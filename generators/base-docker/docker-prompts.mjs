@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,6 +29,7 @@ const monitoring = monitoringTypes;
 const NO_MONITORING = monitoring.NO;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 export default {
   askForApplicationType,
   askForGatewayType,
@@ -283,7 +284,7 @@ async function askForServiceDiscovery() {
             name: 'Consul',
           },
           {
-            value: false,
+            value: NO_SERVICE_DISCOVERY,
             name: 'No Service Discovery and Configuration',
           },
         ],

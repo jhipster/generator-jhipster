@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -35,7 +35,7 @@ import reducer, {
   deleteEntity,
 <%_ } _%>
   getEntities,
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   searchEntities,
 <%_ } _%>
   getEntity,
@@ -103,7 +103,7 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           getEntities.pending.type,
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
           searchEntities.pending.type,
 <%_ } _%>
           getEntity.pending.type
@@ -153,7 +153,7 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           getEntities.rejected.type,
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
           searchEntities.rejected.type,
 <%_ } _%>
           getEntity.rejected.type,
@@ -200,7 +200,7 @@ describe('Entities reducer tests', () => {
       entities: payload.data
       });
     });
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     it('should search all entities', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
   <%_ if (paginationInfiniteScroll) { _%>
@@ -294,7 +294,7 @@ describe('Entities reducer tests', () => {
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     it('dispatches SEARCH_<%= entityActionNamePlural %> actions', async () => {
       const expectedActions = [
         {

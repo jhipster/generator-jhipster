@@ -88,4 +88,10 @@ export type JHipsterOption = OptionConfig & {
   env?: string;
 };
 
+export type CheckResult = {
+  info?: string;
+  warning?: string;
+  error?: string;
+};
+
 export type JHipsterOptions = Record<string, JHipsterOption>;

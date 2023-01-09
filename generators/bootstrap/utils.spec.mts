@@ -4,7 +4,7 @@ import { prepareTempDir } from '../../test/support/temp-dir.mjs';
 
 import { detectCrLf } from './utils.mjs';
 
-describe('bootstrap Utils', () => {
+describe('generator - bootstrap - utils', () => {
   describe('::detectCrLf', () => {
     describe('passing a crlf file', () => {
       let cleanup;

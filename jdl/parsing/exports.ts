@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,8 +21,8 @@
  * This file defines the exported JDL DSL related APIs
  * This file will be used as webpack entry point to produce a UMD bundle.
  */
-import { tokens, JDLLexer } from './lexer/lexer';
-import { parse, getSyntacticAutoCompleteSuggestions } from './api';
-import JDLParser from './jdl-parser';
+import { tokens, JDLLexer } from './lexer/lexer.js';
+import { parse, getSyntacticAutoCompleteSuggestions } from './api.js';
+import JDLParser from './jdl-parser.js';
 
 export { tokens, JDLLexer, JDLParser, parse, getSyntacticAutoCompleteSuggestions };

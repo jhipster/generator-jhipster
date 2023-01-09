@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,7 +25,7 @@ import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
-import constants from '../generator-constants.cjs';
+import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 
@@ -62,7 +62,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
       },
       getConfig() {
         const configuration = this.config;
-        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.env.options.appPath = configuration.get('appPath') || CLIENT_MAIN_SRC_DIR;
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
         this.frontendAppName = this.getFrontendAppName();
@@ -95,8 +95,8 @@ export default class CloudfoundryGenerator extends BaseGenerator {
       copyCloudFoundryFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-        this.template('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
-        this.template('application-cloudfoundry.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
+        this.writeFile('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
+        this.writeFile('application-cloudfoundry.yml.ejs', `${SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
       },
 
       checkInstallation() {

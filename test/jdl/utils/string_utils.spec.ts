@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,9 +21,9 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils';
+import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils.js';
 
-describe('StringUtils', () => {
+describe('jdl - StringUtils', () => {
   describe('camelCase', () => {
     context('when passing a valid string', () => {
       context('with only one letter', () => {

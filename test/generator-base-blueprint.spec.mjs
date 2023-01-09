@@ -174,7 +174,7 @@ const createAllBlueprint = mockedPriorities => {
   };
 };
 
-describe('Generator Base Blueprint', () => {
+describe('generator - base-blueprint', () => {
   describe('priorities', () => {
     describe('when every priority has been implemented', () => {
       let mockedPriorities;

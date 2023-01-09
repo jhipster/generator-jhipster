@@ -130,7 +130,7 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
   }
 };
 
-describe('JHipster generator with multiple blueprints', () => {
+describe('generator - with multiple blueprints', () => {
   const blueprintNames = [
     'generator-jhipster-my-client-blueprint,generator-jhipster-my-server-blueprint',
     'my-client-blueprint,my-server-blueprint',

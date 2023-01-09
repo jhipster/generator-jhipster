@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,7 +23,24 @@ import chalk from 'chalk';
 import crypto from 'crypto';
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
 import { loadFromYoRc } from '../base-docker/docker-base.mjs';
-import constants from '../generator-constants.cjs';
+import {
+  KUBERNETES_CORE_API_VERSION,
+  KUBERNETES_BATCH_API_VERSION,
+  KUBERNETES_DEPLOYMENT_API_VERSION,
+  KUBERNETES_STATEFULSET_API_VERSION,
+  KUBERNETES_INGRESS_API_VERSION,
+  KUBERNETES_ISTIO_NETWORKING_API_VERSION,
+  KUBERNETES_RBAC_API_VERSION,
+  HELM_KAFKA,
+  HELM_ELASTICSEARCH,
+  HELM_PROMETHEUS,
+  HELM_GRAFANA,
+  HELM_MARIADB,
+  HELM_MYSQL,
+  HELM_POSTGRESQL,
+  HELM_MOGODB_REPLICASET,
+  HELM_COUCHBASE_OPERATOR,
+} from '../generator-constants.mjs';
 import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
 
 const { MICROSERVICE } = applicationTypes;
@@ -118,13 +135,13 @@ export function saveConfig() {
 
 export function setupKubernetesConstants() {
   // Make constants available in templates
-  this.KUBERNETES_CORE_API_VERSION = constants.KUBERNETES_CORE_API_VERSION;
-  this.KUBERNETES_BATCH_API_VERSION = constants.KUBERNETES_BATCH_API_VERSION;
-  this.KUBERNETES_DEPLOYMENT_API_VERSION = constants.KUBERNETES_DEPLOYMENT_API_VERSION;
-  this.KUBERNETES_STATEFULSET_API_VERSION = constants.KUBERNETES_STATEFULSET_API_VERSION;
-  this.KUBERNETES_INGRESS_API_VERSION = constants.KUBERNETES_INGRESS_API_VERSION;
-  this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = constants.KUBERNETES_ISTIO_NETWORKING_API_VERSION;
-  this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
+  this.KUBERNETES_CORE_API_VERSION = KUBERNETES_CORE_API_VERSION;
+  this.KUBERNETES_BATCH_API_VERSION = KUBERNETES_BATCH_API_VERSION;
+  this.KUBERNETES_DEPLOYMENT_API_VERSION = KUBERNETES_DEPLOYMENT_API_VERSION;
+  this.KUBERNETES_STATEFULSET_API_VERSION = KUBERNETES_STATEFULSET_API_VERSION;
+  this.KUBERNETES_INGRESS_API_VERSION = KUBERNETES_INGRESS_API_VERSION;
+  this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = KUBERNETES_ISTIO_NETWORKING_API_VERSION;
+  this.KUBERNETES_RBAC_API_VERSION = KUBERNETES_RBAC_API_VERSION;
 }
 
 export function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
@@ -138,13 +155,13 @@ export function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, 
 }
 
 export function setupHelmConstants() {
-  this.HELM_KAFKA = constants.HELM_KAFKA;
-  this.HELM_ELASTICSEARCH = constants.HELM_ELASTICSEARCH;
-  this.HELM_PROMETHEUS = constants.HELM_PROMETHEUS;
-  this.HELM_GRAFANA = constants.HELM_GRAFANA;
-  this.HELM_MARIADB = constants.HELM_MARIADB;
-  this.HELM_MYSQL = constants.HELM_MYSQL;
-  this.HELM_POSTGRESQL = constants.HELM_POSTGRESQL;
-  this.HELM_MOGODB_REPLICASET = constants.HELM_MOGODB_REPLICASET;
-  this.HELM_COUCHBASE_OPERATOR = constants.HELM_COUCHBASE_OPERATOR;
+  this.HELM_KAFKA = HELM_KAFKA;
+  this.HELM_ELASTICSEARCH = HELM_ELASTICSEARCH;
+  this.HELM_PROMETHEUS = HELM_PROMETHEUS;
+  this.HELM_GRAFANA = HELM_GRAFANA;
+  this.HELM_MARIADB = HELM_MARIADB;
+  this.HELM_MYSQL = HELM_MYSQL;
+  this.HELM_POSTGRESQL = HELM_POSTGRESQL;
+  this.HELM_MOGODB_REPLICASET = HELM_MOGODB_REPLICASET;
+  this.HELM_COUCHBASE_OPERATOR = HELM_COUCHBASE_OPERATOR;
 }

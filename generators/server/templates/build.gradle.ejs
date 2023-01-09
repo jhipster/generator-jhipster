@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -46,6 +46,9 @@ plugins {
     id "org.sonarqube"
     id "io.spring.nohttp"
     id "com.github.andygoossens.gradle-modernizer-plugin"
+<%_ if (gatlingTests) { _%>
+    id "io.gatling.gradle"
+<%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -137,6 +140,19 @@ test {
 <%_ } _%>
 }
 
+<%_ if (gatlingTests) { _%>
+sourceSets {
+    gatling {
+        java.srcDirs = ["src/test/java/gatling/simulations"]
+        resources.srcDirs = ["src/test/gatling/conf"]
+    }
+}
+
+gatling {
+    simulations = { include "**/*Test*.java" }
+}
+
+<%_ } _%>
 modernizer {
     failOnViolations = true
     includeTestClasses = true
@@ -199,22 +215,22 @@ project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/chan
 liquibase {
     activities {
         main {
-            driver "<% if (devDatabaseTypeMysql) { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseTypeMariadb) { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseTypePostgres) { %>org.postgresql.Driver<% } else if (devDatabaseTypeH2Disk) { %>org.h2.Driver<% } else if (devDatabaseTypeOracle) { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
-            username "<% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %>"
-            password "<% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %>"
+            driver "<%= devJdbcDriver %>"
+            url "<%- devLiquibaseUrl %>"
+            username "<%- devDatabaseUsername %>"
+            password "<%- devDatabasePassword %>"
             changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
             defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
             logLevel "debug"
             classpath "<%= SERVER_MAIN_RES_DIR %>"
         }
         diffLog {
-            driver "<% if (devDatabaseTypeMysql) { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseTypeMariadb) { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseTypePostgres) { %>org.postgresql.Driver<% } else if (devDatabaseTypeH2Disk) { %>org.h2.Driver<% } else if (devDatabaseTypeOracle) { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
-            username "<% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %>"
-            password "<% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %>"
+            driver "<%= devJdbcDriver %>"
+            url "<%- devLiquibaseUrl %>"
+            username "<%- devDatabaseUsername %>"
+            password "<%- devDatabasePassword %>"
             changeLogFile project.ext.diffChangelogFile
-            referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<% if (devDatabaseTypeMysql) { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseTypeMariadb) { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseTypePostgres) { %>org.hibernate.dialect.PostgreSQLDialect<% } else if (devDatabaseTypeH2Disk) { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseTypeOracle) { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseTypeMssql) { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+            referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
             logLevel "debug"
             classpath "$buildDir/classes/java/main"
@@ -231,6 +247,10 @@ liquibase {
 gitProperties {
     failOnNoGitDirectory = false
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
+
+tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
+  outputs.doNotCacheIf("Task is always executed") { true }
 }
 
 checkstyle {
@@ -522,12 +542,15 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.junit.platform:junit-platform-console"
     testImplementation "org.testng:testng"
 <%_ } _%>
+<%_ if (gatlingTests) { _%>
+    testImplementation "io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
+<%_ } _%>
 <%_ if (enableLiquibase) { _%>
     liquibaseRuntime sourceSets.main.compileClasspath
 <%_ } _%>
 <%_ if (enableLiquibase && databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
+    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>

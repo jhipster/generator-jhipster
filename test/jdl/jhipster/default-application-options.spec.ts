@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,14 +20,16 @@
 
 import { expect } from 'chai';
 
-import {
+import { defaultApplicationOptions } from '../../../jdl/jhipster/index.mjs';
+
+const {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
   getDefaultConfigForNewApplication,
-} from '../../../jdl/jhipster/default-application-options';
+} = defaultApplicationOptions;
 
-describe('DefaultApplicationOptions', () => {
+describe('jdl - DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {
     context('without passing custom options', () => {
       let options;
@@ -40,7 +42,7 @@ describe('DefaultApplicationOptions', () => {
         expect(options.applicationType).to.equal('monolith');
       });
       it('should set the server port to 8080', () => {
-        expect(options.serverPort).to.equal('8080');
+        expect(options.serverPort).to.equal(8080);
       });
       it('should set the authentication type to jwt', () => {
         expect(options.authenticationType).to.equal('jwt');
@@ -116,7 +118,7 @@ describe('DefaultApplicationOptions', () => {
         expect(options.applicationType).to.equal('gateway');
       });
       it('should set the server port to 8080', () => {
-        expect(options.serverPort).to.equal('8080');
+        expect(options.serverPort).to.equal(8080);
       });
       it('should set the authentication type to jwt', () => {
         expect(options.authenticationType).to.equal('jwt');
@@ -149,19 +151,6 @@ describe('DefaultApplicationOptions', () => {
         expect(options.reactive).to.be.true;
       });
     });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForGatewayApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('eureka');
-      });
-    });
     context('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
@@ -171,8 +160,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to false', () => {
-        expect(serviceDiscoveryTypeOption).to.be.false;
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.be.equal('no');
       });
     });
     context('when passing a custom client theme and no variant', () => {
@@ -227,7 +216,7 @@ describe('DefaultApplicationOptions', () => {
         expect(options.applicationType).to.equal('microservice');
       });
       it('should set the server port to 8081', () => {
-        expect(options.serverPort).to.equal('8081');
+        expect(options.serverPort).to.equal(8081);
       });
       it('should set the authentication type to jwt', () => {
         expect(options.authenticationType).to.equal('jwt');
@@ -251,23 +240,10 @@ describe('DefaultApplicationOptions', () => {
         expect(options.clientThemeVariant).to.be.undefined;
       });
       it('should unset the withAdminUi option', () => {
-        expect(options.withAdminUi).to.be.undefined;
+        expect(options.withAdminUi).to.be.false;
       });
       it('should unset the server skipping option', () => {
         expect(options.skipServer).to.be.undefined;
-      });
-    });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('eureka');
       });
     });
     context('when the service discovery type option is no', () => {
@@ -279,21 +255,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to false', () => {
-        expect(serviceDiscoveryTypeOption).to.be.false;
-      });
-    });
-    context('when the user management skipping option is not a boolean', () => {
-      let skipUserManagementOption;
-
-      before(() => {
-        skipUserManagementOption = getConfigForMicroserviceApplication({
-          skipUserManagement: 'no',
-        }).skipUserManagement;
-      });
-
-      it('should set it to true', () => {
-        expect(skipUserManagementOption).to.be.true;
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.equal('no');
       });
     });
     context('when passing custom options', () => {
@@ -320,13 +283,13 @@ describe('DefaultApplicationOptions', () => {
         expect(options.clientFramework).to.equal('react');
       });
       it('should remove the client theme option', () => {
-        expect(options.clientTheme).to.be.undefined;
+        expect(options.clientTheme).to.equal('something');
       });
       it('should remove the client theme variant option', () => {
-        expect(options.clientThemeVariant).to.be.undefined;
+        expect(options.clientThemeVariant).to.equal('somethingElse');
       });
       it('should remove the withAdminUi option', () => {
-        expect(options.withAdminUi).to.be.undefined;
+        expect(options.withAdminUi).to.be.false;
       });
       it('should not remove the server skipping option', () => {
         expect(options.skipServer).not.to.be.undefined;
@@ -371,8 +334,8 @@ describe('DefaultApplicationOptions', () => {
       it('should set the languages option to an empty array', () => {
         expect(options.languages).to.be.eql([]);
       });
-      it('should set the message broker option to false', () => {
-        expect(options.messageBroker).to.be.false;
+      it('should set the message broker option to no', () => {
+        expect(options.messageBroker).to.be.equal('no');
       });
       it('should set the package folder to com/mycompany/myapp', () => {
         expect(options.packageFolder).to.equal('com/mycompany/myapp');
@@ -383,14 +346,14 @@ describe('DefaultApplicationOptions', () => {
       it('should set the production database type option to postgresql', () => {
         expect(options.prodDatabaseType).to.equal('postgresql');
       });
-      it('should set the search engine option to false', () => {
-        expect(options.searchEngine).to.be.false;
+      it('should set the search engine option to no', () => {
+        expect(options.searchEngine).to.be.equal('no');
       });
       it('should set the test frameworks option to nothing', () => {
         expect(options.testFrameworks).to.have.lengthOf(0);
       });
-      it('should set the websocket option to false', () => {
-        expect(options.websocket).to.be.false;
+      it('should set the websocket option to no', () => {
+        expect(options.websocket).to.be.equal('no');
       });
     });
     context('when there is no package name option but only a package folder', () => {
@@ -430,32 +393,6 @@ describe('DefaultApplicationOptions', () => {
 
       it('should set the option to angular', () => {
         expect(clientFrameworkOption).to.equal('angular');
-      });
-    });
-    context('when the dto suffix option is a boolean', () => {
-      let dtoSuffixOption;
-
-      before(() => {
-        dtoSuffixOption = getDefaultConfigForNewApplication({
-          dtoSuffix: true,
-        }).dtoSuffix;
-      });
-
-      it('should set it to DTO', () => {
-        expect(dtoSuffixOption).to.equal('DTO');
-      });
-    });
-    context('when the entity suffix option is a boolean', () => {
-      let entitySuffixOption;
-
-      before(() => {
-        entitySuffixOption = getDefaultConfigForNewApplication({
-          entitySuffix: true,
-        }).entitySuffix;
-      });
-
-      it('should set it to an empty string', () => {
-        expect(entitySuffixOption).to.equal('');
       });
     });
     context('when the database type option is MongoDB', () => {

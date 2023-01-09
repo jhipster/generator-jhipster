@@ -1,11 +1,11 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ServerGenerator from '../../generators/server/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
+import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const filePath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,7 +46,7 @@ describe('needle API server log: JHipster server generator with blueprint', () =
         baseName: 'jhipster',
         packageName: 'com.mycompany.myapp',
         packageFolder: 'com/mycompany/myapp',
-        serviceDiscoveryType: false,
+        serviceDiscoveryType: NO_SERVICE_DISCOVERY,
         authenticationType: 'jwt',
         cacheProvider: 'ehcache',
         enableHibernateCache: true,

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils';
-import formatComment from '../utils/format-utils';
-import { upperFirst } from '../utils/string-utils';
-import getTableNameFromEntityName from './entity-table-name-creator';
-import binaryOptions from './binary-options';
-import unaryOptions from './unary-options';
+import { merge } from '../utils/object-utils.js';
+import formatComment from '../utils/format-utils.js';
+import { upperFirst } from '../utils/string-utils.js';
+import getTableNameFromEntityName from './entity-table-name-creator.js';
+import binaryOptions from './binary-options.js';
+import unaryOptions from './unary-options.js';
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.

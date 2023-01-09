@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,24 +21,19 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import constants from '../generator-constants.cjs';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 
-const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
-
 const { snakeCase } = lodash;
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const generator = basename(__dirname);
 const generatorPath = `${__dirname}/index.mts`;
-
 const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

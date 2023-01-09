@@ -2,7 +2,7 @@ node_modules
 docs
 .git
 test/jdl/**/.jhipster/**
-.vscode
+.vscode-test
 **/templates/**/
 **/jdl-core.min.js
 **/generated-serialized-grammar.js

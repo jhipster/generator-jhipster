@@ -1,64 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster init generator with default config should write files and match snapshot 1`] = `
-Object {
-  ".editorconfig": Object {
+exports[`generator - init with default config should write files and match snapshot 1`] = `
+{
+  ".editorconfig": {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
+  ".gitattributes": {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
+  ".gitignore": {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
+  ".husky/pre-commit": {
     "stateCleared": "modified",
   },
-  ".lintstagedrc.cjs": Object {
+  ".lintstagedrc.cjs": {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
+  ".prettierignore": {
     "stateCleared": "modified",
   },
-  ".prettierrc.yml": Object {
+  ".prettierrc.yml": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "README.md": Object {
+  "README.md": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster init generator with skipCommitHook option should not create husky files and match snapshot 1`] = `
-Object {
-  ".editorconfig": Object {
+exports[`generator - init with skipCommitHook option should not create husky files and match snapshot 1`] = `
+{
+  ".editorconfig": {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
+  ".gitattributes": {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
+  ".gitignore": {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
+  ".prettierignore": {
     "stateCleared": "modified",
   },
-  ".prettierrc.yml": Object {
+  ".prettierrc.yml": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "README.md": Object {
+  "README.md": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
 }

@@ -1,0 +1,7 @@
+{
+  "mochaExplorer.logpanel": true,
+  "mochaExplorer.files": ["!(node_modules)/**/*.spec.{js,cjs,mjs,ts,cts,mts}"],
+  "mochaExplorer.ui": "tdd",
+  "mochaExplorer.configFile": ".mocharc.cjs",
+  "mochaExplorer.nodeArgv": ["--loader=@node-loaders/auto"]
+}

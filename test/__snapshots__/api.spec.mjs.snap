@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Public api generator-jhipster/generators should match snapshot 1`] = `
-Object {
+exports[`public api generator-jhipster/generators should match snapshot 1`] = `
+{
   "GENERATOR_ANGULAR": "angular",
   "GENERATOR_APP": "app",
   "GENERATOR_AWS": "aws",
@@ -15,6 +15,7 @@ Object {
   "GENERATOR_BOOTSTRAP_APPLICATION_BASE": "bootstrap-application-base",
   "GENERATOR_BOOTSTRAP_APPLICATION_CLIENT": "bootstrap-application-client",
   "GENERATOR_BOOTSTRAP_APPLICATION_SERVER": "bootstrap-application-server",
+  "GENERATOR_CASSANDRA": "cassandra",
   "GENERATOR_CI_CD": "ci-cd",
   "GENERATOR_CLIENT": "client",
   "GENERATOR_CLOUDFOUNDRY": "cloudfoundry",
@@ -23,6 +24,7 @@ Object {
   "GENERATOR_CYPRESS": "cypress",
   "GENERATOR_DOCKER": "docker",
   "GENERATOR_DOCKER_COMPOSE": "docker-compose",
+  "GENERATOR_ELASTICSEARCH": "elasticsearch",
   "GENERATOR_ENTITIES": "entities",
   "GENERATOR_ENTITY": "entity",
   "GENERATOR_EXPORT_JDL": "export-jdl",
@@ -41,6 +43,7 @@ Object {
   "GENERATOR_LIQUIBASE": "liquibase",
   "GENERATOR_LIQUIBASE_CHANGELOGS": "liquibase-changelogs",
   "GENERATOR_MAVEN": "maven",
+  "GENERATOR_MONGODB": "mongodb",
   "GENERATOR_OPENAPI_CLIENT": "openapi-client",
   "GENERATOR_OPENSHIFT": "openshift",
   "GENERATOR_PAGE": "page",

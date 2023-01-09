@@ -2,9 +2,7 @@ import path from 'path';
 import { expect } from 'chai';
 import { jestExpect } from 'mocha-expect-snapshot';
 import BaseGeneratorClass from '../generators/base/index.mjs';
-import databaseTypes from '../jdl/jhipster/database-types.js';
-import entityOptions from '../jdl/jhipster/entity-options.js';
-import fieldTypes from '../jdl/jhipster/field-types.js';
+import { databaseTypes, entityOptions, fieldTypes } from '../jdl/jhipster/index.mjs';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -18,7 +16,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-describe('Generator Base Private', () => {
+describe('generator - base-private', () => {
   describe('stripMargin', () => {
     it('should produce correct output without margin', () => {
       const entityFolderName = 'entityFolderName';
@@ -296,7 +294,7 @@ export * from './entityFolderName/entityFileName.state';`;
       it('return SQL', () => {
         jestExpect(Object.fromEntries(Object.values(CommonDBTypes).map(dbType => [dbType, BaseGenerator.getTypescriptType(dbType)])))
           .toMatchInlineSnapshot(`
-Object {
+{
   "AnyBlob": "string",
   "BigDecimal": "number",
   "Blob": "string",

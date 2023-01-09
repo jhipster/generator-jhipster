@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,16 +23,32 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import { exportApplication, exportApplications } from '../../../jdl/exporters/applications/jhipster-application-exporter';
+import { exportApplication, exportApplications } from '../../../jdl/exporters/applications/jhipster-application-exporter.js';
+import {
+  applicationTypes,
+  buildToolTypes,
+  cacheTypes,
+  authenticationTypes,
+  clientFrameworkTypes,
+  databaseTypes,
+  serviceDiscoveryTypes,
+  searchEngineTypes,
+  websocketTypes,
+  messageBrokerTypes,
+} from '../../../jdl/jhipster/index.mjs';
 
-import { MONOLITH } from '../../../jdl/jhipster/application-types';
-import { MAVEN } from '../../../jdl/jhipster/build-tool-types';
-import { EHCACHE } from '../../../jdl/jhipster/cache-types';
-import { JWT } from '../../../jdl/jhipster/authentication-types';
-import { ANGULAR } from '../../../jdl/jhipster/client-framework-types';
-import { SQL, H2_DISK, MYSQL } from '../../../jdl/jhipster/database-types';
+const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
+const NO_WEBSOCKET = websocketTypes.NO;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
+const { MONOLITH } = applicationTypes;
+const { MAVEN } = buildToolTypes;
+const { EHCACHE } = cacheTypes;
+const { JWT } = authenticationTypes;
+const { ANGULAR } = clientFrameworkTypes;
+const { SQL, H2_DISK, MYSQL } = databaseTypes;
 
-describe('JHipsterApplicationExporter', () => {
+describe('jdl - JHipsterApplicationExporter', () => {
   describe('exportApplication', () => {
     context('when passing valid arguments', () => {
       context('when exporting an application to JSON', () => {
@@ -59,18 +75,18 @@ describe('JHipsterApplicationExporter', () => {
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
               languages: [],
-              messageBroker: false,
+              messageBroker: NO_MESSAGE_BROKER,
               packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
               prodDatabaseType: MYSQL,
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
+              searchEngine: NO_SEARCH_ENGINE,
+              serverPort: 8080,
+              serviceDiscoveryType: NO_SERVICE_DISCOVERY,
               skipClient: false,
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              websocket: false,
+              websocket: NO_WEBSOCKET,
               jwtSecretKey: '1234',
               withAdminUi: true,
             },
@@ -124,18 +140,18 @@ describe('JHipsterApplicationExporter', () => {
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
               languages: [],
-              messageBroker: false,
+              messageBroker: NO_MESSAGE_BROKER,
               packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
               prodDatabaseType: MYSQL,
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
+              searchEngine: NO_SEARCH_ENGINE,
+              serverPort: 8080,
+              serviceDiscoveryType: NO_SERVICE_DISCOVERY,
               skipClient: false,
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              websocket: false,
+              websocket: NO_WEBSOCKET,
               jwtSecretKey: '1234',
               withAdminUi: true,
             },
@@ -152,8 +168,8 @@ describe('JHipsterApplicationExporter', () => {
 
         it('should add the read content to the exported application', () => {
           jestExpect(content).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "toto",
@@ -172,19 +188,19 @@ Object {
     "jhiPrefix": "jhi",
     "jhipsterVersion": "4.9.0",
     "jwtSecretKey": "1234",
-    "languages": Array [],
-    "messageBroker": false,
+    "languages": [],
+    "messageBroker": "no",
     "packageFolder": "com/mathieu/sample",
     "packageName": "com.mathieu.sample",
     "prodDatabaseType": "mysql",
-    "searchEngine": false,
-    "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "searchEngine": "no",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "no",
     "skipClient": false,
     "skipServer": false,
     "skipUserManagement": false,
-    "testFrameworks": Array [],
-    "websocket": false,
+    "testFrameworks": [],
+    "websocket": "no",
     "withAdminUi": true,
   },
   "test": 1234,
@@ -228,18 +244,18 @@ Object {
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
               languages: [],
-              messageBroker: false,
+              messageBroker: NO_MESSAGE_BROKER,
               packageFolder: 'com/mathieu/toto',
               packageName: 'com.mathieu.toto',
               prodDatabaseType: MYSQL,
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
+              searchEngine: NO_SEARCH_ENGINE,
+              serverPort: 8080,
+              serviceDiscoveryType: NO_SERVICE_DISCOVERY,
               skipClient: false,
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              websocket: false,
+              websocket: NO_WEBSOCKET,
               jwtSecretKey: '1234',
               withAdminUi: true,
             },
@@ -265,18 +281,18 @@ Object {
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
               languages: [],
-              messageBroker: false,
+              messageBroker: NO_MESSAGE_BROKER,
               packageFolder: 'com/mathieu/titi',
               packageName: 'com.mathieu.titi',
               prodDatabaseType: MYSQL,
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
+              searchEngine: NO_SEARCH_ENGINE,
+              serverPort: 8080,
+              serviceDiscoveryType: NO_SERVICE_DISCOVERY,
               skipClient: false,
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              websocket: false,
+              websocket: NO_WEBSOCKET,
               jwtSecretKey: '1234',
               withAdminUi: true,
             },

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,10 +18,12 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { OptionNames } from '../../../jdl/jhipster/application-options';
-import createApplicationConfigurationFromObject from '../../../jdl/models/jdl-application-configuration-factory';
+import createApplicationConfigurationFromObject from '../../../jdl/models/jdl-application-configuration-factory.js';
+import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
 
-describe('JDLApplicationConfigurationFactory', () => {
+const { OptionNames } = applicationOptions;
+
+describe('jdl - JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {
     context('when passing no configuration', () => {
       let createdConfiguration;
@@ -33,7 +35,7 @@ describe('JDLApplicationConfigurationFactory', () => {
       it('should a configuration without option', () => {
         expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
-  "options": Object {},
+  "options": {},
 }
 `);
       });
@@ -51,7 +53,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
-  "options": Object {
+  "options": {
     "baseName": StringJDLApplicationConfigurationOption {
       "name": "baseName",
       "quoted": false,
@@ -74,7 +76,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
-  "options": Object {
+  "options": {
     "serverPort": IntegerJDLApplicationConfigurationOption {
       "name": "serverPort",
       "value": 8042,
@@ -96,7 +98,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
-  "options": Object {
+  "options": {
     "enableTranslation": BooleanJDLApplicationConfigurationOption {
       "name": "enableTranslation",
       "value": true,
@@ -118,7 +120,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
-  "options": Object {
+  "options": {
     "testFrameworks": ListJDLApplicationConfigurationOption {
       "name": "testFrameworks",
       "value": Set {},

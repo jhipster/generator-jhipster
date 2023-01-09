@@ -1,0 +1,45 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= entityAbsolutePackage %>.domain;
+
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import <%= packageName %>.web.rest.TestUtil;
+<%_ if (primaryKey && primaryKey.hasUUID) { _%>
+import java.util.UUID;
+<%_ } _%>
+
+class <%= persistClass %>Test {
+
+    @Test
+    void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(<%= persistClass %>.class);
+<%_if (!embedded) { _%>
+        <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>2L<% } else if (primaryKey.typeString) { %>"id2"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
+        assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
+<%_} _%>
+    }
+}

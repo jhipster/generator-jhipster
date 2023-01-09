@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,13 +23,17 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import { writeFileSync, unlinkSync } from 'fs';
 import path from 'path';
-import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '../../../jdl/linters/jdl-linter';
-import Issues from '../../../jdl/linters/issues/issues';
-import EntityIssue from '../../../jdl/linters/issues/entity-issue';
-import EnumIssue from '../../../jdl/linters/issues/enum-issue';
-import relationshipIssue from '../../../jdl/linters/issues/relationship-issue';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '../../../jdl/linters/jdl-linter.js';
+import Issues from '../../../jdl/linters/issues/issues.js';
+import EnumIssue from '../../../jdl/linters/issues/enum-issue.js';
+import relationshipIssue from '../../../jdl/linters/issues/relationship-issue.js';
 
-describe('JDLLinter', () => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+describe('jdl - JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {
     context('when not passing a file', () => {
       it('should fail', () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,13 +18,13 @@
  */
 
 import { expect } from 'chai';
-import ApplicationTypes from '../../../../jdl/jhipster/application-types';
-import { createJDLApplication } from '../../../../jdl/models/jdl-application-factory';
-import { convertApplications } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/application-converter';
+import { applicationTypes } from '../../../../jdl/jhipster/index.mjs';
+import createJDLApplication from '../../../../jdl/models/jdl-application-factory.js';
+import { convertApplications } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/application-converter.js';
 
-const { MONOLITH } = ApplicationTypes;
+const { MONOLITH } = applicationTypes;
 
-describe('ApplicationConverter', () => {
+describe('jdl - ApplicationConverter', () => {
   describe('convertApplications', () => {
     context('when not passing applications', () => {
       it('should fail', () => {

@@ -69,7 +69,7 @@
       "uz-Latn-uz",
       "vi"
     ],
-    "messageBroker": false,
+    "messageBroker": "no",
     "nativeLanguage": "en",
     "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
@@ -79,13 +79,13 @@
     "searchEngine": "elasticsearch",
     "serverPort": "8080",
     "serverSideOptions": ["searchEngine:elasticsearch"],
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "skipCheckLengthOfIdentifier": false,
     "skipClient": false,
     "skipFakeData": false,
     "skipServer": false,
     "skipUserManagement": false,
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

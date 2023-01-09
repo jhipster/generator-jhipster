@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
-import RelationshipTypes from '../jhipster/relationship-types';
-import RelationshipOptions from '../jhipster/relationship-options';
+import Validator from './validator.js';
+import { relationshipTypes, relationshipOptions } from '../jhipster/index.mjs';
 
-const { exists, ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = RelationshipTypes;
-const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
+const { exists, ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 
 export default class RelationshipValidator extends Validator {
   constructor() {

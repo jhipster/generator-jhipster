@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,12 +19,12 @@
 /* eslint-disable consistent-return */
 import assert from 'assert/strict';
 
-import { threadId } from 'worker_threads';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { GENERATOR_MAVEN, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import files from './files.mjs';
 import { MAVEN } from './constants.mjs';
+import cleanupOldServerFilesTask from './cleanup.mjs';
 
 /**
  * @class
@@ -62,6 +62,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanupOldServerFilesTask,
       async writeFiles() {
         await this.writeFiles({ sections: files, context: this.application });
       },

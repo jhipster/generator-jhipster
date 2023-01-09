@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const Types = {
+const cacheTypes = {
   CAFFEINE: 'caffeine',
   EHCACHE: 'ehcache',
   HAZELCAST: 'hazelcast',
@@ -27,12 +27,4 @@ const Types = {
   NO: 'no',
 };
 
-export const CAFFEINE = Types.CAFFEINE;
-export const EHCACHE = Types.EHCACHE;
-export const HAZELCAST = Types.HAZELCAST;
-export const INFINISPAN = Types.INFINISPAN;
-export const MEMCACHED = Types.MEMCACHED;
-export const REDIS = Types.REDIS;
-export const NO = Types.NO;
-
-export default Types;
+export default cacheTypes;

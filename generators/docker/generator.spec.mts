@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import Generator from './index.mjs';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.mjs';
 import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
-import { matchElasticSearchDocker } from '../server/__test-support/elastic-search-matcher.mjs';
+import { matchElasticSearchDocker } from '../elasticsearch/__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
 import {
@@ -81,7 +81,7 @@ matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {
 
 const testSamples = buildSamplesFromMatrix(matrix);
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

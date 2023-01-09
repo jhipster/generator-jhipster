@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import EntityIssue from './entity-issue';
-import FieldIssue from './field-issue';
-import EnumIssue from './enum-issue';
-import RelationshipIssue from './relationship-issue';
+import EntityIssue from './entity-issue.js';
+import FieldIssue from './field-issue.js';
+import EnumIssue from './enum-issue.js';
+import RelationshipIssue from './relationship-issue.js';
 
 export default class Issues {
   entityIssues: EntityIssue[];

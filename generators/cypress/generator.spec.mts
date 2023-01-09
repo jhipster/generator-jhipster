@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,19 +20,15 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
-import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
-
+import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
-import constants from '../generator-constants.cjs';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
-const { CYPRESS } = TestFrameworkTypes;
+const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { CLIENT_TEST_SRC_DIR } = constants;
-
 const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -82,7 +78,7 @@ const testSamples = () =>
 
 const e2eSamples = testSamples();
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

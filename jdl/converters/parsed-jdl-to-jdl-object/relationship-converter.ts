@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,9 +18,9 @@
  */
 
 import _ from 'lodash';
-import JDLRelationship from '../../models/jdl-relationship';
-import { lowerFirst, upperFirst } from '../../utils/string-utils';
-import { formatComment } from '../../utils/format-utils';
+import JDLRelationship from '../../models/jdl-relationship.js';
+import { lowerFirst, upperFirst } from '../../utils/string-utils.js';
+import { formatComment } from '../../utils/format-utils.js';
 
 export default { convertRelationships };
 

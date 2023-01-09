@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,9 +19,9 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLDeployment from '../../../jdl/models/jdl-deployment';
+import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
 
-describe('JDLDeployment', () => {
+describe('jdl - JDLDeployment', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {

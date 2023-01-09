@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,9 +23,7 @@ import path, { dirname } from 'path';
 import sortKeys from 'sort-keys';
 import { fileURLToPath } from 'url';
 
-import authenticationTypes from '../jdl/jhipster/authentication-types.js';
-import applicationTypes from '../jdl/jhipster/application-types.js';
-
+import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
 import { formatDateForChangelog } from '../generators/base/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -53,7 +51,7 @@ const itEntitiesSamplesEntries = fs
   .map(({ name }) => name)
   .map(name => [name, path.join(itEntitiesSamplesPath, name)]);
 
-describe('Integration Test', () => {
+describe('integration-test', () => {
   describe('::application samples', () => {
     for (const [name, yoFile] of itSamplesEntries) {
       let yoJson = fse.readJsonSync(yoFile);

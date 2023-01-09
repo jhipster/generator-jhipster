@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,11 +20,11 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import relationshipOptions from '../../../jdl/jhipster/relationship-options';
+import { relationshipOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { JPA_DERIVED_IDENTIFIER, exists } = relationshipOptions;
 
-describe('RelationshipOptions', () => {
+describe('jdl - RelationshipOptions', () => {
   describe('exists', () => {
     describe('when the option does not exist', () => {
       it('should return false', () => {

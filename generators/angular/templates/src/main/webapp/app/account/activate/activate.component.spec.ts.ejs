@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { ActivateService } from './activate.service';
-import { ActivateComponent } from './activate.component';
+import ActivateComponent from './activate.component';
 
 describe('ActivateComponent', () => {
   let comp: ActivateComponent;
@@ -30,8 +30,7 @@ describe('ActivateComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        declarations: [ActivateComponent],
+        imports: [HttpClientTestingModule, ActivateComponent],
         providers: [
           {
             provide: ActivatedRoute,

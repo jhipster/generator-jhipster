@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,20 +21,16 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
-import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
-import generatorDefaults from '../generator-defaults.cjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';
 import { languageToJavaLanguage } from './utils.mjs';
-import jhipsterUtils from '../utils.cjs';
+import { replaceContent } from '../utils.mjs';
 import TranslationData from './translation-data.mjs';
-
-const { translationDefaultConfig } = generatorDefaults;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -152,23 +148,26 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   get configuring() {
     return {
       defaults() {
-        if (this.jhipsterConfig.enableTranslation === false) {
+        const { nativeLanguage, languages, enableTranslation } = this.jhipsterConfigWithDefaults;
+        if (!enableTranslation) {
+          if (!this.jhipsterConfig.nativeLanguage) {
+            this.jhipsterConfig.nativeLanguage = nativeLanguage;
+          }
           return;
         }
         if (!this.jhipsterConfig.nativeLanguage) {
-          // If native language is not set, use defaults, otherwise languages will be built with nativeLanguage.
-          this.setConfigDefaults(translationDefaultConfig);
           if (this.languagesToApply.length === 0) {
-            this.languagesToApply = this.jhipsterConfig.languages;
+            this.languagesToApply = languages;
           }
+          this.jhipsterConfig.nativeLanguage = nativeLanguage;
         }
         if (!this.jhipsterConfig.languages) {
           this.jhipsterConfig.languages = [];
         }
         if (this.jhipsterConfig.languages.length === 0 || this.jhipsterConfig.languages[0] !== this.jhipsterConfig.nativeLanguage) {
-          this.jhipsterConfig.languages = [...new Set([this.jhipsterConfig.nativeLanguage, ...this.jhipsterConfig.languages])];
+          this.jhipsterConfig.languages = [...new Set([nativeLanguage, ...languages])];
         }
-        if (this.languagesToApply.length > 0) {
+        if (this.languagesToApply && this.languagesToApply.length > 0) {
           // Save new languages;
           this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages, ...this.languagesToApply])];
         }
@@ -360,7 +359,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       });
       content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n];';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
@@ -395,7 +394,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       });
       content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
@@ -431,7 +430,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       });
       content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    };';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
@@ -470,7 +469,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
         '                ]';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
@@ -509,7 +508,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
         '                ]';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
@@ -548,7 +547,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n'
       );
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           // match needle until // DAYJS CONFIGURATION (excluded)
@@ -579,7 +578,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         });
       }
       content += '      // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    }';
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g,
@@ -613,7 +612,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
       i18nConfig += '}';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /const dateTimeFormats.*\{([^\]]*jhipster-needle-i18n-language-date-time-format[^}]*)}/g,
@@ -645,7 +644,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             });
       content += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,

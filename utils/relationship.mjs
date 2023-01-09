@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,7 +25,9 @@ import { stringify } from './index.mjs';
 const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
-const { REQUIRED } = validations;
+const {
+  Validations: { REQUIRED },
+} = validations;
 
 const { MAPSTRUCT } = MapperTypes;
 

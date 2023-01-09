@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,14 +17,10 @@
  * limitations under the License.
  */
 
-const MonitoringTypes = {
+const monitoringTypes = {
   PROMETHEUS: 'prometheus',
   ELK: 'elk',
   NO: 'no',
 };
 
-export const PROMETHEUS = MonitoringTypes.PROMETHEUS;
-export const ELK = MonitoringTypes.ELK;
-export const NO = MonitoringTypes.NO;
-
-export default MonitoringTypes;
+export default monitoringTypes;

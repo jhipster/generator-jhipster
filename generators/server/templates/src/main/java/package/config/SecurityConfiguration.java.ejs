@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -69,10 +69,13 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
   <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 <%_ } _%>
 <%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -218,18 +221,28 @@ public class SecurityConfiguration {
                     .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
-            .rememberMe(rememberMe -> rememberMe
-                .rememberMeServices(rememberMeServices)
-                .rememberMeParameter("remember-me")
-                .key(jHipsterProperties.getSecurity().getRememberMe().getKey()))
+            .rememberMe(rememberMe ->
+                rememberMe
+                    .rememberMeServices(rememberMeServices)
+                    .rememberMeParameter("remember-me")
+                    .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
+            )
   <%_ } _%>
-            .formLogin(formLogin -> formLogin
-                .loginProcessingUrl("/api/authentication")
-                .successHandler(ajaxAuthenticationSuccessHandler())
-                .failureHandler(ajaxAuthenticationFailureHandler()))
-            .logout(logout -> logout
-                .logoutUrl("/api/logout")
-                .logoutSuccessHandler(ajaxLogoutSuccessHandler()));
+            .exceptionHandling(exceptionHanding ->
+                exceptionHanding.defaultAuthenticationEntryPointFor(
+                    (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) ->
+                        response.setStatus(401),
+                    new AntPathRequestMatcher("/api/**")
+                )
+            )
+            .formLogin(formLogin ->
+                formLogin
+                    .loginProcessingUrl("/api/authentication")
+                    .successHandler(ajaxAuthenticationSuccessHandler())
+                    .failureHandler(ajaxAuthenticationFailureHandler())
+                    .permitAll()
+            )
+            .logout(logout -> logout.logoutUrl("/api/logout").logoutSuccessHandler(ajaxLogoutSuccessHandler()).permitAll());
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions

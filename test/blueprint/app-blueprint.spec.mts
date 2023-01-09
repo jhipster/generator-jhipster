@@ -4,13 +4,13 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import { jestExpect } from 'mocha-expect-snapshot';
-import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { getGenerator, getTemplatePath } from '../support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 
 const jhipsterVersion = packageJson.version;
 
-describe('JHipster application generator with blueprint', () => {
+describe('generator - app - with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {
     let runResult;
     before(async () => {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import { TranslateDirective } from './translate.directive';
+import TranslateDirective from './translate.directive';
 
 @Component({
   template: ` <div <%= jhiPrefix %>Translate="test"></div> `,
@@ -34,8 +34,8 @@ describe('TranslateDirective Tests', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [TranslateModule.forRoot()],
-        declarations: [TranslateDirective, TestTranslateDirectiveComponent],
+        imports: [TranslateModule.forRoot(), TranslateDirective],
+        declarations: [TestTranslateDirectiveComponent],
       });
     })
   );

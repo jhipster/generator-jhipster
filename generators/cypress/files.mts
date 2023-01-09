@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
 import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.mjs';
 
-const { CLIENT_TEST_SRC_DIR } = constants;
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
 export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication> = {

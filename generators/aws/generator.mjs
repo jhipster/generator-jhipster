@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
-import AwsFactory from './lib/aws.cjs';
+import AwsFactory from './lib/aws.mjs';
 import statistics from '../statistics.cjs';
 import { GENERATOR_AWS } from '../generator-list.mjs';
 import { applicationOptions, databaseTypes } from '../../jdl/jhipster/index.mjs';

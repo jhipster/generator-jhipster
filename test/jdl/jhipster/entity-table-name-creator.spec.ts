@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,9 +18,11 @@
  */
 
 import { expect } from 'chai';
-import getTableNameFromEntityName from '../../../jdl/jhipster/entity-table-name-creator';
+import { entityTableNameCreator } from '../../../jdl/jhipster/index.mjs';
 
-describe('EntityTableNameCreator', () => {
+const getTableNameFromEntityName = entityTableNameCreator;
+
+describe('jdl - EntityTableNameCreator', () => {
   describe('getTableNameFromEntityName', () => {
     context('when not passing an entity name', () => {
       it('should fail', () => {

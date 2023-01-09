@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,16 +17,10 @@
  * limitations under the License.
  */
 
-const Types = {
+const testFrameworkTypes = {
   CYPRESS: 'cypress',
   CUCUMBER: 'cucumber',
   GATLING: 'gatling',
   NO: 'no',
 };
-
-export const CYPRESS = Types.CYPRESS;
-export const CUCUMBER = Types.CUCUMBER;
-export const GATLING = Types.GATLING;
-export const NO = Types.NO;
-
-export default Types;
+export default testFrameworkTypes;

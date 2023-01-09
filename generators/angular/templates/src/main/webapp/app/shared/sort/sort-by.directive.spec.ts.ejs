@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,8 +22,8 @@ import { By } from '@angular/platform-browser';
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
-import { SortByDirective } from './sort-by.directive';
-import { SortDirective } from './sort.directive';
+import SortByDirective from './sort-by.directive';
+import SortDirective from './sort.directive';
 
 @Component({
   template: `
@@ -55,7 +55,8 @@ describe('Directive: SortByDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestSortByDirectiveComponent, SortDirective, SortByDirective, FaIconComponent],
+      imports: [SortDirective, SortByDirective],
+      declarations: [TestSortByDirectiveComponent, FaIconComponent],
     });
     fixture = TestBed.createComponent(TestSortByDirectiveComponent);
     component = fixture.componentInstance;

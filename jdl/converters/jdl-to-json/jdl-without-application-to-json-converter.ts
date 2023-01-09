@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import BasicEntityConverter from './jdl-to-json-basic-entity-converter';
-import FieldConverter from './jdl-to-json-field-converter';
-import RelationshipConverter from './jdl-to-json-relationship-converter';
-import OptionConverter from './jdl-to-json-option-converter';
-import JDLObject from '../../models/jdl-object';
+import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
+import FieldConverter from './jdl-to-json-field-converter.js';
+import RelationshipConverter from './jdl-to-json-relationship-converter.js';
+import OptionConverter from './jdl-to-json-option-converter.js';
+import JDLObject from '../../models/jdl-object.js';
 
 const USER = 'user';
 const AUTHORITY = 'authority';

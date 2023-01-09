@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -131,27 +131,9 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } _%>
+    url: <%- devJdbcUrl %>
+    username: <%- devDatabaseUsername %>
+    password: <%- devDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -168,12 +150,6 @@ spring:
     console:
       # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-  jpa:
-  <%_ if (devDatabaseTypePostgres) { _%>
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
   data:
@@ -204,14 +180,8 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
   <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-<%_ } _%>
-<%_ if (reactive) { _%>
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
+  <%_ if (reactive) { _%>
+    url: <%- devJdbcUrl %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -225,27 +195,9 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } _%>
+    url: <%- devR2dbcUrl %>
+    username: <%- devDatabaseUsername %>
+    password: <%- devDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: false

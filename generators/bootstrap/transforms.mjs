@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,7 +18,7 @@
  */
 import memFsEditor from 'mem-fs-editor';
 import path from 'path';
-import pTransform from 'p-transform';
+import { passthrough } from 'p-transform';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
@@ -26,7 +26,6 @@ import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 import environmentTransform from 'yeoman-environment/transform';
 
 const { State } = memFsEditor;
-const { passthrough } = pTransform;
 const { patternSpy } = environmentTransform;
 
 const { isFileStateDeleted } = State;

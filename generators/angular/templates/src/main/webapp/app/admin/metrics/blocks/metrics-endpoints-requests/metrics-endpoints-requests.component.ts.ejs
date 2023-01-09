@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,11 +18,14 @@
 -%>
 import { Component, Input } from '@angular/core';
 
+import SharedModule from 'app/shared/shared.module';
 import { Services } from 'app/admin/metrics/metrics.model';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-metrics-endpoints-requests',
   templateUrl: './metrics-endpoints-requests.component.html',
+  imports: [SharedModule],
 })
 export class MetricsEndpointsRequestsComponent {
   /**

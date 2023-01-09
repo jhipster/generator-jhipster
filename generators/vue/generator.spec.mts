@@ -9,7 +9,7 @@ import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import constants from '../generator-constants.cjs';
+import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
 const { snakeCase } = lodash;
 
@@ -20,7 +20,6 @@ const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mts');
 
 const { VUE: clientFramework } = clientFrameworkTypes;
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
 const samplesBuilder = () =>
@@ -72,7 +71,7 @@ const clientAdminFiles = (clientSrcDir, clientTestDir) => [
 
 const testSamples = samplesBuilder();
 
-describe(`JHipster ${clientFramework} generator`, () => {
+describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

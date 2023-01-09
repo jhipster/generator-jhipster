@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,6 +25,7 @@ import { GENERATOR_GRADLE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../gen
 import files from './files.mjs';
 import { GRADLE } from './constants.mjs';
 import { GRADLE_VERSION } from './constants.mjs';
+import cleanupOldServerFilesTask from './cleanup.mjs';
 
 /**
  * @class
@@ -62,6 +63,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanupOldServerFilesTask,
       async writeFiles({ application }) {
         await this.writeFiles({ sections: files, context: application });
       },

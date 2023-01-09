@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import { isString } from 'lodash';
+import _ from 'lodash';
 import { createToken } from 'chevrotain';
 
-import { NAME, KEYWORD, namePattern } from './shared-tokens';
+import { NAME, KEYWORD, namePattern } from './shared-tokens.js';
+
+const { isString } = _;
 
 export default function createTokenFromConfig(config) {
   if (!config) {

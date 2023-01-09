@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -50,7 +50,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson() {
-        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('angular', 'templates', 'package.json')));
+        _.merge(
+          this.dependabotPackageJson,
+          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'))
+        );
       },
     });
   }

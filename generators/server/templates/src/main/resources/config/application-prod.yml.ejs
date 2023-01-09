@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -117,23 +117,9 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
-  <%_ } _%>
+    url: <%- prodJdbcUrl %>
+    username: <%- prodDatabaseUsername %>
+    password: <%- prodDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -143,10 +129,6 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-  <%_ } _%>
-  jpa:
-  <%_ if (prodDatabaseTypePostgres) { _%>
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
@@ -177,11 +159,7 @@ spring:
   liquibase:
     contexts: prod
   <%_ if (reactive) { _%>
-    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    <%_ } _%>
+    url: <%- prodJdbcUrl %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -193,23 +171,9 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
-  <%_ } _%>
+    url: <%- prodR2dbcUrl %>
+    username: <%- prodDatabaseUsername %>
+    password: <%- prodDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: true

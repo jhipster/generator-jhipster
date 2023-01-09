@@ -7,6 +7,7 @@ const { KAFKA } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
 export const mockedGenerators = [
+  'jhipster:cassandra',
   'jhipster:common',
   'jhipster:couchbase',
   'jhipster:docker',
@@ -15,6 +16,7 @@ export const mockedGenerators = [
   'jhipster:languages',
   'jhipster:liquibase',
   'jhipster:maven',
+  'jhipster:mongodb',
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,18 +22,20 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import exportEntities from '../../../jdl/exporters/jhipster-entity-exporter';
+import exportEntities from '../../../jdl/exporters/jhipster-entity-exporter.js';
+import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import { MapperTypes, PaginationTypes, ServiceTypes } from '../../../jdl/jhipster/entity-options';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils';
+import entityOptions from '../../../jdl/jhipster/entity-options.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils.js';
 
+const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
+const { MONOLITH, MICROSERVICE } = applicationTypes;
 const { SERVICE_CLASS } = ServiceTypes;
 const NO_DTO = MapperTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_SERVICE = ServiceTypes.NO;
 
-describe('JHipsterEntityExporter', () => {
+describe('jdl - JHipsterEntityExporter', () => {
   describe('exportEntities', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
@@ -78,7 +80,7 @@ describe('JHipsterEntityExporter', () => {
             entities,
             application: {
               name: 'MyApp',
-              type: ApplicationTypes.MONOLITH,
+              type: MONOLITH,
             },
           });
           aEntityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
@@ -104,12 +106,12 @@ describe('JHipsterEntityExporter', () => {
             entities: [],
             application: {
               name: 'MyApp',
-              type: ApplicationTypes.MONOLITH,
+              type: MONOLITH,
             },
           });
         });
         it('should return an empty list', () => {
-          jestExpect(returned).toMatchInlineSnapshot('Array []');
+          jestExpect(returned).toMatchInlineSnapshot('[]');
         });
         it('should not create a .jhipster folder', () => {
           expect(doesDirectoryExist('.jhipster')).to.be.false;
@@ -148,7 +150,7 @@ describe('JHipsterEntityExporter', () => {
             entities,
             application: {
               name: 'MyApp',
-              type: ApplicationTypes.MONOLITH,
+              type: MONOLITH,
             },
           });
           previousChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
@@ -157,7 +159,7 @@ describe('JHipsterEntityExporter', () => {
               entities,
               application: {
                 name: 'MyApp',
-                type: ApplicationTypes.MONOLITH,
+                type: MONOLITH,
               },
             });
             newChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
@@ -167,14 +169,14 @@ describe('JHipsterEntityExporter', () => {
 
         it('should return the exported entities', () => {
           jestExpect(returned).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "applications": Array [],
+[
+  {
+    "applications": [],
     "changelogDate": "42",
     "dto": "no",
     "entityTableName": "a",
-    "fields": Array [
-      Object {
+    "fields": [
+      {
         "fieldName": "myEnum",
         "fieldType": "MyEnum",
         "fieldValues": "FRENCH,ENGLISH",
@@ -185,7 +187,7 @@ Array [
     "jpaMetamodelFiltering": false,
     "name": "A",
     "pagination": "no",
-    "relationships": Array [],
+    "relationships": [],
     "service": "no",
   },
 ]
@@ -299,27 +301,27 @@ Array [
               entities,
               application: {
                 name: 'client',
-                type: ApplicationTypes.MONOLITH,
+                type: MONOLITH,
               },
             });
           });
 
           it('should return the exported entities', () => {
             jestExpect(returned).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "applications": "*",
     "changelogDate": "20180303092308",
     "dto": "no",
     "entityTableName": "client",
-    "fields": Array [],
+    "fields": [],
     "fluentMethods": true,
     "jpaMetamodelFiltering": true,
     "microserviceName": "client",
     "name": "Client",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "location",
         "relationshipName": "location",
         "relationshipType": "many-to-one",
@@ -327,19 +329,19 @@ Array [
     ],
     "service": "serviceClass",
   },
-  Object {
+  {
     "applications": "*",
     "changelogDate": "20180303092309",
     "dto": "no",
     "entityTableName": "location",
-    "fields": Array [],
+    "fields": [],
     "fluentMethods": true,
     "jpaMetamodelFiltering": true,
     "microserviceName": "client",
     "name": "Location",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "client",
         "otherEntityRelationshipName": "location",
         "relationshipName": "clients",
@@ -348,19 +350,19 @@ Array [
     ],
     "service": "serviceClass",
   },
-  Object {
+  {
     "applications": "*",
     "changelogDate": "20180303092310",
     "dto": "no",
     "entityTableName": "local_store",
-    "fields": Array [],
+    "fields": [],
     "fluentMethods": true,
     "jpaMetamodelFiltering": true,
     "microserviceName": "store",
     "name": "LocalStore",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "product",
         "otherEntityRelationshipName": "store",
         "relationshipName": "products",
@@ -369,13 +371,13 @@ Array [
     ],
     "service": "serviceClass",
   },
-  Object {
+  {
     "applications": "*",
     "changelogDate": "20180303092311",
     "dto": "no",
     "entityTableName": "product",
-    "fields": Array [
-      Object {
+    "fields": [
+      {
         "fieldName": "name",
         "fieldType": "String",
       },
@@ -385,8 +387,8 @@ Array [
     "microserviceName": "store",
     "name": "Product",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "localStore",
         "relationshipName": "store",
         "relationshipType": "many-to-one",
@@ -515,7 +517,7 @@ Array [
                 entities,
                 application: {
                   name: 'client',
-                  type: ApplicationTypes.MICROSERVICE,
+                  type: MICROSERVICE,
                 },
               });
             });
@@ -607,7 +609,7 @@ Array [
                 entities,
                 application: {
                   name: 'client',
-                  type: ApplicationTypes.MICROSERVICE,
+                  type: MICROSERVICE,
                 },
               });
             });
@@ -666,7 +668,7 @@ Array [
             entities,
             application: {
               name: 'MyApp',
-              type: ApplicationTypes.MONOLITH,
+              type: MONOLITH,
             },
           });
           newContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,8 +20,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import constants from '../generator-constants.cjs';
-import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
+import { dockerContainers, javaDependencies, CLIENT_DIST_DIR } from '../generator-constants.mjs';
 import {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,
@@ -29,8 +28,7 @@ import {
   prepareEntityPrimaryKeyForTemplates,
 } from '../../utils/entity.mjs';
 import type { SpringBootApplication } from '../server/types.mjs';
-import fieldTypes from '../../jdl/jhipster/field-types.js';
-import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
+import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getPomVersionProperties } from '../server/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
@@ -38,7 +36,6 @@ import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
-
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
 /**
@@ -61,9 +58,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
         application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
-        application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
-        application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
-        application.clientDistDir = `${application.buildDir}${constants.CLIENT_DIST_DIR}`;
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
         application.javaDependencies = this.prepareDependencies(

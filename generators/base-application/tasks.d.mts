@@ -10,8 +10,8 @@ import {
 
 export type Application = Record<string, any>;
 
-type ApplicationTaskParam<ApplicationType> = { application: ApplicationType } & GenerericTaskParam<any, any>;
-type ApplicationTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, ApplicationTaskParam<ApplicationType>>;
+export type ApplicationTaskParam<ApplicationType> = { application: ApplicationType } & GenerericTaskParam<any, any>;
+export type ApplicationTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, ApplicationTaskParam<ApplicationType>>;
 
 type ConfiguringEachEntityTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
   entityName: string;
