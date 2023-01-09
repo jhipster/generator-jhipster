@@ -69,8 +69,7 @@ import {
   LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithUnsetValues } from './support/index.mjs';
-import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
+import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -198,7 +197,16 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @returns {string}
    */
   jhipsterTemplatePath(...args) {
-    this._jhipsterGenerator = locateGenerator(this._jhipsterGenerator, this.env, this.options);
+    let existingGenerator;
+    try {
+      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+    } catch (error) {
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        existingGenerator = split.length === 1 ? split[0] : split[1];
+      }
+    }
+    this._jhipsterGenerator = existingGenerator;
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -1156,62 +1164,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-<<<<<<< HEAD
-=======
-   * @deprecated Should be removed in V8 in favour of getConstraintName
-   *
-   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} columnOrRelationName - name of the column or related entity
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   * @param {string} prefix - constraintName prefix for the constraintName
-   */
-  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
-    let constraintName;
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
-    if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
-    } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
-    }
-    let limit = 0;
-    if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
-      warning(
-        this,
-        `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 62;
-    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
-      warning(
-        this,
-        `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
-      );
-
-      limit = 61;
-    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
-      warning(
-        this,
-        `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 62;
-    }
-    return limit === 0
-      ? constraintName
-      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
-          separator,
-          noSnakeCase,
-          prefix,
-          appendHash: !legacyDbNames,
-        });
-  }
-
-  /**
->>>>>>> 76be228d4d (removes warning method)
    * @private
    * get a foreign key constraint name for tables in JHipster preferred style.
    *
