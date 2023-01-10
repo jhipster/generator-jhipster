@@ -217,6 +217,7 @@ spec:
           value: "x-request-id,x-ot-span-context"
 <%_ } _%>
 <%_ if (useKeycloak) { _%>  
+        # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
           value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
@@ -240,7 +241,7 @@ spec:
         - name: SERVER_SHUTDOWN
           value: graceful
     <%_ if (useKeycloak) { _%>
-        # if using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
+        # Custom trustStore required when using Let's Encrypt staging
         volumeMounts:
           - name: java-truststore
             mountPath: /etc/pki/java
@@ -269,6 +270,7 @@ spec:
           initialDelaySeconds: 120
   <%_ if (useKeycloak) { _%>
       volumes:
+      # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
       - name: java-truststore
         secret:
           secretName: letsencrypt-ca-secret
