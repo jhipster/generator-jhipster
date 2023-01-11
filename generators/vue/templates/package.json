@@ -34,7 +34,7 @@
     "copy-webpack-plugin": "11.0.0",
     "css-loader": "6.7.3",
     "css-minimizer-webpack-plugin": "4.2.2",
-    "folder-hash": "4.0.2",
+    "folder-hash": "4.0.3",
     "fork-ts-checker-webpack-plugin": "7.3.0",
     "html-webpack-plugin": "5.5.0",
     "jest": "29.3.1",
