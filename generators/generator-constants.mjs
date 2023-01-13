@@ -223,7 +223,7 @@ export const LANGUAGES = [
     dispName: 'Qaraqalpaqsha',
     value: 'kr-Latin-kr',
     localeId: 'kr-Latin',
-    dayjsLocaleId: 'kr-latn',
+    dayjsLocaleId: 'kr-latin',
   },
   { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' },
 ];
