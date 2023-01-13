@@ -41,10 +41,8 @@ const expectedFiles = {
   ],
   jhgategateway: ['./jhgate-k8s/jhgate-gateway.yml', './jhgate-k8s/jhgate-destination-rule.yml', './jhgate-k8s/jhgate-virtual-service.yml'],
   applyScript: ['./kubectl-apply.sh'],
-  keycloak: ['./keycloak-k8s/keycloak.yml', './keycloak-k8s/keycloak-cert.yml', './keycloak-k8s/keycloak-configmap.yml'],
-  keycloakgateway: ['./keycloak-k8s/keycloak-gateway.yml'],
-  keycloakingress: ['./keycloak-k8s/keycloak-ingress.yml'],
-  certmanager: ['./cert-manager/ca-secret.yml', './cert-manager/cluster-issuer.yml'],
+  keycloak: ['./keycloak-k8s/keycloak.yml', './keycloak-k8s/keycloak-configmap.yml'],
+  certmanager: ['./cert-manager/letsencrypt-staging-ca-secret.yml', './cert-manager/letsencrypt-staging-issuer.yml'],
 };
 
 describe('JHipster Kubernetes Sub Generator', () => {
@@ -84,12 +82,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
       assert.file(expectedFiles.jhgate);
       assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
       assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
-    });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
     });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
@@ -133,12 +125,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
     it('creates expected mysql files', () => {
       assert.file(expectedFiles.msmysql);
     });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
-    });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
     });
@@ -179,12 +165,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
     it('creates expected namespace file', () => {
       assert.file(expectedFiles.customnamespace);
-    });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
     });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
@@ -227,19 +207,58 @@ describe('JHipster Kubernetes Sub Generator', () => {
     it('creates expected gatewa ingress files', () => {
       assert.file(expectedFiles.jhgateingress);
     });
+    it('create the apply script', () => {
+      assert.file(expectedFiles.applyScript);
+    });
+  });
+
+  describe('gateway and ingressType gke', () => {
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(getGenerator('kubernetes'))
+        .doInDir(dir => {
+          createMockedConfig('01-gateway', dir);
+        })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .withPrompts({
+          deploymentApplicationType: 'microservice',
+          directoryPath: './',
+          chosenApps: ['01-gateway'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          kubernetesServiceType: 'Ingress',
+          ingressType: 'gke',
+          ingressDomain: 'example.com',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files', () => {
+      assert.file(expectedFiles.eurekaregistry);
+    });
+    it('creates expected gateway files', () => {
+      assert.file(expectedFiles.jhgate);
+    });
+    it('creates expected gatewa ingress files', () => {
+      assert.file(expectedFiles.jhgateingress);
+    });
     it('create the expected cert-manager files', () => {
       assert.file(expectedFiles.certmanager);
     });
     it('create the expected keycloak files', () => {
       assert.file(expectedFiles.keycloak);
     });
-    it('create the expected keycloak ingress files', () => {
-      assert.file(expectedFiles.keycloakingress);
-    });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
     });
-  });
+  });  
 
   describe('MySQL and PostgreSQL microservices without gateway', () => {
     let runResult;
@@ -280,12 +299,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
     it('creates expected psql files', () => {
       assert.file(expectedFiles.mspsql);
-    });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
     });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
@@ -344,12 +357,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
     it('creates expected mssql files', () => {
       assert.file(expectedFiles.msmssqldb);
-    });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
     });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
@@ -511,15 +518,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
     it('creates expected routing gateway and istio files', () => {
       assert.file(expectedFiles.jhgategateway);
     });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
-    });
-    it('creates expected keycloak routing gateway and istio files', () => {
-      assert.file(expectedFiles.keycloakgateway);
-    });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
     });
@@ -588,13 +586,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
       assert.fileContent(expectedFiles.msmssqldb[1], /PersistentVolumeClaim/);
       assert.fileContent(expectedFiles.msmssqldb[1], /claimName:/);
     });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
-    });
-
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
     });
