@@ -32,7 +32,7 @@ metadata:
   <%_ } _%>
 spec:
   <%_ if (ingressType === "nginx") { _%>
-  ingressClassName: "nginx"
+  ingressClassName: nginx
   <%_ } _%>
   rules:
   <%_ if (ingressDomain) { _%>
