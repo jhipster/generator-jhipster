@@ -218,6 +218,13 @@ export const LANGUAGES = [
     localeId: 'uz-Latn',
     dayjsLocaleId: 'uz-latn',
   },
+  {
+    name: 'Karakalpak (Latin)',
+    dispName: 'Qaraqalpaqsha',
+    value: 'kr-Latin-kr',
+    localeId: 'kr-Latin',
+    dayjsLocaleId: 'kr-latn',
+  },
   { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' },
 ];
 export const MAIN_DIR = 'src/main/';

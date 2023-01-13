@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Loglar",
+        "nbloggers": "Jami loggerlar sanı : {{ total }}",
+        "filter": "Filtr",
+        "table": {
+            "name": "Atı",
+            "level": "Dárejesi"
+        }
+    }
+}

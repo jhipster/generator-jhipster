@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Java Hipsterǵı, xosh kelipsiz!",
+        "subtitle": "Bas bet",
+        "logged": {
+            "message": "Siz \"{{username}}\" Paydalanıwshısı retinde kirdińiz."
+        },
+        "question": "JHipster boyınsha sorawlarıńız bolsa :",
+        "link": {
+            "homepage": "JHipster bas beti",
+            "stackoverflow": "JHipster Stack Overflow",
+            "bugtracker": "JHipster bag trekeri",
+            "chat": "JHipster ulıwma chat xanasi",
+            "follow": "Twitterdagi logini @jhipster"
+        },
+        "like": "Eger JHipster sizge unasa, bul mánzilde juldızsha quyıwdı umitpań",
+        "github": "GitHub"
+    }
+}

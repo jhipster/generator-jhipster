@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Qáte!",
+        "http": {
+            "400": "Natiwri soraw.",
+            "403": "Siz bul betke kiriw ushın avtorizatsiyadan ótpegensiz",
+            "404": "Tabilmadi.",
+            "405": "Siz isletken HTTP soraw bul URL ushin mas kelmeydi.",
+            "500": "Ishki qátelik júz berdi."
+        },
+        "concurrencyFailure": "Basqa paydalanıwshı sol maǵlıwmattı siz menen bir waqıtta ózgertirdi. Sizdiń ózgerislerińiz biykar etildi.",
+        "validation": "Server tárepte validatsiya qateligi júz berdi."
+    }
+}

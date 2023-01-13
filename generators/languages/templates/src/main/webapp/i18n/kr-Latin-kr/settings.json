@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "[<strong>{{username}}</strong>] sazlamaları",
+        "form": {
+            "firstname": "At",
+            "firstname.placeholder": "Atıńız",
+            "lastname": "Familiya",
+            "lastname.placeholder": "Familiyańız",
+            "language": "Til",
+            "button": "Saqlaw"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Qátelik júz berdi!</strong> Sazlamalar saqlanbadı.",
+                "emailexists": "<strong>Email bánt!</strong> Ótinish, basqasın kiritiń."
+            },
+            "success": "<strong>Sazlamalar saqlandı!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "At kiritiń.",
+                    "minlength": "At uzınlıǵı keminde 1 hárip bolsın",
+                    "maxlength": "At uzınlıǵı kóbi menen 50 hárip bolsın "
+                },
+                "lastname": {
+                    "required": "Famılıya kiritiń.",
+                    "minlength": "Famılıya uzınlıǵı keminde 1 hárip bolsın",
+                    "maxlength": "Famılıya uzınlıǵı kóbi menen 50 hárip bolsın "
+                }
+            }
+        }
+    }
+}

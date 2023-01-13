@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Avtorizatsiya",
+        "form": {
+            "password": "Parol",
+            "password.placeholder": "Parolińiz",
+            "rememberme": "Eslep qaliw",
+            "button": "Kiriw"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Kire almadińiz!</strong> Iltimas, maǵlıwmatlarıńızdı tekserip qayta urunp kóriń."
+            }
+        },
+        "password": {
+            "forgot": "Parolińizdi umıttıńızba?"
+        }
+    }
+}
