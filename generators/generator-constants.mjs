@@ -226,7 +226,6 @@ export const LANGUAGES = [
     dayjsLocaleId: 'kr-latin',
   },
   { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' },
-
 ];
 export const MAIN_DIR = 'src/main/';
 export const TEST_DIR = 'src/test/';
