@@ -22,24 +22,24 @@ let helpBlocks = 0; %>
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
-                "refreshListLabel": "Refresh list",
+                "refreshListLabel": "Listeyi yenile",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Create a new <%= entityClassHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityClassHumanized %>",
+                "createLabel": "Yeni <%= entityClassHumanized %> ekle",
+                "createOrEditLabel": "Yeni <%= entityClassHumanized %> ekle veya guncelle",
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
-                "search": "Search for <%= entityClassHumanized %>",
+                "search": "<%= entityClassHumanized %> ara",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "<%= entityClassPluralHumanized %> kaydi bulunamadi"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",
+            "created": "{{ param }} ID ile bir <%= entityClassHumanized %> eklendi",
+            "updated": "{{ param }} nolu <%= entityClassHumanized %> guncellendi",
+            "deleted": "{{ param }} nolu <%= entityClassHumanized %> silindi",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClassHumanized %> {{ id }}?"
+                "question": "{{ id }} nolu <%= entityClassHumanized %> silinecek. Devem etmek istiyor musunuz?"
             },
 <%_ } _%>
             "detail": {
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "{{ param }} ID ile bir <%= entityClassHumanized %> eklendi",
+            "updated": "{{ param }} nolu <%= entityClassHumanized %> guncellendi",
+            "deleted": "{{ param }} nolu <%= entityClassHumanized %> silindi"
         }
     }
 <%_ } _%>
