@@ -23,6 +23,7 @@ import Generator from 'yeoman-generator';
 import shelljs from 'shelljs';
 
 import { stringify } from '../../utils/index.mjs';
+import { Logguer } from './support/logging.mjs';
 
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
@@ -53,6 +54,7 @@ export default class PrivateBase extends Generator {
     }
     // expose lodash to templates
     this._ = _;
+    this.logguer = new Logguer(this.log, this.configOptions, this.options, this._debug);
   }
 
   /**

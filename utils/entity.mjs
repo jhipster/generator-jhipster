@@ -25,7 +25,6 @@ import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
 import { getTypescriptKeyType } from '../generators/client/support/index.mjs';
-import { warning } from '../generators/base/support/index.mjs';
 import { getEntityFolderName } from '../generators/entity/support/index.mjs';
 import {
   applicationTypes,
@@ -251,7 +250,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     });
     const withError = fieldEntries.find(entry => !entry);
     if (withError) {
-      warning(generator, `Error generating a full sample for entity ${entityName}`);
+      generator.logguer.warn(`Error generating a full sample for entity ${entityName}`);
       return undefined;
     }
     return Object.fromEntries(fieldEntries);

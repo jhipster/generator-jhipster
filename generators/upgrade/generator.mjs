@@ -26,7 +26,6 @@ import path from 'path';
 import childProcess from 'child_process';
 
 import BaseGenerator from '../base/index.mjs';
-import { warning } from '../base/support/index.mjs';
 import { upgradeFiles } from '../cleanup.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
@@ -227,7 +226,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     const commandPrefix = 'npm show';
     const pkgInfo = shelljs.exec(`${commandPrefix} ${packageName} version`, { silent: this.silent });
     if (pkgInfo.stderr) {
-      warning(this, pkgInfo.stderr);
+      this.logguer.warn(pkgInfo.stderr);
       throw new Error(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
     }
     const msg = pkgInfo.stdout;
@@ -257,7 +256,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       async assertGitPresent() {
         if (!(await this.createGit().version()).installed) {
-          warning(this, 'git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
+          this.logguer.warn(`git is not found on your computer.\n, Install git: ${chalk.yellow('https://git-scm.com/')}`);
           throw new Error('Exiting the process.');
         }
       },
@@ -298,8 +297,7 @@ export default class UpgradeGenerator extends BaseGenerator {
                   if (this.newBlueprintVersionFound === undefined) {
                     this.newBlueprintVersionFound = false;
                   }
-                  warning(
-                    this,
+                  this.logguer.warn(
                     `${chalk.green('No update available.')} Application has already been generated with latest version for blueprint: ${
                       blueprint.name
                     }`
@@ -351,7 +349,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
         if (gitStatus.code !== 0) this.error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
         if (gitStatus.stdout) {
-          warning(this, gitStatus.stdout);
+          this.logguer.warn(gitStatus.stdout);
           throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
         }
       },
@@ -508,7 +506,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (gitDiff.code !== 0) this.error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         if (gitDiff.stdout) {
           const installCommand = 'npm install';
-          warning(this, `There are conflicts in package.json, please fix them and then run ${installCommand}`);
+          this.logguer.warn(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
           this.skipInstall = true;
         }
       },
@@ -544,7 +542,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (gitDiff.code !== 0) this.error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         this.success(chalk.bold('Upgraded successfully.'));
         if (gitDiff.stdout) {
-          warning(this, `Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
+          this.logguer.warn(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
         }
       },
     };

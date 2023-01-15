@@ -28,7 +28,6 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { logDebug, warning } from './support/index.mjs';
 import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { stringHashCode } from '../utils.mjs';
@@ -349,7 +348,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           languages.push(language);
         }
       } catch (e) {
-        logDebug(this, 'Error:', e);
+        this.logguer.debug('Error:', e);
         // An exception is thrown if the folder doesn't exist
         // do nothing as the language might not be installed
       }
@@ -1035,8 +1034,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       return this.fs.readJSON(file);
     } catch (error) {
-      warning(this, `Unable to parse ${file}, is the entity file malformed or invalid?`);
-      logDebug(this, 'Error:', error);
+      this.logguer.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
+      this.logguer.debug('Error:', error);
       return undefined;
     }
   }
@@ -1150,8 +1149,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     }
     const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      warning(
-        this,
+      this.logguer.warn(
         `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
       );
       return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
@@ -1164,6 +1162,59 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * @deprecated Should be removed in V8 in favour of getConstraintName
+   *
+   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
+   *
+   * @param {string} entityName - name of the entity
+   * @param {string} columnOrRelationName - name of the column or related entity
+   * @param {string} prodDatabaseType - database type
+   * @param {boolean} noSnakeCase - do not convert names to snakecase
+   * @param {string} prefix - constraintName prefix for the constraintName
+   */
+  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
+    let constraintName;
+    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+    const separator = legacyDbNames ? '_' : '__';
+    if (noSnakeCase) {
+      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
+    } else {
+      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
+    }
+    let limit = 0;
+    if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      this.logguer.warn(
+        `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
+      );
+
+      limit = 62;
+    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+      this.logguer.warn(
+        `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
+      );
+
+      limit = 61;
+    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      this.logguer.warn(
+        `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+      );
+
+      limit = 62;
+    }
+    return limit === 0
+      ? constraintName
+      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+          separator,
+          noSnakeCase,
+          prefix,
+          appendHash: !legacyDbNames,
+        });
+  }
+
+  /**
+>>>>>>> b4e435345a (introduce logguer class)
    * @private
    * get a foreign key constraint name for tables in JHipster preferred style.
    *
@@ -1282,7 +1333,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
-            warning(this, "\nFailed to create a KeyStore with 'keytool'", code);
+            this.logguer.warn("\nFailed to create a KeyStore with 'keytool'", code);
           } else {
             this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
@@ -1353,7 +1404,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         }
       );
     } catch (err) {
-      logDebug(this, 'Error:', err);
+      this.logguer.debug('Error:', err);
       // fail silently as this function doesn't affect normal generator flow
     }
   }
@@ -1550,9 +1601,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
 templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
-            warning(this, `Possible blueprint conflict detected: ${moreThanOneMessage}`);
+            this.logguer.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
-            logDebug(this, moreThanOneMessage);
+            this.logguer.debug(moreThanOneMessage);
           }
         }
         sourceFileFrom = existingTemplates.shift();
@@ -1694,7 +1745,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && this.fs.exists(destinationFile)) {
-              logDebug(this, `skipping file ${destinationFile}`);
+              this.logguer.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
 
@@ -1728,7 +1779,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    logDebug(this, `Time taken to write files: ${new Date() - startTime}ms`);
+    this.logguer.debug(`Time taken to write files: ${new Date() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -1761,7 +1812,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logguer, options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       }
@@ -1896,7 +1947,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logguer, options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {
@@ -1935,7 +1986,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.jhipsterConfig.clientPackageManager) {
       const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
       if (!usingNpm) {
-        warning(this, `Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        this.logguer.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
         options.skipInstall = true;
       }
     }

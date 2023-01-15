@@ -23,7 +23,6 @@ import needleClientBase from '../../client/needle-api/needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
 import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
 import { stripMargin } from '../../base/support/index.mjs';
-import { logDebug } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
@@ -145,7 +144,7 @@ export default class extends needleClientBase {
             iconImport +
             chalk.yellow('.\n')
         );
-        logDebug(this.generator, 'Error:', e);
+        this.generator.logguer.debug('Error:', e);
       }
     }
   }
@@ -243,7 +242,7 @@ export default class extends needleClientBase {
         this._addRoute(entityUrl, modulePath, undefined, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
       }
     } catch (e) {
-      logDebug(this.generator, 'Error:', e);
+      this.generator.logguer.debug('Error:', e);
     }
   }
 

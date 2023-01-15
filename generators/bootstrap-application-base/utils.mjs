@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { warning } from '../base/support/index.mjs';
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { loadRequiredConfigIntoEntity } from '../../utils/entity.mjs';
 import { getPkType } from '../entity/support/index.mjs';
@@ -33,10 +32,10 @@ export function createUserEntity(customUserData = {}, application) {
   const userEntityDefinition = this.readEntityJson('User');
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
-      warning(this, 'Relationships on the User entity side will be disregarded');
+      this.logguer.warn('Relationships on the User entity side will be disregarded');
     }
     if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
-      warning(this, 'Fields on the User entity side (other than id) will be disregarded');
+      this.logguer.warn('Fields on the User entity side (other than id) will be disregarded');
     }
   }
 

@@ -23,14 +23,6 @@ import chalk from 'chalk';
  * formats the message to be displayed in the console.
  * @param message the debug message to format.
  */
-const formatDebugMessageHeader = message => {
-  return `${chalk.yellow.bold('DEBUG!')} ${message}`;
-};
-
-/**
- * formats the message to be displayed in the console.
- * @param message the debug message to format.
- */
 const formatWarningMessageHeader = message => {
   return `${chalk.yellow.bold('WARNING!')} ${message}`;
 };
@@ -43,7 +35,6 @@ const formatWarningMessageHeader = message => {
 const jhipsterDebugOptionsChecker = (configOptions, options) => {
   return (configOptions && configOptions.isDebugEnabled) || (options && options.debug);
 };
-
 /**
  * Prints the messages then the arguments using the yeoman logger
  * @param context the generator context.
@@ -53,6 +44,14 @@ const jhipsterDebugOptionsChecker = (configOptions, options) => {
 const printMessageUsingGeneratorLogger = (log, message, ...args) => {
   log(message);
   args.forEach(arg => log(arg));
+};
+
+/**
+ * formats the message to be displayed in the console.
+ * @param message the debug message to format.
+ */
+const formatDebugMessageHeader = message => {
+  return `${chalk.yellow.bold('DEBUG!')} ${message}`;
 };
 
 /**
@@ -74,9 +73,9 @@ const printMessageAndArgumentsUsingInternalDebugger = (debuggerChannel, message,
   args.forEach(arg => debuggerChannel(arg));
 };
 
-const logDebug = (configOptions, options, log, _debug, message, ...args) => {
+const logDebug = (isDebugEnabled, log, _debug, message, ...args) => {
   const formattedMsg = formatDebugMessageHeader(message);
-  if (jhipsterDebugOptionsChecker(configOptions, options)) {
+  if (isDebugEnabled) {
     printMessageUsingGeneratorLogger(log, formattedMsg, ...args);
   }
   if (generatorDebugOptionChecker(_debug)) {
@@ -84,20 +83,27 @@ const logDebug = (configOptions, options, log, _debug, message, ...args) => {
   }
 };
 
+export class Logguer {
+  constructor(yeomanLogguer, configOptions, options, yeomanDebug) {
+    this.yeomanLogguer = yeomanLogguer;
+    this.yeomanDebug = yeomanDebug;
+    this.isDebugEnabled = jhipsterDebugOptionsChecker(configOptions, options);
+  }
+
+  debug(msg, ...args) {
+    logDebug(this.isDebugEnabled, this.yeomanLogguer, this.yeomanDebug, msg, ...args);
+  }
+
+  info(msg) {
+    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+  }
+
+  warn(msg) {
+    const warn = formatWarningMessageHeader(msg);
+    printMessageUsingGeneratorLogger(this.yeomanLogguer, warn);
+  }
+}
+
 export const debug = (yeomanContext, message, ...args) => {
   logDebug(yeomanContext.configOptions, yeomanContext.options, yeomanContext.log, yeomanContext._debug, message, ...args);
 };
-
-/**
- * Print a warning message.
- *
- * @param {string} msg - message to print
- */
-export const warning = (yeomanContext, msg) => {
-  const warn = formatWarningMessageHeader(msg);
-  printMessageUsingGeneratorLogger(yeomanContext.log, warn);
-  if (generatorDebugOptionChecker(yeomanContext._debug)) {
-    printMessageAndArgumentsUsingInternalDebugger(yeomanContext._debug, warn);
-  }
-};
-export default debug;

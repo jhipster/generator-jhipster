@@ -193,7 +193,7 @@ export default class EntityGenerator extends BaseGenerator {
               this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
               this.entityStorage.set(this.microserviceConfig);
             } catch (err) {
-              this.debug('Error:', err);
+              this.logguer.debug('Error:', err);
               throw new Error('\nThe entity configuration file could not be read!\n');
             }
           }

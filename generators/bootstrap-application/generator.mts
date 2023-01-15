@@ -19,7 +19,6 @@
 import assert from 'assert';
 import lodash from 'lodash';
 
-import { warning } from '../base/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
@@ -164,8 +163,7 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = otherEntityName;
-            warning(
-              this,
+            this.logguer.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
                 relationship.otherEntityName
               } as fallback`

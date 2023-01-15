@@ -382,7 +382,7 @@ export function getAppFolders(input, deploymentApplicationType) {
           }
         } catch (err) {
           this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
-          this.debug('Error:', err);
+          this.logguer.debug('Error:', err);
         }
       }
     }

@@ -26,7 +26,6 @@ import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 
 import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
-import { warning } from './support/index.mjs';
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import baseOptions from './options.mjs';
@@ -251,13 +250,13 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       this.info(result.info);
     }
     if (result.warning) {
-      warning(this, result.warning);
+      this.logguer.warn(result.warning);
     }
     if (result.error) {
       if (throwOnError) {
         throw new Error(result.error);
       } else {
-        warning(this, result.error);
+        this.logguer.warn(result.error);
       }
     }
   }

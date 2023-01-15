@@ -23,6 +23,7 @@ import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
 import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
 import { handleError, removeFieldsWithUnsetValues } from '../base/support/index.mjs';
+
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
@@ -97,7 +98,7 @@ export function loadConfigs() {
   const serverPort = 8080;
 
   // Loading configs
-  logDebug(this, `Apps folders: ${this.appsFolders}`);
+  this.logguer.debug(`Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
