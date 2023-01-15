@@ -19,8 +19,9 @@
 /* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
 import _ from 'lodash';
-import BaseGenerator from '../base-application/index.mjs';
 
+import BaseGenerator from '../base-application/index.mjs';
+import { handleError } from '../base/support/index.mjs';
 import { checkNode } from './support/index.mjs';
 import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
@@ -348,7 +349,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
       validate() {
         if (this.skipServer && this.skipClient) {
-          this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
+          handleError(this.logguer, `You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
       },
     };
@@ -515,7 +516,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
   _validateAppConfiguration(config = this.jhipsterConfig) {
     if (config.entitySuffix === config.dtoSuffix) {
-      this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+      handleError(this.logguer, 'Entities cannot be generated as the entity suffix and DTO suffix are equals !');
     }
   }
 }

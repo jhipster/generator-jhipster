@@ -6,6 +6,7 @@ import LanguagesGenerator from '../../generators/languages/index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator, getTemplatePath } from '../support/index.mjs';
+import { handleError } from '../../generators/base/support/index.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -19,7 +20,7 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      handleError(this.logguer, 'This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;

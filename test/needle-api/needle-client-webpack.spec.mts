@@ -4,6 +4,7 @@ import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_WEBPACK_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
+import { handleError } from '../../generators/base/support/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const assetFrom = 'source';
@@ -17,7 +18,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      handleError(this.logguer, 'This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;

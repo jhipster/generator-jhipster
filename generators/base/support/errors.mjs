@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin, escapeRegExp } from './templates/doc-formatters.mjs';
-export { parseCreationTimestamp, resetFakerSeed } from './configuration-helpers/sequences.mjs';
-export { default as getOptionFromArray } from './configuration-helpers/options-helpers.mjs';
-export { default as httpsGet } from './remote.mjs';
-export { appendYeomanOptionsFromGeneratorOptions, generatorSkipChecks, isReproducible } from './configuration-helpers/options.mjs';
-export { default as getEnumInfo } from './configuration-helpers/enum.mjs';
-export { removeFieldsWithUnsetValues } from './config.mjs';
-export { default as handleError } from './errors.mjs';
+
+const handleError = (logguer, error) => {
+  logguer.error(error);
+  throw new Error(`${error}`);
+};
+
+export default handleError;

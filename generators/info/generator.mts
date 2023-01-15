@@ -23,6 +23,7 @@ import chalk from 'chalk';
 import type { ExecaReturnValue } from 'execa';
 
 import BaseGenerator from '../base/index.mjs';
+import { handleError } from '../base/support/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
@@ -123,7 +124,7 @@ export default class InfoGenerator extends BaseGenerator {
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
       this.log((error as any).message || error);
-      this.error('\nError while parsing entities to JDL\n');
+      handleError(this.logguer, '\nError while parsing entities to JDL\n');
     }
     return jdlObject;
   }

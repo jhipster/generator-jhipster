@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import BaseGenerator from '../base/index.mjs';
 
+import BaseGenerator from '../base/index.mjs';
+import { handleError } from '../base/support/index.mjs';
 import prompts from './prompts.mjs';
 import AwsFactory from './lib/aws.mjs';
 import statistics from '../statistics.cjs';
@@ -85,7 +86,7 @@ export default class AwsGenerator extends BaseGenerator {
             this.dbEngine = 'postgres';
             break;
           default:
-            this.error('Sorry deployment for this database is not possible');
+            handleError(this.logguer, 'Sorry deployment for this database is not possible');
         }
       },
     };
@@ -139,7 +140,7 @@ export default class AwsGenerator extends BaseGenerator {
 
         const child = this.buildApplication(this.buildTool, 'prod', true, err => {
           if (err) {
-            this.error(err);
+            handleError(this.logguer, err);
           } else {
             cb();
           }
@@ -151,28 +152,28 @@ export default class AwsGenerator extends BaseGenerator {
       },
       createBucket() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create S3 bucket'));
+        this.logguer.log();
+        this.logguer.info(chalk.bold('Create S3 bucket'));
 
         const s3 = this.awsFactory.getS3();
 
         s3.createBucket({ bucket: this.bucketName }, (err, data) => {
           if (err) {
             if (err.message == null) {
-              this.error('The S3 bucket could not be created. Are you sure its name is not already used?');
+              handleError(this.logguer, 'The S3 bucket could not be created. Are you sure its name is not already used?');
             } else {
-              this.error(err.message);
+              handleError(this.logguer, err.message);
             }
           } else {
-            this.log(data.message);
+            this.logguer.info(data.message);
             cb();
           }
         });
       },
       uploadWar() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Upload WAR to S3'));
+        this.logguer.log();
+        this.logguer.info(chalk.bold('Upload WAR to S3'));
 
         const s3 = this.awsFactory.getS3();
 
@@ -183,18 +184,18 @@ export default class AwsGenerator extends BaseGenerator {
 
         s3.uploadWar(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            handleError(this.logguer, err.message);
           } else {
             this.warKey = data.warKey;
-            this.log(data.message);
+            this.logguer.info(data.message);
             cb();
           }
         });
       },
       createDatabase() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create database'));
+        this.logguer.log();
+        this.logguer.info(chalk.bold('Create database'));
 
         const rds = this.awsFactory.getRds();
 
@@ -208,17 +209,17 @@ export default class AwsGenerator extends BaseGenerator {
 
         rds.createDatabase(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            handleError(this.logguer, err.message);
           } else {
-            this.log(data.message);
+            this.logguer.info(data.message);
             cb();
           }
         });
       },
       createDatabaseUrl() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Waiting for database (This may take several minutes)'));
+        this.logguer.log();
+        this.logguer.info(chalk.bold('Waiting for database (This may take several minutes)'));
 
         if (this.dbEngine === 'postgres') {
           this.dbEngine = POSTGRESQL;
@@ -233,22 +234,22 @@ export default class AwsGenerator extends BaseGenerator {
 
         rds.createDatabaseUrl(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            handleError(this.logguer, err.message);
           } else {
             this.dbUrl = data.dbUrl;
-            this.log(data.message);
+            this.logguer.info(data.message);
             cb();
           }
         });
       },
       verifyRoles() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
+        this.logguer.log();
+        this.logguer.info(chalk.bold('Verifying ElasticBeanstalk Roles'));
         const iam = this.awsFactory.getIam();
         iam.verifyRoles({}, err => {
           if (err) {
-            this.error(err.message);
+            handleError(this.logguer, err.message);
           } else {
             cb();
           }
@@ -256,8 +257,8 @@ export default class AwsGenerator extends BaseGenerator {
       },
       createApplication() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create/Update application'));
+        this.logguer.log();
+        this.logguer.info(chalk.bold('Create/Update application'));
 
         const eb = this.awsFactory.getEb();
 
@@ -274,9 +275,9 @@ export default class AwsGenerator extends BaseGenerator {
 
         eb.createApplication(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            handleError(this.logguer, err.message);
           } else {
-            this.log(data.message);
+            this.logguer.info(data.message);
             cb();
           }
         });

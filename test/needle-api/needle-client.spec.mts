@@ -3,6 +3,7 @@ import helpers from 'yeoman-test';
 import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
+import { handleError } from '../../generators/base/support/index.mjs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
@@ -12,7 +13,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      handleError(this.logguer, 'This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;

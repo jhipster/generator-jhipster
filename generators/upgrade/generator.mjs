@@ -25,6 +25,7 @@ import gitignore from 'parse-gitignore';
 import path from 'path';
 import childProcess from 'child_process';
 
+import { handleError } from '../base/support/index.mjs';
 import BaseGenerator from '../base/index.mjs';
 import { upgradeFiles } from '../cleanup.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
@@ -157,14 +158,14 @@ export default class UpgradeGenerator extends BaseGenerator {
       args.push('-f');
     }
     const gitCheckout = this.gitExec(args, { silent: this.silent });
-    if (gitCheckout.code !== 0) this.error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
+    if (gitCheckout.code !== 0) handleError(this.logguer, `Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
     this.success(`Checked out branch "${branch}"`);
   }
 
   _upgradeFiles() {
     if (upgradeFiles(this)) {
       const gitCommit = this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent });
-      if (gitCommit.code !== 0) this.error(`Unable to prepare upgrade:\n${gitCommit.stderr}`);
+      if (gitCommit.code !== 0) handleError(this.logguer, `Unable to prepare upgrade:\n${gitCommit.stderr}`);
       this.success('Upgrade preparation');
     }
   }
@@ -197,18 +198,18 @@ export default class UpgradeGenerator extends BaseGenerator {
       childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
       this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
     } catch (err) {
-      this.error(`Something went wrong while generating project! ${err}`);
+      handleError(this.logguer, `Something went wrong while generating project! ${err}`);
     }
   }
 
   _gitCommitAll(commitMsg) {
     const gitAdd = this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000, silent: this.silent });
-    if (gitAdd.code !== 0) this.error(`Unable to add resources in git:\n${gitAdd.stderr}`);
+    if (gitAdd.code !== 0) handleError(this.logguer, `Unable to add resources in git:\n${gitAdd.stderr}`);
 
     const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
       silent: this.silent,
     });
-    if (gitCommit.code !== 0) this.error(`Unable to commit in git:\n${gitCommit.stderr}`);
+    if (gitCommit.code !== 0) handleError(this.logguer, `Unable to commit in git:\n${gitCommit.stderr}`);
     this.success(`Committed with message "${commitMsg}"`);
   }
 
@@ -242,14 +243,14 @@ export default class UpgradeGenerator extends BaseGenerator {
 
     const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
     if (npmIntall.code === 0) this.success(`Installed ${npmPackage}@${version}`);
-    else this.error(`Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
+    else handleError(this.logguer, `Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
   }
 
   get [BaseGenerator.CONFIGURING]() {
     return this.asConfiguringTaskGroup({
       assertJHipsterProject() {
         if (!this.config.get('baseName')) {
-          this.error('Current directory does not contain a JHipster project.');
+          handleError(this.logguer, 'Current directory does not contain a JHipster project.');
         }
       },
 
@@ -328,14 +329,15 @@ export default class UpgradeGenerator extends BaseGenerator {
         } else if (this.force) {
           this.log(chalk.yellow('Forced re-generation'));
         } else if (!this.newBlueprintVersionFound) {
-          this.error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
+          handleError(this.logguer, `${chalk.green('No update available.')} Application has already been generated with latest version.`);
         }
       },
 
       assertGitRepository() {
         const gitInit = () => {
           const gitInit = this.gitExec('init', { silent: this.silent });
-          if (gitInit.code !== 0) this.error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
+          if (gitInit.code !== 0)
+            handleError(this.logguer, `Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
           this.success('Initialized a new Git repository');
           this._gitCommitAll('Initial');
         };
@@ -346,7 +348,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       assertNoLocalChanges() {
         const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
-        if (gitStatus.code !== 0) this.error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
+        if (gitStatus.code !== 0) handleError(this.logguer, `Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
         if (gitStatus.stdout) {
           this.logguer.warn(gitStatus.stdout);
           throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
@@ -355,7 +357,8 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       detectCurrentBranch() {
         const gitRevParse = this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { silent: this.silent });
-        if (gitRevParse.code !== 0) this.error(`Unable to detect current Git branch:\n${gitRevParse.stdout} ${gitRevParse.stderr}`);
+        if (gitRevParse.code !== 0)
+          handleError(this.logguer, `Unable to detect current Git branch:\n${gitRevParse.stdout} ${gitRevParse.stderr}`);
         this.sourceBranch = gitRevParse.stdout.replace('\n', '');
       },
 
@@ -375,7 +378,8 @@ export default class UpgradeGenerator extends BaseGenerator {
           }
           const gitMerge = this.gitExec(args, { silent: this.silent });
           if (gitMerge.code !== 0) {
-            this.error(
+            handleError(
+              this.logguer,
               `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`
             );
           }
@@ -409,7 +413,8 @@ export default class UpgradeGenerator extends BaseGenerator {
 
         const createUpgradeBranch = () => {
           const gitCheckout = this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], { silent: this.silent });
-          if (gitCheckout.code !== 0) this.error(`Unable to create ${UPGRADE_BRANCH} branch:\n${gitCheckout.stdout} ${gitCheckout.stderr}`);
+          if (gitCheckout.code !== 0)
+            handleError(this.logguer, `Unable to create ${UPGRADE_BRANCH} branch:\n${gitCheckout.stdout} ${gitCheckout.stderr}`);
           this.success(`Created branch ${UPGRADE_BRANCH}`);
         };
 
@@ -502,7 +507,8 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       checkConflictsInPackageJson() {
         const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent });
-        if (gitDiff.code !== 0) this.error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
+        if (gitDiff.code !== 0)
+          handleError(this.logguer, `Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         if (gitDiff.stdout) {
           const installCommand = 'npm install';
           this.logguer.warn(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
@@ -524,7 +530,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
           const pkgInstall = shelljs.exec(installCommand, { silent: this.silent });
           if (pkgInstall.code !== 0) {
-            this.error(`${installCommand} failed.`);
+            handleError(this.logguer, `${installCommand} failed.`);
           }
         } else {
           const logMsg = `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
@@ -538,7 +544,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     return {
       end() {
         const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U'], { silent: this.silent });
-        if (gitDiff.code !== 0) this.error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
+        if (gitDiff.code !== 0) handleError(this.logguer, `Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         this.success(chalk.bold('Upgraded successfully.'));
         if (gitDiff.stdout) {
           this.logguer.warn(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);

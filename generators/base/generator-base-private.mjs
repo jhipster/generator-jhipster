@@ -22,9 +22,8 @@ import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import shelljs from 'shelljs';
 
-import { stringify } from '../../utils/index.mjs';
 import { Logguer } from './support/logging.mjs';
-
+import { handleError } from './support/index.mjs';
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
@@ -170,7 +169,7 @@ export default class PrivateBase extends Generator {
       if (this.env === undefined) {
         throw new Error(message);
       }
-      this.error(message);
+      handleError(this.logguer, message);
     }
     const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
     if (!entityFolderPathAddition) {

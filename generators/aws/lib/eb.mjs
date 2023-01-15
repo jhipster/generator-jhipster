@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { handleError } from '../../base/support/index.mjs';
+
 let aws;
 let uuidV4;
 
@@ -25,7 +27,7 @@ const Eb = function Eb(Aws, generator) {
     const { v4 } = require('uuid'); // eslint-disable-line
     uuidV4 = v4;
   } catch (e) {
-    generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
+    handleError(generator.logguer, `Something went wrong while running jhipster:aws:\n${e}`);
   }
 };
 
