@@ -87,7 +87,7 @@
     "axios": "1.2.2",
     "chalk": "4.1.2",
     "chevrotain": "10.4.2",
-    "commander": "9.5.0",
+    "commander": "10.0.0",
     "conf": "10.2.0",
     "cpy-cli": "4.2.0",
     "debug": "4.3.4",
