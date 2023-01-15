@@ -846,12 +846,12 @@ export default class GaeGenerator extends BaseGenerator {
         }
         /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
-                    this.log(chalk.bold('\nSkipping build'));
+                    this.logguer.info(chalk.bold('\nSkipping build'));
                     return;
                 }
 
                 const done = this.async();
-                this.log(chalk.bold('\nBuilding application'));
+                this.logguer.info(chalk.bold('\nBuilding application'));
 
                 const child = this.buildApplication(this.buildTool, 'prod', (err) => {
                     if (err) {

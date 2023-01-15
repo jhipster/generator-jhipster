@@ -65,7 +65,7 @@ export default class AwsGenerator extends BaseGenerator {
           this.dbInstanceClass = awsConfig.dbInstanceClass;
           this.customDBInstanceClass = '';
 
-          this.log(
+          this.logguer.info(
             chalk.green(
               'This is an existing deployment, using the configuration from your .yo-rc.json file \nto deploy your application...\n'
             )
@@ -136,7 +136,7 @@ export default class AwsGenerator extends BaseGenerator {
     return {
       productionBuild() {
         const cb = this.async();
-        this.log(chalk.bold('Building application'));
+        this.logguer.info(chalk.bold('Building application'));
 
         const child = this.buildApplication(this.buildTool, 'prod', true, err => {
           if (err) {

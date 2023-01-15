@@ -1364,7 +1364,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         { silent: true },
         (code, stdout, stderr) => {
           if (!stderr && semver.lt(packageJson.version, stdout)) {
-            this.log(
+            this.logguer.warn(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
@@ -1372,8 +1372,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.log(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logguer.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logguer.warn(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }

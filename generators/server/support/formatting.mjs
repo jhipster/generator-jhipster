@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { stringNullOrEmpty, textToArray, isSimpleText } from '../../base/support/index.mjs';
+import { stringNullOrEmpty, textToArray, isSimpleText } from '../../base/support/templates/doc-formatters.mjs';
 
 const indent = (indentSize = 0) => {
   return _.repeat(' ', indentSize);

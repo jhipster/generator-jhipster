@@ -67,7 +67,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
         this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
       } catch (error) {
         this.logguer.warn('Error adding current blueprint templates as alternative for JHipster templates.');
-        this.log(error);
+        this.logguer.log(error);
       }
     }
   }

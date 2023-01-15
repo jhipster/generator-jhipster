@@ -186,7 +186,7 @@ export default class EntityGenerator extends BaseGenerator {
             context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
             context.useConfigurationFile = true;
 
-            this.log(`\nThe entity ${context.name} is being updated.\n`);
+            this.logguer.info(`\nThe entity ${context.name} is being updated.\n`);
             try {
               // We are generating a entity from a microservice.
               // Load it directly into our entity configuration.
@@ -250,14 +250,14 @@ export default class EntityGenerator extends BaseGenerator {
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
-          this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+          this.logguer.info(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
         }
 
         // Structure for prompts.
         this.entityStorage.defaults({ fields: [], relationships: [] });
 
         if (!context.useConfigurationFile) {
-          this.log(`\nThe entity ${entityName} is being created.\n`);
+          this.logguer.info(`\nThe entity ${entityName} is being created.\n`);
         }
       },
     };
@@ -336,7 +336,7 @@ export default class EntityGenerator extends BaseGenerator {
   get end() {
     return {
       end() {
-        this.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+        this.logguer.info(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
       },
     };
   }

@@ -148,7 +148,7 @@ export function loadFromYoRc() {
   delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
-    this.log('\nFound .yo-rc.json config file...');
+    this.logguer.info('\nFound .yo-rc.json config file...');
   }
 
   if (this.regenerate) {

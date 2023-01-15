@@ -131,8 +131,8 @@ export default class UpgradeGenerator extends BaseGenerator {
   get [BaseGenerator.INITIALIZING]() {
     return {
       displayLogo() {
-        this.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
-        this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
+        this.logguer.info(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
+        this.logguer.info(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
       },
 
       parseBlueprints() {
@@ -182,7 +182,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _generate(jhipsterVersion, blueprintInfo) {
-    this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
+    this.logguer.info(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
     let generatorCommand = 'yo jhipster';
     if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
       this._rmRf('node_modules');
@@ -222,7 +222,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _retrieveLatestVersion(packageName) {
-    this.log(`Looking for latest ${packageName} version...`);
+    this.logguer.info(`Looking for latest ${packageName} version...`);
     const commandPrefix = 'npm show';
     const pkgInfo = shelljs.exec(`${commandPrefix} ${packageName} version`, { silent: this.silent });
     if (pkgInfo.stderr) {
@@ -234,7 +234,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _installNpmPackageLocally(npmPackage, version) {
-    this.log(`Installing ${npmPackage} ${version} locally`);
+    this.logguer.info(`Installing ${npmPackage} ${version} locally`);
     const commandPrefix = 'npm install';
     const devDependencyParam = '--save-dev';
     const noPackageLockParam = '--no-package-lock';
@@ -263,7 +263,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       checkLatestBlueprintVersions() {
         if (!this.blueprints || this.blueprints.length === 0) {
-          this.log('No blueprints detected, skipping check of last blueprint version');
+          this.logguer.warn('No blueprints detected, skipping check of last blueprint version');
           return undefined;
         }
 
@@ -276,7 +276,7 @@ export default class UpgradeGenerator extends BaseGenerator {
                   return elem.name === blueprint.name;
                 });
                 if (targetBlueprint && targetBlueprint.version && targetBlueprint.version !== 'latest') {
-                  this.log(`Blueprint ${targetBlueprint.name} will be upgraded to target version: ${targetBlueprint.version}`);
+                  this.logguer.warn(`Blueprint ${targetBlueprint.name} will be upgraded to target version: ${targetBlueprint.version}`);
                   blueprint.latestBlueprintVersion = targetBlueprint.version;
                   return false;
                 }
@@ -292,7 +292,7 @@ export default class UpgradeGenerator extends BaseGenerator {
                   this.success(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
                 } else if (this.force) {
                   this.newBlueprintVersionFound = true;
-                  this.log(chalk.yellow('Forced re-generation'));
+                  this.logguer.warn(chalk.yellow('Forced re-generation'));
                 } else {
                   if (this.newBlueprintVersionFound === undefined) {
                     this.newBlueprintVersionFound = false;
@@ -318,16 +318,16 @@ export default class UpgradeGenerator extends BaseGenerator {
             this.originalTargetJhipsterVersion = this.targetJhipsterVersion;
             this.targetJhipsterVersion = packageJson.version;
           }
-          this.log(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
+          this.logguer.warn(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
           return;
         }
-        this.log(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
+        this.logguer.info(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
         const latestVersion = this._retrieveLatestVersion(GENERATOR_JHIPSTER);
         this.targetJhipsterVersion = latestVersion;
         if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
           this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
         } else if (this.force) {
-          this.log(chalk.yellow('Forced re-generation'));
+          this.logguer.warn(chalk.yellow('Forced re-generation'));
         } else if (!this.newBlueprintVersionFound) {
           handleError(this.logguer, `${chalk.green('No update available.')} Application has already been generated with latest version.`);
         }
@@ -392,7 +392,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
         const installBlueprintsLocally = () => {
           if (!this.blueprints || this.blueprints.length < 1) {
-            this.log('Skipping local blueprint installation since no blueprint has been detected');
+            this.logguer.info('Skipping local blueprint installation since no blueprint has been detected');
             return Promise.resolve(false);
           }
 
@@ -460,7 +460,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       updateBlueprints() {
         if (!this.blueprints || this.blueprints.length < 1) {
-          this.log('Skipping blueprint update since no blueprint has been detected');
+          this.logguer.info('Skipping blueprint update since no blueprint has been detected');
           return undefined;
         }
 
@@ -500,7 +500,7 @@ export default class UpgradeGenerator extends BaseGenerator {
       },
 
       mergeChangesBack() {
-        this.log(`Merging changes back to ${this.sourceBranch}...`);
+        this.logguer.info(`Merging changes back to ${this.sourceBranch}...`);
         this.gitExec(['merge', '-q', UPGRADE_BRANCH], { silent: this.silent });
         this.success('Merge done!');
       },
@@ -522,7 +522,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     return {
       install() {
         if (!this.skipInstall) {
-          this.log('Installing dependencies, please wait...');
+          this.logguer.info('Installing dependencies, please wait...');
           this.logguer.info('Removing the node_modules directory');
           this._rmRf('node_modules');
           const installCommand = 'npm install';

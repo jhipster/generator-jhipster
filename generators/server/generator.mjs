@@ -190,7 +190,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           try {
             await this.spawnCommand('./npmw', ['install'], { preferLocal: true });
           } catch (error) {
-            this.log(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
+            this.logguer.error(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
           }
           return true;
         }.bind(this),
@@ -751,7 +751,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       end({ application }) {
-        this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+        this.logguer.info(chalk.green.bold('\nServer application generated successfully.\n'));
 
         let executable = 'mvnw';
         if (application.buildTool === GRADLE) {
@@ -761,7 +761,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (os.platform() === 'win32') {
           logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.logguer.info(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
     });
   }

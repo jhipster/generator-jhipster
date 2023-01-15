@@ -47,7 +47,7 @@ export default class InfoGenerator extends BaseGenerator {
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
-        this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+        this.logguer.info(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
 
       async checkJHipster() {
@@ -123,7 +123,7 @@ export default class InfoGenerator extends BaseGenerator {
       });
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
-      this.log((error as any).message || error);
+      this.logguer.warn((error as any).message || error);
       handleError(this.logguer, '\nError while parsing entities to JDL\n');
     }
     return jdlObject;

@@ -110,7 +110,7 @@ export default class PrivateBase extends Generator {
   removeFile(file) {
     const destination = this.destinationPath(file);
     if (destination && shelljs.test('-f', destination)) {
-      this.log(`Removing the file - ${destination}`);
+      this.logguer.log(`Removing the file - ${destination}`);
       rmSync(destination, { force: true });
     }
     return destination;
@@ -128,7 +128,7 @@ export default class PrivateBase extends Generator {
         rmSync(folder, { recursive: true });
       }
     } catch (error) {
-      this.log(`Could not remove folder ${folder}`);
+      this.logguer.log(`Could not remove folder ${folder}`);
     }
   }
 

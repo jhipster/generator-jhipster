@@ -85,7 +85,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (this.languagesToApply.length > 0) {
       this.languagesToApply.forEach(language => {
         if (!this.isSupportedLanguage(language)) {
-          this.log('\n');
+          this.logguer.log('\n');
           handleError(
             this.logguer,
             `Unsupported language "${language}" passed as argument to language generator.` +
@@ -109,11 +109,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       validate() {
         if (this.languagesToApply.length > 0) {
           if (this.skipClient) {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
+            this.logguer.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
           } else if (this.skipServer) {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
+            this.logguer.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
           } else {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
+            this.logguer.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
           }
         }
       },
@@ -367,7 +367,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
@@ -402,7 +402,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
@@ -449,7 +449,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -488,7 +488,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
@@ -527,7 +527,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
@@ -567,7 +567,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. DayJS language task not updated with languages: ') +
@@ -597,7 +597,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -631,7 +631,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -663,7 +663,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
