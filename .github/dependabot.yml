@@ -33,6 +33,8 @@ updates:
       # ESM only version
       - dependency-name: 'os-locale'
         versions: ['>=6']
+      # https://github.com/jhipster/generator-jhipster/issues/20782
+      - dependency-name: 'prettier'
 
   - package-ecosystem: 'npm'
     directory: '/generators/angular/templates/'
@@ -140,6 +142,3 @@ updates:
       - 'theme: github_actions'
       - 'theme: CI builds'
       - 'skip-changelog'
-    ignore:
-      # https://github.com/jhipster/generator-jhipster/issues/20782
-      - dependency-name: 'prettier'
