@@ -1801,14 +1801,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
+          // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
           cache: false,
         };
+        const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
         const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions, copyOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions);
+          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions, copyOptions);
         }
       }
       if (!binary && transform && transform.length) {
