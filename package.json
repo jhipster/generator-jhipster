@@ -158,7 +158,7 @@
     "sort-keys": "5.0.0",
     "typescript": "4.9.4",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "7.1.0"
+    "yeoman-test": "7.2.0"
   },
   "engines": {
     "node": "^16.13.0 || >=18.8.0",
