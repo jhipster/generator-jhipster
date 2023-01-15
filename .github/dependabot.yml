@@ -140,3 +140,6 @@ updates:
       - 'theme: github_actions'
       - 'theme: CI builds'
       - 'skip-changelog'
+    ignore:
+      # https://github.com/jhipster/generator-jhipster/issues/20782
+      - dependency-name: 'prettier'
