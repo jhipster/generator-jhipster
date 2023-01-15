@@ -92,12 +92,8 @@ export function writeEntityFiles() {
       const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = application;
       for (const entity of entities) {
         for (const lang of languages) {
-            await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
-            this.addEntityTranslationKey(
-              entity.entityTranslationKeyMenu,
-              entity.entityClassHumanized || startCase(entity.entityClass),
-              lang
-            );
+          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
         }
       }
     },
