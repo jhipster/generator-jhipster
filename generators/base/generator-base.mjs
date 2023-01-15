@@ -1246,35 +1246,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} msg - message to print
    */
   error(msg) {
-    if (this._debug && this._debug.enabled) {
-      this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
-    }
+    this.logguer.error();
     throw new Error(`${msg}`);
-  }
-
-  /**
-   * Print a warning message.
-   *
-   * @param {string} msg - message to print
-   */
-  warning(msg) {
-    const warn = `${chalk.yellow.bold('WARNING!')} ${msg}`;
-    this.log(warn);
-    if (this._debug && this._debug.enabled) {
-      this._debug(warn);
-    }
-  }
-
-  /**
-   * Print an info message.
-   *
-   * @param {string} msg - message to print
-   */
-  info(msg) {
-    this.log.info(msg);
-    if (this._debug && this._debug.enabled) {
-      this._debug(`${chalk.green('INFO!')} ${msg}`);
-    }
   }
 
   /**
@@ -1298,7 +1271,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const keyStoreFile = `${keystoreFolder}/keystore.p12`;
 
     if (this.fs.exists(keyStoreFile)) {
-      this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
+      this.logguer.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
     } else {
       try {
         shelljs.mkdir('-p', keystoreFolder);
@@ -1335,7 +1308,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           if (code !== 0) {
             this.logguer.warn("\nFailed to create a KeyStore with 'keytool'", code);
           } else {
-            this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+            this.logguer.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
           done();
         }
@@ -1347,24 +1320,26 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * Prints a JHipster logo.
    */
   printJHipsterLogo() {
-    this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
+    this.logguer.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     if (process.cwd() === this.getUserHome()) {
-      this.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
-      this.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.logguer.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.logguer.log(
+        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
+      );
+      this.logguer.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.log(
+    this.logguer.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.log(
+    this.logguer.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
     );
-    this.log(
+    this.logguer.log(
       chalk.white(
         `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
       )
     );
-    this.log(
+    this.logguer.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }
@@ -1516,7 +1491,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
-    this.log(`Running command: '${chalk.bold(buildCmd)}'`);
+    this.logguer.info(`Running command: '${chalk.bold(buildCmd)}'`);
     return {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,

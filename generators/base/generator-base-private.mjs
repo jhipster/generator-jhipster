@@ -145,7 +145,7 @@ export default class PrivateBase extends Generator {
     const source = this.destinationPath(from);
     const dest = this.destinationPath(to);
     if (source && dest && shelljs.test('-f', source)) {
-      this.info(`Renaming the file - ${source} to ${dest}`);
+      this.logguer.info(`Renaming the file - ${source} to ${dest}`);
       return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
     }
     return true;
@@ -300,16 +300,5 @@ export default class PrivateBase extends Generator {
   buildAngularFormPath(reference, prefix = []) {
     const formPath = [...prefix, ...reference.path].join("', '");
     return `'${formPath}'`;
-  }
-
-  /**
-   * @private
-   *
-   * Print entity json representation.
-   *
-   * @param {object} entity
-   */
-  debugEntity(entity) {
-    this.log(stringify(entity));
   }
 }

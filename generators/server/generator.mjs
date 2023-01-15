@@ -311,13 +311,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
-          this.info(`Using ${application.defaultPackaging} as default packaging`);
+          this.logguer.info(`Using ${application.defaultPackaging} as default packaging`);
         }
 
         const JHI_PROFILE = process.env.JHI_PROFILE;
         application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
         if (JHI_PROFILE) {
-          this.info(`Using ${application.defaultEnvironment} as default profile`);
+          this.logguer.info(`Using ${application.defaultEnvironment} as default profile`);
         }
       },
 
@@ -336,7 +336,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
+          this.logguer.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
           application.projectVersion = this.projectVersion;
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
@@ -346,7 +346,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+          this.logguer.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
@@ -484,7 +484,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entityConfig.changelogDate === undefined) {
           const currentDate = this.dateFormatForLiquibase();
           if (entityStorage.existed) {
-            this.info(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
+            this.logguer.info(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
           }
           entityConfig.changelogDate = currentDate;
         }
@@ -544,7 +544,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             );
           }
           if (relationship.useJPADerivedIdentifier) {
-            this.info('Option useJPADerivedIdentifier is deprecated, use id instead');
+            this.logguer.info('Option useJPADerivedIdentifier is deprecated, use id instead');
             relationship.id = true;
           }
         });
@@ -794,7 +794,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
 
     if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
-      this.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
+      this.logguer.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
       config.enableHibernateCache = false;
     }
 

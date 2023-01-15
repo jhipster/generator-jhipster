@@ -13,8 +13,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('generator - upgrade', function () {
-  this.timeout(400000);
-
   describe('default application', () => {
     let runResult;
 

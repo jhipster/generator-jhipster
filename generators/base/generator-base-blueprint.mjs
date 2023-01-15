@@ -614,7 +614,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
     const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
     if (blueprintJhipsterVersion) {
       if (!semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {
-        this.info(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
+        this.logguer.info(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
         return;
       }
       if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintJhipsterVersion)) {

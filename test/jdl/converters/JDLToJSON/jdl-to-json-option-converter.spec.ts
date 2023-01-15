@@ -262,7 +262,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
 {
-  "searchEngine": false,
+  "searchEngine": "no",
 }
 `);
         });

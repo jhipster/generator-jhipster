@@ -21,10 +21,18 @@ import chalk from 'chalk';
 
 /**
  * formats the message to be displayed in the console.
- * @param message the debug message to format.
+ * @param message the info message to format.
  */
 const formatWarningMessageHeader = message => {
   return `${chalk.yellow.bold('WARNING!')} ${message}`;
+};
+
+const formatErrorMessageHeader = message => {
+  return `${chalk.red.bold('ERROR!')} ${message}`;
+};
+
+const formatInfoMessageHeader = message => {
+  return `${chalk.green('INFO!')} ${message}`;
 };
 
 /**
@@ -94,13 +102,32 @@ export class Logguer {
     logDebug(this.isDebugEnabled, this.yeomanLogguer, this.yeomanDebug, msg, ...args);
   }
 
-  info(msg) {
-    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
-  }
-
   warn(msg) {
     const warn = formatWarningMessageHeader(msg);
     printMessageUsingGeneratorLogger(this.yeomanLogguer, warn);
+    if (this.isDebugEnabled) {
+      printMessageAndArgumentsUsingInternalDebugger(this.yeomanDebug, warn);
+    }
+  }
+
+  info(msg) {
+    const info = formatInfoMessageHeader(msg);
+    printMessageUsingGeneratorLogger(this.yeomanLogguer, info);
+    if (this.isDebugEnabled) {
+      printMessageAndArgumentsUsingInternalDebugger(this.yeomanDebug, info);
+    }
+  }
+
+  log(msg) {
+    printMessageUsingGeneratorLogger(this.yeomanLogguer, msg);
+  }
+
+  error(msg) {
+    const warn = formatErrorMessageHeader(msg);
+    printMessageUsingGeneratorLogger(this.yeomanLogguer, warn);
+    if (this.isDebugEnabled) {
+      printMessageAndArgumentsUsingInternalDebugger(this.yeomanDebug, warn);
+    }
   }
 }
 

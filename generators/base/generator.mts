@@ -247,7 +247,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   validateCheckResult(result: CheckResult, { printInfo = false, throwOnError = true } = {}) {
     // Don't print check info by default for cleaner outputs.
     if (printInfo && result.info) {
-      this.info(result.info);
+      this.logguer.info(result.info);
     }
     if (result.warning) {
       this.logguer.warn(result.warning);

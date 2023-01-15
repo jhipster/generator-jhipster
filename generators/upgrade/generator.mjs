@@ -48,7 +48,7 @@ const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI s
  * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
  * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
  */
-function gitExec(args, options = {}, callback) {
+function gitExec(logguer, args, options = {}, callback) {
   if (typeof options === 'function') {
     callback = options;
     options = {};
@@ -62,9 +62,8 @@ function gitExec(args, options = {}, callback) {
     args = [args];
   }
   const command = `git ${args.join(' ')}`;
-  if (options.trace) {
-    console.info(command);
-  }
+
+  logguer.debug(command);
   if (callback) {
     return shelljs.exec(command, options, callback);
   }
@@ -148,7 +147,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
   _rmRf(file) {
     const absolutePath = path.resolve(file);
-    this.info(`Removing ${absolutePath}`);
+    this.logguer.info(`Removing ${absolutePath}`);
     shelljs.rm('-rf', absolutePath);
   }
 
@@ -193,7 +192,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     }
     const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
     const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
-    this.info(regenerateCmd);
+    this.logguer.info(regenerateCmd);
     try {
       childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
       this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
@@ -216,7 +215,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   _regenerate(jhipsterVersion, blueprintInfo) {
     this._generate(jhipsterVersion, blueprintInfo);
     const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
-    this.info(`Removing ${keystore}`);
+    this.logguer.info(`Removing ${keystore}`);
     this._rmRf(keystore);
     this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
   }
@@ -239,7 +238,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     const devDependencyParam = '--save-dev';
     const noPackageLockParam = '--no-package-lock';
     const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --legacy-peer-deps`;
-    this.info(generatorCommand);
+    this.logguer.info(generatorCommand);
 
     const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
     if (npmIntall.code === 0) this.success(`Installed ${npmPackage}@${version}`);
@@ -518,10 +517,10 @@ export default class UpgradeGenerator extends BaseGenerator {
       install() {
         if (!this.skipInstall) {
           this.log('Installing dependencies, please wait...');
-          this.info('Removing the node_modules directory');
+          this.logguer.info('Removing the node_modules directory');
           this._rmRf('node_modules');
           const installCommand = 'npm install';
-          this.info(installCommand);
+          this.logguer.info(installCommand);
 
           const pkgInstall = shelljs.exec(installCommand, { silent: this.silent });
           if (pkgInstall.code !== 0) {
@@ -559,6 +558,6 @@ export default class UpgradeGenerator extends BaseGenerator {
    * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
    */
   gitExec(args, options, callback) {
-    return gitExec(args, options, callback);
+    return gitExec(this.logguer, args, options, callback);
   }
 }
