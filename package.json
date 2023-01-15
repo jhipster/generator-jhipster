@@ -97,7 +97,7 @@
     "escape-string-regexp": "5.0.0",
     "execa": "6.1.0",
     "fast-xml-parser": "4.0.13",
-    "glob": "8.0.3",
+    "glob": "8.1.0",
     "insight": "0.11.1",
     "isbinaryfile": "5.0.0",
     "js-yaml": "4.1.0",
