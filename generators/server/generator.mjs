@@ -749,7 +749,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
-  aaaaaaaa;
   _configureServer(config = this.jhipsterConfig) {
     // JWT authentication is mandatory with Eureka, so the JHipster Registry
     // can control the applications
