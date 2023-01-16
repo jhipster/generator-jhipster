@@ -216,9 +216,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get configuring() {
     return this.asConfiguringTaskGroup({
       configServerPort() {
+        let serverPort = this.jhipsterConfig.serverPort || 8080;
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
-          this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
+          serverPort += this.jhipsterConfig.applicationIndex;
         }
+        this.jhipsterConfig.serverPort = serverPort;
       },
       forceReactiveGateway() {
         if (this.jhipsterConfig.applicationType === GATEWAY) {
@@ -747,6 +749,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
+  aaaaaaaa;
   _configureServer(config = this.jhipsterConfig) {
     // JWT authentication is mandatory with Eureka, so the JHipster Registry
     // can control the applications
