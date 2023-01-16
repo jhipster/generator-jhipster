@@ -1144,7 +1144,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "searchEngineCouchbase": false,
   "searchEngineElasticsearch": false,
   "searchEngineNo": true,
-  "serverPort": 8081,
+  "serverPort": 8080,
   "serviceDiscoveryAny": true,
   "serviceDiscoveryConsul": false,
   "serviceDiscoveryEureka": true,
