@@ -26,7 +26,7 @@ const filterUndefinedAndNullValues = value => value !== undefined && value !== n
  */
 // eslint-disable-next-line import/prefer-default-export
 export function deepCleanup(
-  object: Record<string, any> = {},
+  object: Record<string, any>,
   filterValue: (any) => boolean = filterUndefinedAndNullValues
 ): Record<string, any> {
   const clone = {};
