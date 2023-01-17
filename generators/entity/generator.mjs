@@ -27,7 +27,7 @@ import prompts from './prompts.mjs';
 import { JHIPSTER_CONFIG_DIR, ANGULAR_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
-import { deepCleanup } from '../base/support/config.mjs';
+import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO, ANGULAR } = clientFrameworkTypes;
@@ -151,7 +151,10 @@ export default class EntityGenerator extends BaseGenerator {
         this.loadTranslationConfig(undefined, this.application);
         // Try to load server config from microservice side, falling back to the app config.
         this.loadServerConfig(
-          getConfigWithDefaults({ ...deepCleanup(this.jhipsterConfig), ...deepCleanup(this.microserviceConfig ?? {}) }),
+          getConfigWithDefaults({
+            ...removeFieldsWithUnsetValues(this.jhipsterConfig),
+            ...removeFieldsWithUnsetValues(this.microserviceConfig ?? {}),
+          }),
           this.application
         );
 

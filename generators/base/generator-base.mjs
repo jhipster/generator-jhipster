@@ -68,7 +68,7 @@ import {
   LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { deepCleanup } from './support/config.mjs';
+import { removeFieldsWithUnsetValues } from './support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2582,7 +2582,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(deepCleanup(this.config.getAll()));
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithUnsetValues(this.config.getAll()));
     _.defaults(configWithDefaults, {
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,
