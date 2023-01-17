@@ -151,7 +151,7 @@ export default class EntityGenerator extends BaseGenerator {
         this.loadTranslationConfig(undefined, this.application);
         // Try to load server config from microservice side, falling back to the app config.
         this.loadServerConfig(
-          getConfigWithDefaults({ ...deepCleanup(this.jhipsterConfig), ...deepCleanup(this.microserviceConfig) }),
+          getConfigWithDefaults({ ...deepCleanup(this.jhipsterConfig), ...deepCleanup(this.microserviceConfig ?? {}) }),
           this.application
         );
 
