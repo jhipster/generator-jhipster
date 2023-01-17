@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import path from 'path';
+
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
 import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.mjs';
+import { handleError } from '../../base/support/index.mjs';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
 const { ANGULAR, VUE } = clientFrameworkTypes;
@@ -180,4 +183,32 @@ export const generateTestEntityPrimaryKey = (primaryKey, index) => {
       index
     )
   );
+};
+
+/**
+ * @private
+ * Get a parent folder path addition for entity
+ * @param {string} clientRootFolder
+ */
+export const getEntityParentPathAddition = (logguer, env, clientRootFolder) => {
+  if (!clientRootFolder) {
+    return '';
+  }
+  const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
+  if (relative.includes('app')) {
+    // Relative path outside angular base dir.
+    const message = `
+                "clientRootFolder outside app base dir '${clientRootFolder}'"
+            `;
+    // Test case doesn't have a environment instance so return 'error'
+    if (env === undefined) {
+      throw new Error(message);
+    }
+    handleError(logguer, message);
+  }
+  const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
+  if (!entityFolderPathAddition) {
+    return '';
+  }
+  return `${entityFolderPathAddition}/`;
 };

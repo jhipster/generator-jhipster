@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path from 'path';
+
 import { rmSync, statSync } from 'fs';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import shelljs from 'shelljs';
 
+import { javaBeanCase } from '../server/support/index.mjs';
 import { Logguer } from './support/logging.mjs';
-import { handleError } from './support/index.mjs';
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
@@ -152,77 +152,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Get a parent folder path addition for entity
-   * @param {string} clientRootFolder
-   */
-  getEntityParentPathAddition(clientRootFolder) {
-    if (!clientRootFolder) {
-      return '';
-    }
-    const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
-    if (relative.includes('app')) {
-      // Relative path outside angular base dir.
-      const message = `
-                "clientRootFolder outside app base dir '${clientRootFolder}'"
-            `;
-      // Test case doesn't have a environment instance so return 'error'
-      if (this.env === undefined) {
-        throw new Error(message);
-      }
-      handleError(this.logguer, message);
-    }
-    const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
-    if (!entityFolderPathAddition) {
-      return '';
-    }
-    return `${entityFolderPathAddition}/`;
-  }
-
-  /**
-   * @private
-   */
-  generateDateTimeFormat(language, index, length) {
-    let config = `  '${language}': {\n`;
-
-    config += '    short: {\n';
-    config += "      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'\n";
-    config += '    },\n';
-    config += '    medium: {\n';
-    config += "      year: 'numeric', month: 'short', day: 'numeric',\n";
-    config += "      weekday: 'short', hour: 'numeric', minute: 'numeric'\n";
-    config += '    },\n';
-    config += '    long: {\n';
-    config += "      year: 'numeric', month: 'long', day: 'numeric',\n";
-    config += "      weekday: 'long', hour: 'numeric', minute: 'numeric'\n";
-    config += '    }\n';
-    config += '  }';
-    if (index !== length - 1) {
-      config += ',';
-    }
-    config += '\n';
-    return config;
-  }
-
-  /**
-   * @private
-   * Convert to Java bean name case
-   *
-   * Handle the specific case when the second letter is capitalized
-   * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-   *
-   * @param {string} beanName
-   * @return {string}
-   */
-  javaBeanCase(beanName) {
-    const secondLetter = beanName.charAt(1);
-    if (secondLetter && secondLetter === secondLetter.toUpperCase()) {
-      return beanName;
-    }
-    return _.upperFirst(beanName);
-  }
-
-  /**
-   * @private
    * Create a java getter of reference.
    *
    * @param {object|string[]} reference
@@ -237,7 +166,7 @@ export default class PrivateBase extends Generator {
     } else {
       refPath = [reference.name];
     }
-    return refPath.map(partialPath => `get${this.javaBeanCase(partialPath)}()`).join('.');
+    return refPath.map(partialPath => `get${javaBeanCase(partialPath)}()`).join('.');
   }
 
   /**
@@ -261,7 +190,7 @@ export default class PrivateBase extends Generator {
    * @return {string}
    */
   buildJavaGetter(reference, type = reference.type) {
-    return `${type} get${this.javaBeanCase(reference.name)}()`;
+    return `${type} get${javaBeanCase(reference.name)}()`;
   }
 
   /**
@@ -273,7 +202,7 @@ export default class PrivateBase extends Generator {
    * @return {string}
    */
   buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
-    return `set${this.javaBeanCase(reference.name)}(${valueDefinition})`;
+    return `set${javaBeanCase(reference.name)}(${valueDefinition})`;
   }
 
   /**

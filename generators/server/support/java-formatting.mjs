@@ -16,7 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { getJavadoc as javadoc, getApiDescription } from './doc-formatting.mjs';
-export { getDBTypeFromDBValue, getDBCExtraOption } from './database.mjs';
-export { getJavaValueGeneratorForType, getPrimaryKeyValue } from './templates/field-values.mjs';
-export { default as javaBeanCase } from './java-formatting.mjs';
+import _ from 'lodash';
+
+/**
+ * @private
+ * Convert to Java bean name case
+ *
+ * Handle the specific case when the second letter is capitalized
+ * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+ *
+ * @param {string} beanName
+ * @return {string}
+ */
+const javaBeanCase = beanName => {
+  const secondLetter = beanName.charAt(1);
+  if (secondLetter && secondLetter === secondLetter.toUpperCase()) {
+    return beanName;
+  }
+  return _.upperFirst(beanName);
+};
+
+export default javaBeanCase;

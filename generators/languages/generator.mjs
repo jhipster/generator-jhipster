@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
+import { generateDateTimeFormat } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { handleError } from '../base/support/index.mjs';
 import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR, LANGUAGES } from '../generator-constants.mjs';
@@ -616,7 +617,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       let i18nConfig = 'const dateTimeFormats: DateTimeFormats = {\n';
       if (application.enableTranslation) {
         languages.forEach((ln, i) => {
-          i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
+          i18nConfig += generateDateTimeFormat(ln, i, languages.length);
         });
       }
       i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';

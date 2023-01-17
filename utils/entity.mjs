@@ -24,7 +24,7 @@ import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
-import { getTypescriptKeyType } from '../generators/client/support/index.mjs';
+import { getTypescriptKeyType, getEntityParentPathAddition } from '../generators/client/support/index.mjs';
 import { getEntityFolderName } from '../generators/entity/support/index.mjs';
 import {
   applicationTypes,
@@ -197,7 +197,11 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
   );
   entityWithConfig.entityFolderName = getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
-  entityWithConfig.entityParentPathAddition = generator.getEntityParentPathAddition(entityWithConfig.clientRootFolder);
+  entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(
+    generator.logguer,
+    generator.env,
+    entityWithConfig.clientRootFolder
+  );
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 

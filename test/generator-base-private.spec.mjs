@@ -16,11 +16,16 @@ import { generateEntityClientImports, getTypescriptType, generateTestEntityId } 
 import { default as JHipsterLanguagesGeneratorClass } from '../generators/languages/generator.mjs';
 // eslint-disable-next-line import/no-named-default
 import { default as JHipsterAngularGeneratorClass } from '../generators/angular/generator.mjs';
+// eslint-disable-next-line import/no-named-default
+import { default as JHipsterClientGeneratorClass } from '../generators/client/generator.mjs';
+import { getEntityParentPathAddition } from '../generators/client/support/index.mjs';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const { CommonDBTypes } = fieldTypes;
+
 const BaseGenerator = BaseGeneratorClass.prototype;
+const ClientGenerator = JHipsterClientGeneratorClass.prototype;
 const JHipsterServerGenerator = JHipsterServerGeneratorClass.prototype;
 const LanguagesGenerator = JHipsterLanguagesGeneratorClass.prototype;
 const AngularGenerator = JHipsterAngularGeneratorClass.prototype;
@@ -266,52 +271,52 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('getEntityParentPathAddition', () => {
     describe('when passing /', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('/')).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '/')).to.equal('');
       });
     });
     describe('when passing /foo/', () => {
       it('returns ../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('/foo/')).to.equal('../');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '/foo/')).to.equal('../');
       });
     });
     describe('when passing undefined', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition()).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env)).to.equal('');
       });
     });
     describe('when passing empty', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('')).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '')).to.equal('');
       });
     });
     describe('when passing foo', () => {
       it('returns ../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('foo')).to.equal('../');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, 'foo')).to.equal('../');
       });
     });
     describe('when passing foo/bar', () => {
       it('returns ../../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, 'foo/bar')).to.equal(`..${path.sep}../`);
       });
     });
     describe('when passing ../foo', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('../foo')).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../foo')).to.equal('');
       });
     });
     describe('when passing ../foo/bar', () => {
       it('returns ../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('../foo/bar')).to.equal('../');
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../foo/bar')).to.equal('../');
       });
     });
     describe('when passing ../foo/bar/foo2', () => {
       it('returns ../../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
+        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../foo/bar/foo2')).to.equal(`..${path.sep}../`);
       });
     });
     describe('when passing ../../foo', () => {
       it('throw an error', () => {
-        expect(() => BaseGenerator.getEntityParentPathAddition('../../foo')).to.throw();
+        expect(() => getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../../foo')).to.throw();
       });
     });
   });

@@ -25,4 +25,5 @@ export {
   generateTestEntity,
   generateTestEntityPrimaryKey,
   generateTypescriptTestEntity,
+  getEntityParentPathAddition,
 } from './template-utils.mjs';

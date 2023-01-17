@@ -25,6 +25,7 @@ import os from 'os';
 import { getDBTypeFromDBValue } from './support/index.mjs';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
+
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_CASSANDRA,
@@ -43,7 +44,7 @@ import {
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
 import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.mjs';
-
+import { javaBeanCase as javaBeanClassNameFormat } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
@@ -1035,5 +1036,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    */
   getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
     return getPKValue(primaryKey, databaseType, defaultValue);
+  }
+
+  /**
+   * @private
+   * Convert to Java bean name case
+   *
+   * Handle the specific case when the second letter is capitalized
+   * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+   *
+   * @param {string} beanName name of the class to check
+   * @return {string}
+   */
+  javaBeanCase(beanName) {
+    return javaBeanClassNameFormat(beanName);
   }
 }
