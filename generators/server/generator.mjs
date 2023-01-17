@@ -23,6 +23,8 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
 
+import { applicationOptions, defaultApplicationOptions } from '../../jdl/jhipster/index.mjs';
+
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
@@ -87,6 +89,9 @@ import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.m
 import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
 
+const { OptionNames } = applicationOptions;
+const { SERVER_PORT } = OptionNames;
+const { getConfigWithDefaults } = defaultApplicationOptions;
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -216,7 +221,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get configuring() {
     return this.asConfiguringTaskGroup({
       configServerPort() {
-        let serverPort = this.jhipsterConfig.serverPort || 8080;
+        let serverPort = this.jhipsterConfig.serverPort || getConfigWithDefaults(this.options)[SERVER_PORT];
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
           serverPort += this.jhipsterConfig.applicationIndex;
         }
