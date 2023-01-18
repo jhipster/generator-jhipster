@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ import { Faker } from '@faker-js/faker';
 import Randexp from 'randexp';
 
 import { languageToJavaLanguage } from '../languages/utils.mjs';
-import { stringHashCode } from '../utils.cjs';
+import { stringHashCode } from '../utils.mjs';
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;

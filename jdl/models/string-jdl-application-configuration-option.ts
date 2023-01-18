@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import JDLApplicationConfigurationOption from './jdl-application-configuration-option';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 export default class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
   quoted: boolean;

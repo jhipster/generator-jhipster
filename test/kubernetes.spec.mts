@@ -45,7 +45,7 @@ const expectedFiles = {
   certmanager: ['./cert-manager/letsencrypt-staging-ca-secret.yml', './cert-manager/letsencrypt-staging-issuer.yml'],
 };
 
-describe('JHipster Kubernetes Sub Generator', () => {
+describe('generator - Kubernetes', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import { createJDLApplication } from '../../models/jdl-application-factory';
-import { convertOptions } from './option-converter';
-import ApplicationOptions from '../../jhipster/application-options';
-import JDLUnaryOption from '../../models/jdl-unary-option';
-import JDLBinaryOption from '../../models/jdl-binary-option';
+import createJDLApplication from '../../models/jdl-application-factory.js';
+import { convertOptions } from './option-converter.js';
+import ApplicationOptions from '../../jhipster/application-options.js';
+import JDLUnaryOption from '../../models/jdl-unary-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 const {
   OptionNames: { BASE_NAME },

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,8 +20,6 @@
 const Options = {
   JPA_DERIVED_IDENTIFIER: 'jpaDerivedIdentifier',
 };
-
-export const JPA_DERIVED_IDENTIFIER = Options.JPA_DERIVED_IDENTIFIER;
 
 function exists(option) {
   return Object.values(Options).includes(option);

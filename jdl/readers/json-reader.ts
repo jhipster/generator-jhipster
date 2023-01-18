@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,14 +18,15 @@
  */
 
 import fs from 'fs';
-import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter';
-import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter';
-import mergeJDLObjects from '../models/jdl-object-merger';
-import { OptionNames } from '../jhipster/application-options';
-import { doesDirectoryExist } from '../utils/file-utils';
-import { readJSONFile } from './json-file-reader';
-import JDLObject from '../models/jdl-object';
+import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
+import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter.js';
+import mergeJDLObjects from '../models/jdl-object-merger.js';
+import { applicationOptions } from '../jhipster/index.mjs';
+import { doesDirectoryExist } from '../utils/file-utils.js';
+import { readJSONFile } from './json-file-reader.js';
+import JDLObject from '../models/jdl-object.js';
 
+const { OptionNames } = applicationOptions;
 /* Parse the given jhipster app dir and return a JDLObject */
 export default function parseFromDir(dir: string): JDLObject {
   if (!dir) {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -67,7 +67,7 @@ return merge(
   cache: {
     // 1. Set cache type to filesystem
     type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
+    cacheDirectory: path.resolve(__dirname, '../<%= temporaryDir %>webpack'),
     buildDependencies: {
       // 2. Add your config as buildDependency to get cache invalidation on config change
       config: [

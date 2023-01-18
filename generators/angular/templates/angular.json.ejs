@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -44,7 +44,16 @@
             "outputPath": "<%= clientDistDir %>",
             "index": "<%= clientSrcDir %>index.html",
             "main": "<%= clientSrcDir %>main.ts",
-            "polyfills": "<%= clientSrcDir %>polyfills.ts",
+            "polyfills": [
+<%_ if (communicationSpringWebsocket) { _%>
+              "./<%= clientSrcDir %>sockjs-client.polyfill",
+<%_ } _%>
+<%_ if (microfrontend) { _%>
+              "zone.js/dist/zone"
+<%_ } else { _%>
+              "zone.js"
+<%_ } _%>
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

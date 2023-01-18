@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(false)-redis should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -11,13 +11,11 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379
-      - JHIPSTER_CACHE_REDIS_CLUSTER=false
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
@@ -45,10 +43,6 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-  redis:
-    extends:
-      file: ./redis.yml
-      service: redis
   jhipster-registry:
     extends:
       file: ./jhipster-registry.yml
@@ -59,86 +53,74 @@ services:
 }
 `;
 
-exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(false)-redis should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(no)-redis should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+  "src/main/docker/central-server-config/docker-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+  "src/main/docker/central-server-config/localhost-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/mariadb/my.cnf": Object {
+  "src/main/docker/config/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
+  "src/main/docker/elasticsearch.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-registry.yml": Object {
+  "src/main/docker/jhipster-registry.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mariadb.yml": Object {
+  "src/main/docker/mariadb.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis-cluster.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
+  "src/main/docker/swagger-editor.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/swagger-editor.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -147,7 +129,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_NEO4J_URI=bolt://jhipster-neo4j:7687
@@ -202,77 +184,74 @@ services:
 }
 `;
 
-exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+  "src/main/docker/central-server-config/docker-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+  "src/main/docker/central-server-config/localhost-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/hazelcast-management-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-registry.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-registry.yml": Object {
+  "src/main/docker/kafka.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/kafka.yml": Object {
+  "src/main/docker/keycloak.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/keycloak.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/neo4j.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/neo4j.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -281,7 +260,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@jhipster-oracle:1521:jhipster
@@ -308,62 +287,62 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+  "src/main/docker/central-server-config/docker-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+  "src/main/docker/central-server-config/localhost-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-registry.yml": Object {
+  "src/main/docker/jhipster-registry.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -372,7 +351,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:postgresql://jhipster-postgresql:5432/jhipster
@@ -421,77 +400,74 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+  "src/main/docker/central-server-config/docker-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+  "src/main/docker/central-server-config/localhost-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
+  "src/main/docker/elasticsearch.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/hazelcast-management-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-registry.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-registry.yml": Object {
+  "src/main/docker/kafka.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/kafka.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/postgresql.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/postgresql.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/swagger-editor.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/swagger-editor.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -500,7 +476,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:sqlserver://jhipster-mssql:1433;database=jhipster;encrypt=false
       - SPRING_LIQUIBASE_URL=jdbc:sqlserver://jhipster-mssql:1433;database=jhipster;encrypt=false
       - JHIPSTER_CACHE_MEMCACHED_SERVERS=jhipster-memcached:11211
@@ -548,68 +524,68 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/kafka.yml": Object {
+  "src/main/docker/kafka.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/keycloak.yml": Object {
+  "src/main/docker/keycloak.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/memcached.yml": Object {
+  "src/main/docker/memcached.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mssql.yml": Object {
+  "src/main/docker/mssql.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
+  "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/swagger-editor.yml": Object {
+  "src/main/docker/swagger-editor.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(false) should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -618,13 +594,13 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=jhipster-cassandra
+      - SPRING_CASSANDRA_CONTACTPOINTS=jhipster-cassandra
       - JHIPSTER_SLEEP=10
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
     healthcheck:
@@ -675,92 +651,89 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(false) should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra-cluster.yml": Object {
+  "src/main/docker/cassandra-cluster.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra-migration.yml": Object {
+  "src/main/docker/cassandra-migration.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra.yml": Object {
+  "src/main/docker/cassandra.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra/Cassandra-Migration.Dockerfile": Object {
+  "src/main/docker/cassandra/Cassandra-Migration.Dockerfile": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra/scripts/autoMigrate.sh": Object {
+  "src/main/docker/cassandra/scripts/autoMigrate.sh": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra/scripts/execute-cql.sh": Object {
+  "src/main/docker/cassandra/scripts/execute-cql.sh": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/application.yml": Object {
+  "src/main/docker/central-server-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/git2consul.json": Object {
+  "src/main/docker/config/git2consul.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/consul.yml": Object {
+  "src/main/docker/consul.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
+  "src/main/docker/elasticsearch.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/hazelcast-management-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/keycloak.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/keycloak.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -769,7 +742,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
@@ -805,59 +778,59 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/mariadb/my.cnf": Object {
+  "src/main/docker/config/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/hazelcast-management-center.yml": Object {
+  "src/main/docker/hazelcast-management-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/kafka.yml": Object {
+  "src/main/docker/kafka.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mariadb.yml": Object {
+  "src/main/docker/mariadb.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(false) should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -866,7 +839,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATA_MONGODB_URI=mongodb://jhipster-mongodb:27017/?waitQueueMultiple=1000
@@ -910,80 +883,80 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(false) should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/application.yml": Object {
+  "src/main/docker/central-server-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/git2consul.json": Object {
+  "src/main/docker/config/git2consul.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/consul.yml": Object {
+  "src/main/docker/consul.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
+  "src/main/docker/elasticsearch.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mongodb-cluster.yml": Object {
+  "src/main/docker/mongodb-cluster.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mongodb.yml": Object {
+  "src/main/docker/mongodb.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
+  "src/main/docker/mongodb/MongoDB.Dockerfile": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
+  "src/main/docker/mongodb/scripts/init_replicaset.js": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/swagger-editor.yml": Object {
+  "src/main/docker/swagger-editor.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -992,7 +965,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
@@ -1028,56 +1001,56 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/keycloak.yml": Object {
+  "src/main/docker/keycloak.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/postgresql.yml": Object {
+  "src/main/docker/postgresql.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
+  "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -1086,7 +1059,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_NEO4J_URI=bolt://jhipster-neo4j:7687
@@ -1147,80 +1120,80 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/application.yml": Object {
+  "src/main/docker/central-server-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/git2consul.json": Object {
+  "src/main/docker/config/git2consul.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/consul.yml": Object {
+  "src/main/docker/consul.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
+  "src/main/docker/elasticsearch.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/kafka.yml": Object {
+  "src/main/docker/kafka.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/keycloak.yml": Object {
+  "src/main/docker/keycloak.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/neo4j.yml": Object {
+  "src/main/docker/neo4j.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
+  "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/swagger-editor.yml": Object {
+  "src/main/docker/swagger-editor.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(false)-redis should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -1229,7 +1202,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://jhipster-mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhipster-mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379
@@ -1262,68 +1235,68 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(false)-redis should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-redis should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/mysql/my.cnf": Object {
+  "src/main/docker/config/mysql/my.cnf": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mysql.yml": Object {
+  "src/main/docker/mysql.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis-cluster.yml": Object {
+  "src/main/docker/redis-cluster.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis.yml": Object {
+  "src/main/docker/redis.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
+  "src/main/docker/redis/Redis-Cluster.Dockerfile": {
     "stateCleared": "modified",
   },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
+  "src/main/docker/redis/connectRedisCluster.sh": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/swagger-editor.yml": Object {
+  "src/main/docker/swagger-editor.yml": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
-Object {
-  "src/main/docker/app.yml": Object {
+exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
 services:
@@ -1332,7 +1305,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_COUCHBASE_CONNECTION_STRING=jhipster-couchbase
@@ -1386,72 +1359,72 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
+  "src/main/docker/app.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/README.md": Object {
+  "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/application.yml": Object {
+  "src/main/docker/central-server-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/git2consul.json": Object {
+  "src/main/docker/config/git2consul.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/consul.yml": Object {
+  "src/main/docker/consul.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/couchbase-cluster.yml": Object {
+  "src/main/docker/couchbase-cluster.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/couchbase.yml": Object {
+  "src/main/docker/couchbase.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/couchbase/Couchbase.Dockerfile": Object {
+  "src/main/docker/couchbase/Couchbase.Dockerfile": {
     "stateCleared": "modified",
   },
-  "src/main/docker/couchbase/scripts/configure-node.sh": Object {
+  "src/main/docker/couchbase/scripts/configure-node.sh": {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
+  "src/main/docker/elasticsearch.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jhipster-control-center.yml": Object {
+  "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/kafka.yml": Object {
+  "src/main/docker/kafka.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/monitoring.yml": Object {
+  "src/main/docker/monitoring.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/prometheus/prometheus.yml": Object {
+  "src/main/docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/services.yml": Object {
+  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/sonar.yml": Object {
+  "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }

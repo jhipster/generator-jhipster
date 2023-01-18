@@ -22,7 +22,7 @@ const expectedFiles = {
   ],
 };
 
-describe('JHipster OpenShift Sub Generator', () => {
+describe('generator - OpenShift', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {

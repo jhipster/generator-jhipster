@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ import jest from 'jest-mock';
 
 import { createTranslationReplacer } from './transform-react.mjs';
 
-describe('React transform', () => {
+describe('generator - react - transform', () => {
   describe('replaceReactTranslations', () => {
     let replaceReactTranslations;
     beforeEach(() => {
@@ -83,7 +83,7 @@ translate('global')
 `;
           expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-\\"global-translated-value-0\\"
+"global-translated-value-0"
 "
 `);
         });
@@ -97,7 +97,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 `;
           expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-\\"global-{\\"min\\":20,\\"max\\":50,\\"pattern\\":\\"^[a-zA-Z0-9]*\\",\\"anotherPattern\\":\\"^[a-zA-Z0-9]*\\",\\"dynamic\\":\\"{exec()}\\"}-translated-value-0\\"
+"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*","anotherPattern":"^[a-zA-Z0-9]*","dynamic":"{exec()}"}-translated-value-0"
 "
 `);
         });
@@ -111,7 +111,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 `;
           expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-\\"global-{\\"min\\":20,\\"max\\":50,\\"pattern\\":\\"^[a-zA-Z0-9]*\\",\\"anotherPattern\\":\\"^[a-zA-Z0-9]*\\",\\"dynamic\\":\\"{exec()}\\"}-translated-value-0\\"
+"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*","anotherPattern":"^[a-zA-Z0-9]*","dynamic":"{exec()}"}-translated-value-0"
 "
 `);
         });
@@ -222,33 +222,33 @@ export const Home = () => {
 
   return (
     <Row>
-      <Col md=\\"3\\" className=\\"pad\\">
-        <span className=\\"hipster rounded\\" />
+      <Col md="3" className="pad">
+        <span className="hipster rounded" />
       </Col>
-      <Col md=\\"9\\">
+      <Col md="9">
         <h2>home.title-translated-value-0</h2>
-        <p className=\\"lead\\">
+        <p className="lead">
         home.subtitle-translated-value-1
          </p>
         {
           (account?.login) ? (
             <div>
-              <Alert color=\\"success\\">
+              <Alert color="success">
                 home.logged.message-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-value-2
               </Alert>
             </div>
           ) : (
             <div>
-              <Alert color=\\"warning\\">
+              <Alert color="warning">
                 global.messages.info.authenticated.prefix-translated-value-3
                 <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
-                <Link to=\\"/login\\" className=\\"alert-link\\">global.messages.info.authenticated.link-translated-value-4</Link>
+                <Link to="/login" className="alert-link">global.messages.info.authenticated.link-translated-value-4</Link>
                 global.messages.info.authenticated.suffix-translated-value-5
               </Alert>
 
-              <Alert color=\\"warning\\">
+              <Alert color="warning">
                 global.messages.info.register.noaccount-translated-value-6&nbsp;
-                <Link to=\\"/account/register\\" className=\\"alert-link\\">global.messages.info.register.link-translated-value-7</Link>
+                <Link to="/account/register" className="alert-link">global.messages.info.register.link-translated-value-7</Link>
               </Alert>
             </div>
           )
@@ -259,27 +259,27 @@ export const Home = () => {
 
         <ul>
           <li>
-            <a href=\\"https://www.jhipster.tech/\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+            <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">
               home.link.homepage-translated-value-9
             </a>
           </li>
           <li>
-            <a href=\\"https://stackoverflow.com/tags/jhipster/info\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+            <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">
               home.link.stackoverflow-translated-value-10
             </a>
           </li>
           <li>
-            <a href=\\"https://github.com/jhipster/generator-jhipster/issues?state=open\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+            <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer">
               home.link.bugtracker-translated-value-11
             </a>
           </li>
           <li>
-            <a href=\\"https://gitter.im/jhipster/generator-jhipster\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+            <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">
               home.link.chat-translated-value-12
             </a>
           </li>
           <li>
-            <a href=\\"https://twitter.com/jhipster\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+            <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">
               home.link.follow-translated-value-13
             </a>
           </li>
@@ -288,7 +288,7 @@ export const Home = () => {
         <p>
           home.like-translated-value-14
           {' '}
-          <a href=\\"https://github.com/jhipster/generator-jhipster\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">GitHub</a>!
+          <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
         </p>
       </Col>
     </Row>

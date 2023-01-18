@@ -2,6 +2,9 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
+import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ServerGenerator {
@@ -49,7 +52,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         baseName: 'jhipster',
         packageName: 'com.mycompany.myapp',
         packageFolder: 'com/mycompany/myapp',
-        serviceDiscoveryType: false,
+        serviceDiscoveryType: NO_SERVICE_DISCOVERY,
         authenticationType: 'jwt',
         cacheProvider: 'ehcache',
         enableHibernateCache: true,

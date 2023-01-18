@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,13 +47,13 @@ const initialState: EntityState<I<%= entityReactName %>> = {
 };
 
 const apiUrl = '<%= entityApi %>api/<%= entityApiUrl %>';
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 const apiSearchUrl = '<%= entityApi %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
 
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 export const searchEntities = createAsyncThunk(
   '<%= entityInstance %>/search_entity',
   async ({ query, page, size, sort }: IQueryParams) => {
@@ -164,7 +164,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
 <%_ } _%>
       .addMatcher(isFulfilled(
         getEntities,
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
         searchEntities,
 <%_ } _%>
         ), (state, action) => {
@@ -209,7 +209,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
       .addMatcher(isPending(
         getEntities,
         getEntity,
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
         searchEntities,
 <%_ } _%>
         ), state => {

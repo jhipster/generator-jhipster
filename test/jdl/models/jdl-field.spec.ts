@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,12 +20,16 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import matchField from '../matchers/field-matcher';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import Validations from '../../../jdl/jhipster/validations';
+import matchField from '../matchers/field-matcher.js';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import { validations } from '../../../jdl/jhipster/index.mjs';
 
-describe('JDLField', () => {
+const {
+  Validations: { MIN },
+} = validations;
+
+describe('jdl - JDLField', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
@@ -93,13 +97,13 @@ describe('JDLField', () => {
       let validation;
 
       before(() => {
-        validation = { name: Validations.MIN, value: 42 };
+        validation = { name: MIN, value: 42 };
         field.addValidation(validation);
       });
 
       it('should add it', () => {
         field.forEachValidation(validation => {
-          expect(validation.name).to.equal(Validations.MIN);
+          expect(validation.name).to.equal(MIN);
           expect(validation.value).to.equal(42);
         });
       });

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import applicationOptions from './application-options';
+import applicationOptions from './application-options.js';
 
 const Options: any = {
   SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
@@ -26,13 +26,6 @@ const Options: any = {
   FILTER: 'filter',
   EMBEDDED: 'embedded',
 };
-
-export const SKIP_CLIENT = Options.SKIP_CLIENT;
-export const SKIP_SERVER = Options.SKIP_SERVER;
-export const NO_FLUENT_METHOD = Options.NO_FLUENT_METHOD;
-export const READ_ONLY = Options.READ_ONLY;
-export const FILTER = Options.FILTER;
-export const EMBEDDED = Options.EMBEDDED;
 
 const optionNames = Object.values(Options);
 

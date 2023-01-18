@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,11 +17,15 @@
  limitations under the License.
 -%>
 import { Component, Input } from '@angular/core';
+<%_ if (enableTranslation) { _%>
+import TranslateDirective from '../language/translate.directive';
+<%_ } _%>
 
 /**
  * A component that will take care of item count statistics of a pagination.
  */
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-item-count',
   template: `
 <%_ if (enableTranslation) { _%>
@@ -29,9 +33,12 @@ import { Component, Input } from '@angular/core';
 <%_ } else { _%>
     <div><%- getWebappTranslation('global.item-count') %></div>
 <%_ } _%>
-  `
+  `,
+<%_ if (enableTranslation) { _%>
+  imports: [TranslateDirective],
+<%_ } _%>
 })
-export class ItemCountComponent {
+export default class ItemCountComponent {
   /**
    * @param params  Contains parameters for component:
    *                    page          Current page number

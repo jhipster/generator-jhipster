@@ -7,12 +7,10 @@ import ClientGenerator from '../../generators/client/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import CommonGenerator from '../../generators/common/index.mjs';
 import LanguagesGenerator from '../../generators/languages/index.mjs';
-import databaseTypes from '../../jdl/jhipster/database-types';
-import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
-import authenticationTypes from '../../jdl/jhipster/authentication-types';
-import cacheTypes from '../../jdl/jhipster/cache-types';
+import { databaseTypes, clientFrameworkTypes, authenticationTypes, cacheTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const { MYSQL, SQL, H2_MEMORY } = databaseTypes;
 const { ANGULAR } = clientFrameworkTypes;
 const { JWT } = authenticationTypes;
@@ -85,7 +83,7 @@ const prompts = {
   clientFramework: ANGULAR,
   packageName: 'com.mycompany.myapp',
   packageFolder: 'com/mycompany/myapp',
-  serviceDiscoveryType: false,
+  serviceDiscoveryType: NO_SERVICE_DISCOVERY,
   authenticationType: JWT,
   cacheProvider: EHCACHE,
   enableHibernateCache: true,
@@ -97,7 +95,7 @@ const prompts = {
   languages: ['fr'],
 };
 
-describe('JHipster with app blueprints', () => {
+describe('generator - app - blueprints', () => {
   describe('1 app blueprint', () => {
     let spyClient1;
     let spyServer1;

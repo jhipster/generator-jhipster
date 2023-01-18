@@ -23,7 +23,7 @@ const allMockedComposedGenerators = [
   'jhipster:client',
 ];
 
-describe('jhipster:app composing', () => {
+describe('generator - app - composing', () => {
   describe('when mocking all generators', () => {
     describe('with default options', () => {
       let runContext;

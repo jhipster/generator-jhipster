@@ -17,7 +17,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   @Inject('alertService') private alertService: () => AlertService;
 
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   public currentSearch = '';
 <%_ } _%>
   private removeId: <%- this.getTypescriptKeyType(primaryKey) %> = null;
@@ -43,7 +43,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     this.retrieveAll<%= entityAngularName %>s();
   }
 
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   public search(query) : void {
     if (!query) {
       return this.clear();
@@ -54,7 +54,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
 
 <%_ } _%>
   public clear() : void {
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     this.currentSearch = '';
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
@@ -86,7 +86,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       sort: this.sort()
     };
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     if (this.currentSearch) {
       this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>).then(res => {
   <%_ if (paginationNo) { _%>

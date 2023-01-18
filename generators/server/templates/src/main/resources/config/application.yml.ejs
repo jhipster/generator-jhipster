@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -118,10 +118,13 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
-  metrics:
-    export:
-      # Prometheus is the default metrics backend
-      prometheus:
+<%_ if (databaseTypeNeo4j && reactive) { _%>
+    neo4j:
+      enabled: false # The health check for Neo4j doesn't work with WebFlux
+<%_ } _%>
+  prometheus:
+    metrics:
+      export:
         enabled: true
         step: 60
     enable:
@@ -262,18 +265,16 @@ spring:
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
 <%_ } _%>
   messages:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
-<%_ if (!reactive) { _%>
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-<%_ } _%>
+  <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
+    problemdetails:
+      enabled: true
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
   security:
     user:

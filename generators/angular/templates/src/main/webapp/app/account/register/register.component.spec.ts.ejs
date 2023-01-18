@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,7 +27,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 
 import { RegisterService } from './register.service';
-import { RegisterComponent } from './register.component';
+import RegisterComponent from './register.component';
 
 describe('RegisterComponent', () => {
   let fixture: ComponentFixture<RegisterComponent>;
@@ -40,9 +40,9 @@ describe('RegisterComponent', () => {
 <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
 <%_ } _%>
-          HttpClientTestingModule
+          HttpClientTestingModule,
+          RegisterComponent,
         ],
-        declarations: [RegisterComponent],
         providers: [FormBuilder],
       })
         .overrideTemplate(RegisterComponent, '')

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,28 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { rmSync, statSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import semver from 'semver';
-import { exec } from 'child_process';
 import https from 'https';
 
-import { databaseTypes, buildToolTypes, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-import { packageJson as packagejs } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.cjs';
-import generatorConstants from '../generator-constants.cjs';
+import { packageJson } from '../../lib/index.mjs';
+import { getJavadoc } from '../utils.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import databaseData from '../sql-constants.mjs';
+import { databaseData } from '../sql/support/index.mjs';
+import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
-const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
-const { REQUIRED } = validations;
+const {
+  Validations: { REQUIRED },
+} = validations;
 
 const {
   STRING: TYPE_STRING,
@@ -57,7 +58,7 @@ const {
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
-const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
+const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
 
 const { MAVEN } = buildToolTypes;
 
@@ -156,16 +157,18 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
    * Remove Folder
    *
    * @param folder
    */
   removeFolder(folder) {
     folder = this.destinationPath(folder);
-    if (folder && shelljs.test('-d', folder)) {
-      this.log(`Removing the folder - ${folder}`);
-      shelljs.rm('-rf', folder);
+    try {
+      if (statSync(folder).isDirectory()) {
+        rmSync(folder, { recursive: true });
+      }
+    } catch (error) {
+      this.log(`Could not remove folder ${folder}`);
     }
   }
 
@@ -207,7 +210,7 @@ export default class PrivateBase extends Generator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 0);
+    return getJavadoc(text, 0);
   }
 
   /**
@@ -218,7 +221,7 @@ export default class PrivateBase extends Generator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 4);
+    return getJavadoc(text, 4);
   }
 
   /**
@@ -411,54 +414,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
-   * Utility function to copy and process templates.
-   *
-   * @param {string} source - source
-   * @param {string} destination - destination
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  template(source, destination, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    const customDestination = _this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return Promise.resolved();
-    }
-    return jhipsterUtils
-      .renderContent(source, _this, _context, options)
-      .then(res => {
-        _this.fs.write(customDestination, res);
-        return customDestination;
-      })
-      .catch(error => {
-        this.warning(source);
-        throw error;
-      });
-  }
-
-  /**
-   * @private
-   * Utility function to render a template into a string
-   *
-   * @param {string} source - source
-   * @param {function} callback - callback to take the rendered template as a string
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  render(source, callback, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    jhipsterUtils.renderContent(source, _this, _context, options, res => {
-      callback(res);
-    });
-  }
-
-  /**
    * Print a debug message.
    *
    * @param {string} msg - message to print
@@ -478,36 +433,11 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Check if Java is installed
-   */
-  checkJava() {
-    if (this.skipChecks || this.skipServer) return;
-    const done = this.async();
-    exec('java -version', (err, stdout, stderr) => {
-      if (err) {
-        this.warning('Java is not found on your computer.');
-      } else {
-        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
-          const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.concat().reverse();
-          this.warning(
-            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
-              javaVersion
-            )}`
-          );
-        }
-      }
-      done();
-    });
-  }
-
-  /**
-   * @private
    * Check if Node is installed
    */
   checkNode() {
     if (this.skipChecks) return;
-    const nodeFromPackageJson = packagejs.engines.node;
+    const nodeFromPackageJson = packageJson.engines.node;
     if (!semver.satisfies(process.version, nodeFromPackageJson)) {
       this.warning(
         `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
@@ -708,7 +638,7 @@ export default class PrivateBase extends Generator {
    * @param {string} db - db
    */
   getDBTypeFromDBValue(db) {
-    return jhipsterUtils.getDBTypeFromDBValue(db);
+    return getDBTypeFromDBValue(db);
   }
 
   /**
@@ -929,50 +859,6 @@ export default class PrivateBase extends Generator {
       return TYPE_UUID;
     }
     return TYPE_LONG;
-  }
-
-  /**
-   * @private
-   * Returns the URL for a particular databaseType and protocol
-   *
-   * @param {string} databaseType
-   * @param {string} protocol
-   * @param {*} options
-   */
-  getDBCUrl(databaseType, protocol, options = {}) {
-    if (!protocol) {
-      throw new Error('protocol is required');
-    }
-    const { databaseName, hostname, skipExtraOptions } = options;
-    if (!databaseName) {
-      throw new Error("option 'databaseName' is required");
-    }
-    if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !hostname) {
-      throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
-    } else if (![MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY].includes(databaseType)) {
-      throw new Error(`${databaseType} databaseType is not supported`);
-    }
-    let databaseDataForType = databaseData[databaseType];
-    if (databaseDataForType[protocol]) {
-      databaseDataForType = {
-        ...databaseDataForType,
-        ...databaseDataForType[protocol],
-      };
-    }
-    if (databaseDataForType.getData) {
-      databaseDataForType = {
-        ...databaseDataForType,
-        ...(databaseDataForType.getData(options) || {}),
-      };
-    }
-    const { port = '', protocolSuffix = '', extraOptions = '', localDirectory = options.localDirectory } = databaseDataForType;
-    let url = `${protocol}:${protocolSuffix}`;
-    if (hostname || localDirectory) {
-      url = `${url}${localDirectory || hostname + port}${databaseName}`;
-    } else {
-      url = `${url}${databaseName}${port}`;
-    }
-    return `${url}${skipExtraOptions ? '' : extraOptions}`;
   }
 
   /**

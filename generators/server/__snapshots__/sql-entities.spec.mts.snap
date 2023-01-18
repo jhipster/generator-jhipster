@@ -1,1552 +1,1552 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster sql generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-enableHibernateCache(true)-h2Disk-hazelcast should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-enableHibernateCache(true)-h2Disk-hazelcast should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+  "src/main/java/com/package/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": Object {
+  "src/main/java/com/package/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+  "src/main/java/com/package/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": Object {
+  "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": Object {
+  "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityCallback.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/tech/jhipster/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/tech/jhipster/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/tech/jhipster/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-enableHibernateCache(false)-mysql-caffeine should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-enableHibernateCache(false)-mysql-caffeine should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-mysql-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-mysql-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+  "src/main/java/com/package/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Microservice.java": Object {
+  "src/main/java/com/package/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": Object {
+  "src/main/java/com/package/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+  "src/main/java/com/package/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+  "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": Object {
+  "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mssql-enableHibernateCache(false)-h2Memory should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mssql-enableHibernateCache(false)-h2Memory should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+  "src/main/java/com/package/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Microservice.java": Object {
+  "src/main/java/com/package/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": Object {
+  "src/main/java/com/package/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+  "src/main/java/com/package/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+  "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": Object {
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-postgresql-enableHibernateCache(true)-h2Memory-redis should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-postgresql-enableHibernateCache(true)-h2Memory-redis should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-oracle-enableHibernateCache(false)-h2Memory should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-oracle-enableHibernateCache(false)-h2Memory should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+  "src/main/java/com/package/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Microservice.java": Object {
+  "src/main/java/com/package/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": Object {
+  "src/main/java/com/package/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+  "src/main/java/com/package/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+  "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": Object {
+  "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-enableHibernateCache(false)-postgresql-cacheProvider(no) should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-enableHibernateCache(false)-postgresql-cacheProvider(no) should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-oracle-enableHibernateCache(true)-oracle should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-oracle-enableHibernateCache(true)-oracle should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+  "src/main/java/com/package/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Microservice.java": Object {
+  "src/main/java/com/package/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": Object {
+  "src/main/java/com/package/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+  "src/main/java/com/package/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+  "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": Object {
+  "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-enableHibernateCache(false)-mariadb-ehcache should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-enableHibernateCache(false)-mariadb-ehcache should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-mssql-enableHibernateCache(true)-mssql should match generated files snapshot 1`] = `
-Object {
-  ".jhipster/AnotherSimple.json": Object {
+exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-mssql-enableHibernateCache(true)-mssql should match generated files snapshot 1`] = `
+{
+  ".jhipster/AnotherSimple.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": Object {
+  ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": Object {
+  ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": Object {
+  ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+  "src/main/java/com/package/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Microservice.java": Object {
+  "src/main/java/com/package/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": Object {
+  "src/main/java/com/package/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+  "src/main/java/com/package/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+  "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": Object {
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster sql generator samples matrix should match snapshot 1`] = `
-Object {
-  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-enableHibernateCache(true)-h2Disk-hazelcast": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
+{
+  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-enableHibernateCache(true)-h2Disk-hazelcast": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "gateway",
         "authenticationType": "jwt",
         "baseName": "jhipster",
@@ -1559,25 +1559,25 @@ Object {
         "enableTranslation": true,
         "entitySuffix": "",
         "jhiPrefix": "fix",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
         "nativeLanguage": "en",
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
-        "serverSideOptions": Array [],
+        "serverSideOptions": [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
         "skipUserManagement": false,
-        "testFrameworks": Array [],
+        "testFrameworks": [],
         "websocket": false,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1585,12 +1585,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1599,21 +1599,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1627,14 +1627,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "gateway",
         "authenticationType": "oauth2",
         "baseName": "jhipster",
@@ -1647,28 +1647,28 @@ Object {
         "enableTranslation": false,
         "entitySuffix": "Entity",
         "jhiPrefix": "jhi",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
         "nativeLanguage": "en",
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
-        "serverSideOptions": Array [
+        "serverSideOptions": [
           "enableSwaggerCodegen:true",
         ],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": false,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "cucumber",
         ],
         "websocket": true,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1676,12 +1676,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1690,21 +1690,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1718,14 +1718,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-enableHibernateCache(false)-mysql-caffeine": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-enableHibernateCache(false)-mysql-caffeine": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "microservice",
         "authenticationType": "jwt",
         "baseName": "jhipster",
@@ -1738,7 +1738,7 @@ Object {
         "enableTranslation": false,
         "entitySuffix": "Entity",
         "jhiPrefix": "jhi",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -1746,20 +1746,20 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
         "reactive": false,
-        "serverSideOptions": Array [],
+        "serverSideOptions": [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
         "skipUserManagement": false,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "cucumber",
         ],
         "websocket": false,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1767,12 +1767,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1781,21 +1781,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1809,14 +1809,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-mysql-enableHibernateCache(true)-h2Memory": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-mysql-enableHibernateCache(true)-h2Memory": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "microservice",
         "authenticationType": "jwt",
         "baseName": "jhipster",
@@ -1828,7 +1828,7 @@ Object {
         "enableTranslation": true,
         "entitySuffix": "",
         "jhiPrefix": "fix",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -1836,19 +1836,19 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
         "reactive": true,
-        "serverSideOptions": Array [
+        "serverSideOptions": [
           "enableSwaggerCodegen:true",
         ],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
         "skipUserManagement": true,
-        "testFrameworks": Array [],
+        "testFrameworks": [],
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1856,12 +1856,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1870,21 +1870,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1898,14 +1898,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "microservice",
         "authenticationType": "oauth2",
         "baseName": "jhipster",
@@ -1918,7 +1918,7 @@ Object {
         "enableTranslation": false,
         "entitySuffix": "Entity",
         "jhiPrefix": "jhi",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -1926,21 +1926,21 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "serverSideOptions": Array [
+        "serverSideOptions": [
           "enableSwaggerCodegen:true",
         ],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": false,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "gatling",
         ],
         "websocket": true,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1948,12 +1948,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1962,21 +1962,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -1990,14 +1990,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mssql-enableHibernateCache(false)-h2Memory": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mssql-enableHibernateCache(false)-h2Memory": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "microservice",
         "authenticationType": "oauth2",
         "baseName": "jhipster",
@@ -2009,7 +2009,7 @@ Object {
         "enableTranslation": true,
         "entitySuffix": "",
         "jhiPrefix": "fix",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2017,18 +2017,18 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "serverSideOptions": Array [],
+        "serverSideOptions": [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": true,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "gatling",
         ],
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2036,12 +2036,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2050,21 +2050,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2078,14 +2078,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-postgresql-enableHibernateCache(true)-h2Memory-redis": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-postgresql-enableHibernateCache(true)-h2Memory-redis": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "monolith",
         "authenticationType": "jwt",
         "baseName": "jhipster",
@@ -2098,7 +2098,7 @@ Object {
         "enableTranslation": false,
         "entitySuffix": "Entity",
         "jhiPrefix": "jhi",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2106,20 +2106,20 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "serverSideOptions": Array [
+        "serverSideOptions": [
           "enableSwaggerCodegen:true",
         ],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": false,
         "skipUserManagement": false,
-        "testFrameworks": Array [],
+        "testFrameworks": [],
         "websocket": true,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2127,12 +2127,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2141,21 +2141,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2169,14 +2169,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-oracle-enableHibernateCache(false)-h2Memory": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-oracle-enableHibernateCache(false)-h2Memory": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "monolith",
         "authenticationType": "jwt",
         "baseName": "jhipster",
@@ -2188,7 +2188,7 @@ Object {
         "enableTranslation": true,
         "entitySuffix": "",
         "jhiPrefix": "fix",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2196,19 +2196,19 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "serverSideOptions": Array [],
+        "serverSideOptions": [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
         "skipUserManagement": true,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "cucumber",
         ],
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2216,12 +2216,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2230,21 +2230,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2258,14 +2258,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-enableHibernateCache(false)-postgresql-cacheProvider(no)": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-enableHibernateCache(false)-postgresql-cacheProvider(no)": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "monolith",
         "authenticationType": "oauth2",
         "baseName": "jhipster",
@@ -2278,7 +2278,7 @@ Object {
         "enableTranslation": false,
         "entitySuffix": "Entity",
         "jhiPrefix": "jhi",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2286,17 +2286,17 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "serverSideOptions": Array [],
+        "serverSideOptions": [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
-        "testFrameworks": Array [],
+        "testFrameworks": [],
         "websocket": false,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2304,12 +2304,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2318,21 +2318,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2346,14 +2346,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-oracle-enableHibernateCache(true)-oracle": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-oracle-enableHibernateCache(true)-oracle": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "monolith",
         "authenticationType": "oauth2",
         "baseName": "jhipster",
@@ -2365,7 +2365,7 @@ Object {
         "enableTranslation": true,
         "entitySuffix": "",
         "jhiPrefix": "fix",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2373,20 +2373,20 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "serverSideOptions": Array [
+        "serverSideOptions": [
           "enableSwaggerCodegen:true",
         ],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "cucumber",
         ],
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2394,12 +2394,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2408,21 +2408,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2436,14 +2436,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-enableHibernateCache(false)-mariadb-ehcache": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-enableHibernateCache(false)-mariadb-ehcache": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "monolith",
         "authenticationType": "session",
         "baseName": "jhipster",
@@ -2456,7 +2456,7 @@ Object {
         "enableTranslation": false,
         "entitySuffix": "Entity",
         "jhiPrefix": "jhi",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2464,20 +2464,20 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "serverSideOptions": Array [],
+        "serverSideOptions": [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
         "skipUserManagement": false,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "gatling",
         ],
         "websocket": false,
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2485,12 +2485,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2499,21 +2499,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2527,14 +2527,14 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],
   },
-  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-mssql-enableHibernateCache(true)-mssql": Object {
-    "applicationWithEntities": Object {
-      "config": Object {
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-mssql-enableHibernateCache(true)-mssql": {
+    "applicationWithEntities": {
+      "config": {
         "applicationType": "monolith",
         "authenticationType": "session",
         "baseName": "jhipster",
@@ -2546,7 +2546,7 @@ Object {
         "enableTranslation": true,
         "entitySuffix": "",
         "jhiPrefix": "fix",
-        "languages": Array [
+        "languages": [
           "fr",
           "en",
         ],
@@ -2554,21 +2554,21 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "serverSideOptions": Array [
+        "serverSideOptions": [
           "enableSwaggerCodegen:true",
         ],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": true,
         "skipUserManagement": true,
-        "testFrameworks": Array [
+        "testFrameworks": [
           "gatling",
         ],
       },
-      "entities": Array [
-        Object {
+      "entities": [
+        {
           "changelogDate": "20220129000100",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2576,12 +2576,12 @@ Object {
           "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
-        Object {
+        {
           "changelogDate": "20220129000200",
           "clientRootFolder": "test-root",
           "dto": "mapstruct",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2590,21 +2590,21 @@ Object {
           "pagination": "pagination",
           "service": "serviceImpl",
         },
-        Object {
+        {
           "changelogDate": "20220129002000",
           "entityPackage": "custom",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "id",
               "fieldType": "UUID",
             },
           ],
           "name": "EntityWithCustomId",
         },
-        Object {
+        {
           "changelogDate": "20220129000300",
-          "fields": Array [
-            Object {
+          "fields": [
+            {
               "fieldName": "simpleName",
               "fieldType": "String",
             },
@@ -2618,7 +2618,7 @@ Object {
       ],
     },
     "defaults": true,
-    "skipPriorities": Array [
+    "skipPriorities": [
       "writing",
       "postWriting",
     ],

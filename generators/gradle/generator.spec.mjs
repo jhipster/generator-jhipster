@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,11 +27,10 @@ import { GENERATOR_GRADLE } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
     expect(GENERATOR_GRADLE).toBe(generator);
   });

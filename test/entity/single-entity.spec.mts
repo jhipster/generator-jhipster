@@ -19,7 +19,7 @@ class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   }
 }
 
-describe('jhipster:entity --single-entity', () => {
+describe('generator - entity --single-entity', () => {
   context('when regenerating', () => {
     describe('with default configuration', () => {
       let runResult;

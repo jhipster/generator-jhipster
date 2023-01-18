@@ -72,7 +72,10 @@ export type SpringBootApplication = CommonClientServerApplication &
     srcTestResources: string;
     srcTestJavascript: string;
 
-    buildDir: string;
+    javaPackageSrcDir: string;
+    javaPackageTestDir: string;
+
+    temporaryDir: string;
 
     javaDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;

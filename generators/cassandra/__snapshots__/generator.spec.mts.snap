@@ -1,0 +1,5371 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - cassandra gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/DomainUserDetailsService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/UserNotActivatedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/JWTRelayGatewayFilterFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UsernameAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AdminUserRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/PasswordChangeDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/UserRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/UserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/KeyAndPasswordVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/DomainUserDetailsServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/MailServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/ModifyServersOpenApiFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/GatewayResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/RouteVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/ModifyServersOpenApiFilterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/UserFeignClientInterceptor.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/FeignConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/AuthorizedFeignClient.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/OAuth2InterceptedFeignConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/TokenRelayRequestInterceptor.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/FeignConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AuthorizationHeaderUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AuthorizationHeaderUtilTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AdminUserRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/UserRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/MailServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/package/cucumber/gitkeep": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/CustomClaimConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/CustomClaimConverterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/OAuth2Configuration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AdminUserRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/UserRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AuthInfoResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/LogoutResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/test/util/OAuth2TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/LogoutResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/package/cucumber/gitkeep": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/PersistentToken.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/PersistentTokenRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/PersistentTokenRememberMeServices.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/MailServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/changelog/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace-prod.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/create-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/CassandraKeyspaceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedCassandra.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cassandra samples matrix should match snapshot 1`] = `
+{
+  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "gateway",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "cassandra",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "serverSideOptions": [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": false,
+        "testFrameworks": [],
+        "websocket": false,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "gateway",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "cassandra",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "serverSideOptions": [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "testFrameworks": [
+          "cucumber",
+        ],
+        "websocket": true,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "cassandra",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": [
+          "cucumber",
+        ],
+        "websocket": false,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "cassandra",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": [],
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "cassandra",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": false,
+        "testFrameworks": [
+          "gatling",
+        ],
+        "websocket": true,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "cassandra",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": [],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "testFrameworks": [
+          "gatling",
+        ],
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "cassandra",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": [],
+        "websocket": true,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "cassandra",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": [
+          "cucumber",
+        ],
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "cassandra",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "testFrameworks": [],
+        "websocket": false,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "cassandra",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "testFrameworks": [
+          "cucumber",
+        ],
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "cassandra",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": [
+          "gatling",
+        ],
+        "websocket": false,
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul": {
+    "applicationWithEntities": {
+      "config": {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "cassandra",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": [
+          "gatling",
+        ],
+      },
+      "entities": [
+        {
+          "changelogDate": "20220129000100",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+}
+`;

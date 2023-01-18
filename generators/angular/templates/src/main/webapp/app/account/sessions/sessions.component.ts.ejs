@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,6 +18,7 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 
+import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
@@ -25,9 +26,11 @@ import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-sessions',
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './sessions.component.html',
 })
-export class SessionsComponent implements OnInit {
+export default class SessionsComponent implements OnInit {
   account: Account | null = null;
   error = false;
   success = false;

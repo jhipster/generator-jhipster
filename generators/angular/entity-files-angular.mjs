@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,14 +29,13 @@ export const angularFiles = {
       condition: generator => !generator.embedded,
       ...clientApplicationBlock,
       templates: [
-        'entities/_entityFolder/_entityFile.module.ts',
+        'entities/_entityFolder/_entityFile.routes.ts',
         'entities/_entityFolder/detail/_entityFile-detail.component.html',
         'entities/_entityFolder/detail/_entityFile-detail.component.ts',
         'entities/_entityFolder/detail/_entityFile-detail.component.spec.ts',
         'entities/_entityFolder/list/_entityFile.component.html',
         'entities/_entityFolder/list/_entityFile.component.ts',
         'entities/_entityFolder/list/_entityFile.component.spec.ts',
-        'entities/_entityFolder/route/_entityFile-routing.module.ts',
         'entities/_entityFolder/route/_entityFile-routing-resolve.service.ts',
         'entities/_entityFolder/route/_entityFile-routing-resolve.service.spec.ts',
         'entities/_entityFolder/service/_entityFile.service.ts',
@@ -154,6 +153,11 @@ export function cleanupEntitiesFiles({ application, entities }) {
       );
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
+    }
+
+    if (this.isJhipsterVersionLessThan('7.10.0')) {
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/${entityFileName}.module.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/route/${entityFileName}-routing.module.ts`);
     }
   }
 }

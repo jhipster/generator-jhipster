@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,7 +22,7 @@ import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
-import applicationOptions from '../../jdl/jhipster/application-options.js';
+import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
 import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures } from '../base/api.mjs';
 

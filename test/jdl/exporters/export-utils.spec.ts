@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,9 +21,14 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import path from 'path';
 import { readFileSync, unlinkSync, writeFileSync } from 'fs';
-import { writeConfigFile } from '../../../jdl/exporters/export-utils';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { writeConfigFile } from '../../../jdl/exporters/export-utils.js';
 
-describe('ExportUtils', () => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+describe('jdl - ExportUtils', () => {
   describe('writeConfigFile', () => {
     context('when there is no .yo-rc.json file present', () => {
       let exportedConfig;
@@ -43,8 +48,8 @@ describe('ExportUtils', () => {
 
       it('should export the config', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "jhipsterVersion": "7.0.0",
   },
 }
@@ -81,14 +86,14 @@ Object {
 
       it('should export the config', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "jhipsterVersion": "7.0.0",
   },
-  "somethingElse": Object {
+  "somethingElse": {
     "answer": 42,
   },
-  "somethingNew": Object {
+  "somethingNew": {
     "question": "No comment",
   },
 }
@@ -128,15 +133,15 @@ Object {
 
       it('should export the config', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "creationTimestamp": "old",
     "jhipsterVersion": "7.0.0",
   },
-  "somethingElse": Object {
+  "somethingElse": {
     "answer": 42,
   },
-  "somethingNew": Object {
+  "somethingNew": {
     "question": "No comment",
   },
 }
@@ -175,15 +180,15 @@ Object {
 
       it('should export the config with new creationTimestamp', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "creationTimestamp": "new",
     "jhipsterVersion": "7.0.0",
   },
-  "somethingElse": Object {
+  "somethingElse": {
     "answer": 42,
   },
-  "somethingNew": Object {
+  "somethingNew": {
     "question": "No comment",
   },
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,9 +19,9 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { getRule, rules, rulesNames } from '../../../jdl/linters/rules';
+import { getRule, rules, rulesNames } from '../../../jdl/linters/rules.js';
 
-describe('Rules', () => {
+describe('jdl - Rules', () => {
   describe('getRules', () => {
     context('when not passing a rule name', () => {
       it('should fail', () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,10 +20,10 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import JDLEnums from '../../../jdl/models/jdl-enums';
-import JDLEnum from '../../../jdl/models/jdl-enum';
+import JDLEnums from '../../../jdl/models/jdl-enums.js';
+import { JDLEnum } from '../../../jdl/models/index.mjs';
 
-describe('JDLEnums', () => {
+describe('jdl - JDLEnums', () => {
   describe('add', () => {
     let jdlEnums;
 
@@ -128,7 +128,7 @@ describe('JDLEnums', () => {
 
       it('should use each enum name', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "A",
   "B",
 ]

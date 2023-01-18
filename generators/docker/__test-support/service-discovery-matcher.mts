@@ -1,9 +1,7 @@
 import type { RunResult } from 'yeoman-test';
 
-import constants from '../../generator-constants.cjs';
+import { DOCKER_DIR } from '../../generator-constants.mjs';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.mjs';
-
-const { DOCKER_DIR } = constants;
 
 const expectedEurekaFiles = () => {
   return [

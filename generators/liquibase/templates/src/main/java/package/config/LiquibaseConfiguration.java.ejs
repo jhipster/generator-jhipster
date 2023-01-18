@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -80,7 +80,7 @@ public class LiquibaseConfiguration {
         liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
         liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
-        liquibase.setLabels(liquibaseProperties.getLabels());
+        liquibase.setLabelFilter(liquibaseProperties.getLabelFilter());
         liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
         liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
         liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());

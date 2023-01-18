@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,7 +19,7 @@
 
 import _ from 'lodash';
 import { Lexer } from 'chevrotain';
-import TokenCollectorVisitor from './token-collector-visitor';
+import TokenCollectorVisitor from './token-collector-visitor.js';
 
 export function checkTokens(allDefinedTokens, rules) {
   const usedTokens = getUsedTokens(rules);

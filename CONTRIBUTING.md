@@ -116,7 +116,7 @@ Before you submit your pull request consider the following guidelines:
   mvnw spring-boot:run
   ```
 
-- You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#local-build)
+- You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#running-integration-tests-locally)
 
 - Commit your changes using a descriptive commit message that follows our
   [commit message conventions](#commit-message-format).
@@ -225,7 +225,7 @@ In your cloned `generator-jhipster` project, run `npm link` and then run `npm ci
 
 `npm link` will make a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
-`npm ci` will do a clean install of all of the project dependencies.
+`npm ci` will do a clean installation of all the project dependencies.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
@@ -237,7 +237,7 @@ To put it in a nutshell, you need to:
 1.  run `npm link` on the `generator-jhipster` project (link globally)
 2.  run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
-You can execute `jhipster --install-path` to check where jhipster is been executed from.
+You can execute `jhipster --install-path` to check where jhipster is being executed from.
 
 You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
@@ -271,15 +271,15 @@ or on Windows:
 
 ### Use a text editor
 
-As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
+As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [VSCode](https://code.visualstudio.com/) or [IntelliJ IDEA](https://www.jetbrains.com/idea/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
 
 ### Use a debugger
 
-It is possible to debug JHipster's code using a Node.js debugger. To achieve this, setup your debugger to launch `cli/jhipster.js`.
+It is possible to debug JHipster's code using a Node.js debugger. To achieve this setup your debugger to launch `cli/jhipster.js`.
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `test-integration/samples/app-sample-dev` folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl/Cmd+Shift+D). This will start the generator in debug mode and generate files in the [test-integration/samples/app-sample-dev](test-integration/samples/app-sample-dev) folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
@@ -343,9 +343,9 @@ For simple code (few lines), logic can be embedded in the main file but if logic
 
 Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax highlighting and it enables us to use a very concise syntax:
 
-    <%- include('field_validators'); -%>
+    <%- include('../common/field_validators', {field, reactive}); -%>
 
-This statement means that [\_Entity.java](generators/entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](generators/entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
+This statement means that [_PersistClass_.java.jhi.jakarta_validation.ejs](generators/server/templates/entity/src/main/java/package/domain/_PersistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/server/templates/entity/src/main/java/package/common/field_validators.ejs) sub template.
 
 Sub templates can be unit tested.
 
@@ -416,7 +416,7 @@ or joined the [JHipster team](https://www.jhipster.tech/team/).
 - Follow the project's [policies](https://www.jhipster.tech/policies/#-policies).
 - Follow the project's [Code of Conduct](https://github.com/jhipster/generator-jhipster/blob/main/CODE_OF_CONDUCT.md)
   and be polite and helpful to users when answering questions/bug reports and when reviewing PRs.
-- We work on our free time so we have no obligation nor commitment. Work/life balance is important, so don't
+- We work on our free time, so we have no obligation nor commitment. Work/life balance is important, so don't
   feel tempted to put in all your free time fixing something.
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md

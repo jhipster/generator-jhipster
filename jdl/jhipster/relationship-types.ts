@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,18 +19,13 @@
 
 import _ from 'lodash';
 
-const RelationshipTypes: any = {
+const relationshipTypes: any = {
   ONE_TO_ONE: 'OneToOne',
   ONE_TO_MANY: 'OneToMany',
   MANY_TO_ONE: 'ManyToOne',
   MANY_TO_MANY: 'ManyToMany',
 };
 
-export const ONE_TO_ONE = RelationshipTypes.ONE_TO_ONE;
-export const ONE_TO_MANY = RelationshipTypes.ONE_TO_MANY;
-export const MANY_TO_ONE = RelationshipTypes.MANY_TO_ONE;
-export const MANY_TO_MANY = RelationshipTypes.MANY_TO_MANY;
+relationshipTypes.exists = relationship => Object.values(relationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));
 
-RelationshipTypes.exists = relationship => Object.values(RelationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));
-
-export default RelationshipTypes;
+export default relationshipTypes;

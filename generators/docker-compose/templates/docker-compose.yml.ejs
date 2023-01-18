@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -61,7 +61,7 @@ services:
       - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
   <%_ } _%>
   <%_ if (monitoringPrometheus) { _%>
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
   <%_ } _%>
   <%_ if (usesOauth2) { _%>
       # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,9 +18,9 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertField } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/field-converter';
+import { convertField } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/field-converter.js';
 
-describe('FieldConverter', () => {
+describe('jdl - FieldConverter', () => {
   describe('convertField', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
@@ -45,9 +45,9 @@ describe('FieldConverter', () => {
 JDLField {
   "comment": undefined,
   "name": "anAwesomeField",
-  "options": Object {},
+  "options": {},
   "type": "String",
-  "validations": Object {},
+  "validations": {},
 }
 `);
         });

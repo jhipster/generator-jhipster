@@ -13,15 +13,15 @@
     "enableHibernateCache": true,
     "enableTranslation": false,
     "jhiPrefix": "myPrefix",
-    "messageBroker": false,
+    "messageBroker": "no",
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mariadb",
     "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

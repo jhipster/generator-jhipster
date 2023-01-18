@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2022 the original author or authors from the JHipster project.
+# Copyright the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -93,21 +93,21 @@ jobs:
       - name: Cache angular node_modules
         run: npm install --force
         continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/angular
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/angular/templates
       - name: Cache client common node_modules
         run: |
           npm install --force
           npx cypress install
         continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/common
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates
       - name: Cache react node_modules
         run: npm install --force
         continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/react
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/react/templates
       - name: Cache vue node_modules
         run: npm install
         continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/vue
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/vue/templates
 
       - name: 'mvn: install JHipster'
         run: $JHI_SCRIPTS/10-install-jhipster.sh

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,9 +22,14 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../../../jdl/utils/file-utils';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../../../jdl/utils/file-utils.js';
 
-describe('FileUtils', () => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+describe('jdl - FileUtils', () => {
   describe('doesFileExist', () => {
     context('when checking a file path', () => {
       context('with a nil file path', () => {

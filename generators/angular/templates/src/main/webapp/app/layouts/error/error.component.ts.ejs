@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,12 +22,15 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import SharedModule from 'app/shared/shared.module';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-error',
   templateUrl: './error.component.html',
+  imports: [SharedModule],
 })
-export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
+export default class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
   errorMessage?: string;
 <%_ if (enableTranslation) { _%>
   errorKey?: string;

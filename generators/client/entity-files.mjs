@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import utils from '../utils.cjs';
+import { getEnumInfo } from '../utils.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
@@ -26,7 +26,7 @@ async function addEnumerationFiles({ application, entity }) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;
       const enumInfo = {
-        ...utils.getEnumInfo(field, entity.clientRootFolder),
+        ...getEnumInfo(field, entity.clientRootFolder),
         frontendAppName: application.frontendAppName,
         packageName: application.packageName,
         webappEnumerationsDir: application.webappEnumerationsDir,
@@ -38,7 +38,6 @@ async function addEnumerationFiles({ application, entity }) {
             destinationFile: ctx => `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
           },
         ],
-        rootTemplatesPath: [CLIENT_COMMON_TEMPLATES_DIR],
         context: enumInfo,
       });
     }

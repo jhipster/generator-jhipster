@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,9 +33,9 @@
 <%_ if (databaseTypeCassandra) { _%>
     <logger name="io.netty" level="WARN"/>
 <%_ } _%>
-    <logger name="javax.activation" level="WARN"/>
-    <logger name="javax.mail" level="WARN"/>
-    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="jakarta.activation" level="WARN"/>
+    <logger name="jakarta.mail" level="WARN"/>
+    <logger name="jakarta.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
 <%_ if (databaseTypeCassandra) { _%>
     <logger name="com.datastax" level="WARN"/>
@@ -136,10 +136,5 @@
     <logger name="unknown.jul.logger" level="WARN"/>
 <%_ } _%>
     <logger name="com.tngtech.archunit.core.importer" level="ERROR"/>
-
-    <root>
-        <level>WARN</level>
-        <appender-ref ref="CONSOLE"/>
-    </root>
 
 </configuration>

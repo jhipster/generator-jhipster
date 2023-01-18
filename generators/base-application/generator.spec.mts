@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,7 +23,7 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.mjs';
 import type { BaseApplication } from '../bootstrap-application-base/types.js';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
@@ -35,7 +35,7 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

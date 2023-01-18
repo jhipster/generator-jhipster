@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,21 +23,14 @@ import _ from 'lodash';
 import path from 'path';
 
 import BaseGenerator from '../base/index.mjs';
-
 import prompts from './prompts.mjs';
-import generatorDefaults from '../generator-defaults.cjs';
-import constants from '../generator-constants.cjs';
-import { applicationTypes, clientFrameworkTypes, reservedKeywords } from '../../jdl/jhipster/index.mjs';
+import { JHIPSTER_CONFIG_DIR, ANGULAR_DIR } from '../generator-constants.mjs';
+import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 
-const { defaultConfig } = generatorDefaults;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
+const { NO: CLIENT_FRAMEWORK_NO, ANGULAR } = clientFrameworkTypes;
 const { isReservedClassName } = reservedKeywords;
-
-/* constants used throughout */
-const { JHIPSTER_CONFIG_DIR } = constants;
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 export default class EntityGenerator extends BaseGenerator {
   constructor(args, options, features) {
@@ -156,7 +149,7 @@ export default class EntityGenerator extends BaseGenerator {
         this.loadClientConfig(undefined, this.application);
         this.loadTranslationConfig(undefined, this.application);
         // Try to load server config from microservice side, falling back to the app config.
-        this.loadServerConfig(_.defaults({}, this.microserviceConfig, this.jhipsterConfig, defaultConfig), this.application);
+        this.loadServerConfig(getConfigWithDefaults({ ...this.jhipsterConfig, ...this.microserviceConfig }), this.application);
 
         this.loadDerivedAppConfig(this.application);
         this.loadDerivedClientConfig(this.application);
@@ -318,10 +311,10 @@ export default class EntityGenerator extends BaseGenerator {
         const context = this.context;
         const entityName = context.name;
         if (this.isJhipsterVersionLessThan('5.0.0')) {
-          this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
+          this.removeFile(`${ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
         }
         if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === ANGULAR) {
-          this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
+          this.removeFile(`${ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
         }
       },
     };

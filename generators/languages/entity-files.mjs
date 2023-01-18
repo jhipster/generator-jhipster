@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import utils from '../utils.cjs';
+import { getEnumInfo } from '../utils.mjs';
 
 const { startCase } = _;
 
@@ -69,7 +69,7 @@ export function writeEntityFiles() {
                   this.writeFiles({
                     sections: enumClientI18nFiles,
                     context: {
-                      ...utils.getEnumInfo(field, entity.clientRootFolder),
+                      ...getEnumInfo(field, entity.clientRootFolder),
                       lang,
                       frontendAppName,
                       packageName,
@@ -90,18 +90,12 @@ export function writeEntityFiles() {
 
       // Copy each
       const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = application;
-      await Promise.all(
-        entities.map(entity =>
-          languages.map(async lang => {
-            await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
-            this.addEntityTranslationKey(
-              entity.entityTranslationKeyMenu,
-              entity.entityClassHumanized || startCase(entity.entityClass),
-              lang
-            );
-          })
-        )
-      );
+      for (const entity of entities) {
+        for (const lang of languages) {
+          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
+        }
+      }
     },
   };
 }

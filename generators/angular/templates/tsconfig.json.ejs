@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,12 +33,10 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-<%_ if (microfrontend) { _%>
-    "target": "es2017",
-<%_ } else { _%>
-    "target": "es2020",
-<%_ } _%>
+    "useDefineForClassFields": false,
+    "target": "es2022",
     "module": "es2020",
+    "types": [],
     "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {

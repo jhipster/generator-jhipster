@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,8 +18,8 @@
  */
 
 import path from 'path';
-import { createFolderIfItDoesNotExist, doesFileExist } from '../../utils/file-utils';
-import { GENERATOR_NAME, writeConfigFile } from '../export-utils';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../../utils/file-utils.js';
+import { GENERATOR_NAME, writeConfigFile } from '../export-utils.js';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).

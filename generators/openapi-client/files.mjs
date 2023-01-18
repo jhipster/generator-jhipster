@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 import path from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
-import constants from '../generator-constants.cjs';
+import { SERVER_MAIN_SRC_DIR, OPENAPI_GENERATOR_CLI_VERSION, JACKSON_DATABIND_NULLABLE_VERSION } from '../generator-constants.mjs';
 import { applicationOptions, buildToolTypes, applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
 
 const { OptionNames } = applicationOptions;
@@ -51,8 +51,8 @@ export function customizeFiles() {
         const baseCliPackage = `${this.packageName}.client.`;
         const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
         const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
-        this.removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...cliPackage.split('.')));
-        this.removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...snakeCaseCliPackage.split('.')));
+        this.removeFolder(path.resolve(SERVER_MAIN_SRC_DIR, ...cliPackage.split('.')));
+        this.removeFolder(path.resolve(SERVER_MAIN_SRC_DIR, ...snakeCaseCliPackage.split('.')));
 
         const inputSpec = this.clientsToGenerate[cliName].spec;
         const generatorName = this.clientsToGenerate[cliName].generatorName;
@@ -141,11 +141,11 @@ export function customizeFiles() {
     addJacksonDataBindNullable() {
       if (!this.enableSwaggerCodegen) {
         if (this.buildTool === MAVEN) {
-          this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
+          this.addMavenProperty('jackson-databind-nullable.version', JACKSON_DATABIND_NULLABLE_VERSION);
           // eslint-disable-next-line no-template-curly-in-string
           this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
         } else if (this.buildTool === GRADLE) {
-          this.addGradleProperty('jacksonDatabindNullableVersion', constants.JACKSON_DATABIND_NULLABLE_VERSION);
+          this.addGradleProperty('jacksonDatabindNullableVersion', JACKSON_DATABIND_NULLABLE_VERSION);
           this.addGradleDependency(
             'compile',
             'org.openapitools',
@@ -162,7 +162,7 @@ export function customizeFiles() {
         return;
       }
 
-      this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
+      this.javaDir = `${SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
       const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
       if (this.applicationType !== MICROSERVICE || ![JWT].includes(this.authenticationType)) {
@@ -180,7 +180,7 @@ export function customizeFiles() {
         return;
       }
 
-      this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
+      this.javaDir = `${SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
       const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
       this.rewriteFile(
@@ -199,7 +199,7 @@ export function customizeFiles() {
     customizePackageJson() {
       this.packageJson.merge({
         dependencies: {
-          '@openapitools/openapi-generator-cli': constants.OPENAPI_GENERATOR_CLI_VERSION,
+          '@openapitools/openapi-generator-cli': OPENAPI_GENERATOR_CLI_VERSION,
         },
       });
     },

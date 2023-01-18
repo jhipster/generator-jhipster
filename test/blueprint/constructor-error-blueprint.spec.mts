@@ -3,12 +3,12 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
-import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JHipster application generator with blueprint with constructor error', () => {
+describe('generator - app - with blueprint with constructor error', () => {
   describe('generate monolith application with scoped blueprint', () => {
     it('rejects the environment', () => {
       return helpers

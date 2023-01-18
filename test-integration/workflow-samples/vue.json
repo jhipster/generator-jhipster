@@ -35,6 +35,7 @@
     },
     {
       "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
+      "disabled": "needs adjusts for sb3",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"

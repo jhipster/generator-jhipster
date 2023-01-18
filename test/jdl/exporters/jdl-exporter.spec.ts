@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,18 +22,18 @@ import { expect } from 'chai';
 import { jestExpect } from 'mocha-expect-snapshot';
 
 import fs from 'fs';
-import JDLObject from '../../../jdl/models/jdl-object';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import exportToJDL from '../../../jdl/exporters/jdl-exporter';
-import JDLApplication from '../../../jdl/models/jdl-application';
-import applicationOptions from '../../../jdl/jhipster/application-options';
-import { NO as NO_CLIENT_FRAMEWORK } from '../../../jdl/jhipster/client-framework-types';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
+import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
+import JDLApplication from '../../../jdl/models/jdl-application.js';
+import { applicationOptions, clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
+const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {
   OptionNames: { CLIENT_FRAMEWORK },
 } = applicationOptions;
 
-describe('JDLExporter', () => {
+describe('jdl - JDLExporter', () => {
   describe('exportToJDL', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {

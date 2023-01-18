@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,9 +21,15 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import * as JDLReader from '../../../jdl/readers/jdl-reader';
 
-describe('JDLReader', () => {
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import * as JDLReader from '../../../jdl/readers/jdl-reader.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+describe('jdl - JDLReader', () => {
   describe('parseFromFiles', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {

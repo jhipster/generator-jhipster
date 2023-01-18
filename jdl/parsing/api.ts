@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,11 +19,11 @@
 
 import _ from 'lodash';
 import { EOF } from 'chevrotain';
-import JDLAstBuilderVisitor from './jdl-ast-builder-visitor';
-import { JDLLexer, tokens } from './lexer/lexer';
-import JDLParser from './jdl-parser';
-import performAdditionalSyntaxChecks from './validator';
-import { checkTokens } from './self-checks/parsing-system-checker';
+import JDLAstBuilderVisitor from './jdl-ast-builder-visitor.js';
+import { JDLLexer, tokens } from './lexer/lexer.js';
+import JDLParser from './jdl-parser.js';
+import performAdditionalSyntaxChecks from './validator.js';
+import { checkTokens } from './self-checks/parsing-system-checker.js';
 
 const parserSingleton = JDLParser.getParser();
 parserSingleton.parse();

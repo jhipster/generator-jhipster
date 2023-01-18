@@ -65,7 +65,7 @@ const samplesBuilder = (): [string, any][] =>
 
 const testSamples = samplesBuilder();
 
-describe(`JHipster ${databaseType} generator`, () => {
+describe(`generator - ${databaseType} - entities`, () => {
   it('samples matrix should match snapshot', () => {
     expect(Object.fromEntries(testSamples)).toMatchSnapshot();
   });

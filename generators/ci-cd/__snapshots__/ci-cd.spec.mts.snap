@@ -1,46 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Gradle Angular NPM should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular NPM should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "azure-pipelines.yml": Object {
+  "azure-pipelines.yml": {
     "contents": "jobs:
   - job: Test
     pool:
-      vmImage: \\"ubuntu-20.04\\"
+      vmImage: "ubuntu-20.04"
     variables:
       NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: \\"false\\"
+      NG_CLI_ANALYTICS: "false"
       JHI_E2E_HEADLESS: true
 
     steps:
@@ -50,127 +50,127 @@ Object {
       - task: NodeTool@0
         inputs:
           versionSpec: $(NODE_VERSION)
-        displayName: \\"TOOLS: install Node.js\\"
+        displayName: "TOOLS: install Node.js"
       - task: Bash@3
         inputs:
-          targetType: \\"inline\\"
+          targetType: "inline"
           script: |
             wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: \\"TOOLS: install Chrome\\"
+        displayName: "TOOLS: install Chrome"
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
       - task: Npm@1
         inputs:
-          command: \\"install\\"
-        displayName: \\"INSTALL: launch npm install\\"
+          command: "install"
+        displayName: "INSTALL: launch npm install"
       - script: chmod +x gradlew
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:backend:test\\"
-        displayName: \\"TESTS: backend\\"
+          command: "custom"
+          customCommand: " run ci:backend:test"
+        displayName: "TESTS: backend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"**/TEST-*.xml\\"
-          searchFolder: \\"$(Build.SourcesDirectory)/build/test-results\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/TEST-*.xml"
+          searchFolder: "$(Build.SourcesDirectory)/build/test-results"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:frontend:test\\"
-        displayName: \\"TESTS: frontend\\"
+          command: "custom"
+          customCommand: " run ci:frontend:test"
+        displayName: "TESTS: frontend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run java:jar:prod\\"
-        displayName: \\"TESTS: packaging\\"
+          command: "custom"
+          customCommand: " run java:jar:prod"
+        displayName: "TESTS: packaging"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:package\\"
-        displayName: \\"E2E: Package\\"
+          command: "custom"
+          customCommand: " run ci:e2e:package"
+        displayName: "E2E: Package"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:prepare\\"
-        displayName: \\"E2E: Prepare\\"
+          command: "custom"
+          customCommand: " run ci:e2e:prepare"
+        displayName: "E2E: Prepare"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:run\\"
-        displayName: \\"E2E: Run\\"
+          command: "custom"
+          customCommand: " run ci:e2e:run"
+        displayName: "E2E: Run"
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: \\"cypress-screenshots\\"
-          targetPath: \\"$(Build.SourcesDirectory)/build/cypress/screenshots\\"
+          artifactName: "cypress-screenshots"
+          targetPath: "$(Build.SourcesDirectory)/build/cypress/screenshots"
         condition: failed()
-        displayName: \\"E2E: Publish Cypress Screenshots\\"
+        displayName: "E2E: Publish Cypress Screenshots"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:teardown\\"
-        displayName: \\"E2E: Teardown\\"
+          command: "custom"
+          customCommand: " run ci:e2e:teardown"
+        displayName: "E2E: Teardown"
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Gradle Angular NPM with Snyk should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular NPM with Snyk should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "azure-pipelines.yml": Object {
+  "azure-pipelines.yml": {
     "contents": "jobs:
   - job: Test
     pool:
-      vmImage: \\"ubuntu-20.04\\"
+      vmImage: "ubuntu-20.04"
     variables:
       NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: \\"false\\"
+      NG_CLI_ANALYTICS: "false"
       JHI_E2E_HEADLESS: true
 
     steps:
@@ -180,139 +180,139 @@ Object {
       - task: NodeTool@0
         inputs:
           versionSpec: $(NODE_VERSION)
-        displayName: \\"TOOLS: install Node.js\\"
+        displayName: "TOOLS: install Node.js"
       - task: Bash@3
         inputs:
-          targetType: \\"inline\\"
+          targetType: "inline"
           script: |
             wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: \\"TOOLS: install Chrome\\"
+        displayName: "TOOLS: install Chrome"
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
       - task: Npm@1
         inputs:
-          command: \\"install\\"
-        displayName: \\"INSTALL: launch npm install\\"
+          command: "install"
+        displayName: "INSTALL: launch npm install"
       - script: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
           chmod +x snyk
-        displayName: \\"INSTALL: Snyk CLI\\"
+        displayName: "INSTALL: Snyk CLI"
       - script: ./snyk test --all-projects || true
-        displayName: \\"CHECK: Snyk test\\"
+        displayName: "CHECK: Snyk test"
         env:
           SNYK_TOKEN: $(SNYK_TOKEN)
       - script: ./snyk monitor --all-projects
-        displayName: \\"CHECK: Snyk monitor\\"
+        displayName: "CHECK: Snyk monitor"
         env:
           SNYK_TOKEN: $(SNYK_TOKEN)
       - script: chmod +x gradlew
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:backend:test\\"
-        displayName: \\"TESTS: backend\\"
+          command: "custom"
+          customCommand: " run ci:backend:test"
+        displayName: "TESTS: backend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"**/TEST-*.xml\\"
-          searchFolder: \\"$(Build.SourcesDirectory)/build/test-results\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/TEST-*.xml"
+          searchFolder: "$(Build.SourcesDirectory)/build/test-results"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:frontend:test\\"
-        displayName: \\"TESTS: frontend\\"
+          command: "custom"
+          customCommand: " run ci:frontend:test"
+        displayName: "TESTS: frontend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run java:jar:prod\\"
-        displayName: \\"TESTS: packaging\\"
+          command: "custom"
+          customCommand: " run java:jar:prod"
+        displayName: "TESTS: packaging"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:package\\"
-        displayName: \\"E2E: Package\\"
+          command: "custom"
+          customCommand: " run ci:e2e:package"
+        displayName: "E2E: Package"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:prepare\\"
-        displayName: \\"E2E: Prepare\\"
+          command: "custom"
+          customCommand: " run ci:e2e:prepare"
+        displayName: "E2E: Prepare"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:run\\"
-        displayName: \\"E2E: Run\\"
+          command: "custom"
+          customCommand: " run ci:e2e:run"
+        displayName: "E2E: Run"
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: \\"cypress-screenshots\\"
-          targetPath: \\"$(Build.SourcesDirectory)/build/cypress/screenshots\\"
+          artifactName: "cypress-screenshots"
+          targetPath: "$(Build.SourcesDirectory)/build/cypress/screenshots"
         condition: failed()
-        displayName: \\"E2E: Publish Cypress Screenshots\\"
+        displayName: "E2E: Publish Cypress Screenshots"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:teardown\\"
-        displayName: \\"E2E: Teardown\\"
+          command: "custom"
+          customCommand: " run ci:e2e:teardown"
+        displayName: "E2E: Teardown"
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Maven Angular NPM should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular NPM should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "azure-pipelines.yml": Object {
+  "azure-pipelines.yml": {
     "contents": "jobs:
   - job: Test
     pool:
-      vmImage: \\"ubuntu-20.04\\"
+      vmImage: "ubuntu-20.04"
     variables:
       NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: \\"false\\"
+      NG_CLI_ANALYTICS: "false"
       JHI_E2E_HEADLESS: true
 
     steps:
@@ -322,127 +322,127 @@ Object {
       - task: NodeTool@0
         inputs:
           versionSpec: $(NODE_VERSION)
-        displayName: \\"TOOLS: install Node.js\\"
+        displayName: "TOOLS: install Node.js"
       - task: Bash@3
         inputs:
-          targetType: \\"inline\\"
+          targetType: "inline"
           script: |
             wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: \\"TOOLS: install Chrome\\"
+        displayName: "TOOLS: install Chrome"
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
       - task: Npm@1
         inputs:
-          command: \\"install\\"
-        displayName: \\"INSTALL: launch npm install\\"
+          command: "install"
+        displayName: "INSTALL: launch npm install"
       - script: chmod +x mvnw
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:backend:test\\"
-        displayName: \\"TESTS: backend\\"
+          command: "custom"
+          customCommand: " run ci:backend:test"
+        displayName: "TESTS: backend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"**/TEST-*.xml\\"
-          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/TEST-*.xml"
+          searchFolder: "$(Build.SourcesDirectory)/target/test-results"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:frontend:test\\"
-        displayName: \\"TESTS: frontend\\"
+          command: "custom"
+          customCommand: " run ci:frontend:test"
+        displayName: "TESTS: frontend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run java:jar:prod\\"
-        displayName: \\"TESTS: packaging\\"
+          command: "custom"
+          customCommand: " run java:jar:prod"
+        displayName: "TESTS: packaging"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:package\\"
-        displayName: \\"E2E: Package\\"
+          command: "custom"
+          customCommand: " run ci:e2e:package"
+        displayName: "E2E: Package"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:prepare\\"
-        displayName: \\"E2E: Prepare\\"
+          command: "custom"
+          customCommand: " run ci:e2e:prepare"
+        displayName: "E2E: Prepare"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:run\\"
-        displayName: \\"E2E: Run\\"
+          command: "custom"
+          customCommand: " run ci:e2e:run"
+        displayName: "E2E: Run"
         env:
           CYPRESS_ENABLE_RECORD: true
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: \\"cypress-screenshots\\"
-          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+          artifactName: "cypress-screenshots"
+          targetPath: "$(Build.SourcesDirectory)/target/cypress/screenshots"
         condition: failed()
-        displayName: \\"E2E: Publish Cypress Screenshots\\"
+        displayName: "E2E: Publish Cypress Screenshots"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:teardown\\"
-        displayName: \\"E2E: Teardown\\"
+          command: "custom"
+          customCommand: " run ci:e2e:teardown"
+        displayName: "E2E: Teardown"
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Maven Angular NPM with Snyk should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular NPM with Snyk should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "azure-pipelines.yml": Object {
+  "azure-pipelines.yml": {
     "contents": "jobs:
   - job: Test
     pool:
-      vmImage: \\"ubuntu-20.04\\"
+      vmImage: "ubuntu-20.04"
     variables:
       NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: \\"false\\"
+      NG_CLI_ANALYTICS: "false"
       JHI_E2E_HEADLESS: true
 
     steps:
@@ -452,139 +452,139 @@ Object {
       - task: NodeTool@0
         inputs:
           versionSpec: $(NODE_VERSION)
-        displayName: \\"TOOLS: install Node.js\\"
+        displayName: "TOOLS: install Node.js"
       - task: Bash@3
         inputs:
-          targetType: \\"inline\\"
+          targetType: "inline"
           script: |
             wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: \\"TOOLS: install Chrome\\"
+        displayName: "TOOLS: install Chrome"
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
       - task: Npm@1
         inputs:
-          command: \\"install\\"
-        displayName: \\"INSTALL: launch npm install\\"
+          command: "install"
+        displayName: "INSTALL: launch npm install"
       - script: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
           chmod +x snyk
-        displayName: \\"INSTALL: Snyk CLI\\"
+        displayName: "INSTALL: Snyk CLI"
       - script: ./snyk test --all-projects || true
-        displayName: \\"CHECK: Snyk test\\"
+        displayName: "CHECK: Snyk test"
         env:
           SNYK_TOKEN: $(SNYK_TOKEN)
       - script: ./snyk monitor --all-projects
-        displayName: \\"CHECK: Snyk monitor\\"
+        displayName: "CHECK: Snyk monitor"
         env:
           SNYK_TOKEN: $(SNYK_TOKEN)
       - script: chmod +x mvnw
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:backend:test\\"
-        displayName: \\"TESTS: backend\\"
+          command: "custom"
+          customCommand: " run ci:backend:test"
+        displayName: "TESTS: backend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"**/TEST-*.xml\\"
-          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/TEST-*.xml"
+          searchFolder: "$(Build.SourcesDirectory)/target/test-results"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:frontend:test\\"
-        displayName: \\"TESTS: frontend\\"
+          command: "custom"
+          customCommand: " run ci:frontend:test"
+        displayName: "TESTS: frontend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run java:jar:prod\\"
-        displayName: \\"TESTS: packaging\\"
+          command: "custom"
+          customCommand: " run java:jar:prod"
+        displayName: "TESTS: packaging"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:package\\"
-        displayName: \\"E2E: Package\\"
+          command: "custom"
+          customCommand: " run ci:e2e:package"
+        displayName: "E2E: Package"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:prepare\\"
-        displayName: \\"E2E: Prepare\\"
+          command: "custom"
+          customCommand: " run ci:e2e:prepare"
+        displayName: "E2E: Prepare"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:run\\"
-        displayName: \\"E2E: Run\\"
+          command: "custom"
+          customCommand: " run ci:e2e:run"
+        displayName: "E2E: Run"
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: \\"cypress-screenshots\\"
-          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+          artifactName: "cypress-screenshots"
+          targetPath: "$(Build.SourcesDirectory)/target/cypress/screenshots"
         condition: failed()
-        displayName: \\"E2E: Publish Cypress Screenshots\\"
+        displayName: "E2E: Publish Cypress Screenshots"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:teardown\\"
-        displayName: \\"E2E: Teardown\\"
+          command: "custom"
+          customCommand: " run ci:e2e:teardown"
+        displayName: "E2E: Teardown"
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: autoconfigure should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "azure-pipelines.yml": Object {
+  "azure-pipelines.yml": {
     "contents": "jobs:
   - job: Test
     pool:
-      vmImage: \\"ubuntu-20.04\\"
+      vmImage: "ubuntu-20.04"
     variables:
       NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: \\"false\\"
+      NG_CLI_ANALYTICS: "false"
       JHI_E2E_HEADLESS: true
 
     steps:
@@ -594,89 +594,89 @@ Object {
       - task: NodeTool@0
         inputs:
           versionSpec: $(NODE_VERSION)
-        displayName: \\"TOOLS: install Node.js\\"
+        displayName: "TOOLS: install Node.js"
       - task: Bash@3
         inputs:
-          targetType: \\"inline\\"
+          targetType: "inline"
           script: |
             wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: \\"TOOLS: install Chrome\\"
+        displayName: "TOOLS: install Chrome"
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
       - task: Npm@1
         inputs:
-          command: \\"install\\"
-        displayName: \\"INSTALL: launch npm install\\"
+          command: "install"
+        displayName: "INSTALL: launch npm install"
       - script: chmod +x mvnw
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:backend:test\\"
-        displayName: \\"TESTS: backend\\"
+          command: "custom"
+          customCommand: " run ci:backend:test"
+        displayName: "TESTS: backend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"**/TEST-*.xml\\"
-          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/TEST-*.xml"
+          searchFolder: "$(Build.SourcesDirectory)/target/test-results"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:frontend:test\\"
-        displayName: \\"TESTS: frontend\\"
+          command: "custom"
+          customCommand: " run ci:frontend:test"
+        displayName: "TESTS: frontend"
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: \\"JUnit\\"
-          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+          testResultsFormat: "JUnit"
+          testResultsFiles: "$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml"
         condition: succeededOrFailed()
-        displayName: \\"TESTS: publish test results\\"
+        displayName: "TESTS: publish test results"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run java:jar:prod\\"
-        displayName: \\"TESTS: packaging\\"
+          command: "custom"
+          customCommand: " run java:jar:prod"
+        displayName: "TESTS: packaging"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:package\\"
-        displayName: \\"E2E: Package\\"
+          command: "custom"
+          customCommand: " run ci:e2e:package"
+        displayName: "E2E: Package"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:prepare\\"
-        displayName: \\"E2E: Prepare\\"
+          command: "custom"
+          customCommand: " run ci:e2e:prepare"
+        displayName: "E2E: Prepare"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:run\\"
-        displayName: \\"E2E: Run\\"
+          command: "custom"
+          customCommand: " run ci:e2e:run"
+        displayName: "E2E: Run"
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: \\"cypress-screenshots\\"
-          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+          artifactName: "cypress-screenshots"
+          targetPath: "$(Build.SourcesDirectory)/target/cypress/screenshots"
         condition: failed()
-        displayName: \\"E2E: Publish Cypress Screenshots\\"
+        displayName: "E2E: Publish Cypress Screenshots"
       - task: Npm@1
         inputs:
-          command: \\"custom\\"
-          customCommand: \\" run ci:e2e:teardown\\"
-        displayName: \\"E2E: Teardown\\"
+          command: "custom"
+          customCommand: " run ci:e2e:teardown"
+        displayName: "E2E: Teardown"
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Gradle Angular NPM should match files snapshot 1`] = `
-Object {
-  ".circleci/config.yml": Object {
+exports[`generator - CI-CD Circle CI test Circle CI: Gradle Angular NPM should match files snapshot 1`] = `
+{
+  ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
   build:
@@ -688,31 +688,31 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum \\"build.gradle\\" }}-{{ checksum \\"package-lock.json\\" }}
+            - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
             # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
             - v1-dependencies-
       - run:
           name: Print Java Version
-          command: \\"java -version\\"
+          command: "java -version"
       - run:
           name: Print Node Version
-          command: \\"node -v\\"
+          command: "node -v"
       - run:
           name: Print NPM Version
-          command: \\"npm -v\\"
+          command: "npm -v"
       - run:
           name: Install Node Modules
-          command: \\"npm install\\"
+          command: "npm install"
       - save_cache:
           paths:
             - node
             - node_modules
             - ~/.gradle
-          key: v1-dependencies-{{ checksum \\"build.gradle\\" }}-{{ checksum \\"package-lock.json\\" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Give Executable Power
-          command: \\"chmod +x gradlew\\"
+          command: "chmod +x gradlew"
       - run:
           name: Backend tests
           command: npm run ci:backend:test
@@ -736,29 +736,29 @@ jobs:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -767,9 +767,9 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Gradle with Snyk should match files snapshot 1`] = `
-Object {
-  ".circleci/config.yml": Object {
+exports[`generator - CI-CD Circle CI test Circle CI: Gradle with Snyk should match files snapshot 1`] = `
+{
+  ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
   build:
@@ -781,42 +781,42 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum \\"build.gradle\\" }}-{{ checksum \\"package-lock.json\\" }}
+            - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
             # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
             - v1-dependencies-
       - run:
           name: Print Java Version
-          command: \\"java -version\\"
+          command: "java -version"
       - run:
           name: Print Node Version
-          command: \\"node -v\\"
+          command: "node -v"
       - run:
           name: Print NPM Version
-          command: \\"npm -v\\"
+          command: "npm -v"
       - run:
           name: Install Node Modules
-          command: \\"npm install\\"
+          command: "npm install"
       - run:
           name: Install Snyk CLI
           command: |
-            curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+            curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
             chmod +x snyk
       - run:
           name: Snyk test
-          command: \\"./snyk test --all-projects || true\\"
+          command: "./snyk test --all-projects || true"
       - run:
           name: Snyk monitor
-          command: \\"./snyk monitor --all-projects\\"
+          command: "./snyk monitor --all-projects"
       - save_cache:
           paths:
             - node
             - node_modules
             - ~/.gradle
-          key: v1-dependencies-{{ checksum \\"build.gradle\\" }}-{{ checksum \\"package-lock.json\\" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Give Executable Power
-          command: \\"chmod +x gradlew\\"
+          command: "chmod +x gradlew"
       - run:
           name: Backend tests
           command: npm run ci:backend:test
@@ -840,29 +840,29 @@ jobs:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -871,9 +871,9 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Maven Angular NPM should match files snapshot 1`] = `
-Object {
-  ".circleci/config.yml": Object {
+exports[`generator - CI-CD Circle CI test Circle CI: Maven Angular NPM should match files snapshot 1`] = `
+{
+  ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
   build:
@@ -885,31 +885,31 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum \\"pom.xml\\" }}-{{ checksum \\"package-lock.json\\" }}
+            - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
             # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
             - v1-dependencies-
       - run:
           name: Print Java Version
-          command: \\"java -version\\"
+          command: "java -version"
       - run:
           name: Print Node Version
-          command: \\"node -v\\"
+          command: "node -v"
       - run:
           name: Print NPM Version
-          command: \\"npm -v\\"
+          command: "npm -v"
       - run:
           name: Install Node Modules
-          command: \\"npm install\\"
+          command: "npm install"
       - save_cache:
           paths:
             - node
             - node_modules
             - ~/.m2
-          key: v1-dependencies-{{ checksum \\"pom.xml\\" }}-{{ checksum \\"package-lock.json\\" }}
+          key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Give Executable Power
-          command: \\"chmod +x mvnw\\"
+          command: "chmod +x mvnw"
       - run:
           name: Backend tests
           command: npm run ci:backend:test
@@ -933,29 +933,29 @@ jobs:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -964,9 +964,9 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Maven with Snyk should match files snapshot 1`] = `
-Object {
-  ".circleci/config.yml": Object {
+exports[`generator - CI-CD Circle CI test Circle CI: Maven with Snyk should match files snapshot 1`] = `
+{
+  ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
   build:
@@ -978,42 +978,42 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum \\"pom.xml\\" }}-{{ checksum \\"package-lock.json\\" }}
+            - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
             # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
             - v1-dependencies-
       - run:
           name: Print Java Version
-          command: \\"java -version\\"
+          command: "java -version"
       - run:
           name: Print Node Version
-          command: \\"node -v\\"
+          command: "node -v"
       - run:
           name: Print NPM Version
-          command: \\"npm -v\\"
+          command: "npm -v"
       - run:
           name: Install Node Modules
-          command: \\"npm install\\"
+          command: "npm install"
       - run:
           name: Install Snyk CLI
           command: |
-            curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+            curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
             chmod +x snyk
       - run:
           name: Snyk test
-          command: \\"./snyk test --all-projects || true\\"
+          command: "./snyk test --all-projects || true"
       - run:
           name: Snyk monitor
-          command: \\"./snyk monitor --all-projects\\"
+          command: "./snyk monitor --all-projects"
       - save_cache:
           paths:
             - node
             - node_modules
             - ~/.m2
-          key: v1-dependencies-{{ checksum \\"pom.xml\\" }}-{{ checksum \\"package-lock.json\\" }}
+          key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Give Executable Power
-          command: \\"chmod +x mvnw\\"
+          command: "chmod +x mvnw"
       - run:
           name: Backend tests
           command: npm run ci:backend:test
@@ -1037,29 +1037,29 @@ jobs:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -1068,14 +1068,14 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Gradle Angular NPM should match files snapshot 1`] = `
-Object {
-  ".github/workflows/main.yml": Object {
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular NPM should match files snapshot 1`] = `
+{
+  ".github/workflows/main.yml": {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
   validation:
-    name: \\"Gradle Wrapper Validation\\"
+    name: "Gradle Wrapper Validation"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -1083,7 +1083,7 @@ jobs:
   pipeline:
     name: sampleMysql pipeline
     runs-on: ubuntu-latest
-    if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     timeout-minutes: 40
     env:
       NODE_VERSION: NODE_VERSION
@@ -1098,8 +1098,8 @@ jobs:
           node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
-          distribution: \\"temurin\\"
-          java-version: 11
+          distribution: "temurin"
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1110,44 +1110,44 @@ jobs:
         run: npm run ci:frontend:test
       - name: Package application
         run: npm run java:jar:prod
-      - name: \\"E2E: Package\\"
+      - name: "E2E: Package"
         run: npm run ci:e2e:package
-      - name: \\"E2E: Prepare\\"
+      - name: "E2E: Prepare"
         run: npm run ci:e2e:prepare
-      - name: \\"E2E: Run\\"
+      - name: "E2E: Run"
         run: npm run ci:e2e:run
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: \\"E2E: Teardown\\"
+      - name: "E2E: Teardown"
         run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -1156,14 +1156,14 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Gradle Angular NPM with full options should match files snapshot 1`] = `
-Object {
-  ".github/workflows/main.yml": Object {
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular NPM with full options should match files snapshot 1`] = `
+{
+  ".github/workflows/main.yml": {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
   validation:
-    name: \\"Gradle Wrapper Validation\\"
+    name: "Gradle Wrapper Validation"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -1171,7 +1171,7 @@ jobs:
   pipeline:
     name: sampleMysql pipeline
     runs-on: ubuntu-latest
-    if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     timeout-minutes: 40
     env:
       NODE_VERSION: NODE_VERSION
@@ -1186,13 +1186,13 @@ jobs:
           node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
-          distribution: \\"temurin\\"
-          java-version: 11
+          distribution: "temurin"
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Install Snyk CLI
         run: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
           chmod +x snyk
       - name: Snyk test
         continue-on-error: true
@@ -1215,7 +1215,7 @@ jobs:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
         run: |
-          if [ ! -z \\"$SONAR_TOKEN\\" ]; then
+          if [ ! -z "$SONAR_TOKEN" ]; then
               ./gradlew sonarqube --no-daemon -Dsonar.host.url=http://sonar.com:9000
           else
               echo No SONAR_TOKEN, skipping...
@@ -1227,7 +1227,7 @@ jobs:
         env:
           HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
         run: |
-          if [ ! -z \\"$HEROKU_API_KEY\\" ]; then
+          if [ ! -z "$HEROKU_API_KEY" ]; then
               ./gradlew deployHeroku --no-daemon
           else
               echo No HEROKU_API_KEY, skipping...
@@ -1237,53 +1237,53 @@ jobs:
         run: |
           GIT_TAG=:\${GITHUB_REF#refs/tags/}
           DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
-          ./gradlew jib -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username=\\"\${{ secrets.DOCKER_USERNAME }}\\" -Djib.to.auth.password=\\"\${{ secrets.DOCKER_PASSWORD }}\\" -Pprod
-      - name: \\"E2E: Package\\"
+          ./gradlew jib -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username="\${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="\${{ secrets.DOCKER_PASSWORD }}" -Pprod
+      - name: "E2E: Package"
         run: npm run ci:e2e:package
-      - name: \\"E2E: Prepare\\"
+      - name: "E2E: Prepare"
         run: npm run ci:e2e:prepare
-      - name: \\"E2E: Run\\"
+      - name: "E2E: Run"
         run: npm run ci:e2e:run
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: \\"E2E: Teardown\\"
+      - name: "E2E: Teardown"
         run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/docker-registry.yml": Object {
+  "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: \\"2\\"
+version: "2"
 services:
   registry:
     image: registry:2
@@ -1327,16 +1327,16 @@ services:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Maven Angular NPM should match files snapshot 1`] = `
-Object {
-  ".github/workflows/main.yml": Object {
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Maven Angular NPM should match files snapshot 1`] = `
+{
+  ".github/workflows/main.yml": {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
   pipeline:
     name: sampleMysql pipeline
     runs-on: ubuntu-latest
-    if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     timeout-minutes: 40
     env:
       NODE_VERSION: NODE_VERSION
@@ -1351,8 +1351,8 @@ jobs:
           node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
-          distribution: \\"temurin\\"
-          java-version: 11
+          distribution: "temurin"
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1363,44 +1363,44 @@ jobs:
         run: npm run ci:frontend:test
       - name: Package application
         run: npm run java:jar:prod
-      - name: \\"E2E: Package\\"
+      - name: "E2E: Package"
         run: npm run ci:e2e:package
-      - name: \\"E2E: Prepare\\"
+      - name: "E2E: Prepare"
         run: npm run ci:e2e:prepare
-      - name: \\"E2E: Run\\"
+      - name: "E2E: Run"
         run: npm run ci:e2e:run
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: \\"E2E: Teardown\\"
+      - name: "E2E: Teardown"
         run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -1409,16 +1409,16 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Maven Angular NPM with full options should match files snapshot 1`] = `
-Object {
-  ".github/workflows/main.yml": Object {
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Maven Angular NPM with full options should match files snapshot 1`] = `
+{
+  ".github/workflows/main.yml": {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
   pipeline:
     name: sampleMysql pipeline
     runs-on: ubuntu-latest
-    if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     timeout-minutes: 40
     env:
       NODE_VERSION: NODE_VERSION
@@ -1433,13 +1433,13 @@ jobs:
           node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
-          distribution: \\"temurin\\"
-          java-version: 11
+          distribution: "temurin"
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Install Snyk CLI
         run: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
           chmod +x snyk
       - name: Snyk test
         continue-on-error: true
@@ -1462,7 +1462,7 @@ jobs:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
         run: |
-          if [ ! -z \\"$SONAR_TOKEN\\" ]; then
+          if [ ! -z "$SONAR_TOKEN" ]; then
               ./mvnw -ntp initialize sonar:sonar -Dsonar.host.url=http://sonar.com:9000
           else
               echo No SONAR_TOKEN, skipping...
@@ -1474,7 +1474,7 @@ jobs:
         env:
           HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
         run: |
-          if [ ! -z \\"$HEROKU_API_KEY\\" ]; then
+          if [ ! -z "$HEROKU_API_KEY" ]; then
               ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
           else
               echo No HEROKU_API_KEY, skipping...
@@ -1484,56 +1484,56 @@ jobs:
         run: |
           GIT_TAG=:\${GITHUB_REF#refs/tags/}
           DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
-          ./mvnw -ntp jib:build -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username=\\"\${{ secrets.DOCKER_USERNAME }}\\" -Djib.to.auth.password=\\"\${{ secrets.DOCKER_PASSWORD }}\\" -Pprod
-      - name: \\"E2E: Package\\"
+          ./mvnw -ntp jib:build -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username="\${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="\${{ secrets.DOCKER_PASSWORD }}" -Pprod
+      - name: "E2E: Package"
         run: npm run ci:e2e:package
-      - name: \\"E2E: Prepare\\"
+      - name: "E2E: Prepare"
         run: npm run ci:e2e:prepare
-      - name: \\"E2E: Run\\"
+      - name: "E2E: Run"
         run: npm run ci:e2e:run
         env:
           CYPRESS_ENABLE_RECORD: true
           CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: \\"E2E: Teardown\\"
+      - name: "E2E: Teardown"
         run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "pom.xml": Object {
-    "contents": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<project xmlns=\\"http://maven.apache.org/POM/4.0.0\\"
-         xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"
-         xsi:schemaLocation=\\"http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd\\">
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <distributionManagement>
         <snapshotRepository>
@@ -1550,9 +1550,9 @@ jobs:
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/docker-registry.yml": Object {
+  "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: \\"2\\"
+version: "2"
 services:
   registry:
     image: registry:2
@@ -1596,16 +1596,16 @@ services:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: autoconfigure should match files snapshot 1`] = `
-Object {
-  ".github/workflows/main.yml": Object {
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: autoconfigure should match files snapshot 1`] = `
+{
+  ".github/workflows/main.yml": {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
   pipeline:
     name: sampleMysql pipeline
     runs-on: ubuntu-latest
-    if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     timeout-minutes: 40
     env:
       NODE_VERSION: NODE_VERSION
@@ -1620,8 +1620,8 @@ jobs:
           node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
-          distribution: \\"temurin\\"
-          java-version: 11
+          distribution: "temurin"
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1632,44 +1632,44 @@ jobs:
         run: npm run ci:frontend:test
       - name: Package application
         run: npm run java:jar:prod
-      - name: \\"E2E: Package\\"
+      - name: "E2E: Package"
         run: npm run ci:e2e:package
-      - name: \\"E2E: Prepare\\"
+      - name: "E2E: Prepare"
         run: npm run ci:e2e:prepare
-      - name: \\"E2E: Run\\"
+      - name: "E2E: Run"
         run: npm run ci:e2e:run
         env:
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: \\"E2E: Teardown\\"
+      - name: "E2E: Teardown"
         run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -1678,11 +1678,11 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Gradle Angular NPM should match files snapshot 1`] = `
-Object {
-  ".gitlab-ci.yml": Object {
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Gradle Angular NPM should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
     "contents": "cache:
-  key: \\"$CI_COMMIT_REF_NAME\\"
+  key: "$CI_COMMIT_REF_NAME"
   paths:
     - .gradle/
 stages:
@@ -1694,7 +1694,7 @@ stages:
   - release
   - deploy
 before_script:
-  - export NG_CLI_ANALYTICS=\\"false\\"
+  - export NG_CLI_ANALYTICS="false"
   - export GRADLE_USER_HOME=\`pwd\`/.gradle
   - ./gradlew npm_install -PnodeInstall --no-daemon
 nohttp:
@@ -1766,34 +1766,34 @@ gradle-package:
 #    dependencies:
 #        - gradle-package
 #    script:
-#        - ./gradlew jib -Pprod -PnodeInstall -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=\\"gitlab-ci-token\\"  -Djib.to.auth.password=$CI_BUILD_TOKEN
+#        - ./gradlew jib -Pprod -PnodeInstall -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
 
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -1802,13 +1802,13 @@ gradle-package:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular NPM inside Docker should match files snapshot 1`] = `
-Object {
-  ".gitlab-ci.yml": Object {
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM inside Docker should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
     "contents": "image: jhipster/jhipster:v
 
 cache:
-  key: \\"$CI_COMMIT_REF_NAME\\"
+  key: "$CI_COMMIT_REF_NAME"
   paths:
     - .maven/
 stages:
@@ -1820,7 +1820,7 @@ stages:
   - release
   - deploy
 before_script:
-  - export NG_CLI_ANALYTICS=\\"false\\"
+  - export NG_CLI_ANALYTICS="false"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
 
 nohttp:
@@ -1831,7 +1831,7 @@ nohttp:
 dependency-scanning:
   stage: check
   script:
-    - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+    - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
     - chmod +x snyk
     - ./snyk test --all-projects
     - ./snyk monitor --all-projects
@@ -1853,7 +1853,7 @@ maven-test:
 
   variables:
     # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: \\"tcp://docker:2375\\"
+    DOCKER_HOST: "tcp://docker:2375"
     # Improve performance with overlayfs.
     DOCKER_DRIVER: overlay2
 
@@ -1923,40 +1923,40 @@ deploy-to-production:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "pom.xml": Object {
-    "contents": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<project xmlns=\\"http://maven.apache.org/POM/4.0.0\\"
-         xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"
-         xsi:schemaLocation=\\"http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd\\">
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <distributionManagement>
         <snapshotRepository>
@@ -1976,11 +1976,11 @@ deploy-to-production:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular NPM should match files snapshot 1`] = `
-Object {
-  ".gitlab-ci.yml": Object {
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
     "contents": "cache:
-  key: \\"$CI_COMMIT_REF_NAME\\"
+  key: "$CI_COMMIT_REF_NAME"
   paths:
     - .maven/
 stages:
@@ -1992,7 +1992,7 @@ stages:
   - release
   - deploy
 before_script:
-  - export NG_CLI_ANALYTICS=\\"false\\"
+  - export NG_CLI_ANALYTICS="false"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
   - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
   - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -2062,29 +2062,29 @@ maven-package:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -2093,11 +2093,11 @@ maven-package:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular NPM with full options should match files snapshot 1`] = `
-Object {
-  ".gitlab-ci.yml": Object {
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM with full options should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
     "contents": "cache:
-  key: \\"$CI_COMMIT_REF_NAME\\"
+  key: "$CI_COMMIT_REF_NAME"
   paths:
     - .maven/
 stages:
@@ -2109,7 +2109,7 @@ stages:
   - release
   - deploy
 before_script:
-  - export NG_CLI_ANALYTICS=\\"false\\"
+  - export NG_CLI_ANALYTICS="false"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
   - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
   - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -2122,7 +2122,7 @@ nohttp:
 dependency-scanning:
   stage: check
   script:
-    - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+    - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
     - chmod +x snyk
     - ./snyk test --all-projects
     - ./snyk monitor --all-projects
@@ -2204,40 +2204,40 @@ deploy-to-production:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "pom.xml": Object {
-    "contents": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<project xmlns=\\"http://maven.apache.org/POM/4.0.0\\"
-         xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"
-         xsi:schemaLocation=\\"http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd\\">
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <distributionManagement>
         <snapshotRepository>
@@ -2257,13 +2257,13 @@ deploy-to-production:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular Yarn inside Docker Autoconfigure should match files snapshot 1`] = `
-Object {
-  ".gitlab-ci.yml": Object {
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular Yarn inside Docker Autoconfigure should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
     "contents": "image: jhipster/jhipster:v
 
 cache:
-  key: \\"$CI_COMMIT_REF_NAME\\"
+  key: "$CI_COMMIT_REF_NAME"
   paths:
     - .maven/
 stages:
@@ -2275,7 +2275,7 @@ stages:
   - release
   - deploy
 before_script:
-  - export NG_CLI_ANALYTICS=\\"false\\"
+  - export NG_CLI_ANALYTICS="false"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
 
 nohttp:
@@ -2299,7 +2299,7 @@ maven-test:
 
   variables:
     # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: \\"tcp://docker:2375\\"
+    DOCKER_HOST: "tcp://docker:2375"
     # Improve performance with overlayfs.
     DOCKER_DRIVER: overlay2
 
@@ -2353,29 +2353,29 @@ maven-package:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -2384,13 +2384,13 @@ maven-package:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: npm skip server should match files snapshot 1`] = `
-Object {
-  ".gitlab-ci.yml": Object {
+exports[`generator - CI-CD GitLab CI tests GitLab CI: npm skip server should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
     "contents": "image: jhipster/jhipster:v
 
 before_script:
-  - export NG_CLI_ANALYTICS=\\"false\\"
+  - export NG_CLI_ANALYTICS="false"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
 
 nohttp:
@@ -2414,7 +2414,7 @@ maven-test:
 
   variables:
     # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: \\"tcp://docker:2375\\"
+    DOCKER_HOST: "tcp://docker:2375"
     # Improve performance with overlayfs.
     DOCKER_DRIVER: overlay2
 
@@ -2504,34 +2504,32 @@ webapp-prod:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"jwt\\",
-    \\"baseName\\": \\"jhipster\\",
-    \\"blueprints\\": [],
-    \\"cacheProvider\\": \\"no\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"clientTheme\\": \\"none\\",
-    \\"clientThemeVariant\\": \\"\\",
-    \\"creationTimestamp\\": 1583434912169,
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"sql\\",
-    \\"dtoSuffix\\": \\"DTO\\",
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"entitySuffix\\": \\"\\",
-    \\"jhiPrefix\\": \\"jhi\\",
-    \\"languages\\": [\\"en\\"],
-    \\"nativeLanguage\\": \\"en\\",
-    \\"prodDatabaseType\\": \\"sql\\",
-    \\"promptValues\\": {
-      \\"nativeLanguage\\": \\"en\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "jhipster",
+    "blueprints": [],
+    "cacheProvider": "no",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1583434912169,
+    "databaseType": "sql",
+    "dtoSuffix": "DTO",
+    "enableTranslation": true,
+    "entities": [],
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "promptValues": {
+      "nativeLanguage": "en"
     },
-    \\"skipServer\\": true,
-    \\"testFrameworks\\": []
+    "skipServer": true,
+    "testFrameworks": []
   }
 }
 ",
@@ -2540,37 +2538,37 @@ webapp-prod:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Gradle Angular NPM should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Jenkins tests Jenkins: Gradle Angular NPM should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "Jenkinsfile": Object {
+  "Jenkinsfile": {
     "contents": "#!/usr/bin/env groovy
 
 node {
@@ -2579,23 +2577,23 @@ node {
     }
 
     stage('check java') {
-        sh \\"java -version\\"
+        sh "java -version"
     }
 
     stage('clean') {
-        sh \\"chmod +x gradlew\\"
-        sh \\"./gradlew clean --no-daemon\\"
+        sh "chmod +x gradlew"
+        sh "./gradlew clean --no-daemon"
     }
     stage('nohttp') {
-        sh \\"./gradlew checkstyleNohttp --no-daemon\\"
+        sh "./gradlew checkstyleNohttp --no-daemon"
     }
 
     stage('npm install') {
-        sh \\"./gradlew npm_install -PnodeInstall --no-daemon\\"
+        sh "./gradlew npm_install -PnodeInstall --no-daemon"
     }
     stage('backend tests') {
         try {
-            sh \\"./gradlew test integrationTest -PnodeInstall --no-daemon\\"
+            sh "./gradlew test integrationTest -PnodeInstall --no-daemon"
         } catch(err) {
             throw err
         } finally {
@@ -2605,7 +2603,7 @@ node {
 
     stage('frontend tests') {
         try {
-            sh \\"./gradlew npm_run_test -PnodeInstall --no-daemon\\"
+            sh "./gradlew npm_run_test -PnodeInstall --no-daemon"
         } catch(err) {
             throw err
         } finally {
@@ -2614,7 +2612,7 @@ node {
     }
 
     stage('packaging') {
-        sh \\"./gradlew bootJar -x test -Pprod -PnodeInstall --no-daemon\\"
+        sh "./gradlew bootJar -x test -Pprod -PnodeInstall --no-daemon"
         archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
     }
 
@@ -2622,8 +2620,8 @@ node {
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/jenkins.yml": Object {
-    "contents": "version: \\"2\\"
+  "src/main/docker/jenkins.yml": {
+    "contents": "version: "2"
 services:
   jenkins:
     image: jenkins-placeholder
@@ -2641,7 +2639,7 @@ services:
 ",
     "stateCleared": "modified",
   },
-  "src/main/resources/idea.gdsl": Object {
+  "src/main/resources/idea.gdsl": {
     "contents": "// Jenkinsfile completions for Intellij IDEA
 
 def ctx = context(scope: scriptScope())
@@ -2681,7 +2679,7 @@ contributor(ctx) {
     method(name: 'catchError', type: 'Object', params: [body:'Closure'], doc: 'Advanced/Deprecated Catch error and set build result')
     method(name: 'dockerFingerprintRun', type: 'Object', params: [containerId:'java.lang.String'], doc: 'Advanced/Deprecated Record trace of a Docker image run in a container')
     method(name: 'dockerFingerprintRun', type: 'Object', namedParams: [parameter(name: 'containerId', type: 'java.lang.String'), parameter(name: 'toolName', type: 'java.lang.String'), ], doc: 'Record trace of a Docker image run in a container')
-    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\\\'FOO=bar\\\\' strings suitable for the withEnv step.')
+    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\'FOO=bar\\' strings suitable for the withEnv step.')
     method(name: 'getContext', type: 'Object', params: [type:'Map'], doc: 'Advanced/Deprecated Get contextual object from internal APIs')
     method(name: 'withContext', type: 'Object', params: [context:java.lang.Object, body:'Closure'], doc: 'Advanced/Deprecated Use contextual object from internal APIs within a block')
     property(name: 'docker', type: 'org.jenkinsci.plugins.docker.workflow.DockerDSL')
@@ -2738,37 +2736,37 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM inside Docker should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM inside Docker should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "Jenkinsfile": Object {
+  "Jenkinsfile": {
     "contents": "#!/usr/bin/env groovy
 
 node {
@@ -2776,31 +2774,31 @@ node {
         checkout scm
     }
 
-    docker.image('jhipster/jhipster:v').inside('-u jhipster -e MAVEN_OPTS=\\"-Duser.home=./\\"') {
+    docker.image('jhipster/jhipster:v').inside('-u jhipster -e MAVEN_OPTS="-Duser.home=./"') {
         stage('check java') {
-            sh \\"java -version\\"
+            sh "java -version"
         }
 
         stage('clean') {
-            sh \\"chmod +x mvnw\\"
-            sh \\"./mvnw -ntp clean -P-webapp\\"
+            sh "chmod +x mvnw"
+            sh "./mvnw -ntp clean -P-webapp"
         }
         stage('nohttp') {
-            sh \\"./mvnw -ntp checkstyle:check\\"
+            sh "./mvnw -ntp checkstyle:check"
         }
 
         stage('install tools') {
-            sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm\\"
+            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm"
         }
 
         stage('npm install') {
-            sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm\\"
+            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
         }
         stage('Install Snyk CLI') {
-           sh \\"\\"\\"
-               curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+           sh """
+               curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
                chmod +x snyk
-           \\"\\"\\"
+           """
         }
         stage('Snyk test') {
            sh './snyk test --all-projects'
@@ -2810,7 +2808,7 @@ node {
         }
         stage('backend tests') {
             try {
-                sh \\"./mvnw -ntp verify -P-webapp\\"
+                sh "./mvnw -ntp verify -P-webapp"
             } catch(err) {
                 throw err
             } finally {
@@ -2820,8 +2818,8 @@ node {
 
         stage('frontend tests') {
             try {
-               sh \\"npm install\\"
-               sh \\"npm test\\"
+               sh "npm install"
+               sh "npm test"
             } catch(err) {
                 throw err
             } finally {
@@ -2830,12 +2828,12 @@ node {
         }
 
         stage('package and deploy') {
-            sh \\"./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql\\"
+            sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql"
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
         }
         stage('quality analysis') {
             withSonarQubeEnv('sonarName') {
-                sh \\"./mvnw -ntp initialize sonar:sonar\\"
+                sh "./mvnw -ntp initialize sonar:sonar"
             }
         }
     }
@@ -2844,18 +2842,18 @@ node {
     stage('publish docker') {
         // A pre-requisite to this step is to setup authentication to the docker registry
         // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
-        sh \\"./mvnw -ntp -Pprod verify jib:build\\"
+        sh "./mvnw -ntp -Pprod verify jib:build"
     }
 }
 ",
     "stateCleared": "modified",
   },
-  "pom.xml": Object {
-    "contents": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<project xmlns=\\"http://maven.apache.org/POM/4.0.0\\"
-         xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"
-         xsi:schemaLocation=\\"http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd\\">
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <distributionManagement>
         <snapshotRepository>
@@ -2872,9 +2870,9 @@ node {
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/docker-registry.yml": Object {
+  "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: \\"2\\"
+version: "2"
 services:
   registry:
     image: registry:2
@@ -2915,8 +2913,8 @@ services:
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/jenkins.yml": Object {
-    "contents": "version: \\"2\\"
+  "src/main/docker/jenkins.yml": {
+    "contents": "version: "2"
 services:
   jenkins:
     image: jenkins-placeholder
@@ -2934,7 +2932,7 @@ services:
 ",
     "stateCleared": "modified",
   },
-  "src/main/resources/idea.gdsl": Object {
+  "src/main/resources/idea.gdsl": {
     "contents": "// Jenkinsfile completions for Intellij IDEA
 
 def ctx = context(scope: scriptScope())
@@ -2974,7 +2972,7 @@ contributor(ctx) {
     method(name: 'catchError', type: 'Object', params: [body:'Closure'], doc: 'Advanced/Deprecated Catch error and set build result')
     method(name: 'dockerFingerprintRun', type: 'Object', params: [containerId:'java.lang.String'], doc: 'Advanced/Deprecated Record trace of a Docker image run in a container')
     method(name: 'dockerFingerprintRun', type: 'Object', namedParams: [parameter(name: 'containerId', type: 'java.lang.String'), parameter(name: 'toolName', type: 'java.lang.String'), ], doc: 'Record trace of a Docker image run in a container')
-    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\\\'FOO=bar\\\\' strings suitable for the withEnv step.')
+    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\'FOO=bar\\' strings suitable for the withEnv step.')
     method(name: 'getContext', type: 'Object', params: [type:'Map'], doc: 'Advanced/Deprecated Get contextual object from internal APIs')
     method(name: 'withContext', type: 'Object', params: [context:java.lang.Object, body:'Closure'], doc: 'Advanced/Deprecated Use contextual object from internal APIs within a block')
     property(name: 'docker', type: 'org.jenkinsci.plugins.docker.workflow.DockerDSL')
@@ -3031,37 +3029,37 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "Jenkinsfile": Object {
+  "Jenkinsfile": {
     "contents": "#!/usr/bin/env groovy
 
 node {
@@ -3070,27 +3068,27 @@ node {
     }
 
     stage('check java') {
-        sh \\"java -version\\"
+        sh "java -version"
     }
 
     stage('clean') {
-        sh \\"chmod +x mvnw\\"
-        sh \\"./mvnw -ntp clean -P-webapp\\"
+        sh "chmod +x mvnw"
+        sh "./mvnw -ntp clean -P-webapp"
     }
     stage('nohttp') {
-        sh \\"./mvnw -ntp checkstyle:check\\"
+        sh "./mvnw -ntp checkstyle:check"
     }
 
     stage('install tools') {
-        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm\\"
+        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm"
     }
 
     stage('npm install') {
-        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm\\"
+        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
     }
     stage('backend tests') {
         try {
-            sh \\"./mvnw -ntp verify -P-webapp\\"
+            sh "./mvnw -ntp verify -P-webapp"
         } catch(err) {
             throw err
         } finally {
@@ -3100,7 +3098,7 @@ node {
 
     stage('frontend tests') {
         try {
-            sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'\\"
+            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'"
         } catch(err) {
             throw err
         } finally {
@@ -3109,15 +3107,15 @@ node {
     }
 
     stage('packaging') {
-        sh \\"./mvnw -ntp verify -P-webapp -Pprod -DskipTests\\"
+        sh "./mvnw -ntp verify -P-webapp -Pprod -DskipTests"
         archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
     }
 }
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/jenkins.yml": Object {
-    "contents": "version: \\"2\\"
+  "src/main/docker/jenkins.yml": {
+    "contents": "version: "2"
 services:
   jenkins:
     image: jenkins-placeholder
@@ -3135,7 +3133,7 @@ services:
 ",
     "stateCleared": "modified",
   },
-  "src/main/resources/idea.gdsl": Object {
+  "src/main/resources/idea.gdsl": {
     "contents": "// Jenkinsfile completions for Intellij IDEA
 
 def ctx = context(scope: scriptScope())
@@ -3175,7 +3173,7 @@ contributor(ctx) {
     method(name: 'catchError', type: 'Object', params: [body:'Closure'], doc: 'Advanced/Deprecated Catch error and set build result')
     method(name: 'dockerFingerprintRun', type: 'Object', params: [containerId:'java.lang.String'], doc: 'Advanced/Deprecated Record trace of a Docker image run in a container')
     method(name: 'dockerFingerprintRun', type: 'Object', namedParams: [parameter(name: 'containerId', type: 'java.lang.String'), parameter(name: 'toolName', type: 'java.lang.String'), ], doc: 'Record trace of a Docker image run in a container')
-    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\\\'FOO=bar\\\\' strings suitable for the withEnv step.')
+    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\'FOO=bar\\' strings suitable for the withEnv step.')
     method(name: 'getContext', type: 'Object', params: [type:'Map'], doc: 'Advanced/Deprecated Get contextual object from internal APIs')
     method(name: 'withContext', type: 'Object', params: [context:java.lang.Object, body:'Closure'], doc: 'Advanced/Deprecated Use contextual object from internal APIs within a block')
     property(name: 'docker', type: 'org.jenkinsci.plugins.docker.workflow.DockerDSL')
@@ -3232,37 +3230,37 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM with full options should match files snapshot 1`] = `
-Object {
-  ".yo-rc.json": Object {
+exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM with full options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "Jenkinsfile": Object {
+  "Jenkinsfile": {
     "contents": "#!/usr/bin/env groovy
 
 node {
@@ -3271,29 +3269,29 @@ node {
     }
 
     stage('check java') {
-        sh \\"java -version\\"
+        sh "java -version"
     }
 
     stage('clean') {
-        sh \\"chmod +x mvnw\\"
-        sh \\"./mvnw -ntp clean -P-webapp\\"
+        sh "chmod +x mvnw"
+        sh "./mvnw -ntp clean -P-webapp"
     }
     stage('nohttp') {
-        sh \\"./mvnw -ntp checkstyle:check\\"
+        sh "./mvnw -ntp checkstyle:check"
     }
 
     stage('install tools') {
-        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm\\"
+        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm"
     }
 
     stage('npm install') {
-        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm\\"
+        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
     }
     stage('Install Snyk CLI') {
-       sh \\"\\"\\"
-           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+       sh """
+           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
            chmod +x snyk
-       \\"\\"\\"
+       """
     }
     stage('Snyk test') {
        sh './snyk test --all-projects'
@@ -3303,7 +3301,7 @@ node {
     }
     stage('backend tests') {
         try {
-            sh \\"./mvnw -ntp verify -P-webapp\\"
+            sh "./mvnw -ntp verify -P-webapp"
         } catch(err) {
             throw err
         } finally {
@@ -3313,7 +3311,7 @@ node {
 
     stage('frontend tests') {
         try {
-            sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'\\"
+            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'"
         } catch(err) {
             throw err
         } finally {
@@ -3322,12 +3320,12 @@ node {
     }
 
     stage('package and deploy') {
-        sh \\"./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql\\"
+        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql"
         archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
     }
     stage('quality analysis') {
         withSonarQubeEnv('sonarName') {
-            sh \\"./mvnw -ntp initialize sonar:sonar\\"
+            sh "./mvnw -ntp initialize sonar:sonar"
         }
     }
 
@@ -3335,18 +3333,18 @@ node {
     stage('publish docker') {
         // A pre-requisite to this step is to setup authentication to the docker registry
         // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
-        sh \\"./mvnw -ntp -Pprod verify jib:build\\"
+        sh "./mvnw -ntp -Pprod verify jib:build"
     }
 }
 ",
     "stateCleared": "modified",
   },
-  "pom.xml": Object {
-    "contents": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<project xmlns=\\"http://maven.apache.org/POM/4.0.0\\"
-         xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"
-         xsi:schemaLocation=\\"http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd\\">
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <distributionManagement>
         <snapshotRepository>
@@ -3363,9 +3361,9 @@ node {
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/docker-registry.yml": Object {
+  "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: \\"2\\"
+version: "2"
 services:
   registry:
     image: registry:2
@@ -3406,8 +3404,8 @@ services:
 ",
     "stateCleared": "modified",
   },
-  "src/main/docker/jenkins.yml": Object {
-    "contents": "version: \\"2\\"
+  "src/main/docker/jenkins.yml": {
+    "contents": "version: "2"
 services:
   jenkins:
     image: jenkins-placeholder
@@ -3425,7 +3423,7 @@ services:
 ",
     "stateCleared": "modified",
   },
-  "src/main/resources/idea.gdsl": Object {
+  "src/main/resources/idea.gdsl": {
     "contents": "// Jenkinsfile completions for Intellij IDEA
 
 def ctx = context(scope: scriptScope())
@@ -3465,7 +3463,7 @@ contributor(ctx) {
     method(name: 'catchError', type: 'Object', params: [body:'Closure'], doc: 'Advanced/Deprecated Catch error and set build result')
     method(name: 'dockerFingerprintRun', type: 'Object', params: [containerId:'java.lang.String'], doc: 'Advanced/Deprecated Record trace of a Docker image run in a container')
     method(name: 'dockerFingerprintRun', type: 'Object', namedParams: [parameter(name: 'containerId', type: 'java.lang.String'), parameter(name: 'toolName', type: 'java.lang.String'), ], doc: 'Record trace of a Docker image run in a container')
-    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\\\'FOO=bar\\\\' strings suitable for the withEnv step.')
+    method(name: 'envVarsForTool', type: 'Object', namedParams: [parameter(name: 'toolId', type: 'java.lang.String'), parameter(name: 'toolVersion', type: 'java.lang.String'), ], doc: 'Fetches the environment variables for a given tool in a list of \\'FOO=bar\\' strings suitable for the withEnv step.')
     method(name: 'getContext', type: 'Object', params: [type:'Map'], doc: 'Advanced/Deprecated Get contextual object from internal APIs')
     method(name: 'withContext', type: 'Object', params: [context:java.lang.Object, body:'Closure'], doc: 'Advanced/Deprecated Use contextual object from internal APIs within a block')
     property(name: 'docker', type: 'org.jenkinsci.plugins.docker.workflow.DockerDSL')
@@ -3522,16 +3520,16 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Travis CI tests Travis CI: Gradle Angular NPM should match files snapshot 1`] = `
-Object {
-  ".travis.yml": Object {
+exports[`generator - CI-CD Travis CI tests Travis CI: Gradle Angular NPM should match files snapshot 1`] = `
+{
+  ".travis.yml": {
     "contents": "os:
   - linux
 services:
   - docker
 language: node_js
 node_js:
-  - \\"NODE_VERSION\\"
+  - "NODE_VERSION"
 cache:
   directories:
     - node
@@ -3540,29 +3538,19 @@ cache:
 env:
   global:
     - NODE_VERSION=NODE_VERSION
-    - JHI_JDK=11
+    - JHI_JDK=17
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
-    - NG_CLI_ANALYTICS=\\"false\\"
+    - NG_CLI_ANALYTICS="false"
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 11 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3589,29 +3577,29 @@ notifications:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"gradle\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -3620,16 +3608,16 @@ notifications:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Travis CI tests Travis CI: Maven Angular NPM should match files snapshot 1`] = `
-Object {
-  ".travis.yml": Object {
+exports[`generator - CI-CD Travis CI tests Travis CI: Maven Angular NPM should match files snapshot 1`] = `
+{
+  ".travis.yml": {
     "contents": "os:
   - linux
 services:
   - docker
 language: node_js
 node_js:
-  - \\"NODE_VERSION\\"
+  - "NODE_VERSION"
 cache:
   directories:
     - node
@@ -3638,30 +3626,20 @@ cache:
 env:
   global:
     - NODE_VERSION=NODE_VERSION
-    - JHI_JDK=11
+    - JHI_JDK=17
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
-    - NG_CLI_ANALYTICS=\\"false\\"
+    - NG_CLI_ANALYTICS="false"
     - MAVEN_USER_HOME=$HOME/.m2/repository/
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 11 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3688,29 +3666,29 @@ notifications:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
@@ -3719,16 +3697,16 @@ notifications:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Travis CI tests Travis CI: Maven Angular NPM with full options should match files snapshot 1`] = `
-Object {
-  ".travis.yml": Object {
+exports[`generator - CI-CD Travis CI tests Travis CI: Maven Angular NPM with full options should match files snapshot 1`] = `
+{
+  ".travis.yml": {
     "contents": "os:
   - linux
 services:
   - docker
 language: node_js
 node_js:
-  - \\"NODE_VERSION\\"
+  - "NODE_VERSION"
 cache:
   directories:
     - node
@@ -3737,30 +3715,20 @@ cache:
 env:
   global:
     - NODE_VERSION=NODE_VERSION
-    - JHI_JDK=11
+    - JHI_JDK=17
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
-    - NG_CLI_ANALYTICS=\\"false\\"
+    - NG_CLI_ANALYTICS="false"
     - MAVEN_USER_HOME=$HOME/.m2/repository/
     - CYPRESS_ENABLE_RECORD: true
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 11 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3770,7 +3738,7 @@ before_install:
 install:
   - npm install
 script:
-  - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep \\"browser_download_url.*snyk-linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
+  - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
   - chmod +x snyk
   - ./snyk test --all-projects || true
   - ./snyk monitor --all-projects
@@ -3778,7 +3746,7 @@ script:
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod
-  - if [ $TRAVIS_PULL_REQUEST == \\"false\\" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN; fi
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN; fi
   - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
   - npm run ci:e2e:package
   - npm run ci:e2e:prepare
@@ -3793,40 +3761,40 @@ notifications:
 ",
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"applicationType\\": \\"monolith\\",
-    \\"authenticationType\\": \\"session\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"buildTool\\": \\"maven\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"enableHibernateCache\\": true,
-    \\"enableTranslation\\": true,
-    \\"entities\\": [],
-    \\"languages\\": [\\"en\\"],
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"websocket\\": \\"no\\"
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientPackageManager": "npm",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "languages": ["en"],
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "searchEngine": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "no"
   }
 }
 ",
     "stateCleared": "modified",
   },
-  "pom.xml": Object {
-    "contents": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<project xmlns=\\"http://maven.apache.org/POM/4.0.0\\"
-         xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"
-         xsi:schemaLocation=\\"http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd\\">
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <distributionManagement>
         <snapshotRepository>

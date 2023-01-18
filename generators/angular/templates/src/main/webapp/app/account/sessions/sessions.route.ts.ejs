@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,11 +19,13 @@
 import { Route } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { SessionsComponent } from './sessions.component';
+import SessionsComponent from './sessions.component';
 
-export const sessionsRoute: Route = {
+const sessionsRoute: Route = {
   path: 'sessions',
   component: SessionsComponent,
   title: 'global.menu.account.sessions',
   canActivate: [UserRouteAccessService],
 };
+
+export default sessionsRoute;

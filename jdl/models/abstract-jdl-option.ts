@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils';
-import { addAll } from '../utils/set-utils';
+import { merge } from '../utils/object-utils.js';
+import { addAll } from '../utils/set-utils.js';
 
 export default class AbstractJDLOption {
   name: any;

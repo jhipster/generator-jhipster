@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,16 +27,14 @@ import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
 import { writeEnumerationFiles } from './entity-files.mjs';
 
-import constants from '../generator-constants.cjs';
+import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
-const { clientDefaultConfig } = generatorDefaults;
 
 /**
  * @class
@@ -109,29 +107,26 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      configureDevServerPort() {
-        this.devServerBasePort = this.jhipsterConfig.clientFramework === ANGULAR ? 4200 : 9060;
-
-        if (this.jhipsterConfig.devServerBasePort !== undefined) return undefined;
-        let devServerPort;
-
-        if (this.jhipsterConfig.applicationIndex !== undefined) {
-          devServerPort = this.devServerBasePort + this.jhipsterConfig.applicationIndex;
-        } else if (!this.devServerPort) {
-          devServerPort = this.devServerBasePort;
-        }
-
-        this.jhipsterConfig.devServerPort = devServerPort;
-      },
-
       upgradeAngular() {
         if (this.jhipsterConfig.clientFramework === 'angularX') {
           this.jhipsterConfig.clientFramework = ANGULAR;
         }
       },
 
-      saveConfig() {
-        this.setConfigDefaults(clientDefaultConfig);
+      configureDevServerPort() {
+        if (this.jhipsterConfig.devServerPort !== undefined) return undefined;
+
+        const { clientFramework, applicationIndex } = this.jhipsterConfigWithDefaults;
+        const devServerBasePort = clientFramework === ANGULAR ? 4200 : 9060;
+        let devServerPort;
+
+        if (applicationIndex !== undefined) {
+          devServerPort = devServerBasePort + applicationIndex;
+        } else if (!devServerPort) {
+          devServerPort = devServerBasePort;
+        }
+
+        this.jhipsterConfig.devServerPort = devServerPort;
       },
     });
   }
@@ -168,20 +163,12 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         application.clientPackageManager = 'npm';
       },
 
-      loadPackageJson({ application }) {
+      loadPackageJson() {
         // Load common client package.json into packageJson
         _.merge(
           this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
+          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json'))
         );
-        // Load client package.json into packageJson
-        const clientFramework = application.clientFramework;
-        if (!application.clientFrameworkVue) {
-          _.merge(
-            this.dependabotPackageJson,
-            this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramework, 'package.json'))
-          );
-        }
       },
     });
   }
@@ -200,7 +187,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       prepareForTemplates({ application }) {
-        application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
+        application.webappLoginRegExp = LOGIN_REGEX_JS;
       },
     });
   }

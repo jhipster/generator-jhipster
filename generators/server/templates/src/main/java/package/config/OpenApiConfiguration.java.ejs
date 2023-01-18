@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.config;
 
-import org.springdoc.core.GroupedOpenApi;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 import org.springframework.context.annotation.Bean;
@@ -44,7 +44,7 @@ public class OpenApiConfiguration {
         JHipsterProperties.ApiDocs properties = jHipsterProperties.getApiDocs();
         return GroupedOpenApi.builder()
             .group("openapi")
-            .addOpenApiCustomiser(jhipsterOpenApiCustomizer)
+            .addOpenApiCustomizer(jhipsterOpenApiCustomizer)
             .packagesToScan(API_FIRST_PACKAGE)
             .pathsToMatch(properties.getDefaultIncludePattern())
             .build();

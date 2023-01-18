@@ -1,12 +1,12 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import ClientGenerator from '../../generators/client/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const { ANGULAR } = clientFrameworkTypes;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts, features) {
@@ -163,7 +163,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
       '      {\n' +
         "        path: 'entityUrl',\n" +
         "        data: { pageTitle: 'entity.home.title' },\n" +
-        "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroserviceNameentityNameModule),\n" +
+        "        loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
         '      }'
     );
   });

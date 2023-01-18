@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,12 +17,8 @@
  * limitations under the License.
  */
 
-const WebsocketTypes = {
+const websocketTypes = {
   SPRING_WEBSOCKET: 'spring-websocket',
-  FALSE: false,
+  NO: 'no',
 };
-
-export const SPRING_WEBSOCKET = WebsocketTypes.SPRING_WEBSOCKET;
-export const FALSE = WebsocketTypes.FALSE;
-
-export default WebsocketTypes;
+export default websocketTypes;

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,9 +18,9 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertDeployments } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter';
+import { convertDeployments } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter.js';
 
-describe('DeploymentConverter', () => {
+describe('jdl - DeploymentConverter', () => {
   describe('convertDeployments', () => {
     context('when not passing deployments', () => {
       it('should fail', () => {
@@ -43,7 +43,7 @@ describe('DeploymentConverter', () => {
 
       it('should convert them', () => {
         expect(convertedDeployments).toMatchInlineSnapshot(`
-Array [
+[
   JDLDeployment {
     "appsFolders": Set {
       "tata",
