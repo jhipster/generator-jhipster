@@ -1561,7 +1561,7 @@ metadata:
   name: jhgate
   namespace: default
 spec:
-  ingressClassName: \\"nginx\\"
+  ingressClassName: nginx
   rules:
     - host: jhgate.default.example.com
       http:
