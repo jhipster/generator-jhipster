@@ -23,6 +23,7 @@ import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../gen
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
 import { writeFiles, cleanup } from './files-angular.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { buildAngularFormPath as angularFormPath } from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
@@ -287,5 +288,17 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    */
   generateTypescriptTestEntity(references, additionalFields) {
     return generateTestEntity(references, additionalFields);
+  }
+
+  /**
+   * @private
+   * Create a angular form path getter method of reference.
+   *
+   * @param {object} reference
+   * @param {string[]} prefix
+   * @return {string}
+   */
+  buildAngularFormPath(reference, prefix = []) {
+    return angularFormPath(reference, prefix);
   }
 }

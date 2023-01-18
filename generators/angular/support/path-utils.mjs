@@ -16,7 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { getJavadoc as javadoc, getApiDescription } from './doc-formatting.mjs';
-export { getDBTypeFromDBValue, getDBCExtraOption } from './database.mjs';
-export { getJavaValueGeneratorForType, getPrimaryKeyValue } from './templates/field-values.mjs';
-export { javaBeanCase, buildJavaGet, buildJavaGetter, buildJavaSetter } from './java-formatting.mjs';
+
+/**
+ * @private
+ * Create a angular form path getter method of reference.
+ *
+ * @param {object} reference
+ * @param {string[]} prefix
+ * @return {string}
+ */
+// eslint-disable-next-line import/prefer-default-export
+export const buildAngularFormPath = (reference, prefix = []) => {
+  const formPath = [...prefix, ...reference.path].join("', '");
+  return `'${formPath}'`;
+};

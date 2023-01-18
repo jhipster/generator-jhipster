@@ -22,7 +22,13 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { getDBTypeFromDBValue } from './support/index.mjs';
+import {
+  getDBTypeFromDBValue,
+  buildJavaGet as javaGetCall,
+  javaBeanCase as javaBeanClassNameFormat,
+  buildJavaGetter as javaGetter,
+  buildJavaSetter as javaSetter,
+} from './support/index.mjs';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
@@ -44,7 +50,6 @@ import {
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
 import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.mjs';
-import { javaBeanCase as javaBeanClassNameFormat } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
@@ -1050,5 +1055,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    */
   javaBeanCase(beanName) {
     return javaBeanClassNameFormat(beanName);
+  }
+
+  buildJavaGet(reference) {
+    return javaGetCall(reference);
+  }
+
+  buildJavaGetter(reference, type = reference.type) {
+    return javaGetter(reference, type);
+  }
+
+  buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
+    return javaSetter(reference, valueDefinition);
   }
 }
