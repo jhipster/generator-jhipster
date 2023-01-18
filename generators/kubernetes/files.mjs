@@ -125,10 +125,10 @@ export function writeFiles() {
           this.debug(chalk.red.bold(`AppConfig is ${JSON.stringify(appConfig)}`));
         }
       });
-      this.template('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
-      this.template('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
-      this.template('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
-      this.template('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
+      this.writeFile('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
+      this.writeFile('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
+      this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
+      this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
 
     },
 
