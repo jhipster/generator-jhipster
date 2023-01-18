@@ -919,13 +919,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       this.configOptions.reproducibleLiquibaseTimestamp = now;
 
       // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
         this.config.set('lastLiquibaseTimestamp', now.getTime());
       }
     } else {
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (lastLiquibaseTimestamp) {
         lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
         if (lastLiquibaseTimestamp >= now) {
@@ -934,7 +934,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           now.setMilliseconds(0);
         }
       }
-      this.config.set('lastLiquibaseTimestamp', now.getTime());
+      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
     }
     return formatDateForChangelog(now);
   }

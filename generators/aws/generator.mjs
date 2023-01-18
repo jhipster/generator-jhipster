@@ -47,22 +47,20 @@ export default class AwsGenerator extends BaseGenerator {
       },
       getGlobalConfig() {
         this.existingProject = false;
-        this.baseName = this.config.get(BASE_NAME);
-        this.buildTool = this.config.get(BUILD_TOOL);
+        this.baseName = this.jhipsterConfig.baseName;
+        this.buildTool = this.jhipsterConfig.buildTool;
       },
       getAwsConfig() {
-        const awsConfig = this.config.get('aws');
-
-        if (awsConfig) {
+        if (this.jhipsterConfig.aws) {
           this.existingProject = true;
-          this.applicationName = awsConfig.applicationName;
-          this.environmentName = awsConfig.environmentName;
-          this.bucketName = awsConfig.bucketName;
-          this.instanceType = awsConfig.instanceType;
+          this.applicationName = this.jhipsterConfig.aws.applicationName;
+          this.environmentName = this.jhipsterConfig.aws.environmentName;
+          this.bucketName = this.jhipsterConfig.aws.bucketName;
+          this.instanceType = this.jhipsterConfig.aws.instanceType;
           this.customInstanceType = '';
-          this.awsRegion = awsConfig.awsRegion;
-          this.dbName = awsConfig.dbName;
-          this.dbInstanceClass = awsConfig.dbInstanceClass;
+          this.awsRegion = this.jhipsterConfig.aws.awsRegion;
+          this.dbName = this.jhipsterConfig.aws.dbName;
+          this.dbInstanceClass = this.jhipsterConfig.aws.dbInstanceClass;
           this.customDBInstanceClass = '';
 
           this.logguer.info(
@@ -73,7 +71,7 @@ export default class AwsGenerator extends BaseGenerator {
         }
       },
       checkDatabase() {
-        const prodDatabaseType = this.config.get(PROD_DATABASE_TYPE);
+        const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
 
         switch (prodDatabaseType.toLowerCase()) {
           case MARIADB:
@@ -115,7 +113,7 @@ export default class AwsGenerator extends BaseGenerator {
         cb();
       },
       saveConfig() {
-        this.config.set('aws', {
+        this.jhipsterConfig.aws = {
           applicationName: this.applicationName,
           environmentName: this.environmentName,
           bucketName: this.bucketName,
@@ -123,7 +121,7 @@ export default class AwsGenerator extends BaseGenerator {
           awsRegion: this.awsRegion,
           dbName: this.dbName,
           dbInstanceClass: this.dbInstanceClass,
-        });
+        };
       },
     };
   }
