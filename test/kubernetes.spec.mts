@@ -204,7 +204,7 @@ describe('generator - Kubernetes', () => {
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
     });
-    it('creates expected gatewa ingress files', () => {
+    it('creates expected gateway ingress files', () => {
       assert.file(expectedFiles.jhgateingress);
     });
     it('create the apply script', () => {
@@ -246,7 +246,7 @@ describe('generator - Kubernetes', () => {
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
     });
-    it('creates expected gatewa ingress files', () => {
+    it('creates expected gateway ingress files', () => {
       assert.file(expectedFiles.jhgateingress);
     });
     it('create the expected cert-manager files', () => {
