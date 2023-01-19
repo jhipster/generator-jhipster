@@ -69,7 +69,7 @@ export function calculateDbNameWithLimit(tableOrEntityName, columnOrRelationship
     .digest('hex')}`;
 
   let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
-  formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
+  formattedName = formattedName.substring(0, halfLimit - separator.length);
 
   let otherFormattedName = noSnakeCase ? columnOrRelationshipName : hibernateSnakeCase(columnOrRelationshipName);
   otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
