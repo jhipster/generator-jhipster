@@ -25,10 +25,16 @@ const filterUndefinedAndNullValues = value => value !== undefined && value !== n
  * @returns
  */
 // eslint-disable-next-line import/prefer-default-export
-export function deepCleanup(
-  object: Record<string, any>,
-  filterValue: (any) => boolean = filterUndefinedAndNullValues
-): Record<string, any> {
+export function removeFieldsWithUnsetValues(object: Record<string, any>): Record<string, any> {
+  return filterValue(object, filterUndefinedAndNullValues);
+}
+/**
+ * Copy and remove null and undefined values
+ * @param object
+ * @returns
+ */
+// eslint-disable-next-line import/prefer-default-export
+function filterValue(object: Record<string, any>, filterValue: (any) => boolean = filterUndefinedAndNullValues): Record<string, any> {
   const clone = {};
   for (const [key, value] of Object.entries(object)) {
     if (filterValue(value)) {
@@ -36,7 +42,7 @@ export function deepCleanup(
         if (Array.isArray(value)) {
           clone[key] = value.filter(filterValue);
         } else {
-          clone[key] = deepCleanup(value);
+          clone[key] = removeFieldsWithUnsetValues(value);
         }
       } else {
         clone[key] = value;
