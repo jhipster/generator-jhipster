@@ -460,7 +460,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
           if (databaseType === COUCHBASE) {
             scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
+              'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
             });
           }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
@@ -480,7 +480,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
         if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
           dockerAwaitScripts.push(
-            `echo "Waiting for Elasticsearch to start" && wait-on -t ${WAIT_TIMEOUT} "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"`
+            `echo "Waiting for Elasticsearch to start" && wait-on -t ${WAIT_TIMEOUT} "http-get://127.0.0.1:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"`
           );
         }
 
@@ -499,13 +499,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               }
               scriptsStorage.set(
                 'docker:jhipster-registry:await',
-                `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
+                `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:8761/management/health && echo "jhipster-registry started"`
               );
               dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
             } else if (dockerConfig === 'keycloak') {
               scriptsStorage.set(
                 'docker:keycloak:await',
-                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
+                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
               );
               dockerAwaitScripts.push('npm run docker:keycloak:await');
             }
@@ -592,11 +592,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (scriptsStorage.get('e2e')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (this.applicationTypeGateway ? 2 : 1);
           scriptsStorage.set({
-            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
+            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://127.0.0.1:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
-            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
+            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
           });
         }
       },
