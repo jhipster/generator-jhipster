@@ -114,8 +114,8 @@ export function loadConfigs() {
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       
       const config = getConfigWithDefaults(removeFieldsWithUnsetValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
-      config.composePort = serverPort + config.applicationIndex;
       const index = config.applicationIndex;
+      config.composePort = serverPort + index;
       this.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and index ${index}`));
 
       this.loadAppConfig(config, config);
