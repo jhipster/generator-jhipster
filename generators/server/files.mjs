@@ -872,7 +872,7 @@ export const baseServerFiles = {
         generator.searchEngineCouchbase ||
         generator.databaseTypeNeo4j,
       path: SERVER_TEST_RES_DIR,
-      templates: ['testcontainers.properties', 'META-INF/spring.factories'],
+      templates: ['META-INF/spring.factories'],
     },
     {
       condition: generator =>
