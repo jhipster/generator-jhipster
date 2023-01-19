@@ -24,3 +24,4 @@ export { appendYeomanOptionsFromGeneratorOptions, generatorSkipChecks, isReprodu
 export { default as getEnumInfo } from './configuration-helpers/enum.mjs';
 export { removeFieldsWithUnsetValues } from './config.mjs';
 export { default as handleError } from './errors.mjs';
+export { removeFieldsWithUnsetValues } from './config.mjs';
