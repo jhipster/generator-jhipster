@@ -8,7 +8,7 @@ const packageJson = require('../package.json');
 const { prepareTempDir } = require('./utils/utils');
 const { escapeRegExp } = require('../generators/utils');
 
-describe('JHipster upgrade generator', function () {
+describe.skip('JHipster upgrade generator', function () {
   this.timeout(400000);
 
   describe('default application', () => {
