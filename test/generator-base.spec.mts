@@ -147,7 +147,7 @@ describe('generator - base', () => {
         ).to.have.length(63);
         expect(
           BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', POSTGRESQL)
-        ).to.equal('ux_entity_longer_name_with_pagi__column_longer_name_with_pag_8b');
+        ).to.equal('ux_entity_longer_name_with_pagin__column_longer_name_with_pa_8b');
       });
     });
     describe('when called with a long name that is near limit and postgresql', () => {
@@ -185,7 +185,7 @@ describe('generator - base', () => {
             POSTGRESQL,
             true
           )
-        ).to.equal('ux_entityLongerNameWithPaginati__columnLongerNameWithPaginat_8b');
+        ).to.equal('ux_entityLongerNameWithPaginatio__columnLongerNameWithPagina_8b');
       });
     });
   });
