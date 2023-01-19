@@ -476,9 +476,6 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -889,9 +886,6 @@ exports[`generator - couchbase gateway-oauth2-maven-enableTranslation(false)-tec
   "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -1251,9 +1245,6 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -1587,9 +1578,6 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -1988,9 +1976,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -2392,9 +2377,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -2864,9 +2846,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3224,9 +3203,6 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -3628,9 +3604,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -4071,9 +4044,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -4525,9 +4495,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4864,9 +4831,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }

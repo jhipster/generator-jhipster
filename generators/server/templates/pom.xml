@@ -18,7 +18,7 @@
         <hazelcast-spring.version>5.2.1</hazelcast-spring.version>
         <jaxb-runtime.version>4.0.1</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
-        <liquibase.version>4.18.0</liquibase.version>
+        <liquibase.version>4.19.0</liquibase.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
@@ -32,18 +32,18 @@
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-        <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
+        <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M8</maven-failsafe-plugin.version>
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <modernizer-maven-plugin.version>2.5.0</modernizer-maven-plugin.version>
         <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>

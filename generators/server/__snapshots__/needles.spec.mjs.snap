@@ -452,8 +452,5 @@ exports[`generator - server - needles generated project should match state snaps
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;

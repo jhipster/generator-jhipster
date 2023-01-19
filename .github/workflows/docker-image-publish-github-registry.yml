@@ -67,12 +67,12 @@ jobs:
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v4.1.1
+        uses: docker/metadata-action@v4.3.0
         with:
           images: ghcr.io/${{ github.repository }}${{ (steps.login-hub.outcome == 'success' && ',jhipster/jhipster') || ''}}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v3.3.0
         with:
           context: .
           platforms: linux/amd64,linux/arm64

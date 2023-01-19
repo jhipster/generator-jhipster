@@ -86,22 +86,16 @@ export function writeEntityFiles() {
 
     async writeClientFiles({ application, entities }) {
       if (!application.enableTranslation || application.skipClient) return;
-      entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
+      const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtIn);
 
       // Copy each
       const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = application;
-      await Promise.all(
-        entities.map(entity =>
-          languages.map(async lang => {
-            await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
-            this.addEntityTranslationKey(
-              entity.entityTranslationKeyMenu,
-              entity.entityClassHumanized || startCase(entity.entityClass),
-              lang
-            );
-          })
-        )
-      );
+      for (const entity of entitiesToWriteTranslationFor) {
+        for (const lang of languages) {
+          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
+        }
+      }
     },
   };
 }
