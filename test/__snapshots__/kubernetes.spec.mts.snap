@@ -5069,13 +5069,11 @@ resources:
   - jhgate-k8s/jhgate-mysql.yml
   - jhgate-k8s/jhgate-ingress.yml
   # cert-manager
-  - cert-manager/ca-secret.yml
-  - cert-manager/cluster-issuer.yml
+  - cert-manager/letsencrypt-staging-ca-secret.yml
+  - cert-manager/letsencrypt-staging-issuer.yml
   # keycloak
-  - keycloak-k8s/keycloak-cert.yml
   - keycloak-k8s/keycloak-configmap.yml
   - keycloak-k8s/keycloak.yml
-  - keycloak-k8s/keycloak-ingress.yml
   # service discovery eureka/consul
   - registry-k8s/jhipster-registry.yml
   - registry-k8s/application-configmap.yml
