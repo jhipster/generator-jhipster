@@ -77,20 +77,6 @@ describe('generator - base', () => {
         );
       });
     });
-    describe('when legacyRelationshipTableName is set', () => {
-      it('returns a proper join table name', () => {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        function TestClass() {}
-        TestClass.prototype = Object.create(Base.prototype);
-        TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
-        expect(TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.equal(
-          'rel_entity_name_longer_for_postgr__relationship_name_for_pos_24'
-        );
-        expect(
-          TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)
-        ).to.have.length(63);
-      });
-    });
   });
   describe('getFKConstraintName', () => {
     describe('when called with a value', () => {

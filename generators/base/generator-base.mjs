@@ -1262,16 +1262,15 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} prodDatabaseType - database type
    */
   getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
-    const prefix = legacyDbNames ? '' : 'rel_';
+    const separator = '__';
+    const prefix = 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
-      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator, appendHash: !legacyDbNames });
+      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
     }
     return joinTableName;
   }
@@ -1289,8 +1288,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
     let constraintName;
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
+    const separator = '__';
     if (noSnakeCase) {
       constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
     } else {
@@ -1305,7 +1303,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         separator,
         noSnakeCase,
         prefix,
-        appendHash: !legacyDbNames,
       })}${suffix}`;
     }
     return constraintName;
@@ -2016,9 +2013,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     if (options.cypressAudit !== undefined) {
       this.jhipsterConfig.cypressAudit = options.cypressAudit;
-    }
-    if (options.legacyDbNames !== undefined) {
-      this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
     }
     if (options.enableTranslation !== undefined) {
       this.jhipsterConfig.enableTranslation = options.enableTranslation;

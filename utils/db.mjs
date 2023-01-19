@@ -58,18 +58,15 @@ export function hibernateSnakeCase(value) {
  * @param {boolean} [options.noSnakeCase = false] - do not convert names to snakecase
  * @param {string} [options.prefix = '']
  * @param {string} [options.separator = '__']
- * @param {boolean} [options.appendHash = true] - adds a calculated hash based on tableOrEntityName and columnOrRelationshipName to prevent trimming conflict.
  * @return {string} db referente name
  */
 export function calculateDbNameWithLimit(tableOrEntityName, columnOrRelationshipName, limit, options = {}) {
-  const { noSnakeCase = false, prefix = '', separator = '__', appendHash = true } = options;
+  const { noSnakeCase = false, prefix = '', separator = '__' } = options;
   const halfLimit = Math.floor(limit / 2);
-  const suffix = !appendHash
-    ? ''
-    : `_${crypto
-        .createHash('shake256', { outputLength: 1 })
-        .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
-        .digest('hex')}`;
+  const suffix = `_${crypto
+    .createHash('shake256', { outputLength: 1 })
+    .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
+    .digest('hex')}`;
 
   let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
   formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
