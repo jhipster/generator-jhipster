@@ -68,6 +68,7 @@ import {
   LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
+import { removeFieldsWithUnsetValues } from './support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -1737,14 +1738,14 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
     const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs, transform, binary }) => {
       const extension = path.extname(sourceFile);
-      binary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
-      const appendEjs = noEjs === undefined ? !binary && extension !== '.ejs' : !noEjs;
+      const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
       const ejsFile = appendEjs || extension === '.ejs';
-
+      let targetFile;
       if (typeof destinationFile === 'function') {
-        destinationFile = resolveCallback(destinationFile);
+        targetFile = resolveCallback(destinationFile);
       } else {
-        destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
+        targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
 
       let sourceFileFrom;
@@ -1778,7 +1779,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }
 
       if (!ejsFile) {
-        await this.copyTemplateAsync(sourceFileFrom, destinationFile);
+        await this.copyTemplateAsync(sourceFileFrom, targetFile);
       } else {
         let useAsync = true;
         if (context.entityClass) {
@@ -1806,15 +1807,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         // TODO drop for v8 final release
         const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions);
+          this.renderTemplate(sourceFileFrom, targetFile, data, renderOptions);
         }
       }
-      if (!binary && transform && transform.length) {
-        this.editFile(destinationFile, ...transform);
+      if (!isBinary && transform && transform.length) {
+        this.editFile(targetFile, ...transform);
       }
-      return destinationFile;
+      return targetFile;
     };
 
     let parsedBlocks = blocks;
@@ -2581,7 +2582,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(this.config.getAll());
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithUnsetValues(this.config.getAll()));
     _.defaults(configWithDefaults, {
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,

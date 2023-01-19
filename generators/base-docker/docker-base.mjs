@@ -18,10 +18,10 @@
  */
 import { existsSync } from 'fs';
 import chalk from 'chalk';
-import _ from 'lodash';
 
 import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
+import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -112,7 +112,8 @@ export function loadConfigs() {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     this.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = getConfigWithDefaults(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll());
+      
+      const config = getConfigWithDefaults(removeFieldsWithUnsetValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       config.composePort = serverPort + config.applicationIndex;
       const index = config.applicationIndex;
       this.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and index ${index}`));

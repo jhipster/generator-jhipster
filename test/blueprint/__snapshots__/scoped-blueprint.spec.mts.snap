@@ -1349,9 +1349,6 @@ exports[`generator - app - with scoped blueprint generate monolith application w
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
   "tsconfig.app.json": {
     "stateCleared": "modified",
   },
