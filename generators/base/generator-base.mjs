@@ -1312,56 +1312,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @deprecated Should be removed in V8 in favour of getConstraintName
-   *
-   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} columnOrRelationName - name of the column or related entity
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   * @param {string} prefix - constraintName prefix for the constraintName
-   */
-  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
-    let constraintName;
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
-    if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
-    } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
-    }
-    let limit = 0;
-    if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 62;
-    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
-      );
-
-      limit = 61;
-    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 62;
-    }
-    return limit === 0
-      ? constraintName
-      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
-          separator,
-          noSnakeCase,
-          prefix,
-          appendHash: !legacyDbNames,
-        });
-  }
-
-  /**
    * @private
    * get a foreign key constraint name for tables in JHipster preferred style.
    *
@@ -1371,10 +1321,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
-    return prodDatabaseType === ORACLE
-      ? this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id')
-      : `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
+    return this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
   }
 
   /**
@@ -1387,10 +1334,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
-    return prodDatabaseType === ORACLE
-      ? this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_')
-      : `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
+    return this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
   }
 
   /**
