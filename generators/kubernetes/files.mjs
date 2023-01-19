@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- import chalk from 'chalk';
- 
- import {
+import chalk from 'chalk';
+
+import {
   applicationTypes,
   authenticationTypes,
   databaseTypes,
@@ -97,24 +97,21 @@ export function writeFiles() {
     writeKeycloak() {
       if (!this.useKeycloak) return;
       const keycloakOut = 'keycloak'.concat('-', suffix);
-      this.entryPort ='8080';
+      this.entryPort = '8080';
       this.keycloakRedirectUris = '';
       this.appConfigs.forEach(appConfig => {
         // Add application configuration
         if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
           this.entryPort = appConfig.composePort;
           if (this.ingressDomain) {
-            this.keycloakRedirectUris += 
-            `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", 
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", 
             "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
           } else {
-            this.keycloakRedirectUris += 
-            `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", 
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", 
             "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
           }
 
-          this.keycloakRedirectUris += 
-            `"http://localhost:${appConfig.composePort}/*", 
+          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", 
             "https://localhost:${appConfig.composePort}/*", `;
 
           if (appConfig.devServerPort !== undefined) {
@@ -129,7 +126,6 @@ export function writeFiles() {
       this.writeFile('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
       this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
       this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
-
     },
 
     writePrometheusGrafanaFiles() {

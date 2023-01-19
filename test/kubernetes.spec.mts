@@ -258,7 +258,7 @@ describe('generator - Kubernetes', () => {
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
     });
-  });  
+  });
 
   describe('MySQL and PostgreSQL microservices without gateway', () => {
     let runResult;

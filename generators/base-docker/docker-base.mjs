@@ -108,11 +108,10 @@ export function loadConfigs() {
 
   // Loading configs
   this.debug(`Apps folders: ${this.appsFolders}`);
-  this.appsFolders.forEach((appFolder) => {
+  this.appsFolders.forEach(appFolder => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     this.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      
       const config = getConfigWithDefaults(removeFieldsWithUnsetValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       const index = config.applicationIndex;
       config.composePort = serverPort + index;
