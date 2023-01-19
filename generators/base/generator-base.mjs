@@ -1267,12 +1267,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const prefix = legacyDbNames ? '' : 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
-    // FIXME: In V8, remove specific condition for POSTGRESQL joinTableName.length === 63
-    if (
-      tableNameMaxLength &&
-      (joinTableName.length > tableNameMaxLength || (prodDatabaseType === POSTGRESQL && joinTableName.length === 63)) &&
-      !this.skipCheckLengthOfIdentifier
-    ) {
+    if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
