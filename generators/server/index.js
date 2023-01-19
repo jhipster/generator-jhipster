@@ -440,7 +440,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (databaseTypeSql) {
           if (prodDatabaseTypeMysql) {
             scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:127.0.0.1:3306 && sleep 20 && echo "MySQL started"`,
             });
           }
           if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
@@ -455,7 +455,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           const dockerFile = `src/main/docker/${databaseType}.yml`;
           if (databaseType === CASSANDRA) {
             scriptsStorage.set({
-              'docker:db:await': `wait-on -t ${WAIT_TIMEOUT} tcp:9042 && sleep 20`,
+              'docker:db:await': `wait-on -t ${WAIT_TIMEOUT} tcp:127.0.0.1:9042 && sleep 20`,
             });
           }
           if (databaseType === COUCHBASE) {
