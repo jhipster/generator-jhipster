@@ -141,7 +141,7 @@
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-chai-friendly": "0.7.2",
-    "eslint-plugin-import": "2.27.4",
+    "eslint-plugin-import": "2.27.5",
     "eslint-plugin-mocha": "10.1.0",
     "eslint-plugin-prettier": "4.2.1",
     "fs-extra": "11.1.0",
