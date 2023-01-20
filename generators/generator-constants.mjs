@@ -221,7 +221,7 @@ export const LANGUAGES = [
   {
     name: 'Karakalpak (Latin)',
     dispName: 'Qaraqalpaqsha',
-    value: 'kr-Latin-kr',
+    value: 'kr-Latn-kr',
     localeId: 'kr-Latin',
     dayjsLocaleId: 'kr-latin',
   },
