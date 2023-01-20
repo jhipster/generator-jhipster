@@ -218,7 +218,7 @@ describe('generator - Kubernetes', () => {
       runResult = await helpers
         .create(getGenerator('kubernetes'))
         .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
+          createMockedConfig('01-gateway', dir, { config: { authenticationType: 'oauth2' } });
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({

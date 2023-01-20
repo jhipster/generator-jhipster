@@ -3351,8 +3351,8 @@ data:
         {
           "id": "6e8deddb-b4d6-4e2e-b389-b397d3f74fcd",
           "clientId": "web_app",
-          "rootUrl": "http://localhost:NaN",
-          "adminUrl": "http://localhost:NaN",
+          "rootUrl": "http://localhost:8080",
+          "adminUrl": "http://localhost:8080",
           "surrogateAuthRequired": false,
           "enabled": true,
           "alwaysDisplayInConsole": false,
@@ -3360,8 +3360,8 @@ data:
           "secret": "web_app",
           "redirectUris": [
             "http://jhgate.default.example.com/*", 
-            "https://jhgate.default.example.com/*", "http://localhost:NaN/*", 
-            "https://localhost:NaN/*", 
+            "https://jhgate.default.example.com/*", "http://localhost:8080/*", 
+            "https://localhost:8080/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "http://localhost:9000/*",
@@ -3369,8 +3369,8 @@ data:
           ],
           "webOrigins": [
             "http://jhgate.default.example.com", 
-            "https://jhgate.default.example.com", "http://localhost:NaN", 
-            "https://localhost:NaN", 
+            "https://jhgate.default.example.com", "http://localhost:8080", 
+            "https://localhost:8080", 
             "http://localhost:8100",
             "http://127.0.0.1:8761",
             "http://localhost:9000"
