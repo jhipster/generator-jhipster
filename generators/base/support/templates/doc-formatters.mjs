@@ -17,14 +17,30 @@
  * limitations under the License.
  */
 
+/**
+ * Converts text to an array of lines.
+ * @param text the text to convert
+ * @return {*} the array of lines
+ */
 const textToArray = text => {
   return text.split('\n');
 };
 
+/**
+ * Checks if a string is null, undefined or empty.
+ * @param str the string to check
+ * @return {boolean} true if the string is null, undefined or empty, false otherwise
+ */
 const stringNullOrEmpty = str => {
   return str === null || str === undefined || str.trim() === '';
 };
 
+/**
+ * Verifies is the text is wrapped between ><: used in Api docs and liquibase changelogs templates.
+ * @param previousLine the previous line (potentially finishing with the wrapper character '>'
+ * @param text the text to check, which should not begin with the closing wrapper character '<'
+ * @return {boolean} true if the text is considered wrapped, false otherwise
+ */
 const isSimpleText = (previousLine, text) => {
   return !previousLine.endsWith('>') && !text.startsWith('<');
 };
