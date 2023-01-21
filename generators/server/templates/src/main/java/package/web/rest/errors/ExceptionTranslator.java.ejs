@@ -219,8 +219,7 @@ _%>
 <%_ if (!reactive) { _%>
     private String extractURI(<%= requestClass %> request) {
         HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
-        String requestUri = nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
-        return requestUri;
+        return nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
     }
 <%_ } _%>
     private HttpStatus toStatus(final Throwable throwable) {
