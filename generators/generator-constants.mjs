@@ -222,8 +222,8 @@ export const LANGUAGES = [
     name: 'Karakalpak (Latin)',
     dispName: 'Qaraqalpaqsha',
     value: 'kr-Latn-kr',
-    localeId: 'kr-Latin',
-    dayjsLocaleId: 'kr-latin',
+    localeId: 'kr-Latn',
+    dayjsLocaleId: 'kr-latn',
   },
   { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' },
 ];
