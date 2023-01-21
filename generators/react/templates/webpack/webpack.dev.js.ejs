@@ -52,7 +52,10 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         test: /\.(sa|sc|c)ss$/,
         use: [
           'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: { url: false },
+          },
           {
             loader: 'postcss-loader',
 <%_ if (enableI18nRTL) { _%>

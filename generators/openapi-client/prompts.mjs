@@ -18,7 +18,7 @@
  */
 import path from 'path';
 import shelljs from 'shelljs';
-import request from 'then-request';
+import axios from 'axios';
 import { applicationOptions, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
 const { EUREKA } = serviceDiscoveryTypes;
@@ -30,11 +30,16 @@ async function fetchSwaggerResources(input) {
   const availableDocs = [];
 
   const baseUrl = input.replace(/\/$/, '');
-  const swaggerResources = await request('GET', `${baseUrl}/swagger-resources`, {
-    // This header is needed to use the custom /swagger-resources controller
-    // and not the default one that has only the gateway's swagger resource
-    headers: { Accept: 'application/json, text/javascript;' },
+  const axiosClient = axios.create({
+    baseURL: baseUrl,
   });
+  const config = {
+    headers: {
+      Accept: 'application/json, text/javascript;',
+    },
+  };
+
+  const swaggerResources = await axiosClient.get('/swagger-resources', config);
 
   JSON.parse(swaggerResources.getBody()).forEach(swaggerResource => {
     const specPath = swaggerResource.location.replace(/^\/+/g, '');
@@ -136,9 +141,8 @@ export function askActionType() {
       validate: async input => {
         try {
           if (/^((http|https):\/\/)/.test(input)) {
-            await request('GET', `${input}`, {
-              // headers: { Accept: 'application/json, text/javascript;' }
-            });
+            const axiosClient = axios.create({ baseURL: input });
+            await axiosClient.get('/');
           } else if (!shelljs.test('-f', input)) {
             return `file '${input}' not found`;
           }

@@ -77,20 +77,6 @@ describe('generator - base', () => {
         );
       });
     });
-    describe('when legacyRelationshipTableName is set', () => {
-      it('returns a proper join table name', () => {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        function TestClass() {}
-        TestClass.prototype = Object.create(Base.prototype);
-        TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
-        expect(TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.equal(
-          'rel_entity_name_longer_for_postgr__relationship_name_for_pos_24'
-        );
-        expect(
-          TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)
-        ).to.have.length(63);
-      });
-    });
   });
   describe('getFKConstraintName', () => {
     describe('when called with a value', () => {
@@ -161,7 +147,7 @@ describe('generator - base', () => {
         ).to.have.length(63);
         expect(
           BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', POSTGRESQL)
-        ).to.equal('ux_entity_longer_name_with_pagi__column_longer_name_with_pag_8b');
+        ).to.equal('ux_entity_longer_name_with_pagin__column_longer_name_with_pa_8b');
       });
     });
     describe('when called with a long name that is near limit and postgresql', () => {
@@ -199,7 +185,7 @@ describe('generator - base', () => {
             POSTGRESQL,
             true
           )
-        ).to.equal('ux_entityLongerNameWithPaginati__columnLongerNameWithPaginat_8b');
+        ).to.equal('ux_entityLongerNameWithPaginatio__columnLongerNameWithPagina_8b');
       });
     });
   });

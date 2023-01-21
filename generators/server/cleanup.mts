@@ -170,6 +170,7 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     this.removeFile(`${application.javaPackageSrcDir}NoOpMailConfiguration.java`);
   }
   if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile(`${application.srcTestResources}testcontainers.properties`);
     if (application.authenticationTypeJwt) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/UserJWTController.java`);
       this.removeFile(`${application.javaPackageSrcDir}security/jwt/JWTConfigurer.java`);
