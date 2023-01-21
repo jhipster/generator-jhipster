@@ -328,13 +328,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     const generator = _this || this;
     const prefix = this.fetchFromInstalledJHipster('languages/templates');
     const langJavaProp = languageToJavaLanguage(lang);
-    generator.renderTemplate(
+    generator.writeFile(
       `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
       `${resourceDir}i18n/messages_${langJavaProp}.properties`,
       data
     );
     if (!data.skipUserManagement) {
-      generator.renderTemplate(
+      generator.writeFile(
         `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
         `${testResourceDir}i18n/messages_${langJavaProp}.properties`,
         data

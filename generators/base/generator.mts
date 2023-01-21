@@ -159,11 +159,11 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    * @param options - options passed to ejs render
    * @param copyOptions
    */
-  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions?: CopyOptions) {
+  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions: CopyOptions = {}) {
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
-    return this.renderTemplate(source, destination, data, { root, ...options }, copyOptions);
+    return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
   }
 
   /**
