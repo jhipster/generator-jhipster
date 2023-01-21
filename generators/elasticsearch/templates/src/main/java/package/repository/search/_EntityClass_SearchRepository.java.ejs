@@ -24,7 +24,6 @@ import <%= entityAbsolutePackage %>.repository.<%= persistClass %>Repository;
 <%_ if (!paginationNo) { _%>
   <%_ if (!reactive) { _%>
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -153,7 +152,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     @Override
     public Page<<%= persistClass %>> search(Query query) {
         SearchHits<<%= persistClass %>> searchHits = elasticsearchTemplate.search(query, <%= persistClass %>.class);
-        List<<%= persistClass %>> hits = searchHits.map(SearchHit::getContent).stream().collect(Collectors.toList());
+        List<<%= persistClass %>> hits = searchHits.map(SearchHit::getContent).stream().toList();
         return new PageImpl<>(hits, query.getPageable(), searchHits.getTotalHits());
     }
   <%_ } _%>

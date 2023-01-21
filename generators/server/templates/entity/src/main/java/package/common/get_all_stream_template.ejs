@@ -42,9 +42,9 @@ for (const relationship of relationships) {
                 .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
                 .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)<% if (dtoMapstruct) { %>
                 .map(<%= entityToDtoReference %>)<% } if (!paginationNo) { %>
-                .collect(Collectors.toList()), HttpStatus.OK);<% } else { if (dtoMapstruct) { %>
+                .toList(), HttpStatus.OK);<% } else { if (dtoMapstruct) { %>
                 .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
-                .collect(Collectors.toList());<% }} %>
+                .toList();<% }} %>
                 <%_ } _%>
     <%_ } _%>
         }

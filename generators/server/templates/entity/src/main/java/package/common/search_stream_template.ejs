@@ -34,7 +34,7 @@ const entityToDtoReference = mapper + '::' + 'toDto'; %>
             .map(<%= entityToDtoReference %>)
     <%_ } _%>
     <%_ if (dtoMapstruct || searchEngineElasticsearch) { _%>
-            .collect(Collectors.toList());
+            .toList();
     <%_ } _%>
   <%_ } _%>
 <%_ } else { _%>

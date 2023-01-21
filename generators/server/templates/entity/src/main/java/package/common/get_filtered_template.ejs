@@ -42,7 +42,7 @@ for (const relationship of relationships) { if (relationship.relationshipOneToOn
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new));
       <%_ } else { _%>
-            .collect(Collectors.toList());
+            .toList();
       <%_ } _%>
     <%_ } _%>
     }
