@@ -24,7 +24,6 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.domain.User;
   <%_ if (!reactive) { _%>
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
   <%_ } _%>
 <%_ } _%>
@@ -75,7 +74,6 @@ import java.util.Arrays;
 import java.util.*;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 <%_ } _%>
@@ -190,7 +188,7 @@ public class PublicUserResource {
         return StreamSupport
             .stream(userSearchRepository.search(query).spliterator(), false)
             .map(<%= user.dtoClass %>::new)
-            .collect(Collectors.toList());
+            .toList();
     <%_ } _%>
   <%_ } else { _%>
      <%_ if (reactive) { _%>
@@ -199,7 +197,7 @@ public class PublicUserResource {
         return StreamSupport
             .stream(userRepository.search(query).spliterator(), false)
             .map(<%= user.dtoClass %>::new)
-            .collect(Collectors.toList());
+            .toList();
      <%_ } _%>
   <%_ } _%>
     }
