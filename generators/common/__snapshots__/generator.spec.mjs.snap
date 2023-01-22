@@ -259,7 +259,7 @@ To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\
   },
   "devDependencies": {
     "husky": "7.0.4",
-    "lint-staged": "13.0.3"
+    "lint-staged": "13.1.0"
   }
 }
 ",
