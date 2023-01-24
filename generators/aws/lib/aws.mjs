@@ -20,6 +20,7 @@ import S3 from './s3.mjs';
 import Rds from './rds.mjs';
 import Eb from './eb.mjs';
 import Iam from './iam.mjs';
+import { handleError } from '../../base/support/index.mjs';
 
 let Aws;
 let generator;
@@ -30,7 +31,7 @@ const AwsFactory = function AwsFactory(generatorRef, cb) {
     Aws = require('aws-sdk'); // eslint-disable-line
     cb();
   } catch (e) {
-    generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
+    handleError(generator.logguer, `Something went wrong while running jhipster:aws:\n${e}`);
   }
 };
 

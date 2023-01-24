@@ -16,4 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './config.mjs';
+
+/**
+ * @private
+ * Get a root folder name for entity
+ * @param {string} clientRootFolder
+ * @param {string} entityFileName
+ */
+// eslint-disable-next-line import/prefer-default-export
+export const getEntityFolderName = (clientRootFolder, entityFileName) => {
+  if (clientRootFolder) {
+    return `${clientRootFolder}/${entityFileName}`;
+  }
+  return entityFileName;
+};

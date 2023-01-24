@@ -160,7 +160,7 @@ export default class PageGenerator extends BaseApplicationGenerator {
     return {
       success() {
         if (this.env.rootGenerator() !== this) return;
-        this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
+        this.logguer.info(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
       },
     };
   }

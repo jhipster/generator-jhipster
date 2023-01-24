@@ -35,6 +35,7 @@ import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
+import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
@@ -52,7 +53,6 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -68,18 +68,16 @@ import {
   LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithUnsetValues } from './support/index.mjs';
+import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
+import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
-
 const { PROMETHEUS, ELK } = monitoringTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
@@ -90,7 +88,6 @@ const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
-
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -199,12 +196,16 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @returns {string}
    */
   jhipsterTemplatePath(...args) {
+    let existingGenerator;
     try {
-      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        existingGenerator = split.length === 1 ? split[0] : split[1];
+      }
     }
+    this._jhipsterGenerator = existingGenerator;
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -221,66 +222,16 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Replace placeholders with versions from packageJsonSourceFile.
-   * @param {string} keyToReplace - PlaceHolder name.
-   * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
-   */
-  replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
-    const packageJsonTargetFile = this.destinationPath('package.json');
-    const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    const replace = section => {
-      if (packageJsonTarget[section]) {
-        Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
-          if (dependencyReference.startsWith(keyToReplace)) {
-            const [keyToReplaceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = dependencyReference.split('#');
-            if (keyToReplaceAtSource !== keyToReplace) return;
-            if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
-              throw new Error(`Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`);
-            }
-            packageJsonTarget[section][dependency] = packageJsonSource[sectionAtSource][dependencyAtSource];
-          }
-        });
-      }
-    };
-    replace('dependencies');
-    replace('devDependencies');
-    this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
-  }
-
-  /**
-   * @private
-   * Add a new icon to icon imports.
-   *
-   * @param {string} iconName - The name of the Font Awesome icon.
-   * @param {string} clientFramework - The name of the client framework
-   */
-  addIcon(iconName, clientFramework) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addIcon(iconName);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
-  }
-
-  /**
-   * @private
    * Add a new menu element, at the root of the menu.
    *
-   * @param {string} routerName - The name of the Angular router that is added to the menu.
+   * @param {string} routerName - The name of the router that is added to the menu.
    * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
    * @param {boolean} enableTranslation - If translations are enabled or not
    * @param {string} clientFramework - The name of the client framework
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 
   /**
@@ -292,96 +243,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addExternalResourcesToRoot(resources, comment) {
     this.needleApi.client.addExternalResourcesToRoot(resources, comment);
-  }
-
-  /**
-   * Add a new menu element to the admin menu.
-   *
-   * @param {string} routerName - The name of the Angular router that is added to the admin menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the admin menu
-   */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
-  }
-
-  /**
-   * @private
-   * Add a new entity in the "entities" menu.
-   *
-   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
-   * @param {string} entityTranslationValue - i18n value for entity entry in menu
-   */
-  addEntityToMenu(
-    routerName,
-    enableTranslation,
-    clientFramework = this.clientFramework,
-    entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
-    jhiPrefix = this.jhiPrefix
-  ) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addEntityToMenu(
-        routerName,
-        enableTranslation,
-        entityTranslationKeyMenu,
-        entityTranslationValue,
-        jhiPrefix
-      );
-    } else if (clientFramework === REACT) {
-      this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    } else if (clientFramework === VUE) {
-      this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new entity in the TS modules file.
-   *
-   * @param {string} entityInstance - Entity Instance
-   * @param {string} entityClass - Entity Class
-   * @param {string} entityName - Entity Name
-   * @param {string} entityFolderName - Entity Folder Name
-   * @param {string} entityFileName - Entity File Name
-   * @param {string} entityUrl - Entity router URL
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} microserviceName - Microservice Name
-   * @param {boolean} readOnly - If the entity is read-only or not
-   * @param {string} pageTitle - The translation key or the text for the page title in the browser
-   */
-  addEntityToModule(
-    entityInstance = this.entityInstance,
-    entityClass = this.entityClass,
-    entityName = this.entityAngularName,
-    entityFolderName = this.entityFolderName,
-    entityFileName = this.entityFileName,
-    entityUrl = this.entityUrl,
-    clientFramework = this.clientFramework,
-    microserviceName = this.microserviceName,
-    readOnly = this.readOnly,
-    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
-  ) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addEntityToModule(entityName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle);
-    } else if (clientFramework === REACT) {
-      this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
-    } else if (clientFramework === VUE) {
-      this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
-      this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
-      this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
-      this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
-    }
   }
 
   /**
@@ -487,7 +348,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           languages.push(language);
         }
       } catch (e) {
-        this.debug('Error:', e);
+        this.logguer.debug('Error:', e);
         // An exception is thrown if the folder doesn't exist
         // do nothing as the language might not be installed
       }
@@ -499,7 +360,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * get all the languages supported by JHipster
    */
   getAllSupportedLanguages() {
-    return _.map(this.getAllSupportedLanguageOptions(), 'value');
+    return _.map(LANGUAGES, 'value');
   }
 
   /**
@@ -519,7 +380,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     if (!languages) {
       return false;
     }
-    const rtlLanguages = this.getAllSupportedLanguageOptions().filter(langObj => langObj.rtl);
+    const rtlLanguages = LANGUAGES.filter(langObj => langObj.rtl);
     return languages.some(lang => !!rtlLanguages.find(langObj => langObj.value === lang));
   }
 
@@ -530,7 +391,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} language - language key
    */
   getLocaleId(language) {
-    const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+    const langObj = LANGUAGES.find(langObj => langObj.value === language);
     return langObj.localeId || language;
   }
 
@@ -541,16 +402,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} language - language key
    */
   getDayjsLocaleId(language) {
-    const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+    const langObj = LANGUAGES.find(langObj => langObj.value === language);
     return langObj.dayjsLocaleId || language;
-  }
-
-  /**
-   * @private
-   * get all the languages options supported by JHipster
-   */
-  getAllSupportedLanguageOptions() {
-    return LANGUAGES;
   }
 
   /**
@@ -1066,13 +919,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       this.configOptions.reproducibleLiquibaseTimestamp = now;
 
       // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
         this.config.set('lastLiquibaseTimestamp', now.getTime());
       }
     } else {
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (lastLiquibaseTimestamp) {
         lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
         if (lastLiquibaseTimestamp >= now) {
@@ -1081,7 +934,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           now.setMilliseconds(0);
         }
       }
-      this.config.set('lastLiquibaseTimestamp', now.getTime());
+      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
     }
     return formatDateForChangelog(now);
   }
@@ -1181,8 +1034,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       return this.fs.readJSON(file);
     } catch (error) {
-      this.warning(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.debug('Error:', error);
+      this.logguer.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
+      this.logguer.debug('Error:', error);
       return undefined;
     }
   }
@@ -1267,7 +1120,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
+      this.logguer.warn(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
       return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
@@ -1296,7 +1149,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     }
     const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
+      this.logguer.warn(
         `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
       );
       return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
@@ -1340,35 +1193,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} msg - message to print
    */
   error(msg) {
-    if (this._debug && this._debug.enabled) {
-      this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
-    }
+    this.logguer.error();
     throw new Error(`${msg}`);
-  }
-
-  /**
-   * Print a warning message.
-   *
-   * @param {string} msg - message to print
-   */
-  warning(msg) {
-    const warn = `${chalk.yellow.bold('WARNING!')} ${msg}`;
-    this.log(warn);
-    if (this._debug && this._debug.enabled) {
-      this._debug(warn);
-    }
-  }
-
-  /**
-   * Print an info message.
-   *
-   * @param {string} msg - message to print
-   */
-  info(msg) {
-    this.log.info(msg);
-    if (this._debug && this._debug.enabled) {
-      this._debug(`${chalk.green('INFO!')} ${msg}`);
-    }
   }
 
   /**
@@ -1392,7 +1218,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const keyStoreFile = `${keystoreFolder}/keystore.p12`;
 
     if (this.fs.exists(keyStoreFile)) {
-      this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
+      this.logguer.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
     } else {
       try {
         shelljs.mkdir('-p', keystoreFolder);
@@ -1427,9 +1253,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
-            this.warning("\nFailed to create a KeyStore with 'keytool'", code);
+            this.logguer.warn("\nFailed to create a KeyStore with 'keytool'", code);
           } else {
-            this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+            this.logguer.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
           done();
         }
@@ -1441,24 +1267,26 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * Prints a JHipster logo.
    */
   printJHipsterLogo() {
-    this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
+    this.logguer.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     if (process.cwd() === this.getUserHome()) {
-      this.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
-      this.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.logguer.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.logguer.log(
+        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
+      );
+      this.logguer.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.log(
+    this.logguer.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.log(
+    this.logguer.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
     );
-    this.log(
+    this.logguer.log(
       chalk.white(
         `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
       )
     );
-    this.log(
+    this.logguer.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }
@@ -1483,7 +1311,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         { silent: true },
         (code, stdout, stderr) => {
           if (!stderr && semver.lt(packageJson.version, stdout)) {
-            this.log(
+            this.logguer.warn(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
@@ -1491,14 +1319,14 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.log(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logguer.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logguer.warn(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }
       );
     } catch (err) {
-      this.debug('Error:', err);
+      this.logguer.debug('Error:', err);
       // fail silently as this function doesn't affect normal generator flow
     }
   }
@@ -1610,7 +1438,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
-    this.log(`Running command: '${chalk.bold(buildCmd)}'`);
+    this.logguer.info(`Running command: '${chalk.bold(buildCmd)}'`);
     return {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,
@@ -1695,9 +1523,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
 templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
-            this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+            this.logguer.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
-            this.debug(moreThanOneMessage);
+            this.logguer.debug(moreThanOneMessage);
           }
         }
         sourceFileFrom = existingTemplates.shift();
@@ -1841,7 +1669,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && this.fs.exists(destinationFile)) {
-              this.debug(`skipping file ${destinationFile}`);
+              this.logguer.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
 
@@ -1875,7 +1703,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
+    this.logguer.debug(`Time taken to write files: ${new Date() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -1908,7 +1736,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logguer, options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       }
@@ -1974,7 +1802,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.baseName = this.options.baseName;
     }
     if (options.db) {
-      const databaseType = this.getDBTypeFromDBValue(this.options.db);
+      const databaseType = getDBTypeFromDBValue(this.options.db);
       if (databaseType) {
         this.jhipsterConfig.databaseType = databaseType;
       } else if (!this.jhipsterConfig.databaseType) {
@@ -2043,7 +1871,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logguer, options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {
@@ -2082,7 +1910,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.jhipsterConfig.clientPackageManager) {
       const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
       if (!usingNpm) {
-        this.warning(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        this.logguer.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
         options.skipInstall = true;
       }
     }
@@ -2500,7 +2328,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {...string} subpath : the path to fetch from
    */
   fetchFromInstalledJHipster(...subpath) {
-    return path.join(__dirname, '..', ...subpath);
+    if (subpath) {
+      return path.join(__dirname, '..', ...subpath);
+    }
+    return subpath;
   }
 
   /**
@@ -2529,7 +2360,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
     const jhipsterVersion = packageJson.version;
-    const baseName = this.getDefaultAppName();
+    const baseName = getDefaultAppName(this);
     const creationTimestamp = new Date().getTime();
 
     this.config.defaults({

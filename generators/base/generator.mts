@@ -21,14 +21,11 @@ import { basename } from 'path';
 import { createHash } from 'crypto';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
-
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 
 import SharedData from './shared-data.mjs';
-
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
-
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import baseOptions from './options.mjs';
@@ -250,16 +247,16 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   validateCheckResult(result: CheckResult, { printInfo = false, throwOnError = true } = {}) {
     // Don't print check info by default for cleaner outputs.
     if (printInfo && result.info) {
-      this.info(result.info);
+      this.logguer.info(result.info);
     }
     if (result.warning) {
-      this.warning(result.warning);
+      this.logguer.warn(result.warning);
     }
     if (result.error) {
       if (throwOnError) {
         throw new Error(result.error);
       } else {
-        this.warning(result.error);
+        this.logguer.warn(result.error);
       }
     }
   }

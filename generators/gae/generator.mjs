@@ -24,7 +24,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseGenerator from '../base/index.mjs';
-
+import { handleError } from '../base/support/index.mjs';
 import { GENERATOR_GAE } from '../generator-list.mjs';
 import statistics from '../statistics.cjs';
 import dockerPrompts from '../base-docker/docker-prompts.mjs';
@@ -50,7 +50,7 @@ export default class GaeGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.log(chalk.bold('Welcome to Google App Engine Generator'));
+        this.logguer.info(chalk.bold('Welcome to Google App Engine Generator'));
       },
       checkInstallation() {
         if (this.abort) return;
@@ -58,7 +58,7 @@ export default class GaeGenerator extends BaseGenerator {
 
         shelljs.exec('gcloud version', { silent: true }, (code, stdout, err) => {
           if (err && code !== 0) {
-            this.log.error("You don't have the Cloud SDK (gcloud) installed. \nDownload it from https://cloud.google.com/sdk/install");
+            this.logguer.error("You don't have the Cloud SDK (gcloud) installed. \nDownload it from https://cloud.google.com/sdk/install");
             this.abort = true;
           }
           done();
@@ -77,11 +77,11 @@ export default class GaeGenerator extends BaseGenerator {
             if (_.includes(stdout, component)) {
               done();
             } else {
-              this.log(chalk.bold('\nInstalling App Engine Java SDK'));
-              this.log(`... Running: gcloud components install ${component} --quiet`);
+              this.logguer.info(chalk.bold('\nInstalling App Engine Java SDK'));
+              this.logguer.info(`... Running: gcloud components install ${component} --quiet`);
               shelljs.exec(`gcloud components install ${component} --quiet`, { silent: true }, (code, stdout, err) => {
                 if (err && code !== 0) {
-                  this.log.error(err);
+                  this.logguer.error(err);
                   done(
                     `Installation failed. \nPlease try to install the app-engine-java component manually via; gcloud components install ${component}`
                   );
@@ -160,11 +160,11 @@ export default class GaeGenerator extends BaseGenerator {
           this.directoryPath = props.directoryPath;
           // Patch the path if there is no trailing "/"
           if (!this.directoryPath.endsWith('/')) {
-            this.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
+            this.logguer.warn(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
             this.directoryPath += '/';
           }
           this.appsFolders = this._getMicroserviceFolders(this.directoryPath);
-          this.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
+          this.logguer.info(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
         });
       },
       askForApps() {
@@ -263,7 +263,7 @@ export default class GaeGenerator extends BaseGenerator {
             } else {
               this.gaeLocationExists = true;
               this.gaeLocation = stdout.trim();
-              this.log(`This project already has an App Engine location set, using location "${chalk.cyan(this.gaeLocation)}"`);
+              this.logguer.info(`This project already has an App Engine location set, using location "${chalk.cyan(this.gaeLocation)}"`);
               done();
             }
           }
@@ -332,7 +332,7 @@ export default class GaeGenerator extends BaseGenerator {
         const done = this.async();
 
         if (this.gaeInstanceClass.startsWith('F')) {
-          this.log(
+          this.logguer.info(
             `Instance Class "${chalk.cyan(this.gaeInstanceClass)}" can only be automatically scaled. Setting scaling type to automatic.`
           );
           this.gaeScalingType = 'automatic';
@@ -460,7 +460,7 @@ export default class GaeGenerator extends BaseGenerator {
           `gcloud sql instances list  --format="value[separator=':'](project,region,name)" --project="${this.gcpProjectId}"`,
           (code, stdout, err) => {
             if (err && code !== 0) {
-              this.log.error(err);
+              this.logguer.error(err);
             } else {
               _.forEach(stdout.toString().split(os.EOL), instance => {
                 if (!instance) return;
@@ -558,7 +558,7 @@ export default class GaeGenerator extends BaseGenerator {
           { silent: true },
           (code, stdout, err) => {
             if (err && code !== 0) {
-              this.log.error(err);
+              this.logguer.error(err);
             } else {
               _.forEach(stdout.toString().split(os.EOL), database => {
                 if (!database) return;
@@ -625,13 +625,13 @@ export default class GaeGenerator extends BaseGenerator {
         const done = this.async();
 
         if (!this.gaeLocationExists) {
-          this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyan(this.gaeLocation)}"`));
+          this.logguer.info(chalk.bold(`Configuring Google App Engine Location "${chalk.cyan(this.gaeLocation)}"`));
           shelljs.exec(
             `gcloud app create --region="${this.gaeLocation}" --project="${this.gcpProjectId}"`,
             { silent: true },
             (code, stdout, err) => {
               if (err && code !== 0) {
-                this.log.error(err);
+                this.logguer.error(err);
                 this.abort = true;
               }
 
@@ -650,7 +650,7 @@ export default class GaeGenerator extends BaseGenerator {
         if (this.gcpCloudSqlInstanceNameExists) return;
         const done = this.async();
 
-        this.log(chalk.bold('\nCreating New Cloud SQL Instance'));
+        this.logguer.info(chalk.bold('\nCreating New Cloud SQL Instance'));
 
         const name = this.gcpCloudSqlInstanceName;
         // for mysql keep default options, set specific option for pg
@@ -662,12 +662,12 @@ export default class GaeGenerator extends BaseGenerator {
           gaeCloudSqlLocation = 'europe-west1';
         }
         const cmd = `gcloud sql instances create "${name}" --region='${gaeCloudSqlLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
-        this.log(chalk.bold(`\n... Running: ${cmd}`));
+        this.logguer.info(chalk.bold(`\n... Running: ${cmd}`));
 
         shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
           if (err && code !== 0) {
             this.abort = true;
-            this.log.error(err);
+            this.logguer.error(err);
           }
 
           const cloudSQLInstanceName = shelljs.exec(
@@ -686,7 +686,7 @@ export default class GaeGenerator extends BaseGenerator {
         if (!this.gcpCloudSqlInstanceName) return;
         const done = this.async();
 
-        this.log(chalk.bold('\nConfiguring Cloud SQL Login'));
+        this.logguer.info(chalk.bold('\nConfiguring Cloud SQL Login'));
 
         const name = this.gcpCloudSqlInstanceName.split(':')[2];
         shelljs.exec(
@@ -694,16 +694,16 @@ export default class GaeGenerator extends BaseGenerator {
           { silent: true },
           (code, stdout, err) => {
             if (_.includes(stdout, this.gcpCloudSqlUserName)) {
-              this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
+              this.logguer.info(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
               const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${this.gcpProjectId}" --password="..."`;
-              this.log(chalk.bold(`... To set its password, run: ${cmd}`));
+              this.logguer.info(chalk.bold(`... To set its password, run: ${cmd}`));
               done();
             } else {
               const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${this.gcpCloudSqlPassword}" --project="${this.gcpProjectId}"`;
-              this.log(chalk.bold(`... Running: ${cmd}`));
+              this.logguer.info(chalk.bold(`... Running: ${cmd}`));
               shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
                 if (err && code !== 0) {
-                  this.log.error(err);
+                  this.logguer.error(err);
                 }
                 done();
               });
@@ -720,12 +720,12 @@ export default class GaeGenerator extends BaseGenerator {
         const done = this.async();
 
         const name = this.gcpCloudSqlInstanceName.split(':')[2];
-        this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
+        this.logguer.info(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
         const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${this.gcpProjectId}"`;
-        this.log(chalk.bold(`... Running: ${cmd}`));
+        this.logguer.info(chalk.bold(`... Running: ${cmd}`));
         shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
           if (err && code !== 0) {
-            this.log.error(err);
+            this.logguer.error(err);
           }
           done();
         });
@@ -771,7 +771,7 @@ export default class GaeGenerator extends BaseGenerator {
       copyFiles() {
         if (this.abort) return;
 
-        this.log(chalk.bold('\nCreating Google App Engine deployment files'));
+        this.logguer.info(chalk.bold('\nCreating Google App Engine deployment files'));
 
         this.writeFile('app.yaml.ejs', `${MAIN_DIR}/appengine/app.yaml`);
         if (this.applicationType === GATEWAY) {
@@ -834,29 +834,29 @@ export default class GaeGenerator extends BaseGenerator {
       productionBuild() {
         if (this.abort) return;
         // Until issue; https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376 is fixed we shall disable .gcloudignore
-        this.log(
+        this.logguer.info(
           chalk.bold(
             'Due to a Bug in GCloud SDK you will need to disable the generation of .gcloudignore file before deploying using: "gcloud config set gcloudignore/enabled false". For more info refer: https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376'
           )
         );
         if (this.buildTool === MAVEN) {
-          this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));
+          this.logguer.info(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));
         } else if (this.buildTool === 'gradle') {
-          this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
+          this.logguer.info(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
         }
         /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
-                    this.log(chalk.bold('\nSkipping build'));
+                    this.logguer.info(chalk.bold('\nSkipping build'));
                     return;
                 }
 
                 const done = this.async();
-                this.log(chalk.bold('\nBuilding application'));
+                this.logguer.info(chalk.bold('\nBuilding application'));
 
                 const child = this.buildApplication(this.buildTool, 'prod', (err) => {
                     if (err) {
                         this.abort = true;
-                        this.log.error(err);
+                        this.logguer.error(err);
                     }
                     done();
                 });
@@ -883,7 +883,7 @@ export default class GaeGenerator extends BaseGenerator {
       const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
       return projectId.trim();
     } catch (ex) {
-      this.log.error('Unable to determine the default Google Cloud Project ID');
+      this.logguer.error('Unable to determine the default Google Cloud Project ID');
       return undefined;
     }
   }
@@ -913,8 +913,8 @@ export default class GaeGenerator extends BaseGenerator {
               appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
             }
           } catch (err) {
-            this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
-            this.debug('Error:', err);
+            this.logguer.error(chalk.red(`${file}: this .yo-rc.json can't be read`));
+            this.logguer.debug('Error:', err);
           }
         }
       }

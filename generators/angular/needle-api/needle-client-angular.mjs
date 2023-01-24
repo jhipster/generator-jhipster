@@ -18,9 +18,11 @@
  */
 import chalk from 'chalk';
 import _ from 'lodash';
-import needleClientBase from './needle-client.mjs';
+
+import needleClientBase from '../../client/needle-api/needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
 import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
+import { stripMargin } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
@@ -102,7 +104,7 @@ export default class extends needleClientBase {
   _generateRewriteFileModelWithImportStatement(appName, angularName, folderName, fileName, modulePath, needle) {
     const importStatement = this._generateImportStatement(appName, angularName, folderName, fileName);
 
-    return this.generateFileModel(modulePath, needle, this.generator.stripMargin(importStatement));
+    return this.generateFileModel(modulePath, needle, stripMargin(importStatement));
   }
 
   _generateImportStatement(appName, angularName, folderName, fileName) {
@@ -118,7 +120,7 @@ export default class extends needleClientBase {
   }
 
   _generateRewriteFileModelAddModule(appName, angularName, modulePath, needle) {
-    return this.generateFileModel(modulePath, needle, this.generator.stripMargin(`|${appName}${angularName}Module,`));
+    return this.generateFileModel(modulePath, needle, stripMargin(`|${appName}${angularName}Module,`));
   }
 
   addIcon(iconName) {
@@ -142,7 +144,7 @@ export default class extends needleClientBase {
             iconImport +
             chalk.yellow('.\n')
         );
-        this.generator.debug('Error:', e);
+        this.generator.logguer.debug('Error:', e);
       }
     }
   }
@@ -159,7 +161,7 @@ export default class extends needleClientBase {
     const routerLink = `routerLink="${routerName}"`;
     const entityEntry =
       // prettier-ignore
-      this.generator.stripMargin(`|<li>
+      stripMargin(`|<li>
                              |                        <a class="dropdown-item" ${routerLink} routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
                              |                            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${entityTranslationValue}</span>
@@ -218,7 +220,7 @@ export default class extends needleClientBase {
       pageTitleTemplate = `
             |        data: { pageTitle: '${pageTitle}' },`;
     }
-    const routingEntry = this.generator.stripMargin(
+    const routingEntry = stripMargin(
       `{
             |        path: '${route}',${pageTitleTemplate}
             |        loadChildren: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
@@ -240,7 +242,7 @@ export default class extends needleClientBase {
         this._addRoute(entityUrl, modulePath, undefined, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
       }
     } catch (e) {
-      this.generator.debug('Error:', e);
+      this.generator.logguer.debug('Error:', e);
     }
   }
 

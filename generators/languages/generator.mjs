@@ -20,11 +20,12 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
+import { generateDateTimeFormat } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import { handleError } from '../base/support/index.mjs';
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR, LANGUAGES } from '../generator-constants.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
-
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';
@@ -85,12 +86,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (this.languagesToApply.length > 0) {
       this.languagesToApply.forEach(language => {
         if (!this.isSupportedLanguage(language)) {
-          this.log('\n');
-          this.error(
+          this.logguer.log('\n');
+          handleError(
+            this.logguer,
             `Unsupported language "${language}" passed as argument to language generator.` +
-              `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(), o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join(
-                ''
-              )}`
+              `\nSupported languages: ${_.map(LANGUAGES, o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
           );
         }
       });
@@ -110,11 +110,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       validate() {
         if (this.languagesToApply.length > 0) {
           if (this.skipClient) {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
+            this.logguer.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
           } else if (this.skipServer) {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
+            this.logguer.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
           } else {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
+            this.logguer.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
           }
         }
       },
@@ -368,7 +368,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
@@ -403,7 +403,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
@@ -412,6 +412,17 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       );
       this.debug('Error:', e);
     }
+  }
+
+  /**
+   * @private
+   * Generate language objects in array of "'en': { name: 'English' }" format
+   * @param {string[]} languages
+   * @returns generated language options
+   */
+  generateLanguageOptions(languages) {
+    const selectedLangs = LANGUAGES.filter(lang => languages.includes(lang.value));
+    return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
   }
 
   /**
@@ -425,7 +436,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       : `${application.clientSrcDir}/app/config/translation.ts`;
     try {
       let content = '{\n';
-      this.generateLanguageOptions(languages, application.clientFramework).forEach((ln, i) => {
+      this.generateLanguageOptions(languages).forEach((ln, i) => {
         content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
       });
       content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    };';
@@ -439,7 +450,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -478,7 +489,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
@@ -517,7 +528,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
@@ -557,7 +568,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. DayJS language task not updated with languages: ') +
@@ -573,7 +584,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     try {
       let content = 'languages: {\n';
       if (application.enableTranslation) {
-        this.generateLanguageOptions(languages, application.clientFramework).forEach((ln, i) => {
+        this.generateLanguageOptions(languages).forEach((ln, i) => {
           content += `      ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
         });
       }
@@ -587,7 +598,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -606,7 +617,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       let i18nConfig = 'const dateTimeFormats: DateTimeFormats = {\n';
       if (application.enableTranslation) {
         languages.forEach((ln, i) => {
-          i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
+          i18nConfig += generateDateTimeFormat(ln, i, languages.length);
         });
       }
       i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
@@ -621,7 +632,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -653,7 +664,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logguer.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +

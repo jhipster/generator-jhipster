@@ -54,8 +54,8 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
-        this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.logguer.info(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
+        this.logguer.info(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
       ...super.initializing,
       checkKubernetes,
@@ -152,38 +152,34 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
     return {
       deploy() {
         if (this.hasWarning) {
-          this.log(`\n${chalk.yellow.bold('WARNING!')} Helm configuration generated, but no Jib cache found`);
-          this.log('If you forgot to generate the Docker image for this application, please run:');
-          this.log(this.warningMessage);
+          this.logguer.warn('\nHelm configuration generated, but no Jib cache found');
+          this.logguer.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.logguer.warn(this.warningMessage);
         } else {
-          this.log(`\n${chalk.bold.green('Helm configuration successfully generated!')}`);
+          this.logguer.info(`\n${chalk.bold.green('Helm configuration successfully generated!')}`);
         }
-        this.log(
-          `${chalk.yellow.bold(
-            'WARNING!'
-          )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        this.logguer.warn(
+          'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
           const targetImageName = this.appConfigs[i].targetImageName;
           if (originalImageName !== targetImageName) {
-            this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
+            this.logguer.info(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
-          this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
+          this.logguer.info(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
-        this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash helm-apply.sh')}`);
-        this.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
+        this.logguer.info('\nYou can deploy all your apps by running the following script:');
+        this.logguer.info(`  ${chalk.cyan('bash helm-apply.sh')}`);
+        this.logguer.info('\nYou can upgrade (after any changes) all your apps by running the following script:');
+        this.logguer.info(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
         // Make the apply script executable
         try {
           fs.chmodSync('helm-apply.sh', '755');
           fs.chmodSync('helm-upgrade.sh', '755');
         } catch (err) {
-          this.log(
-            `${chalk.yellow.bold(
-              'WARNING!'
-            )}Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh`
+          this.logguer.warn(
+            "Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh"
           );
         }
       },

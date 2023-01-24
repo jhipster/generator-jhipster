@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { loadRequiredConfigIntoEntity } from '../../utils/entity.mjs';
+import { getPkType } from '../entity/support/index.mjs';
 
 const { SQL } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -32,10 +32,10 @@ export function createUserEntity(customUserData = {}, application) {
   const userEntityDefinition = this.readEntityJson('User');
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
-      this.warning('Relationships on the User entity side will be disregarded');
+      this.logguer.warn('Relationships on the User entity side will be disregarded');
     }
     if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
-      this.warning('Fields on the User entity side (other than id) will be disregarded');
+      this.logguer.warn('Fields on the User entity side (other than id) will be disregarded');
     }
   }
 
@@ -57,7 +57,7 @@ export function createUserEntity(customUserData = {}, application) {
   loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
 
   const oauth2 = user.authenticationType === OAUTH2;
-  const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : this.getPkType(user.databaseType);
+  const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : getPkType(this.jhipsterConfig, user.databaseType);
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
   addOrExtendFields(user.fields, [
