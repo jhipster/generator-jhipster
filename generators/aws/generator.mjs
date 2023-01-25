@@ -19,7 +19,6 @@
 import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
-import { handleError } from '../base/support/index.mjs';
 import prompts from './prompts.mjs';
 import AwsFactory from './lib/aws.mjs';
 import statistics from '../statistics.cjs';
@@ -84,7 +83,7 @@ export default class AwsGenerator extends BaseGenerator {
             this.dbEngine = 'postgres';
             break;
           default:
-            handleError(this.logguer, 'Sorry deployment for this database is not possible');
+            throw new Error('Sorry deployment for this database is not possible');
         }
       },
     };
@@ -138,7 +137,7 @@ export default class AwsGenerator extends BaseGenerator {
 
         const child = this.buildApplication(this.buildTool, 'prod', true, err => {
           if (err) {
-            handleError(this.logguer, err);
+            throw new Error(err);
           } else {
             cb();
           }
@@ -158,9 +157,9 @@ export default class AwsGenerator extends BaseGenerator {
         s3.createBucket({ bucket: this.bucketName }, (err, data) => {
           if (err) {
             if (err.message == null) {
-              handleError(this.logguer, 'The S3 bucket could not be created. Are you sure its name is not already used?');
+              throw new Error('The S3 bucket could not be created. Are you sure its name is not already used?');
             } else {
-              handleError(this.logguer, err.message);
+              throw new Error(err.message);
             }
           } else {
             this.logguer.info(data.message);
@@ -182,7 +181,7 @@ export default class AwsGenerator extends BaseGenerator {
 
         s3.uploadWar(params, (err, data) => {
           if (err) {
-            handleError(this.logguer, err.message);
+            throw new Error(err.message);
           } else {
             this.warKey = data.warKey;
             this.logguer.info(data.message);
@@ -207,7 +206,7 @@ export default class AwsGenerator extends BaseGenerator {
 
         rds.createDatabase(params, (err, data) => {
           if (err) {
-            handleError(this.logguer, err.message);
+            throw new Error(err.message);
           } else {
             this.logguer.info(data.message);
             cb();
@@ -232,7 +231,7 @@ export default class AwsGenerator extends BaseGenerator {
 
         rds.createDatabaseUrl(params, (err, data) => {
           if (err) {
-            handleError(this.logguer, err.message);
+            throw new Error(err.message);
           } else {
             this.dbUrl = data.dbUrl;
             this.logguer.info(data.message);
@@ -247,7 +246,7 @@ export default class AwsGenerator extends BaseGenerator {
         const iam = this.awsFactory.getIam();
         iam.verifyRoles({}, err => {
           if (err) {
-            handleError(this.logguer, err.message);
+            throw new Error(err.message);
           } else {
             cb();
           }
@@ -273,7 +272,7 @@ export default class AwsGenerator extends BaseGenerator {
 
         eb.createApplication(params, (err, data) => {
           if (err) {
-            handleError(this.logguer, err.message);
+            throw new Error(err.message);
           } else {
             this.logguer.info(data.message);
             cb();

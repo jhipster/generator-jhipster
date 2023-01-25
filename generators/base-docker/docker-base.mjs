@@ -21,7 +21,7 @@ import chalk from 'chalk';
 
 import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
-import { handleError, removeFieldsWithUnsetValues } from '../base/support/index.mjs';
+import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -123,7 +123,7 @@ export function loadConfigs() {
       config.appFolder = appFolder;
       this.appConfigs.push(config);
     } else {
-      handleError(this.logguer, `Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
+      throw new Error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
     }
   });
 }

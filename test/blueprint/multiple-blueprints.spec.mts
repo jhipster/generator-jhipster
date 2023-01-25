@@ -4,14 +4,13 @@ import helpers from 'yeoman-test';
 import ClientGenerator from '../../generators/client/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
-import { handleError } from '../../generators/base/support/index.mjs';
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
     if (!this.options.jhipsterContext) {
-      handleError(this.logguer, "This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
   }
 
@@ -69,7 +68,7 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
     super(args, opts, features);
 
     if (!this.options.jhipsterContext) {
-      handleError(this.logguer, "This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
   }
 
