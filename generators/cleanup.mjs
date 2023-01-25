@@ -18,7 +18,7 @@
  */
 
 import { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR, DOCKER_DIR } from './generator-constants.mjs';
-import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
+import { languageSnakeCase, languageToJavaLanguage } from './languages/support/index.mjs';
 import { clientFrameworkTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;

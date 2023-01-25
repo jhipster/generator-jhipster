@@ -47,7 +47,10 @@ export function rewriteFile(args, generator) {
 }
 
 /**
+ * @deprecated Replace with `this.editFile(args.file, content => content.replace(args.regex ? new RegExp(args.pattern, 'g') : args.pattern, args.content))`
+ *
  * Replace content
+ *
  * @param {object} args argument object
  * @param {object} generator reference to the generator
  */

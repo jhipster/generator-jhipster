@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
 export { default as addEntityMenuEntry } from './needles.mjs';
+export { default as updateLanguagesTask } from './update-languages.mjs';

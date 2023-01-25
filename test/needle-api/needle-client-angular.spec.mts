@@ -47,6 +47,7 @@ describe('needle API Client for Angular: JHipster client generator with blueprin
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        skipServer: true,
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
       .run();

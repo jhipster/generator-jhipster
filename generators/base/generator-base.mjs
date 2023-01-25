@@ -34,7 +34,7 @@ import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
-import detectLanguage from '../languages/detect-language.mjs';
+import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
@@ -65,7 +65,6 @@ import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
   NODE_VERSION,
-  LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
@@ -316,94 +315,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Add a translation key to all installed languages
-   *
-   * @param {string} key - Key for the entity name
-   * @param {string} value - Default translated value
-   * @param {string} method - The method to be run with provided key and value from above
-   * @param {string} enableTranslation - specify if i18n is enabled
-   */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
-    if (enableTranslation) {
-      this.getAllInstalledLanguages().forEach(language => {
-        this[method](key, value, language, webappSrcDir);
-      });
-    }
-  }
-
-  /**
-   * @private
-   * get all the languages installed currently
-   */
-  getAllInstalledLanguages() {
-    const languages = [];
-    this.getAllSupportedLanguages().forEach(language => {
-      try {
-        const stats = fs.lstatSync(`${this.sharedData.getApplication().clientSrcDir}i18n/${language}`);
-        if (stats.isDirectory()) {
-          languages.push(language);
-        }
-      } catch (e) {
-        this.logger.debug('Error:', e);
-        // An exception is thrown if the folder doesn't exist
-        // do nothing as the language might not be installed
-      }
-    });
-    return languages;
-  }
-
-  /**
-   * get all the languages supported by JHipster
-   */
-  getAllSupportedLanguages() {
-    return _.map(LANGUAGES, 'value');
-  }
-
-  /**
-   * check if a language is supported by JHipster
-   * @param {string} language - Key for the language
-   */
-  isSupportedLanguage(language) {
-    return _.includes(this.getAllSupportedLanguages(), language);
-  }
-
-  /**
-   * @private
-   * check if Right-to-Left support is necessary for i18n
-   * @param {string[]} languages - languages array
-   */
-  isI18nRTLSupportNecessary(languages) {
-    if (!languages) {
-      return false;
-    }
-    const rtlLanguages = LANGUAGES.filter(langObj => langObj.rtl);
-    return languages.some(lang => !!rtlLanguages.find(langObj => langObj.value === lang));
-  }
-
-  /**
-   * @private
-   * return the localeId from the given language key (from constants.LANGUAGES)
-   * if no localeId is defined, return the language key (which is a localeId itself)
-   * @param {string} language - language key
-   */
-  getLocaleId(language) {
-    const langObj = LANGUAGES.find(langObj => langObj.value === language);
-    return langObj.localeId || language;
-  }
-
-  /**
-   * @private
-   * return the dayjsLocaleId from the given language key (from constants.LANGUAGES)
-   * if no dayjsLocaleId is defined, return the language key (which is a localeId itself)
-   * @param {string} language - language key
-   */
-  getDayjsLocaleId(language) {
-    const langObj = LANGUAGES.find(langObj => langObj.value === language);
-    return langObj.dayjsLocaleId || language;
   }
 
   /**
@@ -2118,10 +2029,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    dest.enableTranslation = config.enableTranslation;
-    dest.nativeLanguage = config.nativeLanguage;
-    dest.languages = config.languages;
-    dest.enableI18nRTL = dest.languages && this.isI18nRTLSupportNecessary(dest.languages);
+    loadLanguagesConfig(dest, config);
   }
 
   /**

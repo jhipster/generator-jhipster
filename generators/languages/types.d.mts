@@ -16,5 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
-export { default as addEntityMenuEntry } from './needles.mjs';
+export type I18nApplication = {
+  enableI18nRTL: boolean;
+  nativeLanguage: string;
+  nativeLanguageDefinition: Language;
+} & (
+  | {
+      enableTranslation: false;
+    }
+  | {
+      enableTranslation: true;
+      languages: string[];
+      languagesDefinition: ReadonlyArray<Language>;
+    }
+);

@@ -417,6 +417,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} [extraOptions] - extra options to pass to blueprint generator
+   * @returns {Promise<any[]>}
    */
   async composeWithBlueprints(subGen, extraOptions) {
     this.delegateToBlueprint = false;
@@ -430,9 +431,11 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
     if (this.options.localBlueprint) {
       blueprints = blueprints.concat({ name: '@jhipster/local' });
     }
+    const composedBlueprints = [];
     for (const blueprint of blueprints) {
       const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
       if (blueprintGenerator) {
+        composedBlueprints.push(blueprintGenerator);
         if (blueprintGenerator.sbsBlueprint) {
           // If sbsBlueprint, add templatePath to the original generator templatesFolder.
           this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
@@ -443,6 +446,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
         }
       }
     }
+    return composedBlueprints;
   }
 
   /**

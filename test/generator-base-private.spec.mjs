@@ -125,35 +125,6 @@ export * from './entityFolderName/entityFileName.state';`;
     });
   });
 
-  describe('generateLanguageOptions', () => {
-    describe('when called with empty array', () => {
-      it('return empty', () => {
-        expect(LanguagesGenerator.generateLanguageOptions([])).to.eql([]);
-      });
-    });
-    describe('when called with languages array', () => {
-      it('return languages pipe syntax', () => {
-        expect(LanguagesGenerator.generateLanguageOptions(['en', 'fr'])).to.eql([
-          `'en': { name: 'English' }`, // eslint-disable-line
-          `'fr': { name: 'Français' }`, // eslint-disable-line
-        ]);
-      });
-    });
-  });
-
-  describe('skipLanguageForLocale', () => {
-    describe('when called with english', () => {
-      it('return false', () => {
-        expect(AngularGenerator.skipLanguageForLocale('en')).to.equal(false);
-      });
-    });
-    describe('when called with languages ar-ly', () => {
-      it('return true', () => {
-        expect(AngularGenerator.skipLanguageForLocale('ar-ly')).to.be.true;
-      });
-    });
-  });
-
   describe('generateTestEntityId', () => {
     describe('when called with int', () => {
       it('return 123', () => {

@@ -22,8 +22,8 @@ import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import shelljs from 'shelljs';
 
-import { javaBeanCase } from '../server/support/index.mjs';
 import { Logger } from './support/logging.mjs';
+
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */

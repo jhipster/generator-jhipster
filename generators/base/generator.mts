@@ -164,30 +164,68 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * Edit file content
+   * Edit file content.
+   * Edits an empty file if `options.create` is truthy or no callback is passed.
+   * @example
+   * // Throws if `foo.txt` doesn't exists or append the content.
+   * editFile('foo.txt', content => content + 'foo.txt content');
+   * @example
+   * // Appends `foo.txt` content if whether exists or not.
+   * editFile('foo.txt', { create: true }, content => content + 'foo.txt content');
+   * @example
+   * // Appends `foo.txt` content if whether exists or not using the returned cascaded callback.
+   * editFile('foo.txt')(content => content + 'foo.txt content');
    */
-  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> {
+  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
+  editFile(
+    file: string,
+    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean },
+    ...transformCallbacks: EditFileCallback<this>[]
+  ): CascatedEditFileCallback<this>;
+
+  editFile(
+    file: string,
+    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean } | EditFileCallback<this>,
+    ...transformCallbacks: EditFileCallback<this>[]
+  ): CascatedEditFileCallback<this> {
+    let actualOptions: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean };
+    if (typeof options === 'function') {
+      transformCallbacks = [options, ...transformCallbacks];
+      actualOptions = {};
+    } else if (options === undefined) {
+      actualOptions = {};
+    } else {
+      actualOptions = options;
+    }
     let filePath = this.destinationPath(file);
     if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
       filePath = `${filePath}.jhi`;
     }
 
-    let content;
-
+    let originalContent;
     try {
-      content = this.readDestination(filePath);
+      originalContent = this.readDestination(filePath);
     } catch (_error) {
-      if (transformCallbacks.length === 0) {
+      if (actualOptions.ignoreNonExisting) {
+        // return a noop.
+        const noop = () => noop;
+        return noop;
+      }
+      if (!actualOptions.create || transformCallbacks.length === 0) {
         throw new Error(`File ${filePath} doesn't exist`);
       }
       // allow to edit non existing files
-      content = '';
+      originalContent = '';
     }
 
+    let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
       try {
-        content = joinCallbacks(...callbacks).call(this, content, filePath);
-        this.writeDestination(filePath, content);
+        newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
+        if (actualOptions.assertModified && originalContent === newContent) {
+          throw new Error(`Fail to edit file '${file}'.`);
+        }
+        this.writeDestination(filePath, newContent);
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
