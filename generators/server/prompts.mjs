@@ -18,6 +18,7 @@
  */
 
 import chalk from 'chalk';
+import _ from 'lodash';
 
 import {
   applicationOptions,
@@ -29,7 +30,6 @@ import {
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
-import { getOptionFromArray } from '../base/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -57,6 +57,24 @@ const {
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
+
+/**
+ * Get Option From Array
+ *
+ * @param {Array} array - array
+ * @param {any} option - options
+ * @returns {boolean} true if option is in array and is set to 'true'
+ */
+const getOptionFromArray = (array, option) => {
+  let optionValue = false;
+  array.forEach(value => {
+    if (_.includes(value, option)) {
+      optionValue = value.split(':')[1];
+    }
+  });
+  optionValue = optionValue === 'true' ? true : optionValue;
+  return optionValue;
+};
 
 export async function askForServerSideOpts({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
