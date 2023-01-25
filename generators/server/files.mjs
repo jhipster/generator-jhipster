@@ -18,7 +18,8 @@
  */
 import cleanupOldServerFiles from './cleanup.mjs';
 import { TEST_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
-import { addSectionsCondition, mergeSections, moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './support/utils.mjs';
+import { addSectionsCondition, mergeSections } from '../base/support/index.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './support/index.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
 
 export const neo4jFiles = {

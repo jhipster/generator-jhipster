@@ -20,7 +20,7 @@ import _ from 'lodash';
 import chalk from 'chalk';
 import fs from 'fs';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
-import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir, replaceEntityFilePathVariables } from './support/utils.mjs';
+import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir, replaceEntityFilePathVariables } from './support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { getEnumInfo } from '../base/support/index.mjs';

@@ -16,9 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin, escapeRegExp } from './templates/doc-formatters.mjs';
-export { parseCreationTimestamp, resetFakerSeed } from './configuration-helpers/sequences.mjs';
-export { default as httpsGet } from './remote.mjs';
-export { isReproducible } from './configuration-helpers/options.mjs';
-export { default as getEnumInfo } from './configuration-helpers/enum.mjs';
-export { removeFieldsWithUnsetValues } from './config.mjs';
+import { XMLParser } from 'fast-xml-parser';
+
+/**
+ * Extract properties from pom content
+ * @param pomContent
+ */
+export function getPomProperties(pomContent: string): Record<string, string> {
+  return new XMLParser().parse(pomContent).project.properties;
+}
+
+/**
+ * Extract version properties from pom content
+ * @param pomContent
+ */
+export function getPomVersionProperties(pomContent: string): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(getPomProperties(pomContent))
+      .filter(([property]) => property.endsWith('.version'))
+      .map(([property, value]) => [property.slice(0, -8), value])
+  );
+}
