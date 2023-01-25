@@ -287,11 +287,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get end() {
     return this.asEndTaskGroup({
       end({ application }) {
-        this.logguer.info(chalk.green.bold('\nClient application generated successfully.\n'));
+        this.logger.info(chalk.green.bold('\nClient application generated successfully.\n'));
 
         const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${application.clientPackageManager} start`)}\n`;
 
-        this.logguer.info(chalk.green(logMsg));
+        this.logger.info(chalk.green(logMsg));
       },
     });
   }

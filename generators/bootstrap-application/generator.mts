@@ -163,7 +163,7 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = otherEntityName;
-            this.logguer.warn(
+            this.logger.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
                 relationship.otherEntityName
               } as fallback`

@@ -144,7 +144,7 @@ export default class extends needleClientBase {
             iconImport +
             chalk.yellow('.\n')
         );
-        this.generator.logguer.debug('Error:', e);
+        this.generator.logger.debug('Error:', e);
       }
     }
   }
@@ -242,7 +242,7 @@ export default class extends needleClientBase {
         this._addRoute(entityUrl, modulePath, undefined, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
       }
     } catch (e) {
-      this.generator.logguer.debug('Error:', e);
+      this.generator.logger.debug('Error:', e);
     }
   }
 

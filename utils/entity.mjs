@@ -198,7 +198,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     : entityWithConfig.entityFileName;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(
-    generator.logguer,
+    generator.logger,
     generator.env,
     entityWithConfig.clientRootFolder
   );
@@ -254,7 +254,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     });
     const withError = fieldEntries.find(entry => !entry);
     if (withError) {
-      generator.logguer.warn(`Error generating a full sample for entity ${entityName}`);
+      generator.logger.warn(`Error generating a full sample for entity ${entityName}`);
       return undefined;
     }
     return Object.fromEntries(fieldEntries);

@@ -271,52 +271,52 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('getEntityParentPathAddition', () => {
     describe('when passing /', () => {
       it('returns an empty string', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '/')).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '/')).to.equal('');
       });
     });
     describe('when passing /foo/', () => {
       it('returns ../', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '/foo/')).to.equal('../');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '/foo/')).to.equal('../');
       });
     });
     describe('when passing undefined', () => {
       it('returns an empty string', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env)).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env)).to.equal('');
       });
     });
     describe('when passing empty', () => {
       it('returns an empty string', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '')).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '')).to.equal('');
       });
     });
     describe('when passing foo', () => {
       it('returns ../', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, 'foo')).to.equal('../');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, 'foo')).to.equal('../');
       });
     });
     describe('when passing foo/bar', () => {
       it('returns ../../', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, 'foo/bar')).to.equal(`..${path.sep}../`);
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, 'foo/bar')).to.equal(`..${path.sep}../`);
       });
     });
     describe('when passing ../foo', () => {
       it('returns an empty string', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../foo')).to.equal('');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '../foo')).to.equal('');
       });
     });
     describe('when passing ../foo/bar', () => {
       it('returns ../', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../foo/bar')).to.equal('../');
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '../foo/bar')).to.equal('../');
       });
     });
     describe('when passing ../foo/bar/foo2', () => {
       it('returns ../../', () => {
-        expect(getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../foo/bar/foo2')).to.equal(`..${path.sep}../`);
+        expect(getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '../foo/bar/foo2')).to.equal(`..${path.sep}../`);
       });
     });
     describe('when passing ../../foo', () => {
       it('throw an error', () => {
-        expect(() => getEntityParentPathAddition(ClientGenerator.logguer, ClientGenerator.env, '../../foo')).to.throw();
+        expect(() => getEntityParentPathAddition(ClientGenerator.logger, ClientGenerator.env, '../../foo')).to.throw();
       });
     });
   });

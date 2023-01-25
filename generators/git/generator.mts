@@ -53,7 +53,7 @@ export default class InitGenerator extends BaseGenerator {
         if (!this.skipGit) {
           this.gitInstalled = (await this.createGit().version()).installed;
           if (!this.gitInstalled) {
-            this.logguer.warn('Git repository will not be created, as Git is not installed on your system');
+            this.logger.warn('Git repository will not be created, as Git is not installed on your system');
             this.skipGit = true;
           }
         }
@@ -102,7 +102,7 @@ export default class InitGenerator extends BaseGenerator {
       async gitCommit() {
         if (this.skipGit) return;
         if (!this.gitInitialized) {
-          this.logguer.warn('The generated application could not be committed to Git, as a Git repository could not be initialized.');
+          this.logger.warn('The generated application could not be committed to Git, as a Git repository could not be initialized.');
           return;
         }
         this.debug('Committing files to git');
@@ -110,7 +110,7 @@ export default class InitGenerator extends BaseGenerator {
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         const result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
-          this.logguer.info(
+          this.logger.info(
             `Found commits in Git from ${repositoryRoot}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
           );
           return;
@@ -118,7 +118,7 @@ export default class InitGenerator extends BaseGenerator {
         try {
           const statusResult = await git.status();
           if (statusResult.staged.length > 0) {
-            this.logguer.info(`The repository ${repositoryRoot} has staged files, skipping commit.`);
+            this.logger.info(`The repository ${repositoryRoot} has staged files, skipping commit.`);
             return;
           }
           await git.add(['.']);
@@ -128,9 +128,9 @@ export default class InitGenerator extends BaseGenerator {
             commitMsg += ` with blueprints ${bpInfo}`;
           }
           await git.commit(commitMsg);
-          this.logguer.info(chalk.green.bold(`Application successfully committed to Git from ${repositoryRoot}.`));
+          this.logger.info(chalk.green.bold(`Application successfully committed to Git from ${repositoryRoot}.`));
         } catch (e) {
-          this.logguer.error(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
+          this.logger.error(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
         }
       },
     });
@@ -144,9 +144,9 @@ export default class InitGenerator extends BaseGenerator {
     try {
       const git = this.createGit();
       this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
-      this.logguer.info(chalk.green.bold('Git repository initialized.'));
+      this.logger.info(chalk.green.bold('Git repository initialized.'));
     } catch (error) {
-      this.logguer.warn(`Failed to initialize Git repository.\n ${error}`);
+      this.logger.warn(`Failed to initialize Git repository.\n ${error}`);
     }
   }
 }

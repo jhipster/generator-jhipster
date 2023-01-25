@@ -23,12 +23,12 @@
  * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
  *                   obtained by parsing the given string representation of the creationTimestamp.
  */
-export const parseCreationTimestamp = (logguer, creationTimestampOption) => {
+export const parseCreationTimestamp = (logger, creationTimestampOption) => {
   let creationTimestamp;
   if (creationTimestampOption) {
     creationTimestamp = Date.parse(creationTimestampOption);
     if (!creationTimestamp) {
-      logguer.warn(`Error parsing creationTimestamp ${creationTimestampOption}.`);
+      logger.warn(`Error parsing creationTimestamp ${creationTimestampOption}.`);
     } else if (creationTimestamp > new Date().getTime()) {
       throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
     }
