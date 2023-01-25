@@ -1,13 +1,8 @@
-import { fileURLToPath } from 'url';
 import assert from 'yeoman-assert';
-import path, { dirname } from 'path';
 
-import { deepFind, stringHashCode } from '../generators/utils.mjs';
+import { stringHashCode } from '../generators/utils.mjs';
 import { getEnumInfo } from '../generators/base/support/index.mjs';
 import { javadoc } from '../generators/server/support/index.mjs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 describe('utils - generator', () => {
   describe('::javadoc', () => {
@@ -209,25 +204,6 @@ describe('utils - generator', () => {
 
       it('returns the clientRootFolder property suffixed by a dash', () => {
         assert.strictEqual(enumInfo.clientRootFolder, 'root-');
-      });
-    });
-  });
-  describe('::deepFind function', () => {
-    const jsonData = {
-      foo11: 'foo11value',
-      fooNested: { foo21: 'foo21value' },
-      foo21: 'foo21value',
-    };
-    describe('the key is found in the object that is searched', () => {
-      it('returns the value associated to the key', () => {
-        const value = deepFind(jsonData, 'foo21');
-        assert.textEqual(value, 'foo21value');
-      });
-    });
-    describe('the key is not found in the object that is searched', () => {
-      it('returns undefined', () => {
-        const value = deepFind(jsonData, 'foo123');
-        assert.textEqual(`${value}`, 'undefined');
       });
     });
   });
