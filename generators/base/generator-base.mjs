@@ -348,7 +348,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           languages.push(language);
         }
       } catch (e) {
-        this.logguer.debug('Error:', e);
+        this.logger.debug('Error:', e);
         // An exception is thrown if the folder doesn't exist
         // do nothing as the language might not be installed
       }
@@ -1034,8 +1034,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       return this.fs.readJSON(file);
     } catch (error) {
-      this.logguer.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.logguer.debug('Error:', error);
+      this.logger.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
+      this.logger.debug('Error:', error);
       return undefined;
     }
   }
@@ -1120,7 +1120,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logguer.warn(
+      this.logger.warn(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
       return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
@@ -1149,7 +1149,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     }
     const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logguer.warn(
+      this.logger.warn(
         `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
       );
       return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
@@ -1193,7 +1193,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} msg - message to print
    */
   error(msg) {
-    this.logguer.error();
+    this.logger.error();
     throw new Error(`${msg}`);
   }
 
@@ -1218,7 +1218,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const keyStoreFile = `${keystoreFolder}/keystore.p12`;
 
     if (this.fs.exists(keyStoreFile)) {
-      this.logguer.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
+      this.logger.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
     } else {
       try {
         shelljs.mkdir('-p', keystoreFolder);
@@ -1253,9 +1253,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
-            this.logguer.warn("\nFailed to create a KeyStore with 'keytool'", code);
+            this.logger.warn("\nFailed to create a KeyStore with 'keytool'", code);
           } else {
-            this.logguer.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+            this.logger.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
           done();
         }
@@ -1267,26 +1267,26 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * Prints a JHipster logo.
    */
   printJHipsterLogo() {
-    this.logguer.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
+    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     if (process.cwd() === this.getUserHome()) {
-      this.logguer.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.logguer.log(
+      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.logger.log(
         chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
       );
-      this.logguer.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.logguer.log(
+    this.logger.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.logguer.log(
+    this.logger.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
     );
-    this.logguer.log(
+    this.logger.log(
       chalk.white(
         `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
       )
     );
-    this.logguer.log(
+    this.logger.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }
@@ -1311,7 +1311,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         { silent: true },
         (code, stdout, stderr) => {
           if (!stderr && semver.lt(packageJson.version, stdout)) {
-            this.logguer.warn(
+            this.logger.warn(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
@@ -1319,14 +1319,14 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.logguer.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.logguer.warn(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logger.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logger.warn(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }
       );
     } catch (err) {
-      this.logguer.debug('Error:', err);
+      this.logger.debug('Error:', err);
       // fail silently as this function doesn't affect normal generator flow
     }
   }
@@ -1438,7 +1438,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
-    this.logguer.info(`Running command: '${chalk.bold(buildCmd)}'`);
+    this.logger.info(`Running command: '${chalk.bold(buildCmd)}'`);
     return {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,
@@ -1523,9 +1523,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
 templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
-            this.logguer.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+            this.logger.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
-            this.logguer.debug(moreThanOneMessage);
+            this.logger.debug(moreThanOneMessage);
           }
         }
         sourceFileFrom = existingTemplates.shift();
@@ -1669,7 +1669,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && this.fs.exists(destinationFile)) {
-              this.logguer.debug(`skipping file ${destinationFile}`);
+              this.logger.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
 
@@ -1703,7 +1703,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    this.logguer.debug(`Time taken to write files: ${new Date() - startTime}ms`);
+    this.logger.debug(`Time taken to write files: ${new Date() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -1736,7 +1736,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this.logguer, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       }
@@ -1871,7 +1871,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this.logguer, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {
@@ -1910,7 +1910,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.jhipsterConfig.clientPackageManager) {
       const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
       if (!usingNpm) {
-        this.logguer.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        this.logger.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
         options.skipInstall = true;
       }
     }

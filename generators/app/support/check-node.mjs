@@ -43,22 +43,22 @@ const requiredEngineFromPackageJson = () => {
  * @private
  * Check if Node is installed, up to date, and in LTS version.
  * Will emit a warning if the current node version is too old compared to the required one or if it is not in LTS.
- * @param {any} logguer - the logging adapter
+ * @param {any} logger - the logging adapter
  * @param {string} requiredNodeVersion - the version needed to run the generator (defaulted to the one mentionned in package.json)
  * @param {string} currentNodeVersion - the version of Node installed on the machine (defaulted to the one running the generator)
  */
 const checkNode = (
-  logguer,
+  logger,
   requiredNodeVersion = requiredEngineFromPackageJson(),
   currentNodeVersion = getNodeVersionFromCurrentProcess()
 ) => {
   if (isNodeVersionCompliantWithRequirement(currentNodeVersion, requiredNodeVersion)) {
-    logguer.warn(
+    logger.warn(
       `Your NodeJS version is too old (${currentNodeVersion}). You should use at least NodeJS ${chalk.bold(requiredNodeVersion)}`
     );
   }
   if (!isNodeLTS(getNodeReleaseFromCurrentProcess())) {
-    logguer.warn(
+    logger.warn(
       'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
     );
   }

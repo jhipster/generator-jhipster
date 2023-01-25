@@ -337,7 +337,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
         if (this.skipChecks) {
           return;
         }
-        checkNode(this.logguer);
+        checkNode(this.logger);
       },
 
       checkForNewJHVersion() {
@@ -500,7 +500,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   get end() {
     return {
       afterRunHook() {
-        this.logguer.info(
+        this.logger.info(
           chalk.green(
             `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
           )

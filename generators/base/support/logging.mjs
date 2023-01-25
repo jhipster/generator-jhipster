@@ -91,20 +91,20 @@ const logDebug = (isDebugEnabled, log, _debug, message, ...args) => {
   }
 };
 
-export class Logguer {
-  constructor(yeomanLogguer, configOptions, options, yeomanDebug) {
-    this.yeomanLogguer = yeomanLogguer;
+export class Logger {
+  constructor(yeomanLogger, configOptions, options, yeomanDebug) {
+    this.yeomanLogger = yeomanLogger;
     this.yeomanDebug = yeomanDebug;
     this.isDebugEnabled = jhipsterDebugOptionsChecker(configOptions, options);
   }
 
   debug(msg, ...args) {
-    logDebug(this.isDebugEnabled, this.yeomanLogguer, this.yeomanDebug, msg, ...args);
+    logDebug(this.isDebugEnabled, this.yeomanLogger, this.yeomanDebug, msg, ...args);
   }
 
   warn(msg) {
     const warn = formatWarningMessageHeader(msg);
-    printMessageUsingGeneratorLogger(this.yeomanLogguer, warn);
+    printMessageUsingGeneratorLogger(this.yeomanLogger, warn);
     if (this.isDebugEnabled) {
       printMessageAndArgumentsUsingInternalDebugger(this.yeomanDebug, warn);
     }
@@ -112,19 +112,19 @@ export class Logguer {
 
   info(msg) {
     const info = formatInfoMessageHeader(msg);
-    printMessageUsingGeneratorLogger(this.yeomanLogguer, info);
+    printMessageUsingGeneratorLogger(this.yeomanLogger, info);
     if (this.isDebugEnabled) {
       printMessageAndArgumentsUsingInternalDebugger(this.yeomanDebug, info);
     }
   }
 
   log(msg) {
-    printMessageUsingGeneratorLogger(this.yeomanLogguer, msg);
+    printMessageUsingGeneratorLogger(this.yeomanLogger, msg);
   }
 
   error(msg) {
     const warn = formatErrorMessageHeader(msg);
-    printMessageUsingGeneratorLogger(this.yeomanLogguer, warn);
+    printMessageUsingGeneratorLogger(this.yeomanLogger, warn);
     if (this.isDebugEnabled) {
       printMessageAndArgumentsUsingInternalDebugger(this.yeomanDebug, warn);
     }

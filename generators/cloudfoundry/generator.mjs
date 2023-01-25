@@ -49,7 +49,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logguer.info(chalk.bold('CloudFoundry configuration is starting'));
+        this.logger.info(chalk.bold('CloudFoundry configuration is starting'));
       },
 
       getSharedConfig() {
@@ -94,7 +94,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
       copyCloudFoundryFiles() {
         if (this.abort) return;
-        this.logguer.info(chalk.bold('\nCreating Cloud Foundry deployment files'));
+        this.logger.info(chalk.bold('\nCreating Cloud Foundry deployment files'));
         this.writeFile('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
         this.writeFile('application-cloudfoundry.yml.ejs', `${SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
       },
@@ -105,7 +105,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
         exec('cf -v', err => {
           if (err) {
-            this.logguer.error(
+            this.logger.error(
               "cloudfoundry's cf command line interface is not available. " +
                 'You can install it via https://github.com/cloudfoundry/cli/releases'
             );
@@ -127,11 +127,11 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
         const done = this.async();
 
-        this.logguer.info(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
+        this.logger.info(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
         exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (err, stdout, stderr) => {
           // Unauthenticated
           if (stdout.search('cf login') >= 0) {
-            this.logguer.error("Error: Not authenticated. Run 'cf login' to login to your cloudfoundry account and try again.");
+            this.logger.error("Error: Not authenticated. Run 'cf login' to login to your cloudfoundry account and try again.");
             this.abort = true;
           }
           done();
@@ -142,10 +142,10 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
         const done = this.async();
 
-        this.logguer.info(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
+        this.logger.info(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
 
         if (this.databaseType !== 'no') {
-          this.logguer.info(chalk.bold('Creating the database'));
+          this.logger.info(chalk.bold('Creating the database'));
           const child = exec(
             `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
             {},
@@ -154,7 +154,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
             }
           );
           child.stdout.on('data', data => {
-            this.logguer.info(data.toString());
+            this.logger.info(data.toString());
           });
         } else {
           done();
@@ -165,11 +165,11 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         if (this.abort) return;
         const done = this.async();
 
-        this.logguer.info(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
+        this.logger.info(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
         const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
           if (err) {
-            this.logguer.error(err);
+            this.logger.error(err);
           }
           done();
         });
@@ -177,7 +177,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         this.buildCmd = child.buildCmd;
 
         child.stdout.on('data', data => {
-          this.logguer.info(data.toString());
+          this.logger.info(data.toString());
         });
       },
     };
@@ -205,28 +205,28 @@ export default class CloudfoundryGenerator extends BaseGenerator {
           cloudfoundryDeployCommand += `${jarFolder}*.jar`;
         }
 
-        this.logguer.info(chalk.bold('\nPushing the application to Cloud Foundry'));
+        this.logger.info(chalk.bold('\nPushing the application to Cloud Foundry'));
         const child = exec(cloudfoundryDeployCommand, err => {
           if (err) {
-            this.logguer.error(err);
+            this.logger.error(err);
           }
-          this.logguer.info(chalk.green('\nYour app should now be live'));
-          this.logguer.warn(chalk.yellow(`After application modification, repackage it with\n\t${chalk.bold(this.buildCmd)}`));
-          this.logguer.warn(chalk.yellow(`And then re-deploy it with\n\t${chalk.bold(cloudfoundryDeployCommand)}`));
+          this.logger.info(chalk.green('\nYour app should now be live'));
+          this.logger.warn(chalk.yellow(`After application modification, repackage it with\n\t${chalk.bold(this.buildCmd)}`));
+          this.logger.warn(chalk.yellow(`And then re-deploy it with\n\t${chalk.bold(cloudfoundryDeployCommand)}`));
           done();
         });
 
         child.stdout.on('data', data => {
-          this.logguer.info(data.toString());
+          this.logger.info(data.toString());
         });
       },
 
       restartApp() {
         if (this.abort || !this.cloudfoundry_remote_exists) return;
-        this.logguer.info(chalk.bold('\nRestarting your cloudfoundry app.\n'));
+        this.logger.info(chalk.bold('\nRestarting your cloudfoundry app.\n'));
 
         exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
-          this.logguer.info(chalk.green('\nYour app should now be live'));
+          this.logger.info(chalk.green('\nYour app should now be live'));
         });
       },
     };

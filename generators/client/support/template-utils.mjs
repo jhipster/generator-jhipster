@@ -189,7 +189,7 @@ export const generateTestEntityPrimaryKey = (primaryKey, index) => {
  * Get a parent folder path addition for entity
  * @param {string} clientRootFolder
  */
-export const getEntityParentPathAddition = (logguer, env, clientRootFolder) => {
+export const getEntityParentPathAddition = (logger, env, clientRootFolder) => {
   if (!clientRootFolder) {
     return '';
   }

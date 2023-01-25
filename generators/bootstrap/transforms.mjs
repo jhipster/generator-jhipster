@@ -77,7 +77,7 @@ At: ${fileContent
           errorMessage = `Unknown prettier error: ${error}`;
         }
         if (ignoreErrors) {
-          generator.logguer.warn(errorMessage);
+          generator.logger.warn(errorMessage);
           return file;
         }
         throw new Error(errorMessage);

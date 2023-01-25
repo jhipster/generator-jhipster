@@ -23,7 +23,7 @@ import Generator from 'yeoman-generator';
 import shelljs from 'shelljs';
 
 import { javaBeanCase } from '../server/support/index.mjs';
-import { Logguer } from './support/logging.mjs';
+import { Logger } from './support/logging.mjs';
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
@@ -53,7 +53,7 @@ export default class PrivateBase extends Generator {
     }
     // expose lodash to templates
     this._ = _;
-    this.logguer = new Logguer(this.log, this.configOptions, this.options, this._debug);
+    this.logger = new Logger(this.log, this.configOptions, this.options, this._debug);
   }
 
   /**
@@ -110,7 +110,7 @@ export default class PrivateBase extends Generator {
   removeFile(file) {
     const destination = this.destinationPath(file);
     if (destination && shelljs.test('-f', destination)) {
-      this.logguer.log(`Removing the file - ${destination}`);
+      this.logger.log(`Removing the file - ${destination}`);
       rmSync(destination, { force: true });
     }
     return destination;
@@ -128,7 +128,7 @@ export default class PrivateBase extends Generator {
         rmSync(folder, { recursive: true });
       }
     } catch (error) {
-      this.logguer.log(`Could not remove folder ${folder}`);
+      this.logger.log(`Could not remove folder ${folder}`);
     }
   }
 
@@ -144,7 +144,7 @@ export default class PrivateBase extends Generator {
     const source = this.destinationPath(from);
     const dest = this.destinationPath(to);
     if (source && dest && shelljs.test('-f', source)) {
-      this.logguer.info(`Renaming the file - ${source} to ${dest}`);
+      this.logger.info(`Renaming the file - ${source} to ${dest}`);
       return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
     }
     return true;

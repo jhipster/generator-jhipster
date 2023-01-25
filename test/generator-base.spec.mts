@@ -9,7 +9,7 @@ import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
 import { parseChangelog } from '../generators/base/utils.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
-import { Logguer } from '../generators/base/support/logging.mjs';
+import { Logger } from '../generators/base/support/logging.mjs';
 
 const { POSTGRESQL } = databaseTypes;
 
@@ -20,7 +20,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-BaseGenerator.logguer = new Logguer(BaseGenerator.log);
+BaseGenerator.logger = new Logger(BaseGenerator.log);
 
 describe('generator - base', () => {
   describe('getAllSupportedLanguages', () => {

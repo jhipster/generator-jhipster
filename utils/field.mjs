@@ -121,7 +121,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
       data = generated;
     }
     if (data.length === 0) {
-      this.logguer.warn(`Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
+      this.logger.warn(`Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
       data = undefined;
     }
   } else if (field.fieldIsEnum) {
@@ -129,7 +129,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
       const enumValues = field.enumValues;
       data = enumValues[faker.datatype.number(enumValues.length - 1)].name;
     } else {
-      this.logguer.warn(`Enum ${field.fieldType} is not valid`);
+      this.logger.warn(`Enum ${field.fieldType} is not valid`);
       data = undefined;
     }
   } else if (field.fieldType === DURATION && type === 'cypress') {
@@ -170,7 +170,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
   } else if (field.fieldType === BOOLEAN) {
     data = faker.datatype.boolean();
   } else {
-    this.logguer.warn(`Fake data for field ${field.fieldType} is not supported`);
+    this.logger.warn(`Fake data for field ${field.fieldType} is not supported`);
   }
 
   if (field.fieldType === BYTES && type === 'json-serializable') {
@@ -303,14 +303,14 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
       // eslint-disable-next-line no-new
       new RegExp(field.fieldValidateRulesPattern);
     } catch (e) {
-      generator.logguer.warn(
+      generator.logger.warn(
         `${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `
       );
       return undefined;
     }
     const re = faker.createRandexp(field.fieldValidateRulesPattern);
     if (!re) {
-      generator.logguer.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
+      generator.logger.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
     }
     return re;
   };
@@ -330,13 +330,13 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
         data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
       }
       if (data === undefined) {
-        generator.logguer.warn(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
+        generator.logger.warn(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
       } else {
         field.uniqueValue.push(data);
       }
     }
     if (data === undefined) {
-      generator.logguer.warn(`Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
+      generator.logger.warn(`Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
     }
     return data;
   };
@@ -439,7 +439,7 @@ export function prepareServerFieldForTemplates(entityWithConfig, field, generato
 
     if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType)) {
       if (!jhiFieldNamePrefix) {
-        generator.logguer.warn(
+        generator.logger.warn(
           `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
         );
         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;

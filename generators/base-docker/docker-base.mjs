@@ -32,7 +32,7 @@ export { checkDocker } from './docker-utils.mjs';
  * Check Images
  */
 export function checkImages() {
-  this.logguer.info('\nChecking Docker images in applications directories...');
+  this.logger.info('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
   let runCommand = '';
@@ -97,7 +97,7 @@ export function loadConfigs() {
   const serverPort = 8080;
 
   // Loading configs
-  this.logguer.debug(`Apps folders: ${this.appsFolders}`);
+  this.logger.debug(`Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
@@ -148,7 +148,7 @@ export function loadFromYoRc() {
   delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
-    this.logguer.info('\nFound .yo-rc.json config file...');
+    this.logger.info('\nFound .yo-rc.json config file...');
   }
 
   if (this.regenerate) {
