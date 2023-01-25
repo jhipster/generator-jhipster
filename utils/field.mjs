@@ -303,9 +303,7 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
       // eslint-disable-next-line no-new
       new RegExp(field.fieldValidateRulesPattern);
     } catch (e) {
-      generator.logger.warn(
-        `${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `
-      );
+      generator.logger.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
     }
     const re = faker.createRandexp(field.fieldValidateRulesPattern);
