@@ -18,13 +18,13 @@
  */
 import chalk from 'chalk';
 import { execaCommandSync } from 'execa';
+import { type CheckResult } from '../../../base/api.mjs';
 
 /**
  * Check if installed java version is compatible
- * @param {string[]} [javaCompatibleVersions]
- * @return {import('../../../base/api.mjs').CheckResult & { javaVersion?: string }}
+ * @param javaCompatibleVersions
  */
-export default javaCompatibleVersions => {
+export default (javaCompatibleVersions: string[]): CheckResult & { javaVersion?: string } => {
   try {
     const { exitCode, stderr } = execaCommandSync('java -version', { stdio: 'pipe' });
     if (exitCode === 0 && stderr) {
@@ -43,6 +43,6 @@ export default javaCompatibleVersions => {
     }
     return { error: `Error parsing Java version. Output: ${stderr}` };
   } catch (error) {
-    return { error: `Java was not found on your computer (${error.message}).` };
+    return { error: `Java was not found on your computer (${(error as any).message}).` };
   }
 };
