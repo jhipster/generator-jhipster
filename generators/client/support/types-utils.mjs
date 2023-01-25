@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
-import { fieldIsEnum } from '../../entity/support/index.mjs';
+import { fieldIsEnum } from '../../base-application/support/index.mjs';
 
 const {
   BOOLEAN: TYPE_BOOLEAN,

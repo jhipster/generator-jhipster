@@ -25,7 +25,6 @@ import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../generators/client/support/index.mjs';
-import { getEntityFolderName } from '../generators/entity/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -194,7 +193,9 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
   entityWithConfig.entityFileName = _.kebabCase(
     entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
   );
-  entityWithConfig.entityFolderName = getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
+  entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
+    ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
+    : entityWithConfig.entityFileName;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(
     generator.logguer,

@@ -22,5 +22,3 @@ export {
   isSignedNumber as inputIsSignedNumber,
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
 } from './asserts.mjs';
-export { fieldIsEnum } from './field-utils.mjs';
-export { getEntityFolderName } from './template-utils.mjs';

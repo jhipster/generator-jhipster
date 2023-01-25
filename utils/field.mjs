@@ -20,7 +20,7 @@ import assert from 'assert';
 import _ from 'lodash';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../jdl/jhipster/index.mjs';
 import { getTypescriptType } from '../generators/client/support/index.mjs';
-import { fieldIsEnum } from '../generators/entity/support/index.mjs';
+import { fieldIsEnum } from '../generators/base-application/support/index.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
