@@ -23,7 +23,7 @@
  * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
  *                   obtained by parsing the given string representation of the creationTimestamp.
  */
-const parseCreationTimestamp = (logguer, creationTimestampOption) => {
+export const parseCreationTimestamp = (logguer, creationTimestampOption) => {
   let creationTimestamp;
   if (creationTimestampOption) {
     creationTimestamp = Date.parse(creationTimestampOption);
@@ -41,7 +41,7 @@ const parseCreationTimestamp = (logguer, creationTimestampOption) => {
  * @param context the context to reset faker seed for
  * @param basename name of the file
  */
-const resetFakerSeed = (context, basename) => {
+export const resetFakerSeed = (context, basename) => {
   if (context.entityClass) {
     if (context.configOptions && context.configOptions.sharedEntities) {
       // TODO looks executed for each entity class, should be executed only once
@@ -53,5 +53,3 @@ const resetFakerSeed = (context, basename) => {
     }
   }
 };
-
-export { parseCreationTimestamp, resetFakerSeed };
