@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 export { getJavadoc as javadoc, getApiDescription } from './doc-formatting.mjs';
-export { getDBTypeFromDBValue, getDBCExtraOption } from './database.mjs';
+export * from './database.mjs';
+export * from './dependabot-maven.mjs';
+export * from './files.mjs';
 export { getJavaValueGeneratorForType, getPrimaryKeyValue } from './templates/field-values.mjs';
 export { javaBeanCase, buildJavaGet, buildJavaGetter, buildJavaSetter } from './java-formatting.mjs';
-export * from './files.mjs';
-export * from './dependabot-maven.mjs';
