@@ -23,13 +23,6 @@ const doesTheEnumValueHaveACustomValue = enumValue => {
   return enumValue.includes('(');
 };
 
-const parseEnumValue = enumValueLine => {
-  const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(enumValueLine);
-  const enumValueName = matches[1];
-  const enumValueCustomValue = matches[3];
-  return { name: enumValueName, value: enumValueCustomValue };
-};
-
 const getCustomValuesState = enumValues => {
   const state = {
     withoutCustomValue: 0,

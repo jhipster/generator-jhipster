@@ -22,7 +22,7 @@
  * @param text the text to convert
  * @return {*} the array of lines
  */
-const textToArray = text => {
+export const textToArray = text => {
   return text.split('\n');
 };
 
@@ -31,7 +31,7 @@ const textToArray = text => {
  * @param str the string to check
  * @return {boolean} true if the string is null, undefined or empty, false otherwise
  */
-const stringNullOrEmpty = str => {
+export const stringNullOrEmpty = str => {
   return str === null || str === undefined || str.trim() === '';
 };
 
@@ -41,11 +41,11 @@ const stringNullOrEmpty = str => {
  * @param text the text to check, which should not begin with the closing wrapper character '<'
  * @return {boolean} true if the text is considered wrapped, false otherwise
  */
-const isSimpleText = (previousLine, text) => {
+export const isSimpleText = (previousLine, text) => {
   return !previousLine.endsWith('>') && !text.startsWith('<');
 };
 
-const htmlEncode = text => {
+export const htmlEncode = text => {
   let htmLifiedText = text;
   // escape & to &amp;
   htmLifiedText = htmLifiedText.replace(/&/g, '&amp;');
@@ -76,8 +76,6 @@ export function escapeRegExp(str) {
  *
  *  @param {string} content - the string to process
  */
-const stripMargin = content => {
+export const stripMargin = content => {
   return content.replace(/^[ ]*\|/gm, '');
 };
-
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin };
