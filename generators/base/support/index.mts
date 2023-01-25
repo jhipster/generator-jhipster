@@ -22,3 +22,4 @@ export { default as httpsGet } from './remote.mjs';
 export { isReproducible } from './configuration-helpers/options.mjs';
 export { default as getEnumInfo } from './configuration-helpers/enum.mjs';
 export { removeFieldsWithUnsetValues } from './config.mjs';
+export * from './write-files.mjs';

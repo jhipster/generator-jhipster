@@ -28,9 +28,9 @@ import {
   prepareEntityPrimaryKeyForTemplates,
 } from '../../utils/entity.mjs';
 import type { SpringBootApplication } from '../server/types.mjs';
-import { authenticationTypes, fieldTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
+import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
-import { getPomVersionProperties } from '../server/index.mjs';
+import { getPomVersionProperties } from '../server/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 

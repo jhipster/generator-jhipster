@@ -16,26 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
-
-export const entityFiles = {
-  server: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_mongodb'],
-    },
-  ],
-};
-
-export function cleanupMongodbEntityFilesTask({ application, entities }) {}
-
-export default async function writeEntityMongodbFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
-    await this.writeFiles({
-      sections: entityFiles,
-      context: { ...application, ...entity },
-    });
-  }
-}
+export { getJavadoc as javadoc, getApiDescription } from './doc-formatting.mjs';
+export { getDBTypeFromDBValue, getDBCExtraOption } from './database.mjs';
+export { getJavaValueGeneratorForType, getPrimaryKeyValue } from './templates/field-values.mjs';
+export { javaBeanCase, buildJavaGet, buildJavaGetter, buildJavaSetter } from './java-formatting.mjs';
+export * from './files.mjs';
+export * from './dependabot-maven.mjs';

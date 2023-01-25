@@ -16,7 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { getJavadoc as javadoc, getApiDescription } from './doc-formatting.mjs';
-export { getDBTypeFromDBValue, getDBCExtraOption } from './database.mjs';
-export { getJavaValueGeneratorForType, getPrimaryKeyValue } from './templates/field-values.mjs';
-export { javaBeanCase, buildJavaGet, buildJavaGetter, buildJavaSetter } from './java-formatting.mjs';
+import { XMLParser } from 'fast-xml-parser';
+
+/**
+ * Extract properties from pom content
+ * @param pomContent
+ */
+export function getPomProperties(pomContent: string): Record<string, string> {
+  return new XMLParser().parse(pomContent).project.properties;
+}
+
+/**
+ * Extract version properties from pom content
+ * @param pomContent
+ */
+export function getPomVersionProperties(pomContent: string): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(getPomProperties(pomContent))
+      .filter(([property]) => property.endsWith('.version'))
+      .map(([property, value]) => [property.slice(0, -8), value])
+  );
+}
