@@ -22,7 +22,6 @@ import { exec } from 'child_process';
 import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
-import { handleError } from '../base/support/index.mjs';
 import statistics from '../statistics.cjs';
 
 // Global constants
@@ -105,12 +104,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
     return {
       checkBuildTool() {
         if (this.abort) return;
-        const done = this.async();
         if (this.buildTool !== MAVEN) {
-          handleError(this.logguer, 'Sorry, this sub-generator only works with Maven projects for the moment.');
-          this.abort = true;
+          throw new Error('Sorry, this sub-generator only works with Maven projects for the moment.');
         }
-        done();
       },
 
       checkInstallation() {
@@ -118,16 +114,11 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         const done = this.async();
 
         exec('az --version', err => {
-          if (err) {
-            handleError(
-              this.logguer,
-              `You don't have the Azure CLI installed.
-Download it from:
-${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`
-            );
-            this.abort = true;
-          }
-          done();
+          done(
+            new Error(`You don't have the Azure CLI installed.
+          Download it from:
+          ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`)
+          );
         });
       },
 
@@ -141,7 +132,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
               azureLocation: 'eastus',
             });
             this.abort = true;
-            handleError(this.logguer, 'Could not retrieve your Azure default configuration.');
+            throw new Error('Could not retrieve your Azure default configuration.');
           } else {
             const json = JSON.parse(stdout);
             Object.keys(json).forEach(key => {
@@ -279,7 +270,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
         exec(`az group show --name ${this.azureAppServiceResourceGroupName}`, (err, stdout) => {
           if (err) {
             this.abort = true;
-            handleError(this.logguer, 'Could not retrieve your Azure resource group information, it is probably not configured.');
+            throw new Error('Could not retrieve your Azure resource group information, it is probably not configured.');
           } else {
             const json = JSON.parse(stdout);
             this.azureGroupId = json.id;
@@ -296,7 +287,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
         exec(`az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
           if (err) {
             this.abort = true;
-            handleError(this.logguer, 'Could not list your Azure App Service plans');
+            throw new Error('Could not list your Azure App Service plans');
           } else {
             const json = JSON.parse(stdout);
             if (json.filter(currentPlan => currentPlan.name === this.azureAppServicePlan).length > 0) {
@@ -310,10 +301,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                   `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName} --location ${this.azureLocation}`,
                   err => {
                     if (err) {
-                      this.abort = true;
-                      handleError(this.logguer, 'Could not create the Azure App Service plan');
-                      this.logguer.info(err);
-                      done();
+                      done(new Error('Could not create the Azure App Service plan'));
                     } else {
                       this.logguer.info(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
                       this.logguer.info(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
@@ -328,7 +316,7 @@ which is free for the first 30 days`);
             } catch (e) {
               this.logguer.warn(e);
               this.abort = true;
-              handleError(this.logguer, 'Could not manage the Azure App Service plan');
+              throw new Error('Could not manage the Azure App Service plan');
             }
           }
         });
@@ -341,7 +329,7 @@ which is free for the first 30 days`);
         exec(`az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
           if (err) {
             this.abort = true;
-            handleError(this.logguer, 'Could not list your Azure App Service instances');
+            throw new Error('Could not list your Azure App Service instances');
           } else {
             const json = JSON.parse(stdout);
             let applicationAlreadyExists = false;
@@ -358,9 +346,7 @@ which is free for the first 30 days`);
                   err => {
                     if (err) {
                       this.abort = true;
-                      handleError(this.logguer, 'Could not create the Web application');
-                      this.logguer.info(err);
-                      done();
+                      done(new Error('Could not create the Web application'));
                     } else {
                       this.logguer.info(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
                       done();
@@ -373,7 +359,7 @@ which is free for the first 30 days`);
             } catch (e) {
               this.logguer.info(e);
               this.abort = true;
-              handleError(this.logguer, 'Could not manage the Azure App Service Web application');
+              throw new Error('Could not manage the Azure App Service Web application');
             }
           }
         });
@@ -389,7 +375,7 @@ which is free for the first 30 days`);
           (err, stdout) => {
             if (err) {
               this.abort = true;
-              handleError(this.logguer, 'Could not configure Azure App Service instance');
+              throw new Error('Could not configure Azure App Service instance');
             }
             done();
           }
@@ -424,7 +410,7 @@ which is free for the first 30 days`);
               } else {
                 this.logguer.info(err);
                 this.abort = true;
-                handleError(this.logguer, 'Could not install the Azure Application Insights extension');
+                throw new Error('Could not install the Azure Application Insights extension');
               }
               done();
             });
@@ -451,7 +437,7 @@ which is free for the first 30 days`);
                   if (err) {
                     this.logguer.info(err);
                     this.abort = true;
-                    handleError(this.logguer, 'Could not create the Azure Application Insights instance');
+                    throw new Error('Could not create the Azure Application Insights instance');
                   } else {
                     this.logguer.info(chalk.green('The Azure Application Insights instance is created!'));
                     const json = JSON.parse(stdout);
@@ -530,7 +516,6 @@ which is free for the first 30 days`);
       gitHubAction() {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'local') return;
-        const done = this.async();
 
         try {
           this.logguer.info('Test if Git is configured on your project...');
@@ -538,21 +523,19 @@ which is free for the first 30 days`);
           this.logguer.info(chalk.bold('\nUsing existing Git repository'));
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
-          handleError(
-            this.logguer,
+          throw new Error(
             `${chalk.red('Git is not set up on your project!')}
 You need a GitHub project correctly configured in order to use GitHub Actions.`
           );
-          this.abort = true;
-          return;
         }
         const gitAddCmd = 'git add .';
         this.logguer.info(chalk.bold('\nAdding Azure App Service files to the Git repository'));
         this.logguer.info(chalk.cyan(gitAddCmd));
+        const done = this.async();
         exec(gitAddCmd, (err, stdout, stderr) => {
           if (err) {
             this.abort = true;
-            handleError(this.logguer, err);
+            throw new Error(err);
           } else {
             const line = stderr.toString().trimRight();
             if (line.trim().length !== 0) this.logguer.info(line);
@@ -563,7 +546,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
             exec(gitCommitCmd, (err, stdout, stderr) => {
               if (err) {
                 this.abort = true;
-                handleError(this.logguer, err);
+                throw new Error(err);
               } else {
                 const line = stderr.toString().trimRight();
                 if (line.trim().length !== 0) this.logguer.info(line);
@@ -573,7 +556,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                 exec(gitPushCmd, (err, stdout, stderr) => {
                   if (err) {
                     this.abort = true;
-                    handleError(this.logguer, err);
+                    throw new Error(err);
                   } else {
                     const line = stderr.toString().trimRight();
                     if (line.trim().length !== 0) this.logguer.info(line);
@@ -608,7 +591,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
         const child = this.buildApplication(this.buildTool, 'prod', false, err => {
           if (err) {
             this.abort = true;
-            handleError(this.logguer, err);
+            throw new Error(err);
           }
           done();
         });

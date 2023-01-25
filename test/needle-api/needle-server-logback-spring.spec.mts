@@ -4,7 +4,6 @@ import ServerGenerator from '../../generators/server/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
 import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
-import { handleError } from '../../generators/base/support/index.mjs';
 
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const filePath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
@@ -17,7 +16,7 @@ const mockBlueprintSubGen: any = class extends ServerGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      handleError(this.logguer, 'This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;

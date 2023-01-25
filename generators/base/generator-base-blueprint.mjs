@@ -21,7 +21,6 @@ import fs from 'fs';
 import path from 'path';
 import semver from 'semver';
 
-import { handleError } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace } from '../utils.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
@@ -503,7 +502,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       // Verify if the blueprints hava been registered.
       const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
       if (missing && missing.length > 0) {
-        handleError(this.logguer, `Some blueprints were not found ${missing}, you should install them manually`);
+        throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
       }
     }
   }
@@ -596,7 +595,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
    */
   _checkBlueprint(blueprint) {
     if (blueprint === 'generator-jhipster') {
-      handleError(this.logguer, `You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
+      throw new Error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
     }
     this._findBlueprintPackageJson(blueprint);
   }
@@ -634,8 +633,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
         return;
       }
-      handleError(
-        this.logguer,
+      throw new Error(
         `The installed ${chalk.yellow(
           blueprintPkgName
         )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`

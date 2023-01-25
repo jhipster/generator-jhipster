@@ -21,7 +21,6 @@ import path from 'path';
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
 import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.mjs';
-import { handleError } from '../../base/support/index.mjs';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
 const { ANGULAR, VUE } = clientFrameworkTypes;
@@ -197,14 +196,9 @@ export const getEntityParentPathAddition = (logguer, env, clientRootFolder) => {
   const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
   if (relative.includes('app')) {
     // Relative path outside angular base dir.
-    const message = `
-                "clientRootFolder outside app base dir '${clientRootFolder}'"
-            `;
-    // Test case doesn't have a environment instance so return 'error'
-    if (env === undefined) {
-      throw new Error(message);
-    }
-    handleError(logguer, message);
+    throw new Error(`
+    "clientRootFolder outside app base dir '${clientRootFolder}'"
+`);
   }
   const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
   if (!entityFolderPathAddition) {

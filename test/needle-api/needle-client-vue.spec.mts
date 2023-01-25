@@ -1,7 +1,6 @@
 import helpers from 'yeoman-test';
 
 import ClientGenerator from '../../generators/client/index.mjs';
-import { handleError } from '../../generators/base/support/index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import { getGenerator } from '../support/index.mjs';
@@ -14,7 +13,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     super(args, opts, features);
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
     if (!jhContext) {
-      handleError(this.logguer, "This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
     this.sbsBlueprint = true;
   }
