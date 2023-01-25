@@ -23,4 +23,3 @@ export {
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
 } from './asserts.mjs';
 export { getPkType } from './pk-utils.mjs';
-export { getEntityFolderName } from './template-utils.mjs';
