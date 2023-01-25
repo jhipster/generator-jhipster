@@ -23,11 +23,7 @@
  * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
  *                   obtained by parsing the given string representation of the creationTimestamp.
  */
-<<<<<<< skip_ci-logger
-const parseCreationTimestamp = (logger, creationTimestampOption) => {
-=======
-export const parseCreationTimestamp = (logguer, creationTimestampOption) => {
->>>>>>> main
+export const parseCreationTimestamp = (logger, creationTimestampOption) => {
   let creationTimestamp;
   if (creationTimestampOption) {
     creationTimestamp = Date.parse(creationTimestampOption);
