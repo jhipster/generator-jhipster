@@ -19,9 +19,8 @@
 import _ from 'lodash';
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { loadRequiredConfigIntoEntity } from '../../utils/entity.mjs';
-import { getPkType } from '../entity/support/index.mjs';
 
-const { SQL } = databaseTypes;
+const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
@@ -57,7 +56,8 @@ export function createUserEntity(customUserData = {}, application) {
   loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
 
   const oauth2 = user.authenticationType === OAUTH2;
-  const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : getPkType(this.jhipsterConfig, user.databaseType);
+  // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
+  const userIdType = oauth2 || user.databaseType === CASSANDRA ? TYPE_STRING : undefined;
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
   addOrExtendFields(user.fields, [

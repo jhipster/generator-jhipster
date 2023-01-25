@@ -19,7 +19,7 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 import path from 'path';
-import { getPkType } from '../generators/entity/support/index.mjs';
+import { getDatabaseTypeData } from '../generators/server/support/index.mjs';
 import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
@@ -34,7 +34,6 @@ import {
   reservedKeywords,
   searchEngineTypes,
 } from '../jdl/jhipster/index.mjs';
-import { OFFICIAL_DATABASE_TYPE_NAMES } from '../generators/server/support/database.mjs';
 
 const { ELASTICSEARCH } = searchEngineTypes;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -421,7 +420,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       idField.dynamic = false;
       // Allow ids type to be empty and fallback to default type for the database.
       if (!idField.fieldType) {
-        idField.fieldType = getPkType(generator, entityWithConfig.databaseType);
+        idField.fieldType = generator.jhipsterConfig.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;
@@ -704,7 +703,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
 
 export function preparePostEntityServerDerivedProperties(entity) {
   const { databaseType, reactive } = entity;
-  entity.officialDatabaseType = OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
+  entity.officialDatabaseType = getDatabaseTypeData(databaseType).name;
   let springDataDatabase;
   if (entity.databaseType !== SQL) {
     springDataDatabase = entity.officialDatabaseType;

@@ -18,7 +18,6 @@
  */
 import fs from 'fs';
 import { buildToolTypes } from '../../../jdl/jhipster/index.mjs';
-import { handleError } from '../../base/support/index.mjs';
 
 const { GRADLE } = buildToolTypes;
 const FILE_EXTENSION = '.war';
@@ -31,7 +30,7 @@ const S3 = function S3(Aws, generator) {
   try {
     Progressbar = require('progress'); // eslint-disable-line
   } catch (e) {
-    handleError(generator.logguer, `Something went wrong while running jhipster:aws:\n${e}`);
+    throw new Error(`Something went wrong while running jhipster:aws:\n${e}`);
   }
 };
 

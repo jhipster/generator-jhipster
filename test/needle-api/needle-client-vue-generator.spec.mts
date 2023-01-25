@@ -6,7 +6,6 @@ import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 import VueGenerator from '../../generators/vue/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
-import { handleError } from '../../generators/base/support/index.mjs';
 
 const { VUE } = clientFrameworkTypes;
 
@@ -16,7 +15,7 @@ const mockBlueprintSubGen: any = class extends VueGenerator {
     super(args, opts, features);
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
     if (!jhContext) {
-      handleError(this.logguer, "This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
     this.sbsBlueprint = true;
   }

@@ -24,7 +24,6 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseGenerator from '../base/index.mjs';
-import { handleError } from '../base/support/index.mjs';
 import { GENERATOR_GAE } from '../generator-list.mjs';
 import statistics from '../statistics.cjs';
 import dockerPrompts from '../base-docker/docker-prompts.mjs';

@@ -22,7 +22,6 @@ import _ from 'lodash';
 
 import { generateDateTimeFormat } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { handleError } from '../base/support/index.mjs';
 import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR, LANGUAGES } from '../generator-constants.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
@@ -87,8 +86,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       this.languagesToApply.forEach(language => {
         if (!this.isSupportedLanguage(language)) {
           this.logguer.log('\n');
-          handleError(
-            this.logguer,
+          throw new Error(
             `Unsupported language "${language}" passed as argument to language generator.` +
               `\nSupported languages: ${_.map(LANGUAGES, o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
           );

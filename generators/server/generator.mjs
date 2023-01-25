@@ -95,10 +95,10 @@ import { normalizePathEnd } from '../base/utils.mjs';
 import {
   getApiDescription,
   javadoc,
-  getDBCExtraOption as getDBExtraOption,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
 } from './support/index.mjs';
+import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 
 const dbTypes = fieldTypes;
 const {

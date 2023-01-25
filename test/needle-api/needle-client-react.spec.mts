@@ -5,7 +5,6 @@ import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
-import { handleError } from '../../generators/base/support/index.mjs';
 
 const { REACT } = clientFrameworkTypes;
 
@@ -17,7 +16,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      handleError(this.logguer, 'This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;
