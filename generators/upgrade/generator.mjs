@@ -26,7 +26,7 @@ import path from 'path';
 import childProcess from 'child_process';
 
 import BaseGenerator from '../base/index.mjs';
-import { upgradeFiles } from '../cleanup.mjs';
+import { upgradeFilesTask as upgradeLanguagesFilesTask } from '../languages/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
 import { parseBluePrints } from '../../utils/blueprint.mjs';
@@ -162,7 +162,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _upgradeFiles() {
-    if (upgradeFiles(this)) {
+    if (upgradeLanguagesFilesTask.call(this)) {
       const gitCommit = this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent });
       if (gitCommit.code !== 0) throw new Error(`Unable to prepare upgrade:\n${gitCommit.stderr}`);
       this.success('Upgrade preparation');
