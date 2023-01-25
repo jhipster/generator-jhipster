@@ -188,3 +188,9 @@ export function getDatabaseData(databaseType: string) {
   }
   return databaseData[databaseType];
 }
+
+export const getDBCExtraOption = databaseType => {
+  const databaseDataForType = databaseData[databaseType];
+  const { extraOptions = '' } = databaseDataForType;
+  return extraOptions;
+};

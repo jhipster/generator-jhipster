@@ -1,14 +1,44 @@
-import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
-import { databaseData } from '../../sql/support/index.mjs';
+import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.mjs';
 
-const SQL = databaseTypes.SQL;
+const dbTypes = fieldTypes;
+const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
+const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
 
-export const OFFICIAL_DATABASE_TYPE_NAMES = {
-  cassandra: 'Cassandra',
-  couchbase: 'Couchbase',
-  mongodb: 'MongoDB',
-  neo4j: 'Neo4j',
-  sql: 'SQL',
+type DatabaseTypeData = {
+  name: string;
+  defaultPrimaryKeyType: string;
+};
+
+const databaseTypeDataFallback: DatabaseTypeData = {
+  name: 'Unknown',
+  defaultPrimaryKeyType: TYPE_LONG,
+};
+
+export const databaseTypeData: Record<string, DatabaseTypeData> = {
+  [CASSANDRA]: {
+    name: 'Cassandra',
+    defaultPrimaryKeyType: TYPE_UUID,
+  },
+  [COUCHBASE]: {
+    name: 'Couchbase',
+    defaultPrimaryKeyType: TYPE_STRING,
+  },
+  [MONGODB]: {
+    name: 'MongoDB',
+    defaultPrimaryKeyType: TYPE_STRING,
+  },
+  [NEO4J]: {
+    name: 'Neo4j',
+    defaultPrimaryKeyType: TYPE_STRING,
+  },
+  [SQL]: {
+    name: 'SQL',
+    defaultPrimaryKeyType: TYPE_LONG,
+  },
+};
+
+export const getDatabaseTypeData = (databaseType: string): DatabaseTypeData => {
+  return databaseTypeData[databaseType] ?? databaseTypeDataFallback;
 };
 
 export const R2DBC_DB_OPTIONS = [
@@ -63,9 +93,3 @@ export function getDBTypeFromDBValue(db) {
   }
   return db;
 }
-
-export const getDBCExtraOption = databaseType => {
-  const databaseDataForType = databaseData[databaseType];
-  const { extraOptions = '' } = databaseDataForType;
-  return extraOptions;
-};
