@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,16 +19,12 @@
 import entityOptions from './entity-options.js';
 
 const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = entityOptions;
-
 const { MAPSTRUCT } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
-
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const NO_SERVICE = ServiceTypes.NO;
-
 const { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH } = SearchTypes;
-
-export const Options = {
+const Options = {
   DTO: 'dto',
   SERVICE: 'service',
   PAGINATION: 'pagination',
@@ -38,17 +34,9 @@ export const Options = {
   CLIENT_ROOT_FOLDER: 'clientRootFolder',
 };
 
-export const DTO = Options.DTO;
-export const SERVICE = Options.SERVICE;
-export const PAGINATION = Options.PAGINATION;
-export const MICROSERVICE = Options.MICROSERVICE;
-export const SEARCH = Options.SEARCH;
-export const ANGULAR_SUFFIX = Options.ANGULAR_SUFFIX;
-export const CLIENT_ROOT_FOLDER = Options.CLIENT_ROOT_FOLDER;
-
 const optionNames = Object.values(Options);
 
-export const Values = {
+const Values = {
   [Options.DTO]: { MAPSTRUCT, NO: NO_MAPPER },
   [Options.SERVICE]: { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE },
   [Options.PAGINATION]: {
@@ -59,17 +47,17 @@ export const Values = {
   [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH },
 };
 
-export const DefaultValues = {
+const DefaultValues = {
   [Options.DTO]: Values[Options.DTO].NO,
   [Options.SERVICE]: Values[Options.SERVICE].NO,
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
-export function getOptionName(optionValue) {
+function getOptionName(optionValue) {
   return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 
-export const OptionValues = {
+const OptionValues = {
   mapstruct: 'MAPSTRUCT',
   serviceClass: 'SERVICE_CLASS',
   serviceImpl: 'SERVICE_IMPL',

@@ -20,7 +20,7 @@
     "jhiPrefix": "jhi",
     "jhipsterVersion": "6.6.0",
     "languages": ["en", "fr"],
-    "messageBroker": false,
+    "messageBroker": "no",
     "nativeLanguage": "en",
     "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
@@ -29,8 +29,8 @@
     "reactive": true,
     "searchEngine": "elasticsearch",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

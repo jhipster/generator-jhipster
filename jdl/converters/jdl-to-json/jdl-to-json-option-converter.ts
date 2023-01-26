@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,22 +18,20 @@
  */
 
 import logger from '../../utils/objects/logger.js';
-import UnaryOptions from '../../jhipster/unary-options.js';
-
-import BinaryOptions from '../../jhipster/binary-options.js';
-import EntityOptions from '../../jhipster/entity-options.js';
+import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.mjs';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 
-const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = UnaryOptions;
+const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
-const { ServiceTypes } = EntityOptions;
+const { ServiceTypes } = entityOptions;
+const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 
 const NO_SERVICE = ServiceTypes.NO;
 const {
   Options: { ANGULAR_SUFFIX, MICROSERVICE, SEARCH, DTO },
-} = BinaryOptions;
-const serviceClassOptionValue = BinaryOptions.Values.service.SERVICE_CLASS;
+} = binaryOptions;
+const serviceClassOptionValue = binaryOptions.Values.service.SERVICE_CLASS;
 
 const USER = 'user';
 
@@ -124,7 +122,7 @@ function getJSONOptionKeyAndValue(jdlOption) {
 
 function preventEntitiesFromBeingSearched(entityNames) {
   entityNames.forEach(entityName => {
-    setOptionToEntityName({ optionName: 'searchEngine', optionValue: false }, entityName);
+    setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
   });
 }
 

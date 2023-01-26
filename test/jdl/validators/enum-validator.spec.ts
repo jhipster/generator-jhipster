@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,10 +18,10 @@
  */
 
 import { expect } from 'chai';
-import JDLEnum from '../../../jdl/models/jdl-enum.js';
+import { JDLEnum } from '../../../jdl/models/index.mjs';
 import EnumValidator from '../../../jdl/validators/enum-validator.js';
 
-describe('EnumValidator', () => {
+describe('jdl - EnumValidator', () => {
   let validator;
 
   before(() => {

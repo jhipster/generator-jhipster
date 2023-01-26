@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,17 +25,16 @@ import { expect } from 'chai';
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import ApplicationTypes from '../../jdl/jhipster/application-types.js';
-import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
-import DatabaseTypes from '../../jdl/jhipster/database-types.js';
+import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer.js';
 
+const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { NO: NO_CLIENT_FRAMEWORK } = ClientFrameworkTypes;
+const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
-describe('JDLImporter', () => {
+describe('jdl - JDLImporter', () => {
   describe('createImporterFromFiles', () => {
     context('when not passing files', () => {
       it('should fail', () => {
@@ -61,8 +60,8 @@ describe('JDLImporter', () => {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'big_sample.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
         returned.exportedEntities = returned.exportedEntities
@@ -393,8 +392,8 @@ relationship OneToOne {
       before("importing a JDL file with the 'no' database type", () => {
         importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'simple.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.NO,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.NO,
         });
       });
 
@@ -412,7 +411,7 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'annotations.jdl')], {
           applicationName: 'toto',
-          databaseType: DatabaseTypes.SQL,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
       });
@@ -445,8 +444,8 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'regex_validation.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
         entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Customer.json'), { encoding: 'utf8' }));
@@ -469,8 +468,8 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'pattern_validation_with_quote.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
       });
@@ -655,112 +654,112 @@ paginate * with infinite-scroll
 
       it('should set them', () => {
         jestExpect(entityA).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityB).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "b",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "B",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityCInTata).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
     "tutu",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "c",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "C",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityCInTutu).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
     "tutu",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "c",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "C",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityD).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tutu",
   ],
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "d",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "D",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "serviceClass",
 }
 `);
         jestExpect(entityE).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tutu",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "e",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "E",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -948,17 +947,18 @@ ${entities}`,
               gradleEnterpriseHost: '',
               jhiPrefix: 'jhi',
               languages: [],
-              messageBroker: false,
+              messageBroker: 'no',
+              nativeLanguage: 'en',
               packageFolder: 'com/mycompany/myapp',
               packageName: 'com.mycompany.myapp',
               prodDatabaseType: 'postgresql',
-              searchEngine: false,
+              searchEngine: 'no',
               reactive: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
+              serverPort: 8080,
+              serviceDiscoveryType: 'no',
               skipUserManagement: false,
               testFrameworks: [],
-              websocket: false,
+              websocket: 'no',
               withAdminUi: true,
             },
           },
@@ -1087,8 +1087,8 @@ relationship OneToOne {
 
       it('should export them', () => {
         jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
-Object {
-  "options": Object {
+{
+  "options": {
     "notId": "value",
     "something": true,
   },
@@ -1101,8 +1101,8 @@ Object {
 }
 `);
         jestExpect(relationshipOnDestination).toMatchInlineSnapshot(`
-Object {
-  "options": Object {
+{
+  "options": {
     "id": true,
   },
   "otherEntityName": "a",
@@ -1127,11 +1127,11 @@ Object {
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "baseName": "foo",
   },
-  Object {
+  {
     "baseName": "bar",
   },
 ]

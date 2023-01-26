@@ -1,10 +1,8 @@
 import helpers from 'yeoman-test';
 
-import EnvironmentBuilder from '../cli/environment-builder.cjs';
-import constants from '../generators/generator-constants.cjs';
+import EnvironmentBuilder from '../cli/environment-builder.mjs';
+import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generators/generator-constants.mjs';
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
 
 const pageName = 'MyTestPage';
@@ -33,7 +31,7 @@ const createPage = runResult =>
     })
     .run();
 
-describe('Page subgenerator', () => {
+describe('generator - page', () => {
   it.skip('with angular client framework');
 
   it.skip('with react client framework');

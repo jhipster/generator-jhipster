@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,16 +18,17 @@
  */
 
 import _ from 'lodash';
-import Validations from '../../jhipster/validations.js';
+import { validations } from '../../jhipster/index.mjs';
 import formatComment from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';
 import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { Field } from '../types.js';
-import JDLEntity from '../../models/jdl-entity.js';
+import { JDLEntity } from '../../models/index.mjs';
 
-const { UNIQUE, REQUIRED } = Validations;
-
+const {
+  Validations: { UNIQUE, REQUIRED },
+} = validations;
 const { isBlobType } = fieldTypes;
 const { ANY_BLOB, BLOB, IMAGE_BLOB, TEXT_BLOB } = fieldTypes.CommonDBTypes;
 const { ANY, IMAGE, TEXT } = fieldTypes.BlobTypes;

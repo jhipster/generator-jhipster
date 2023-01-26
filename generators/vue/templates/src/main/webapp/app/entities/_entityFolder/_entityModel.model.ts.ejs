@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,9 +18,9 @@
 -%>
 <%
 const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
-const typeImports = this.generateEntityClientImports(relationships, dto, clientFramework);
+const typeImports = this.generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
-const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id), clientFramework);
+const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 %>
 <%_ typeImports.forEach( (importedPath, importedType) => {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');

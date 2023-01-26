@@ -72,10 +72,10 @@ function revertTempDir(dest = getPackageFilePath(), tempDir) {
       tempDir = cwd;
     }
   }
+  process.chdir(dest);
   if (tempDir && dest !== tempDir) {
     fs.rmSync(tempDir, { recursive: true });
   }
-  process.chdir(dest);
 }
 
 function copyTemplateBlueprints(destDir, ...blueprintNames) {

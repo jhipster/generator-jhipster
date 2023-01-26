@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -35,7 +35,7 @@ const generator = basename(__dirname);
 
 const mockedGenerators = ['jhipster:init'];
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     const generatorList = await import('../generator-list.mjs');
     await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -81,8 +81,8 @@ describe(`JHipster ${generator} generator`, () => {
       });
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
 }
@@ -102,17 +102,17 @@ Object {
       });
       it('should write java files with gradle build tool and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".blueprint/app/generator.mjs": Object {
+{
+  ".blueprint/app/generator.mjs": {
     "stateCleared": "modified",
   },
-  ".blueprint/app/index.mjs": Object {
+  ".blueprint/app/index.mjs": {
     "stateCleared": "modified",
   },
-  ".blueprint/app/templates/template-file-app.ejs": Object {
+  ".blueprint/app/templates/template-file-app.ejs": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
 }

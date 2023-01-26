@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { convertEnums } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter.js';
 
-describe('EnumConverter', () => {
+describe('jdl - EnumConverter', () => {
   describe('convertEnums', () => {
     context('when not passing enumerations', () => {
       it('should fail', () => {
@@ -46,7 +46,7 @@ describe('EnumConverter', () => {
 
       it('should convert them', () => {
         expect(convertedEnums).toMatchInlineSnapshot(`
-Array [
+[
   JDLEnum {
     "comment": "A comment",
     "name": "Country",

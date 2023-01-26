@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,7 +29,7 @@ const __dirname = dirname(__filename);
 const generatorPath = join(__dirname, 'index.mjs');
 const generator = basename(__dirname);
 
-describe(`JHipster ${generator} needles`, () => {
+describe(`generator - ${generator} - needles`, () => {
   describe('generated project', () => {
     let runResult;
     before(async () => {
@@ -82,8 +82,8 @@ describe(`JHipster ${generator} needles`, () => {
 
         it('should match snapshot', () => {
           expect(snapshot).toMatchInlineSnapshot(`
-Object {
-  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": Object {
+{
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "contents": "package com.mycompany.myapp.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -94,7 +94,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Properties are configured in the {@code application.yml} file.
  * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
  */
-@ConfigurationProperties(prefix = \\"application\\", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
     private Foo foo;
     // jhipster-needle-application-properties-property

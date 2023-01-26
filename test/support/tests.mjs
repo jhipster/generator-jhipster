@@ -6,9 +6,7 @@ import { fileURLToPath } from 'url';
 
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 import { skipPrettierHelpers as helpers } from './helpers.mjs';
-import priorities from '../../generators/base-application/priorities.cjs';
-
-const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = priorities;
+import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.mjs';
 
 const {
   CONFIGURING_EACH_ENTITY,
@@ -246,7 +244,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .run(generatorPath)
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withOptions({ blueprint: 'foo', skipChecks: true, baseName: 'jhipster' })
-        .on('ready', generator => {
+        .onGenerator(generator => {
           spy = addSpies(generator);
         });
     });
@@ -297,7 +295,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .run(generatorPath)
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withOptions(options)
-        .on('ready', generator => {
+        .onGenerator(generator => {
           spy = addSpies(generator);
         });
 

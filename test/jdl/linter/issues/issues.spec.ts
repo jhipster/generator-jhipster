@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,14 +20,13 @@
 import { expect } from 'chai';
 import Issues from '../../../../jdl/linters/issues/issues.js';
 import { rulesNames } from '../../../../jdl/linters/rules.js';
-import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
+import { relationshipTypes } from '../../../../jdl/jhipster/index.mjs';
 import EntityIssue from '../../../../jdl/linters/issues/entity-issue.js';
 import FieldIssue from '../../../../jdl/linters/issues/field-issue.js';
 import EnumIssue from '../../../../jdl/linters/issues/enum-issue.js';
 import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue.js';
-import AbstractIssue from '../../../../jdl/linters/issues/abstract-issue.js';
 
-describe('Issues', () => {
+describe('jdl - Issues', () => {
   describe('getNumberOfIssues', () => {
     let issues: Issues;
 
@@ -66,7 +65,7 @@ describe('Issues', () => {
             ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
           }),
         ]);
       });
@@ -177,7 +176,7 @@ describe('Issues', () => {
             ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
           }),
         ]);
       });
@@ -228,7 +227,7 @@ describe('Issues', () => {
           ruleName: rulesNames.REL_INDIVIDUAL_DECL,
           from: 'A',
           to: 'A',
-          type: RelationshipTypes.ONE_TO_ONE,
+          type: relationshipTypes.ONE_TO_ONE,
         });
 
         issues.addEntityIssues([entityIssue]);

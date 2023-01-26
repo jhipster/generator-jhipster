@@ -2,13 +2,13 @@
     "userManagement": {
         "home": {
             "title": "Kullanıcılar",
-            "refreshListLabel": "Refresh list",
+            "refreshListLabel": "Listeyi yenile",
             "createLabel": "Yeni kullanıcı oluştur",
             "createOrEditLabel": "Kullanıcı oluştur veya düzenle"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "A user is updated with identifier {{ param }}",
-        "deleted": "A user is deleted with identifier {{ param }}",
+        "created": "{{ param }} ID ile yeni bir user eklendi.",
+        "updated": "{{ param }} nolu user güncellendi",
+        "deleted": "{{ param }} nolu user silindi",
         "delete": {
             "question": "{{ login }} kullanıcısını silmek istediğinize emin misiniz?"
         },
@@ -21,7 +21,7 @@
         "email": "Eposta",
         "activated": "Aktif",
         "deactivated": "Deaktif",
-        "profiles": "Profiller",
+        "profiles": "Roller",
         "langKey": "Dil",
         "createdBy": "Oluşturan",
         "createdDate": "Oluşturma tarihi",

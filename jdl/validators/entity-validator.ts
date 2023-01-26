@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,7 +18,9 @@
  */
 
 import Validator from './validator.js';
-import { isReservedClassName } from '../jhipster/reserved-keywords.js';
+import { reservedKeywords } from '../jhipster/index.mjs';
+
+const { isReservedClassName } = reservedKeywords;
 
 export default class EntityValidator extends Validator {
   constructor() {

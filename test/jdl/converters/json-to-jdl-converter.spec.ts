@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,7 +29,7 @@ import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JSONToJDLConverter', () => {
+describe('jdl - JSONToJDLConverter', () => {
   describe('convertToJDL', () => {
     context('when there is a yo-rc file in the passed directory', () => {
       let dir;
@@ -66,23 +66,24 @@ describe('JSONToJDLConverter', () => {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost \\"\\"
+    gradleEnterpriseHost ""
     jhiPrefix jhi
-    jhipsterVersion \\"6.0.1\\"
-    jwtSecretKey \\"HIDDEN\\"
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
+    withAdminUi false
   }
 }
 
@@ -119,23 +120,24 @@ describe('JSONToJDLConverter', () => {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost \\"\\"
+    gradleEnterpriseHost ""
     jhiPrefix jhi
-    jhipsterVersion \\"6.0.1\\"
-    jwtSecretKey \\"HIDDEN\\"
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
+    withAdminUi false
   }
 
   entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
@@ -253,23 +255,24 @@ paginate Country with pager
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost \\"\\"
+    gradleEnterpriseHost ""
     jhiPrefix jhi
-    jhipsterVersion \\"6.0.1\\"
-    jwtSecretKey \\"HIDDEN\\"
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.app1
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
+    withAdminUi false
   }
 
   entities Region
@@ -290,23 +293,24 @@ application {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost \\"\\"
+    gradleEnterpriseHost ""
     jhiPrefix jhi
-    jhipsterVersion \\"6.0.1\\"
-    jwtSecretKey \\"HIDDEN\\"
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.app2
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
+    withAdminUi false
   }
 
   entities Country, Location
@@ -327,23 +331,24 @@ application {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost \\"\\"
+    gradleEnterpriseHost ""
     jhiPrefix jhi
-    jhipsterVersion \\"6.0.1\\"
-    jwtSecretKey \\"HIDDEN\\"
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.app3
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
+    withAdminUi false
   }
 }
 

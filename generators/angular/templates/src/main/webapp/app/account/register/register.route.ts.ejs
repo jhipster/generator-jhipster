@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,10 +18,12 @@
 -%>
 import { Route } from '@angular/router';
 
-import { RegisterComponent } from './register.component';
+import RegisterComponent from './register.component';
 
-export const registerRoute: Route = {
+const registerRoute: Route = {
   path: 'register',
   component: RegisterComponent,
   title: 'register.title',
 };
+
+export default registerRoute;

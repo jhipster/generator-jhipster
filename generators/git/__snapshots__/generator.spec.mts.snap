@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster git generator with default config should write files and match snapshot 1`] = `
-Object {
-  ".gitattributes": Object {
+exports[`generator - git with default config should write files and match snapshot 1`] = `
+{
+  ".gitattributes": {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
+  ".gitignore": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
 }

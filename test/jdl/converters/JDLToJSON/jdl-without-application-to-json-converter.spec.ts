@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,33 +28,37 @@ import { expect } from 'chai';
 
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 
-import ApplicationTypes from '../../../../jdl/jhipster/application-types.js';
-import DatabaseTypes from '../../../../jdl/jhipster/database-types.js';
+import {
+  applicationTypes,
+  databaseTypes,
+  fieldTypes,
+  validations,
+  unaryOptions,
+  binaryOptions,
+  relationshipTypes,
+  relationshipOptions,
+} from '../../../../jdl/jhipster/index.mjs';
 
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
 import JDLField from '../../../../jdl/models/jdl-field.js';
-import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
 import JDLRelationship from '../../../../jdl/models/jdl-relationship.js';
 import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
-import FieldTypes from '../../../../jdl/jhipster/field-types.js';
-import Validations from '../../../../jdl/jhipster/validations.js';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
-import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
-import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
-import RelationshipOptions from '../../../../jdl/jhipster/relationship-options.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 
-const { CommonDBTypes } = FieldTypes;
-const { MONOLITH } = ApplicationTypes;
-const { SQL } = DatabaseTypes;
+const {
+  Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
+} = validations;
+const { MONOLITH } = applicationTypes;
+const { CommonDBTypes } = fieldTypes;
+const { SQL } = databaseTypes;
 
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = RelationshipTypes;
-const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 
-describe('JDLWithoutApplicationToJSONConverter', () => {
+describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
   describe('convert', () => {
     context('when passing invalid parameters', () => {
       context('such as no parameter', () => {
@@ -161,14 +165,14 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -186,62 +190,62 @@ JSONEntity {
           });
           const options = [
             new JDLUnaryOption({
-              name: UnaryOptions.EMBEDDED,
+              name: unaryOptions.EMBEDDED,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.NO_FLUENT_METHOD,
+              name: unaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.FILTER,
+              name: unaryOptions.FILTER,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.READ_ONLY,
+              name: unaryOptions.READ_ONLY,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.SKIP_CLIENT,
+              name: unaryOptions.SKIP_CLIENT,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.SKIP_SERVER,
+              name: unaryOptions.SKIP_SERVER,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.ANGULAR_SUFFIX,
+              name: binaryOptions.Options.ANGULAR_SUFFIX,
               value: 'suffix',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
+              name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
               value: '../client_root_folder',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
-              value: BinaryOptions.Values.dto.MAPSTRUCT,
+              name: binaryOptions.Options.DTO,
+              value: binaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.MICROSERVICE,
+              name: binaryOptions.Options.MICROSERVICE,
               value: 'myMs',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.PAGINATION,
-              value: BinaryOptions.Values.pagination.PAGINATION,
+              name: binaryOptions.Options.PAGINATION,
+              value: binaryOptions.Values.pagination.PAGINATION,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.SEARCH,
-              value: BinaryOptions.Values.search.COUCHBASE,
+              name: binaryOptions.Options.SEARCH,
+              value: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.SERVICE,
-              value: BinaryOptions.Values.service.SERVICE_IMPL,
+              name: binaryOptions.Options.SERVICE,
+              value: binaryOptions.Values.service.SERVICE_IMPL,
               entityNames: ['A'],
             }),
           ];
@@ -265,7 +269,7 @@ JSONEntity {
   "dto": "mapstruct",
   "embedded": true,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": false,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": true,
@@ -273,7 +277,7 @@ JSONEntity {
   "name": "A",
   "pagination": "pagination",
   "readOnly": true,
-  "relationships": Array [],
+  "relationships": [],
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,
@@ -297,8 +301,8 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
-              value: BinaryOptions.Values.dto.MAPSTRUCT,
+              name: binaryOptions.Options.DTO,
+              value: binaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             })
           );
@@ -328,14 +332,14 @@ JSONEntity {
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "serviceClass",
 }
 `);
@@ -356,7 +360,7 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: UnaryOptions.FILTER,
+              name: unaryOptions.FILTER,
               entityNames: ['A'],
             })
           );
@@ -386,14 +390,14 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": true,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "serviceClass",
 }
 `);
@@ -412,8 +416,8 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: BinaryOptions.Options.SEARCH,
-              values: BinaryOptions.Values.search.COUCHBASE,
+              name: binaryOptions.Options.SEARCH,
+              values: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
             })
@@ -434,15 +438,15 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
-  "searchEngine": false,
+  "relationships": [],
+  "searchEngine": "no",
   "service": "no",
 }
 `);
@@ -486,12 +490,12 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "firstField",
       "fieldType": "String",
     },
-    Object {
+    {
       "fieldName": "secondField",
       "fieldType": "Integer",
     },
@@ -502,7 +506,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -555,23 +559,23 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "anyBlobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
     },
-    Object {
+    {
       "fieldName": "textBlobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "text",
     },
-    Object {
+    {
       "fieldName": "blobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
     },
-    Object {
+    {
       "fieldName": "imageBlobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "image",
@@ -583,7 +587,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -622,8 +626,8 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "enumField",
       "fieldType": "CustomEnum",
       "fieldValues": "AA,AB",
@@ -635,7 +639,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -674,8 +678,8 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "firstField",
       "fieldType": "String",
       "javadoc": "The best field",
@@ -687,7 +691,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -716,40 +720,40 @@ JSONEntity {
               type: CommonDBTypes.ANY_BLOB,
             });
             const requiredValidation = new JDLValidation({
-              name: Validations.REQUIRED,
+              name: REQUIRED,
               value: true,
             });
             const uniqueValidation = new JDLValidation({
-              name: Validations.UNIQUE,
+              name: UNIQUE,
               value: true,
             });
             const minValidation = new JDLValidation({
-              name: Validations.MIN,
+              name: MIN,
               value: 0,
             });
             const maxValidation = new JDLValidation({
-              name: Validations.MAX,
+              name: MAX,
               value: 10,
             });
             const minLengthValidation = new JDLValidation({
-              name: Validations.MINLENGTH,
+              name: MINLENGTH,
               value: 0,
             });
             const maxLengthValidation = new JDLValidation({
-              name: Validations.MAXLENGTH,
+              name: MAXLENGTH,
               value: 10,
             });
             const patternValidation = new JDLValidation({
-              name: Validations.PATTERN,
+              name: PATTERN,
               // eslint-disable-next-line prettier/prettier,no-useless-escape
               value: '^d$',
             });
             const minBytesValidation = new JDLValidation({
-              name: Validations.MINBYTES,
+              name: MINBYTES,
               value: 0,
             });
             const maxBytesValidation = new JDLValidation({
-              name: Validations.MAXBYTES,
+              name: MAXBYTES,
               value: 10,
             });
             stringField.addValidation(requiredValidation);
@@ -781,11 +785,11 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "stringField",
       "fieldType": "String",
-      "fieldValidateRules": Array [
+      "fieldValidateRules": [
         "required",
         "unique",
         "minlength",
@@ -796,21 +800,21 @@ JSONEntity {
       "fieldValidateRulesMinlength": 0,
       "fieldValidateRulesPattern": "^d$",
     },
-    Object {
+    {
       "fieldName": "integerField",
       "fieldType": "Integer",
-      "fieldValidateRules": Array [
+      "fieldValidateRules": [
         "min",
         "max",
       ],
       "fieldValidateRulesMax": 10,
       "fieldValidateRulesMin": 0,
     },
-    Object {
+    {
       "fieldName": "blobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
-      "fieldValidateRules": Array [
+      "fieldValidateRules": [
         "minbytes",
         "maxbytes",
       ],
@@ -824,7 +828,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -866,12 +870,12 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "firstField",
       "fieldType": "String",
       "javadoc": "The best field",
-      "options": Object {
+      "options": {
         "id": 42,
       },
     },
@@ -882,7 +886,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -944,27 +948,27 @@ JSONEntity {
 
           it('should convert them', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "ownerSide": true,
     "relationshipName": "b",
     "relationshipType": "one-to-one",
   },
-  Object {
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "relationshipName": "b",
     "relationshipType": "one-to-many",
   },
-  Object {
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "relationshipName": "b",
     "relationshipType": "many-to-one",
   },
-  Object {
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "ownerSide": true,
@@ -974,27 +978,27 @@ Array [
 ]
 `);
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "ownerSide": false,
     "relationshipName": "a",
     "relationshipType": "one-to-one",
   },
-  Object {
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "relationshipName": "a",
     "relationshipType": "many-to-one",
   },
-  Object {
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "relationshipName": "a",
     "relationshipType": "one-to-many",
   },
-  Object {
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "ownerSide": false,
@@ -1039,8 +1043,8 @@ Array [
 
             it('should convert them', () => {
               jestExpect(convertedRelationship).toMatchInlineSnapshot(`
-Object {
-  "options": Object {
+{
+  "options": {
     "custom": 42,
   },
   "otherEntityName": "b",
@@ -1085,7 +1089,7 @@ Object {
 
             it('should convert them', () => {
               jestExpect(convertedRelationship).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
   "ownerSide": true,
@@ -1129,8 +1133,8 @@ Object {
 
           it('should convert them', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "ownerSide": true,
@@ -1141,8 +1145,8 @@ Array [
 ]
 `);
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "ownerSide": false,
@@ -1186,8 +1190,8 @@ Array [
 
           it('should convert them', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "javadoc": "A to B",
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
@@ -1198,8 +1202,8 @@ Array [
 ]
 `);
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "javadoc": "A to B but in the destination",
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
@@ -1241,7 +1245,7 @@ Array [
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "ownerSide": true,
   "relationshipName": "b",
@@ -1282,7 +1286,7 @@ Object {
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
   "relationshipName": "b",
@@ -1292,7 +1296,7 @@ Object {
             });
             it('should add the relationship for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
   "relationshipName": "a",
@@ -1330,7 +1334,7 @@ Object {
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "relationshipName": "b",
   "relationshipType": "many-to-one",
@@ -1370,7 +1374,7 @@ Object {
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
   "ownerSide": true,
@@ -1381,7 +1385,7 @@ Object {
             });
             it('should add the relationship for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
   "ownerSide": false,
@@ -1423,7 +1427,7 @@ Object {
 
             it('should add it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1435,7 +1439,7 @@ Object {
             });
             it('should ignore it for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
@@ -1476,7 +1480,7 @@ Object {
 
             it('should ignore it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1487,7 +1491,7 @@ Object {
             });
             it('should add it for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
@@ -1527,7 +1531,7 @@ Object {
 
             it('should add it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1538,7 +1542,7 @@ Object {
             });
             it('should ignore it for the source entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
@@ -1578,7 +1582,7 @@ Object {
 
             it('should add it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1590,7 +1594,7 @@ Object {
             });
             it('should add it for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",

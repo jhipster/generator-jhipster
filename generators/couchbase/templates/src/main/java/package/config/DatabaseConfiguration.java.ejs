@@ -1,0 +1,324 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+package <%= packageName %>.config;
+
+import tech.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterProperties;
+
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
+import com.github.couchmove.Couchmove;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.*;
+import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.GenericConverter;
+import org.springframework.core.convert.support.GenericConversionService;
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
+<%_ } _%>
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.config.BeanNames;
+import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
+import org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter;
+import org.springframework.data.couchbase.core.mapping.CouchbaseMappingContext;
+import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
+<%_ if (!reactive) { _%>
+import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+<%_ } _%>
+import org.springframework.data.couchbase.repository.config.Enable<%_ if (reactive) { _%>Reactive<% } %>CouchbaseRepositories;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.Duration;
+import java.util.*;
+<%_ if (reactive) { _%>
+import java.lang.reflect.Field;
+import org.springframework.data.repository.util.QueryExecutionConverters;
+import reactor.core.publisher.Flux;
+<%_ } _%>
+
+@Configuration
+@EnableConfigurationProperties(CouchbaseProperties.class)
+<%_ if (searchEngineElasticsearch) { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
+<%_ } _%>
+@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(basePackages = "<%= packageName %>.repository"<%_ if (searchEngineElasticsearch) { %>,
+    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
+<%_ if (!reactive) { _%>
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
+<%_ } _%>
+public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
+
+    private static final String CHANGELOG_COLLECTION = "changelog";
+    private static final String TYPE_KEY = "type";
+
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+
+    private final JHipsterProperties jHipsterProperties;
+    private final CouchbaseProperties couchbaseProperties;
+
+    public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseProperties couchbaseProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+        this.couchbaseProperties = couchbaseProperties;
+        <% if (reactive) { %>allowPageable();<% } %>
+    }
+
+<%_ if (reactive) { _%>
+    // Temporary Hack to fix pageable
+    @SuppressWarnings("unchecked")
+    private void allowPageable() {
+        try {
+            Field allowed_pageable_types = QueryExecutionConverters.class.getDeclaredField("ALLOWED_PAGEABLE_TYPES");
+            allowed_pageable_types.setAccessible(true);
+            Set<Class<?>> ALLOWED_PAGEABLE_TYPES = (Set<Class<?>>) allowed_pageable_types.get(QueryExecutionConverters.class);
+            ALLOWED_PAGEABLE_TYPES.add(Flux.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+<%_ } _%>
+    @Bean
+    public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
+        return new ValidatingCouchbaseEventListener(validator());
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }
+
+    @Override
+    public String getConnectionString() {
+        return couchbaseProperties.getConnectionString();
+    }
+
+    @Override
+    public String getUserName() {
+        return couchbaseProperties.getUsername();
+    }
+
+    @Override
+    public String getPassword() {
+        return couchbaseProperties.getPassword();
+    }
+
+    @Override
+    public String getBucketName() {
+        return jHipsterProperties.getDatabase().getCouchbase().getBucketName();
+    }
+
+    @Bean
+    public Bucket bucket(Cluster cluster) {
+        return cluster.bucket(jHipsterProperties.getDatabase().getCouchbase().getBucketName());
+    }
+
+    @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
+    public CouchbaseCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(ZonedDateTimeToLongConverter.INSTANCE);
+        converters.add(NumberToLocalDateTimeConverter.INSTANCE);
+        converters.add(BigIntegerToStringConverter.INSTANCE);
+        converters.add(StringToBigIntegerConverter.INSTANCE);
+        converters.add(BigDecimalToStringConverter.INSTANCE);
+        converters.add(StringToBigDecimalConverter.INSTANCE);
+        converters.add(StringToByteConverter.INSTANCE);
+        converters.add(UUIDToStringConverter.INSTANCE);
+        converters.add(StringToUUIDConverter.INSTANCE);
+        return new CouchbaseCustomConversions(converters);
+    }
+
+    @Override
+    public MappingCouchbaseConverter mappingCouchbaseConverter(CouchbaseMappingContext couchbaseMappingContext, CouchbaseCustomConversions couchbaseCustomConversions) {
+        MappingCouchbaseConverter mappingCouchbaseConverter = super.mappingCouchbaseConverter(couchbaseMappingContext, couchbaseCustomConversions);
+        ((GenericConversionService) mappingCouchbaseConverter.getConversionService()).addConverter(StringToObjectConverter.INSTANCE);
+        return mappingCouchbaseConverter;
+    }
+
+    @Bean
+    public Couchmove couchmove(Cluster cluster) {
+        log.debug("Configuring Couchmove");
+        Bucket bucket = cluster.bucket(getBucketName());
+        Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
+        Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
+        couchmove.migrate();
+        couchmove.buildN1qlDeferredIndexes(getScopeName());
+        return couchmove;
+    }
+
+    @Bean
+    @Profile({JHipsterConstants.SPRING_PROFILE_TEST, JHipsterConstants.SPRING_PROFILE_E2E})
+    public Couchmove waitForIndexes(Couchmove couchmove) {
+        couchmove.waitForN1qlIndexes(getScopeName(), Duration.ofMinutes(15));
+        return couchmove;
+    }
+
+    @Override
+    public String typeKey() {
+        return TYPE_KEY;
+    }
+
+    @Override
+    protected String getScopeName() {
+        return jHipsterProperties.getDatabase().getCouchbase().getScopeName();
+    }
+
+    /**
+     * Simple singleton to convert {@link ZonedDateTime}s to their {@link Long} representation.
+     */
+    @WritingConverter
+    public enum ZonedDateTimeToLongConverter implements Converter<ZonedDateTime, Long> {
+        INSTANCE;
+
+        @Override
+        public Long convert(ZonedDateTime source) {
+            return source == null ? null : Date.from(source.toInstant()).getTime();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link Number} {@link BigDecimal} representation.
+     */
+    @ReadingConverter
+    public enum NumberToLocalDateTimeConverter implements Converter<Number, ZonedDateTime> {
+        INSTANCE;
+
+        @Override
+        public ZonedDateTime convert(Number source) {
+            return source == null ? null : ZonedDateTime.ofInstant(new Date(source.longValue()).toInstant(), ZoneId.systemDefault());
+        }
+
+    }
+
+    /**
+     * Simple singleton to convert {@link BigDecimal}s to their {@link String} representation.
+     */
+    @WritingConverter
+    public enum BigDecimalToStringConverter implements Converter<BigDecimal, String> {
+        INSTANCE;
+
+        public String convert(BigDecimal source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@link BigDecimal} representation.
+     */
+    @ReadingConverter
+    public enum StringToBigDecimalConverter implements Converter<String, BigDecimal> {
+        INSTANCE;
+
+        public BigDecimal convert(String source) {
+            return StringUtils.hasText(source) ? new BigDecimal(source) : null;
+        }
+    }
+
+    /**
+     * Simple singleton to convert {@link BigInteger}s to their {@link String} representation.
+     */
+    @WritingConverter
+    public enum BigIntegerToStringConverter implements Converter<BigInteger, String> {
+        INSTANCE;
+
+        public String convert(BigInteger source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@link BigInteger} representation.
+     */
+    @ReadingConverter
+    public enum StringToBigIntegerConverter implements Converter<String, BigInteger> {
+        INSTANCE;
+
+        public BigInteger convert(String source) {
+            return StringUtils.hasText(source) ? new BigInteger(source) : null;
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@code byte[]} representation.
+     */
+    @ReadingConverter
+    public enum StringToByteConverter implements Converter<String, byte[]> {
+        INSTANCE;
+
+        @Override
+        public byte[] convert(String source) {
+            return Base64.getDecoder().decode(source);
+        }
+    }
+
+    /**
+     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+     */
+    @WritingConverter
+    public enum UUIDToStringConverter implements Converter<UUID, String> {
+        INSTANCE;
+
+        @Override
+        public String convert(UUID source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@link UUID} representation.
+     */
+    @ReadingConverter
+    public enum StringToUUIDConverter implements Converter<String, UUID> {
+        INSTANCE;
+
+        @Override
+        public UUID convert(String source) {
+            return source == null ? null : UUID.fromString(source);
+        }
+
+    }
+
+    public enum StringToObjectConverter implements GenericConverter {
+        INSTANCE;
+
+        @Override
+        public Set<ConvertiblePair> getConvertibleTypes() {
+            return Collections.singleton(new ConvertiblePair(String.class, Object.class));
+        }
+
+        @Override
+        public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+            return null;
+        }
+    }
+}

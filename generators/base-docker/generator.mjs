@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,7 +25,7 @@ import { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolde
 import statistics from '../statistics.cjs';
 import { applicationOptions, deploymentOptions } from '../../jdl/jhipster/index.mjs';
 
-import constants from '../generator-constants.cjs';
+import { dockerContainers as elasticDockerContainer } from '../generator-constants.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 
 const { OptionNames } = applicationOptions;
@@ -65,7 +65,7 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
         this.dockerContainers = this.prepareDependencies(
           {
-            ...constants.dockerContainers,
+            ...elasticDockerContainer,
             ...getDockerfileContainers(dockerfile),
           },
           dockerPlaceholderGenerator

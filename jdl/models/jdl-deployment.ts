@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,24 +17,26 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import DeploymentOptions from '../jhipster/deployment-options.js';
-import { merge as mergeObjects } from '../utils/object-utils.js';
+import { deploymentOptions, applicationOptions, serviceDiscoveryTypes } from '../jhipster/index.mjs';
+import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 
+const { Options } = deploymentOptions;
 const { isEqual } = _;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
   constructor(args) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }
-    const merged = mergeObjects(defaults(args.deploymentType), args);
+    const merged = merge(defaults(args.deploymentType), args);
     Object.entries(merged).forEach(([key, option]) => {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
         this[key] = new Set(option);
-      } else if (key === 'serviceDiscoveryType' && option === DeploymentOptions.Options.serviceDiscoveryType.no) {
-        this[key] = false;
+      } else if (key === applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE && option === Options.serviceDiscoveryType.no) {
+        this[key] = NO_SERVICE_DISCOVERY;
       } else {
         this[key] = option;
       }
@@ -70,5 +72,5 @@ function stringifyOptionValue(name, value) {
 }
 
 function defaults(deploymentType) {
-  return (DeploymentOptions.Options as any).defaults(deploymentType);
+  return (deploymentOptions.Options as any).defaults(deploymentType);
 }

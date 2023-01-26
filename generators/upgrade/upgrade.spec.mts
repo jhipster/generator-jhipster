@@ -7,16 +7,12 @@ import { fileURLToPath } from 'url';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { packageJson } from '../../lib/index.mjs';
 import { prepareTempDir } from '../../test/support/temp-dir.mjs';
-import generatorUtils from '../utils.cjs';
-
-const { escapeRegExp } = generatorUtils;
+import { escapeRegExp } from '../base/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JHipster upgrade generator', function () {
-  this.timeout(400000);
-
+describe('generator - upgrade', function () {
   describe('default application', () => {
     let runResult;
 

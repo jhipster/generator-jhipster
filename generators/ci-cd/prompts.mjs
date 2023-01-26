@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,12 +26,12 @@ export default {
 async function askPipeline() {
   if (this.abort) return;
   if (this.autoconfigureTravis) {
-    this.log('Auto-configuring Travis CI');
+    this.logger.info('Auto-configuring Travis CI');
     this.pipeline = 'travis';
     return;
   }
   if (this.autoconfigureJenkins) {
-    this.log('Auto-configuring Jenkins');
+    this.logger.info('Auto-configuring Jenkins');
     this.pipeline = 'jenkins';
     this.sendBuildToGitlab = false;
     this.insideDocker = false;
@@ -39,7 +39,7 @@ async function askPipeline() {
   }
 
   if (this.autoconfigureGitlab) {
-    this.log('Auto-configuring Gitlab');
+    this.logger.info('Auto-configuring Gitlab');
     this.pipeline = 'gitlab';
     this.sendBuildToGitlab = true;
     this.insideDocker = true;
@@ -47,19 +47,19 @@ async function askPipeline() {
   }
 
   if (this.autoconfigureAzure) {
-    this.log('Auto-configuring Azure');
+    this.logger.info('Auto-configuring Azure');
     this.pipeline = 'azure';
     return;
   }
 
   if (this.autoconfigureGithub) {
-    this.log('Auto-configuring GitHub Actions');
+    this.logger.info('Auto-configuring GitHub Actions');
     this.pipeline = 'github';
     return;
   }
 
   if (this.autoconfigureCircleCI) {
-    this.log('Auto-configuring CircleCI');
+    this.logger.info('Auto-configuring CircleCI');
     this.pipeline = 'circle';
     return;
   }
@@ -105,19 +105,19 @@ async function askIntegrations() {
   }
 
   if (this.autoconfigureAzure) {
-    this.log('Auto-configuring Azure');
+    this.logger.info('Auto-configuring Azure');
     this.pipeline = 'azure';
     return;
   }
 
   if (this.autoconfigureGithub) {
-    this.log('Auto-configuring GitHub Actions');
+    this.logger.info('Auto-configuring GitHub Actions');
     this.pipeline = 'github';
     return;
   }
 
   if (this.autoconfigureCircleCI) {
-    this.log('Auto-configuring CircleCI');
+    this.logger.info('Auto-configuring CircleCI');
     this.pipeline = 'circle';
     return;
   }

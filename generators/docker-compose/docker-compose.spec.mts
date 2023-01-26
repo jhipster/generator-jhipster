@@ -37,7 +37,7 @@ const workspacesOptions = {
   skipPriorities: ['prompting'],
 };
 
-describe('JHipster Docker Compose Sub Generator', () => {
+describe('generator - Docker Compose', () => {
   describe('only gateway', () => {
     let runResult;
     const chosenApps = ['01-gateway'];

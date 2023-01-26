@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,9 +20,13 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
-import Validations from '../../../jdl/jhipster/validations.js';
+import { validations } from '../../../jdl/jhipster/index.mjs';
 
-describe('JDLValidation', () => {
+const {
+  Validations: { PATTERN },
+} = validations;
+
+describe('jdl - JDLValidation', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       let validation;
@@ -86,7 +90,7 @@ describe('JDLValidation', () => {
       it('should format it', () => {
         expect(
           new JDLValidation({
-            name: Validations.PATTERN,
+            name: PATTERN,
             value: '[A-z0-9]',
           }).toString()
         ).to.equal('pattern(/[A-z0-9]/)');

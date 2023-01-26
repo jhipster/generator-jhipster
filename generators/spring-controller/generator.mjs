@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,7 +22,7 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
 
-import constants from '../generator-constants.cjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { askForControllerActions } from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import { GENERATOR_SPRING_CONTROLLER } from '../generator-list.mjs';
@@ -31,8 +31,6 @@ import { applicationOptions, cacheTypes, messageBrokerTypes } from '../../jdl/jh
 const { OptionNames } = applicationOptions;
 const cacheProviders = cacheTypes;
 const messageBrokers = messageBrokerTypes;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const {
   BASE_NAME,
   PACKAGE_NAME,
@@ -73,7 +71,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
   get initializing() {
     return {
       initializing() {
-        this.log(`The spring-controller ${this.name} is being created.`);
+        this.logger.info(`The spring-controller ${this.name} is being created.`);
         const configuration = this.config;
         this.baseName = configuration.get(BASE_NAME);
         this.packageName = configuration.get(PACKAGE_NAME);
@@ -150,7 +148,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
         this.apiPrefix = _.kebabCase(this.name);
 
         if (this.controllerActions.length === 0) {
-          this.log(chalk.green('No controller actions found, adding a default action'));
+          this.logger.info(chalk.green('No controller actions found, adding a default action'));
           this.controllerActions.push({
             actionName: 'defaultAction',
             actionMethod: 'Get',
@@ -176,16 +174,16 @@ export default class SpringControllerGenerator extends BaseGenerator {
         this.controllerActions.forEach(action => {
           action.actionPath = _.kebabCase(action.actionName);
           action.actionNameUF = _.upperFirst(action.actionName);
-          this.log(
+          this.logger.info(
             chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`)
           );
         });
 
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
           `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
         );
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
           `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
         );

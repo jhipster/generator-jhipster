@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,11 +19,11 @@
 
 import fs from 'fs';
 import path from 'path';
-import ApplicationTypes from '../jhipster/application-types.js';
-import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 
-import { areEntitiesEqual as areJHipsterEntitiesEqual } from '../utils/object-utils.js';
+import { applicationTypes } from '../jhipster/index.mjs';
+import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
+import { areEntitiesEqual } from '../utils/object-utils.js';
 
 let configuration: any = {};
 
@@ -111,13 +111,13 @@ function updateEntityToGenerateWithExistingOne(filePath, entity) {
 function filterOutUnchangedEntities(subFolder) {
   return configuration.entities.filter(entity => {
     const filePath = path.join(subFolder, toFilePath(entity.name));
-    return !(doesFileExist(filePath) && areJHipsterEntitiesEqual(readJSONFile(filePath), entity));
+    return !(doesFileExist(filePath) && areEntitiesEqual(readJSONFile(filePath), entity));
   });
 }
 
 function shouldFilterOutEntitiesBasedOnMicroservice() {
   return (
-    configuration.application.type && configuration.application.type === ApplicationTypes.MICROSERVICE && configuration.application.name
+    configuration.application.type && configuration.application.type === applicationTypes.MICROSERVICE && configuration.application.name
   );
 }
 

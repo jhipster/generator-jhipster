@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,19 +18,16 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
-import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../../../jdl/jhipster/index.mjs';
 import { convertOptions } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter.js';
-import EntityOptions from '../../../../jdl/jhipster/entity-options.js';
-import SearchEngineTypes from '../../../../jdl/jhipster/search-engine-types.js';
 
-const { MapperTypes, PaginationTypes } = EntityOptions;
-const { COUCHBASE } = SearchEngineTypes;
+const { MapperTypes, PaginationTypes } = entityOptions;
+const { COUCHBASE } = searchEngineTypes;
 
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION } = PaginationTypes;
 
-describe('OptionConverter', () => {
+describe('jdl - OptionConverter', () => {
   describe('convertOptions', () => {
     context('when not passing options', () => {
       it('should fail', () => {
@@ -39,7 +36,7 @@ describe('OptionConverter', () => {
       });
     });
     context('when passing options', () => {
-      UnaryOptions.forEach(unaryOptionName => {
+      unaryOptions.forEach(unaryOptionName => {
         context(`such as ${unaryOptionName}`, () => {
           let convertedOptions;
 
@@ -57,16 +54,16 @@ describe('OptionConverter', () => {
           });
         });
       });
-      const binaryOptions = new Map([
-        [BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT],
-        [BinaryOptions.Options.SERVICE, BinaryOptions.Values.service.SERVICE_CLASS],
-        [BinaryOptions.Options.PAGINATION, BinaryOptions.Values.pagination.PAGINATION],
-        [BinaryOptions.Options.SEARCH, BinaryOptions.Values.search.ELASTICSEARCH],
-        [BinaryOptions.Options.ANGULAR_SUFFIX, 'toto'],
-        [BinaryOptions.Options.CLIENT_ROOT_FOLDER, 'toto'],
-        [BinaryOptions.Options.MICROSERVICE, 'toto'],
+      const BinaryOptions = new Map([
+        [binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT],
+        [binaryOptions.Options.SERVICE, binaryOptions.Values.service.SERVICE_CLASS],
+        [binaryOptions.Options.PAGINATION, binaryOptions.Values.pagination.PAGINATION],
+        [binaryOptions.Options.SEARCH, binaryOptions.Values.search.ELASTICSEARCH],
+        [binaryOptions.Options.ANGULAR_SUFFIX, 'toto'],
+        [binaryOptions.Options.CLIENT_ROOT_FOLDER, 'toto'],
+        [binaryOptions.Options.MICROSERVICE, 'toto'],
       ]);
-      binaryOptions.forEach((optionValue, optionName) => {
+      BinaryOptions.forEach((optionValue, optionName) => {
         context(`such as ${optionName}`, () => {
           let convertedOptions;
 
@@ -107,7 +104,7 @@ describe('OptionConverter', () => {
         });
         it('should convert them', () => {
           expect(convertedOptions).toMatchInlineSnapshot(`
-Array [
+[
   JDLBinaryOption {
     "entityNames": Set {
       "*",
@@ -160,7 +157,7 @@ Array [
         });
         it('should not convert them', () => {
           expect(convertedOptions).toMatchInlineSnapshot(`
-Array [
+[
   JDLBinaryOption {
     "entityNames": Set {
       "*",

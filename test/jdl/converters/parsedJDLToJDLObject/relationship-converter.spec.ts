@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { convertRelationships } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/relationship-converter.js';
 
-describe('RelationshipConverter', () => {
+describe('jdl - RelationshipConverter', () => {
   describe('convertRelationships', () => {
     context('when not passing relationships', () => {
       it('should fail', () => {
@@ -67,21 +67,21 @@ describe('RelationshipConverter', () => {
 
         it('should convert them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-Array [
+[
   JDLRelationship {
-    "commentInFrom": "/**\\\\nRequired\\\\n/",
-    "commentInTo": "/**\\\\nNot required\\\\n/",
+    "commentInFrom": "/**\\nRequired\\n/",
+    "commentInTo": "/**\\nNot required\\n/",
     "from": "Source",
     "injectedFieldInFrom": "destination",
     "injectedFieldInTo": "source",
     "isInjectedFieldInFromRequired": true,
     "isInjectedFieldInToRequired": false,
-    "options": Object {
-      "destination": Object {},
-      "global": Object {
+    "options": {
+      "destination": {},
+      "global": {
         "jpaDerivedIdentifier": true,
       },
-      "source": Object {},
+      "source": {},
     },
     "to": "Destination",
     "type": "OneToMany",
@@ -126,21 +126,21 @@ Array [
 
         it('should generate them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-Array [
+[
   JDLRelationship {
-    "commentInFrom": "/**\\\\nRequired\\\\n/",
-    "commentInTo": "/**\\\\nNot required\\\\n/",
+    "commentInFrom": "/**\\nRequired\\n/",
+    "commentInTo": "/**\\nNot required\\n/",
     "from": "Source",
     "injectedFieldInFrom": "destination",
     "injectedFieldInTo": "source",
     "isInjectedFieldInFromRequired": true,
     "isInjectedFieldInToRequired": false,
-    "options": Object {
-      "destination": Object {},
-      "global": Object {
+    "options": {
+      "destination": {},
+      "global": {
         "jpaDerivedIdentifier": true,
       },
-      "source": Object {},
+      "source": {},
     },
     "to": "Destination",
     "type": "OneToMany",

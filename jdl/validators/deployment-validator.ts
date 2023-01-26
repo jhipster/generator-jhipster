@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,15 +18,14 @@
  */
 
 import Validator from './validator.js';
-import ApplicationTypes from '../jhipster/application-types.js';
-import DatabaseTypes from '../jhipster/database-types.js';
-import SearchEngineTypes from '../jhipster/search-engine-types.js';
-import DeploymentOptions from '../jhipster/deployment-options.js';
+import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions, applicationOptions } from '../jhipster/index.mjs';
 
-const { MICROSERVICE } = ApplicationTypes;
-const { NO } = DatabaseTypes;
-const { ELASTICSEARCH } = SearchEngineTypes;
-const { Options } = DeploymentOptions;
+const { Options } = deploymentOptions;
+const { MICROSERVICE } = applicationTypes;
+const { NO } = databaseTypes;
+const { ELASTICSEARCH } = searchEngineTypes;
+const { OptionNames } = applicationOptions;
+const { PROD_DATABASE_TYPE } = OptionNames;
 
 export default class DeploymentValidator extends Validator {
   constructor() {
@@ -75,7 +74,7 @@ function validateKubernetesRelatedDeployment(jdlDeployment) {
 function validateOpenshiftRelatedDeployment(jdlDeployment, options) {
   if (jdlDeployment.storageType) {
     if (options.prodDatabaseType === NO) {
-      throw new Error("Can't have the storageType option set when there is no prodDatabaseType.");
+      throw new Error(`Can't have the storageType option set when there is no ${PROD_DATABASE_TYPE}.`);
     }
 
     if (options.searchEngine === ELASTICSEARCH) {

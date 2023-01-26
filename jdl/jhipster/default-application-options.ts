@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
 import applicationOptions from './application-options.js';
-import cacheProviderType from './cache-types.js';
+import cacheTypes from './cache-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
@@ -33,9 +33,9 @@ const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
-const { EHCACHE, HAZELCAST } = cacheProviderType;
+const { EHCACHE, HAZELCAST } = cacheTypes;
 
-const NO_CACHE_PROVIDER = cacheProviderType.NO;
+const NO_CACHE_PROVIDER = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;
@@ -61,6 +61,7 @@ const {
   JHI_PREFIX,
   LANGUAGES,
   MESSAGE_BROKER,
+  NATIVE_LANGUAGE,
   PACKAGE_FOLDER,
   PACKAGE_NAME,
   PROD_DATABASE_TYPE,
@@ -69,7 +70,6 @@ const {
   SERVER_PORT,
   SERVICE_DISCOVERY_TYPE,
   SKIP_CLIENT,
-  SKIP_SERVER,
   SKIP_USER_MANAGEMENT,
   TEST_FRAMEWORKS,
   // TODO: This key is missing, investigate if this is a bug.
@@ -84,77 +84,160 @@ const {
 const commonDefaultOptions = {
   [AUTHENTICATION_TYPE]: JWT,
   [BUILD_TOOL]: MAVEN,
+  [DTO_SUFFIX]: OptionValues[DTO_SUFFIX],
+  [ENABLE_SWAGGER_CODEGEN]: OptionValues[ENABLE_SWAGGER_CODEGEN],
+  [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
+  [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
+  [JHI_PREFIX]: OptionValues[JHI_PREFIX],
+  [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].no,
+  [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].no,
+  [WEBSOCKET]: OptionValues[WEBSOCKET].no,
 };
 
-export function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
-  if (applicationType === MONOLITH) {
-    return getConfigForMonolithApplication(customOptions);
-  }
+export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}) {
+  const applicationType = typeof customOptions === 'string' ? customOptions : customOptions.applicationType;
   if (applicationType === GATEWAY) {
     return getConfigForGatewayApplication(customOptions);
   }
   if (applicationType === MICROSERVICE) {
     return getConfigForMicroserviceApplication(customOptions);
   }
-  return getDefaultConfigForNewApplication(customOptions);
+  return getConfigForMonolithApplication(customOptions);
 }
 
-export function getConfigForMonolithApplication(customOptions: any = {}): any {
+export function getConfigForClientApplication(options: any = {}): any {
+  if (options[SKIP_CLIENT]) {
+    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
+  }
+  const clientFramework = options[CLIENT_FRAMEWORK];
+  if (clientFramework !== NO_CLIENT_FRAMEWORK) {
+    if (!options[CLIENT_THEME]) {
+      options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
+      options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].none;
+    } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
+      options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
+    }
+  }
+  return options;
+}
+
+export function getConfigForAuthenticationType(options: any = {}): any {
+  if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
+    if (options[AUTHENTICATION_TYPE] === OAUTH2) {
+      options[SKIP_USER_MANAGEMENT] = true;
+    } else {
+      options[SKIP_USER_MANAGEMENT] = OptionValues[SKIP_USER_MANAGEMENT];
+    }
+  }
+  return options;
+}
+
+export function getConfigForPackageName(options: any = {}): any {
+  if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
+    options[PACKAGE_FOLDER] = OptionValues[PACKAGE_FOLDER];
+  }
+  if (!options[PACKAGE_NAME] && options[PACKAGE_FOLDER]) {
+    options[PACKAGE_NAME] = options[PACKAGE_FOLDER].replace(/\//g, '.');
+  }
+  if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
+    options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
+  }
+  return options;
+}
+
+export function getConfigForCacheProvider(options: any = {}): any {
+  if (options[REACTIVE]) {
+    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
+  }
+  return options;
+}
+
+export function getConfigForReactive(options: any = {}): any {
+  if (options[REACTIVE] === undefined) {
+    options[REACTIVE] = false;
+  }
+  return options;
+}
+
+export function getConfigForTranslation(options: any = {}): any {
+  if (options[ENABLE_TRANSLATION] === undefined) {
+    options[ENABLE_TRANSLATION] = true;
+  }
+  if (options[NATIVE_LANGUAGE] === undefined) {
+    options[NATIVE_LANGUAGE] = 'en';
+  }
+  if (options[ENABLE_TRANSLATION] && options[LANGUAGES] === undefined) {
+    options[LANGUAGES] = ['en', 'fr'];
+  }
+  return options;
+}
+
+export function getConfigForDatabaseType(options: any = {}): any {
+  if (options[DATABASE_TYPE] === undefined) {
+    options[DATABASE_TYPE] = SQL;
+  }
+  if (options[DATABASE_TYPE] === SQL) {
+    if (options[PROD_DATABASE_TYPE] === undefined) {
+      options[PROD_DATABASE_TYPE] = POSTGRESQL;
+    }
+    if (options[DEV_DATABASE_TYPE] === undefined) {
+      options[DEV_DATABASE_TYPE] = H2_DISK;
+    }
+  } else if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
+    options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
+    options[PROD_DATABASE_TYPE] = options[DATABASE_TYPE];
+    if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
+      options[ENABLE_HIBERNATE_CACHE] = false;
+    }
+  }
+  if (options[REACTIVE]) {
+    options[ENABLE_HIBERNATE_CACHE] = false;
+  }
+  if (options[ENABLE_HIBERNATE_CACHE] === undefined) {
+    options[ENABLE_HIBERNATE_CACHE] = true;
+  }
+  return options;
+}
+
+export function getServerConfigForMonolithApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: false,
-    [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
+    [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
     [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
-  if (!options[CLIENT_THEME]) {
-    options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-    options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].none;
-  } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
-    options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
-  }
-  if (options[AUTHENTICATION_TYPE] === OAUTH2) {
-    options[SKIP_USER_MANAGEMENT] = true;
-  }
-  if (options[SKIP_CLIENT]) {
-    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
-  }
   return {
     ...options,
     [APPLICATION_TYPE]: MONOLITH,
   };
 }
 
-export function getConfigForGatewayApplication(customOptions: any = {}): any {
+export function getConfigForMonolithApplication(customOptions: any = {}): any {
+  let options = getServerConfigForMonolithApplication(customOptions);
+  options = getConfigForClientApplication(options);
+  options = getConfigForPackageName(options);
+  options = getConfigForCacheProvider(options);
+  options = getConfigForDatabaseType(options);
+  options = getConfigForReactive(options);
+  options = getConfigForTranslation(options);
+  return getConfigForAuthenticationType(options);
+}
+
+export function getServerConfigForGatewayApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: EUREKA,
-    [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
     [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
-  if (!options[CLIENT_THEME]) {
-    options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-    options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].none;
-  } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
-    options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
-  }
-  if (options[AUTHENTICATION_TYPE] === OAUTH2) {
-    options[SKIP_USER_MANAGEMENT] = true;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = false;
-  }
   options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
+
   return {
     ...options,
     [REACTIVE]: true,
@@ -162,8 +245,19 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   };
 }
 
-export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
-  const DEFAULT_SERVER_PORT = '8081';
+export function getConfigForGatewayApplication(customOptions: any = {}): any {
+  let options = getServerConfigForGatewayApplication(customOptions);
+  options = getConfigForClientApplication(options);
+  options = getConfigForPackageName(options);
+  options = getConfigForCacheProvider(options);
+  options = getConfigForDatabaseType(options);
+  options = getConfigForReactive(options);
+  options = getConfigForTranslation(options);
+  return getConfigForAuthenticationType(options);
+}
+
+export function getServerConfigForMicroserviceApplication(customOptions: any = {}): any {
+  const DEFAULT_SERVER_PORT = 8081;
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: HAZELCAST,
@@ -175,85 +269,37 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
   if (options[SKIP_CLIENT] === undefined) {
     options[SKIP_CLIENT] = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO_CLIENT_FRAMEWORK;
   }
-  if (options[SKIP_CLIENT]) {
-    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
-    delete options[SKIP_SERVER];
-  }
-  delete options[CLIENT_THEME];
-  delete options[CLIENT_THEME_VARIANT];
-  delete options[WITH_ADMIN_UI];
-  if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
-    options[SKIP_USER_MANAGEMENT] = true;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = false;
-  }
+
+  options[WITH_ADMIN_UI] = false;
   return {
     ...options,
     [APPLICATION_TYPE]: MICROSERVICE,
   };
 }
 
+export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+  let options = getServerConfigForMicroserviceApplication(customOptions);
+  options = getConfigForClientApplication(options);
+  options = getConfigForPackageName(options);
+  options = getConfigForCacheProvider(options);
+  options = getConfigForDatabaseType(options);
+  options = getConfigForReactive(options);
+  options = getConfigForTranslation(options);
+  return getConfigForAuthenticationType(options);
+}
+
 export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [BASE_NAME]: OptionValues[BASE_NAME],
-    [DATABASE_TYPE]: SQL,
-    [DEV_DATABASE_TYPE]: H2_DISK,
-    [CACHE_PROVIDER]: EHCACHE,
-    [ENABLE_HIBERNATE_CACHE]: OptionValues[ENABLE_HIBERNATE_CACHE],
-    [ENABLE_SWAGGER_CODEGEN]: OptionValues[ENABLE_SWAGGER_CODEGEN],
-    [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
-    [JHI_PREFIX]: OptionValues[JHI_PREFIX],
     [LANGUAGES]: OptionValues[LANGUAGES],
-    [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
-    [PROD_DATABASE_TYPE]: POSTGRESQL,
-    [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
     [TEST_FRAMEWORKS]: [],
-    [WEBSOCKET]: OptionValues[WEBSOCKET].false,
     [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
     [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
     ...customOptions,
   };
-  if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
-    options[PACKAGE_FOLDER] = OptionValues[PACKAGE_FOLDER];
-    options[PACKAGE_NAME] = OptionValues[PACKAGE_NAME];
-  }
-  if (!options[PACKAGE_NAME] && options[PACKAGE_FOLDER]) {
-    options[PACKAGE_NAME] = options[PACKAGE_FOLDER].replace(/\//g, '.');
-  }
-  if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
-    options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
-  }
-  if (options[SKIP_CLIENT]) {
-    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
-  }
-  if (options[CLIENT_FRAMEWORK] === ANGULAR) {
-    options[CLIENT_FRAMEWORK] = ANGULAR;
-  }
   if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
     options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;
   }
-  if (typeof options[DTO_SUFFIX] === 'boolean' || typeof options[DTO_SUFFIX] !== 'string') {
-    options[DTO_SUFFIX] = OptionValues[DTO_SUFFIX];
-  }
-  if (typeof options[ENTITY_SUFFIX] === 'boolean' || typeof options[ENTITY_SUFFIX] !== 'string') {
-    options[ENTITY_SUFFIX] = OptionValues[ENTITY_SUFFIX];
-  }
-  if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
-    options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
-    options[PROD_DATABASE_TYPE] = options[DATABASE_TYPE];
-    if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
-      options[ENABLE_HIBERNATE_CACHE] = false;
-    }
-  }
-  if (options[REACTIVE]) {
-    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
-  } else {
-    options[REACTIVE] = OptionValues[REACTIVE];
-  }
-  return options;
+  return getConfigWithDefaults(options);
 }

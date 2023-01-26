@@ -6,10 +6,12 @@ coverage
 *.iws
 atlassian-ide-plugin.xml
 /.project
+app.jdl
 test/temp/
 /docs
 *debug.log*
 .vscode
+.vscode-test
 .DS_Store
 /.jhipster
 *.sw?
@@ -20,4 +22,4 @@ test/temp/
 .project
 .settings
 test/**/*.png
-dist
+/dist

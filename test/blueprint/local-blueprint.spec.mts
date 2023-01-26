@@ -24,7 +24,7 @@ const BLUEPRINT_CONTENTS = `export async function createGenerator(env){
 }
 `;
 
-describe('Local blueprint', () => {
+describe('generator - base - local blueprint', () => {
   describe('generates application', () => {
     let runResult;
     before(async () => {
@@ -43,11 +43,11 @@ describe('Local blueprint', () => {
 
     it('creates expected default files', () => {
       jestExpect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "local-blueprint.txt": Object {
+  "local-blueprint.txt": {
     "stateCleared": "modified",
   },
 }

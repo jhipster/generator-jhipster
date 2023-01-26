@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,6 +27,7 @@ import BaseDockerGenerator from '../base-docker/index.mjs';
 
 import { writeFiles } from './files.mjs';
 import {
+  authenticationTypes,
   applicationTypes,
   cacheTypes,
   databaseTypes,
@@ -36,15 +37,16 @@ import {
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { stringHashCode } from '../utils.cjs';
+import { stringHashCode } from '../utils.mjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
-const { EUREKA } = serviceDiscoveryTypes;
+const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 const { KAFKA } = messageBrokerTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
+const { OAUTH2 } = authenticationTypes;
 
 /* eslint-disable consistent-return */
 /**
@@ -69,7 +71,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
 
         shelljs.exec('docker compose version', { silent: true }, (code, stdout, stderr) => {
           if (stderr) {
-            this.log(
+            this.logger.error(
               chalk.red(
                 'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
                   '         Read https://docs.docker.com/compose/install/\n'
@@ -80,7 +82,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             const composeVersionMajor = composeVersion.split('.')[0];
             const composeVersionMinor = composeVersion.split('.')[1];
             if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-              this.log(
+              this.logger.error(
                 chalk.red(
                   `$Docker Compose version 1.6.0 or later is not installed on your computer.
                                              Docker Compose version found: ${composeVersion}
@@ -110,8 +112,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   get configuring() {
     return {
       sayHello() {
-        this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-        this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.logger.info(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+        this.logger.info(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
       ...super.configuring,
@@ -167,7 +169,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             this.includesApplicationTypeGateway = true;
           }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-            if (this.keycloakSecrets === undefined && appConfig.authenticationType === 'oauth2') {
+            if (this.keycloakSecrets === undefined && appConfig.authenticationType === OAUTH2) {
               faker.seed(stringHashCode(appConfig.baseName));
               this.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
             }
@@ -191,7 +193,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
           }
 
-          if (!this.serviceDiscoveryType && appConfig.skipClient) {
+          const hasNoServiceDiscovery = !this.serviceDiscoveryType && this.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+          if (hasNoServiceDiscovery && appConfig.skipClient) {
             yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
           }
 
@@ -313,21 +316,21 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return {
       end() {
         if (this.hasWarning) {
-          this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
-          this.log('If you forgot to generate the Docker image for this application, please run:');
-          this.log(chalk.red(this.warningMessage));
+          this.logger.warn('\nDocker Compose configuration generated, but no Jib cache found');
+          this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.logger.warn(chalk.red(this.warningMessage));
         } else {
-          this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+          this.logger.info(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        this.logger.info(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
         if (this.gatewayNb + this.monolithicNb > 1) {
-          this.log('\nYour applications will be accessible on these URLs:');
+          this.logger.info('\nYour applications will be accessible on these URLs:');
           this.appConfigs.forEach(appConfig => {
             if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-              this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+              this.logger.info(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
             }
           });
-          this.log('\n');
+          this.logger.log('\n');
         }
       },
     };

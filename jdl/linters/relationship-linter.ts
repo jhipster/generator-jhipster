@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 import RelationshipIssue from './issues/relationship-issue.js';
 
 import { rulesNames } from './rules.js';
-import RelationshipTypes from '../jhipster/relationship-types.js';
+import { relationshipTypes } from '../jhipster/index.mjs';
 
 let issues: RelationshipIssue[];
 
@@ -53,10 +53,10 @@ function checkForCollapsibleRelationships(relationshipDeclarations: Relationship
   const sortedRelationships: {
     [key in string]: { from: string; to: string }[];
   } = {
-    [RelationshipTypes.ONE_TO_ONE]: [],
-    [RelationshipTypes.ONE_TO_MANY]: [],
-    [RelationshipTypes.MANY_TO_ONE]: [],
-    [RelationshipTypes.MANY_TO_MANY]: [],
+    [relationshipTypes.ONE_TO_ONE]: [],
+    [relationshipTypes.ONE_TO_MANY]: [],
+    [relationshipTypes.MANY_TO_ONE]: [],
+    [relationshipTypes.MANY_TO_MANY]: [],
   };
   relationshipDeclarations.forEach((relationshipDeclaration: any) => {
     const type = relationshipDeclaration.children.relationshipType[0].children.RELATIONSHIP_TYPE[0].image;

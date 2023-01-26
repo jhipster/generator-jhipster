@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -58,21 +58,18 @@ export function hibernateSnakeCase(value) {
  * @param {boolean} [options.noSnakeCase = false] - do not convert names to snakecase
  * @param {string} [options.prefix = '']
  * @param {string} [options.separator = '__']
- * @param {boolean} [options.appendHash = true] - adds a calculated hash based on tableOrEntityName and columnOrRelationshipName to prevent trimming conflict.
  * @return {string} db referente name
  */
 export function calculateDbNameWithLimit(tableOrEntityName, columnOrRelationshipName, limit, options = {}) {
-  const { noSnakeCase = false, prefix = '', separator = '__', appendHash = true } = options;
+  const { noSnakeCase = false, prefix = '', separator = '__' } = options;
   const halfLimit = Math.floor(limit / 2);
-  const suffix = !appendHash
-    ? ''
-    : `_${crypto
-        .createHash('shake256', { outputLength: 1 })
-        .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
-        .digest('hex')}`;
+  const suffix = `_${crypto
+    .createHash('shake256', { outputLength: 1 })
+    .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
+    .digest('hex')}`;
 
   let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
-  formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
+  formattedName = formattedName.substring(0, halfLimit - separator.length);
 
   let otherFormattedName = noSnakeCase ? columnOrRelationshipName : hibernateSnakeCase(columnOrRelationshipName);
   otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);

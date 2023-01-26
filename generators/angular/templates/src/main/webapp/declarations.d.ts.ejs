@@ -2,20 +2,3 @@ declare const SERVER_API_URL: string;
 <%_ if (enableTranslation) { _%>
 declare const I18N_HASH: string;
 <%_ } _%>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
-
-  <%_ for (const remote of microfrontends) { _%>
-declare module '<%= remote.lowercaseBaseName %>/entity-routing' {
-  export class EntityRoutingModule {}
-}
-declare module '<%= remote.lowercaseBaseName %>/entity-navbar-items' {
-  export const EntityNavbarItems : []
-}
-    <%_ if (enableTranslation) { _%>
-
-declare module '<%= remote.lowercaseBaseName %>/translation-module' {
-  export class LazyTranslationModule {}
-}
-    <%_ } _%>
-  <%_ } _%>
-<%_ } _%>

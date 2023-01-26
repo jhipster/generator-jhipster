@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import RelationshipTypes from '../jhipster/relationship-types.js';
+import { relationshipTypes } from '../jhipster/index.mjs';
 
 export default class JDLRelationships {
   relationships: { OneToOne: Map<any, any>; OneToMany: Map<any, any>; ManyToOne: Map<any, any>; ManyToMany: Map<any, any> };
@@ -39,23 +39,23 @@ export default class JDLRelationships {
   }
 
   getOneToOne(relationshipId) {
-    return this.get(RelationshipTypes.ONE_TO_ONE, relationshipId);
+    return this.get(relationshipTypes.ONE_TO_ONE, relationshipId);
   }
 
   getOneToMany(relationshipId) {
-    return this.get(RelationshipTypes.ONE_TO_MANY, relationshipId);
+    return this.get(relationshipTypes.ONE_TO_MANY, relationshipId);
   }
 
   getManyToOne(relationshipId) {
-    return this.get(RelationshipTypes.MANY_TO_ONE, relationshipId);
+    return this.get(relationshipTypes.MANY_TO_ONE, relationshipId);
   }
 
   getManyToMany(relationshipId) {
-    return this.get(RelationshipTypes.MANY_TO_MANY, relationshipId);
+    return this.get(relationshipTypes.MANY_TO_MANY, relationshipId);
   }
 
   get(type, relationshipId) {
-    if (!RelationshipTypes.exists(type)) {
+    if (!relationshipTypes.exists(type)) {
       throw new Error(`A valid relationship type must be passed so as to retrieve the relationship, got '${type}'.`);
     }
     if (!relationshipId) {

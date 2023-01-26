@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,17 +21,14 @@ import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-
-import generatorDefaults from '../generator-defaults.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
-import constants from '../generator-constants.cjs';
+import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
-import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
-import { REACT } from '../../jdl/jhipster/client-framework-types.js';
+import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { defaultConfig } = generatorDefaults;
 const { MAVEN, GRADLE } = buildToolTypes;
+const { REACT } = clientFrameworkTypes;
 
 /**
  * @class
@@ -95,7 +92,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
+        this.logger.info(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
 
       getSharedConfig() {
@@ -123,12 +120,12 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
       },
 
       initConstants() {
-        this.NODE_VERSION = constants.NODE_VERSION;
+        this.NODE_VERSION = NODE_VERSION;
       },
 
       getConstants() {
-        this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        this.JAVA_VERSION = constants.JAVA_VERSION;
+        this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
+        this.JAVA_VERSION = JAVA_VERSION;
       },
     };
   }
@@ -177,7 +174,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  _loadCiCdConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  _loadCiCdConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.cicdIntegrations = dest.cicdIntegrations || config.cicdIntegrations || [];
     dest.cicdIntegrationsSnyk = dest.cicdIntegrations.includes('snyk');
     dest.cicdIntegrationsSonar = dest.cicdIntegrations.includes('sonar');
@@ -230,19 +227,19 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
           });
         }
         if (this.pipeline === 'gitlab') {
-          this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
+          this.writeFile('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipeline === 'circle') {
-          this.template('circle.yml.ejs', '.circleci/config.yml');
+          this.writeFile('circle.yml.ejs', '.circleci/config.yml');
         }
         if (this.pipeline === 'travis') {
-          this.template('travis.yml.ejs', '.travis.yml');
+          this.writeFile('travis.yml.ejs', '.travis.yml');
         }
         if (this.pipeline === 'azure') {
-          this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+          this.writeFile('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
         if (this.pipeline === 'github') {
-          this.template('github-actions.yml.ejs', '.github/workflows/main.yml');
+          this.writeFile('github-actions.yml.ejs', '.github/workflows/main.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {
@@ -256,12 +253,12 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
           } else if (this.buildTool === GRADLE) {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-            this.warning('No support for Artifactory yet, when using Gradle.\n');
+            this.logger.warn('No support for Artifactory yet, when using Gradle.\n');
           }
         }
 
         if (this.cicdIntegrations.includes('publishDocker')) {
-          this.template('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
+          this.writeFile('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
         }
       },
     });

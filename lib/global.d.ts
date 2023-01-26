@@ -1,3 +1,9 @@
+import { CopyOptions } from 'mem-fs-editor';
+
 declare module 'yeoman-environment/transform';
-declare module 'p-transform';
-declare module 'p-queue';
+
+declare module 'mem-fs-editor' {
+  interface CopyOptions {
+    noGlob?: boolean;
+  }
+}

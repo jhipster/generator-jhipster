@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -34,33 +34,33 @@ export function writeFiles() {
       for (let i = 0; i < this.appConfigs.length; i++) {
         const appName = this.appConfigs[i].baseName.toLowerCase();
         this.app = this.appConfigs[i];
-        this.template('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
+        this.writeFile('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
 
         if (this.app.prodDatabaseType !== NO_DATABASE) {
-          this.template(
+          this.writeFile(
             `db/${this.app.prodDatabaseType}.yml.ejs`,
             `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`
           );
         }
         if (this.app.searchEngine === ELASTICSEARCH) {
-          this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);
+          this.writeFile('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);
         }
       }
     },
 
     writeMessagingBroker() {
       if (!this.useKafka) return;
-      this.template('messagebroker/kafka.yml.ejs', `${this.directoryPath}/ocp/messagebroker/kafka.yml`);
+      this.writeFile('messagebroker/kafka.yml.ejs', `${this.directoryPath}/ocp/messagebroker/kafka.yml`);
     },
 
     writeRegistryFiles() {
-      this.template('scc/scc-config.yml.ejs', `${this.directoryPath}/ocp/registry/scc-config.yml`);
+      this.writeFile('scc/scc-config.yml.ejs', `${this.directoryPath}/ocp/registry/scc-config.yml`);
       if (this.serviceDiscoveryType === EUREKA) {
-        this.template('registry/jhipster-registry.yml.ejs', `${this.directoryPath}/ocp/registry/jhipster-registry.yml`);
-        this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
+        this.writeFile('registry/jhipster-registry.yml.ejs', `${this.directoryPath}/ocp/registry/jhipster-registry.yml`);
+        this.writeFile('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
       } else if (this.serviceDiscoveryType === CONSUL) {
-        this.template('registry/consul.yml.ejs', `${this.directoryPath}/ocp/registry/consul.yml`);
-        this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
+        this.writeFile('registry/consul.yml.ejs', `${this.directoryPath}/ocp/registry/consul.yml`);
+        this.writeFile('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
       }
     },
 
@@ -74,11 +74,11 @@ export function writeFiles() {
 
       this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
 
-      this.template('monitoring/jhipster-metrics.yml.ejs', `${this.directoryPath}/ocp/monitoring/jhipster-metrics.yml`);
+      this.writeFile('monitoring/jhipster-metrics.yml.ejs', `${this.directoryPath}/ocp/monitoring/jhipster-metrics.yml`);
     },
 
     writeConfigRunFile() {
-      this.template('apply.sh.ejs', `${this.directoryPath}/ocp/ocp-apply.sh`);
+      this.writeFile('apply.sh.ejs', `${this.directoryPath}/ocp/ocp-apply.sh`);
     },
   };
 }

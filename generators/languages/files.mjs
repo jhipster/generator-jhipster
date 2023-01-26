@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,9 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
-
-const { CLIENT_MAIN_SRC_DIR } = constants;
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
 export const clientI18nFiles = {

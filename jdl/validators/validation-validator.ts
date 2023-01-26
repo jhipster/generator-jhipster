@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,9 +18,11 @@
  */
 
 import Validator from './validator.js';
-import Validations from '../jhipster/validations.js';
+import { validations } from '../jhipster/index.mjs';
 
-const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = Validations;
+const {
+  Validations: { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES },
+} = validations;
 
 export default class ValidationValidator extends Validator {
   constructor() {

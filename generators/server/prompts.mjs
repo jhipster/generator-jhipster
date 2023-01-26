@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,8 +18,7 @@
  */
 
 import chalk from 'chalk';
-
-import generatorDefaults from '../generator-defaults.mjs';
+import _ from 'lodash';
 
 import {
   applicationOptions,
@@ -33,7 +32,6 @@ import {
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
 
 const { OptionNames } = applicationOptions;
-const { serverDefaultConfig } = generatorDefaults;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
@@ -51,23 +49,44 @@ const {
   REACTIVE,
   SERVER_PORT,
   SERVICE_DISCOVERY_TYPE,
+  WEBSOCKET,
+  SEARCH_ENGINE,
+  MESSAGE_BROKER,
+  ENABLE_SWAGGER_CODEGEN,
 } = OptionNames;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
+/**
+ * Get Option From Array
+ *
+ * @param {Array} array - array
+ * @param {any} option - options
+ * @returns {boolean} true if option is in array and is set to 'true'
+ */
+const getOptionFromArray = (array, option) => {
+  let optionValue = false;
+  array.forEach(value => {
+    if (_.includes(value, option)) {
+      optionValue = value.split(':')[1];
+    }
+  });
+  optionValue = optionValue === 'true' ? true : optionValue;
+  return optionValue;
+};
+
 export async function askForServerSideOpts({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const applicationType = this.jhipsterConfig.applicationType;
-  const defaultPort = applicationType === GATEWAY ? '8080' : '8081';
+  const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
   const prompts = [
     {
       when: () => [MONOLITH, MICROSERVICE].includes(applicationType),
       type: 'confirm',
       name: REACTIVE,
       message: 'Do you want to make it reactive with Spring WebFlux?',
-      default: serverDefaultConfig.reactive,
+      default: reactive,
     },
     {
       when: () => applicationType === GATEWAY || applicationType === MICROSERVICE,
@@ -76,7 +95,7 @@ export async function askForServerSideOpts({ control }) {
       validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
       message:
         'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
-      default: defaultPort,
+      default: defaultServerPort,
     },
     {
       type: 'input',
@@ -86,7 +105,7 @@ export async function askForServerSideOpts({ control }) {
           ? true
           : 'The package name you have provided is not a valid Java package name.',
       message: 'What is your default Java package name?',
-      default: serverDefaultConfig.packageName,
+      default: this.jhipsterConfigWithDefaults.packageName,
       store: true,
     },
     {
@@ -135,7 +154,7 @@ export async function askForServerSideOpts({ control }) {
         }
         return opts;
       },
-      default: serverDefaultConfig.authenticationType,
+      default: this.jhipsterConfigWithDefaults.authenticationType,
     },
     {
       type: 'list',
@@ -178,7 +197,7 @@ export async function askForServerSideOpts({ control }) {
         });
         return opts;
       },
-      default: serverDefaultConfig.databaseType,
+      default: this.jhipsterConfigWithDefaults.databaseType,
     },
     {
       when: response => response.databaseType === SQL,
@@ -186,7 +205,7 @@ export async function askForServerSideOpts({ control }) {
       name: PROD_DATABASE_TYPE,
       message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
       choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
-      default: serverDefaultConfig.prodDatabaseType,
+      default: this.jhipsterConfigWithDefaults.prodDatabaseType,
     },
     {
       when: response => response.databaseType === SQL,
@@ -204,7 +223,7 @@ export async function askForServerSideOpts({ control }) {
             name: 'H2 with in-memory persistence',
           },
         ].concat(SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
-      default: serverDefaultConfig.devDatabaseType,
+      default: this.jhipsterConfigWithDefaults.devDatabaseType,
     },
     {
       when: answers => !answers.reactive,
@@ -241,7 +260,7 @@ export async function askForServerSideOpts({ control }) {
           name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
         },
       ],
-      default: applicationType === MICROSERVICE ? 2 : serverDefaultConfig.cacheProvider,
+      default: this.jhipsterConfigWithDefaults.cacheProvider,
     },
     {
       when: answers =>
@@ -251,7 +270,7 @@ export async function askForServerSideOpts({ control }) {
       type: 'confirm',
       name: 'enableHibernateCache',
       message: 'Do you want to use Hibernate 2nd level cache?',
-      default: serverDefaultConfig.enableHibernateCache,
+      default: this.jhipsterConfigWithDefaults.enableHibernateCache,
     },
     {
       type: 'list',
@@ -267,14 +286,14 @@ export async function askForServerSideOpts({ control }) {
           name: 'Gradle',
         },
       ],
-      default: serverDefaultConfig.buildTool,
+      default: this.jhipsterConfigWithDefaults.buildTool,
     },
     {
       when: answers => answers.buildTool === GRADLE && this.options.experimental,
       type: 'confirm',
       name: 'enableGradleEnterprise',
       message: 'Do you want to enable Gradle Enterprise integration?',
-      default: serverDefaultConfig.enableGradleEnterprise,
+      default: this.jhipsterConfigWithDefaults.enableGradleEnterprise,
     },
     {
       when: answers => answers.enableGradleEnterprise,
@@ -298,7 +317,7 @@ export async function askForServerSideOpts({ control }) {
           name: 'Yes',
         },
       ],
-      default: serverDefaultConfig.serviceDiscoveryType,
+      default: this.jhipsterConfigWithDefaults.serviceDiscoveryType,
     },
   ];
 
@@ -308,9 +327,7 @@ export async function askForServerSideOpts({ control }) {
 export async function askForOptionalItems({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const applicationType = this.jhipsterConfig.applicationType;
-  const reactive = this.jhipsterConfig.reactive;
-  const databaseType = this.jhipsterConfig.databaseType;
+  const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
   const choices = [];
   const defaultChoice = [];
@@ -354,13 +371,13 @@ export async function askForOptionalItems({ control }) {
   if (choices.length > 0) {
     await this.prompt(PROMPTS).then(answers => {
       this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
-      this.jhipsterConfig.websocket = this.getOptionFromArray(answers.serverSideOptions, 'websocket');
-      this.jhipsterConfig.searchEngine = this.getOptionFromArray(answers.serverSideOptions, 'searchEngine');
-      this.jhipsterConfig.messageBroker = this.getOptionFromArray(answers.serverSideOptions, 'messageBroker');
-      this.jhipsterConfig.enableSwaggerCodegen = this.getOptionFromArray(answers.serverSideOptions, 'enableSwaggerCodegen');
+      this.jhipsterConfig.websocket = getOptionFromArray(answers.serverSideOptions, WEBSOCKET);
+      this.jhipsterConfig.searchEngine = getOptionFromArray(answers.serverSideOptions, SEARCH_ENGINE);
+      this.jhipsterConfig.messageBroker = getOptionFromArray(answers.serverSideOptions, MESSAGE_BROKER);
+      this.jhipsterConfig.enableSwaggerCodegen = getOptionFromArray(answers.serverSideOptions, ENABLE_SWAGGER_CODEGEN);
       // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
       if (!this.jhipsterConfig.serviceDiscoveryType) {
-        this.jhipsterConfig.serviceDiscoveryType = this.getOptionFromArray(answers.serverSideOptions, 'serviceDiscoveryType');
+        this.jhipsterConfig.serviceDiscoveryType = getOptionFromArray(answers.serverSideOptions, SERVICE_DISCOVERY_TYPE);
       }
     });
   }

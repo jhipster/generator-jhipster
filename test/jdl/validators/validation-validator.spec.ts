@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 import ValidationValidator from '../../../jdl/validators/validation-validator.js';
 
-describe('ValidationValidator', () => {
+describe('jdl - ValidationValidator', () => {
   let validator;
 
   before(() => {

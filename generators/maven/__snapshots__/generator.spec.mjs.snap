@@ -1,46 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster maven generator with empty configuration should generate only maven files 1`] = `
-Object {
-  ".mvn/jvm.config": Object {
+exports[`generator - maven with empty configuration should generate only maven files 1`] = `
+{
+  ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
+  ".mvn/wrapper/maven-wrapper.jar": {
     "stateCleared": "modified",
   },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
+  ".mvn/wrapper/maven-wrapper.properties": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "mvnw": Object {
+  "mvnw": {
     "stateCleared": "modified",
   },
-  "mvnw.cmd": Object {
+  "mvnw.cmd": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster maven generator with valid configuration should generate only maven files 1`] = `
-Object {
-  ".mvn/jvm.config": Object {
+exports[`generator - maven with valid configuration should generate only maven files 1`] = `
+{
+  ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
+  ".mvn/wrapper/maven-wrapper.jar": {
     "stateCleared": "modified",
   },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
+  ".mvn/wrapper/maven-wrapper.properties": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "mvnw": Object {
+  "mvnw": {
     "stateCleared": "modified",
   },
-  "mvnw.cmd": Object {
+  "mvnw.cmd": {
     "stateCleared": "modified",
   },
 }

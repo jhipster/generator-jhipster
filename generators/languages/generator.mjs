@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,21 +20,17 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
+import { generateDateTimeFormat } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR, LANGUAGES } from '../generator-constants.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
-import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
-
-import generatorDefaults from '../generator-defaults.mjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';
 import { languageToJavaLanguage } from './utils.mjs';
-import jhipsterUtils from '../utils.cjs';
+import { replaceContent } from '../utils.mjs';
 import TranslationData from './translation-data.mjs';
-
-const { translationDefaultConfig } = generatorDefaults;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -89,12 +85,10 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (this.languagesToApply.length > 0) {
       this.languagesToApply.forEach(language => {
         if (!this.isSupportedLanguage(language)) {
-          this.log('\n');
-          this.error(
+          this.logger.log('\n');
+          throw new Error(
             `Unsupported language "${language}" passed as argument to language generator.` +
-              `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(), o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join(
-                ''
-              )}`
+              `\nSupported languages: ${_.map(LANGUAGES, o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
           );
         }
       });
@@ -114,11 +108,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       validate() {
         if (this.languagesToApply.length > 0) {
           if (this.skipClient) {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
+            this.logger.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
           } else if (this.skipServer) {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
+            this.logger.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
           } else {
-            this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
+            this.logger.info(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
           }
         }
       },
@@ -152,23 +146,26 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   get configuring() {
     return {
       defaults() {
-        if (this.jhipsterConfig.enableTranslation === false) {
+        const { nativeLanguage, languages, enableTranslation } = this.jhipsterConfigWithDefaults;
+        if (!enableTranslation) {
+          if (!this.jhipsterConfig.nativeLanguage) {
+            this.jhipsterConfig.nativeLanguage = nativeLanguage;
+          }
           return;
         }
         if (!this.jhipsterConfig.nativeLanguage) {
-          // If native language is not set, use defaults, otherwise languages will be built with nativeLanguage.
-          this.setConfigDefaults(translationDefaultConfig);
           if (this.languagesToApply.length === 0) {
-            this.languagesToApply = this.jhipsterConfig.languages;
+            this.languagesToApply = languages;
           }
+          this.jhipsterConfig.nativeLanguage = nativeLanguage;
         }
         if (!this.jhipsterConfig.languages) {
           this.jhipsterConfig.languages = [];
         }
         if (this.jhipsterConfig.languages.length === 0 || this.jhipsterConfig.languages[0] !== this.jhipsterConfig.nativeLanguage) {
-          this.jhipsterConfig.languages = [...new Set([this.jhipsterConfig.nativeLanguage, ...this.jhipsterConfig.languages])];
+          this.jhipsterConfig.languages = [...new Set([nativeLanguage, ...languages])];
         }
-        if (this.languagesToApply.length > 0) {
+        if (this.languagesToApply && this.languagesToApply.length > 0) {
           // Save new languages;
           this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages, ...this.languagesToApply])];
         }
@@ -329,13 +326,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     const generator = _this || this;
     const prefix = this.fetchFromInstalledJHipster('languages/templates');
     const langJavaProp = languageToJavaLanguage(lang);
-    generator.renderTemplate(
+    generator.writeFile(
       `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
       `${resourceDir}i18n/messages_${langJavaProp}.properties`,
       data
     );
     if (!data.skipUserManagement) {
-      generator.renderTemplate(
+      generator.writeFile(
         `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
         `${testResourceDir}i18n/messages_${langJavaProp}.properties`,
         data
@@ -360,7 +357,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       });
       content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n];';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
@@ -369,7 +366,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
@@ -395,7 +392,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       });
       content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
@@ -404,7 +401,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
@@ -413,6 +410,17 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       );
       this.debug('Error:', e);
     }
+  }
+
+  /**
+   * @private
+   * Generate language objects in array of "'en': { name: 'English' }" format
+   * @param {string[]} languages
+   * @returns generated language options
+   */
+  generateLanguageOptions(languages) {
+    const selectedLangs = LANGUAGES.filter(lang => languages.includes(lang.value));
+    return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
   }
 
   /**
@@ -426,12 +434,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       : `${application.clientSrcDir}/app/config/translation.ts`;
     try {
       let content = '{\n';
-      this.generateLanguageOptions(languages, application.clientFramework).forEach((ln, i) => {
+      this.generateLanguageOptions(languages).forEach((ln, i) => {
         content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
       });
       content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    };';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
@@ -440,7 +448,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -470,7 +478,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
         '                ]';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
@@ -479,7 +487,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
@@ -509,7 +517,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
         '                ]';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
@@ -518,7 +526,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
@@ -548,7 +556,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n'
       );
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           // match needle until // DAYJS CONFIGURATION (excluded)
@@ -558,7 +566,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. DayJS language task not updated with languages: ') +
@@ -574,12 +582,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     try {
       let content = 'languages: {\n';
       if (application.enableTranslation) {
-        this.generateLanguageOptions(languages, application.clientFramework).forEach((ln, i) => {
+        this.generateLanguageOptions(languages).forEach((ln, i) => {
           content += `      ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
         });
       }
       content += '      // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    }';
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g,
@@ -588,7 +596,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -607,13 +615,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       let i18nConfig = 'const dateTimeFormats: DateTimeFormats = {\n';
       if (application.enableTranslation) {
         languages.forEach((ln, i) => {
-          i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
+          i18nConfig += generateDateTimeFormat(ln, i, languages.length);
         });
       }
       i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
       i18nConfig += '}';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /const dateTimeFormats.*\{([^\]]*jhipster-needle-i18n-language-date-time-format[^}]*)}/g,
@@ -622,7 +630,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
@@ -645,7 +653,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             });
       content += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';
 
-      jhipsterUtils.replaceContent(
+      replaceContent(
         {
           file: fullPath,
           pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
@@ -654,7 +662,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this
       );
     } catch (e) {
-      this.log(
+      this.logger.warn(
         chalk.yellow('\nUnable to find ') +
           fullPath +
           chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +

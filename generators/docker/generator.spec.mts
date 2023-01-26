@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,22 +24,14 @@ import { fileURLToPath } from 'url';
 import Generator from './index.mjs';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.mjs';
 import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
-import { matchElasticSearchDocker } from '../server/__test-support/elastic-search-matcher.mjs';
+import { matchElasticSearchDocker } from '../elasticsearch/__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
-import {
-  databaseTypes,
-  applicationTypes,
-  searchEngineTypes,
-  serviceDiscoveryTypes,
-  messageBrokerTypes,
-  cacheTypes,
-} from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, messageBrokerTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { buildServerMatrix } from '../../test/support/server-samples.mjs';
 
 const { snakeCase } = lodash;
 
-const { MONOLITH, GATEWAY, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { NO: NO_SERVICE_DISCOVERY, EUREKA, CONSUL } = serviceDiscoveryTypes;
@@ -81,7 +73,7 @@ matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {
 
 const testSamples = buildSamplesFromMatrix(matrix);
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

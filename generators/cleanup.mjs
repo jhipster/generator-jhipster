@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 
-import { ANGULAR, REACT, VUE } from '../jdl/jhipster/client-framework-types.js';
-import constants from './generator-constants.cjs';
+import { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR, DOCKER_DIR } from './generator-constants.mjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
+import { clientFrameworkTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
 
-export { cleanupOldServerFiles } from './server/cleanup.mjs';
-
-const { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR } = constants;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+const { OAUTH2, SESSION } = authenticationTypes;
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
@@ -83,11 +82,11 @@ export function cleanupOldFiles(generator, data) {
   }
   if (
     generator.isJhipsterVersionLessThan('5.2.2') &&
-    generator.authenticationType === 'oauth2' &&
+    generator.authenticationType === OAUTH2 &&
     generator.applicationType === 'microservice'
   ) {
-    generator.removeFolder(`${constants.DOCKER_DIR}realm-config`);
-    generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
+    generator.removeFolder(`${DOCKER_DIR}realm-config`);
+    generator.removeFile(`${DOCKER_DIR}keycloak.yml`);
   }
   if (generator.isJhipsterVersionLessThan('6.0.0')) {
     generator.removeFolder(`${data.clientSrcDir}app/shared/layout/header/menus`);
@@ -149,7 +148,7 @@ export function cleanupOldFiles(generator, data) {
       generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
       generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
       generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
-      if (generator.jhipsterConfig.authenticationType !== 'session' || generator.jhipsterConfig.websocket !== 'spring-websocket') {
+      if (generator.jhipsterConfig.authenticationType !== SESSION || generator.jhipsterConfig.websocket !== 'spring-websocket') {
         generator.removeFile(`${ANGULAR_DIR}core/auth/csrf.service.ts`);
       }
       generator.removeFolder(`${ANGULAR_DIR}core/login`);

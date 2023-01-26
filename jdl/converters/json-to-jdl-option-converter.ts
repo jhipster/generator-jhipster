@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,9 +19,9 @@
 
 import JDLObject from '../models/jdl-object.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
-import UnaryOptions from '../jhipster/unary-options.js';
+import { unaryOptions } from '../jhipster/index.mjs';
 
-const { SKIP_CLIENT, SKIP_SERVER } = UnaryOptions;
+const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 export default {
   convertServerOptionsToJDL,

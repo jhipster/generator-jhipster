@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2022 the original author or authors from the JHipster project.
+# Copyright the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -189,12 +189,12 @@ jobs:
         timeout-minutes: 7
       - name: 'TESTS: backend'
         id: backend
-        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 'true' && needs.build-matrix.outputs.server != 'false'
         run: npm run ci:backend:test
         continue-on-error: ${{matrix.continue-on-backend-tests-error || false}}
         timeout-minutes: 15
       - name: 'TESTS: frontend'
-        if: steps.compare.outputs.equals != 'true' && matrix.skip-frontend-tests != 1 && needs.build-matrix.outputs.client != 'false'
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-frontend-tests != 'true' && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
         timeout-minutes: 15
       - name: 'TESTS: packaging'

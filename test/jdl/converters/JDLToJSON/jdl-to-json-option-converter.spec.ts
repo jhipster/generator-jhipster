@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,15 +26,14 @@ chai.use(sinonChai);
 import { expect } from 'chai';
 
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../../jdl/models/index.mjs';
 import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
-import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+import { unaryOptions, binaryOptions } from '../../../../jdl/jhipster/index.mjs';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-option-converter.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 
-describe('JDLToJSONOptionConverter', () => {
+describe('jdl - JDLToJSONOptionConverter', () => {
   describe('convert', () => {
     context('when not passing a JDL option holder', () => {
       it('should fail', () => {
@@ -67,62 +66,62 @@ describe('JDLToJSONOptionConverter', () => {
           });
           const options = [
             new JDLUnaryOption({
-              name: UnaryOptions.EMBEDDED,
+              name: unaryOptions.EMBEDDED,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.NO_FLUENT_METHOD,
+              name: unaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.FILTER,
+              name: unaryOptions.FILTER,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.READ_ONLY,
+              name: unaryOptions.READ_ONLY,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.SKIP_CLIENT,
+              name: unaryOptions.SKIP_CLIENT,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: UnaryOptions.SKIP_SERVER,
+              name: unaryOptions.SKIP_SERVER,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.ANGULAR_SUFFIX,
+              name: binaryOptions.Options.ANGULAR_SUFFIX,
               value: 'suffix',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
+              name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
               value: '../client_root_folder',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
-              value: BinaryOptions.Values.dto.MAPSTRUCT,
+              name: binaryOptions.Options.DTO,
+              value: binaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.MICROSERVICE,
+              name: binaryOptions.Options.MICROSERVICE,
               value: 'myMs',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.PAGINATION,
-              value: BinaryOptions.Values.pagination.PAGINATION,
+              name: binaryOptions.Options.PAGINATION,
+              value: binaryOptions.Values.pagination.PAGINATION,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.SEARCH,
-              value: BinaryOptions.Values.search.COUCHBASE,
+              name: binaryOptions.Options.SEARCH,
+              value: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.SERVICE,
-              value: BinaryOptions.Values.service.SERVICE_IMPL,
+              name: binaryOptions.Options.SERVICE,
+              value: binaryOptions.Values.service.SERVICE_IMPL,
               entityNames: ['A'],
             }),
           ];
@@ -134,7 +133,7 @@ describe('JDLToJSONOptionConverter', () => {
 
         it('should convert the options', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "angularJSSuffix": "suffix",
   "clientRootFolder": "../client_root_folder",
   "dto": "mapstruct",
@@ -167,8 +166,8 @@ Object {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
-              value: BinaryOptions.Values.dto.MAPSTRUCT,
+              name: binaryOptions.Options.DTO,
+              value: binaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             })
           );
@@ -188,7 +187,7 @@ Object {
         });
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "dto": "mapstruct",
   "service": "serviceClass",
 }
@@ -210,7 +209,7 @@ Object {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: UnaryOptions.FILTER,
+              name: unaryOptions.FILTER,
               entityNames: ['A'],
             })
           );
@@ -230,7 +229,7 @@ Object {
         });
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "jpaMetamodelFiltering": true,
   "service": "serviceClass",
 }
@@ -250,8 +249,8 @@ Object {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: BinaryOptions.Options.SEARCH,
-              values: BinaryOptions.Values.search.COUCHBASE,
+              name: binaryOptions.Options.SEARCH,
+              values: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
             })
@@ -262,8 +261,8 @@ Object {
 
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
-  "searchEngine": false,
+{
+  "searchEngine": "no",
 }
 `);
         });

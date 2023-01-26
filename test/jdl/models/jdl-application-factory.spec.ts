@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,9 +19,11 @@
 
 import { expect } from 'chai';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
-import { MONOLITH, MICROSERVICE, GATEWAY } from '../../../jdl/jhipster/application-types.js';
+import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
-describe('JDLApplicationFactory', () => {
+const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+
+describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
     context(`when passing a ${MICROSERVICE} config`, () => {
       let application;

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import BaseGenerator from '../base/index.mjs';
-
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
+import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 export default class EntitiesGenerator extends BaseGenerator {
   constructor(args, options, features) {
@@ -102,9 +102,8 @@ export default class EntitiesGenerator extends BaseGenerator {
 
     if (this.options.defaults) {
       if (!this.jhipsterConfig.baseName) {
-        this.jhipsterConfig.baseName = this.getDefaultAppName();
+        this.jhipsterConfig.baseName = getDefaultAppName(this);
       }
-      this.setConfigDefaults(this.getDefaultConfigForApplicationType());
     }
 
     if (!this.options.entities || this.options.entities.length === 0 || this.options.writeEveryEntity) {

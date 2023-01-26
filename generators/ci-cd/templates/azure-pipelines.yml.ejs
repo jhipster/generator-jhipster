@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -86,7 +86,7 @@ jobs:
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: '**/TEST-*.xml'
-      searchFolder: '$(Build.SourcesDirectory)/<%= buildDir %>test-results'
+      searchFolder: '$(Build.SourcesDirectory)/<%= temporaryDir %>test-results'
     condition: succeededOrFailed()
     displayName: 'TESTS: publish test results'
   <%_ } _%>
@@ -99,7 +99,7 @@ jobs:
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '$(Build.SourcesDirectory)/<%= buildDir %>test-results/TESTS-results-jest.xml'
+      testResultsFiles: '$(Build.SourcesDirectory)/<%= temporaryDir %>test-results/TESTS-results-jest.xml'
     condition: succeededOrFailed()
     displayName: 'TESTS: publish test results'
 <%_ } _%>
@@ -135,7 +135,7 @@ jobs:
   <%= commented %>- task: PublishPipelineArtifact@1
   <%= commented %>  inputs:
   <%= commented %>    artifactName: 'cypress-screenshots'
-  <%= commented %>    targetPath: '$(Build.SourcesDirectory)/<%= buildDir %>cypress/screenshots'
+  <%= commented %>    targetPath: '$(Build.SourcesDirectory)/<%= temporaryDir %>cypress/screenshots'
   <%= commented %>  condition: failed()
   <%= commented %>  displayName: 'E2E: Publish Cypress Screenshots'
   <%_ } _%>

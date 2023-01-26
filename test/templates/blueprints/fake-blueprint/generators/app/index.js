@@ -1,32 +1,33 @@
-const createGenerator = async env => class extends (await env.requireGenerator('jhipster:app')) {
+const createGenerator = async env =>
+  class extends (await env.requireGenerator('jhipster:app')) {
     constructor(args, opts, features) {
-        super(args, opts, { taskPrefix: '>', ...features });
+      super(args, opts, { taskPrefix: '>', ...features });
 
-        this.option('foo-bar', {
-            desc: 'Sample option',
-            type: Boolean,
-        });
+      this.option('foo-bar', {
+        desc: 'Sample option',
+        type: Boolean,
+      });
 
-        if (this.options.help) {
-           return;
-        }
+      if (this.options.help) {
+        return;
+      }
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-        if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
-        }
+      const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
+      if (!jhContext) {
+        throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint");
+      }
     }
 
     get ['>initializing']() {
-        return super.initializing;
+      return super.initializing;
     }
 
     get ['>prompting']() {
-        return super.prompting;
+      return super.prompting;
     }
 
     get ['>configuring']() {
-        return super.configuring;
+      return super.configuring;
     }
 
     get ['>composing']() {
@@ -42,28 +43,28 @@ const createGenerator = async env => class extends (await env.requireGenerator('
     }
 
     get ['>default']() {
-        return super.default;
+      return super.default;
     }
 
     get ['>writing']() {
-        return super.writing;
+      return super.writing;
     }
 
     get ['>postWriting']() {
-        return super.postWriting;
+      return super.postWriting;
     }
 
     get ['>install']() {
-        return super.install;
+      return super.install;
     }
 
     get ['>postInstall']() {
-        return super.postInstall;
+      return super.postInstall;
     }
 
     get ['>end']() {
-        return super.end;
+      return super.end;
     }
-};
+  };
 
 module.exports = { createGenerator };

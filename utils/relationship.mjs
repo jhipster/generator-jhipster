@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,7 +25,9 @@ import { stringify } from './index.mjs';
 const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
-const { REQUIRED } = validations;
+const {
+  Validations: { REQUIRED },
+} = validations;
 
 const { MAPSTRUCT } = MapperTypes;
 
@@ -75,7 +77,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
       });
       if (!otherRelationship) {
         // TODO throw error at v8.
-        generator.warning(
+        generator.logger.warn(
           `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
         );
       } else if (
@@ -190,7 +192,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
-      generator.warning(
+      generator.logger.warn(
         `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
       );
     }
@@ -252,7 +254,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
 
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-      generator.warning(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
+      generator.logger.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {
       relationship.relationshipValidate = relationship.relationshipRequired = true;
     }

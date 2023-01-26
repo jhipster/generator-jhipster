@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 import JDLEnums from './jdl-enums.js';
 import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';
-import BinaryOptions from '../jhipster/binary-options.js';
+import { binaryOptions } from '../jhipster/index.mjs';
 import JDLEntity from './jdl-entity.js';
 
 /**
@@ -241,7 +241,7 @@ export default class JDLObject {
   }
 
   isEntityInMicroservice(entityName) {
-    const options = this.getOptionsForName(BinaryOptions.Options.MICROSERVICE);
+    const options = this.getOptionsForName(binaryOptions.Options.MICROSERVICE);
     return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
   }
 

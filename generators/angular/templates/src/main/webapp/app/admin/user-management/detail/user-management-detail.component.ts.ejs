@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,14 +18,17 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import SharedModule from 'app/shared/shared.module';
 
 import { User } from '../user-management.model';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
   templateUrl: './user-management-detail.component.html',
+  imports: [SharedModule],
 })
-export class UserManagementDetailComponent implements OnInit {
+export default class UserManagementDetailComponent implements OnInit {
   user: User | null = null;
 
   constructor(private route: ActivatedRoute) {}

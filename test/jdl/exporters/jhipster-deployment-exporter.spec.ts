@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,13 +25,13 @@ import fs from 'fs';
 import path from 'path';
 import exportDeployments from '../../../jdl/exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
-import DeploymentOptions from '../../../jdl/jhipster/deployment-options.js';
+import { deploymentOptions } from '../../../jdl/jhipster/index.mjs';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
-} = DeploymentOptions;
+} = deploymentOptions;
 
-describe('JHipsterDeploymentExporter', () => {
+describe('jdl - JHipsterDeploymentExporter', () => {
   describe('exportDeployments', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
@@ -91,12 +91,12 @@ describe('JHipsterDeploymentExporter', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
             jestExpect(config).toMatchInlineSnapshot(`
-Object {
-  "appsFolders": Array [
+{
+  "appsFolders": [
     "tata",
     "titi",
   ],
-  "clusteredDbApps": Array [],
+  "clusteredDbApps": [],
   "deploymentType": "docker-compose",
   "directoryPath": "../",
   "dockerRepositoryName": "test",
@@ -133,12 +133,12 @@ Object {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
             jestExpect(config).toMatchInlineSnapshot(`
-Object {
-  "appsFolders": Array [
+{
+  "appsFolders": [
     "tata",
     "titi",
   ],
-  "clusteredDbApps": Array [],
+  "clusteredDbApps": [],
   "deploymentType": "kubernetes",
   "directoryPath": "../",
   "dockerPushCommand": "docker push",

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,15 +18,15 @@
  */
 
 import _ from 'lodash';
-import RelationshipTypes from '../../jhipster/relationship-types.js';
-import RelationshipOptions from '../../jhipster/relationship-options.js';
-import Validations from '../../jhipster/validations.js';
+import { relationshipTypes, relationshipOptions, validations } from '../../jhipster/index.mjs';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
 
-const { REQUIRED } = Validations;
-const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
-const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = RelationshipTypes;
+const {
+  Validations: { REQUIRED },
+} = validations;
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 
 const USER = 'user';
 const AUTHORITY = 'authority';

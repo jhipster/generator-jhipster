@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -73,7 +73,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
+      - SPRING_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
       - JHIPSTER_SLEEP=10 # Let migration complete

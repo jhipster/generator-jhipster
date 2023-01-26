@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,18 +19,18 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
+import { relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 
-describe('RelationshipTypes', () => {
+describe('jdl - RelationshipTypes', () => {
   describe('exists', () => {
     context('when checking for a valid unary relationship type', () => {
       it('should return true', () => {
-        expect(RelationshipTypes.exists(RelationshipTypes.MANY_TO_ONE)).to.be.true;
+        expect(relationshipTypes.exists(relationshipTypes.MANY_TO_ONE)).to.be.true;
       });
     });
     context('when checking for an invalid relationship type', () => {
       it('should return false', () => {
-        expect(RelationshipTypes.exists('NOTHING')).to.be.false;
+        expect(relationshipTypes.exists('NOTHING')).to.be.false;
       });
     });
   });

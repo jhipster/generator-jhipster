@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,11 +23,11 @@ import { expect } from 'chai';
 import { convertServerOptionsToJDL } from '../../../jdl/converters/json-to-jdl-option-converter.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
-import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-const { SKIP_CLIENT } = UnaryOptions;
+const { SKIP_CLIENT } = unaryOptions;
 
-describe('JSONToJDLOptionConverter', () => {
+describe('jdl - JSONToJDLOptionConverter', () => {
   describe('convertToServerOptions', () => {
     context('when not passing any argument', () => {
       let jdlObject;

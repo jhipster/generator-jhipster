@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,21 +19,21 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import FieldTypes from '../jhipster/field-types.js';
-import ApplicationTypes from '../jhipster/application-types.js';
+import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, reservedKeywords, applicationOptions } from '../jhipster/index.mjs';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
 import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
-import DatabaseTypes from '../jhipster/database-types.js';
-import BinaryOptions from '../jhipster/binary-options.js';
 import ApplicationValidator from './application-validator.js';
-
-import { isReservedFieldName, isReservedTableName, isReservedPaginationWords } from '../jhipster/reserved-keywords.js';
 import JDLObject from '../models/jdl-object.js';
 
+const { OptionNames } = applicationOptions;
+const { SQL } = databaseTypes;
+
+const { APPLICATION_TYPE, BLUEPRINTS, DATABASE_TYPE, BASE_NAME, REACTIVE, JHI_PREFIX, SKIP_USER_MANAGEMENT } = OptionNames;
+const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
 /**
  * Constructor taking the jdl object to check against application settings.
  * @param {JDLObject} jdlObject -  the jdl object to check.
@@ -50,7 +50,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     checkForErrors: () => {
       checkForApplicationErrors();
       jdlObject.forEachApplication(jdlApplication => {
-        const blueprints = jdlApplication.getConfigurationOptionValue('blueprints');
+        const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
         if (blueprints && blueprints.length > 0) {
           logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
           return;
@@ -85,14 +85,14 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       }
       validator.validate(jdlEntity);
       if (
-        jdlApplication.getConfigurationOptionValue('databaseType') &&
-        isReservedTableName(jdlEntity.tableName, jdlApplication.getConfigurationOptionValue('databaseType'))
+        jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) &&
+        isReservedTableName(jdlEntity.tableName, jdlApplication.getConfigurationOptionValue(DATABASE_TYPE))
       ) {
         logger.warn(`The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
-      } else if (!jdlApplication.getConfigurationOptionValue('databaseType') && isTableNameReserved(jdlEntity.tableName, jdlApplication)) {
+      } else if (!jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) && isTableNameReserved(jdlEntity.tableName, jdlApplication)) {
         logger.warn(
           `The table name '${jdlEntity.tableName}' is a reserved keyword for application: ` +
-            `${jdlApplication.getConfigurationOptionValue('baseName')}` +
+            `${jdlApplication.getConfigurationOptionValue(BASE_NAME)}` +
             "so it will be prefixed with the value of 'jhiPrefix'."
         );
       }
@@ -103,13 +103,12 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
   function checkForFieldErrors(entityName, jdlFields, jdlApplication) {
     const validator = new FieldValidator();
     const filtering =
-      jdlApplication.getConfigurationOptionValue('databaseType') === 'sql' &&
-      jdlApplication.getConfigurationOptionValue('reactive') === false;
+      jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) === SQL && jdlApplication.getConfigurationOptionValue(REACTIVE) === false;
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
       if (isReservedFieldName(jdlField.name)) {
-        logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
+        logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of '${JHI_PREFIX}'.`);
       }
       if (filtering && isReservedPaginationWords(jdlField.name)) {
         throw new Error(
@@ -130,7 +129,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     Object.keys(jdlField.validations).forEach(validationName => {
       const jdlValidation = jdlField.validations[validationName];
       validator.validate(jdlValidation);
-      if (!FieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
+      if (!fieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
         throw new Error(`The validation '${jdlValidation.name}' isn't supported for the type '${jdlField.type}'.`);
       }
     });
@@ -141,7 +140,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       return;
     }
     const { unidirectionalRelationships } = options;
-    const skippedUserManagement = jdlApplication.getConfigurationOptionValue('skipUserManagement');
+    const skippedUserManagement = jdlApplication.getConfigurationOptionValue(SKIP_USER_MANAGEMENT);
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
       validator.validate(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
@@ -202,8 +201,8 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
 
 function checkForPaginationInAppWithCassandra(jdlOption, jdlApplication) {
   if (
-    jdlApplication.getConfigurationOptionValue('databaseType') === DatabaseTypes.CASSANDRA &&
-    jdlOption.name === BinaryOptions.Options.PAGINATION
+    jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) === databaseTypes.CASSANDRA &&
+    jdlOption.name === binaryOptions.Options.PAGINATION
   ) {
     throw new Error("Pagination isn't allowed when the application uses Cassandra.");
   }
@@ -230,14 +229,14 @@ function isUserManagementEntity(entityName) {
 }
 
 function isTableNameReserved(tableName, jdlApplication: any = []) {
-  return isReservedTableName(tableName, jdlApplication.getConfigurationOptionValue('databaseType'));
+  return isReservedTableName(tableName, jdlApplication.getConfigurationOptionValue(DATABASE_TYPE));
 }
 
 function getTypeCheckingFunction(entityName, jdlApplication) {
-  if (jdlApplication.getConfigurationOptionValue('applicationType') === ApplicationTypes.GATEWAY) {
+  if (jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE) === applicationTypes.GATEWAY) {
     return () => true;
   }
-  return FieldTypes.getIsType(jdlApplication.getConfigurationOptionValue('databaseType'));
+  return fieldTypes.getIsType(jdlApplication.getConfigurationOptionValue(DATABASE_TYPE));
 }
 
 function checkIfRelationshipIsBetweenApplications({ jdlRelationship, applicationsPerEntityName }) {
@@ -246,9 +245,9 @@ function checkIfRelationshipIsBetweenApplications({ jdlRelationship, application
   if (!applicationsForDestinationEntity || !applicationsForSourceEntity) {
     return;
   }
-  applicationsForSourceEntity = applicationsForSourceEntity.map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
+  applicationsForSourceEntity = applicationsForSourceEntity.map(jdlApplication => jdlApplication.getConfigurationOptionValue(BASE_NAME));
   applicationsForDestinationEntity = applicationsForDestinationEntity.map(jdlApplication =>
-    jdlApplication.getConfigurationOptionValue('baseName')
+    jdlApplication.getConfigurationOptionValue(BASE_NAME)
   );
   const difference = applicationsForSourceEntity.filter(application => !applicationsForDestinationEntity.includes(application));
   if (difference.length !== 0) {

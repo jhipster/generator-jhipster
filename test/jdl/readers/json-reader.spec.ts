@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,12 +25,14 @@ import { expect } from 'chai';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import parseFromDir from '../../../jdl/readers/json-reader.js';
-import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options.js';
+import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
+
+const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JSONReader', () => {
+describe('jdl - JSONReader', () => {
   describe('parseFromDir', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {

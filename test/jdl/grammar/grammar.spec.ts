@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,15 +22,19 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import { parseFromContent } from '../../../jdl/readers/jdl-reader.js';
-import { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } from '../../../jdl/jhipster/relationship-types.js';
-import { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } from '../../../jdl/jhipster/validations.js';
-import { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } from '../../../jdl/jhipster/unary-options.js';
+import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-import { Options, Values, OptionValues } from '../../../jdl/jhipster/binary-options.js';
+const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
+const {
+  Validations: { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE },
+} = validations;
+const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = unaryOptions;
+
+const { Options, Values, OptionValues } = binaryOptions;
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 
-describe('Grammar tests', () => {
+describe('jdl - Grammar tests', () => {
   context('when parsing constants', () => {
     context('with integer values', () => {
       let constants;
@@ -43,7 +47,7 @@ MAX = 43`);
 
       it('should parse them', () => {
         jestExpect(constants).toMatchInlineSnapshot(`
-Object {
+{
   "MAX": "43",
   "MIN": "42",
 }
@@ -60,7 +64,7 @@ Object {
 
       it('should parse them', () => {
         jestExpect(constants).toMatchInlineSnapshot(`
-Object {
+{
   "MIN": "42.42",
 }
 `);
@@ -78,11 +82,11 @@ Object {
 
       it('should parse it', () => {
         jestExpect(application).toMatchInlineSnapshot(`
-Object {
-  "config": Object {},
-  "entities": Array [],
-  "options": Object {},
-  "useOptions": Array [],
+{
+  "config": {},
+  "entities": [],
+  "options": {},
+  "useOptions": [],
 }
 `);
       });
@@ -102,13 +106,13 @@ Object {
 
         it('should parse it', () => {
           jestExpect(application).toMatchInlineSnapshot(`
-Object {
-  "config": Object {
+{
+  "config": {
     "applicationType": "monolith",
   },
-  "entities": Array [],
-  "options": Object {},
-  "useOptions": Array [],
+  "entities": [],
+  "options": {},
+  "useOptions": [],
 }
 `);
         });
@@ -127,13 +131,13 @@ Object {
 
         it('should parse it', () => {
           jestExpect(application).toMatchInlineSnapshot(`
-Object {
-  "config": Object {
+{
+  "config": {
     "baseName": "toto",
   },
-  "entities": Array [],
-  "options": Object {},
-  "useOptions": Array [],
+  "entities": [],
+  "options": {},
+  "useOptions": [],
 }
 `);
         });
@@ -152,16 +156,16 @@ Object {
 
         it('should parse it', () => {
           jestExpect(application).toMatchInlineSnapshot(`
-Object {
-  "config": Object {
-    "blueprints": Array [
+{
+  "config": {
+    "blueprints": [
       "generator-jhipster-vuejs",
       "generator-jhipster-nodejs",
     ],
   },
-  "entities": Array [],
-  "options": Object {},
-  "useOptions": Array [],
+  "entities": [],
+  "options": {},
+  "useOptions": [],
 }
 `);
         });
@@ -190,24 +194,24 @@ application {
 
       it('should parse them', () => {
         jestExpect(applications).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "config": Object {
+[
+  {
+    "config": {
       "applicationType": "monolith",
       "baseName": "superApp2",
     },
-    "entities": Array [],
-    "options": Object {},
-    "useOptions": Array [],
+    "entities": [],
+    "options": {},
+    "useOptions": [],
   },
-  Object {
-    "config": Object {
+  {
+    "config": {
       "applicationType": "monolith",
       "baseName": "superApp1",
     },
-    "entities": Array [],
-    "options": Object {},
-    "useOptions": Array [],
+    "entities": [],
+    "options": {},
+    "useOptions": [],
   },
 ]
 `);
@@ -373,9 +377,9 @@ entity C
 
       it('should parse it', () => {
         jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [],
-  "body": Array [],
+{
+  "annotations": [],
+  "body": [],
   "javadoc": null,
   "name": "A",
   "tableName": "A",
@@ -393,9 +397,9 @@ Object {
 
       it('should parse it', () => {
         jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [],
-  "body": Array [],
+{
+  "annotations": [],
+  "body": [],
   "javadoc": null,
   "name": "A",
   "tableName": "a_table",
@@ -437,44 +441,44 @@ entity A`);
 
       it('should parse it', () => {
         jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [
-    Object {
+{
+  "annotations": [
+    {
       "optionName": "dto",
       "optionValue": "mapstruct",
       "type": "BINARY",
     },
-    Object {
+    {
       "optionName": "service",
       "optionValue": "serviceClass",
       "type": "BINARY",
     },
-    Object {
+    {
       "optionName": "readOnly",
       "type": "UNARY",
     },
-    Object {
+    {
       "optionName": "customAnnotation",
       "optionValue": "value1",
       "type": "BINARY",
     },
-    Object {
+    {
       "optionName": "customAnnotation2",
       "optionValue": "2",
       "type": "BINARY",
     },
-    Object {
+    {
       "optionName": "customAnnotation3",
       "optionValue": "2.42",
       "type": "BINARY",
     },
-    Object {
+    {
       "optionName": "customAnnotation4",
       "optionValue": "foo bar $",
       "type": "BINARY",
     },
   ],
-  "body": Array [],
+  "body": [],
   "javadoc": null,
   "name": "A",
   "tableName": "A",
@@ -493,9 +497,9 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [],
-  "body": Array [],
+{
+  "annotations": [],
+  "body": [],
   "javadoc": "A comment",
   "name": "A",
   "tableName": "A",
@@ -517,9 +521,9 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [],
-  "body": Array [],
+{
+  "annotations": [],
+  "body": [],
   "javadoc": "
  * Big
  * comment.
@@ -547,14 +551,14 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [
-    Object {
+{
+  "annotations": [
+    {
       "optionName": "id",
       "type": "UNARY",
     },
   ],
-  "body": Array [],
+  "body": [],
   "javadoc": "A comment",
   "name": "A",
   "tableName": "A",
@@ -594,12 +598,12 @@ Object {
 
           it('should parse it', () => {
             jestExpect(parsedEntity).toMatchInlineSnapshot(`
-Object {
-  "annotations": Array [],
-  "body": Array [
-    Object {
-      "annotations": Array [
-        Object {
+{
+  "annotations": [],
+  "body": [
+    {
+      "annotations": [
+        {
           "optionName": "something",
           "type": "UNARY",
         },
@@ -607,7 +611,7 @@ Object {
       "javadoc": "field comment",
       "name": "name",
       "type": "String",
-      "validations": Array [],
+      "validations": [],
     },
   ],
   "javadoc": null,
@@ -1018,17 +1022,17 @@ entity A {
 
       it('should parse them', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": null,
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "key": "FRANCE",
     },
-    Object {
+    {
       "key": "ENGLAND",
     },
-    Object {
+    {
       "key": "ICELAND",
     },
   ],
@@ -1052,21 +1056,21 @@ Object {
 
       it('should parse them', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": null,
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "key": "FRANCE",
     },
-    Object {
+    {
       "key": "ENGLAND",
       "value": "aaa bbb ccc",
     },
-    Object {
+    {
       "key": "ICELAND",
     },
-    Object {
+    {
       "key": "GERMANY",
     },
   ],
@@ -1091,17 +1095,17 @@ Object {
 
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": null,
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "key": "FRANCE",
     },
-    Object {
+    {
       "key": "ENGLAND",
     },
-    Object {
+    {
       "key": "ICELAND",
     },
   ],
@@ -1132,31 +1136,31 @@ Object {
 
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": "country enum",
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "comment": "some comment",
       "key": "FRANCE",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ITALY",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ENGLAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ICELAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "IRELAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "CANADA",
     },
@@ -1187,33 +1191,33 @@ Object {
 
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": "country enum",
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "comment": "some comment",
       "key": "FRANCE",
       "value": "cheese and wine country",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ITALY",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ENGLAND",
       "value": "not a tea country",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ICELAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "IRELAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "CANADA",
     },
@@ -1243,33 +1247,33 @@ Object {
 
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": null,
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "comment": "some comment",
       "key": "FRANCE",
       "value": "cheese_and_wine_country",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ITALY",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ENGLAND",
       "value": "not_a_tea_country",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "ICELAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "IRELAND",
     },
-    Object {
+    {
       "comment": "some comment",
       "key": "CANADA",
     },
@@ -1297,19 +1301,19 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": null,
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "key": "FRANCE",
       "value": "cheese_and_wine_country",
     },
-    Object {
+    {
       "key": "ENGLAND",
       "value": "not_a_tea_country",
     },
-    Object {
+    {
       "key": "ICELAND",
     },
   ],
@@ -1334,19 +1338,19 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedEnum).toMatchInlineSnapshot(`
-Object {
+{
   "javadoc": null,
   "name": "MyEnum",
-  "values": Array [
-    Object {
+  "values": [
+    {
       "key": "FRANCE",
       "value": "cheese and wine country",
     },
-    Object {
+    {
       "key": "ENGLAND",
       "value": "not a tea country",
     },
-    Object {
+    {
       "key": "ICELAND",
     },
   ],
@@ -1381,19 +1385,19 @@ Object {
 
       it('should parse them', () => {
         jestExpect(relationship).toMatchInlineSnapshot(`
-Object {
+{
   "cardinality": "OneToOne",
-  "from": Object {
+  "from": {
     "injectedField": null,
     "javadoc": null,
     "name": "A",
   },
-  "options": Object {
-    "destination": Array [],
-    "global": Array [],
-    "source": Array [],
+  "options": {
+    "destination": [],
+    "global": [],
+    "source": [],
   },
-  "to": Object {
+  "to": {
     "injectedField": null,
     "javadoc": null,
     "name": "B",
@@ -1580,66 +1584,66 @@ Object {
 
         it('should add them', () => {
           jestExpect(relationships).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "cardinality": "OneToOne",
-    "from": Object {
+    "from": {
       "injectedField": null,
       "javadoc": null,
       "name": "A",
     },
-    "options": Object {
-      "destination": Array [],
-      "global": Array [
-        Object {
+    "options": {
+      "destination": [],
+      "global": [
+        {
           "optionName": "jpaDerivedIdentifier",
           "type": "UNARY",
         },
       ],
-      "source": Array [],
+      "source": [],
     },
-    "to": Object {
+    "to": {
       "injectedField": null,
       "javadoc": null,
       "name": "B",
     },
   },
-  Object {
+  {
     "cardinality": "OneToOne",
-    "from": Object {
+    "from": {
       "injectedField": null,
       "javadoc": null,
       "name": "B",
     },
-    "options": Object {
-      "destination": Array [],
-      "global": Array [],
-      "source": Array [],
+    "options": {
+      "destination": [],
+      "global": [],
+      "source": [],
     },
-    "to": Object {
+    "to": {
       "injectedField": null,
       "javadoc": null,
       "name": "C",
     },
   },
-  Object {
+  {
     "cardinality": "OneToOne",
-    "from": Object {
+    "from": {
       "injectedField": null,
       "javadoc": null,
       "name": "D",
     },
-    "options": Object {
-      "destination": Array [],
-      "global": Array [
-        Object {
+    "options": {
+      "destination": [],
+      "global": [
+        {
           "optionName": "jpaDerivedIdentifier",
           "type": "UNARY",
         },
       ],
-      "source": Array [],
+      "source": [],
     },
-    "to": Object {
+    "to": {
       "injectedField": null,
       "javadoc": null,
       "name": "E",
@@ -1661,25 +1665,25 @@ Array [
 
         it('should parse them', () => {
           jestExpect(relationships).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "cardinality": "OneToOne",
-    "from": Object {
+    "from": {
       "injectedField": null,
       "javadoc": null,
       "name": "A",
     },
-    "options": Object {
-      "destination": Array [],
-      "global": Array [],
-      "source": Array [
-        Object {
+    "options": {
+      "destination": [],
+      "global": [],
+      "source": [
+        {
           "optionName": "id",
           "type": "UNARY",
         },
       ],
     },
-    "to": Object {
+    "to": {
       "injectedField": null,
       "javadoc": null,
       "name": "B",
@@ -1699,25 +1703,25 @@ Array [
 
         it('should parse them', () => {
           jestExpect(relationships).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "cardinality": "OneToOne",
-    "from": Object {
+    "from": {
       "injectedField": null,
       "javadoc": null,
       "name": "A",
     },
-    "options": Object {
-      "destination": Array [
-        Object {
+    "options": {
+      "destination": [
+        {
           "optionName": "id",
           "type": "UNARY",
         },
       ],
-      "global": Array [],
-      "source": Array [],
+      "global": [],
+      "source": [],
     },
-    "to": Object {
+    "to": {
       "injectedField": null,
       "javadoc": null,
       "name": "B",
@@ -1737,30 +1741,30 @@ Array [
 
         it('should parse them', () => {
           jestExpect(relationships).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "cardinality": "OneToOne",
-    "from": Object {
+    "from": {
       "injectedField": null,
       "javadoc": null,
       "name": "A",
     },
-    "options": Object {
-      "destination": Array [
-        Object {
+    "options": {
+      "destination": [
+        {
           "optionName": "id",
           "type": "UNARY",
         },
       ],
-      "global": Array [],
-      "source": Array [
-        Object {
+      "global": [],
+      "source": [
+        {
           "optionName": "id",
           "type": "UNARY",
         },
       ],
     },
-    "to": Object {
+    "to": {
       "injectedField": null,
       "javadoc": null,
       "name": "B",
@@ -1784,11 +1788,11 @@ Array [
 
         it('should add the exclusions', () => {
           jestExpect(parsedOption).toMatchInlineSnapshot(`
-Object {
-  "excluded": Array [
+{
+  "excluded": [
     "A",
   ],
-  "list": Array [
+  "list": [
     "*",
   ],
 }
@@ -1825,10 +1829,10 @@ Object {
 
           it('should parse it', () => {
             jestExpect(parsedOption).toMatchInlineSnapshot(`
-Object {
-  "client": Object {
-    "excluded": Array [],
-    "list": Array [
+{
+  "client": {
+    "excluded": [],
+    "list": [
       "*",
     ],
   },
@@ -1846,10 +1850,10 @@ Object {
 
           it('should parse it', () => {
             jestExpect(parsedOption).toMatchInlineSnapshot(`
-Object {
-  "\\"../../toto\\"": Object {
-    "excluded": Array [],
-    "list": Array [
+{
+  ""../../toto"": {
+    "excluded": [],
+    "list": [
       "*",
     ],
   },
@@ -1868,12 +1872,12 @@ Object {
 
         it('should add the exclusions', () => {
           jestExpect(parsedOption).toMatchInlineSnapshot(`
-Object {
-  "mapstruct": Object {
-    "excluded": Array [
+{
+  "mapstruct": {
+    "excluded": [
       "A",
     ],
-    "list": Array [
+    "list": [
       "*",
     ],
   },
@@ -1929,10 +1933,10 @@ Object {
 
       it("should parse it as '*'", () => {
         jestExpect(parsedOption).toMatchInlineSnapshot(`
-Object {
-  "client": Object {
-    "excluded": Array [],
-    "list": Array [
+{
+  "client": {
+    "excluded": [],
+    "list": [
       "*",
     ],
   },
@@ -1950,10 +1954,10 @@ Object {
 
       it('should parse it', () => {
         jestExpect(parsedOption).toMatchInlineSnapshot(`
-Object {
-  "client": Object {
-    "excluded": Array [],
-    "list": Array [
+{
+  "client": {
+    "excluded": [],
+    "list": [
       "*",
     ],
   },
@@ -2001,7 +2005,7 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedDeployment).toMatchInlineSnapshot(`
-Object {
+{
   "kubernetesStorageClassName": "",
 }
 `);
@@ -2022,7 +2026,7 @@ Object {
 
         it('should parse it', () => {
           jestExpect(parsedDeployment).toMatchInlineSnapshot(`
-Object {
+{
   "kubernetesStorageClassName": "SetValue",
 }
 `);

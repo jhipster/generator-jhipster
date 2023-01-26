@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,7 +29,6 @@ import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
 } = deploymentOptions;
-
 /**
  * Base class for a generator that can be extended through a blueprint.
  *

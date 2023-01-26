@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,22 +19,22 @@
 
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import databaseTypes from '../../../jdl/jhipster/database-types.js';
+import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
-const { isSql, CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
+const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
-describe('DatabaseTypes', () => {
+describe('jdl - DatabaseTypes', () => {
   describe('isSql', () => {
     context('when not passing anything', () => {
       it('should return false', () => {
-        expect(isSql()).to.be.false;
+        expect(databaseTypes.isSql()).to.be.false;
       });
     });
     context('when passing a SQL database type', () => {
       [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL].forEach(databaseType => {
         context(`such as ${databaseType}`, () => {
           it('should return true', () => {
-            expect(isSql(databaseType)).to.be.true;
+            expect(databaseTypes.isSql(databaseType)).to.be.true;
           });
         });
       });
@@ -43,7 +43,7 @@ describe('DatabaseTypes', () => {
       [MONGODB, CASSANDRA, COUCHBASE, NO].forEach(databaseType => {
         context(`such as ${databaseType}`, () => {
           it('should return false', () => {
-            expect(isSql(databaseType)).to.be.false;
+            expect(databaseTypes.isSql(databaseType)).to.be.false;
           });
         });
       });

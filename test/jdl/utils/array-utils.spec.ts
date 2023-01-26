@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import deduplicate from '../../../jdl/utils/array-utils.js';
 
-describe('ArrayUtils', () => {
+describe('jdl - ArrayUtils', () => {
   describe('deduplicate', () => {
     context('when not passing an array', () => {
       it('should return an empty array', () => {

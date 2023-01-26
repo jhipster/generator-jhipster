@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ import jest from 'jest-mock';
 
 import { createTranslationReplacer } from './transform-angular.mjs';
 
-describe('Angular transform', () => {
+describe('generator - angular - transform', () => {
   describe('replaceAngularTranslations', () => {
     let generator;
     let replaceAngularTranslations;
@@ -107,8 +107,8 @@ describe('Angular transform', () => {
 `;
           expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-<input placeholder=\\"translated-value-global.form.currentpassword.placeholder1-0\\"/>
-<input placeholder=\\"translated-value-global.form.currentpassword.placeholder2-1\\"/>
+<input placeholder="translated-value-global.form.currentpassword.placeholder1-0"/>
+<input placeholder="translated-value-global.form.currentpassword.placeholder2-1"/>
 "
 `);
         });
@@ -120,8 +120,8 @@ describe('Angular transform', () => {
 `;
           expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-<input title=\\"translated-value-global.form.currentpassword.title1-0\\"/>
-<input title=\\"translated-value-global.form.currentpassword.title2-1\\"/>
+<input title="translated-value-global.form.currentpassword.title1-0"/>
+<input title="translated-value-global.form.currentpassword.title2-1"/>
 "
 `);
         });

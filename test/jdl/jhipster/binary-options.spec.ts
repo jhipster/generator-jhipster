@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,27 +20,27 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-describe('BinaryOptions', () => {
+describe('jdl - BinaryOptions', () => {
   it('should match values', () => {
-    jestExpect(BinaryOptions.Values).toMatchInlineSnapshot(`
-Object {
-  "dto": Object {
+    jestExpect(binaryOptions.Values).toMatchInlineSnapshot(`
+{
+  "dto": {
     "MAPSTRUCT": "mapstruct",
     "NO": "no",
   },
-  "pagination": Object {
+  "pagination": {
     "INFINITE-SCROLL": "infinite-scroll",
     "NO": "no",
     "PAGINATION": "pagination",
   },
-  "search": Object {
+  "search": {
     "COUCHBASE": "couchbase",
     "ELASTICSEARCH": "elasticsearch",
     "NO": "no",
   },
-  "service": Object {
+  "service": {
     "NO": "no",
     "SERVICE_CLASS": "serviceClass",
     "SERVICE_IMPL": "serviceImpl",
@@ -51,13 +51,13 @@ Object {
   describe('exists', () => {
     context('when checking for a valid binary option', () => {
       it('should return true', () => {
-        expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
+        expect(binaryOptions.exists(binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
       });
     });
     context('when checking for a custom binary option', () => {
       it('should return true', () => {
-        expect(BinaryOptions.exists('customOption')).to.be.true;
-        expect(BinaryOptions.exists('customOption', 'customValue')).to.be.true;
+        expect(binaryOptions.exists('customOption')).to.be.true;
+        expect(binaryOptions.exists('customOption', 'customValue')).to.be.true;
       });
     });
   });
@@ -65,7 +65,7 @@ Object {
     context('when not passing a function', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => BinaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
+        expect(() => binaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
       });
     });
     context('when passing a function', () => {
@@ -73,12 +73,12 @@ Object {
 
       before(() => {
         result = [];
-        BinaryOptions.forEach(optionName => result.push(optionName));
+        binaryOptions.forEach(optionName => result.push(optionName));
       });
 
       it('should iterate over them', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "dto",
   "service",
   "pagination",

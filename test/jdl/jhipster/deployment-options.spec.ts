@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,11 +21,11 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import deploymentOptions from '../../../jdl/jhipster/deployment-options.js';
+import { deploymentOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { DeploymentTypes, Options } = deploymentOptions;
 
-describe('DeploymentOptions', () => {
+describe('jdl - DeploymentOptions', () => {
   describe('DeploymentTypes', () => {
     describe('exists', () => {
       context('when passing a nil arg', () => {

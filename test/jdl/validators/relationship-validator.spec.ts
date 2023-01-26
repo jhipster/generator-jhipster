@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,11 +20,12 @@
 import { expect } from 'chai';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
 import RelationshipValidator from '../../../jdl/validators/relationship-validator.js';
+import { relationshipOptions, relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 
-import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options.js';
-import { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } from '../../../jdl/jhipster/relationship-types.js';
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 
-describe('RelationshipValidator', () => {
+describe('jdl - RelationshipValidator', () => {
   let validator;
 
   before(() => {

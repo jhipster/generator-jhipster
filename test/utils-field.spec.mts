@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,13 +20,13 @@
 import { expect } from 'chai';
 import { prepareEntityForTemplates, loadRequiredConfigIntoEntity } from '../utils/entity.mjs';
 import { formatDateForChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.mjs';
 import BaseGenerator from '../generators/base/index.mjs';
 import { prepareFieldForTemplates, getEnumValuesWithCustomValues } from '../utils/field.mjs';
+import { getConfigWithDefaults } from '../jdl/jhipster/index.mjs';
 
-const { defaultConfig } = generatorDefaults;
+const defaultConfig = getConfigWithDefaults();
 
-describe('main utilities', () => {
+describe('utils - field', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 

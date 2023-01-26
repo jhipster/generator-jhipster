@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -75,12 +75,7 @@ export async function postWriteEntitiesFiles({ application, entities }) {
         applicationTypeMicroservice,
         clientSrcDir: application.clientSrcDir,
       });
-      this.needleApi.clientReact.addEntityToMenu(
-        entity.entityPage,
-        application.enableTranslation,
-        entity.entityTranslationKeyMenu,
-        entity.entityClassHumanized
-      );
+      this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
     }
   }
 }

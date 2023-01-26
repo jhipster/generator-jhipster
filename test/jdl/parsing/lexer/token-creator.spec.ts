@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import { NAME, KEYWORD } from '../../../../jdl/parsing/lexer/shared-tokens.js';
 import createTokenFromConfig from '../../../../jdl/parsing/lexer/token-creator.js';
 
-describe('TokenCreator', () => {
+describe('jdl - TokenCreator', () => {
   describe('createTokenFromConfig', () => {
     context('when not passing a config', () => {
       it('should fail', () => {

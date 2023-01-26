@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,9 +20,10 @@ import { Directive, OnInit, ElementRef, Renderer2, Input } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Directive({
+  standalone: true,
   selector: '[<%= jhiPrefix %>ActiveMenu]',
 })
-export class ActiveMenuDirective implements OnInit {
+export default class ActiveMenuDirective implements OnInit {
   @Input() <%= jhiPrefix %>ActiveMenu?: string;
 
   constructor(private el: ElementRef, private renderer: Renderer2, private translateService: TranslateService) {}

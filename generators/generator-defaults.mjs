@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,109 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getConfigForApplicationType } from '../jdl/jhipster/default-application-options.js';
-import applicationOptions from '../jdl/jhipster/application-options.js';
-import { MONOLITH } from '../jdl/jhipster/application-types.js';
-import binaryOptions from '../jdl/jhipster/binary-options.js';
+import { binaryOptions } from '../jdl/jhipster/index.mjs';
 
-const optionNames = applicationOptions.OptionNames;
-const defaultNewApplicationOptions = getConfigForApplicationType();
-const defaultMonolithOptions = getConfigForApplicationType(MONOLITH);
-
-/** Required config for prompts to be skipped */
-const appRequiredConfig = {
-  applicationType: defaultMonolithOptions[optionNames.APPLICATION_TYPE],
-};
-
-const appDefaultConfig = {
-  ...appRequiredConfig,
-  skipClient: defaultNewApplicationOptions[optionNames.SKIP_CLIENT],
-  skipServer: defaultNewApplicationOptions[optionNames.SKIP_SERVER],
-  skipUserManagement: defaultMonolithOptions[optionNames.SKIP_USER_MANAGEMENT],
-  skipCheckLengthOfIdentifier: false,
-  skipFakeData: false,
-  jhiPrefix: defaultNewApplicationOptions[optionNames.JHI_PREFIX],
-  entitySuffix: defaultNewApplicationOptions[optionNames.ENTITY_SUFFIX],
-  dtoSuffix: defaultNewApplicationOptions[optionNames.DTO_SUFFIX],
-  get testFrameworks() {
-    return [];
-  },
-  get blueprints() {
-    return [];
-  },
-  get pages() {
-    return [];
-  },
-};
-
-/** Required config for prompts to be skipped */
-const serverRequiredConfig = {
-  packageName: defaultNewApplicationOptions[optionNames.PACKAGE_NAME],
-  cacheProvider: defaultNewApplicationOptions[optionNames.CACHE_PROVIDER],
-  websocket: defaultNewApplicationOptions[optionNames.WEBSOCKET],
-  databaseType: defaultNewApplicationOptions[optionNames.DATABASE_TYPE],
-  prodDatabaseType: defaultNewApplicationOptions[optionNames.PROD_DATABASE_TYPE],
-  devDatabaseType: defaultNewApplicationOptions[optionNames.DEV_DATABASE_TYPE],
-  searchEngine: defaultNewApplicationOptions[optionNames.SEARCH_ENGINE],
-  buildTool: defaultNewApplicationOptions[optionNames.BUILD_TOOL],
-};
-
-const serverDefaultConfig = {
-  ...serverRequiredConfig,
-  serverPort: defaultMonolithOptions[optionNames.SERVER_PORT],
-  authenticationType: defaultMonolithOptions[optionNames.AUTHENTICATION_TYPE],
-  serviceDiscoveryType: defaultMonolithOptions[optionNames.SERVICE_DISCOVERY_TYPE],
-  enableHibernateCache: true,
-  reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
-  enableGradleEnterprise: false,
-};
-
-/** Required config for prompts to be skipped */
-const clientRequiredConfig = {
-  clientFramework: defaultMonolithOptions[optionNames.CLIENT_FRAMEWORK],
-};
-
-const clientDefaultConfig = {
-  ...clientRequiredConfig,
-  clientPackageManager: defaultNewApplicationOptions[optionNames.CLIENT_PACKAGE_MANAGER],
-  clientTheme: defaultMonolithOptions[optionNames.CLIENT_THEME],
-  clientThemeVariant: defaultMonolithOptions[optionNames.CLIENT_THEME_VARIANT],
-  withAdminUi: defaultMonolithOptions[optionNames.WITH_ADMIN_UI],
-};
-
-const translationDefaultConfig = {
-  enableTranslation: defaultNewApplicationOptions[optionNames.ENABLE_TRANSLATION],
-  nativeLanguage: 'en',
-  get languages() {
-    return ['en', 'fr'];
-  },
-};
-
-/** Required config for prompts to be skipped, baseName is missing */
-const requiredDefaultConfig = {
-  ...appRequiredConfig,
-  ...serverRequiredConfig,
-  ...clientRequiredConfig,
-};
-
-const defaultConfig = {
-  ...appDefaultConfig,
-  ...serverDefaultConfig,
-  ...clientDefaultConfig,
-  ...translationDefaultConfig,
-  serverPort: 8080,
-};
-
-const defaultConfigMicroservice = {
-  ...appDefaultConfig,
-  ...serverDefaultConfig,
-  ...translationDefaultConfig,
-  microfrontend: false,
-  gatewayServerPort: 8080,
-  serverPort: 8081,
-};
-
-const entityDefaultConfig = {
+// eslint-disable-next-line import/prefer-default-export
+export const entityDefaultConfig = {
   pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
   validation: false,
   dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
@@ -136,16 +37,3 @@ const entityDefaultConfig = {
     return [];
   },
 };
-
-const defaultExport = {
-  appDefaultConfig,
-  serverDefaultConfig,
-  clientDefaultConfig,
-  defaultConfig,
-  defaultConfigMicroservice,
-  requiredDefaultConfig,
-  entityDefaultConfig,
-  translationDefaultConfig,
-};
-
-export default defaultExport;

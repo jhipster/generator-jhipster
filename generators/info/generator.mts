@@ -2,7 +2,7 @@
 // stderr unlike yeoman's log() so that user can easily redirect output to a file.
 /* eslint-disable no-console */
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -46,7 +46,7 @@ export default class InfoGenerator extends BaseGenerator {
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
-        this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+        this.logger.info(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
 
       async checkJHipster() {
@@ -122,8 +122,8 @@ export default class InfoGenerator extends BaseGenerator {
       });
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
-      this.log((error as any).message || error);
-      this.error('\nError while parsing entities to JDL\n');
+      this.logger.warn((error as any).message || error);
+      throw new Error('\nError while parsing entities to JDL\n');
     }
     return jdlObject;
   }

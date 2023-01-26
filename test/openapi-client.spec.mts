@@ -6,7 +6,7 @@ import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 const basePackage = 'src/main/java/com/mycompany/myapp';
 
-describe('JHipster OpenAPI Client Sub Generator', () => {
+describe('generator - OpenAPI Client', () => {
   //--------------------------------------------------
   // Spring Cloud Client tests
   //--------------------------------------------------

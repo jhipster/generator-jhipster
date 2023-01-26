@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -38,7 +38,7 @@ export function checkDocker() {
 
   shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
     if (stderr) {
-      this.log(
+      this.logger.error(
         chalk.red(
           'Docker version 1.10.0 or later is not installed on your computer.\n' +
             '         Read http://docs.docker.com/engine/installation/#installation\n'
@@ -50,7 +50,7 @@ export function checkDocker() {
       const dockerVersionMajor = dockerVersion.split('.')[0];
       const dockerVersionMinor = dockerVersion.split('.')[1];
       if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-        this.log(
+        this.logger.error(
           chalk.red(
             `Docker version 1.10.0 or later is not installed on your computer.
                                  Docker version found: ${dockerVersion}
@@ -59,7 +59,7 @@ export function checkDocker() {
         );
         this.abort = true;
       } else {
-        this.log.ok('Docker is installed');
+        this.logger.info('Docker is installed');
       }
     }
     done();

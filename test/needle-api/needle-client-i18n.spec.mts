@@ -3,11 +3,11 @@ import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 
 import LanguagesGenerator from '../../generators/languages/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator, getTemplatePath } from '../support/index.mjs';
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const { ANGULAR } = clientFrameworkTypes;
 
 const generatorPath = getGenerator('languages');
 
@@ -19,7 +19,7 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;

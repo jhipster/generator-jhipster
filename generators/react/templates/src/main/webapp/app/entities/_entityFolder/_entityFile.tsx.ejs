@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,7 +21,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
+import { Button, <% if (searchEngineAny) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
 <%_ if (blobFields.length > 0) { _%>
   <%_ if (fieldsContainBlobOrImage) { _%>
@@ -29,7 +29,7 @@ import {
   <%_ } _%>
   byteSize,
 <%_ } _%>
-  Translate<% if (searchEngine) { %>, translate<% } %>
+  Translate<% if (searchEngineAny) { %>, translate<% } %>
   <% if (fieldsContainDate) { %>, TextFormat<% } %>
 <%_ if (paginationNo) { _%>
   , getSortState
@@ -56,7 +56,7 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 
 import {
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   searchEntities,
 <%_ } _%>
   getEntities,
@@ -73,7 +73,7 @@ export const <%= entityReactName %> = () => {
   const navigate = useNavigate();
 <%_ } _%>
 
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (paginationNo) { _%>
@@ -96,7 +96,7 @@ export const <%= entityReactName %> = () => {
 <%_ } _%>
 
   const getAllEntities = () => {
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     if (search) {
       dispatch(
         searchEntities({
@@ -155,7 +155,7 @@ export const <%= entityReactName %> = () => {
   }, []);
 <%_ } _%>
 
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   const startSearching = (e) => {
     if (search) {
   <%_ if (paginationInfiniteScroll) { _%>
@@ -245,7 +245,7 @@ export const <%= entityReactName %> = () => {
 <%_ } else { _%>
     sortEntities();
 <%_ } _%>
-  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%_ if (searchEngine) { _%>, search<% } %>]);
+  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%_ if (searchEngineAny) { _%>, search<% } %>]);
 
 <%_ if (paginationPagination) { _%>
   useEffect(() => {
@@ -324,7 +324,7 @@ export const <%= entityReactName %> = () => {
 <%_ } _%>
         </div>
       </h2>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
       <Row>
         <Col sm="12">
           <Form onSubmit={startSearching}>

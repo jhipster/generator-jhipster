@@ -1,11 +1,11 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ClientGenerator from '../../generators/client/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import { CLIENT_WEBPACK_DIR } from '../../generators/generator-constants.mjs';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
-const { ANGULAR, VUE, REACT } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
-const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
+const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const assetFrom = 'source';
 const assetTo = 'target';
 
@@ -17,7 +17,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;

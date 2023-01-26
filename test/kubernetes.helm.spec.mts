@@ -73,7 +73,7 @@ const expectedFiles = {
   applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
 };
 
-describe('JHipster Kubernetes Helm Sub Generator', () => {
+describe('generator - Kubernetes Helm', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {

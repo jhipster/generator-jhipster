@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,13 +19,13 @@
 import JDLParser from './jdl-parser.js';
 import deduplicate from '../utils/array-utils.js';
 
-import ApplicationOptions from '../jhipster/application-options.js';
-import EntityOptions from '../jhipster/entity-options.js';
-import Validations from '../jhipster/validations.js';
+import { applicationOptions, entityOptions, validations } from '../jhipster/index.mjs';
 
-const { OptionNames } = ApplicationOptions;
-const { PaginationTypes } = EntityOptions;
-const { PATTERN, REQUIRED, UNIQUE } = Validations;
+const { OptionNames } = applicationOptions;
+const { PaginationTypes } = entityOptions;
+const {
+  Validations: { PATTERN, REQUIRED, UNIQUE },
+} = validations;
 
 const { PAGINATION } = PaginationTypes;
 const { PACKAGE_NAME } = OptionNames;

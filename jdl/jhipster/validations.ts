@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,16 +29,6 @@ const Validations: any = {
   MAXBYTES: 'maxbytes',
 };
 
-export const REQUIRED = Validations.REQUIRED;
-export const UNIQUE = Validations.UNIQUE;
-export const MIN = Validations.MIN;
-export const MAX = Validations.MAX;
-export const MINLENGTH = Validations.MINLENGTH;
-export const MAXLENGTH = Validations.MAXLENGTH;
-export const PATTERN = Validations.PATTERN;
-export const MINBYTES = Validations.MINBYTES;
-export const MAXBYTES = Validations.MAXBYTES;
-
 Validations.exists = validation =>
   Object.keys(Validations)
     .map(key => Validations[key])
@@ -59,8 +49,7 @@ Validations.needsValue = validation => {
   return valuedMap[validation];
 };
 
-export default Validations;
-
-export const SUPPORTED_VALIDATION_RULES = Object.keys(Validations)
+const SUPPORTED_VALIDATION_RULES = Object.keys(Validations)
   .map(key => Validations[key])
   .filter(e => typeof e === 'string');
+export default { Validations, SUPPORTED_VALIDATION_RULES };

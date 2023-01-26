@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,19 +20,19 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
 import JDLField from '../../../../jdl/models/jdl-field.js';
-import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
-import FieldTypes from '../../../../jdl/jhipster/field-types.js';
-import Validations from '../../../../jdl/jhipster/validations.js';
+import { fieldTypes, validations } from '../../../../jdl/jhipster/index.mjs';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter.js';
 
-const { CommonDBTypes } = FieldTypes;
+const { CommonDBTypes } = fieldTypes;
 
-const { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX } = Validations;
+const {
+  Validations: { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX },
+} = validations;
 
-describe('JDLToJSONFieldConverter', () => {
+describe('jdl - JDLToJSONFieldConverter', () => {
   describe('convert', () => {
     context('when not passing a JDL object', () => {
       it('should fail', () => {
@@ -63,7 +63,7 @@ describe('JDLToJSONFieldConverter', () => {
 
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
-Object {
+{
   "fieldName": "firstField",
   "fieldType": "String",
 }
@@ -108,23 +108,23 @@ Object {
 
           it('should convert them', () => {
             jestExpect(convertedFields).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "fieldName": "anyBlobField",
     "fieldType": "byte[]",
     "fieldTypeBlobContent": "any",
   },
-  Object {
+  {
     "fieldName": "textBlobField",
     "fieldType": "byte[]",
     "fieldTypeBlobContent": "text",
   },
-  Object {
+  {
     "fieldName": "blobField",
     "fieldType": "byte[]",
     "fieldTypeBlobContent": "any",
   },
-  Object {
+  {
     "fieldName": "imageBlobField",
     "fieldType": "byte[]",
     "fieldTypeBlobContent": "image",
@@ -159,7 +159,7 @@ Array [
 
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
-Object {
+{
   "fieldName": "enumField",
   "fieldType": "CustomEnum",
   "fieldValues": "AA,AB",
@@ -194,12 +194,12 @@ Object {
 
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
-Object {
+{
   "fieldName": "enumField",
   "fieldType": "CustomEnum",
   "fieldTypeJavadoc": "enum comment",
   "fieldValues": "AA,AB",
-  "fieldValuesJavadocs": Object {
+  "fieldValuesJavadocs": {
     "AA": "some comment",
     "AB": "some comment",
   },
@@ -230,7 +230,7 @@ Object {
 
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
-Object {
+{
   "fieldName": "firstField",
   "fieldType": "String",
   "javadoc": "The best field",
@@ -316,11 +316,11 @@ Object {
 
         it('should convert them', () => {
           jestExpect(convertedFields).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "fieldName": "stringField",
     "fieldType": "String",
-    "fieldValidateRules": Array [
+    "fieldValidateRules": [
       "required",
       "unique",
       "minlength",
@@ -331,21 +331,21 @@ Array [
     "fieldValidateRulesMinlength": 0,
     "fieldValidateRulesPattern": "^d$",
   },
-  Object {
+  {
     "fieldName": "integerField",
     "fieldType": "Integer",
-    "fieldValidateRules": Array [
+    "fieldValidateRules": [
       "min",
       "max",
     ],
     "fieldValidateRulesMax": 10,
     "fieldValidateRulesMin": 0,
   },
-  Object {
+  {
     "fieldName": "blobField",
     "fieldType": "byte[]",
     "fieldTypeBlobContent": "any",
-    "fieldValidateRules": Array [
+    "fieldValidateRules": [
       "minbytes",
       "maxbytes",
     ],
@@ -382,11 +382,11 @@ Array [
 
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
-Object {
+{
   "fieldName": "firstField",
   "fieldType": "String",
   "javadoc": "The best field",
-  "options": Object {
+  "options": {
     "id": 42,
   },
 }

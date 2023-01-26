@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,15 +19,15 @@
 /* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
 import _ from 'lodash';
-import BaseGenerator from '../base-application/index.mjs';
 
+import BaseGenerator from '../base-application/index.mjs';
+import { checkNode } from './support/index.mjs';
 import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
@@ -40,7 +40,6 @@ import {
 
 import { applicationTypes, applicationOptions, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { appDefaultConfig } = generatorDefaults;
 const { MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
@@ -308,11 +307,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
 
-    // Use jhipster defaults
-    if (this.options.defaults || this.options.withEntities) {
-      this.setConfigDefaults(this.getDefaultConfigForApplicationType());
-    }
-
     // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
@@ -339,12 +333,11 @@ export default class JHipsterAppGenerator extends BaseGenerator {
         }
       },
 
-      validateJava() {
-        this.checkJava();
-      },
-
       validateNode() {
-        this.checkNode();
+        if (this.skipChecks) {
+          return;
+        }
+        checkNode(this.logger);
       },
 
       checkForNewJHVersion() {
@@ -355,7 +348,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
       validate() {
         if (this.skipServer && this.skipClient) {
-          this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
+          throw new Error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
       },
     };
@@ -380,7 +373,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     return {
       setup() {
         // Update jhipsterVersion.
-        this.jhipsterConfig.jhipsterVersion = packagejs.version;
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
 
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
@@ -397,12 +390,11 @@ export default class JHipsterAppGenerator extends BaseGenerator {
         if (this.jhipsterConfig.skipClient) {
           this.jhipsterConfig.clientFramework = CLIENT_FRAMEWORK_NO;
         }
-
-        // Set app defaults
-        this.setConfigDefaults(appDefaultConfig);
       },
       fixConfig() {
-        this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+        if (this.jhipsterConfig.jhiPrefix) {
+          this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+        }
       },
     };
   }
@@ -508,7 +500,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   get end() {
     return {
       afterRunHook() {
-        this.log(
+        this.logger.info(
           chalk.green(
             `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
           )
@@ -523,7 +515,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
   _validateAppConfiguration(config = this.jhipsterConfig) {
     if (config.entitySuffix === config.dtoSuffix) {
-      this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+      throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
     }
   }
 }
