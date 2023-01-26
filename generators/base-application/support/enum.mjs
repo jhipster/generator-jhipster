@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { getJavadoc as javadoc } from '../../../server/support/doc-formatting.mjs';
+import { getJavadoc as javadoc } from '../../server/support/doc-formatting.mjs';
 
 const doesTheEnumValueHaveACustomValue = enumValue => {
   return enumValue.includes('(');
@@ -80,10 +80,11 @@ const extractEnumEntries = field => {
 /**
  * Build an enum object
  * @param {Object} field - entity field
- * @param {String} clientRootFolder - the client's root folder
+ * @param {String} [clientRootFolder] - the client's root folder
  * @return {Object} the enum info.
  */
-const enumInfo = (field, clientRootFolder) => {
+// eslint-disable-next-line import/prefer-default-export
+export const getEnumInfo = (field, clientRootFolder) => {
   field.enumInstance = extractEnumInstance(field); // TODO remove side effect
   const enums = extractEnumEntries(field);
   const customValuesState = getCustomValuesState(enums);
@@ -97,5 +98,3 @@ const enumInfo = (field, clientRootFolder) => {
     clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
   };
 };
-
-export default enumInfo;
