@@ -66,9 +66,9 @@ export const insertContentIntoApplicationProperties = (generator, data, needles)
     generator = null;
   }
 
-  return createBaseNeedle(
+  return createBaseNeedle.call(
+    generator,
     {
-      generator,
       filePath: generator ? `${data.SERVER_MAIN_SRC_DIR}${data.javaDir}config/ApplicationProperties.java` : undefined,
       needlesPrefix: 'application-properties',
     },

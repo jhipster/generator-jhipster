@@ -20,44 +20,73 @@ import assert from 'assert';
 import chalk from 'chalk';
 import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
+import BaseGenerator from '../../generators/base/index.mjs';
+import { CascatedEditFileCallback, EditFileCallback } from '../../generators/base/api.mjs';
+import { joinCallbacks } from '../../generators/base/ts-utils.mjs';
 
 const { kebabCase } = _;
 
+type NeedleInsertion = {
+  needle: string;
+  /**
+   * Content to add.
+   */
+  contentToAdd: string | string[];
+  /**
+   * check existing content ignoring white spaces and new lines.
+   */
+  ignoreWhitespaces?: boolean;
+  /**
+   * throw error if needle was not found
+   */
+  optional?: boolean;
+};
+
+type NeedleFileInsertion = NeedleInsertion & {
+  /**
+   * Path to file.
+   * The generator context must be passed.
+   */
+  filePath?: string;
+  /**
+   * Common needle prefix
+   */
+  needlesPrefix?: string;
+};
+
+type NeedleContentInsertion = NeedleInsertion & {
+  content: string;
+};
+
 /**
  * Change spaces sequences and '>' to allow any number of spaces or new line prefix
- *
- * @param {string} str string
- * @returns {string} string where CRLF is replaced with LF in Windows
  */
-export const convertToPrettierExpressions = str => {
+export const convertToPrettierExpressions = (str: string): string => {
   return str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
 };
 
 /**
  * Check if contentToCheck existing in content
  *
- * @param {string} contentToCheck
- * @param {string} content
- * @param {boolean} [ignoreWhitespaces=true]
- * @returns {boolean} if exists
+ * @param contentToCheck
+ * @param content
+ * @param [ignoreWhitespaces=true]
  */
-export const checkContentIn = (contentToCheck, content, ignoreWhitespaces = true) => {
+export const checkContentIn = (contentToCheck: string | RegExp, content, ignoreWhitespaces = true) => {
   assert(content, 'content is required');
   assert(contentToCheck, 'contentToCheck is required');
 
-  let re;
-  if (contentToCheck.test) {
-    re = contentToCheck;
-  } else if (ignoreWhitespaces) {
-    re = convertToPrettierExpressions(escapeStringRegexp(contentToCheck));
+  let re: RegExp;
+  if (typeof contentToCheck === 'string') {
+    const pattern = ignoreWhitespaces
+      ? convertToPrettierExpressions(escapeStringRegexp(contentToCheck))
+      : contentToCheck
+          .split('\n')
+          .map(line => `\\s*${escapeStringRegexp(line)}`)
+          .join('\n');
+    re = new RegExp(pattern);
   } else {
-    re = contentToCheck
-      .split('\n')
-      .map(line => `\\s*${escapeStringRegexp(line)}`)
-      .join('\n');
-  }
-  if (!re.test) {
-    re = new RegExp(re);
+    re = contentToCheck;
   }
   return re.test(content);
 };
@@ -65,13 +94,10 @@ export const checkContentIn = (contentToCheck, content, ignoreWhitespaces = true
 /**
  * Write content before needle applying identation
  *
- * @param {object} args
- * @param {string} args.content - normalized content
- * @param {string} args.needle
- * @param {string|string[]} args.contentToAdd
- * @returns {string|null} null if needle was not found, new content otherwise
+ * @param args
+ * @returns null if needle was not found, new content otherwise
  */
-export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }) => {
+export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }: NeedleContentInsertion): string | null => {
   assert(needle, 'needle is required');
   assert(content, 'content is required');
   assert(contentToAdd, 'contentToAdd is required');
@@ -95,13 +121,14 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }) => 
   const needleLine = afterContent.split('\n', 2)[0];
   const needleIdent = needleLine.length - needleLine.trimStart().length;
 
-  contentToAdd = []
-    .concat(contentToAdd)
-    .map(eachContentToAdd => eachContentToAdd.split('\n'))
-    .flat();
+  contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).map(eachContentToAdd => eachContentToAdd.split('\n')).flat();
 
   // Normalize needle ident with contentToAdd.
   const firstContent = contentToAdd.find(line => line.trim());
+  if (!firstContent) {
+    // File is blank.
+    return null;
+  }
   const contentIdent = firstContent.length - firstContent.trimStart().length;
   if (needleIdent > contentIdent) {
     const identToApply = ' '.repeat(needleIdent - contentIdent);
@@ -126,24 +153,21 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }) => 
 /**
  * Create an callback to insert the new content into existing content.
  *
- * @this Generator
- * @param {object} options
- * @param {string} options.needle needle to look for
- * @param {string|string[]} options.contentToAdd content to add
- * @param {boolean} [options.optional=false] don't throw error if needle was not found
- * @param {boolean} [options.ignoreWhitespaces=true] check existing content ignoring white spaces and new lines
- * @returns {import('../../generators/base/types').EditFileCallback}
+ * @param options
  */
-export const createNeedleCallback = ({ needle, contentToAdd, optional = false, ignoreWhitespaces = true }) => {
+export const createNeedleCallback = ({
+  needle,
+  contentToAdd,
+  optional = false,
+  ignoreWhitespaces = true,
+}: NeedleInsertion): EditFileCallback<BaseGenerator> => {
   assert(needle, 'needle is required');
   assert(contentToAdd, 'contentToAdd is required');
 
-  /**
-   * @type {import('../../generators/base/types').EditFileCallback}
-   * @this {import('../../generators/base/index.mjs').default}
-   */
   return function (content, filePath) {
-    contentToAdd = [].concat(contentToAdd).filter(eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces));
+    contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).filter(
+      eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces)
+    );
     if (contentToAdd.length === 0) {
       return content;
     }
@@ -168,27 +192,22 @@ export const createNeedleCallback = ({ needle, contentToAdd, optional = false, i
 /**
  * Inject content before needle or create a needle insertion callback.
  *
- * @param {object} options foo
- * @param {object} needles
- * @param {string} options.contentToAdd content to add
- * @param {Generator} [options.generator] generator if provided, editFile will be executed
- * @param {string} [options.filePath] path to file
- * @param {string} [options.needlesPrefix] common needle prefix
- * @param {boolean} [options.optional=false] throw error if needle was not found
- * @returns {import('../../generators/base/index.mjs').CascatedEditFileCallback | import('../../generators/base/index.mjs').EditFileCallback}
+ * @param this - generator if provided, editFile will be executed
  */
-export const createBaseNeedle = (options, needles) => {
-  if (!needles) {
-    needles = options;
-    options = {};
-  }
+export function createBaseNeedle(
+  this: BaseGenerator | void,
+  options: NeedleFileInsertion | Record<string, string>,
+  needles?: Record<string, string>
+): EditFileCallback<BaseGenerator> | CascatedEditFileCallback<BaseGenerator> {
+  const actualNeedles = needles === undefined ? (options as Record<string, string>) : needles;
+  const actualOptions: NeedleFileInsertion | undefined = needles === undefined ? undefined : (options as NeedleFileInsertion);
 
-  assert(needles, 'needles is required');
-  const { generator, filePath, optional = false, ignoreWhitespaces = true } = options;
+  assert(actualNeedles, 'needles is required');
+  const { filePath, optional = false, ignoreWhitespaces = true } = actualOptions ?? {};
   let { needlesPrefix } = options;
   needlesPrefix = needlesPrefix ? `${needlesPrefix}-` : '';
 
-  const callbacks = Object.entries(needles)
+  const callbacks = Object.entries(actualNeedles)
     .filter(([_key, contentToAdd]) => contentToAdd)
     .map(([key, contentToAdd]) =>
       createNeedleCallback({ needle: `${needlesPrefix}${kebabCase(key)}`, contentToAdd, optional, ignoreWhitespaces })
@@ -196,21 +215,13 @@ export const createBaseNeedle = (options, needles) => {
 
   assert(callbacks.length > 0, 'At least 1 needle is required');
 
-  const callback =
-    callbacks.length === 1
-      ? callbacks[0]
-      : function (content, ...args) {
-          callbacks.forEach(cb => {
-            content = cb.call(this, content, ...args);
-          });
-          return content;
-        };
+  const callback = callbacks.length === 1 ? callbacks[0] : joinCallbacks(...callbacks);
 
-  if (generator) {
-    assert(filePath, 'filePath is required');
+  if (filePath) {
+    assert(this, 'when passing filePath, the generator is required');
 
-    return generator.editFile(filePath, callback);
+    return this.editFile(filePath, callback);
   }
 
   return callback;
-};
+}

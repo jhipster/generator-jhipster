@@ -24,10 +24,12 @@ import { checkContentIn, insertContentBeforeNeedle, createNeedleCallback, create
 describe('needles - support', () => {
   describe('checkContentIn', () => {
     it('should throw without content', () => {
+      // @ts-expect-error
       expect(() => checkContentIn('bar')).toThrow();
     });
 
     it('should throw without contentToCheck', () => {
+      // @ts-expect-error
       expect(() => checkContentIn(undefined, 'bar')).toThrow();
     });
 
@@ -67,6 +69,7 @@ describe('needles - support', () => {
   describe('insertContentBeforeNeedle', () => {
     it('should throw without content', () => {
       expect(() =>
+        // @ts-expect-error
         insertContentBeforeNeedle({
           contentToAdd: 'bar',
           needle: 'bar',
@@ -76,6 +79,7 @@ describe('needles - support', () => {
 
     it('should throw without needle', () => {
       expect(() =>
+        // @ts-expect-error
         insertContentBeforeNeedle({
           content: 'bar',
           contentToAdd: 'bar',
@@ -85,6 +89,7 @@ describe('needles - support', () => {
 
     it('should throw without contentToAdd', () => {
       expect(() =>
+        // @ts-expect-error
         insertContentBeforeNeedle({
           content: 'bar',
           needle: 'bar',
@@ -201,10 +206,12 @@ ${needlePrefix} jhipster-needle-a-needle"
     const contentToAdd = 'content to add';
 
     it('should throw without needle', () => {
+      // @ts-expect-error
       expect(() => createNeedleCallback({ contentToAdd })).toThrow();
     });
 
     it('should throw without contentToAdd', () => {
+      // @ts-expect-error
       expect(() => createNeedleCallback({ needle })).toThrow();
     });
 
@@ -213,28 +220,37 @@ ${needlePrefix} jhipster-needle-a-needle"
     });
 
     it('returned function should throw on missing content', () => {
-      expect(() => createNeedleCallback({ contentToAdd, needle })()).toThrow(/content is required/);
+      expect(() => createNeedleCallback({ contentToAdd, needle }).call({ log() {} })).toThrow(/content is required/);
     });
 
     it('returned function should throw on missing needle', () => {
-      expect(() => createNeedleCallback({ contentToAdd, needle })('no needle')).toThrow(/Missing required jhipster-needle/);
+      expect(() => createNeedleCallback({ contentToAdd, needle }).call({ log() {} }, 'no needle')).toThrow(
+        /Missing required jhipster-needle/
+      );
     });
 
     it('returned function should not throw on optional missing needle', () => {
       const content = 'no needle';
-      expect(createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log() {} }, content, 'file')).toBe(content);
+      expect(
+        createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log() {}, logger: { warn: () => {} } }, content, 'file')
+      ).toBe(content);
     });
 
     it('returned function should add contentToAdd', () => {
-      expect(createNeedleCallback({ contentToAdd, needle })(`\\ jhipster-needle-${needle}`)).toMatchInlineSnapshot(`
+      expect(createNeedleCallback({ contentToAdd, needle }).call({ log() {} }, `\\\\ jhipster-needle-${needle}`, 'file'))
+        .toMatchInlineSnapshot(`
 "content to add
 \\\\ jhipster-needle-a-needle"
 `);
     });
 
     it('returned function should add contentToAdd array', () => {
-      expect(createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle })(`\\ jhipster-needle-${needle}`))
-        .toMatchInlineSnapshot(`
+      expect(
+        createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle }).call(
+          { log() {} },
+          `\\\\ jhipster-needle-${needle}`
+        )
+      ).toMatchInlineSnapshot(`
 "content to add
 content to add2
 \\\\ jhipster-needle-a-needle"
@@ -253,6 +269,7 @@ content to add2
     });
 
     it('should throw without needles parameter', () => {
+      // @ts-expect-error
       expect(() => createBaseNeedle()).toThrow(/needles is required/);
     });
 
@@ -261,6 +278,7 @@ content to add2
     });
 
     it('should throw with options and empty needles', () => {
+      // @ts-expect-error
       expect(() => createBaseNeedle({ optional: true }, {})).toThrow(/At least 1 needle is required/);
     });
 
@@ -268,13 +286,14 @@ content to add2
       expect(typeof createBaseNeedle(needles)).toBe('function');
     });
 
-    it('should throw with generator without filePath', () => {
-      expect(() => createBaseNeedle({ generator }, needles)).toThrow(/filePath is required/);
+    it('should throw with filePath without generator', () => {
+      const filePath = 'file.foo';
+      expect(() => createBaseNeedle({ filePath }, needles)).toThrow(/when passing filePath, the generator is required/);
     });
 
     it('should execute editFile if generator and filePath is passed', () => {
       const filePath = 'file.foo';
-      createBaseNeedle({ generator, filePath }, needles);
+      createBaseNeedle.call(generator, { filePath }, needles);
       expect(generator.editFile).toBeCalledTimes(1);
       expect(generator.editFile.mock.lastCall[0]).toBe(filePath);
       expect(typeof generator.editFile.mock.lastCall[1]).toBe('function');
