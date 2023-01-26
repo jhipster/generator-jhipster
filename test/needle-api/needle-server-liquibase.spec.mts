@@ -97,6 +97,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        clientFramework: 'no',
         skipPriorities: ['prompting'],
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])

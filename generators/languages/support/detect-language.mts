@@ -18,15 +18,14 @@
  */
 
 import osLocale from 'os-locale';
-import { LANGUAGES } from '../generator-constants.mjs';
+import { findLanguageForTag, Language, supportedLanguages } from './languages.mjs';
 
-const detectLanguage = () => {
+const detectLanguage = (languages: ReadonlyArray<Language> = supportedLanguages) => {
   const locale = osLocale.sync();
   if (locale) {
-    const language =
-      LANGUAGES.find(lang => lang.value === locale.toLowerCase()) || LANGUAGES.find(lang => lang.value === locale.split('-')[0]);
+    const language = findLanguageForTag(locale.toLowerCase(), languages) ?? findLanguageForTag(locale.split('-')[0], languages);
     if (language) {
-      return language.value;
+      return language.languageTag;
     }
   }
   return 'en';

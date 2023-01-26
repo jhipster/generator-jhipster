@@ -27,3 +27,4 @@ export {
   generateTypescriptTestEntity,
   getEntityParentPathAddition,
 } from './template-utils.mjs';
+export * from './update-languages.mjs';

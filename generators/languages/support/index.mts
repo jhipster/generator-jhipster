@@ -16,14 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export function languageSnakeCase(language) {
-  // Template the message server side properties
-  return language.replace(/-/g, '_');
-}
-
-export function languageToJavaLanguage(language) {
-  // Template the message server side properties
-  const langProp = languageSnakeCase(language);
-  // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-  return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
-}
+export * from './languages.mjs';
+export { default as generateDateTimeFormat } from './json/dates.mjs';
+export { default as detectLanguage } from './detect-language.mjs';
+export { default as loadLanguagesConfig } from './load-config.mjs';

@@ -29,6 +29,7 @@ import type { CommonClientServerApplication } from '../base-application/types.mj
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
 import { packageJson } from '../../lib/index.mjs';
+import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const { upperFirst } = _;
 
@@ -66,9 +67,9 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadApplication({ application }) {
+      loadApplication({ application, control }) {
         this.loadAppConfig(undefined, application);
-        this.loadTranslationConfig(undefined, application);
+        loadLanguagesConfig(application, this.jhipsterConfigWithDefaults, control);
       },
       loadNodeDependencies({ application }) {
         const commonDependencies = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')) as any;
