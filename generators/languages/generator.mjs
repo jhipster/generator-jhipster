@@ -33,6 +33,7 @@ import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.mjs';
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import upgradeFilesTask from './upgrade-files-task.mjs';
 
 /**
  * This is the base class for a generator that generates entities.
@@ -268,6 +269,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return {
+      upgradeFilesTask,
       async writeClientTranslations({ application }) {
         if (!application.enableTranslation || application.skipClient) return;
         await Promise.all(

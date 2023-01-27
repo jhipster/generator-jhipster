@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export { default } from './generator.mjs';
+export { default as upgradeFilesTask } from './upgrade-files-task.mjs';

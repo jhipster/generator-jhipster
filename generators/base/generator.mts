@@ -23,6 +23,7 @@ import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
+import { statSync, rmSync } from 'fs';
 
 import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
@@ -90,6 +91,13 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
+   * Override yeoman generator's usage function to fine tune --help message.
+   */
+  usage(): string {
+    return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  /**
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
@@ -145,6 +153,38 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
         }
       }
     });
+  }
+
+  /**
+   * Remove File
+   * @param file
+   */
+  removeFile(...path: string[]) {
+    const destinationFile = this.destinationPath(...path);
+    try {
+      if (destinationFile && statSync(destinationFile).isFile()) {
+        this.logger.log(`Removing the file - ${destinationFile}`);
+        rmSync(destinationFile, { force: true });
+      }
+    } catch {
+      this.logger.log(`Could not remove file ${destinationFile}`);
+    }
+    return destinationFile;
+  }
+
+  /**
+   * Remove Folder
+   * @param path
+   */
+  removeFolder(...path: string[]) {
+    const destinationFolder = this.destinationPath(...path);
+    try {
+      if (statSync(destinationFolder).isDirectory()) {
+        rmSync(destinationFolder, { recursive: true });
+      }
+    } catch (error) {
+      this.logger.log(`Could not remove folder ${destinationFolder}`);
+    }
   }
 
   /**
