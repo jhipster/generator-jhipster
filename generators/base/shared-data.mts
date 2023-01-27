@@ -16,49 +16,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import { type BaseApplication } from '../base-application/types.mjs';
+import { type Control } from './types.mjs';
 
-/**
- * @template {import('../bootstrap-application-base/types.js').BaseApplication} ApplicationType
- */
-export default class SharedData {
-  constructor(storage, jhipsterOldVersion) {
+export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
+  _storage: any;
+
+  constructor(storage, initialControl: Partial<Control> = {}) {
     if (!storage) {
       throw new Error('Storage is required for SharedData');
     }
-    if (
-      jhipsterOldVersion &&
-      storage.sharedData?.jhipsterOldVersion !== undefined &&
-      jhipsterOldVersion !== storage.sharedData?.jhipsterOldVersion
-    ) {
-      throw new Error('JHipster old version cannot be overridden');
-    }
-    this._configDefaultValues = {};
-    this._configChoices = {};
-
     // Backward compatibility sharedData
     this._storage = storage;
     this._storage.sharedEntities = this._storage.sharedEntities || {};
     this._storage.sharedApplication = this._storage.sharedApplication || {};
     this._storage.sharedSource = this._storage.sharedSource || {};
-    this._storage.sharedData = this._storage.sharedData || { jhipsterOldVersion };
+    this._storage.sharedData = this._storage.sharedData || initialControl;
   }
 
   getSource() {
     return this._storage.sharedSource;
   }
 
-  /**
-   * @returns {import('./types.mjs').Control}
-   */
-  getControl() {
+  getControl(): Control {
     return this._storage.sharedData;
   }
 
-  /**
-   * @returns {ApplicationType}
-   */
-  getApplication() {
+  getApplication(): ApplicationType {
     if (!this._storage.sharedApplication) throw new Error('Shared application not loaded');
     return this._storage.sharedApplication;
   }

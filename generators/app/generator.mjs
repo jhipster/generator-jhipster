@@ -369,9 +369,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   get configuring() {
     return {
       setup() {
-        // Update jhipsterVersion.
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
-
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient =

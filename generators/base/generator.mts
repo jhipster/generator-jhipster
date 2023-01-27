@@ -27,6 +27,7 @@ import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import { statSync, rmSync } from 'fs';
 import { lt as semverLessThan } from 'semver';
+import type Storage from 'yeoman-generator/lib/util/storage.js';
 
 import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
@@ -44,6 +45,8 @@ import type {
 } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
+import { packageJson } from '../../lib/index.mjs';
+import { type BaseApplication } from '../base-application/types.mjs';
 
 const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -87,14 +90,30 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static END = asPriority(END);
 
-  readonly sharedData!: SharedData<any>;
+  readonly sharedData!: SharedData<BaseApplication>;
+
+  sbsBlueprint?: boolean;
 
   private _jhipsterGenerator?: string;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
 
-    this.sharedData = this.createSharedData();
+    /*
+     * When building help, this.jhipsterConfig is not available.
+     * At current state jhipsterOptions registers options and parses it.
+     * TODO split register/parse options process, register should alway be executed.
+     * When building the help, parse can be skipped.
+     */
+    let jhipsterOldVersion = null;
+    if (this.jhipsterConfig && !this.options.reproducible) {
+      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
+      if (!this.jhipsterConfig.jhipsterVersion) {
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
+      }
+    }
+
+    this.sharedData = this.createSharedData(jhipsterOldVersion);
 
     this.jhipsterOptions(baseOptions as JHipsterOptions);
   }
@@ -414,11 +433,10 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   /**
    * Get all the generator configuration from the .yo-rc.json file
-   * @param {string} entityName - Name of the entity to load.
+   * @param entityName - Name of the entity to load.
    * @param {boolean} create - Create storage if doesn't exists.
-   * @returns {import('yeoman-generator/lib/util/storage')}
    */
-  getEntityConfig(entityName, create = false) {
+  getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
     if (!create && !this.fs.exists(entityPath)) return undefined;
     return this.createStorage(entityPath, { sorted: true } as any);
@@ -456,7 +474,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     return entities;
   }
 
-  private createSharedData() {
+  private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
     const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
@@ -465,11 +483,9 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       this.options.sharedData.applications = {};
     }
     const sharedApplications = this.options.sharedData.applications;
-    let jhipsterOldVersion = null;
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
-      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
     }
-    return new SharedData(sharedApplications[applicationId], jhipsterOldVersion);
+    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion });
   }
 }

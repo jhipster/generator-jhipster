@@ -113,8 +113,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
   dependabotPackageJson;
 
-  sbsBlueprint;
-
   /**
    * @param {string | string[]} args
    * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
@@ -162,8 +160,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     this._config = this._getStorage('generator-jhipster', { sorted: true });
     /* JHipster config using proxy mode used as a plain object instead of using get/set. */
     this.jhipsterConfig = this.config.createProxy();
-
-    this.parseTestOptions();
 
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
@@ -2208,16 +2204,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
-   * @experimental
-   */
-  showHello() {
-    if (this.configOptions.showHello === false) return false;
-    this.configOptions.showHello = false;
-    return true;
-  }
-
-  /**
    * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
@@ -2226,32 +2212,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDependabotDependencies(packageJson) {
     const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
     _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
-  }
-
-  /**
-   * @private
-   * Load config for simulating existing project.
-   */
-  parseTestOptions() {
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
-      delete this.options.defaultLocalConfig;
-    }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      this.config.set(this.options.localConfig);
-      delete this.options.localConfig;
-    }
   }
 }
