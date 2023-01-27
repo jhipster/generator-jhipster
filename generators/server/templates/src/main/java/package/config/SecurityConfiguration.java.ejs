@@ -80,9 +80,6 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-  <%_ if (applicationTypeMonolith) { _%>
-import org.springframework.security.config.Customizer;
-  <%_ } _%>
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
