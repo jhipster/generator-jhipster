@@ -341,7 +341,7 @@ export default class extends BaseGenerator {
         if (!generateSnapshots) return;
 
         // Generate snapshots to add to git.
-        this.log(`
+        this.logger.info(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
         try {
           if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
@@ -353,7 +353,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
             // We are forcing to generate snapshots fail the generation.
             throw error;
           }
-          this.log('Fail to generate snapshots');
+          this.logger.warn('Fail to generate snapshots');
         }
       },
     };
@@ -368,7 +368,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
       end() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
 
-        this.log(`${chalk.bold.green('##### USAGE #####')}
+        this.logger.info(`${chalk.bold.green('##### USAGE #####')}
 To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}

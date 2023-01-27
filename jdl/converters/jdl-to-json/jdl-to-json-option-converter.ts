@@ -18,13 +18,14 @@
  */
 
 import logger from '../../utils/objects/logger.js';
-import { unaryOptions, binaryOptions, entityOptions } from '../../jhipster/index.mjs';
+import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.mjs';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 const { ServiceTypes } = entityOptions;
+const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 
 const NO_SERVICE = ServiceTypes.NO;
 const {
@@ -121,7 +122,7 @@ function getJSONOptionKeyAndValue(jdlOption) {
 
 function preventEntitiesFromBeingSearched(entityNames) {
   entityNames.forEach(entityName => {
-    setOptionToEntityName({ optionName: 'searchEngine', optionValue: false }, entityName);
+    setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
   });
 }
 

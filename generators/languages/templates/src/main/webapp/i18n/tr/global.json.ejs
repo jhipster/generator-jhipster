@@ -19,7 +19,7 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "<strong>Çok eski</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
+        "browsehappy": "<strong>Güncel olmayan</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
         "menu": {
             "home": "Ana Sayfa",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -39,14 +39,14 @@
             "admin": {
                 "main": "Yönetim",
 <%_ if (applicationTypeGateway) { _%>
-                "gateway": "Gateway",
+                "gateway": "Ağ geçici",
 <%_ } _%>
                 "userManagement": "Kullanıcı yönetimi",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
-                "logs": "Kayıtlar",
+                "logs": "Sistem günlükleri",
                 "apidocs": "API",
                 "database": "Veritabanı",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -60,8 +60,8 @@
             "currentpassword.placeholder": "Mevcut Şifreniz",
             "newpassword.label": "Yeni Şifre",
             "newpassword.placeholder": "Yeni Şifreniz",
-            "confirmpassword.label": "Yeni Şifre Tekrar",
-            "confirmpassword.placeholder": "Yeni Şifreniz Tekrar",
+            "confirmpassword.label": "Yeni Şifre Doğrulama",
+            "confirmpassword.placeholder": "Yeni Şifrenizi Doğrulayınız",
             "email.label": "E-posta",
             "email.placeholder": "E-posta adresiniz"
         },
@@ -88,15 +88,15 @@
                     "strength": "Şifre karmaşıklığı:"
                 },
                 "confirmpassword": {
-                    "required": "Tekrar şifresi zorunludur.",
-                    "minlength": "Tekrar şifreniz en az 4 karakter olmalıdır",
-                    "maxlength": "Tekrar şifreniz 50 karakterden uzun olamaz"
+                    "required": "Doğrulama şifresi zorunludur.",
+                    "minlength": "Doğrulama şifreniz en az 4 karakter olmalıdır",
+                    "maxlength": "Doğrulama şifreniz 50 karakterden uzun olamaz"
                 },
                 "email": {
-                    "required": "E-posta zorunlu alandır.",
-                    "invalid": "E-posta alanı uygun değil.",
-                    "minlength": "E-posta adresi en az 5 karakter olmalıdır",
-                    "maxlength": "E-posta adresi 50 karakterden fazla olamaz"
+                    "required": "E-posta adresiniz zorunludur.",
+                    "invalid": "E-posta adresiniz uygun değil.",
+                    "minlength": "E-posta adresiniz en az 5 karakter olmalıdır",
+                    "maxlength": "E-posta adresiniz 50 karakterden fazla olamaz"
                 }
             }
         },
@@ -104,13 +104,13 @@
             "id" : "ID"
         },
         "ribbon": {
-            "dev": "Development"
+            "dev": "Geliştirme Modu"
         },
         "item-count": "Toplam {{total}} kaydın {{first}} - {{second}} arası gösteriliyor."
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
+            "addblob": "İkili büyük nesne ekle",
             "addimage": "Resim Ekle",
             "back": "Geri",
             "cancel": "İptal",
@@ -119,7 +119,7 @@
             "open": "Aç",
             "save": "Kaydet",
             "view": "Görüntüle",
-            "show": "Show {{otherEntity}}"
+            "show": "Göster {{otherEntity}}"
         },
         "detail": {
             "field": "Alan",
@@ -129,7 +129,7 @@
             "title": "Silme işlemini onayla"
         },
         "validation": {
-            "required": "Bu alan gerekli.",
+            "required": "Bu alan gereklidir.",
             "minlength": "Bu alan en az {{min}} karakterden oluşabilir.",
             "maxlength": "Bu alan en fazla {{max}} karakterden oluşabilir.",
             "min": "Bu alan en az {{min}} olmalı.",
@@ -142,26 +142,26 @@
             "patternLogin": "Bu alan harf, rakam veya e-posta adresi içermeli."
         },
         "filters": {
-          "set": "Following filters are set",
-          "clear": "Clear filter",
-          "clearAll": "Clear all filters"
+          "set": "Aşağıdaki filtreler ayarlandı",
+          "clear": "Filtreyi temizle",
+          "clearAll": "Tüm filtreleri temizle"
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
-        "server.not.reachable": "Sunucuya ulaşılamıyor",
+        "internalServerError": "Dahili sunucu hatası",
+        "server.not.reachable": "Sunucuya ulaşılabilir değil",
         "url.not.found": "Bulunamadı",
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
         "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
-        "userexists": "Kullanıcı adı daha önce alınmış!",
-        "emailexists": "E-posta adresi zaten kullanılıyor!",
-        "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID",
-        "idinvalid": "Invalid Id",
-        "idnotfound": "ID cannot be found",
+        "userexists": "Bu kullanıcı adı daha önce alınmış!",
+        "emailexists": "Bu E-posta adresi zaten kullanılıyor!",
+        "idexists": "Yeni bir {{entityName}} eklenirken ID dolu olamaz",
+        "idnull": "Geçersiz ID",
+        "idinvalid": "Geçersiz Id",
+        "idnotfound": "ID bulunamadı",
         "file": {
-            "could.not.extract": "Could not extract file",
-            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+            "could.not.extract": "Dosya çıkarılamadı",
+            "not.image": "Dosyanın bir resim olması bekleniyordu; ancak \"{{ fileType }}\" oldugu bulundu"
         }
     },
     "footer": "Burası sayfa alt bilgisi"

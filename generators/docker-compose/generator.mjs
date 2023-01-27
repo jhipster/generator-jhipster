@@ -71,7 +71,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
 
         shelljs.exec('docker compose version', { silent: true }, (code, stdout, stderr) => {
           if (stderr) {
-            this.log(
+            this.logger.error(
               chalk.red(
                 'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
                   '         Read https://docs.docker.com/compose/install/\n'
@@ -82,7 +82,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             const composeVersionMajor = composeVersion.split('.')[0];
             const composeVersionMinor = composeVersion.split('.')[1];
             if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-              this.log(
+              this.logger.error(
                 chalk.red(
                   `$Docker Compose version 1.6.0 or later is not installed on your computer.
                                              Docker Compose version found: ${composeVersion}
@@ -112,8 +112,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   get configuring() {
     return {
       sayHello() {
-        this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-        this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.logger.info(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+        this.logger.info(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
       ...super.configuring,
@@ -316,21 +316,21 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return {
       end() {
         if (this.hasWarning) {
-          this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
-          this.log('If you forgot to generate the Docker image for this application, please run:');
-          this.log(chalk.red(this.warningMessage));
+          this.logger.warn('\nDocker Compose configuration generated, but no Jib cache found');
+          this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.logger.warn(chalk.red(this.warningMessage));
         } else {
-          this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+          this.logger.info(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        this.logger.info(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
         if (this.gatewayNb + this.monolithicNb > 1) {
-          this.log('\nYour applications will be accessible on these URLs:');
+          this.logger.info('\nYour applications will be accessible on these URLs:');
           this.appConfigs.forEach(appConfig => {
             if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-              this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+              this.logger.info(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
             }
           });
-          this.log('\n');
+          this.logger.log('\n');
         }
       },
     };

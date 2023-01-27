@@ -20,7 +20,6 @@ import assert from 'assert';
 import lodash from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-
 import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import {
@@ -29,7 +28,7 @@ import {
   preparePostEntityCommonDerivedProperties,
   preparePostEntityServerDerivedProperties,
 } from '../../utils/entity.mjs';
-import { fieldIsEnum } from '../../utils/field.mjs';
+import { fieldIsEnum } from '../base-application/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
 import type { ClientServerApplication } from '../common/types.mjs';
@@ -164,7 +163,7 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = otherEntityName;
-            this.warning(
+            this.logger.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
                 relationship.otherEntityName
               } as fallback`

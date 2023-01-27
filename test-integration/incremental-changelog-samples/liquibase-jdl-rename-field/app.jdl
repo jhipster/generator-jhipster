@@ -95,6 +95,7 @@ entity Employee {
 }
 
 entity Location {
+  @Id locationId Long
   streetAddress String,
   postalCode String,
   city String,

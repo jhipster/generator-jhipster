@@ -28,21 +28,11 @@ const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
 export { checkDocker } from './docker-utils.mjs';
 
-export default {
-  checkImages,
-  generateJwtSecret,
-  configureImageNames,
-  setAppsFolderPaths,
-  loadConfigs,
-  loadFromYoRc,
-  setClusteredApps,
-};
-
 /**
  * Check Images
  */
 export function checkImages() {
-  this.log('\nChecking Docker images in applications directories...');
+  this.logger.info('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
   let runCommand = '';
@@ -107,7 +97,7 @@ export function loadConfigs() {
   const serverPort = 8080;
 
   // Loading configs
-  this.debug(`Apps folders: ${this.appsFolders}`);
+  this.logger.debug(`Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
@@ -133,7 +123,7 @@ export function loadConfigs() {
       config.appFolder = appFolder;
       this.appConfigs.push(config);
     } else {
-      this.error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
+      throw new Error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
     }
   });
 }
@@ -158,7 +148,7 @@ export function loadFromYoRc() {
   delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
-    this.log('\nFound .yo-rc.json config file...');
+    this.logger.info('\nFound .yo-rc.json config file...');
   }
 
   if (this.regenerate) {

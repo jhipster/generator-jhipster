@@ -44,7 +44,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
     if (this.options.help) {
       return;
     }
-    this.info(`Creating changelog for entities ${this.options.entities}`);
+    this.logger.info(`Creating changelog for entities ${this.options.entities}`);
     this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
   }
 

@@ -29,7 +29,6 @@ import reactor.core.publisher.Mono;
 <%_ } else { _%>
 import java.util.List;
 <%_ } _%>
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -59,7 +58,7 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
                     }
                     return order.withProperty(format("%s.%s", prefix, property));
                 })
-                .collect(Collectors.toList()));
+                .toList());
         return new org.springframework.data.couchbase.core.query.Query()
             .limit(pageable.getPageSize())
             .skip(pageable.getOffset())
@@ -110,7 +109,7 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
 <%_ } else { _%>
         return entities.stream()
             .map(entity -> (ID) getEntityInformation().getId(entity))
-            .collect(Collectors.toList());
+            .toList();
 <%_ } _%>
     }
 }

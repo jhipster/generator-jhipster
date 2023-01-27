@@ -1,6 +1,6 @@
 {
     "logs": {
-        "title": "Kayıtlar",
+        "title": "Sistem günlükleri",
         "nbloggers": "Toplam {{ total }} kayıt var.",
         "filter": "Filtre",
         "table": {

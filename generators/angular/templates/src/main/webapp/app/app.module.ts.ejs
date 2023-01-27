@@ -16,13 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const localeId = this.getLocaleId(nativeLanguage);
-_%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import locale from '@angular/common/locales/<%= localeId %>';
+import locale from '@angular/common/locales/<%= angularLocaleId %>';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { TitleStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -73,7 +70,7 @@ import { TrackerService } from './core/tracker/tracker.service';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
     CookieService,
 <%_ } _%>
-    { provide: LOCALE_ID, useValue: '<%= this.skipLanguageForLocale(nativeLanguage) ? 'en' : localeId %>' },
+    { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
     FindLanguageFromKeyPipe,

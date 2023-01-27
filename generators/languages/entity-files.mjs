@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { getEnumInfo } from '../utils.mjs';
+import { getEnumInfo } from '../base-application/support/index.mjs';
 
 const { startCase } = _;
 
@@ -63,9 +63,7 @@ export function writeEntityFiles() {
             entity.fields
               .map(field => {
                 if (!field.fieldIsEnum) return undefined;
-                // Copy for each
-                const languages = application.languages || this.getAllInstalledLanguages();
-                return languages.map(lang =>
+                return this.languagesToApply.map(lang =>
                   this.writeFiles({
                     sections: enumClientI18nFiles,
                     context: {
@@ -89,9 +87,9 @@ export function writeEntityFiles() {
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtIn);
 
       // Copy each
-      const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = application;
+      const { clientSrcDir, frontendAppName } = application;
       for (const entity of entitiesToWriteTranslationFor) {
-        for (const lang of languages) {
+        for (const lang of this.languagesToApply) {
           await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
           this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
         }

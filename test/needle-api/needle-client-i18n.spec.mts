@@ -1,13 +1,9 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
-import fse from 'fs-extra';
+import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
 
 import LanguagesGenerator from '../../generators/languages/index.mjs';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
-import { getGenerator, getTemplatePath } from '../support/index.mjs';
-
-const { ANGULAR } = clientFrameworkTypes;
+import { getGenerator } from '../support/index.mjs';
 
 const generatorPath = getGenerator('languages');
 
@@ -19,7 +15,7 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;
@@ -48,9 +44,8 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
   before(async () => {
     await helpers
       .run(generatorPath)
-      .inTmpDir(dir => {
-        fse.copySync(getTemplatePath('ngx-blueprint'), dir);
-      })
+      .withJHipsterConfig({ baseName: 'jhipster' })
+      .withOptions({ ignoreNeedlesError: true })
       .withOptions({
         build: 'maven',
         auth: 'jwt',
@@ -58,15 +53,10 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
-      })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
-      .withPrompts({
-        baseName: 'jhipster',
-        clientFramework: ANGULAR,
-        enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
-      });
+      })
+      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']]);
   });
 
   it('Assert english global.json contain the new key', () => {

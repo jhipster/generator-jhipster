@@ -89,7 +89,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {
-      this.debug('Queueing entity tasks');
+      this.logger.debug('Queueing entity tasks');
       this.queueEntityTasks();
     });
 
@@ -383,7 +383,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
    */
   resetEntitiesFakeData(seed) {
     seed = `${this.sharedData.getApplication().baseName}-${seed}`;
-    this.debug(`Reseting entities seed with '${seed}'`);
+    this.logger.debug(`Reseting entities seed with '${seed}'`);
     this.sharedData.getEntities().forEach(({ entity }) => {
       entity.resetFakerSeed(seed);
     });
@@ -575,10 +575,10 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       taskName: 'queueConfiguringEachEntity',
       cancellable: true,
       method: () => {
-        this.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY}`);
+        this.logger.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY}`);
         const tasks = this.extractTasksFromPriority(CONFIGURING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToConfigure().forEach(({ entityName, entityStorage, entityConfig }) => {
-          this.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY} for ${entityName}`);
+          this.logger.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY} for ${entityName}`);
           const args = this.getArgsForPriority(CONFIGURING_EACH_ENTITY);
           tasks.forEach(task => {
             this.queueTask({
@@ -595,9 +595,9 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       taskName: 'queueLoadingEntities',
       cancellable: true,
       method: () => {
-        this.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
+        this.logger.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
         const tasks = this.extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
-        this.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
+        this.logger.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
         const args = this.getArgsForPriority(LOADING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
@@ -613,10 +613,10 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       taskName: 'queuePreparingEachEntity',
       cancellable: true,
       method: () => {
-        this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY}`);
+        this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY}`);
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
-          this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
+          this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
           tasks.forEach(task => {
             this.queueTask({
@@ -635,7 +635,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       method: () => {
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_FIELD, { skip: false });
         this.getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
-          this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
+          this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
           tasks.forEach(task => {
             this.queueTask({
@@ -654,7 +654,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       method: () => {
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_RELATIONSHIP, { skip: false });
         this.getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
-          this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
+          this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
           tasks.forEach(task => {
             this.queueTask({
@@ -673,7 +673,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       method: () => {
         const tasks = this.extractTasksFromPriority(POST_PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPostPrepare().forEach(({ description, ...data }) => {
-          this.debug(`Queueing entity tasks ${POST_PREPARING_EACH_ENTITY} for ${description}`);
+          this.logger.debug(`Queueing entity tasks ${POST_PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(POST_PREPARING_EACH_ENTITY);
           tasks.forEach(task => {
             this.queueTask({

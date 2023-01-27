@@ -20,7 +20,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import { dockerContainers, javaDependencies, CLIENT_DIST_DIR } from '../generator-constants.mjs';
+import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
 import {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,
@@ -30,7 +30,7 @@ import {
 import type { SpringBootApplication } from '../server/types.mjs';
 import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
-import { getPomVersionProperties } from '../server/index.mjs';
+import { getPomVersionProperties } from '../server/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 

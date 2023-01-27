@@ -50,7 +50,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
       ...super.initializing,
       sayHello() {
         // Have Yeoman greet the user.
-        this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
+        this.logger.info(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
       },
       getConfig() {
         this.openApiClients = this.config.get('openApiClients') || {};
@@ -135,16 +135,16 @@ export default class OpenapiClientGenerator extends BaseGenerator {
         this.clientPackageManager = this.config.get('clientPackageManager');
         const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
         if (stderr) {
-          this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
+          this.logger.error(`Something went wrong while running npm install: ${stdout} ${stderr}`);
         }
         Object.keys(this.clientsToGenerate).forEach(cliName => {
-          this.log(chalk.green(`\nGenerating client for ${cliName}`));
+          this.logger.info(chalk.green(`\nGenerating client for ${cliName}`));
           const generatorName = this.clientsToGenerate[cliName].generatorName;
           const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
           if (!stderr) {
             this.success(`Succesfully generated ${cliName} ${generatorName} client`);
           } else {
-            this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
+            this.logger.error(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
           }
         });
       },
@@ -158,7 +158,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   get end() {
     return {
       tearDown() {
-        this.log('End of openapi-client generator');
+        this.logger.info('End of openapi-client generator');
       },
     };
   }

@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import detectLanguage from './detect-language.mjs';
+import detectLanguage from './support/detect-language.mjs';
+import { languagesAsChoices } from './support/languages.mjs';
 
 export async function askI18n() {
   if (!this.askForMoreLanguages) return;
@@ -33,7 +34,7 @@ export async function askI18n() {
         type: 'list',
         name: 'nativeLanguage',
         message: 'Please choose the native language of the application',
-        choices: () => this.getAllSupportedLanguageOptions(),
+        choices: () => languagesAsChoices(this.supportedLanguages),
         default: () => (this.options.reproducible ? 'en' : detectLanguage()),
         store: true,
       },
@@ -45,24 +46,27 @@ export async function askI18n() {
   }
 }
 
-export async function askForLanguages() {
+export async function askForLanguages({ control }) {
   if (!this.askForMoreLanguages) {
     return;
   }
+  const currentLanguages = this.jhipsterConfigWithDefaults.languages ?? [];
   const answers = await this.prompt([
     {
       type: 'checkbox',
       name: 'languages',
       message: 'Please choose additional languages to install',
       choices: () => {
-        const languageOptions = this.getAllSupportedLanguageOptions();
-        const nativeLanguage = this.jhipsterConfig.nativeLanguage;
-        const currentLanguages = this.jhipsterConfig.languages || [];
-        return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));
+        const languageOptions = this.supportedLanguages;
+        const nativeLanguage = this.jhipsterConfigWithDefaults.nativeLanguage;
+        return languagesAsChoices(languageOptions.filter(l => l.languageTag !== nativeLanguage));
       },
+      default: () => this.jhipsterConfigWithDefaults.languages,
     },
   ]);
-  if (answers.languages && answers.languages.length > 0) {
+  if (control.existingProject) {
+    this.languagesToApply.push(...answers.languages.filter(newLang => !currentLanguages.includes(newLang)));
+  } else {
     this.languagesToApply.push(...answers.languages);
   }
 }

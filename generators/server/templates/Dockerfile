@@ -20,7 +20,7 @@ FROM mysql:8.0.32
 
 FROM mariadb:10.10.2
 
-FROM mongo:6.0.3
+FROM mongo:6.0.4
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.1.3
@@ -60,7 +60,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:9.3.2
+FROM grafana/grafana:9.3.6
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

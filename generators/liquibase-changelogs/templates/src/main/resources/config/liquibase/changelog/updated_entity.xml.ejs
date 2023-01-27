@@ -78,9 +78,10 @@
         <addColumn tableName="<%= entity.entityTableName %>">
             <%_
             for (relationship of addedRelationships) {
-                relationshipColumnType = relationship.otherEntityName === 'user' && authenticationTypeOauth2 ? 'varchar(100)' : 'bigint';
-                if (relationship.shouldWriteRelationship) { _%>
-                <column name="<%= relationship.columnName %>_id" type="<%= relationshipColumnType %>"/>
+                if (relationship.shouldWriteRelationship) { 
+                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
+                <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>" type="<%= otherEntityPkField.columnType %>"/>
+                    <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
         </addColumn>
@@ -142,10 +143,12 @@ if (removedRelationships && removedRelationships.length) {
             /* ======== End dropForeignKeyConstraint ======== */ _%>
         <dropColumn tableName="<%= entity.entityTableName %>">
         <%_
-            /* ======== Start drop relationship column ======== */
+            /* ======== Start drop relationship columns ======== */
             for (relationship of removedRelationships) {
-                if (relationship.shouldWriteRelationship) { _%>
-            <column name="<%= relationship.columnName %>_id"/>
+                if (relationship.shouldWriteRelationship) {
+                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
+            <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>"/>
+                    <%_ } _%>
         <%_     }
             }
             /* ======== End drop relationship column ======== */ _%>
