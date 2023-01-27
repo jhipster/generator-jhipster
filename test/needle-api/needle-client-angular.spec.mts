@@ -3,13 +3,13 @@ import helpers from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
+import AngularGenerator from '../../generators/angular/index.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-const mockBlueprintSubGen = class extends ClientGenerator {
+const mockBlueprintSubGen = class extends AngularGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
     this.sbsBlueprint = true;
@@ -35,12 +35,12 @@ const mockBlueprintSubGen = class extends ClientGenerator {
   }
 };
 
-describe('needle API Client for Angular: JHipster client generator with blueprint', () => {
+describe('needle API Angular: JHipster angular generator with blueprint', () => {
   let runContext;
   let runResult;
 
   before(async () => {
-    runContext = helpers.create(getGenerator('client'));
+    runContext = helpers.create(getGenerator('angular'));
     runResult = await runContext
       .withOptions({
         defaults: true,
@@ -48,7 +48,7 @@ describe('needle API Client for Angular: JHipster client generator with blueprin
         blueprint: 'myblueprint',
         skipChecks: true,
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:angular']])
       .run();
   });
 

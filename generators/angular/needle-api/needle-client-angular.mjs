@@ -23,7 +23,9 @@ import needleClientBase from '../../client/needle-api/needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
 import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
 import { stripMargin } from '../../base/support/index.mjs';
+import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
+const { ANGULAR } = clientFrameworkTypes;
 export default class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
     const filePath = `${this.clientSrcDir}content/scss/global.scss`;
@@ -35,25 +37,15 @@ export default class extends needleClientBase {
     super.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-vendor');
   }
 
-  addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
+  addModule(appName, angularName, folderName, fileName, enableTranslation) {
     const modulePath = `${this.clientSrcDir}app/app.module.ts`;
     const importNeedle = 'jhipster-needle-angular-add-module-import';
     const moduleNeedle = 'jhipster-needle-angular-add-module';
 
-    this._genericAddModule(
-      appName,
-      angularName,
-      folderName,
-      fileName,
-      enableTranslation,
-      clientFramework,
-      modulePath,
-      importNeedle,
-      moduleNeedle
-    );
+    this._genericAddModule(appName, angularName, folderName, fileName, enableTranslation, ANGULAR, modulePath, importNeedle, moduleNeedle);
   }
 
-  addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
+  addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation) {
     const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
     const importNeedle = 'jhipster-needle-add-admin-module-import';
     const moduleNeedle = 'jhipster-needle-add-admin-module';
@@ -64,7 +56,7 @@ export default class extends needleClientBase {
       adminFolderName,
       adminFileName,
       enableTranslation,
-      clientFramework,
+      ANGULAR,
       adminModulePath,
       importNeedle,
       moduleNeedle
