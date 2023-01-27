@@ -22,7 +22,7 @@ import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import prompts from './prompts.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';

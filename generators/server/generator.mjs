@@ -70,7 +70,7 @@ import {
   JACKSON_DATABIND_NULLABLE_VERSION,
   JACOCO_VERSION,
 } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
 import {
   applicationTypes,

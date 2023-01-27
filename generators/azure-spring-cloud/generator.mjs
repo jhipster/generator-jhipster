@@ -21,7 +21,7 @@ import { exec } from 'child_process';
 import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
 import { JAVA_VERSION, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 

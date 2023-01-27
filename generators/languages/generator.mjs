@@ -22,7 +22,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';

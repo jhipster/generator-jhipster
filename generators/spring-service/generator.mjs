@@ -22,7 +22,7 @@ import _ from 'lodash';
 import BaseGenerator from '../base/index.mjs';
 
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 

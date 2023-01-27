@@ -26,7 +26,7 @@ import prompts from './prompts.mjs';
 import { writeFiles } from './files.mjs';
 import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
 import { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
 import {

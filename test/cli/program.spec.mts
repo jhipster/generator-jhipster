@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 
 import { createProgram } from '../../cli/program.mjs';
-import { prepareTempDir } from './utils/utils.cjs';
+import { prepareTempDir } from '../support/index.mjs';
 
 describe('cli - program', () => {
   let cleanup;

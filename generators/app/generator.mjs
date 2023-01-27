@@ -27,7 +27,7 @@ import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
