@@ -103,8 +103,8 @@ public final class SecurityUtils {
                 return (String) attributes.get("preferred_username");
             }
 <%_ } _%>
-        } else if (authentication.getPrincipal() instanceof String) {
-            return (String) authentication.getPrincipal();
+        } else if (authentication.getPrincipal() instanceof String s) {
+            return s;
         }
         return null;
     }
