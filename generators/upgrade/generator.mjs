@@ -28,7 +28,7 @@ import childProcess from 'child_process';
 import BaseGenerator from '../base/index.mjs';
 import { upgradeFiles } from '../cleanup.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { parseBluePrints } from '../../utils/blueprint.mjs';
 import { packageJson } from '../../lib/index.mjs';
 

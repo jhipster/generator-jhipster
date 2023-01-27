@@ -28,7 +28,7 @@ import { writeFiles as writeCommonFiles } from './files-common.mjs';
 import { writeEnumerationFiles } from './entity-files.mjs';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';

@@ -16,22 +16,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { v4: uuid } = require('uuid');
-const Config = require('conf');
-const osLocale = require('os-locale');
-const axios = require('axios');
-const os = require('os');
-const Insight = require('insight');
-const { packageJson: packagejs } = require('../lib/index.cjs');
+import { v4 as uuid } from 'uuid';
+import Conf from 'conf';
+import osLocale from 'os-locale';
+import axios from 'axios';
+import os from 'os';
+import Insight from 'insight';
+import { packageJson as packagejs } from '../lib/index.mjs';
 
 const DO_NOT_ASK_LIMIT = 100;
 
 const DEFAULT_JHIPSTER_ONLINE_URL = 'https://start.jhipster.tech';
 
+type InsightConfig = {
+  clientId: string;
+  doNotAskCounter: number;
+  isLinked: boolean;
+};
+
 class Statistics {
+  config: Conf<InsightConfig>;
+  jhipsterOnlineUrl: string;
+  statisticsAPIPath: string;
+  clientId: string;
+  doNotAskCounter: number;
+  optOut: any;
+  isLinked: any;
+  noInsight: string | boolean | undefined;
+  forceInsight: boolean;
+  insight: any;
+  axiosClient: any;
+  axiosProxyClient: any;
+  statisticsAPI: string | undefined;
+
   constructor() {
-    this.config = new Config({
+    this.config = new Conf({
       configName: 'jhipster-insight',
+      projectName: packagejs.name,
       defaults: {
         clientId: uuid(),
         doNotAskCounter: 0,
@@ -117,7 +138,7 @@ class Statistics {
       const splitted = proxySettings.split(':');
       this.axiosProxyClient = axios.create({
         baseURL: this.statisticsAPI,
-        proxy: { host: splitted[0], port: splitted[1] },
+        proxy: { host: splitted[0], port: Number(splitted[1]) },
       });
     }
   }
@@ -178,7 +199,7 @@ class Statistics {
     this.insight.track('app/clientPackageManager', yorc.clientPackageManager);
   }
 
-  sendSubGenEvent(source, type, event) {
+  sendSubGenEvent(source, type, event?) {
     if (this.noInsight) return;
     const strEvent = event === '' ? event : JSON.stringify(event);
     this.postRequest(`/s/event/${this.clientId}`, { source, type, event: strEvent }, this.forceInsight);
@@ -233,14 +254,4 @@ class Statistics {
   }
 }
 
-let currentInstance;
-
-function get() {
-  if (!currentInstance) {
-    currentInstance = new Statistics();
-  }
-
-  return currentInstance;
-}
-
-module.exports = get();
+export default new Statistics();

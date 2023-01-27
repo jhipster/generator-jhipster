@@ -27,7 +27,7 @@ import glob from 'glob';
 
 import BaseGenerator from '../base/index.mjs';
 
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { CLIENT_MAIN_SRC_DIR, JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_HEROKU } from '../generator-list.mjs';
 import {

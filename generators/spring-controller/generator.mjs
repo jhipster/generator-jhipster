@@ -24,7 +24,7 @@ import BaseGenerator from '../base/index.mjs';
 
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { askForControllerActions } from './prompts.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_CONTROLLER } from '../generator-list.mjs';
 import { applicationOptions, cacheTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 
