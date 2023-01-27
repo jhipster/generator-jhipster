@@ -22,9 +22,16 @@ import assert from 'assert';
  * @template {import('../bootstrap-application-base/types.js').BaseApplication} ApplicationType
  */
 export default class SharedData {
-  constructor(storage) {
+  constructor(storage, jhipsterOldVersion) {
     if (!storage) {
       throw new Error('Storage is required for SharedData');
+    }
+    if (
+      jhipsterOldVersion &&
+      storage.sharedData?.jhipsterOldVersion !== undefined &&
+      jhipsterOldVersion !== storage.sharedData?.jhipsterOldVersion
+    ) {
+      throw new Error('JHipster old version cannot be overridden');
     }
     this._configDefaultValues = {};
     this._configChoices = {};
@@ -34,7 +41,7 @@ export default class SharedData {
     this._storage.sharedEntities = this._storage.sharedEntities || {};
     this._storage.sharedApplication = this._storage.sharedApplication || {};
     this._storage.sharedSource = this._storage.sharedSource || {};
-    this._storage.sharedData = this._storage.sharedData || {};
+    this._storage.sharedData = this._storage.sharedData || { jhipsterOldVersion };
   }
 
   getSource() {

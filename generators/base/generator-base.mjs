@@ -188,27 +188,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @protected
-   * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
-   *
-   * @param {...string} args
-   * @returns {string}
-   */
-  jhipsterTemplatePath(...args) {
-    let existingGenerator;
-    try {
-      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    } catch (error) {
-      if (this.options.namespace) {
-        const split = this.options.namespace.split(':', 2);
-        existingGenerator = split.length === 1 ? split[0] : split[1];
-      }
-    }
-    this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
-  }
-
-  /**
    * @private
    * Get generator dependencies for building help
    * This is a stub and should be overwritten by the generator.
@@ -952,52 +931,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntities() {
-    function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
-    }
-
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    if (!fs.existsSync(configDir)) {
-      fs.mkdirSync(configDir);
-    }
-    const dir = fs.opendirSync(configDir);
-    const entityNames = [];
-    let dirent = dir.readSync();
-    while (dirent !== null) {
-      const extname = path.extname(dirent.name);
-      if (dirent.isFile() && extname === '.json') {
-        entityNames.push(path.basename(dirent.name, extname));
-      }
-      dirent = dir.readSync();
-    }
-    dir.closeSync();
-
-    const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
-      .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !entity.builtInUser && entity.definition)
-      .sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
-    return entities;
-  }
-
-  /**
-   * Check if the JHipster version used to generate an existing project is less than the passed version argument
-   *
-   * @param {string} version - A valid semver version string
-   */
-  isJhipsterVersionLessThan(version) {
-    const jhipsterOldVersion = this.jhipsterOldVersion || this.configOptions.jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare and return false
-      return false;
-    }
-    return semver.lt(jhipsterOldVersion, version);
-  }
-
-  /**
    * @private
    * get a table name in JHipster preferred style.
    *
@@ -1624,10 +1557,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (dest.jhipsterOldVersion === undefined) {
-      // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-      dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
-    }
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
@@ -2217,29 +2146,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
     }
     return this.createStorage(yoRcPath, GENERATOR_JHIPSTER);
-  }
-
-  /**
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param {string} entityName - Name of the entity to load.
-   * @param {boolean} create - Create storage if doesn't exists.
-   * @returns {import('yeoman-generator/lib/util/storage')}
-   */
-  getEntityConfig(entityName, create = false) {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
-    if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true });
-  }
-
-  /**
-   * Fetch files from the generator-jhipster instance installed
-   * @param {...string} subpath : the path to fetch from
-   */
-  fetchFromInstalledJHipster(...subpath) {
-    if (subpath) {
-      return path.join(__dirname, '..', ...subpath);
-    }
-    return subpath;
   }
 
   /**
