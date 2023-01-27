@@ -48,7 +48,6 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
     content = content.replace(target, translation);
     match = regex.exec(content);
   }
-
   return content;
 }
 

@@ -43,7 +43,7 @@ export function customizeFiles() {
   return {
     callOpenApiGenerator() {
       if (Object.keys(this.clientsToGenerate).length === 0) {
-        this.log('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
+        this.logger.warn('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
         return;
       }
 
@@ -73,7 +73,7 @@ export function customizeFiles() {
 
           additionalParameters.push('-p dateLibrary=java8');
         }
-        this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
+        this.logger.info(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
 
         openApiCmd.push(
           `-g ${openApiGeneratorName}`,

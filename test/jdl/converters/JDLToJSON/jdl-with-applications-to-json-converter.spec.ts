@@ -480,7 +480,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "searchEngine": false,
+  "searchEngine": "no",
   "service": "no",
 }
 `);

@@ -33,7 +33,7 @@ const mockBlueprintSubGen: any = class extends ServerGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;
@@ -97,6 +97,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        clientFramework: 'no',
         skipPriorities: ['prompting'],
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])

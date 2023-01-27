@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR, DOCKER_DIR } from './generator-constants.mjs';
-import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
-import { clientFrameworkTypes } from '../jdl/jhipster/index.mjs';
+import { ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR, DOCKER_DIR } from './generator-constants.mjs';
+import { clientFrameworkTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+const { OAUTH2, SESSION } = authenticationTypes;
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
@@ -33,6 +33,7 @@ const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
  *
  * @param {any} generator - reference to generator
  */
+// eslint-disable-next-line import/prefer-default-export
 export function cleanupOldFiles(generator, data) {
   if (generator.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
@@ -81,7 +82,7 @@ export function cleanupOldFiles(generator, data) {
   }
   if (
     generator.isJhipsterVersionLessThan('5.2.2') &&
-    generator.authenticationType === 'oauth2' &&
+    generator.authenticationType === OAUTH2 &&
     generator.applicationType === 'microservice'
   ) {
     generator.removeFolder(`${DOCKER_DIR}realm-config`);
@@ -147,7 +148,7 @@ export function cleanupOldFiles(generator, data) {
       generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
       generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
       generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
-      if (generator.jhipsterConfig.authenticationType !== 'session' || generator.jhipsterConfig.websocket !== 'spring-websocket') {
+      if (generator.jhipsterConfig.authenticationType !== SESSION || generator.jhipsterConfig.websocket !== 'spring-websocket') {
         generator.removeFile(`${ANGULAR_DIR}core/auth/csrf.service.ts`);
       }
       generator.removeFolder(`${ANGULAR_DIR}core/login`);
@@ -335,34 +336,4 @@ export function cleanupOldFiles(generator, data) {
       generator.removeFile('.npmrc');
     }
   }
-}
-
-/**
- * Upgrade files.
- *
- * @param {any} generator - reference to generator
- */
-export function upgradeFiles(generator) {
-  let atLeastOneSuccess = false;
-  if (generator.isJhipsterVersionLessThan('6.1.0')) {
-    const languages = generator.config.get('languages');
-    if (languages) {
-      const langNameDiffer = function (lang) {
-        const langProp = languageSnakeCase(lang);
-        const langJavaProp = languageToJavaLanguage(lang);
-        return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
-      };
-      languages
-        .map(langNameDiffer)
-        .filter(props => props)
-        .forEach(props => {
-          const code = generator.gitMove(
-            `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
-            `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
-          );
-          atLeastOneSuccess = atLeastOneSuccess || code;
-        });
-    }
-  }
-  return atLeastOneSuccess;
 }

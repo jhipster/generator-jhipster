@@ -77,7 +77,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
       });
       if (!otherRelationship) {
         // TODO throw error at v8.
-        generator.warning(
+        generator.logger.warn(
           `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
         );
       } else if (
@@ -192,7 +192,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
-      generator.warning(
+      generator.logger.warn(
         `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
       );
     }
@@ -254,7 +254,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
 
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-      generator.warning(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
+      generator.logger.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {
       relationship.relationshipValidate = relationship.relationshipRequired = true;
     }

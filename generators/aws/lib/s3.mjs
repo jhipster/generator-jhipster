@@ -30,7 +30,7 @@ const S3 = function S3(Aws, generator) {
   try {
     Progressbar = require('progress'); // eslint-disable-line
   } catch (e) {
-    generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
+    throw new Error(`Something went wrong while running jhipster:aws:\n${e}`);
   }
 };
 

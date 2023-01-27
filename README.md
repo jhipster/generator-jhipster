@@ -40,11 +40,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
   <tbody>
     <tr>
       <td align="center" valign="middle">
-        <a href="http://www.octoconsulting.com/" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/octoconsulting.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://dev.entando.org/jhipster" target="_blank">
           <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
         </a>

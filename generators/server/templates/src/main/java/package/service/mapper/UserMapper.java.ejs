@@ -47,7 +47,7 @@ public class UserMapper {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public <%= user.dtoClass %> userToUserDTO(<%= user.persistClass %> user) {
@@ -58,7 +58,7 @@ public class UserMapper {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToAdminUserDTO)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public <%= user.adminUserDto %> userToAdminUserDTO(<%= user.persistClass %> user) {
@@ -69,7 +69,7 @@ public class UserMapper {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public <%= user.persistClass %> userDTOToUser(<%= user.adminUserDto %> userDTO) {

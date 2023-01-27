@@ -1,92 +1,93 @@
-const createGenerator = async env => class extends (await env.requireGenerator('jhipster:server')) {
-  constructor(args, opts, features) {
+const createGenerator = async env =>
+  class extends (await env.requireGenerator('jhipster:server')) {
+    constructor(args, opts, features) {
       super(args, opts, { taskPrefix: '>', ...features });
 
       if (this.options.help) {
-         return;
+        return;
       }
 
       const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
       if (!jhContext) {
-          this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+        throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
       }
-  }
+    }
 
-  get ['>initializing']() {
+    get ['>initializing']() {
       return super.initializing;
-  }
+    }
 
-  get ['>prompting']() {
+    get ['>prompting']() {
       return super.prompting;
-  }
+    }
 
-  get ['>configuring']() {
+    get ['>configuring']() {
       return super.configuring;
-  }
+    }
 
-  get ['>composing']() {
-    return super.composing;
-  }
+    get ['>composing']() {
+      return super.composing;
+    }
 
-  get ['>loading']() {
-    return super.loading;
-  }
+    get ['>loading']() {
+      return super.loading;
+    }
 
-  get ['>preparing']() {
-    return super.preparing;
-  }
+    get ['>preparing']() {
+      return super.preparing;
+    }
 
-  get ['>configuringEachEntity']() {
-    return super.configuringEachEntity;
-  }
+    get ['>configuringEachEntity']() {
+      return super.configuringEachEntity;
+    }
 
-  get ['>loadingEachEntity']() {
-    return super.loadingEachEntity;
-  }
+    get ['>loadingEachEntity']() {
+      return super.loadingEachEntity;
+    }
 
-  get ['>preparingEachEntity']() {
-    return super.preparingEachEntity;
-  }
+    get ['>preparingEachEntity']() {
+      return super.preparingEachEntity;
+    }
 
-  get ['>preparingEachEntityField']() {
-    return super.preparingEachEntityField;
-  }
+    get ['>preparingEachEntityField']() {
+      return super.preparingEachEntityField;
+    }
 
-  get ['>preparingEachEntityRelationship']() {
-    return super.preparingEachEntityRelationship;
-  }
+    get ['>preparingEachEntityRelationship']() {
+      return super.preparingEachEntityRelationship;
+    }
 
-  get ['>default']() {
+    get ['>default']() {
       return super.default;
-  }
+    }
 
-  get ['>writing']() {
+    get ['>writing']() {
       return super.writing;
-  }
+    }
 
-  get ['>writingEntities']() {
+    get ['>writingEntities']() {
       return super.writingEntities;
-  }
+    }
 
-  get ['>postWriting']() {
+    get ['>postWriting']() {
       return super.postWriting;
-  }
+    }
 
-  get ['>postWritingEntities']() {
+    get ['>postWritingEntities']() {
       return super.postWritingEntities;
-  }
+    }
 
-  get ['>install']() {
+    get ['>install']() {
       return super.install;
-  }
+    }
 
-  get ['>postInstall']() {
+    get ['>postInstall']() {
       return super.postInstall;
-  }
+    }
 
-  get ['>end']() {
+    get ['>end']() {
       return super.end;
-  }
-};
+    }
+  };
 
 module.exports = { createGenerator };

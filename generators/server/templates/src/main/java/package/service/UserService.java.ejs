@@ -772,14 +772,14 @@ public class UserService {
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.adminUserDto %>> getAllManagedUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
             .map(<%= user.adminUserDto %>::new)<% if (!reactive) { %>
-            .collect(Collectors.toList())<% } %>;
+            .toList()<% } %>;
     }
 
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.dtoClass %>> getAllPublicUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
             .filter(user -> user.isActivated())
             .map(<%= user.dtoClass %>::new)<% if (!reactive) { %>
-            .collect(Collectors.toList())<% } %>;
+            .toList()<% } %>;
     }
   <%_ } _%>
 
@@ -876,7 +876,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><String> getAuthorities() {
-        return authorityRepository.findAll()<% if (!reactive) { %>.stream()<% } %>.map(Authority::getName)<% if (!reactive) { %>.collect(Collectors.toList())<% } %>;
+        return authorityRepository.findAll()<% if (!reactive) { %>.stream()<% } %>.map(Authority::getName)<% if (!reactive) { %>.toList()<% } %>;
     }
   <%_ } _%>
   <%_ if (authenticationTypeOauth2) { _%>
@@ -885,7 +885,7 @@ public class UserService {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
     <%_ if (reactive) { _%>
         Collection<String> userAuthorities =
-            user.getAuthorities().stream()<% if (!databaseTypeCouchbase) { %>.map(Authority::getName)<% } %>.collect(Collectors.toList());
+            user.getAuthorities().stream()<% if (!databaseTypeCouchbase) { %>.map(Authority::getName)<% } %>.toList();
 
         return getAuthorities().collectList()
             .flatMapMany(dbAuthorities -> {
@@ -896,7 +896,7 @@ public class UserService {
                         authorityToSave.setName(authority);
                         return authorityToSave;
                     })
-                    .collect(Collectors.toList());
+                    .toList();
                 return Flux.fromIterable(authoritiesToSave);
             })
             .doOnNext(authority -> log.debug("Saving authority '{}' in local database", authority))
@@ -931,7 +931,7 @@ public class UserService {
         Collection<String> dbAuthorities = getAuthorities();
       <%_ if (!databaseTypeCouchbase) { _%>
         Collection<String> userAuthorities =
-            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
+            user.getAuthorities().stream().map(Authority::getName).toList();
       <%_ } else { _%>
         Collection<String> userAuthorities = user.getAuthorities();
       <%_ } _%>

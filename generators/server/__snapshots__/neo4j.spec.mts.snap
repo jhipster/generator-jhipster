@@ -449,9 +449,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.packag
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -847,9 +844,6 @@ exports[`generator - neo4j gateway-oauth2-maven-enableTranslation(false)-tech.jh
   "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -1191,9 +1185,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -1512,9 +1503,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -1897,9 +1885,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(false)-maven-enableTrans
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -2278,9 +2263,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -2729,9 +2711,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3068,9 +3047,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -3451,9 +3427,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -3867,9 +3840,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -4300,9 +4270,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4618,9 +4585,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }

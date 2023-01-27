@@ -2,9 +2,6 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
-import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
-
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ServerGenerator {
@@ -14,7 +11,7 @@ const mockBlueprintSubGen: any = class extends ServerGenerator {
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
-      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
+      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
     this.sbsBlueprint = true;
@@ -95,13 +92,14 @@ const mockBlueprintSubGen: any = class extends ServerGenerator {
 };
 
 describe('needle API server maven: JHipster server generator with blueprint', () => {
-  before(done => {
-    helpers
+  before(async () => {
+    await helpers
       .run(getGenerator('server'))
       .withOptions({
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        clientFramework: 'no',
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
       .withPrompts({
@@ -121,8 +119,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         buildTool: 'maven',
         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
         serverSideOptions: [],
-      })
-      .on('end', done);
+      });
   });
 
   it('Assert pom.xml has the dependency management added', () => {

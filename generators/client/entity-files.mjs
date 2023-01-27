@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getEnumInfo } from '../utils.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import { getEnumInfo } from '../base-application/support/index.mjs';
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 

@@ -26,7 +26,9 @@ const { OAUTH2 } = authenticationTypes;
 export function writeFiles() {
   return {
     cleanup() {
-      this.removeFile('realm-config/jhipster-users-0.json');
+      if (this.isJhipsterVersionLessThan('7.10.0')) {
+        this.removeFile('realm-config/jhipster-users-0.json');
+      }
     },
 
     writeDockerCompose() {

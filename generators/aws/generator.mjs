@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import BaseGenerator from '../base/index.mjs';
 
+import BaseGenerator from '../base/index.mjs';
 import prompts from './prompts.mjs';
 import AwsFactory from './lib/aws.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_AWS } from '../generator-list.mjs';
 import { applicationOptions, databaseTypes } from '../../jdl/jhipster/index.mjs';
 
@@ -46,25 +46,23 @@ export default class AwsGenerator extends BaseGenerator {
       },
       getGlobalConfig() {
         this.existingProject = false;
-        this.baseName = this.config.get(BASE_NAME);
-        this.buildTool = this.config.get(BUILD_TOOL);
+        this.baseName = this.jhipsterConfig.baseName;
+        this.buildTool = this.jhipsterConfig.buildTool;
       },
       getAwsConfig() {
-        const awsConfig = this.config.get('aws');
-
-        if (awsConfig) {
+        if (this.jhipsterConfig.aws) {
           this.existingProject = true;
-          this.applicationName = awsConfig.applicationName;
-          this.environmentName = awsConfig.environmentName;
-          this.bucketName = awsConfig.bucketName;
-          this.instanceType = awsConfig.instanceType;
+          this.applicationName = this.jhipsterConfig.aws.applicationName;
+          this.environmentName = this.jhipsterConfig.aws.environmentName;
+          this.bucketName = this.jhipsterConfig.aws.bucketName;
+          this.instanceType = this.jhipsterConfig.aws.instanceType;
           this.customInstanceType = '';
-          this.awsRegion = awsConfig.awsRegion;
-          this.dbName = awsConfig.dbName;
-          this.dbInstanceClass = awsConfig.dbInstanceClass;
+          this.awsRegion = this.jhipsterConfig.aws.awsRegion;
+          this.dbName = this.jhipsterConfig.aws.dbName;
+          this.dbInstanceClass = this.jhipsterConfig.aws.dbInstanceClass;
           this.customDBInstanceClass = '';
 
-          this.log(
+          this.logger.info(
             chalk.green(
               'This is an existing deployment, using the configuration from your .yo-rc.json file \nto deploy your application...\n'
             )
@@ -72,7 +70,7 @@ export default class AwsGenerator extends BaseGenerator {
         }
       },
       checkDatabase() {
-        const prodDatabaseType = this.config.get(PROD_DATABASE_TYPE);
+        const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
 
         switch (prodDatabaseType.toLowerCase()) {
           case MARIADB:
@@ -85,7 +83,7 @@ export default class AwsGenerator extends BaseGenerator {
             this.dbEngine = 'postgres';
             break;
           default:
-            this.error('Sorry deployment for this database is not possible');
+            throw new Error('Sorry deployment for this database is not possible');
         }
       },
     };
@@ -114,7 +112,7 @@ export default class AwsGenerator extends BaseGenerator {
         cb();
       },
       saveConfig() {
-        this.config.set('aws', {
+        this.jhipsterConfig.aws = {
           applicationName: this.applicationName,
           environmentName: this.environmentName,
           bucketName: this.bucketName,
@@ -122,7 +120,7 @@ export default class AwsGenerator extends BaseGenerator {
           awsRegion: this.awsRegion,
           dbName: this.dbName,
           dbInstanceClass: this.dbInstanceClass,
-        });
+        };
       },
     };
   }
@@ -135,11 +133,11 @@ export default class AwsGenerator extends BaseGenerator {
     return {
       productionBuild() {
         const cb = this.async();
-        this.log(chalk.bold('Building application'));
+        this.logger.info(chalk.bold('Building application'));
 
         const child = this.buildApplication(this.buildTool, 'prod', true, err => {
           if (err) {
-            this.error(err);
+            throw new Error(err);
           } else {
             cb();
           }
@@ -151,28 +149,28 @@ export default class AwsGenerator extends BaseGenerator {
       },
       createBucket() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create S3 bucket'));
+        this.logger.log();
+        this.logger.info(chalk.bold('Create S3 bucket'));
 
         const s3 = this.awsFactory.getS3();
 
         s3.createBucket({ bucket: this.bucketName }, (err, data) => {
           if (err) {
             if (err.message == null) {
-              this.error('The S3 bucket could not be created. Are you sure its name is not already used?');
+              throw new Error('The S3 bucket could not be created. Are you sure its name is not already used?');
             } else {
-              this.error(err.message);
+              throw new Error(err.message);
             }
           } else {
-            this.log(data.message);
+            this.logger.info(data.message);
             cb();
           }
         });
       },
       uploadWar() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Upload WAR to S3'));
+        this.logger.log();
+        this.logger.info(chalk.bold('Upload WAR to S3'));
 
         const s3 = this.awsFactory.getS3();
 
@@ -183,18 +181,18 @@ export default class AwsGenerator extends BaseGenerator {
 
         s3.uploadWar(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            throw new Error(err.message);
           } else {
             this.warKey = data.warKey;
-            this.log(data.message);
+            this.logger.info(data.message);
             cb();
           }
         });
       },
       createDatabase() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create database'));
+        this.logger.log();
+        this.logger.info(chalk.bold('Create database'));
 
         const rds = this.awsFactory.getRds();
 
@@ -208,17 +206,17 @@ export default class AwsGenerator extends BaseGenerator {
 
         rds.createDatabase(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            throw new Error(err.message);
           } else {
-            this.log(data.message);
+            this.logger.info(data.message);
             cb();
           }
         });
       },
       createDatabaseUrl() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Waiting for database (This may take several minutes)'));
+        this.logger.log();
+        this.logger.info(chalk.bold('Waiting for database (This may take several minutes)'));
 
         if (this.dbEngine === 'postgres') {
           this.dbEngine = POSTGRESQL;
@@ -233,22 +231,22 @@ export default class AwsGenerator extends BaseGenerator {
 
         rds.createDatabaseUrl(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            throw new Error(err.message);
           } else {
             this.dbUrl = data.dbUrl;
-            this.log(data.message);
+            this.logger.info(data.message);
             cb();
           }
         });
       },
       verifyRoles() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
+        this.logger.log();
+        this.logger.info(chalk.bold('Verifying ElasticBeanstalk Roles'));
         const iam = this.awsFactory.getIam();
         iam.verifyRoles({}, err => {
           if (err) {
-            this.error(err.message);
+            throw new Error(err.message);
           } else {
             cb();
           }
@@ -256,8 +254,8 @@ export default class AwsGenerator extends BaseGenerator {
       },
       createApplication() {
         const cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create/Update application'));
+        this.logger.log();
+        this.logger.info(chalk.bold('Create/Update application'));
 
         const eb = this.awsFactory.getEb();
 
@@ -274,9 +272,9 @@ export default class AwsGenerator extends BaseGenerator {
 
         eb.createApplication(params, (err, data) => {
           if (err) {
-            this.error(err.message);
+            throw new Error(err.message);
           } else {
-            this.log(data.message);
+            this.logger.info(data.message);
             cb();
           }
         });

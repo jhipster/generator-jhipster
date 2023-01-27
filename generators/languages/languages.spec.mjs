@@ -1,10 +1,11 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { basicHelpers, skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 
-import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, CLIENT_WEBPACK_DIR, LANGUAGES } from '../generator-constants.mjs';
+import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import { supportedLanguages } from './support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,7 +13,7 @@ const __dirname = dirname(__filename);
 const generatorPath = join(__dirname, 'index.mjs');
 
 const createClientProject = async options =>
-  helpers
+  basicHelpers
     .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
     .withOptions({
       skipInstall: true,
@@ -99,29 +100,30 @@ const containsLanguageInVueStore = languageValue => {
 
 describe('generator - languages', () => {
   context('Creates default i18n files', () => {
-    LANGUAGES.forEach(language => {
+    supportedLanguages.forEach(language => {
       describe(`with prompts for ${language.name}`, () => {
         before(() =>
           helpers
             .create(generatorPath)
-            .withOptions({ skipInstall: true, baseName: 'jhipster' })
+            .withOptions({ ignoreNeedlesError: true })
             .withPrompts({
               enableTranslation: true,
-              nativeLanguage: language.value,
-              languages: [language.value],
+              nativeLanguage: language.languageTag,
+              languages: [language.languageTag],
             })
             .run()
         );
-        containsLanguageFiles(language.value);
+        containsLanguageFiles(language.languageTag);
       });
       describe(`with options for ${language.name}`, () => {
         before(() =>
           helpers
             .run(generatorPath)
-            .withLocalConfig({ enableTranslation: true, nativeLanguage: language.value })
-            .withOptions({ skipInstall: true, languages: [language.value], baseName: 'jhipster' })
+            .withOptions({ ignoreNeedlesError: true })
+            .withLocalConfig({ enableTranslation: true, nativeLanguage: language.languageTag })
+            .withOptions({ skipInstall: true, languages: [language.languageTag], baseName: 'jhipster' })
         );
-        containsLanguageFiles(language.value);
+        containsLanguageFiles(language.languageTag);
       });
     });
   });
@@ -130,8 +132,8 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .run(generatorPath)
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
-          .withOptions({ skipInstall: true, baseName: 'jhipster' })
+          .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'], baseName: 'jhipster' })
+          .withOptions({ ignoreNeedlesError: true })
       );
       noLanguageFiles('fr');
     });
@@ -139,8 +141,8 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .run(generatorPath)
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
-          .withOptions({ skipInstall: true, skipPrompts: true, baseName: 'jhipster' })
+          .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
+          .withOptions({ ignoreNeedlesError: true, skipInstall: true, skipPrompts: true, baseName: 'jhipster' })
       );
       noLanguageFiles('fr');
       noLanguageFiles('en');
@@ -149,7 +151,7 @@ describe('generator - languages', () => {
   context('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
       before(() =>
-        helpers.run(generatorPath).withOptions({ skipInstall: true, baseName: 'jhipster' }).withPrompts({
+        helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withPrompts({
           enableTranslation: true,
           nativeLanguage: 'fr',
           languages: [],
@@ -162,6 +164,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true })
+          .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipInstall: true, nativeLanguage: 'fr', baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
@@ -171,6 +174,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
+          .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true, baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
@@ -178,14 +182,19 @@ describe('generator - languages', () => {
   });
   context('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
-      before(() => helpers.run(generatorPath).withOptions({ skipInstall: true, reproducible: true, baseName: 'jhipster' }));
+      before(() =>
+        helpers
+          .run(generatorPath)
+          .withOptions({ ignoreNeedlesError: true })
+          .withOptions({ skipInstall: true, reproducible: true, baseName: 'jhipster' })
+      );
       containsLanguageFiles('en');
     });
     describe('using prompts', () => {
       before(() =>
         helpers
           .run(generatorPath)
-          .withOptions({ skipInstall: true, baseName: 'jhipster' })
+          .withOptions({ ignoreNeedlesError: true })
           .withPrompts({
             enableTranslation: true,
             nativeLanguage: 'fr',
@@ -200,6 +209,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true })
+          .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipInstall: true, nativeLanguage: 'fr', languages: ['en'], baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
@@ -210,6 +220,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
+          .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true, baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
@@ -221,7 +232,7 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .run(generatorPath)
-          .withOptions({ skipInstall: true, baseName: 'jhipster' })
+          .withOptions({ ignoreNeedlesError: true })
           .withPrompts({
             enableTranslation: true,
             nativeLanguage: 'fr',
@@ -236,6 +247,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'en' })
+          .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
@@ -245,19 +257,17 @@ describe('generator - languages', () => {
 
   context('Creates default i18n files for Vue applications', () => {
     describe('using prompts', () => {
-      before(() =>
-        createClientProject({
+      before(async () => {
+        const result = await createClientProject({
           localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
-        }).then(result =>
-          result
-            .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .withOptions({ skipInstall: true, baseName: 'jhipster' })
-            .withPrompts({
-              languages: ['fr', 'de'],
-            })
-            .run()
-        )
-      );
+        });
+        await result
+          .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
+          .withPrompts({
+            languages: ['fr', 'de'],
+          })
+          .run();
+      });
       describe('for native language translation', () => {
         containsLanguageFiles('en');
         containsLanguageInVueStore('en');
@@ -271,16 +281,15 @@ describe('generator - languages', () => {
     });
 
     describe('using options', () => {
-      before(() =>
-        createClientProject({
+      before(async () => {
+        const result = await createClientProject({
           localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
-        }).then(result =>
-          result
-            .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
-            .run()
-        )
-      );
+        });
+        await result
+          .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
+          .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
+          .run();
+      });
       describe('for native language translation', () => {
         containsLanguageFiles('en');
         containsLanguageInVueStore('en');

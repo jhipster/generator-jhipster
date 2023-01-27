@@ -82,7 +82,7 @@ export async function writeEntitiesFiles({ application, entities, control }) {
 export async function postWriteEntitiesFiles({ application, entities, control }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     if (!entity.embedded) {
-      const { clientFramework, enableTranslation } = application;
+      const { enableTranslation } = application;
       const {
         entityInstance,
         entityClass,
@@ -104,7 +104,6 @@ export async function postWriteEntitiesFiles({ application, entities, control })
         entityFolderName,
         entityFileName,
         entityUrl,
-        clientFramework,
         microserviceName,
         readOnly,
         pageTitle
@@ -112,7 +111,6 @@ export async function postWriteEntitiesFiles({ application, entities, control })
       this.addEntityToMenu(
         entity.entityPage,
         application.enableTranslation,
-        application.clientFramework,
         entity.entityTranslationKeyMenu,
         entity.entityClassHumanized,
         application.jhiPrefix

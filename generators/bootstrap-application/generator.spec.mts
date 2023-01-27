@@ -37,7 +37,7 @@ const __dirname = dirname(__filename);
 const generatorPath = join(__dirname, 'index.mts');
 const generator = basename(__dirname);
 
-const expectedField = field => ({
+const expectedField = () => ({
   generateFakeData: expect.any(Function),
   createRandexp: expect.any(Function),
 
@@ -45,11 +45,11 @@ const expectedField = field => ({
   reference: expect.any(Object),
 });
 
-const expectedRelationship = relationship => ({
+const expectedRelationship = () => ({
   otherEntity: expect.any(Object),
 });
 
-const expectedPrimaryKeyId = id => ({
+const expectedPrimaryKeyId = () => ({
   field: expect.any(Object),
 });
 

@@ -476,9 +476,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -887,9 +884,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
     "stateCleared": "modified",
   },
   "src/test/resources/tech/jhipster/cucumber/gitkeep": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -1305,9 +1299,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -1677,9 +1668,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -2087,9 +2075,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -2509,9 +2494,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -2990,9 +2972,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3380,9 +3359,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -3844,9 +3820,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -4323,9 +4296,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }
@@ -4843,9 +4813,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -5227,9 +5194,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
 }

@@ -10,7 +10,7 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
     super(args, opts, features);
 
     if (!this.options.jhipsterContext) {
-      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
   }
 
@@ -68,7 +68,7 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
     super(args, opts, features);
 
     if (!this.options.jhipsterContext) {
-      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
   }
 

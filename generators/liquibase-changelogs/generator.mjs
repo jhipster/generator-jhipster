@@ -27,6 +27,7 @@ import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from 
 import { prepareFieldForTemplates } from '../../utils/field.mjs';
 import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
+import { liquibaseComment } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
@@ -169,7 +170,8 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
           entityChanges.removedRelationships = databaseChangelog.removedRelationships
             .map(relationship => {
               const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-              relationship.otherEntity = this.configOptions.oldSharedEntities[otherEntityName];
+              relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
+
               if (!relationship.otherEntity) {
                 throw new Error(`Error at entity ${entity.name}: could not find the entity of the relationship ${stringify(relationship)}`);
               }
@@ -395,5 +397,17 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
 
     relationship.columnDataType = relationship.otherEntity.columnType;
     return relationship;
+  }
+
+  /**
+   * @private
+   * Format As Liquibase Remarks
+   *
+   * @param {string} text - text to format
+   * @param {boolean} addRemarksTag - add remarks tag
+   * @returns formatted liquibase remarks
+   */
+  formatAsLiquibaseRemarks(text, addRemarksTag = false) {
+    return liquibaseComment(text, addRemarksTag);
   }
 }

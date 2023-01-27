@@ -19,11 +19,12 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 import path from 'path';
-
+import { getDatabaseTypeData } from '../generators/server/support/index.mjs';
 import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
+import { getTypescriptKeyType, getEntityParentPathAddition } from '../generators/client/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -33,7 +34,6 @@ import {
   reservedKeywords,
   searchEngineTypes,
 } from '../jdl/jhipster/index.mjs';
-import { OFFICIAL_DATABASE_TYPE_NAMES } from '../generators/server/support/database.mjs';
 
 const { ELASTICSEARCH } = searchEngineTypes;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -53,18 +53,7 @@ const NO_MAPPER = MapperTypes.NO;
 
 const { POSTGRESQL, MYSQL, MARIADB, CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
-const {
-  INTEGER: TYPE_INTEGER,
-  LONG: TYPE_LONG,
-  BIG_DECIMAL: TYPE_BIG_DECIMAL,
-  FLOAT: TYPE_FLOAT,
-  DOUBLE: TYPE_DOUBLE,
-  INSTANT,
-  ZONED_DATE_TIME,
-  DURATION,
-  LOCAL_DATE,
-  BIG_DECIMAL,
-} = fieldTypes.CommonDBTypes;
+const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL } = fieldTypes.CommonDBTypes;
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = fieldTypes.BlobTypes;
@@ -204,9 +193,15 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
   entityWithConfig.entityFileName = _.kebabCase(
     entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
   );
-  entityWithConfig.entityFolderName = generator.getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
+  entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
+    ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
+    : entityWithConfig.entityFileName;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
-  entityWithConfig.entityParentPathAddition = generator.getEntityParentPathAddition(entityWithConfig.clientRootFolder);
+  entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(
+    generator.logger,
+    generator.env,
+    entityWithConfig.clientRootFolder
+  );
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
@@ -259,7 +254,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     });
     const withError = fieldEntries.find(entry => !entry);
     if (withError) {
-      generator.warning(`Error generating a full sample for entity ${entityName}`);
+      generator.logger.warn(`Error generating a full sample for entity ${entityName}`);
       return undefined;
     }
     return Object.fromEntries(fieldEntries);
@@ -425,7 +420,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       idField.dynamic = false;
       // Allow ids type to be empty and fallback to default type for the database.
       if (!idField.fieldType) {
-        idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+        idField.fieldType = generator.jhipsterConfig.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;
@@ -436,7 +431,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       name: primaryKeyName,
       nameCapitalized: _.upperFirst(primaryKeyName),
       type: primaryKeyType,
-      tsType: generator.getTypescriptKeyType(primaryKeyType),
+      tsType: getTypescriptKeyType(primaryKeyType),
       composite,
       relationships: idRelationships,
       // Fields declared in this entity
@@ -708,7 +703,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
 
 export function preparePostEntityServerDerivedProperties(entity) {
   const { databaseType, reactive } = entity;
-  entity.officialDatabaseType = OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
+  entity.officialDatabaseType = getDatabaseTypeData(databaseType).name;
   let springDataDatabase;
   if (entity.databaseType !== SQL) {
     springDataDatabase = entity.officialDatabaseType;
@@ -768,22 +763,6 @@ export function preparePostEntityServerDerivedProperties(entity) {
       }
     }
   }
-}
-
-/**
- * Find key type for Typescript
- *
- * @param {string | object} primaryKey - primary key definition
- * @returns {string} primary key type in Typescript
- */
-export function getTypescriptKeyType(primaryKey) {
-  if (typeof primaryKey === 'object') {
-    primaryKey = primaryKey.type;
-  }
-  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
-    return 'number';
-  }
-  return 'string';
 }
 
 export function preparePostEntityClientDerivedProperties(entity) {

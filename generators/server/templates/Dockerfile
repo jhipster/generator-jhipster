@@ -16,11 +16,11 @@ LABEL ALIAS=postgresql
 FROM quay.io/keycloak/keycloak:20.0.1
 LABEL ALIAS=keycloak
 
-FROM mysql:8.0.31
+FROM mysql:8.0.32
 
 FROM mariadb:10.10.2
 
-FROM mongo:6.0.3
+FROM mongo:6.0.4
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.1.3
@@ -36,9 +36,9 @@ FROM neo4j:5.3.0
 FROM hazelcast/management-center:5.2.1
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.17-alpine
+FROM memcached:1.6.18-alpine
 
-FROM redis:7.0.7
+FROM redis:7.0.8
 
 FROM confluentinc/cp-kafka:7.3.1
 LABEL ALIAS=kafka
@@ -60,7 +60,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:9.3.2
+FROM grafana/grafana:9.3.6
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

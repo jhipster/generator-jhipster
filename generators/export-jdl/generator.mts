@@ -20,7 +20,7 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
 
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
@@ -67,7 +67,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.END]() {
     return this.asEndTaskGroup({
       end() {
-        this.log(chalk.green.bold('\nThe JDL export is complete!\n'));
+        this.logger.info(chalk.green.bold('\nThe JDL export is complete!\n'));
       },
     });
   }
