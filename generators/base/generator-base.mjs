@@ -54,8 +54,6 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
-import { CUSTOM_PRIORITIES } from './priorities.mjs';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -108,80 +106,7 @@ const isWin32 = os.platform() === 'win32';
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
-  jhipsterConfig;
-
-  /** @type {Record<string, any>} */
   dependabotPackageJson;
-
-  /**
-   * @param {string | string[]} args
-   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
-   */
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (!this.features.jhipsterModular) {
-      // This adds support for a `--from-cli` flag
-      this.option('from-cli', {
-        desc: 'Indicates the command is run from JHipster CLI',
-        type: Boolean,
-        hide: true,
-      });
-
-      this.option('with-generated-flag', {
-        desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-        type: Boolean,
-      });
-
-      this.option('skip-prompts', {
-        desc: 'Skip prompts',
-        type: Boolean,
-      });
-
-      this.option('skip-prettier', {
-        desc: 'Skip prettier',
-        type: Boolean,
-        hide: true,
-      });
-    }
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
-
-    // JHipster runtime config that should not be stored to .yo-rc.json.
-    this.configOptions = this.options.configOptions || { sharedEntities: {} };
-    this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-
-    /* Force config to use 'generator-jhipster' namespace. */
-    this._config = this._getStorage('generator-jhipster', { sorted: true });
-    /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-    this.jhipsterConfig = this.config.createProxy();
-
-    this.loadRuntimeOptions();
-    this.loadStoredAppOptions();
-
-    if (this.options.namespace !== 'jhipster:bootstrap') {
-      this.env.runLoop.add(
-        'environment:run',
-        async (done, stop) => {
-          try {
-            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
-            done();
-          } catch (error) {
-            stop(error);
-          }
-        },
-        {
-          once: 'queueJhipsterBootstrap',
-          run: false,
-        }
-      );
-    }
-  }
 
   /**
    * @private
