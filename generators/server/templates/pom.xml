@@ -10,7 +10,7 @@
         <!-- Dependency versions -->
         <archunit-junit5.version>1.0.1</archunit-junit5.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
+        <blockhound-junit-platform.version>1.0.7.RELEASE</blockhound-junit-platform.version>
         <caffeine.version>3.1.2</caffeine.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.0</gatling.version>
