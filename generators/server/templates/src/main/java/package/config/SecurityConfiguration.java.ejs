@@ -242,7 +242,7 @@ public class SecurityConfiguration {
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-            .exceptionHandling((exceptions) -> exceptions
+            .exceptionHandling(exceptions -> exceptions
 				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
 				.accessDeniedHandler(new BearerTokenAccessDeniedHandler())
 			);
