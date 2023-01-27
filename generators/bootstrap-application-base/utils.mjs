@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { loadRequiredConfigIntoEntity } from '../../utils/entity.mjs';
 
-const { SQL } = databaseTypes;
+const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
@@ -32,10 +31,10 @@ export function createUserEntity(customUserData = {}, application) {
   const userEntityDefinition = this.readEntityJson('User');
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
-      this.warning('Relationships on the User entity side will be disregarded');
+      this.logger.warn('Relationships on the User entity side will be disregarded');
     }
     if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
-      this.warning('Fields on the User entity side (other than id) will be disregarded');
+      this.logger.warn('Fields on the User entity side (other than id) will be disregarded');
     }
   }
 
@@ -57,7 +56,8 @@ export function createUserEntity(customUserData = {}, application) {
   loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
 
   const oauth2 = user.authenticationType === OAUTH2;
-  const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : this.getPkType(user.databaseType);
+  // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
+  const userIdType = oauth2 || user.databaseType === CASSANDRA ? TYPE_STRING : undefined;
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
   addOrExtendFields(user.fields, [

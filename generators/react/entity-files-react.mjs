@@ -75,12 +75,7 @@ export async function postWriteEntitiesFiles({ application, entities }) {
         applicationTypeMicroservice,
         clientSrcDir: application.clientSrcDir,
       });
-      this.needleApi.clientReact.addEntityToMenu(
-        entity.entityPage,
-        application.enableTranslation,
-        entity.entityTranslationKeyMenu,
-        entity.entityClassHumanized
-      );
+      this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
     }
   }
 }

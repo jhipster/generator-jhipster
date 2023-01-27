@@ -1,9 +1,9 @@
 {
     "configuration": {
         "title": "Yapılandırma",
-        "filter": "Filtrele (Önek ile)",
+        "filter": "Filtrele (Ön ek ile)",
         "table": {
-            "prefix": "Önek",
+            "prefix": "Ön ek",
             "properties": "Özellikler"
         }
     }

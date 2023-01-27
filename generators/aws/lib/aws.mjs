@@ -30,7 +30,7 @@ const AwsFactory = function AwsFactory(generatorRef, cb) {
     Aws = require('aws-sdk'); // eslint-disable-line
     cb();
   } catch (e) {
-    generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
+    throw new Error(`Something went wrong while running jhipster:aws:\n${e}`);
   }
 };
 

@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import { mock, maxDepth, importMock, resetAllMocks } from '@node-loaders/jest-mock';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { testInTempDir, revertTempDir } from './utils/utils.cjs';
+import { testInTempDir, revertTempDir } from '../support/index.mjs';
 import packageJson from '../../package.json' assert { type: 'json' };
 
 await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');

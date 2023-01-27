@@ -5,6 +5,7 @@ import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
+import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -14,7 +15,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get [ClientGenerator.POST_WRITING]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     return {
       addCssStylesProperty() {
         this.addMainSCSSStyle('@import style_without_comment;');
@@ -24,22 +25,8 @@ const mockBlueprintSubGen = class extends ClientGenerator {
       },
       addToMenuStep() {
         this.addElementToMenu('routerName1', 'iconName1', true, ANGULAR);
-        this.addElementToAdminMenu('routerName2', 'iconName2', true, ANGULAR);
-        this.addEntityToMenu('routerName3', true, ANGULAR, 'routerName3');
       },
       addToModuleStep() {
-        this.addEntityToModule(
-          'entityInstance',
-          'entityClass',
-          'entityName',
-          'entityFolderName',
-          'entityFileName',
-          'entityUrl',
-          ANGULAR,
-          'microserviceName',
-          false,
-          'entity.home.title'
-        );
         this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
         this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
         this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
@@ -48,7 +35,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
   }
 };
 
-describe('needle API Angular: JHipster client generator with blueprint', () => {
+describe('needle API Client for Angular: JHipster client generator with blueprint', () => {
   let runContext;
   let runResult;
 
@@ -60,16 +47,9 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        skipServer: true,
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .run();
-  });
-
-  it('should bail on any file change adding same needles again', async () => {
-    await runResult
-      .create('jhipster-myblueprint:client')
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .withOptions({ force: false, bail: true, skipChecks: true, skipInstall: true })
       .run();
   });
 
@@ -117,55 +97,6 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
 
   it('icon imports contains a new icon added by a new menu method of needle api ', () => {
     assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName1');
-  });
-
-  it('admin menu contains the admin element added by needle api', () => {
-    assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
-      `
-            <li>
-              <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">
-                <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
-              </a>
-            </li>
-`
-    );
-  });
-
-  it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName2');
-  });
-
-  it('entity menu contains the entity added by needle api', () => {
-    assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
-      `
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="routerName3"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>
-              </a>
-            </li>
-`
-    );
-  });
-
-  it('entity module contains the microservice object added by needle api', () => {
-    assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
-      '      {\n' +
-        "        path: 'entityUrl',\n" +
-        "        data: { pageTitle: 'entity.home.title' },\n" +
-        "        loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
-        '      }'
-    );
   });
 
   it('admin module contains the import and the module added by needle api', () => {

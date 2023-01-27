@@ -28,6 +28,7 @@ import {
   validations,
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.mjs';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { CASSANDRA, SQL } = databaseTypes;
@@ -112,7 +113,7 @@ function askForMicroserviceJson() {
 
   return this.prompt(prompts).then(answers => {
     if (answers.microservicePath) {
-      this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+      this.logger.info(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
       context.microservicePath = this.entityConfig.microservicePath = answers.microservicePath;
     }
   });
@@ -202,7 +203,7 @@ function askForFieldsToRemove() {
   ];
   return this.prompt(prompts).then(props => {
     if (props.confirmRemove) {
-      this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
+      this.logger.warn(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
       const fields = this.entityConfig.fields;
       for (let i = fields.length - 1; i >= 0; i -= 1) {
         const field = this.entityConfig.fields[i];
@@ -264,7 +265,7 @@ function askForRelationsToRemove() {
   ];
   return this.prompt(prompts).then(props => {
     if (props.confirmRemove) {
-      this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
+      this.logger.warn(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
       const relationships = this.entityConfig.relationships;
       for (let i = relationships.length - 1; i >= 0; i -= 1) {
         const rel = relationships[i];
@@ -420,7 +421,7 @@ function askForPagination() {
   ];
   return this.prompt(prompts).then(props => {
     this.entityConfig.pagination = props.pagination;
-    this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
+    this.logger.info(chalk.green('\nEverything is configured, generating the entity...\n'));
   });
 }
 
@@ -429,7 +430,7 @@ function askForPagination() {
  */
 function askForField() {
   const context = this.context;
-  this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
+  this.logger.info(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   const skipServer = context.skipServer;
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
@@ -770,7 +771,7 @@ function askForField() {
       when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
       type: 'input',
       name: 'fieldValidateRulesMinlength',
-      validate: input => (this.isNumber(input) ? true : 'Minimum length must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Minimum length must be a positive number'),
       message: 'What is the minimum length of your field?',
       default: 0,
     },
@@ -778,7 +779,7 @@ function askForField() {
       when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
       type: 'input',
       name: 'fieldValidateRulesMaxlength',
-      validate: input => (this.isNumber(input) ? true : 'Maximum length must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Maximum length must be a positive number'),
       message: 'What is the maximum length of your field?',
       default: 20,
     },
@@ -789,9 +790,9 @@ function askForField() {
       message: 'What is the minimum of your field?',
       validate: (input, response) => {
         if ([FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
-          return this.isSignedDecimalNumber(input) ? true : 'Minimum must be a decimal number';
+          return inputIsSignedDecimalNumber(input) ? true : 'Minimum must be a decimal number';
         }
-        return this.isSignedNumber(input) ? true : 'Minimum must be a number';
+        return inputIsSignedNumber(input) ? true : 'Minimum must be a number';
       },
       default: 0,
     },
@@ -802,9 +803,9 @@ function askForField() {
       message: 'What is the maximum of your field?',
       validate: (input, response) => {
         if ([FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
-          return this.isSignedDecimalNumber(input) ? true : 'Maximum must be a decimal number';
+          return inputIsSignedDecimalNumber(input) ? true : 'Maximum must be a decimal number';
         }
-        return this.isSignedNumber(input) ? true : 'Maximum must be a number';
+        return inputIsSignedNumber(input) ? true : 'Maximum must be a number';
       },
       default: 100,
     },
@@ -818,7 +819,7 @@ function askForField() {
       type: 'input',
       name: 'fieldValidateRulesMinbytes',
       message: 'What is the minimum byte size of your field?',
-      validate: input => (this.isNumber(input) ? true : 'Minimum byte size must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Minimum byte size must be a positive number'),
       default: 0,
     },
     {
@@ -831,7 +832,7 @@ function askForField() {
       type: 'input',
       name: 'fieldValidateRulesMaxbytes',
       message: 'What is the maximum byte size of your field?',
-      validate: input => (this.isNumber(input) ? true : 'Maximum byte size must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Maximum byte size must be a positive number'),
       default: 5000000,
     },
     {
@@ -880,7 +881,7 @@ function askForField() {
 function askForRelationship() {
   const context = this.context;
   const name = context.name;
-  this.log(chalk.green('\nGenerating relationships to other entities\n'));
+  this.logger.info(chalk.green('\nGenerating relationships to other entities\n'));
   const prompts = [
     {
       type: 'confirm',
@@ -1062,7 +1063,7 @@ function askForRelationship() {
     if (props.relationshipAdd) {
       return askForRelationship.call(this);
     }
-    this.log('\n');
+    this.logger.log('\n');
     return undefined;
   });
 }
@@ -1073,10 +1074,10 @@ function askForRelationship() {
 function logFieldsAndRelationships() {
   const context = this.context;
   if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
-    this.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
+    this.logger.info(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
   }
   if (this.entityConfig.fields.length > 0) {
-    this.log(chalk.white('Fields'));
+    this.logger.info(chalk.white('Fields'));
     this.entityConfig.fields.forEach(field => {
       const validationDetails = [];
       const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
@@ -1109,27 +1110,27 @@ function logFieldsAndRelationships() {
           validationDetails.push(`${MAXBYTES}='${field.fieldValidateRulesMaxbytes}'`);
         }
       }
-      this.log(
+      this.logger.info(
         chalk.red(field.fieldName) +
           chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) +
           chalk.cyan(validationDetails.join(' '))
       );
     });
-    this.log();
+    this.logger.log();
   }
   if (this.entityConfig.relationships.length > 0) {
-    this.log(chalk.white('Relationships'));
+    this.logger.info(chalk.white('Relationships'));
     this.entityConfig.relationships.forEach(relationship => {
       const validationDetails = [];
       if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
-      this.log(
+      this.logger.info(
         `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
           relationship.relationshipType
         )} ${chalk.cyan(validationDetails.join(' '))}`
       );
     });
-    this.log();
+    this.logger.log();
   }
 }

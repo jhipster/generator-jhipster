@@ -28,6 +28,7 @@ import { JHIPSTER_CONFIG_DIR, ANGULAR_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
+import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO, ANGULAR } = clientFrameworkTypes;
@@ -185,14 +186,14 @@ export default class EntityGenerator extends BaseGenerator {
             context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
             context.useConfigurationFile = true;
 
-            this.log(`\nThe entity ${context.name} is being updated.\n`);
+            this.logger.info(`\nThe entity ${context.name} is being updated.\n`);
             try {
               // We are generating a entity from a microservice.
               // Load it directly into our entity configuration.
               this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
               this.entityStorage.set(this.microserviceConfig);
             } catch (err) {
-              this.debug('Error:', err);
+              this.logger.debug('Error:', err);
               throw new Error('\nThe entity configuration file could not be read!\n');
             }
           }
@@ -217,7 +218,7 @@ export default class EntityGenerator extends BaseGenerator {
         const context = this.context;
 
         if (this.options.db) {
-          context.databaseType = this.getDBTypeFromDBValue(this.options.db);
+          context.databaseType = getDBTypeFromDBValue(this.options.db);
           context.prodDatabaseType = this.options.db;
           context.devDatabaseType = this.options.db;
         }
@@ -249,14 +250,14 @@ export default class EntityGenerator extends BaseGenerator {
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
-          this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+          this.logger.info(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
         }
 
         // Structure for prompts.
         this.entityStorage.defaults({ fields: [], relationships: [] });
 
         if (!context.useConfigurationFile) {
-          this.log(`\nThe entity ${entityName} is being created.\n`);
+          this.logger.info(`\nThe entity ${entityName} is being created.\n`);
         }
       },
     };
@@ -335,7 +336,7 @@ export default class EntityGenerator extends BaseGenerator {
   get end() {
     return {
       end() {
-        this.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+        this.logger.info(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
       },
     };
   }

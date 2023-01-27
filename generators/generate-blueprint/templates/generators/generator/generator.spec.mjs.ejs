@@ -37,6 +37,7 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
           reproducible: true,
           defaults: true,
           baseName: 'jhipster',
+          ignoreNeedlesError: true,
 <%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
 <%_ } _%>

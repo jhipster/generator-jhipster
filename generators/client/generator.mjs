@@ -28,7 +28,7 @@ import { writeFiles as writeCommonFiles } from './files-common.mjs';
 import { writeEnumerationFiles } from './entity-files.mjs';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -287,11 +287,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get end() {
     return this.asEndTaskGroup({
       end({ application }) {
-        this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+        this.logger.info(chalk.green.bold('\nClient application generated successfully.\n'));
 
         const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${application.clientPackageManager} start`)}\n`;
 
-        this.log(chalk.green(logMsg));
+        this.logger.info(chalk.green(logMsg));
       },
     });
   }

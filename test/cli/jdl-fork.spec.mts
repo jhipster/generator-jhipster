@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-import { prepareTempDir } from './utils/utils.cjs';
+import { prepareTempDir } from '../support/index.mjs';
 import { runJHipster } from '../../cli/program.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 

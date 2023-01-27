@@ -19,6 +19,10 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
+import { databaseTypes } from '../../jdl/jhipster/index.mjs';
+
+const { H2_DISK, H2_MEMORY, NO: NO_DATABASE } = databaseTypes;
+
 export default {
   prompting,
 };
@@ -48,13 +52,13 @@ async function prompting() {
       default: 0,
     },
     {
-      when: response => databaseType !== 'no',
+      when: response => databaseType !== NO_DATABASE,
       name: 'cloudfoundryDatabaseServiceName',
       message: 'What is the name of your database service?',
       default: 'elephantsql',
     },
     {
-      when: response => databaseType !== 'no',
+      when: response => databaseType !== NO_DATABASE,
       name: 'cloudfoundryDatabaseServicePlan',
       message: 'What is the name of your database plan?',
       default: 'turtle',
@@ -68,8 +72,8 @@ async function prompting() {
   this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
   this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
 
-  if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
-    this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
+  if ((this.devDatabaseType === H2_DISK || this.devDatabaseType === H2_MEMORY) && this.cloudfoundryProfile === 'dev') {
+    this.logger.warn(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
     this.cloudfoundryProfile = 'prod';
   }
 }

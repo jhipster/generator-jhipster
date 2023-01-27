@@ -22,7 +22,7 @@ import _ from 'lodash';
 import BaseGenerator from '../base/index.mjs';
 
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 
@@ -53,7 +53,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       initializing() {
-        this.log(`The service ${this.name} is being created.`);
+        this.logger.info(`The service ${this.name} is being created.`);
         const configuration = this.config;
         this.baseName = configuration.get(BASE_NAME);
         this.packageName = configuration.get(PACKAGE_NAME);

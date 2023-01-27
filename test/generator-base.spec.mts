@@ -9,6 +9,7 @@ import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
 import { parseChangelog } from '../generators/base/utils.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
+import { Logger } from '../generators/base/support/logging.mjs';
 
 const { POSTGRESQL } = databaseTypes;
 
@@ -19,33 +20,9 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
+BaseGenerator.logger = new Logger(BaseGenerator.log);
+
 describe('generator - base', () => {
-  describe('getAllSupportedLanguages', () => {
-    describe('when called', () => {
-      it('returns an array', () => {
-        expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-      });
-    });
-  });
-  describe('isSupportedLanguage', () => {
-    describe('when called with valid language', () => {
-      it('returns true', () => {
-        expect(BaseGenerator.isSupportedLanguage('en')).to.be.true;
-      });
-    });
-    describe('when called with invalid language', () => {
-      it('returns false', () => {
-        expect(BaseGenerator.isSupportedLanguage('ab')).to.equal(false);
-      });
-    });
-  });
-  describe('getAllSupportedLanguageOptions', () => {
-    describe('when called', () => {
-      it('returns an array', () => {
-        expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-      });
-    });
-  });
   describe('getTableName', () => {
     describe('when called with a value', () => {
       it('returns a table name', () => {
@@ -75,20 +52,6 @@ describe('generator - base', () => {
         expect(BaseGenerator.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.have.length(
           63
         );
-      });
-    });
-    describe('when legacyRelationshipTableName is set', () => {
-      it('returns a proper join table name', () => {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        function TestClass() {}
-        TestClass.prototype = Object.create(Base.prototype);
-        TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
-        expect(TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.equal(
-          'rel_entity_name_longer_for_postgr__relationship_name_for_pos_24'
-        );
-        expect(
-          TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)
-        ).to.have.length(63);
       });
     });
   });
@@ -161,7 +124,7 @@ describe('generator - base', () => {
         ).to.have.length(63);
         expect(
           BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', POSTGRESQL)
-        ).to.equal('ux_entity_longer_name_with_pagi__column_longer_name_with_pag_8b');
+        ).to.equal('ux_entity_longer_name_with_pagin__column_longer_name_with_pa_8b');
       });
     });
     describe('when called with a long name that is near limit and postgresql', () => {
@@ -199,7 +162,7 @@ describe('generator - base', () => {
             POSTGRESQL,
             true
           )
-        ).to.equal('ux_entityLongerNameWithPaginati__columnLongerNameWithPaginat_8b');
+        ).to.equal('ux_entityLongerNameWithPaginatio__columnLongerNameWithPagina_8b');
       });
     });
   });

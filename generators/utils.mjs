@@ -19,9 +19,9 @@
 /* eslint-disable no-console */
 
 import path from 'path';
-import ejs from 'ejs';
 import _ from 'lodash';
 import os from 'os';
+import { stripMargin, escapeRegExp } from './base/support/index.mjs';
 
 /**
  * Rewrite file with passed arguments
@@ -47,7 +47,10 @@ export function rewriteFile(args, generator) {
 }
 
 /**
+ * @deprecated Replace with `this.editFile(args.file, content => content.replace(args.regex ? new RegExp(args.pattern, 'g') : args.pattern, args.content))`
+ *
  * Replace content
+ *
  * @param {object} args argument object
  * @param {object} generator reference to the generator
  */
@@ -63,16 +66,6 @@ export function replaceContent(args, generator) {
   const newBody = currentBody.replace(re, args.content);
   generator.fs.write(fullPath, newBody);
   return newBody !== currentBody;
-}
-
-/**
- * Escape regular expressions.
- *
- * @param {string} str string
- * @returns {string} string with regular expressions escaped
- */
-export function escapeRegExp(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
 }
 
 /**
@@ -164,169 +157,6 @@ export function rewrite(args) {
 }
 
 /**
- *
- * @param obj object to find in
- * @param path path to traverse
- * @param placeholder placeholder
- */
-export function deepFind(obj, path, placeholder) {
-  const paths = path.split('.');
-  let current = obj;
-  if (placeholder) {
-    // dirty fix for placeholders, the json files needs to be corrected
-    paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
-    paths.pop();
-  }
-  for (let i = 0; i < paths.length; ++i) {
-    if (current[paths[i]] === undefined) {
-      return undefined;
-    }
-    current = current[paths[i]];
-  }
-  return current;
-}
-
-/**
- * Convert passed block of string to javadoc formatted string.
- *
- * @param {string} text text to convert to javadoc format
- * @param {number} indentSize indent size (default 0)
- * @returns javadoc formatted string
- */
-export function getJavadoc(text, indentSize = 0) {
-  if (!text) {
-    text = '';
-  }
-  if (text.includes('"')) {
-    text = text.replace(/"/g, '\\"');
-  }
-  let javadoc = `${_.repeat(' ', indentSize)}/**`;
-  const rows = text.split('\n');
-  for (let i = 0; i < rows.length; i++) {
-    javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} * ${rows[i]}`;
-  }
-  javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
-  return javadoc;
-}
-
-/**
- * Build an enum object
- * @param {Object} field - entity field
- * @param {String} clientRootFolder - the client's root folder
- * @return {Object} the enum info.
- */
-export function getEnumInfo(field, clientRootFolder) {
-  const fieldType = field.fieldType;
-  // Todo: check if the next line does a side-effect and refactor it.
-  field.enumInstance = _.lowerFirst(fieldType);
-  const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
-  const customValuesState = getCustomValuesState(enums);
-  return {
-    enumName: fieldType,
-    javadoc: field.fieldTypeJavadoc && getJavadoc(field.fieldTypeJavadoc),
-    enumInstance: field.enumInstance,
-    enums,
-    ...customValuesState,
-    enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
-    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-  };
-}
-
-/**
- * @Deprecated
- * Build an enum object, deprecated use getEnumInfoInstead
- * @param {any} field : entity field
- * @param {string} frontendAppName
- * @param {string} packageName
- * @param {string} clientRootFolder
- */
-export function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
-  const fieldType = field.fieldType;
-  field.enumInstance = _.lowerFirst(fieldType);
-  const enums = field.fieldValues.replace(/\s/g, '').split(',');
-  const enumsWithCustomValue = getEnumsWithCustomValue(enums);
-  return {
-    enumName: fieldType,
-    enumValues: field.fieldValues.split(',').join(', '),
-    enumInstance: field.enumInstance,
-    enums,
-    enumsWithCustomValue,
-    frontendAppName,
-    packageName,
-    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-  };
-}
-
-/**
- * @deprecated
- * private function to remove for jhipster v7
- * @param enums
- * @return {*}
- */
-export function getEnumsWithCustomValue(enums) {
-  return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
-    if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
-      const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
-      const enumValueName = matches[1];
-      const enumValueCustomValue = matches[3];
-      enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
-    } else {
-      enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
-    }
-    return enumsWithCustomValueArray;
-  }, []);
-}
-
-export function getCustomValuesState(enumValues) {
-  const state = {
-    withoutCustomValue: 0,
-    withCustomValue: 0,
-  };
-  enumValues.forEach(enumValue => {
-    if (doesTheEnumValueHaveACustomValue(enumValue)) {
-      state.withCustomValue++;
-    } else {
-      state.withoutCustomValue++;
-    }
-  });
-  return {
-    withoutCustomValues: state.withCustomValue === 0,
-    withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
-    withCustomValues: state.withoutCustomValue === 0,
-  };
-}
-
-export function getEnums(enums, customValuesState, comments) {
-  if (customValuesState.withoutCustomValues) {
-    return enums.map(enumValue => ({
-      name: enumValue,
-      value: enumValue,
-      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
-    }));
-  }
-  return enums.map(enumValue => {
-    if (!doesTheEnumValueHaveACustomValue(enumValue)) {
-      return {
-        name: enumValue.trim(),
-        value: enumValue.trim(),
-        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
-      };
-    }
-    // eslint-disable-next-line no-unused-vars
-    const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-    return {
-      name: matched[1],
-      value: matched[2],
-      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 4),
-    };
-  });
-}
-
-export function doesTheEnumValueHaveACustomValue(enumValue) {
-  return enumValue.includes('(');
-}
-
-/**
  * Checks if string is already in file
  * @param {string} path file path
  * @param {string} search search string
@@ -385,7 +215,7 @@ export function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pa
       file: `${clientSrcDir}/app/router/pages.ts`,
       needle: 'jhipster-needle-add-entity-to-router-import',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|// prettier-ignore
                 |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
@@ -402,7 +232,7 @@ export function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFile
       file: `${clientSrcDir}/app/router/pages.ts`,
       needle: 'jhipster-needle-add-entity-to-router',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|{
                     |    path: '/pages/${pageFilename}',
@@ -423,7 +253,7 @@ export function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageNam
       file: `${clientSrcDir}/app/main.ts`,
       needle: 'jhipster-needle-add-entity-service-to-main-import',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
         ),
@@ -439,7 +269,7 @@ export function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pag
       file: `${clientSrcDir}/app/main.ts`,
       needle: 'jhipster-needle-add-entity-service-to-main',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|${pageInstance}Service: () => new ${pageName}Service(),`
         ),

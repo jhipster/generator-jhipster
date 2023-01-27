@@ -20,6 +20,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import { checkStringInFile } from '../../utils.mjs';
 import needleClientBase from './needle-client.mjs';
+import { stripMargin } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
@@ -34,7 +35,7 @@ export default class extends needleClientBase {
     const menuI18nTitle = enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : '';
     const entityEntry =
       // prettier-ignore
-      this.generator.stripMargin(
+      stripMargin(
                 `|<b-dropdown-item to="/${routerName}">
 |            <font-awesome-icon icon="asterisk" />
 |            <span${menuI18nTitle}>${entityTranslationValue}</span>
@@ -60,7 +61,7 @@ export default class extends needleClientBase {
     let entityEntry;
     if (!readOnly) {
       // prettier-ignore
-      entityEntry = this.generator.stripMargin(
+      entityEntry = stripMargin(
                 `|// prettier-ignore
                 |const ${entityName} = () => import('@/entities/${folderName}/${fileName}.vue');
                 |// prettier-ignore
@@ -70,7 +71,7 @@ export default class extends needleClientBase {
             );
     } else {
       // prettier-ignore
-      entityEntry = this.generator.stripMargin(
+      entityEntry = stripMargin(
                 `|// prettier-ignore
                 |const ${entityName} = () => import('@/entities/${folderName}/${fileName}.vue');
                 |// prettier-ignore
@@ -94,7 +95,7 @@ export default class extends needleClientBase {
     let entityEntry;
     if (!readOnly) {
       // prettier-ignore
-      entityEntry = this.generator.stripMargin(
+      entityEntry = stripMargin(
                 `|{
                 |    path: '${entityFileName}',
                 |    name: '${entityName}',
@@ -122,7 +123,7 @@ export default class extends needleClientBase {
             );
     } else {
       // prettier-ignore
-      entityEntry = this.generator.stripMargin(
+      entityEntry = stripMargin(
                 `|{
                 |    path: '/${entityFileName}',
                 |    name: '${entityName}',
@@ -148,7 +149,7 @@ export default class extends needleClientBase {
     const filePath = `${this.clientSrcDir}/app/main.ts`;
 
     // prettier-ignore
-    const entityEntry = this.generator.stripMargin(
+    const entityEntry = stripMargin(
             `import ${entityName}Service from '@/entities/${entityFolderName}/${entityFileName}.service';`
         );
 
@@ -161,7 +162,7 @@ export default class extends needleClientBase {
     const filePath = `${this.clientSrcDir}/app/main.ts`;
 
     // prettier-ignore
-    const entityEntry = this.generator.stripMargin(
+    const entityEntry = stripMargin(
             `${entityInstance}Service: () => new ${entityName}Service(),`
         );
 

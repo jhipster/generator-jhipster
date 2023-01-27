@@ -18,7 +18,7 @@
  */
 import Base from './needle-base.mjs';
 import Client from './client/needle-api/needle-client.mjs';
-import ClientAngular from './client/needle-api/needle-client-angular.mjs';
+import ClientAngular from './angular/needle-api/needle-client-angular.mjs';
 import ClientReact from './client/needle-api/needle-client-react.mjs';
 import ClientVue from './client/needle-api/needle-client-vue.mjs';
 import ClientWebpack from './client/needle-api/needle-client-webpack.mjs';

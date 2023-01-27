@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import constants from '../generator-constants.cjs';
 import jdlImporter from '../../jdl/index.mjs';
 
 const { createImporterFromContent } = jdlImporter;
@@ -31,9 +30,11 @@ application {
 const jdlApplicationWithEntities = `
 ${jdlApplication}
 entity One {
+    @Id oneId Long
     original String
 }
 entity Another {
+    @Id anotherId Long
     original String
 }`;
 
@@ -77,6 +78,12 @@ entity Smarty {
 }
 enum ProductCategory {
   Laptop, Desktop, Phone, Tablet, Accessory
+}`;
+
+const jdlApplicationWithEntitiesAndRelationship = `
+${jdlApplicationWithEntities}
+relationship OneToOne {
+One to Another,
 }`;
 
 const generatorPath = join(__dirname, '../server/index.mjs');
@@ -606,18 +613,10 @@ entity Customer {
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
-      const state = createImporterFromContent(
-        `
-${jdlApplicationWithEntities}
-relationship OneToOne {
-    One to Another,
-}
-`,
-        {
-          skipFileGeneration: true,
-          ...options,
-        }
-      ).import();
+      const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
+        skipFileGeneration: true,
+        ...options,
+      }).import();
       runResult = await runResult
         .create(generatorPath)
         .withOptions({
@@ -653,7 +652,7 @@ relationship OneToOne {
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'column name="another_id" type="bigint"'
+        'column name="another_another_id" type="bigint"'
       );
       runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`, 'dropColumn');
     });
@@ -664,6 +663,77 @@ relationship OneToOne {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
     });
   });
+  context('when removing a relationship', () => {
+    let runResult;
+    before(async () => {
+      const baseName = 'JhipsterApp';
+      const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
+        ...options,
+        skipFileGeneration: true,
+        creationTimestampConfig: options.creationTimestamp,
+      }).import();
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(2);
+      runResult = await helpers
+        .create(generatorPath)
+        .withOptions({ ...options, applicationWithEntities })
+        .run();
+
+      const state = createImporterFromContent(jdlApplicationWithEntities, {
+        skipFileGeneration: true,
+        ...options,
+      }).import();
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
+    });
+
+    after(() => runResult.cleanup());
+
+    it('should create application', () => {
+      runResult.assertFile(['.yo-rc.json']);
+    });
+    it('should create entity config file', () => {
+      runResult.assertFile([join('.jhipster', 'One.json'), join('.jhipster', 'Another.json')]);
+    });
+    it('should create entity initial changelog', () => {
+      runResult.assertFile([
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Another.xml`,
+      ]);
+    });
+    it('should create entity initial fake data', () => {
+      runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_one.csv`]);
+    });
+    it('should create entity update changelog with dropColumn and dropForeignKeyContraint', () => {
+      runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
+        'dropColumn tableName="one"'
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
+        'column name="another_another_id"'
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
+        'dropForeignKeyConstraint baseTableName="one" constraintName="fk_one__another_id"'
+      );
+    });
+    it('should not create an additional entity constraint update changelog', () => {
+      runResult.assertNoFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`]);
+    });
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
+  });
+
   context('entities with/without byte fields should create fake data', () => {
     [
       {

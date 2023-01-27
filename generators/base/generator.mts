@@ -21,14 +21,12 @@ import { basename } from 'path';
 import { createHash } from 'crypto';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
-
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
+import { statSync, rmSync } from 'fs';
 
 import SharedData from './shared-data.mjs';
-
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
-
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import baseOptions from './options.mjs';
@@ -93,6 +91,13 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
+   * Override yeoman generator's usage function to fine tune --help message.
+   */
+  usage(): string {
+    return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  /**
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
@@ -151,6 +156,38 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
+   * Remove File
+   * @param file
+   */
+  removeFile(...path: string[]) {
+    const destinationFile = this.destinationPath(...path);
+    try {
+      if (destinationFile && statSync(destinationFile).isFile()) {
+        this.logger.log(`Removing the file - ${destinationFile}`);
+        rmSync(destinationFile, { force: true });
+      }
+    } catch {
+      this.logger.log(`Could not remove file ${destinationFile}`);
+    }
+    return destinationFile;
+  }
+
+  /**
+   * Remove Folder
+   * @param path
+   */
+  removeFolder(...path: string[]) {
+    const destinationFolder = this.destinationPath(...path);
+    try {
+      if (statSync(destinationFolder).isDirectory()) {
+        rmSync(destinationFolder, { recursive: true });
+      }
+    } catch (error) {
+      this.logger.log(`Could not remove folder ${destinationFolder}`);
+    }
+  }
+
+  /**
    * Utility function to write file.
    *
    * @param source
@@ -159,38 +196,76 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    * @param options - options passed to ejs render
    * @param copyOptions
    */
-  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions?: CopyOptions) {
+  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions: CopyOptions = {}) {
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
-    return this.renderTemplate(source, destination, data, { root, ...options }, copyOptions);
+    return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
   }
 
   /**
-   * Edit file content
+   * Edit file content.
+   * Edits an empty file if `options.create` is truthy or no callback is passed.
+   * @example
+   * // Throws if `foo.txt` doesn't exists or append the content.
+   * editFile('foo.txt', content => content + 'foo.txt content');
+   * @example
+   * // Appends `foo.txt` content if whether exists or not.
+   * editFile('foo.txt', { create: true }, content => content + 'foo.txt content');
+   * @example
+   * // Appends `foo.txt` content if whether exists or not using the returned cascaded callback.
+   * editFile('foo.txt')(content => content + 'foo.txt content');
    */
-  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> {
+  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
+  editFile(
+    file: string,
+    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean },
+    ...transformCallbacks: EditFileCallback<this>[]
+  ): CascatedEditFileCallback<this>;
+
+  editFile(
+    file: string,
+    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean } | EditFileCallback<this>,
+    ...transformCallbacks: EditFileCallback<this>[]
+  ): CascatedEditFileCallback<this> {
+    let actualOptions: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean };
+    if (typeof options === 'function') {
+      transformCallbacks = [options, ...transformCallbacks];
+      actualOptions = {};
+    } else if (options === undefined) {
+      actualOptions = {};
+    } else {
+      actualOptions = options;
+    }
     let filePath = this.destinationPath(file);
     if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
       filePath = `${filePath}.jhi`;
     }
 
-    let content;
-
+    let originalContent;
     try {
-      content = this.readDestination(filePath);
+      originalContent = this.readDestination(filePath);
     } catch (_error) {
-      if (transformCallbacks.length === 0) {
+      if (actualOptions.ignoreNonExisting) {
+        // return a noop.
+        const noop = () => noop;
+        return noop;
+      }
+      if (!actualOptions.create || transformCallbacks.length === 0) {
         throw new Error(`File ${filePath} doesn't exist`);
       }
       // allow to edit non existing files
-      content = '';
+      originalContent = '';
     }
 
+    let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
       try {
-        content = joinCallbacks(...callbacks).call(this, content, filePath);
-        this.writeDestination(filePath, content);
+        newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
+        if (actualOptions.assertModified && originalContent === newContent) {
+          throw new Error(`Fail to edit file '${file}'.`);
+        }
+        this.writeDestination(filePath, newContent);
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
@@ -250,16 +325,16 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   validateCheckResult(result: CheckResult, { printInfo = false, throwOnError = true } = {}) {
     // Don't print check info by default for cleaner outputs.
     if (printInfo && result.info) {
-      this.info(result.info);
+      this.logger.info(result.info);
     }
     if (result.warning) {
-      this.warning(result.warning);
+      this.logger.warn(result.warning);
     }
     if (result.error) {
       if (throwOnError) {
         throw new Error(result.error);
       } else {
-        this.warning(result.error);
+        this.logger.warn(result.error);
       }
     }
   }

@@ -46,7 +46,7 @@ export default class {
       message = 'File rewrite failed.';
     }
     this.generator.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(` or missing required jhipster-needle. ${message}\n`));
-    this.generator.debug('Error:', exception);
+    this.generator.logger.debug('Error:', exception);
   }
 
   generateFileModelWithPath(aPath, aFile, needleTag, ...content) {

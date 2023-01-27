@@ -34,7 +34,8 @@ import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
-import detectLanguage from '../languages/detect-language.mjs';
+import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
+import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
@@ -52,7 +53,6 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -65,21 +65,18 @@ import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
   NODE_VERSION,
-  LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithUnsetValues } from './support/index.mjs';
+import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
+import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
-
 const { PROMETHEUS, ELK } = monitoringTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
@@ -90,7 +87,6 @@ const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
-
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -199,12 +195,16 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @returns {string}
    */
   jhipsterTemplatePath(...args) {
+    let existingGenerator;
     try {
-      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        existingGenerator = split.length === 1 ? split[0] : split[1];
+      }
     }
+    this._jhipsterGenerator = existingGenerator;
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -221,66 +221,16 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Replace placeholders with versions from packageJsonSourceFile.
-   * @param {string} keyToReplace - PlaceHolder name.
-   * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
-   */
-  replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
-    const packageJsonTargetFile = this.destinationPath('package.json');
-    const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    const replace = section => {
-      if (packageJsonTarget[section]) {
-        Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
-          if (dependencyReference.startsWith(keyToReplace)) {
-            const [keyToReplaceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = dependencyReference.split('#');
-            if (keyToReplaceAtSource !== keyToReplace) return;
-            if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
-              throw new Error(`Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`);
-            }
-            packageJsonTarget[section][dependency] = packageJsonSource[sectionAtSource][dependencyAtSource];
-          }
-        });
-      }
-    };
-    replace('dependencies');
-    replace('devDependencies');
-    this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
-  }
-
-  /**
-   * @private
-   * Add a new icon to icon imports.
-   *
-   * @param {string} iconName - The name of the Font Awesome icon.
-   * @param {string} clientFramework - The name of the client framework
-   */
-  addIcon(iconName, clientFramework) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addIcon(iconName);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
-  }
-
-  /**
-   * @private
    * Add a new menu element, at the root of the menu.
    *
-   * @param {string} routerName - The name of the Angular router that is added to the menu.
+   * @param {string} routerName - The name of the router that is added to the menu.
    * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
    * @param {boolean} enableTranslation - If translations are enabled or not
    * @param {string} clientFramework - The name of the client framework
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 
   /**
@@ -292,96 +242,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addExternalResourcesToRoot(resources, comment) {
     this.needleApi.client.addExternalResourcesToRoot(resources, comment);
-  }
-
-  /**
-   * Add a new menu element to the admin menu.
-   *
-   * @param {string} routerName - The name of the Angular router that is added to the admin menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the admin menu
-   */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
-  }
-
-  /**
-   * @private
-   * Add a new entity in the "entities" menu.
-   *
-   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
-   * @param {string} entityTranslationValue - i18n value for entity entry in menu
-   */
-  addEntityToMenu(
-    routerName,
-    enableTranslation,
-    clientFramework = this.clientFramework,
-    entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
-    jhiPrefix = this.jhiPrefix
-  ) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addEntityToMenu(
-        routerName,
-        enableTranslation,
-        entityTranslationKeyMenu,
-        entityTranslationValue,
-        jhiPrefix
-      );
-    } else if (clientFramework === REACT) {
-      this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    } else if (clientFramework === VUE) {
-      this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new entity in the TS modules file.
-   *
-   * @param {string} entityInstance - Entity Instance
-   * @param {string} entityClass - Entity Class
-   * @param {string} entityName - Entity Name
-   * @param {string} entityFolderName - Entity Folder Name
-   * @param {string} entityFileName - Entity File Name
-   * @param {string} entityUrl - Entity router URL
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} microserviceName - Microservice Name
-   * @param {boolean} readOnly - If the entity is read-only or not
-   * @param {string} pageTitle - The translation key or the text for the page title in the browser
-   */
-  addEntityToModule(
-    entityInstance = this.entityInstance,
-    entityClass = this.entityClass,
-    entityName = this.entityAngularName,
-    entityFolderName = this.entityFolderName,
-    entityFileName = this.entityFileName,
-    entityUrl = this.entityUrl,
-    clientFramework = this.clientFramework,
-    microserviceName = this.microserviceName,
-    readOnly = this.readOnly,
-    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
-  ) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addEntityToModule(entityName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle);
-    } else if (clientFramework === REACT) {
-      this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
-    } else if (clientFramework === VUE) {
-      this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
-      this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
-      this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
-      this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
-    }
   }
 
   /**
@@ -455,102 +315,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Add a translation key to all installed languages
-   *
-   * @param {string} key - Key for the entity name
-   * @param {string} value - Default translated value
-   * @param {string} method - The method to be run with provided key and value from above
-   * @param {string} enableTranslation - specify if i18n is enabled
-   */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
-    if (enableTranslation) {
-      this.getAllInstalledLanguages().forEach(language => {
-        this[method](key, value, language, webappSrcDir);
-      });
-    }
-  }
-
-  /**
-   * @private
-   * get all the languages installed currently
-   */
-  getAllInstalledLanguages() {
-    const languages = [];
-    this.getAllSupportedLanguages().forEach(language => {
-      try {
-        const stats = fs.lstatSync(`${this.sharedData.getApplication().clientSrcDir}i18n/${language}`);
-        if (stats.isDirectory()) {
-          languages.push(language);
-        }
-      } catch (e) {
-        this.debug('Error:', e);
-        // An exception is thrown if the folder doesn't exist
-        // do nothing as the language might not be installed
-      }
-    });
-    return languages;
-  }
-
-  /**
-   * get all the languages supported by JHipster
-   */
-  getAllSupportedLanguages() {
-    return _.map(this.getAllSupportedLanguageOptions(), 'value');
-  }
-
-  /**
-   * check if a language is supported by JHipster
-   * @param {string} language - Key for the language
-   */
-  isSupportedLanguage(language) {
-    return _.includes(this.getAllSupportedLanguages(), language);
-  }
-
-  /**
-   * @private
-   * check if Right-to-Left support is necessary for i18n
-   * @param {string[]} languages - languages array
-   */
-  isI18nRTLSupportNecessary(languages) {
-    if (!languages) {
-      return false;
-    }
-    const rtlLanguages = this.getAllSupportedLanguageOptions().filter(langObj => langObj.rtl);
-    return languages.some(lang => !!rtlLanguages.find(langObj => langObj.value === lang));
-  }
-
-  /**
-   * @private
-   * return the localeId from the given language key (from constants.LANGUAGES)
-   * if no localeId is defined, return the language key (which is a localeId itself)
-   * @param {string} language - language key
-   */
-  getLocaleId(language) {
-    const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
-    return langObj.localeId || language;
-  }
-
-  /**
-   * @private
-   * return the dayjsLocaleId from the given language key (from constants.LANGUAGES)
-   * if no dayjsLocaleId is defined, return the language key (which is a localeId itself)
-   * @param {string} language - language key
-   */
-  getDayjsLocaleId(language) {
-    const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
-    return langObj.dayjsLocaleId || language;
-  }
-
-  /**
-   * @private
-   * get all the languages options supported by JHipster
-   */
-  getAllSupportedLanguageOptions() {
-    return LANGUAGES;
   }
 
   /**
@@ -1066,13 +830,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       this.configOptions.reproducibleLiquibaseTimestamp = now;
 
       // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
         this.config.set('lastLiquibaseTimestamp', now.getTime());
       }
     } else {
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (lastLiquibaseTimestamp) {
         lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
         if (lastLiquibaseTimestamp >= now) {
@@ -1081,7 +845,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           now.setMilliseconds(0);
         }
       }
-      this.config.set('lastLiquibaseTimestamp', now.getTime());
+      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
     }
     return formatDateForChangelog(now);
   }
@@ -1181,8 +945,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       return this.fs.readJSON(file);
     } catch (error) {
-      this.warning(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.debug('Error:', error);
+      this.logger.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
+      this.logger.debug('Error:', error);
       return undefined;
     }
   }
@@ -1262,21 +1026,15 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} prodDatabaseType - database type
    */
   getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
-    const prefix = legacyDbNames ? '' : 'rel_';
+    const separator = '__';
+    const prefix = 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
-    // FIXME: In V8, remove specific condition for POSTGRESQL joinTableName.length === 63
-    if (
-      tableNameMaxLength &&
-      (joinTableName.length > tableNameMaxLength || (prodDatabaseType === POSTGRESQL && joinTableName.length === 63)) &&
-      !this.skipCheckLengthOfIdentifier
-    ) {
-      this.warning(
+    if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
+      this.logger.warn(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
-      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator, appendHash: !legacyDbNames });
+      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
     }
     return joinTableName;
   }
@@ -1294,8 +1052,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
     let constraintName;
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
+    const separator = '__';
     if (noSnakeCase) {
       constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
     } else {
@@ -1303,67 +1060,16 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     }
     const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
+      this.logger.warn(
         `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
       );
       return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
         separator,
         noSnakeCase,
         prefix,
-        appendHash: !legacyDbNames,
       })}${suffix}`;
     }
     return constraintName;
-  }
-
-  /**
-   * @deprecated Should be removed in V8 in favour of getConstraintName
-   *
-   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} columnOrRelationName - name of the column or related entity
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   * @param {string} prefix - constraintName prefix for the constraintName
-   */
-  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
-    let constraintName;
-    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
-    const separator = legacyDbNames ? '_' : '__';
-    if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
-    } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
-    }
-    let limit = 0;
-    if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 62;
-    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
-      );
-
-      limit = 61;
-    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 62;
-    }
-    return limit === 0
-      ? constraintName
-      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
-          separator,
-          noSnakeCase,
-          prefix,
-          appendHash: !legacyDbNames,
-        });
   }
 
   /**
@@ -1376,10 +1082,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
-    return prodDatabaseType === ORACLE
-      ? this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id')
-      : `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
+    return this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
   }
 
   /**
@@ -1392,10 +1095,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
-    return prodDatabaseType === ORACLE
-      ? this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_')
-      : `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
+    return this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
   }
 
   /**
@@ -1404,35 +1104,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} msg - message to print
    */
   error(msg) {
-    if (this._debug && this._debug.enabled) {
-      this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
-    }
+    this.logger.error();
     throw new Error(`${msg}`);
-  }
-
-  /**
-   * Print a warning message.
-   *
-   * @param {string} msg - message to print
-   */
-  warning(msg) {
-    const warn = `${chalk.yellow.bold('WARNING!')} ${msg}`;
-    this.log(warn);
-    if (this._debug && this._debug.enabled) {
-      this._debug(warn);
-    }
-  }
-
-  /**
-   * Print an info message.
-   *
-   * @param {string} msg - message to print
-   */
-  info(msg) {
-    this.log.info(msg);
-    if (this._debug && this._debug.enabled) {
-      this._debug(`${chalk.green('INFO!')} ${msg}`);
-    }
   }
 
   /**
@@ -1456,7 +1129,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const keyStoreFile = `${keystoreFolder}/keystore.p12`;
 
     if (this.fs.exists(keyStoreFile)) {
-      this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
+      this.logger.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
     } else {
       try {
         shelljs.mkdir('-p', keystoreFolder);
@@ -1491,9 +1164,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
-            this.warning("\nFailed to create a KeyStore with 'keytool'", code);
+            this.logger.warn("\nFailed to create a KeyStore with 'keytool'", code);
           } else {
-            this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+            this.logger.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
           done();
         }
@@ -1505,24 +1178,26 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * Prints a JHipster logo.
    */
   printJHipsterLogo() {
-    this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
+    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     if (process.cwd() === this.getUserHome()) {
-      this.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
-      this.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.logger.log(
+        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
+      );
+      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.log(
+    this.logger.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.log(
+    this.logger.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
     );
-    this.log(
+    this.logger.log(
       chalk.white(
         `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
       )
     );
-    this.log(
+    this.logger.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }
@@ -1547,7 +1222,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         { silent: true },
         (code, stdout, stderr) => {
           if (!stderr && semver.lt(packageJson.version, stdout)) {
-            this.log(
+            this.logger.warn(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
@@ -1555,14 +1230,14 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.log(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logger.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logger.warn(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }
       );
     } catch (err) {
-      this.debug('Error:', err);
+      this.logger.debug('Error:', err);
       // fail silently as this function doesn't affect normal generator flow
     }
   }
@@ -1674,7 +1349,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
-    this.log(`Running command: '${chalk.bold(buildCmd)}'`);
+    this.logger.info(`Running command: '${chalk.bold(buildCmd)}'`);
     return {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,
@@ -1759,9 +1434,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
 templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
-            this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+            this.logger.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
-            this.debug(moreThanOneMessage);
+            this.logger.debug(moreThanOneMessage);
           }
         }
         sourceFileFrom = existingTemplates.shift();
@@ -1802,14 +1477,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
+          // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
           cache: false,
         };
+        const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
         const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, targetFile, data, renderOptions);
+          this.renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         }
       }
       if (!isBinary && transform && transform.length) {
@@ -1903,7 +1580,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && this.fs.exists(destinationFile)) {
-              this.debug(`skipping file ${destinationFile}`);
+              this.logger.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
 
@@ -1937,7 +1614,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
+    this.logger.debug(`Time taken to write files: ${new Date() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -1970,7 +1647,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       }
@@ -2036,7 +1713,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.baseName = this.options.baseName;
     }
     if (options.db) {
-      const databaseType = this.getDBTypeFromDBValue(this.options.db);
+      const databaseType = getDBTypeFromDBValue(this.options.db);
       if (databaseType) {
         this.jhipsterConfig.databaseType = databaseType;
       } else if (!this.jhipsterConfig.databaseType) {
@@ -2078,9 +1755,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.cypressAudit !== undefined) {
       this.jhipsterConfig.cypressAudit = options.cypressAudit;
     }
-    if (options.legacyDbNames !== undefined) {
-      this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
-    }
     if (options.enableTranslation !== undefined) {
       this.jhipsterConfig.enableTranslation = options.enableTranslation;
     }
@@ -2108,7 +1782,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {
@@ -2147,7 +1821,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.jhipsterConfig.clientPackageManager) {
       const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
       if (!usingNpm) {
-        this.warning(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        this.logger.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
         options.skipInstall = true;
       }
     }
@@ -2355,10 +2029,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    dest.enableTranslation = config.enableTranslation;
-    dest.nativeLanguage = config.nativeLanguage;
-    dest.languages = config.languages;
-    dest.enableI18nRTL = dest.languages && this.isI18nRTLSupportNecessary(dest.languages);
+    loadLanguagesConfig(dest, config);
   }
 
   /**
@@ -2565,7 +2236,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {...string} subpath : the path to fetch from
    */
   fetchFromInstalledJHipster(...subpath) {
-    return path.join(__dirname, '..', ...subpath);
+    if (subpath) {
+      return path.join(__dirname, '..', ...subpath);
+    }
+    return subpath;
   }
 
   /**
@@ -2594,7 +2268,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
     const jhipsterVersion = packageJson.version;
-    const baseName = this.getDefaultAppName();
+    const baseName = getDefaultAppName(this);
     const creationTimestamp = new Date().getTime();
 
     this.config.defaults({

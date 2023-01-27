@@ -48,7 +48,7 @@ export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 // Libraries version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-export const SPRING_BOOT_VERSION = '3.0.1';
+export const SPRING_BOOT_VERSION = '3.0.2';
 // The spring-cloud version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 export const SPRING_CLOUD_VERSION = '2022.0.0';
 // The hibernate driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
@@ -88,138 +88,6 @@ export const LOGIN_REGEX_JS = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\
 export const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 export const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
-export const LANGUAGES = [
-  {
-    name: 'Albanian',
-    dispName: 'Shqip',
-    value: 'al',
-    dayjsLocaleId: 'sq',
-    localeId: 'sq',
-  },
-  {
-    name: 'Arabic (Libya)',
-    dispName: 'العربية',
-    value: 'ar-ly',
-    rtl: true,
-    skipForLocale: true,
-    localeId: 'ar-LY',
-  },
-  {
-    name: 'Armenian',
-    dispName: 'Հայերեն',
-    value: 'hy',
-    dayjsLocaleId: 'hy-am',
-  },
-  {
-    name: 'Belarusian',
-    dispName: 'Беларускі',
-    value: 'by',
-    dayjsLocaleId: 'be',
-    localeId: 'be',
-  },
-  {
-    name: 'Bengali',
-    dispName: 'বাংলা',
-    value: 'bn',
-    dayjsLocaleId: 'bn',
-  },
-  { name: 'Bulgarian', dispName: 'Български', value: 'bg' },
-  {
-    name: 'Catalan',
-    dispName: 'Català',
-    value: 'ca',
-  },
-  {
-    name: 'Chinese (Simplified)',
-    dispName: '中文（简体）',
-    value: 'zh-cn',
-    localeId: 'zh-Hans',
-  },
-  {
-    name: 'Chinese (Traditional)',
-    dispName: '繁體中文',
-    value: 'zh-tw',
-    localeId: 'zh-Hant',
-  },
-  { name: 'Croatian', dispName: 'Hrvatski', value: 'hr' },
-  { name: 'Czech', dispName: 'Český', value: 'cs' },
-  { name: 'Danish', dispName: 'Dansk', value: 'da' },
-  { name: 'Dutch', dispName: 'Nederlands', value: 'nl' },
-  { name: 'English', dispName: 'English', value: 'en' },
-  { name: 'Estonian', dispName: 'Eesti', value: 'et' },
-  {
-    name: 'Farsi',
-    dispName: 'فارسی',
-    value: 'fa',
-    rtl: true,
-  },
-  { name: 'Finnish', dispName: 'Suomi', value: 'fi' },
-  { name: 'French', dispName: 'Français', value: 'fr' },
-  { name: 'Galician', dispName: 'Galego', value: 'gl' },
-  { name: 'German', dispName: 'Deutsch', value: 'de' },
-  { name: 'Greek', dispName: 'Ελληνικά', value: 'el' },
-  { name: 'Hindi', dispName: 'हिंदी', value: 'hi' },
-  { name: 'Hungarian', dispName: 'Magyar', value: 'hu' },
-  { name: 'Indonesian', dispName: 'Bahasa Indonesia', value: 'id' },
-  { name: 'Italian', dispName: 'Italiano', value: 'it' },
-  { name: 'Japanese', dispName: '日本語', value: 'ja' },
-  { name: 'Korean', dispName: '한국어', value: 'ko' },
-  { name: 'Marathi', dispName: 'मराठी', value: 'mr' },
-  { name: 'Myanmar', dispName: 'မြန်မာ', value: 'my' },
-  { name: 'Polish', dispName: 'Polski', value: 'pl' },
-  {
-    name: 'Portuguese (Brazilian)',
-    dispName: 'Português (Brasil)',
-    value: 'pt-br',
-    localeId: 'pt',
-  },
-  {
-    name: 'Portuguese',
-    dispName: 'Português',
-    value: 'pt-pt',
-    localeId: 'pt-PT',
-    dayjsLocaleId: 'pt',
-  },
-  {
-    name: 'Punjabi',
-    dispName: 'ਪੰਜਾਬੀ',
-    value: 'pa',
-    dayjsLocaleId: 'pa-in',
-  },
-  { name: 'Romanian', dispName: 'Română', value: 'ro' },
-  { name: 'Russian', dispName: 'Русский', value: 'ru' },
-  { name: 'Slovak', dispName: 'Slovenský', value: 'sk' },
-  { name: 'Serbian', dispName: 'Srpski', value: 'sr' },
-  { name: 'Sinhala', dispName: 'සිංහල', value: 'si' },
-  { name: 'Spanish', dispName: 'Español', value: 'es' },
-  { name: 'Swedish', dispName: 'Svenska', value: 'sv' },
-  { name: 'Turkish', dispName: 'Türkçe', value: 'tr' },
-  { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
-  { name: 'Telugu', dispName: 'తెలుగు', value: 'te' },
-  { name: 'Thai', dispName: 'ไทย', value: 'th' },
-  {
-    name: 'Ukrainian',
-    dispName: 'Українська',
-    value: 'ua',
-    localeId: 'uk',
-    dayjsLocaleId: 'uk',
-  },
-  {
-    name: 'Uzbek (Cyrillic)',
-    dispName: 'Ўзбекча',
-    value: 'uz-Cyrl-uz',
-    localeId: 'uz-Cyrl',
-    dayjsLocaleId: 'uz',
-  },
-  {
-    name: 'Uzbek (Latin)',
-    dispName: 'O`zbekcha',
-    value: 'uz-Latn-uz',
-    localeId: 'uz-Latn',
-    dayjsLocaleId: 'uz-latn',
-  },
-  { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' },
-];
 export const MAIN_DIR = 'src/main/';
 export const TEST_DIR = 'src/test/';
 

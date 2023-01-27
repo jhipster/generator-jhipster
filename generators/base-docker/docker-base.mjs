@@ -28,21 +28,11 @@ const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
 export { checkDocker } from './docker-utils.mjs';
 
-export default {
-  checkImages,
-  generateJwtSecret,
-  configureImageNames,
-  setAppsFolderPaths,
-  loadConfigs,
-  loadFromYoRc,
-  setClusteredApps,
-};
-
 /**
  * Check Images
  */
 export function checkImages() {
-  this.log('\nChecking Docker images in applications directories...');
+  this.logger.info('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
   let runCommand = '';
@@ -137,7 +127,7 @@ export function loadConfigs() {
       config.appFolder = appFolder;
       this.appConfigs.push(config);
     } else {
-      this.error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
+      throw new Error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
     }
   });
 }
@@ -162,7 +152,7 @@ export function loadFromYoRc() {
   delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
-    this.log('\nFound .yo-rc.json config file...');
+    this.logger.info('\nFound .yo-rc.json config file...');
   }
 
   if (this.regenerate) {

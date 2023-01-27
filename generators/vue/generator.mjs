@@ -19,13 +19,22 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { fieldTypes } from '../../jdl/jhipster/index.mjs';
+import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
 import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
+import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
+import {
+  generateEntityClientEnumImports as getClientEnumImportsFormat,
+  generateEntityClientFields as getHydratedEntityClientFields,
+  generateEntityClientImports as formatEntityClientImports,
+  generateTestEntityId as getTestEntityId,
+  getTypescriptKeyType as getTSKeyType,
+} from '../client/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
-const TYPE_LONG = CommonDBTypes.LONG;
+const { VUE } = clientFrameworkTypes;
+const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 /**
  * @class
@@ -108,5 +117,94 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  /**
+   * @private
+   * Add a new entity in the "entities" menu.
+   *
+   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+   * @param {boolean} enableTranslation - If translations are enabled or not
+   * @param {string} clientFramework - The name of the client framework
+   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+   * @param {string} entityTranslationValue - i18n value for entity entry in menu
+   */
+  addEntityToMenu(
+    routerName,
+    enableTranslation,
+    entityTranslationKeyMenu = _.camelCase(routerName),
+    entityTranslationValue = _.startCase(routerName)
+  ) {
+    addVueEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+  }
+
+  /**
+   * @private
+   * Add a new entity in the TS modules file.
+   *
+   * @param {string} entityInstance - Entity Instance
+   * @param {string} entityClass - Entity Class
+   * @param {string} entityName - Entity Name
+   * @param {string} entityFolderName - Entity Folder Name
+   * @param {string} entityFileName - Entity File Name
+   * @param {string} entityUrl - Entity router URL
+   * @param {string} microserviceName - Microservice Name
+   * @param {boolean} readOnly - If the entity is read-only or not
+   * @param {string} pageTitle - The translation key or the text for the page title in the browser
+   */
+  addEntityToModule(
+    entityInstance = this.entityInstance,
+    entityClass = this.entityClass,
+    entityName = this.entityAngularName,
+    entityFolderName = this.entityFolderName,
+    entityFileName = this.entityFileName,
+    entityUrl = this.entityUrl,
+    microserviceName = this.microserviceName,
+    readOnly = this.readOnly,
+    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
+  ) {
+    this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
+    this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
+    this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
+    this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
+  }
+
+  /**
+   * @private
+   * Generate Entity Client Field Default Values
+   *
+   * @param {Array|Object} fields - array of fields
+   * @returns {Array} defaultVariablesValues
+   */
+  generateEntityClientFieldDefaultValues(fields) {
+    const defaultVariablesValues = {};
+    fields.forEach(field => {
+      const fieldType = field.fieldType;
+      const fieldName = field.fieldName;
+      if (fieldType === TYPE_BOOLEAN) {
+        defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
+      }
+    });
+    return defaultVariablesValues;
+  }
+
+  getTypescriptKeyType(primaryKey) {
+    return getTSKeyType(primaryKey);
+  }
+
+  generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+    return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, VUE);
+  }
+
+  generateEntityClientImports(relationships, dto) {
+    return formatEntityClientImports(relationships, dto, VUE);
+  }
+
+  generateEntityClientEnumImports(fields) {
+    return getClientEnumImportsFormat(fields, VUE);
+  }
+
+  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
+    return getTestEntityId(primaryKey, index, wrapped);
   }
 }
