@@ -153,8 +153,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     }
 
     private void setLocationForStaticAssets(WebServerFactory server) {
-        if (server instanceof ConfigurableServletWebServerFactory) {
-            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
+        if (server instanceof ConfigurableServletWebServerFactory servletWebServer) {
             File root;
             String prefixPath = resolvePathPrefix();
             root = new File(prefixPath + "<%= clientDistDir %>");
