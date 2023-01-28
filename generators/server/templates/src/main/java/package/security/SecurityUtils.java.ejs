@@ -88,12 +88,10 @@ public final class SecurityUtils {
     private static String extractPrincipal(Authentication authentication) {
         if (authentication == null) {
             return null;
-        } else if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+        } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
             return springSecurityUser.getUsername();
 <%_ if (authenticationTypeJwt) { _%>
-        } else if (authentication.getPrincipal() instanceof Jwt) {
-            Jwt jwt = (Jwt) authentication.getPrincipal();
+        } else if (authentication.getPrincipal() instanceof Jwt jwt) {
             return jwt.getSubject();
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -105,8 +103,8 @@ public final class SecurityUtils {
                 return (String) attributes.get("preferred_username");
             }
 <%_ } _%>
-        } else if (authentication.getPrincipal() instanceof String) {
-            return (String) authentication.getPrincipal();
+        } else if (authentication.getPrincipal() instanceof String s) {
+            return s;
         }
         return null;
     }

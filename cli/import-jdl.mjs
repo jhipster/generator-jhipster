@@ -28,7 +28,7 @@ import { fork as forkProcess } from 'child_process';
 import EnvironmentBuilder from './environment-builder.mjs';
 import { CLI_NAME, GENERATOR_NAME, logger, printSuccess, getOptionAsArgs } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
-import statistics from '../generators/statistics.cjs';
+import statistics from '../generators/statistics.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.mjs';
 

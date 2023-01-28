@@ -23,32 +23,6 @@ BaseGenerator.log = msg => {
 BaseGenerator.logger = new Logger(BaseGenerator.log);
 
 describe('generator - base', () => {
-  describe('getAllSupportedLanguages', () => {
-    describe('when called', () => {
-      it('returns an array', () => {
-        expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-      });
-    });
-  });
-  describe('isSupportedLanguage', () => {
-    describe('when called with valid language', () => {
-      it('returns true', () => {
-        expect(BaseGenerator.isSupportedLanguage('en')).to.be.true;
-      });
-    });
-    describe('when called with invalid language', () => {
-      it('returns false', () => {
-        expect(BaseGenerator.isSupportedLanguage('ab')).to.equal(false);
-      });
-    });
-  });
-  describe('getAllSupportedLanguage', () => {
-    describe('when called', () => {
-      it('returns an array', () => {
-        expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-      });
-    });
-  });
   describe('getTableName', () => {
     describe('when called with a value', () => {
       it('returns a table name', () => {

@@ -5,7 +5,7 @@ import assert from 'yeoman-assert';
 import { expect } from 'chai';
 import { getOptionAsArgs } from '../../cli/utils.mjs';
 
-import { getTemplatePath, testInTempDir, revertTempDir } from './utils/utils.cjs';
+import { getTemplatePath, testInTempDir, revertTempDir } from '../support/index.mjs';
 
 let subGenCallParams = {
   count: 0,

@@ -22,3 +22,5 @@ export * from './dependabot-maven.mjs';
 export * from './files.mjs';
 export { getJavaValueGeneratorForType, getPrimaryKeyValue } from './templates/field-values.mjs';
 export { javaBeanCase, buildJavaGet, buildJavaGetter, buildJavaSetter } from './java-formatting.mjs';
+export { default as updateLanguagesTask } from './update-languages.mjs';
+export * from './update-languages.mjs';

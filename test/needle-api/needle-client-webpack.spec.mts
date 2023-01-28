@@ -45,6 +45,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        skipServer: true,
         baseName: 'jhipster',
         clientFramework,
         enableTranslation: true,

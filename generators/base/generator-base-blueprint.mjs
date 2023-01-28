@@ -38,40 +38,6 @@ import { PRIORITY_NAMES } from './priorities.mjs';
  */
 export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerator {
   /**
-   * @param {string | string[]} args
-   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
-   */
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (this.options.help) {
-      return;
-    }
-
-    // Add base template folder.
-    this.jhipsterTemplatesFolders = [this.templatePath()];
-
-    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
-
-    if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage({ sorted: true });
-      this.blueprintConfig = this.blueprintStorage.createProxy();
-
-      // jhipsterContext is the original generator
-      this.jhipsterContext = this.options.jhipsterContext;
-
-      try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
-      } catch (error) {
-        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
-        this.logger.log(error);
-      }
-    }
-  }
-
-  /**
    * Priority API stub for blueprints.
    *
    * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.
@@ -417,6 +383,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} [extraOptions] - extra options to pass to blueprint generator
+   * @returns {Promise<any[]>}
    */
   async composeWithBlueprints(subGen, extraOptions) {
     this.delegateToBlueprint = false;
@@ -430,9 +397,11 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
     if (this.options.localBlueprint) {
       blueprints = blueprints.concat({ name: '@jhipster/local' });
     }
+    const composedBlueprints = [];
     for (const blueprint of blueprints) {
       const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
       if (blueprintGenerator) {
+        composedBlueprints.push(blueprintGenerator);
         if (blueprintGenerator.sbsBlueprint) {
           // If sbsBlueprint, add templatePath to the original generator templatesFolder.
           this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
@@ -443,6 +412,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
         }
       }
     }
+    return composedBlueprints;
   }
 
   /**

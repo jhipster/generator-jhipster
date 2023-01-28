@@ -39,5 +39,5 @@ describe(`generator - ${generator}`, () => {
     const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
-  describe.skip('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator));
 });

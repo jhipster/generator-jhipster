@@ -34,7 +34,7 @@ import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
-import detectLanguage from '../languages/detect-language.mjs';
+import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
@@ -54,8 +54,6 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
-import { CUSTOM_PRIORITIES } from './priorities.mjs';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -65,7 +63,6 @@ import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
   NODE_VERSION,
-  LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
@@ -109,105 +106,7 @@ const isWin32 = os.platform() === 'win32';
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
-  jhipsterConfig;
-
-  /** @type {Record<string, any>} */
   dependabotPackageJson;
-
-  sbsBlueprint;
-
-  /**
-   * @param {string | string[]} args
-   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
-   */
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (!this.features.jhipsterModular) {
-      // This adds support for a `--from-cli` flag
-      this.option('from-cli', {
-        desc: 'Indicates the command is run from JHipster CLI',
-        type: Boolean,
-        hide: true,
-      });
-
-      this.option('with-generated-flag', {
-        desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-        type: Boolean,
-      });
-
-      this.option('skip-prompts', {
-        desc: 'Skip prompts',
-        type: Boolean,
-      });
-
-      this.option('skip-prettier', {
-        desc: 'Skip prettier',
-        type: Boolean,
-        hide: true,
-      });
-    }
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
-
-    // JHipster runtime config that should not be stored to .yo-rc.json.
-    this.configOptions = this.options.configOptions || { sharedEntities: {} };
-    this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-
-    /* Force config to use 'generator-jhipster' namespace. */
-    this._config = this._getStorage('generator-jhipster', { sorted: true });
-    /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-    this.jhipsterConfig = this.config.createProxy();
-
-    this.parseTestOptions();
-
-    this.loadRuntimeOptions();
-    this.loadStoredAppOptions();
-
-    if (this.options.namespace !== 'jhipster:bootstrap') {
-      this.env.runLoop.add(
-        'environment:run',
-        async (done, stop) => {
-          try {
-            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
-            done();
-          } catch (error) {
-            stop(error);
-          }
-        },
-        {
-          once: 'queueJhipsterBootstrap',
-          run: false,
-        }
-      );
-    }
-  }
-
-  /**
-   * @protected
-   * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
-   *
-   * @param {...string} args
-   * @returns {string}
-   */
-  jhipsterTemplatePath(...args) {
-    let existingGenerator;
-    try {
-      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    } catch (error) {
-      if (this.options.namespace) {
-        const split = this.options.namespace.split(':', 2);
-        existingGenerator = split.length === 1 ? split[0] : split[1];
-      }
-    }
-    this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
-  }
 
   /**
    * @private
@@ -265,94 +164,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Add a translation key to all installed languages
-   *
-   * @param {string} key - Key for the entity name
-   * @param {string} value - Default translated value
-   * @param {string} method - The method to be run with provided key and value from above
-   * @param {string} enableTranslation - specify if i18n is enabled
-   */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
-    if (enableTranslation) {
-      this.getAllInstalledLanguages().forEach(language => {
-        this[method](key, value, language, webappSrcDir);
-      });
-    }
-  }
-
-  /**
-   * @private
-   * get all the languages installed currently
-   */
-  getAllInstalledLanguages() {
-    const languages = [];
-    this.getAllSupportedLanguages().forEach(language => {
-      try {
-        const stats = fs.lstatSync(`${this.sharedData.getApplication().clientSrcDir}i18n/${language}`);
-        if (stats.isDirectory()) {
-          languages.push(language);
-        }
-      } catch (e) {
-        this.logger.debug('Error:', e);
-        // An exception is thrown if the folder doesn't exist
-        // do nothing as the language might not be installed
-      }
-    });
-    return languages;
-  }
-
-  /**
-   * get all the languages supported by JHipster
-   */
-  getAllSupportedLanguages() {
-    return _.map(LANGUAGES, 'value');
-  }
-
-  /**
-   * check if a language is supported by JHipster
-   * @param {string} language - Key for the language
-   */
-  isSupportedLanguage(language) {
-    return _.includes(this.getAllSupportedLanguages(), language);
-  }
-
-  /**
-   * @private
-   * check if Right-to-Left support is necessary for i18n
-   * @param {string[]} languages - languages array
-   */
-  isI18nRTLSupportNecessary(languages) {
-    if (!languages) {
-      return false;
-    }
-    const rtlLanguages = LANGUAGES.filter(langObj => langObj.rtl);
-    return languages.some(lang => !!rtlLanguages.find(langObj => langObj.value === lang));
-  }
-
-  /**
-   * @private
-   * return the localeId from the given language key (from constants.LANGUAGES)
-   * if no localeId is defined, return the language key (which is a localeId itself)
-   * @param {string} language - language key
-   */
-  getLocaleId(language) {
-    const langObj = LANGUAGES.find(langObj => langObj.value === language);
-    return langObj.localeId || language;
-  }
-
-  /**
-   * @private
-   * return the dayjsLocaleId from the given language key (from constants.LANGUAGES)
-   * if no dayjsLocaleId is defined, return the language key (which is a localeId itself)
-   * @param {string} language - language key
-   */
-  getDayjsLocaleId(language) {
-    const langObj = LANGUAGES.find(langObj => langObj.value === language);
-    return langObj.dayjsLocaleId || language;
   }
 
   /**
@@ -477,30 +288,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addChangesetToLiquibaseEntityChangelog(filePath, content) {
     this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the react application in "app.scss".
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addAppSCSSStyle(style, comment) {
-    this.needleApi.clientReact.addAppSCSSStyle(style, comment);
   }
 
   /**
@@ -923,52 +710,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       this.logger.debug('Error:', error);
       return undefined;
     }
-  }
-
-  /**
-   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntities() {
-    function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
-    }
-
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    if (!fs.existsSync(configDir)) {
-      fs.mkdirSync(configDir);
-    }
-    const dir = fs.opendirSync(configDir);
-    const entityNames = [];
-    let dirent = dir.readSync();
-    while (dirent !== null) {
-      const extname = path.extname(dirent.name);
-      if (dirent.isFile() && extname === '.json') {
-        entityNames.push(path.basename(dirent.name, extname));
-      }
-      dirent = dir.readSync();
-    }
-    dir.closeSync();
-
-    const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
-      .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !entity.builtInUser && entity.definition)
-      .sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
-    return entities;
-  }
-
-  /**
-   * Check if the JHipster version used to generate an existing project is less than the passed version argument
-   *
-   * @param {string} version - A valid semver version string
-   */
-  isJhipsterVersionLessThan(version) {
-    const jhipsterOldVersion = this.jhipsterOldVersion || this.configOptions.jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare and return false
-      return false;
-    }
-    return semver.lt(jhipsterOldVersion, version);
   }
 
   /**
@@ -1598,10 +1339,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (dest.jhipsterOldVersion === undefined) {
-      // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-      dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
-    }
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
@@ -2003,10 +1740,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    dest.enableTranslation = config.enableTranslation;
-    dest.nativeLanguage = config.nativeLanguage;
-    dest.languages = config.languages;
-    dest.enableI18nRTL = dest.languages && this.isI18nRTLSupportNecessary(dest.languages);
+    loadLanguagesConfig(dest, config);
   }
 
   /**
@@ -2197,29 +1931,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param {string} entityName - Name of the entity to load.
-   * @param {boolean} create - Create storage if doesn't exists.
-   * @returns {import('yeoman-generator/lib/util/storage')}
-   */
-  getEntityConfig(entityName, create = false) {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
-    if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true });
-  }
-
-  /**
-   * Fetch files from the generator-jhipster instance installed
-   * @param {...string} subpath : the path to fetch from
-   */
-  fetchFromInstalledJHipster(...subpath) {
-    if (subpath) {
-      return path.join(__dirname, '..', ...subpath);
-    }
-    return subpath;
-  }
-
-  /**
    * @private
    */
   get needleApi() {
@@ -2279,16 +1990,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
-   * @experimental
-   */
-  showHello() {
-    if (this.configOptions.showHello === false) return false;
-    this.configOptions.showHello = false;
-    return true;
-  }
-
-  /**
    * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
@@ -2297,32 +1998,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDependabotDependencies(packageJson) {
     const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
     _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
-  }
-
-  /**
-   * @private
-   * Load config for simulating existing project.
-   */
-  parseTestOptions() {
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
-      delete this.options.defaultLocalConfig;
-    }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      this.config.set(this.options.localConfig);
-      delete this.options.localConfig;
-    }
   }
 }

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
 import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 

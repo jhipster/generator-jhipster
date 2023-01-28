@@ -20,6 +20,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
+import { defaultLanguage } from '../languages/support/index.mjs';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
 import { writeFiles, cleanup } from './files-angular.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -31,9 +32,9 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
-import { LANGUAGES } from '../generator-constants.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
+
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
@@ -77,6 +78,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
+        application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale;
       },
     });
   }
@@ -322,16 +324,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    */
   getTypescriptKeyType(primaryKey) {
     return getTSKeyType(primaryKey);
-  }
-
-  /**
-   * @private
-   * Check if language should be skipped for locale setting
-   * @param {string} language
-   */
-  skipLanguageForLocale(language) {
-    const out = LANGUAGES.filter(lang => language === lang.value);
-    return out && out[0] && !!out[0].skipForLocale;
   }
 
   /**

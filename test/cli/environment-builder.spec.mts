@@ -26,10 +26,10 @@ import helpers from 'yeoman-test';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
-import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } from './utils/utils.cjs';
+import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } from '../support/index.mjs';
 
 describe('cli - EnvironmentBuilder', () => {
-  let cleanup;
+  let cleanup: () => void;
   before(() => {
     cleanup = prepareTempDir();
   });
@@ -77,11 +77,11 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = EnvironmentBuilder.create([])._loadBlueprints();
     });
     describe('when there is no .yo-rc.json', () => {
-      let oldCwd;
+      let oldCwd: string;
       let blueprintsWithVersion;
 
-      before(() => {
-        oldCwd = testInTempDir(() => {});
+      before(async () => {
+        oldCwd = await testInTempDir(() => {});
         assert(!fs.existsSync('.yo-rc.json'));
       });
       after(() => {
@@ -237,7 +237,7 @@ describe('cli - EnvironmentBuilder', () => {
           lnYeoman(tmpdir);
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-        }, true);
+        });
 
         process.argv = ['--blueprints', 'cli,cli-shared'];
       });
@@ -275,7 +275,7 @@ describe('cli - EnvironmentBuilder', () => {
           lnYeoman(tmpdir);
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-        }, true);
+        });
 
         process.argv = ['--blueprints', 'cli,cli-shared'];
       });

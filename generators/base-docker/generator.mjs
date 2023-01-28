@@ -22,7 +22,7 @@ import prompts from './docker-prompts.mjs';
 import BlueprintBaseGenerator from '../base/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } from './docker-base.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { applicationOptions, deploymentOptions } from '../../jdl/jhipster/index.mjs';
 
 import { dockerContainers as elasticDockerContainer } from '../generator-constants.mjs';

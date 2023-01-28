@@ -10,7 +10,7 @@ import { mock, resetAllMocks, fn } from '@node-loaders/jest-mock';
 
 import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
 import { createProgram } from '../../cli/program.mjs';
-import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from './utils/utils.cjs';
+import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from '../support/index.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
 const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');

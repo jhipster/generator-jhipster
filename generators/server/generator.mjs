@@ -70,7 +70,7 @@ import {
   JACKSON_DATABIND_NULLABLE_VERSION,
   JACOCO_VERSION,
 } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
 import {
   applicationTypes,
@@ -167,9 +167,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-
-    // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-    this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
   async beforeQueue() {

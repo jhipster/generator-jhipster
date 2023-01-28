@@ -16,22 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { basename, join } = require('path');
-const { readFileSync } = require('fs');
-
-const getPackageRoot = () => {
-  const sourceRoot = join(__dirname, '..');
-  const sourceBasename = basename(sourceRoot);
-  return sourceBasename === 'generator-jhipster' ? sourceRoot : join(sourceRoot, '..');
-};
-
-const getPackageJson = () => {
-  return JSON.parse(readFileSync(join(getPackageRoot(), 'package.json')));
-};
-
-const packageJson = getPackageJson();
-module.exports = {
-  getPackageRoot,
-  getPackageJson,
-  packageJson,
-};
+export * from './languages.mjs';
+export { default as generateDateTimeFormat } from './json/dates.mjs';
+export { default as detectLanguage } from './detect-language.mjs';
+export { default as loadLanguagesConfig } from './load-config.mjs';

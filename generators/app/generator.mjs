@@ -24,10 +24,10 @@ import BaseGenerator from '../base-application/index.mjs';
 import { checkNode } from './support/index.mjs';
 import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
-import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
+import { cleanupOldFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
@@ -306,9 +306,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-
-    // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-    this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
   async beforeQueue() {
@@ -372,9 +369,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   get configuring() {
     return {
       setup() {
-        // Update jhipsterVersion.
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
-
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient =
@@ -488,7 +482,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     return this.asWritingTaskGroup({
       cleanup({ application }) {
         cleanupOldFiles(this, application);
-        upgradeFiles(this);
       },
     });
   }

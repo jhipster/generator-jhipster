@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 import { skipPrettierHelpers as helpers } from './helpers.mjs';
+import * as GeneratorList from '../../generators/generator-list.mjs';
 import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.mjs';
 
 const {
@@ -126,7 +127,8 @@ export const basicTests = data => {
       const existing = { baseName: 'existing' };
       before(async () => {
         runResult = await contextBuilder()
-          .withOptions({ localConfig: existing, skipPriorities: skipWritingPriorities })
+          .withJHipsterConfig(existing)
+          .withOptions({ skipPriorities: skipWritingPriorities })
           .withPrompts(customPrompts)
           .run();
       });
@@ -141,10 +143,10 @@ export const basicTests = data => {
       let runResult;
       before(async () => {
         runResult = await contextBuilder()
+          .withJHipsterConfig({ baseName: 'existing' })
           .withOptions({
             askAnswered: true,
             skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
-            localConfig: { baseName: 'existing' },
           })
           .withPrompts(customPrompts)
           .run();
@@ -161,10 +163,10 @@ export const basicTests = data => {
       const existingConfig = { baseName: 'existing' };
       before(async () => {
         runResult = await contextBuilder()
+          .withJHipsterConfig(existingConfig)
           .withOptions({
             add: true,
             skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
-            localConfig: existingConfig,
           })
           .withPrompts(customPrompts)
           .run();
@@ -242,7 +244,13 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     before(async () => {
       result = await helpers
         .run(generatorPath)
-        .withMockedGenerators([`jhipster-foo:${generatorName}`])
+        .withMockedGenerators([
+          `jhipster-foo:${generatorName}`,
+          // Mock every generator except the generator been tested
+          ...Object.values(GeneratorList)
+            .filter(gen => gen !== generatorName)
+            .map(gen => `jhipster:${gen}`),
+        ])
         .withOptions({ blueprint: 'foo', skipChecks: true, baseName: 'jhipster' })
         .onGenerator(generator => {
           spy = addSpies(generator);
@@ -293,7 +301,13 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       }
       const context = helpers
         .run(generatorPath)
-        .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
+        .withMockedGenerators([
+          `jhipster-foo-sbs:${generatorName}`,
+          // Mock every generator except the generator been tested
+          ...Object.values(GeneratorList)
+            .filter(gen => gen !== generatorName)
+            .map(gen => `jhipster:${gen}`),
+        ])
         .withOptions(options)
         .onGenerator(generator => {
           spy = addSpies(generator);

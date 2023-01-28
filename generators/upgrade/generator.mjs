@@ -26,9 +26,9 @@ import path from 'path';
 import childProcess from 'child_process';
 
 import BaseGenerator from '../base/index.mjs';
-import { upgradeFiles } from '../cleanup.mjs';
+import { upgradeFilesTask as upgradeLanguagesFilesTask } from '../languages/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { parseBluePrints } from '../../utils/blueprint.mjs';
 import { packageJson } from '../../lib/index.mjs';
 
@@ -117,9 +117,6 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.silent = this.options.silent;
     this.skipChecks = this.options.skipChecks;
 
-    // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
-    this.jhipsterOldVersion = this.config.get('jhipsterVersion');
-
     if (!this.config.existed) {
       throw new Error(
         "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it."
@@ -162,7 +159,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _upgradeFiles() {
-    if (upgradeFiles(this)) {
+    if (upgradeLanguagesFilesTask.call(this)) {
       const gitCommit = this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent });
       if (gitCommit.code !== 0) throw new Error(`Unable to prepare upgrade:\n${gitCommit.stderr}`);
       this.success('Upgrade preparation');

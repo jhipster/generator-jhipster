@@ -17,24 +17,18 @@
  * limitations under the License.
  */
 
-import { rmSync, statSync } from 'fs';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
-import shelljs from 'shelljs';
 
-import { javaBeanCase } from '../server/support/index.mjs';
 import { Logger } from './support/logging.mjs';
+
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
 
 /**
- * This is the Generator base private class.
- * This provides all the private API methods used internally.
- * These methods should not be directly utilized using commonJS require,
- * as these can have breaking changes without a major version bump
+ * This class changes/corrects the yeoman-generator typescript definitions.
  *
- * The method signatures in private API can be changed without a major version change.
  * @class
  * @extends {Generator<JHipsterGeneratorOptions>}
  */
@@ -54,6 +48,17 @@ export default class PrivateBase extends Generator {
     // expose lodash to templates
     this._ = _;
     this.logger = new Logger(this.log, this.configOptions, this.options, this._debug);
+  }
+
+  /**
+   * @protected
+   * Return a storage instance.
+   * @param  {String | (Partial<import('yeoman-generator/lib/util/storage.js').StorageOptions> & { sorted?: boolean })} [rootName] The rootName in which is stored inside .yo-rc.json
+   * @param  {Partial<import('yeoman-generator/lib/util/storage.js').StorageOptions> & { sorted?: boolean }} [options] Storage options
+   * @return {import('yeoman-generator/lib/util/storage.js')}
+   */
+  _getStorage(rootName, options) {
+    return super._getStorage(rootName, options);
   }
 
   /**
@@ -89,64 +94,5 @@ export default class PrivateBase extends Generator {
    */
   spawnCommand(command, args, opt) {
     return super.spawnCommand(command, args, opt);
-  }
-
-  /* ======================================================================== */
-  /* private methods use within generator (not exposed to modules) */
-  /* ======================================================================== */
-
-  /**
-   * Override yeoman generator's usage function to fine tune --help message.
-   */
-  usage() {
-    return super.usage().replace('yo jhipster:', 'jhipster ');
-  }
-
-  /**
-   * Remove File
-   *
-   * @param file
-   */
-  removeFile(file) {
-    const destination = this.destinationPath(file);
-    if (destination && shelljs.test('-f', destination)) {
-      this.logger.log(`Removing the file - ${destination}`);
-      rmSync(destination, { force: true });
-    }
-    return destination;
-  }
-
-  /**
-   * Remove Folder
-   *
-   * @param folder
-   */
-  removeFolder(folder) {
-    folder = this.destinationPath(folder);
-    try {
-      if (statSync(folder).isDirectory()) {
-        rmSync(folder, { recursive: true });
-      }
-    } catch (error) {
-      this.logger.log(`Could not remove folder ${folder}`);
-    }
-  }
-
-  /**
-   * @private
-   * Execute a git mv.
-   *
-   * @param {string} source
-   * @param {string} dest
-   * @returns {boolean} true if success; false otherwise
-   */
-  gitMove(from, to) {
-    const source = this.destinationPath(from);
-    const dest = this.destinationPath(to);
-    if (source && dest && shelljs.test('-f', source)) {
-      this.logger.info(`Renaming the file - ${source} to ${dest}`);
-      return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
-    }
-    return true;
   }
 }
