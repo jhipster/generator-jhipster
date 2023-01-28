@@ -295,7 +295,7 @@ _%>
 
     private URI getPathValue(<%= requestClass %> request) {
         if(request == null) return URI.create("about:blank");
-        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI((NativeWebRequest) request))<% } %>;
+        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI(request))<% } %>;
     }
 
     private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {
