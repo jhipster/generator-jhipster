@@ -175,7 +175,7 @@ _%>
 
         if (problem.getProperties() == null || !problem.getProperties().containsKey(MESSAGE_KEY))
         	problem.setProperty(MESSAGE_KEY,
-                getMappedMessageKey((Throwable) err) != null
+                getMappedMessageKey(err) != null
                     ? getMappedMessageKey(err)
                     : "error.http." + problem.getStatus());
 
