@@ -121,20 +121,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new menu element, at the root of the menu.
-   *
-   * @param {string} routerName - The name of the router that is added to the menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the menu
-   */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
-  }
-
-  /**
-   * @private
    * Add external resources to root file(index.html).
    *
    * @param {string} resources - Resources added to root file.
@@ -142,43 +128,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addExternalResourcesToRoot(resources, comment) {
     this.needleApi.client.addExternalResourcesToRoot(resources, comment);
-  }
-
-  /**
-   * @private
-   * Add a new admin in the TS modules file.
-   *
-   * @param {string} appName - Angular2 application name.
-   * @param {string} adminAngularName - The name of the new admin item.
-   * @param {string} adminFolderName - The name of the folder.
-   * @param {string} adminFileName - The name of the file.
-   * @param {boolean} enableTranslation - If translations are enabled or not.
-   * @param {string} clientFramework - The name of the client framework.
-   */
-  addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-    this.needleApi.clientAngular.addToAdminModule(
-      appName,
-      adminAngularName,
-      adminFolderName,
-      adminFileName,
-      enableTranslation,
-      clientFramework
-    );
-  }
-
-  /**
-   * @private
-   * Add a new lazy loaded module to admin routing file.
-   *
-   * @param {string} route - The route for the module. For example 'entity-audit'.
-   * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
-   * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
-   * @param {string} pageTitle - The translation key if i18n is enabled or the text if i18n is disabled for the page title in the browser.
-   *                             For example 'entityAudit.home.title' for i18n enabled or 'Entity audit' for i18n disabled.
-   *                             If undefined then application global page title is used in the browser title bar.
-   */
-  addAdminRoute(route, modulePath, moduleName, pageTitle) {
-    this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName, pageTitle);
   }
 
   /**
@@ -215,21 +164,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Add a new module in the TS modules file.
-   *
-   * @param {string} appName - Angular2 application name.
-   * @param {string} angularName - The name of the new admin item.
-   * @param {string} folderName - The name of the folder.
-   * @param {string} fileName - The name of the file.
-   * @param {boolean} enableTranslation - If translations are enabled or not.
-   * @param {string} clientFramework - The name of the client framework.
-   */
-  addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-    this.needleApi.clientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework);
   }
 
   /**
@@ -354,55 +288,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addChangesetToLiquibaseEntityChangelog(filePath, content) {
     this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "global.scss
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addMainSCSSStyle(style, comment) {
-    this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "vendor.scss".
-   *
-   * @param {string} style - scss to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
-   * comment = 'Message'
-   *
-   * * ==========================================================================
-   * Message
-   * ========================================================================== *
-   * .success {
-   *     @extend .message;
-   *     border-color: green;
-   * }
-   *
-   */
-  addVendorSCSSStyle(style, comment) {
-    this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
   }
 
   /**
