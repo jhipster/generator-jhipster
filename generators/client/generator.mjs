@@ -299,4 +299,35 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.END]() {
     return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
+
+  /**
+   * @private
+   * Add external resources to root file(index.html).
+   *
+   * @param {string} resources - Resources added to root file.
+   * @param {string} comment - comment to add before resources content.
+   */
+  addExternalResourcesToRoot(resources, comment) {
+    this.needleApi.client.addExternalResourcesToRoot(resources, comment);
+  }
+
+  /**
+   * @private
+   * Copy third-party library resources path.
+   *
+   * @param {string} sourceFolder - third-party library resources source path
+   * @param {string} targetFolder - third-party library resources destination path
+   */
+  copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
+    this.needleApi.clientWebpack.copyExternalAssets(sourceFolder, targetFolder);
+  }
+
+  /**
+   * Add webpack config.
+   *
+   * @param {string} config - webpack config to be merged
+   */
+  addWebpackConfig(config, clientFramework) {
+    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
+  }
 }

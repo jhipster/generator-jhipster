@@ -55,6 +55,15 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
     this.loadRuntimeOptions();
   }
 
+  /**
+   * Add webpack config.
+   *
+   * @param {string} config - webpack config to be merged
+   */
+  addWebpackConfig(config, clientFramework) {
+    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
+  }
+
   async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
