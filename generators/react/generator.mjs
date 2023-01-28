@@ -228,4 +228,28 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   generateTestEntityPrimaryKey(primaryKey, index) {
     return getTestEntityPrimaryKey(primaryKey, index);
   }
+
+  /**
+   * @private
+   * Add new scss style to the react application in "app.scss".
+   *
+   * @param {string} style - css to add in the file
+   * @param {string} comment - comment to add before css code
+   *
+   * example:
+   *
+   * style = '.jhipster {\n     color: #baa186;\n}'
+   * comment = 'New JHipster color'
+   *
+   * * ==========================================================================
+   * New JHipster color
+   * ========================================================================== *
+   * .jhipster {
+   *     color: #baa186;
+   * }
+   *
+   */
+  addAppSCSSStyle(style, comment) {
+    this.needleApi.clientReact.addAppSCSSStyle(style, comment);
+  }
 }
