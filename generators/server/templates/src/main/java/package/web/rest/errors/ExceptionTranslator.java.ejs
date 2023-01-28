@@ -282,7 +282,7 @@ _%>
 
     private HttpStatus getMappedStatus(Throwable err) {
         // Where we disagree with Spring defaults
-        if (err instanceof AccessDeniedException accDenied) return HttpStatus.FORBIDDEN;
+        if (err instanceof AccessDeniedException) return HttpStatus.FORBIDDEN;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
     <%_ } _%>
