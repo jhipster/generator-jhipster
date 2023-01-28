@@ -1,4 +1,4 @@
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from './support/index.mjs';
 
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generators/generator-constants.mjs';
@@ -9,16 +9,13 @@ const pageName = 'MyTestPage';
 const pageFolderName = 'my-test-page';
 const pageInstance = 'myTestPage';
 
-const createClientProject = options =>
-  helpers
-    .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
-    .withOptions({
-      skipInstall: true,
-      defaults: true,
-      skipServer: true, // We don't need server for this test
-      ...options,
-    })
-    .run();
+const createClientProject = (options?: any) =>
+  helpers.run('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv }).withOptions({
+    skipInstall: true,
+    defaults: true,
+    skipServer: true, // We don't need server for this test
+    ...options,
+  });
 
 const createPage = runResult =>
   runResult
@@ -64,7 +61,7 @@ describe('generator - page', () => {
 
     describe('creating a new page', () => {
       before(async () => {
-        runResult = await createClientProject({ localConfig: { clientFramework: 'vue' } });
+        runResult = await createClientProject().withJHipsterConfig({ clientFramework: 'vue' });
         runResult = await createPage(runResult);
       });
 
@@ -73,7 +70,7 @@ describe('generator - page', () => {
 
     describe('regenerating an existing page', () => {
       before(async () => {
-        runResult = await createClientProject({ localConfig: { clientFramework: 'vue', pages: [{ name: pageName }] } });
+        runResult = await createClientProject().withJHipsterConfig({ clientFramework: 'vue', pages: [{ name: pageName }] });
       });
 
       containsVueFiles();

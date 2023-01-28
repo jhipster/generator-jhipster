@@ -51,6 +51,17 @@ export default class PrivateBase extends Generator {
   }
 
   /**
+   * @protected
+   * Return a storage instance.
+   * @param  {String | (Partial<import('yeoman-generator/lib/util/storage.js').StorageOptions> & { sorted?: boolean })} [rootName] The rootName in which is stored inside .yo-rc.json
+   * @param  {Partial<import('yeoman-generator/lib/util/storage.js').StorageOptions> & { sorted?: boolean }} [options] Storage options
+   * @return {import('yeoman-generator/lib/util/storage.js')}
+   */
+  _getStorage(rootName, options) {
+    return super._getStorage(rootName, options);
+  }
+
+  /**
    * Add getTaskNames to types
    * @returns {string[]}
    */

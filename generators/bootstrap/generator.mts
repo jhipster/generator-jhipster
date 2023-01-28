@@ -68,25 +68,6 @@ export default class BootstrapGenerator extends BaseGenerator {
   }
 
   _postConstruct() {
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
-    }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      (this.config as any).set(this.options.localConfig);
-    }
-
     if (this.options.help) return;
 
     this.loadStoredAppOptions();

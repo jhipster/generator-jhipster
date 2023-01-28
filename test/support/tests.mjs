@@ -127,7 +127,8 @@ export const basicTests = data => {
       const existing = { baseName: 'existing' };
       before(async () => {
         runResult = await contextBuilder()
-          .withOptions({ localConfig: existing, skipPriorities: skipWritingPriorities })
+          .withJHipsterConfig(existing)
+          .withOptions({ skipPriorities: skipWritingPriorities })
           .withPrompts(customPrompts)
           .run();
       });
@@ -142,10 +143,10 @@ export const basicTests = data => {
       let runResult;
       before(async () => {
         runResult = await contextBuilder()
+          .withJHipsterConfig({ baseName: 'existing' })
           .withOptions({
             askAnswered: true,
             skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
-            localConfig: { baseName: 'existing' },
           })
           .withPrompts(customPrompts)
           .run();
@@ -162,10 +163,10 @@ export const basicTests = data => {
       const existingConfig = { baseName: 'existing' };
       before(async () => {
         runResult = await contextBuilder()
+          .withJHipsterConfig(existingConfig)
           .withOptions({
             add: true,
             skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
-            localConfig: existingConfig,
           })
           .withPrompts(customPrompts)
           .run();

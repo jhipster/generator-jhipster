@@ -54,11 +54,11 @@ describe(`generator - ${generator}`, () => {
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
+            .withJHipsterConfig({
+              baseName: 'jhipster',
+              buildTool: 'maven',
+            })
             .withOptions({
-              localConfig: {
-                baseName: 'jhipster',
-                buildTool: 'maven',
-              },
               skipPriorities,
             })
             .withMockedGenerators(mockedGenerators);
@@ -76,11 +76,11 @@ describe(`generator - ${generator}`, () => {
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
+            .withJHipsterConfig({
+              baseName: 'jhipster',
+              buildTool: 'gradle',
+            })
             .withOptions({
-              localConfig: {
-                baseName: 'jhipster',
-                buildTool: 'gradle',
-              },
               skipPriorities,
             })
             .withMockedGenerators(mockedGenerators);
@@ -101,11 +101,11 @@ describe(`generator - ${generator}`, () => {
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
+            .withJHipsterConfig({
+              baseName: 'jhipster',
+              messageBroker: 'no',
+            })
             .withOptions({
-              localConfig: {
-                baseName: 'jhipster',
-                messageBroker: 'no',
-              },
               skipPriorities,
             })
             .withMockedGenerators(mockedGenerators);
@@ -118,11 +118,11 @@ describe(`generator - ${generator}`, () => {
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
+            .withJHipsterConfig({
+              baseName: 'jhipster',
+              messageBroker: 'kafka',
+            })
             .withOptions({
-              localConfig: {
-                baseName: 'jhipster',
-                messageBroker: 'kafka',
-              },
               skipPriorities,
             })
             .withMockedGenerators(mockedGenerators);
@@ -137,11 +137,11 @@ describe(`generator - ${generator}`, () => {
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
+            .withJHipsterConfig({
+              baseName: 'jhipster',
+              databaseType: 'no',
+            })
             .withOptions({
-              localConfig: {
-                baseName: 'jhipster',
-                databaseType: 'no',
-              },
               skipPriorities,
             })
             .withMockedGenerators(mockedGenerators);
@@ -154,11 +154,11 @@ describe(`generator - ${generator}`, () => {
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
+            .withJHipsterConfig({
+              baseName: 'jhipster',
+              databaseType: 'couchbase',
+            })
             .withOptions({
-              localConfig: {
-                baseName: 'jhipster',
-                databaseType: 'couchbase',
-              },
               skipPriorities,
             })
             .withMockedGenerators(mockedGenerators);

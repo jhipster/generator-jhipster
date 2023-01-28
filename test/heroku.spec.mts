@@ -1,12 +1,11 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import sinon from 'sinon';
 import ChildProcess from 'child_process';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_RES_DIR } from '../generators/generator-constants.mjs';
-import { getTemplatePath, getGenerator } from './support/index.mjs';
+import { getTemplatePath, getGenerator, basicHelpers as helpers } from './support/index.mjs';
 
 const expectedFiles = {
   monolith: ['Procfile', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`],

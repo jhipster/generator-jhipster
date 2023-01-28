@@ -54,8 +54,6 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
-import { CUSTOM_PRIORITIES } from './priorities.mjs';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -108,105 +106,7 @@ const isWin32 = os.platform() === 'win32';
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
-  jhipsterConfig;
-
-  /** @type {Record<string, any>} */
   dependabotPackageJson;
-
-  sbsBlueprint;
-
-  /**
-   * @param {string | string[]} args
-   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
-   */
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (!this.features.jhipsterModular) {
-      // This adds support for a `--from-cli` flag
-      this.option('from-cli', {
-        desc: 'Indicates the command is run from JHipster CLI',
-        type: Boolean,
-        hide: true,
-      });
-
-      this.option('with-generated-flag', {
-        desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-        type: Boolean,
-      });
-
-      this.option('skip-prompts', {
-        desc: 'Skip prompts',
-        type: Boolean,
-      });
-
-      this.option('skip-prettier', {
-        desc: 'Skip prettier',
-        type: Boolean,
-        hide: true,
-      });
-    }
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
-
-    // JHipster runtime config that should not be stored to .yo-rc.json.
-    this.configOptions = this.options.configOptions || { sharedEntities: {} };
-    this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-
-    /* Force config to use 'generator-jhipster' namespace. */
-    this._config = this._getStorage('generator-jhipster', { sorted: true });
-    /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-    this.jhipsterConfig = this.config.createProxy();
-
-    this.parseTestOptions();
-
-    this.loadRuntimeOptions();
-    this.loadStoredAppOptions();
-
-    if (this.options.namespace !== 'jhipster:bootstrap') {
-      this.env.runLoop.add(
-        'environment:run',
-        async (done, stop) => {
-          try {
-            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
-            done();
-          } catch (error) {
-            stop(error);
-          }
-        },
-        {
-          once: 'queueJhipsterBootstrap',
-          run: false,
-        }
-      );
-    }
-  }
-
-  /**
-   * @protected
-   * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
-   *
-   * @param {...string} args
-   * @returns {string}
-   */
-  jhipsterTemplatePath(...args) {
-    let existingGenerator;
-    try {
-      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    } catch (error) {
-      if (this.options.namespace) {
-        const split = this.options.namespace.split(':', 2);
-        existingGenerator = split.length === 1 ? split[0] : split[1];
-      }
-    }
-    this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
-  }
 
   /**
    * @private
@@ -928,52 +828,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntities() {
-    function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
-    }
-
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    if (!fs.existsSync(configDir)) {
-      fs.mkdirSync(configDir);
-    }
-    const dir = fs.opendirSync(configDir);
-    const entityNames = [];
-    let dirent = dir.readSync();
-    while (dirent !== null) {
-      const extname = path.extname(dirent.name);
-      if (dirent.isFile() && extname === '.json') {
-        entityNames.push(path.basename(dirent.name, extname));
-      }
-      dirent = dir.readSync();
-    }
-    dir.closeSync();
-
-    const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
-      .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !entity.builtInUser && entity.definition)
-      .sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
-    return entities;
-  }
-
-  /**
-   * Check if the JHipster version used to generate an existing project is less than the passed version argument
-   *
-   * @param {string} version - A valid semver version string
-   */
-  isJhipsterVersionLessThan(version) {
-    const jhipsterOldVersion = this.jhipsterOldVersion || this.configOptions.jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare and return false
-      return false;
-    }
-    return semver.lt(jhipsterOldVersion, version);
-  }
-
-  /**
    * @private
    * get a table name in JHipster preferred style.
    *
@@ -1600,10 +1454,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (dest.jhipsterOldVersion === undefined) {
-      // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-      dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
-    }
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
@@ -2196,29 +2046,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param {string} entityName - Name of the entity to load.
-   * @param {boolean} create - Create storage if doesn't exists.
-   * @returns {import('yeoman-generator/lib/util/storage')}
-   */
-  getEntityConfig(entityName, create = false) {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
-    if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true });
-  }
-
-  /**
-   * Fetch files from the generator-jhipster instance installed
-   * @param {...string} subpath : the path to fetch from
-   */
-  fetchFromInstalledJHipster(...subpath) {
-    if (subpath) {
-      return path.join(__dirname, '..', ...subpath);
-    }
-    return subpath;
-  }
-
-  /**
    * @private
    */
   get needleApi() {
@@ -2278,16 +2105,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
-   * @experimental
-   */
-  showHello() {
-    if (this.configOptions.showHello === false) return false;
-    this.configOptions.showHello = false;
-    return true;
-  }
-
-  /**
    * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
@@ -2296,32 +2113,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDependabotDependencies(packageJson) {
     const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
     _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
-  }
-
-  /**
-   * @private
-   * Load config for simulating existing project.
-   */
-  parseTestOptions() {
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
-      delete this.options.defaultLocalConfig;
-    }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      this.config.set(this.options.localConfig);
-      delete this.options.localConfig;
-    }
   }
 }

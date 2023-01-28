@@ -16,18 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { basename } from 'path';
+import { existsSync, mkdirSync, opendirSync } from 'fs';
+import { basename, extname, join as joinPath, dirname } from 'path';
 import { createHash } from 'crypto';
+import { fileURLToPath } from 'url';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import { statSync, rmSync } from 'fs';
+import { lt as semverLessThan } from 'semver';
+import type Storage from 'yeoman-generator/lib/util/storage.js';
 
 import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
-import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import baseOptions from './options.mjs';
 
@@ -40,10 +44,17 @@ import type {
   CheckResult,
 } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
+import { packageJson } from '../../lib/index.mjs';
+import { type BaseApplication } from '../base-application/types.mjs';
+import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 
 const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`;
 
@@ -80,14 +91,129 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static END = asPriority(END);
 
-  readonly sharedData!: SharedData<any>;
+  readonly sharedData!: SharedData<BaseApplication>;
+
+  declare _config: Record<string, any>;
+  jhipsterConfig!: Record<string, any>;
+  /**
+   * @deprecated
+   */
+  configOptions!: Record<string, any>;
+  jhipsterTemplatesFolders!: string[];
+
+  fromBlueprint!: boolean;
+  sbsBlueprint?: boolean;
+  blueprintStorage?: Storage;
+  blueprintConfig?: Record<string, any>;
+  jhipsterContext?: any;
+
+  private _jhipsterGenerator?: string;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
 
-    this.sharedData = this.createSharedData();
+    if (!this.features.jhipsterModular) {
+      // This adds support for a `--from-cli` flag
+      this.option('from-cli', {
+        description: 'Indicates the command is run from JHipster CLI',
+        type: Boolean,
+        hide: true,
+      });
+
+      this.option('with-generated-flag', {
+        description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+        type: Boolean,
+      });
+
+      this.option('skip-prompts', {
+        description: 'Skip prompts',
+        type: Boolean,
+      });
+
+      this.option('skip-prettier', {
+        description: 'Skip prettier',
+        type: Boolean,
+        hide: true,
+      });
+    }
+
+    /*
+     * When building help, this.jhipsterConfig is not available.
+     * At current state jhipsterOptions registers options and parses it.
+     * TODO split register/parse options process, register should alway be executed.
+     * When building the help, parse can be skipped.
+     */
+    let jhipsterOldVersion = null;
+    if (!this.options.help) {
+      // JHipster runtime config that should not be stored to .yo-rc.json.
+      this.configOptions = this.options.configOptions || { sharedEntities: {} };
+      this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+
+      /* Force config to use 'generator-jhipster' namespace. */
+      this._config = this._getStorage('generator-jhipster', { sorted: true });
+      /* JHipster config using proxy mode used as a plain object instead of using get/set. */
+      this.jhipsterConfig = this.config.createProxy();
+
+      if (!this.options.reproducible) {
+        jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
+        if (!this.jhipsterConfig.jhipsterVersion) {
+          this.jhipsterConfig.jhipsterVersion = packageJson.version;
+        }
+      }
+    }
+
+    this.sharedData = this.createSharedData(jhipsterOldVersion);
 
     this.jhipsterOptions(baseOptions as JHipsterOptions);
+
+    if (this.options.help) {
+      return;
+    }
+
+    this.registerPriorities(CUSTOM_PRIORITIES as any);
+
+    this.loadRuntimeOptions();
+    this.loadStoredAppOptions();
+
+    if (this.options.namespace !== 'jhipster:bootstrap') {
+      // jhipster:bootstrap is always required. Run it once the enviroment starts.
+      (this.env as any).runLoop.add(
+        'environment:run',
+        async (done, stop) => {
+          try {
+            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
+            done();
+          } catch (error) {
+            stop(error);
+          }
+        },
+        {
+          once: 'queueJhipsterBootstrap',
+          run: false,
+        }
+      );
+    }
+
+    // Add base template folder.
+    this.jhipsterTemplatesFolders = [this.templatePath()];
+
+    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
+
+    if (this.fromBlueprint) {
+      this.blueprintStorage = this._getStorage({ sorted: true });
+      this.blueprintConfig = this.blueprintStorage.createProxy();
+
+      // jhipsterContext is the original generator
+      this.jhipsterContext = this.options.jhipsterContext;
+
+      try {
+        // Fallback to the original generator if the file does not exists in the blueprint.
+        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
+      } catch (error) {
+        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
+        this.logger.log(error);
+      }
+    }
   }
 
   /**
@@ -95,6 +221,20 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   usage(): string {
     return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  /**
+   * Check if the JHipster version used to generate an existing project is less than the passed version argument
+   *
+   * @param {string} version - A valid semver version string
+   */
+  isJhipsterVersionLessThan(version) {
+    const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
+    if (!jhipsterOldVersion) {
+      // if old version is unknown then can't compare (the project may be null) and return false
+      return false;
+    }
+    return semverLessThan(jhipsterOldVersion, version);
   }
 
   /**
@@ -107,6 +247,17 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       return [{ control, source }];
     }
     return [{ control }];
+  }
+
+  /**
+   * Override yeoman-generator method that gets methods to be queued, filtering the result.
+   */
+  getTaskNames(): string[] {
+    let priorities = super.getTaskNames();
+    if (this.options.skipPriorities) {
+      priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
+    }
+    return priorities;
   }
 
   /**
@@ -139,7 +290,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
         if (optionDesc.scope === 'storage') {
           this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'blueprint') {
-          this.blueprintStorage.set(optionName, optionValue);
+          this.blueprintStorage!.set(optionName, optionValue);
         } else if (optionDesc.scope === 'control') {
           this.sharedData.getControl()[optionName] = optionValue;
         } else if (optionDesc.scope === 'generator') {
@@ -153,6 +304,25 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
         }
       }
     });
+  }
+
+  /**
+   * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
+   */
+  jhipsterTemplatePath(...path: string[]) {
+    let existingGenerator: string;
+    try {
+      existingGenerator = this._jhipsterGenerator || (this.env as any).requireNamespace(this.options.namespace).generator;
+    } catch (error) {
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        existingGenerator = split.length === 1 ? split[0] : split[1];
+      } else {
+        throw new Error('Could not determine the generator name');
+      }
+    }
+    this._jhipsterGenerator = existingGenerator;
+    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path);
   }
 
   /**
@@ -185,6 +355,16 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     } catch (error) {
       this.logger.log(`Could not remove folder ${destinationFolder}`);
     }
+  }
+
+  /**
+   * Fetch files from the generator-jhipster instance installed
+   */
+  fetchFromInstalledJHipster(...path: string[]) {
+    if (path) {
+      return joinPath(__dirname, '..', ...path);
+    }
+    return path;
   }
 
   /**
@@ -340,17 +520,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * Override yeoman-generator method that gets methods to be queued, filtering the result.
-   */
-  getTaskNames(): string[] {
-    let priorities = super.getTaskNames();
-    if (this.options.skipPriorities) {
-      priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
-    }
-    return priorities;
-  }
-
-  /**
    * Create a simple-git instance using current destinationPath as baseDir.
    */
   createGit() {
@@ -361,9 +530,49 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * @private
+   * Get all the generator configuration from the .yo-rc.json file
+   * @param entityName - Name of the entity to load.
+   * @param {boolean} create - Create storage if doesn't exists.
    */
-  createSharedData() {
+  getEntityConfig(entityName: string, create = false): Storage | undefined {
+    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
+    if (!create && !this.fs.exists(entityPath)) return undefined;
+    return this.createStorage(entityPath, { sorted: true } as any);
+  }
+
+  /**
+   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
+   */
+  getExistingEntities() {
+    function isBefore(e1, e2) {
+      return e1.definition.changelogDate - e2.definition.changelogDate;
+    }
+
+    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+    if (!existsSync(configDir)) {
+      mkdirSync(configDir);
+    }
+    const dir = opendirSync(configDir);
+    const entityNames: string[] = [];
+    let dirent = dir.readSync();
+    while (dirent !== null) {
+      const extension = extname(dirent.name);
+      if (dirent.isFile() && extension === '.json') {
+        entityNames.push(basename(dirent.name, extension));
+      }
+      dirent = dir.readSync();
+    }
+    dir.closeSync();
+
+    const entities = [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(entityNames))]
+      .map(entityName => ({ name: entityName, definition: this.getEntityConfig(entityName)?.getAll() }))
+      .filter(entity => entity && entity.definition)
+      .sort(isBefore);
+    this.jhipsterConfig.entities = entities.map(({ name }) => name);
+    return entities;
+  }
+
+  private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
     const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
@@ -375,6 +584,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
     }
-    return new SharedData(sharedApplications[applicationId]);
+    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion });
   }
 }

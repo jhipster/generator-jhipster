@@ -1,8 +1,8 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { getTemplatePath, getGenerator } from '../../test/support/index.mjs';
+
+import { getTemplatePath, getGenerator, basicHelpers as helpers } from '../../test/support/index.mjs';
 
 const expectedFiles = {
   travis: ['.travis.yml'],
