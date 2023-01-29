@@ -178,7 +178,7 @@ _%>
         Map<String, Object> problemProperties = problem.getProperties();
         if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY))
         	problem.setProperty(MESSAGE_KEY,
-                getMappedMessageKey((Throwable) err) != null
+                getMappedMessageKey(err) != null
                     ? getMappedMessageKey(err)
                     : "error.http." + problem.getStatus());
 
@@ -285,7 +285,7 @@ _%>
 
     private HttpStatus getMappedStatus(Throwable err) {
         // Where we disagree with Spring defaults
-        if (err instanceof AccessDeniedException accDenied) return HttpStatus.FORBIDDEN;
+        if (err instanceof AccessDeniedException) return HttpStatus.FORBIDDEN;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
     <%_ } _%>
@@ -298,7 +298,7 @@ _%>
 
     private URI getPathValue(<%= requestClass %> request) {
         if(request == null) return URI.create("about:blank");
-        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI((NativeWebRequest) request))<% } %>;
+        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI(request))<% } %>;
     }
 
     private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {

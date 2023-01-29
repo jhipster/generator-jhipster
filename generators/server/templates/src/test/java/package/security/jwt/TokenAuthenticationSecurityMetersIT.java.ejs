@@ -43,7 +43,7 @@ class TokenAuthenticationSecurityMetersIT {
     private MeterRegistry meterRegistry;
 
     @Test
-    public void testValidTokenShouldNotCountAnything() throws Exception {
+    void testValidTokenShouldNotCountAnything() throws Exception {
         Collection<Counter> counters = meterRegistry.find(INVALID_TOKENS_METER_EXPECTED_NAME).counters();
 
         var count = aggregate(counters);
@@ -54,7 +54,7 @@ class TokenAuthenticationSecurityMetersIT {
     }
 
     @Test
-    public void testTokenExpiredCount() throws Exception {
+    void testTokenExpiredCount() throws Exception {
         var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "expired").counter().count();
 
         tryToAuthenticate(createExpiredToken(jwtKey));
@@ -63,7 +63,7 @@ class TokenAuthenticationSecurityMetersIT {
     }
 
     @Test
-    public void testTokenSignatureInvalidCount() throws Exception {
+    void testTokenSignatureInvalidCount() throws Exception {
         var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "invalid-signature").counter().count();
 
         tryToAuthenticate(createTokenWithDifferentSignature());
@@ -73,7 +73,7 @@ class TokenAuthenticationSecurityMetersIT {
     }
 
     @Test
-    public void testTokenMalformedCount() throws Exception {
+    void testTokenMalformedCount() throws Exception {
         var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "malformed").counter().count();
 
         tryToAuthenticate(createSignedInvalidJwt(jwtKey));
@@ -82,7 +82,7 @@ class TokenAuthenticationSecurityMetersIT {
     }
 
     @Test
-    public void testTokenInvalidCount() throws Exception {
+    void testTokenInvalidCount() throws Exception {
         var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "malformed").counter().count();
 
         tryToAuthenticate(createInvalidToken(jwtKey));
