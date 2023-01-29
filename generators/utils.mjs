@@ -25,8 +25,8 @@ import { stripMargin, escapeRegExp } from './base/support/index.mjs';
 
 /**
  * Rewrite file with passed arguments
- * @param {object} args argument object (containing path, file, haystack, etc properties)
- * @param {object} generator reference to the generator
+ * @param {import('./needle-base.mjs').NeedleFileModel} args argument object (containing path, file, haystack, etc properties)
+ * @param {import('./base/index.mjs').default} generator reference to the generator
  */
 export function rewriteFile(args, generator) {
   const { path: rewritePath, file } = args;
@@ -94,25 +94,22 @@ export function convertToPrettierExpressions(str) {
 /**
  * Rewrite using the passed argument object.
  *
- * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
- * @param {string[]} args.splicable       - content to be added.
- * @param {boolean} [args.prettierAware]  - apply prettier aware expressions before looking for applied needles.
- * @param {string|RegExp} [args.regexp]   - use another content to looking for applied needles.
- * @param {string} [args.haystack]        - file content
- * @param {string} [args.needle]          - needle to be looked for
- * @param {string} [args.file]            - file path for logging purposes
+ * @param {import('./needle-base.mjs').NeedleFileModel} args argument object (containing path, file, haystack, etc properties)
  * @returns {string} re-written content
  */
 export function rewrite(args) {
+  const contents = Array.isArray(args.splicable) ? args.splicable : [args.splicable];
   // check if splicable is already in the body text
   let re;
   if (args.regexp) {
-    re = args.regexp;
-    if (!re.test) {
-      re = escapeRegExp(re);
+    if (typeof args.regexp === 'string') {
+      re = escapeRegExp(args.regexp);
+    } else {
+      re = args.regexp;
+      console.log(re);
     }
   } else {
-    re = args.splicable.map(line => `\\s*${escapeRegExp(normalizeWindowsLineEndings(line))}`).join('\n');
+    re = contents.map(line => `\\s*${escapeRegExp(normalizeWindowsLineEndings(line))}`).join('\n');
   }
   if (!re.test) {
     if (args.prettierAware) {
@@ -151,7 +148,7 @@ export function rewrite(args) {
     spaceStr += ' ';
   }
 
-  lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
+  lines.splice(otherwiseLineIndex, 0, contents.map(line => spaceStr + line).join('\n'));
 
   return lines.join('\n');
 }

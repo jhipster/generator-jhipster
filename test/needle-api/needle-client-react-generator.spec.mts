@@ -27,16 +27,12 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
       addEntityToMenuStep() {
         this.addEntityToMenu('routerName', false, false);
       },
-      addEntityToModuleStep() {
-        this.addEntityToModule(
-          'entityInstance',
-          'entityClass',
-          'entityName',
-          'entityFolderName',
-          'entityFileName',
-          'entityUrl',
-          'microServiceNam'
-        );
+      addEntityToModuleStep({ application }) {
+        const { applicationTypeMicroservice, clientSrcDir } = application;
+        this.addEntityToModule('entityInstance', 'entityClass', 'entityName', 'entityFolderName', 'entityFileName', {
+          applicationTypeMicroservice,
+          clientSrcDir,
+        });
       },
     };
     return { ...customPhaseSteps };

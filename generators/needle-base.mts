@@ -17,31 +17,69 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import BaseGenerator from './base/index.mjs';
 import { rewriteFile } from './utils.mjs';
 
+export type NeedleFileModel = {
+  /**
+   * file path for logging purposes.
+   */
+  file: string;
+  /**
+   * needle to be looked for
+   */
+  needle: string;
+  /**
+   * content to be added.
+   */
+  splicable: string | string[];
+
+  path?: string;
+  /**
+   * apply prettier aware expressions before looking for applied needles.
+   */
+  prettierAware?: boolean;
+  /**
+   * use another content to looking for applied needles.
+   */
+  regexp?: RegExp | string;
+  /**
+   * file content
+   */
+  haystack?: string;
+};
+
 export default class {
-  constructor(generator) {
+  generator: BaseGenerator;
+
+  constructor(generator: BaseGenerator) {
     this.generator = generator;
   }
 
-  get clientSrcDir() {
+  /**
+   * @deprecated
+   */
+  get clientSrcDir(): string {
     return this.generator.sharedData.getApplication().clientSrcDir;
   }
 
-  get clientFramework() {
+  /**
+   * @deprecated
+   */
+  get clientFramework(): string {
     return this.generator.sharedData.getApplication().clientFramework;
   }
 
-  addBlockContentToFile(rewriteFileModel, errorMessage) {
+  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): boolean {
     try {
       return rewriteFile(rewriteFileModel, this.generator);
-    } catch (e) {
+    } catch (e: any) {
       this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
       return false;
     }
   }
 
-  logNeedleNotFound(exception, message, fullPath) {
+  logNeedleNotFound(exception: Error, message?: string, fullPath?: string): void {
     if (!message) {
       message = 'File rewrite failed.';
     }
@@ -49,11 +87,17 @@ export default class {
     this.generator.logger.debug('Error:', exception);
   }
 
-  generateFileModelWithPath(aPath, aFile, needleTag, ...content) {
+  /**
+   * @deprecated
+   */
+  generateFileModelWithPath(aPath: string, aFile: string, needleTag: string, ...content: string[]): NeedleFileModel {
     return Object.assign(this.generateFileModel(aFile, needleTag, ...content), { path: aPath });
   }
 
-  generateFileModel(aFile, needleTag, ...content) {
+  /**
+   * @deprecated
+   */
+  generateFileModel(aFile: string, needleTag: string, ...content: string[]): NeedleFileModel {
     return {
       file: aFile,
       needle: needleTag,

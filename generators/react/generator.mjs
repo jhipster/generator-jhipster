@@ -153,7 +153,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   /**
-   * @private
+   * @experimental
    * Add a new entity in the TS modules file.
    *
    * @param {string} entityInstance - Entity Instance
@@ -173,12 +173,12 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     entityName = this.entityAngularName,
     entityFolderName = this.entityFolderName,
     entityFileName = this.entityFileName,
-    entityUrl = this.entityUrl,
-    microserviceName = this.microserviceName,
-    readOnly = this.readOnly,
-    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
+    { applicationTypeMicroservice, clientSrcDir }
   ) {
-    this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
+    this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, {
+      applicationTypeMicroservice,
+      clientSrcDir,
+    });
   }
 
   /**

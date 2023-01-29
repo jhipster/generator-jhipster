@@ -70,10 +70,10 @@ export async function postWriteEntitiesFiles({ application, entities }) {
     if (!entity.embedded) {
       const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
-      const { applicationTypeMicroservice } = application;
+      const { applicationTypeMicroservice, clientSrcDir } = application;
       this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
         applicationTypeMicroservice,
-        clientSrcDir: application.clientSrcDir,
+        clientSrcDir,
       });
       this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
     }
