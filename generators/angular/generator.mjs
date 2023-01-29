@@ -49,11 +49,11 @@ export default class AngularGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get composing() {
-    return this.asComposingTaskGroup({
+    return {
       async composing() {
         await this.composeWithJHipster(GENERATOR_LANGUAGES);
       },
-    });
+    };
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
@@ -61,14 +61,14 @@ export default class AngularGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get loading() {
-    return this.asLoadingTaskGroup({
+    return {
       loadPackageJson() {
         _.merge(
           this.dependabotPackageJson,
           this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'))
         );
       },
-    });
+    };
   }
 
   get [BaseApplicationGenerator.LOADING]() {
@@ -76,12 +76,12 @@ export default class AngularGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get preparing() {
-    return this.asPreparingTaskGroup({
+    return {
       prepareForTemplates({ application }) {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
         application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale;
       },
-    });
+    };
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -123,6 +123,23 @@ export default class AngularGenerator extends AbstractJHipsterClientGenerator {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
+  get postWriting() {
+    return {
+      microfrontend({ application }) {
+        if (!application.microfrontend) return;
+        const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
+        this.addWebpackConfig(
+          `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
+          application.clientFramework
+        );
+      },
+    };
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
   get postWritingEntities() {
     return {
       postWriteEntitiesFiles,
@@ -130,7 +147,7 @@ export default class AngularGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.asPostWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.postWritingEntities));
   }
 
   /**

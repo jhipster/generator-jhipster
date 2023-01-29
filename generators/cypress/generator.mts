@@ -56,15 +56,6 @@ export default class CypressGenerator extends AbstractJHipsterClientGenerator<Cy
     this.loadRuntimeOptions();
   }
 
-  /**
-   * Add webpack config.
-   *
-   * @param {string} config - webpack config to be merged
-   */
-  addWebpackConfig(config, clientFramework) {
-    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
-  }
-
   async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -183,6 +174,10 @@ export default class CypressGenerator extends AbstractJHipsterClientGenerator<Cy
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
   get writingEntities(): WritingEntitiesTaskGroup<this, CypressApplication> {
     return {
       cleanupCypressEntityFiles({ application: { cypressDir }, entities }) {
@@ -288,10 +283,6 @@ export default class CypressGenerator extends AbstractJHipsterClientGenerator<Cy
         }
       },
     };
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   generateTestEntity(references, index = 'random') {

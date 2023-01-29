@@ -80,11 +80,11 @@ export default class ReactGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get preparing() {
-    return this.asPreparingTaskGroup({
+    return {
       prepareForTemplates({ application }) {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
       },
-    });
+    };
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -92,11 +92,11 @@ export default class ReactGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get preparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
+    return {
       react({ application, entity }) {
         prepareEntity({ entity, application });
       },
-    });
+    };
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
@@ -111,7 +111,7 @@ export default class ReactGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.asWritingTaskGroup(this.delegateTasksToBlueprint(() => this.writing));
   }
 
   get writingEntities() {
@@ -122,7 +122,24 @@ export default class ReactGenerator extends AbstractJHipsterClientGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.asWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.writingEntities));
+  }
+
+  /**
+   * Postwriting step for client technology
+   * @return {{microfrontend({application: *}): void}}
+   */
+  get postWriting() {
+    return {
+      microfrontend({ application }) {
+        if (!application.microfrontend) return;
+        this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })", application.clientFramework);
+      },
+    };
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 
   get postWritingEntities() {

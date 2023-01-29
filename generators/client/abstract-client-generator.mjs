@@ -23,11 +23,20 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 /**
- * @class
+ * @class AbstractJHipsterClientGenerator - Base class for client technology generators
  * @template ApplicationType
  * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
 export default class AbstractJHipsterClientGenerator extends BaseApplicationGenerator {
+  /**
+   * Add webpack config.
+   *
+   * @param {string} config - webpack config to be merged
+   */
+  addWebpackConfig(config, clientFramework) {
+    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
+  }
+
   /**
    * @private
    * Add external resources to root file(index.html).
@@ -48,14 +57,5 @@ export default class AbstractJHipsterClientGenerator extends BaseApplicationGene
    */
   copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
     this.needleApi.clientWebpack.copyExternalAssets(sourceFolder, targetFolder);
-  }
-
-  /**
-   * Add webpack config.
-   *
-   * @param {string} config - webpack config to be merged
-   */
-  addWebpackConfig(config, clientFramework) {
-    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
   }
 }

@@ -31,6 +31,9 @@ const mockBlueprintSubGen = class extends AngularGenerator {
         this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
         this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
       },
+      addExternalResourcesToRootStep() {
+        this.addExternalResourcesToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');
+      },
     };
   }
 };
@@ -125,5 +128,10 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
       "import { appNameangularNameModule } from './folderName/fileName.module';"
     );
     assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, 'appNameangularNameModule,');
+  });
+
+  it('Assert index.html contain the comment and the resource added', () => {
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css" />');
   });
 });

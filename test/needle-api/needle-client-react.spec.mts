@@ -29,6 +29,9 @@ const mockBlueprintSubGen: any = class extends ReactGenerator {
         this.addAppSCSSStyle('@import without-comment');
         this.addAppSCSSStyle('@import with-comment', 'my comment');
       },
+      addExternalResourcesToRootStep() {
+        this.addExternalResourcesToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');
+      },
     };
     return { ...customPhaseSteps };
   }
@@ -67,5 +70,10 @@ describe('needle API React: JHipster react generator with blueprint', () => {
         'my comment\n' +
         '========================================================================== */\n'
     );
+  });
+
+  it('Assert index.html contain the comment and the resource added', () => {
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css" />');
   });
 });
