@@ -60,14 +60,14 @@ export default class {
    * @deprecated
    */
   get clientSrcDir(): string {
-    return this.generator.sharedData.getApplication().clientSrcDir;
+    return (this.generator.sharedData.getApplication() as any).clientSrcDir;
   }
 
   /**
    * @deprecated
    */
   get clientFramework(): string {
-    return this.generator.sharedData.getApplication().clientFramework;
+    return (this.generator.sharedData.getApplication() as any).clientFramework;
   }
 
   addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): boolean {
