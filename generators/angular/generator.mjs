@@ -32,6 +32,7 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
+import AbstractJHipsterClientGenerator from '../client/abstract-client-generator.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -39,7 +40,7 @@ const { ANGULAR } = clientFrameworkTypes;
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
-export default class AngularGenerator extends BaseApplicationGenerator {
+export default class AngularGenerator extends AbstractJHipsterClientGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {

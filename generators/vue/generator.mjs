@@ -31,6 +31,7 @@ import {
   generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
+import AbstractJHipsterClientGenerator from '../client/abstract-client-generator.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -40,7 +41,7 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
-export default class VueGenerator extends BaseApplicationGenerator {
+export default class VueGenerator extends AbstractJHipsterClientGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {

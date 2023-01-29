@@ -32,6 +32,7 @@ import {
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.mjs';
+import AbstractJHipsterClientGenerator from '../client/abstract-client-generator.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -40,7 +41,7 @@ const { REACT } = clientFrameworkTypes;
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
-export default class ReactGenerator extends BaseApplicationGenerator {
+export default class ReactGenerator extends AbstractJHipsterClientGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {

@@ -37,6 +37,7 @@ import type {
   WritingTaskGroup,
 } from '../base-application/tasks.mjs';
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.mjs';
+import AbstractJHipsterClientGenerator from '../client/abstract-client-generator.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -44,7 +45,7 @@ const { ANGULAR } = clientFrameworkTypes;
  * @class
  * @extends {BaseApplicationGenerator<CypressApplication>}
  */
-export default class CypressGenerator extends BaseApplicationGenerator<CypressApplication> {
+export default class CypressGenerator extends AbstractJHipsterClientGenerator<CypressApplication> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
