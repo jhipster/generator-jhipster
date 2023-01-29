@@ -251,8 +251,8 @@ const partialLanguages: PartialLanguage[] = [
     name: 'Karakalpak (Latin)',
     displayName: 'Qaraqalpaqsha',
     languageTag: 'kr-Latn-kr',
-    angularLocale: 'kr-Latn',
-    dayjsLocale: 'kr-latn',
+    angularLocale: 'en',
+    dayjsLocale: 'en',
   },
 ];
 
