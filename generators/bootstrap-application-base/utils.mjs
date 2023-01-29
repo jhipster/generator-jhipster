@@ -28,7 +28,7 @@ const { STRING: TYPE_STRING } = CommonDBTypes;
 
 // eslint-disable-next-line import/prefer-default-export
 export function createUserEntity(customUserData = {}, application) {
-  const userEntityDefinition = this.readEntityJson('User');
+  const userEntityDefinition = this.getEntityConfig('User')?.getAll();
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
       this.logger.warn('Relationships on the User entity side will be disregarded');

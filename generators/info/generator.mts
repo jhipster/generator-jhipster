@@ -26,6 +26,8 @@ import BaseGenerator from '../base/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
+import { getEntitiesFromDir } from '../base-application/support/entities.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 
 export default class InfoGenerator extends BaseGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
@@ -113,8 +115,9 @@ export default class InfoGenerator extends BaseGenerator {
     let jdlObject;
     const entities = new Map();
     try {
-      this.getExistingEntities().forEach(entity => {
-        entities.set(entity.name, entity.definition);
+      const entityNames = getEntitiesFromDir(this.destinationPath(JHIPSTER_CONFIG_DIR));
+      entityNames.forEach(entityName => {
+        entities.set(entityName, this.readDestinationJSON(`${JHIPSTER_CONFIG_DIR}/${entityName}.json`));
       });
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({
         entities,

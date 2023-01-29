@@ -55,7 +55,6 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
-  JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
   SERVER_MAIN_RES_DIR,
@@ -686,30 +685,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getMicroserviceAppName(microserviceName) {
     return _.camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
-  }
-
-  /**
-   * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntityNames() {
-    return this.getExistingEntities().map(entity => entity.name);
-  }
-
-  /**
-   * @private
-   * Read entity json from config folder.
-   * @param {string} entityName - Entity name
-   * @return {object} entity definition
-   */
-  readEntityJson(entityName) {
-    const file = path.join(path.dirname(this.config.path), JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-    try {
-      return this.fs.readJSON(file);
-    } catch (error) {
-      this.logger.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.logger.debug('Error:', error);
-      return undefined;
-    }
   }
 
   /**

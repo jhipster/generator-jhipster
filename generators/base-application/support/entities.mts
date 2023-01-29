@@ -16,7 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { existsSync, mkdirSync, opendirSync } from 'fs';
+import { extname, basename } from 'path';
 
-export * from './enum.mjs';
-export * from './entities.mjs';
-export * from './field-utils.mjs';
+// eslint-disable-next-line import/prefer-default-export
+export function getEntitiesFromDir(configDir: string): string[] {
+  if (!existsSync(configDir)) {
+    mkdirSync(configDir);
+  }
+  const dir = opendirSync(configDir);
+  const entityNames: string[] = [];
+  let dirent = dir.readSync();
+  while (dirent !== null) {
+    const extension = extname(dirent.name);
+    if (dirent.isFile() && extension === '.json') {
+      entityNames.push(basename(dirent.name, extension));
+    }
+    dirent = dir.readSync();
+  }
+  dir.closeSync();
+  return entityNames;
+}
