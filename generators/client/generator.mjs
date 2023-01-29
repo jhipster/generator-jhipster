@@ -32,6 +32,7 @@ import statistics from '../statistics.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import AbstractJHipsterClientGenerator from './abstract-client-generator.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -40,7 +41,7 @@ const { CYPRESS } = testFrameworkTypes;
  * @class
  * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
-export default class JHipsterClientGenerator extends BaseApplicationGenerator {
+export default class JHipsterClientGenerator extends AbstractJHipsterClientGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
