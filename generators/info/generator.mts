@@ -22,14 +22,13 @@
 import chalk from 'chalk';
 import type { ExecaReturnValue } from 'execa';
 
-import BaseGenerator from '../base/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
-import { getEntitiesFromDir } from '../base-application/support/entities.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
+import { type BaseApplication } from '../base-application/types.mjs';
 
-export default class InfoGenerator extends BaseGenerator {
+export default class InfoGenerator extends BaseApplicationGenerator<BaseApplication> {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -45,7 +44,7 @@ export default class InfoGenerator extends BaseGenerator {
     this.env.options.skipInstall = true;
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
         this.logger.info(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
@@ -115,9 +114,8 @@ export default class InfoGenerator extends BaseGenerator {
     let jdlObject;
     const entities = new Map();
     try {
-      const entityNames = getEntitiesFromDir(this.destinationPath(JHIPSTER_CONFIG_DIR));
-      entityNames.forEach(entityName => {
-        entities.set(entityName, this.readDestinationJSON(`${JHIPSTER_CONFIG_DIR}/${entityName}.json`));
+      this.getExistingEntities().forEach(entity => {
+        entities.set(entity.name, entity.definition);
       });
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({
         entities,
