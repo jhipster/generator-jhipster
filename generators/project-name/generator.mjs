@@ -23,8 +23,7 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { BASE_NAME } from './constants.mjs';
-
-const { startCase } = _;
+import { getHipster } from '../base/support/index.mjs';
 
 /**
  * @class
@@ -97,7 +96,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
         _.defaults(application, {
           humanizedBaseName,
           camelizedBaseName: _.camelCase(baseName),
-          hipster: this.getHipster(baseName),
+          hipster: getHipster(baseName),
           capitalizedBaseName: _.upperFirst(baseName),
           dasherizedBaseName: _.kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),

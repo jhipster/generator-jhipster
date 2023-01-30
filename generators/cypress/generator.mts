@@ -19,7 +19,7 @@
 import { faker } from '@faker-js/faker/locale/en';
 import _ from 'lodash';
 
-import { stringHashCode } from '../utils.mjs';
+import { stringHashCode } from '../base/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { cypressFiles, cypressEntityFiles } from './files.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';

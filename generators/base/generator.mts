@@ -20,6 +20,7 @@ import { existsSync, mkdirSync, opendirSync } from 'fs';
 import { basename, extname, join as joinPath, dirname } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
+import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
@@ -39,6 +40,7 @@ import type {
   JHipsterGeneratorOptions,
   JHipsterGeneratorFeatures,
   EditFileCallback,
+  EditFileOptions,
   CascatedEditFileCallback,
   JHipsterOptions,
   CheckResult,
@@ -132,6 +134,12 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
       this.option('skip-prettier', {
         description: 'Skip prettier',
+        type: Boolean,
+        hide: true,
+      });
+
+      this.option('ignore-needles-error', {
+        description: 'Ignore needles failures',
         type: Boolean,
         hide: true,
       });
@@ -397,18 +405,14 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    * editFile('foo.txt')(content => content + 'foo.txt content');
    */
   editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
-  editFile(
-    file: string,
-    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean },
-    ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this>;
+  editFile(file: string, options: EditFileOptions, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
 
   editFile(
     file: string,
-    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean } | EditFileCallback<this>,
+    options?: EditFileOptions | EditFileCallback<this>,
     ...transformCallbacks: EditFileCallback<this>[]
   ): CascatedEditFileCallback<this> {
-    let actualOptions: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean };
+    let actualOptions: EditFileOptions;
     if (typeof options === 'function') {
       transformCallbacks = [options, ...transformCallbacks];
       actualOptions = {};
@@ -426,13 +430,16 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     try {
       originalContent = this.readDestination(filePath);
     } catch (_error) {
-      if (actualOptions.ignoreNonExisting) {
+      const { ignoreNonExisting, create } = actualOptions;
+      const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
+      if (ignoreNonExisting) {
+        this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
         // return a noop.
         const noop = () => noop;
         return noop;
       }
-      if (!actualOptions.create || transformCallbacks.length === 0) {
-        throw new Error(`File ${filePath} doesn't exist`);
+      if (!create || transformCallbacks.length === 0) {
+        throw new Error(`Unable to find ${filePath}. ${errorMessage}`);
       }
       // allow to edit non existing files
       originalContent = '';
@@ -584,6 +591,8 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
     }
-    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion });
+    const { ignoreNeedlesError } = this.options;
+
+    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion, ignoreNeedlesError });
   }
 }

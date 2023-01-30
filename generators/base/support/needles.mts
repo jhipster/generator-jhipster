@@ -20,9 +20,9 @@ import assert from 'assert';
 import chalk from 'chalk';
 import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
-import BaseGenerator from '../../generators/base/index.mjs';
-import { CascatedEditFileCallback, EditFileCallback } from '../../generators/base/api.mjs';
-import { joinCallbacks } from '../../generators/base/ts-utils.mjs';
+import BaseGenerator from '../index.mjs';
+import { CascatedEditFileCallback, EditFileCallback } from '../api.mjs';
+import { joinCallbacks } from '../ts-utils.mjs';
 
 const { kebabCase } = _;
 
@@ -31,7 +31,8 @@ type NeedleInsertion = {
   /**
    * Content to add.
    */
-  contentToAdd: string | string[];
+  contentToAdd: string | string[] | ((content: string, options: { needleIndent: number; indentPrefix: string }) => string);
+  contentToCheck?: string | RegExp;
   /**
    * check existing content ignoring white spaces and new lines.
    */
@@ -40,6 +41,10 @@ type NeedleInsertion = {
    * throw error if needle was not found
    */
   optional?: boolean;
+  /**
+   * Detect and apply ident
+   */
+  autoIndent?: boolean;
 };
 
 type NeedleFileInsertion = NeedleInsertion & {
@@ -97,17 +102,25 @@ export const checkContentIn = (contentToCheck: string | RegExp, content, ignoreW
  * @param args
  * @returns null if needle was not found, new content otherwise
  */
-export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }: NeedleContentInsertion): string | null => {
+export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoIndent = true }: NeedleContentInsertion): string | null => {
   assert(needle, 'needle is required');
   assert(content, 'content is required');
   assert(contentToAdd, 'contentToAdd is required');
 
-  const regexp = new RegExp(`(?://|<!--|/*|#) jhipster-needle-${needle}(?:$|\n| )`, 'g');
-  const firstMatch = regexp.exec(content);
+  needle = needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
+
+  let regexp = new RegExp(`(?://|<!--|/*|#) ${needle}(?:$|\n| )`, 'g');
+  let firstMatch = regexp.exec(content);
   if (!firstMatch) {
-    return null;
+    regexp = new RegExp(`"${needle}": `, 'g');
+    firstMatch = regexp.exec(content);
+    if (!firstMatch) {
+      return null;
+    }
   }
-  if (regexp.exec(content)) {
+
+  // Replacements using functions allows to replace multiples needles
+  if (typeof contentToAdd !== 'function' && regexp.exec(content)) {
     throw new Error(`Multiple needles found for ${needle}`);
   }
 
@@ -119,29 +132,35 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }: Nee
 
   // Find needle ident
   const needleLine = afterContent.split('\n', 2)[0];
-  const needleIdent = needleLine.length - needleLine.trimStart().length;
+  const needleIndent = needleLine.length - needleLine.trimStart().length;
 
-  contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).map(eachContentToAdd => eachContentToAdd.split('\n')).flat();
+  if (typeof contentToAdd === 'function') {
+    return contentToAdd(content, { needleIndent, indentPrefix: ' '.repeat(needleIndent) });
+  }
+  contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
+  if (autoIndent) {
+    contentToAdd = contentToAdd.map(eachContentToAdd => eachContentToAdd.split('\n')).flat();
+  }
 
-  // Normalize needle ident with contentToAdd.
+  // Normalize needle indent with contentToAdd.
   const firstContent = contentToAdd.find(line => line.trim());
   if (!firstContent) {
     // File is blank.
     return null;
   }
-  const contentIdent = firstContent.length - firstContent.trimStart().length;
-  if (needleIdent > contentIdent) {
-    const identToApply = ' '.repeat(needleIdent - contentIdent);
+  const contentIndent = firstContent.length - firstContent.trimStart().length;
+  if (needleIndent > contentIndent) {
+    const identToApply = ' '.repeat(needleIndent - contentIndent);
     contentToAdd = contentToAdd.map(line => (line ? identToApply + line : line));
-  } else if (needleIdent < contentIdent) {
-    let identToRemove = contentIdent - needleIdent;
+  } else if (needleIndent < contentIndent) {
+    let identToRemove = contentIndent - needleIndent;
     contentToAdd
       .filter(line => line.trimStart())
       .forEach(line => {
         const trimmedLine = line.trimStart();
-        const lineIdent = line.length - trimmedLine.length;
-        if (lineIdent < identToRemove) {
-          identToRemove = lineIdent;
+        const lineIndent = line.length - trimmedLine.length;
+        if (lineIndent < identToRemove) {
+          identToRemove = lineIndent;
         }
       });
     contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.substring(identToRemove) : ''));
@@ -158,24 +177,32 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle }: Nee
 export const createNeedleCallback = ({
   needle,
   contentToAdd,
+  contentToCheck,
   optional = false,
   ignoreWhitespaces = true,
+  autoIndent,
 }: NeedleInsertion): EditFileCallback<BaseGenerator> => {
   assert(needle, 'needle is required');
   assert(contentToAdd, 'contentToAdd is required');
 
   return function (content, filePath) {
-    contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).filter(
-      eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces)
-    );
-    if (contentToAdd.length === 0) {
+    if (contentToCheck && checkContentIn(contentToCheck, content, ignoreWhitespaces)) {
       return content;
+    }
+    if (typeof contentToAdd !== 'function') {
+      contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).filter(
+        eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces)
+      );
+      if (contentToAdd.length === 0) {
+        return content;
+      }
     }
 
     const newContent = insertContentBeforeNeedle({
       needle,
       content,
       contentToAdd,
+      autoIndent,
     });
     if (newContent) {
       return newContent;

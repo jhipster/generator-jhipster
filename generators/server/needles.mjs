@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createBaseNeedle } from '../../lib/support/needles.mjs';
+import { createBaseNeedle } from '../base/support/needles.mjs';
 
 /**
  * @typedef {Object} ApplicationPropertiesNeedles - creates a new type named 'SpecialType'
