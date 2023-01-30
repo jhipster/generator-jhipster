@@ -31,7 +31,7 @@ FROM cassandra:3.11.14
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.3.0
+FROM neo4j:5.4.0
 
 FROM hazelcast/management-center:5.2.1
 LABEL ALIAS=hazelcast
@@ -49,7 +49,7 @@ LABEL ALIAS=zookeeper
 FROM sonarqube:9.8.0-community
 LABEL ALIAS=sonar
 
-FROM consul:1.14.3
+FROM consul:1.14.4
 
 FROM prom/prometheus:v2.41.0
 LABEL ALIAS=prometheus

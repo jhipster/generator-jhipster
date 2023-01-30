@@ -54,8 +54,6 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
-import { CUSTOM_PRIORITIES } from './priorities.mjs';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -108,105 +106,7 @@ const isWin32 = os.platform() === 'win32';
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
-  jhipsterConfig;
-
-  /** @type {Record<string, any>} */
   dependabotPackageJson;
-
-  sbsBlueprint;
-
-  /**
-   * @param {string | string[]} args
-   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
-   */
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (!this.features.jhipsterModular) {
-      // This adds support for a `--from-cli` flag
-      this.option('from-cli', {
-        desc: 'Indicates the command is run from JHipster CLI',
-        type: Boolean,
-        hide: true,
-      });
-
-      this.option('with-generated-flag', {
-        desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-        type: Boolean,
-      });
-
-      this.option('skip-prompts', {
-        desc: 'Skip prompts',
-        type: Boolean,
-      });
-
-      this.option('skip-prettier', {
-        desc: 'Skip prettier',
-        type: Boolean,
-        hide: true,
-      });
-    }
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
-
-    // JHipster runtime config that should not be stored to .yo-rc.json.
-    this.configOptions = this.options.configOptions || { sharedEntities: {} };
-    this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-
-    /* Force config to use 'generator-jhipster' namespace. */
-    this._config = this._getStorage('generator-jhipster', { sorted: true });
-    /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-    this.jhipsterConfig = this.config.createProxy();
-
-    this.parseTestOptions();
-
-    this.loadRuntimeOptions();
-    this.loadStoredAppOptions();
-
-    if (this.options.namespace !== 'jhipster:bootstrap') {
-      this.env.runLoop.add(
-        'environment:run',
-        async (done, stop) => {
-          try {
-            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
-            done();
-          } catch (error) {
-            stop(error);
-          }
-        },
-        {
-          once: 'queueJhipsterBootstrap',
-          run: false,
-        }
-      );
-    }
-  }
-
-  /**
-   * @protected
-   * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
-   *
-   * @param {...string} args
-   * @returns {string}
-   */
-  jhipsterTemplatePath(...args) {
-    let existingGenerator;
-    try {
-      existingGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    } catch (error) {
-      if (this.options.namespace) {
-        const split = this.options.namespace.split(':', 2);
-        existingGenerator = split.length === 1 ? split[0] : split[1];
-      }
-    }
-    this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
-  }
 
   /**
    * @private
@@ -221,20 +121,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new menu element, at the root of the menu.
-   *
-   * @param {string} routerName - The name of the router that is added to the menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the menu
-   */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
-  }
-
-  /**
-   * @private
    * Add external resources to root file(index.html).
    *
    * @param {string} resources - Resources added to root file.
@@ -242,43 +128,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addExternalResourcesToRoot(resources, comment) {
     this.needleApi.client.addExternalResourcesToRoot(resources, comment);
-  }
-
-  /**
-   * @private
-   * Add a new admin in the TS modules file.
-   *
-   * @param {string} appName - Angular2 application name.
-   * @param {string} adminAngularName - The name of the new admin item.
-   * @param {string} adminFolderName - The name of the folder.
-   * @param {string} adminFileName - The name of the file.
-   * @param {boolean} enableTranslation - If translations are enabled or not.
-   * @param {string} clientFramework - The name of the client framework.
-   */
-  addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-    this.needleApi.clientAngular.addToAdminModule(
-      appName,
-      adminAngularName,
-      adminFolderName,
-      adminFileName,
-      enableTranslation,
-      clientFramework
-    );
-  }
-
-  /**
-   * @private
-   * Add a new lazy loaded module to admin routing file.
-   *
-   * @param {string} route - The route for the module. For example 'entity-audit'.
-   * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
-   * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
-   * @param {string} pageTitle - The translation key if i18n is enabled or the text if i18n is disabled for the page title in the browser.
-   *                             For example 'entityAudit.home.title' for i18n enabled or 'Entity audit' for i18n disabled.
-   *                             If undefined then application global page title is used in the browser title bar.
-   */
-  addAdminRoute(route, modulePath, moduleName, pageTitle) {
-    this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName, pageTitle);
   }
 
   /**
@@ -315,21 +164,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Add a new module in the TS modules file.
-   *
-   * @param {string} appName - Angular2 application name.
-   * @param {string} angularName - The name of the new admin item.
-   * @param {string} folderName - The name of the folder.
-   * @param {string} fileName - The name of the file.
-   * @param {boolean} enableTranslation - If translations are enabled or not.
-   * @param {string} clientFramework - The name of the client framework.
-   */
-  addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-    this.needleApi.clientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework);
   }
 
   /**
@@ -454,79 +288,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addChangesetToLiquibaseEntityChangelog(filePath, content) {
     this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "global.scss
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addMainSCSSStyle(style, comment) {
-    this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "vendor.scss".
-   *
-   * @param {string} style - scss to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
-   * comment = 'Message'
-   *
-   * * ==========================================================================
-   * Message
-   * ========================================================================== *
-   * .success {
-   *     @extend .message;
-   *     border-color: green;
-   * }
-   *
-   */
-  addVendorSCSSStyle(style, comment) {
-    this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the react application in "app.scss".
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addAppSCSSStyle(style, comment) {
-    this.needleApi.clientReact.addAppSCSSStyle(style, comment);
   }
 
   /**
@@ -949,52 +710,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       this.logger.debug('Error:', error);
       return undefined;
     }
-  }
-
-  /**
-   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntities() {
-    function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
-    }
-
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    if (!fs.existsSync(configDir)) {
-      fs.mkdirSync(configDir);
-    }
-    const dir = fs.opendirSync(configDir);
-    const entityNames = [];
-    let dirent = dir.readSync();
-    while (dirent !== null) {
-      const extname = path.extname(dirent.name);
-      if (dirent.isFile() && extname === '.json') {
-        entityNames.push(path.basename(dirent.name, extname));
-      }
-      dirent = dir.readSync();
-    }
-    dir.closeSync();
-
-    const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
-      .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !entity.builtInUser && entity.definition)
-      .sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
-    return entities;
-  }
-
-  /**
-   * Check if the JHipster version used to generate an existing project is less than the passed version argument
-   *
-   * @param {string} version - A valid semver version string
-   */
-  isJhipsterVersionLessThan(version) {
-    const jhipsterOldVersion = this.jhipsterOldVersion || this.configOptions.jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare and return false
-      return false;
-    }
-    return semver.lt(jhipsterOldVersion, version);
   }
 
   /**
@@ -1624,10 +1339,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (dest.jhipsterOldVersion === undefined) {
-      // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-      dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
-    }
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
@@ -2220,29 +1931,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param {string} entityName - Name of the entity to load.
-   * @param {boolean} create - Create storage if doesn't exists.
-   * @returns {import('yeoman-generator/lib/util/storage')}
-   */
-  getEntityConfig(entityName, create = false) {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
-    if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true });
-  }
-
-  /**
-   * Fetch files from the generator-jhipster instance installed
-   * @param {...string} subpath : the path to fetch from
-   */
-  fetchFromInstalledJHipster(...subpath) {
-    if (subpath) {
-      return path.join(__dirname, '..', ...subpath);
-    }
-    return subpath;
-  }
-
-  /**
    * @private
    */
   get needleApi() {
@@ -2302,16 +1990,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
-   * @experimental
-   */
-  showHello() {
-    if (this.configOptions.showHello === false) return false;
-    this.configOptions.showHello = false;
-    return true;
-  }
-
-  /**
    * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
@@ -2320,32 +1998,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDependabotDependencies(packageJson) {
     const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
     _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
-  }
-
-  /**
-   * @private
-   * Load config for simulating existing project.
-   */
-  parseTestOptions() {
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
-      delete this.options.defaultLocalConfig;
-    }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      this.config.set(this.options.localConfig);
-      delete this.options.localConfig;
-    }
   }
 }

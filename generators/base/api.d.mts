@@ -13,6 +13,7 @@ export interface JHipsterGeneratorOptions extends GeneratorOptions {
 
 export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
   priorityArgs?: boolean;
+  jhipsterModular?: boolean;
 }
 
 // eslint-disable-next-line no-use-before-define

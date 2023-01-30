@@ -77,6 +77,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -164,7 +165,8 @@ _%>
 
         // higher precedence to Custom/ResponseStatus types
         String title = extractTitle(err, problem.getStatus());
-        if (problem.getTitle() == null || !problem.getTitle().equals(title)) {
+        String problemTitle = problem.getTitle();
+        if (problemTitle == null || !problemTitle.equals(title)) {
         	problem.setTitle(title);
         }
 
@@ -173,17 +175,18 @@ _%>
         	problem.setDetail(getCustomizedErrorDetails(err));
         }
 
-        if (problem.getProperties() == null || !problem.getProperties().containsKey(MESSAGE_KEY))
+        Map<String, Object> problemProperties = problem.getProperties();
+        if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY))
         	problem.setProperty(MESSAGE_KEY,
-                getMappedMessageKey((Throwable) err) != null
+                getMappedMessageKey(err) != null
                     ? getMappedMessageKey(err)
                     : "error.http." + problem.getStatus());
 
-        if (problem.getProperties() == null || !problem.getProperties().containsKey(PATH_KEY))
+        if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
             problem.setProperty(PATH_KEY, getPathValue(request));
 
         if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) &&
-                (problem.getProperties() == null || !problem.getProperties().containsKey(FIELD_ERRORS_KEY)))
+                (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY)))
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors((<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %>) err));
 
         problem.setCause(buildCause(err.getCause(), request).orElse(null));
@@ -282,7 +285,7 @@ _%>
 
     private HttpStatus getMappedStatus(Throwable err) {
         // Where we disagree with Spring defaults
-        if (err instanceof AccessDeniedException accDenied) return HttpStatus.FORBIDDEN;
+        if (err instanceof AccessDeniedException) return HttpStatus.FORBIDDEN;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
     <%_ } _%>
@@ -295,7 +298,7 @@ _%>
 
     private URI getPathValue(<%= requestClass %> request) {
         if(request == null) return URI.create("about:blank");
-        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI((NativeWebRequest) request))<% } %>;
+        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI(request))<% } %>;
     }
 
     private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {

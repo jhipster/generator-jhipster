@@ -117,9 +117,6 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.silent = this.options.silent;
     this.skipChecks = this.options.skipChecks;
 
-    // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
-    this.jhipsterOldVersion = this.config.get('jhipsterVersion');
-
     if (!this.config.existed) {
       throw new Error(
         "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it."

@@ -306,9 +306,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-
-    // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-    this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
   async beforeQueue() {
@@ -372,9 +369,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   get configuring() {
     return {
       setup() {
-        // Update jhipsterVersion.
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
-
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient =
