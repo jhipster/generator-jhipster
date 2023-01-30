@@ -20,7 +20,7 @@
     "react-toastify": "9.1.1",
     "react-transition-group": "4.4.5",
     "reactstrap": "9.1.5",
-    "redux": "4.2.0",
+    "redux": "4.2.1",
     "redux-thunk": "2.4.2",
     "sonar-scanner": "3.1.0",
     "tslib": "2.5.0",
