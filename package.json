@@ -84,7 +84,7 @@
     "@types/yeoman-generator": "5.2.11",
     "@types/yeoman-test": "4.0.3",
     "aws-sdk": "2.1299.0",
-    "axios": "1.2.3",
+    "axios": "1.2.6",
     "chalk": "4.1.2",
     "chevrotain": "10.4.2",
     "commander": "10.0.0",
