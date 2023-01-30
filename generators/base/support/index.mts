@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './templates/doc-formatters.mjs';
+export * from './needles-utils.mjs';
 export * from './configuration-helpers/sequences.mjs';
 export { default as httpsGet } from './remote.mjs';
 export * from './configuration-helpers/options.mjs';
