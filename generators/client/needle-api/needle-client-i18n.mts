@@ -20,22 +20,29 @@ import chalk from 'chalk';
 import needleClient from './needle-client.mjs';
 
 export default class extends needleClient {
-  addElementTranslationKey(key, value, language, webappSrcDir) {
+  addElementTranslationKey(key: string, value: string, language: string, webappSrcDir: string) {
     const errorMessage = ' not added as a new entity in the menu.';
     this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-element', webappSrcDir);
   }
 
-  addAdminElementTranslationKey(key, value, language, webappSrcDir) {
+  addAdminElementTranslationKey(key: string, value: string, language: string, webappSrcDir: string) {
     const errorMessage = ' not added as a new entry in the admin menu.';
     this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-admin-element', webappSrcDir);
   }
 
-  addEntityTranslationKey(key, value, language, webappSrcDir) {
+  addEntityTranslationKey(key: string, value: string, language: string, webappSrcDir: string) {
     const errorMessage = ' not added as a new entity in the menu.';
     this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-entry', webappSrcDir);
   }
 
-  _addTranslationKey(key, value, language, errorMessage, needle, webappSrcDir = this.clientSrcDir) {
+  _addTranslationKey(
+    key: string,
+    value: string,
+    language: string,
+    errorMessage: string,
+    needle: string,
+    webappSrcDir: string = this.clientSrcDir
+  ) {
     const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
     const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
     const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${value}",`);

@@ -23,7 +23,12 @@ import needleClientBase from './needle-client.mjs';
 import { stripMargin } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
-  addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
+  addEntityToMenu(
+    routerName: string,
+    enableTranslation: boolean,
+    entityTranslationKeyMenu: string,
+    entityTranslationValue: string = _.startCase(routerName)
+  ) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
 
@@ -45,7 +50,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityToRouterImport(entityName, fileName, folderName, readOnly) {
+  addEntityToRouterImport(entityName: string, fileName: string, folderName: string, readOnly: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
@@ -83,7 +88,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityToRouter(entityInstance, entityName, entityFileName, readOnly) {
+  addEntityToRouter(entityInstance: string, entityName: string, entityFileName: string, readOnly: boolean) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
@@ -144,7 +149,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName) {
+  addEntityServiceToMainImport(entityName: string, entityClass: string, entityFileName: string, entityFolderName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to import in main.\n')}`;
     const filePath = `${this.clientSrcDir}/app/main.ts`;
 
@@ -157,7 +162,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToMain(entityInstance, entityName) {
+  addEntityServiceToMain(entityInstance: string, entityName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to service in main.\n')}`;
     const filePath = `${this.clientSrcDir}/app/main.ts`;
 
@@ -170,7 +175,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName) {
+  addEntityServiceToEntitiesComponentImport(entityName: string, entityClass: string, entityFileName: string, entityFolderName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow(
       'not added to import in entities component.\n'
     )}`;
@@ -187,7 +192,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToEntitiesComponent(entityInstance, entityName) {
+  addEntityServiceToEntitiesComponent(entityInstance: string, entityName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow(
       'not added to service in entities component.\n'
     )}`;
