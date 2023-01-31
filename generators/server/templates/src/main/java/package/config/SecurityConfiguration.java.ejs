@@ -173,6 +173,7 @@ public class SecurityConfiguration {
 <%_ } _%>
             .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
   <%_ if (!skipClient) { _%>
             .requestMatchers("/app/*.html").permitAll()
             .requestMatchers("/app/*/*.html").permitAll()
