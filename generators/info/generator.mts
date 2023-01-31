@@ -66,13 +66,6 @@ export default class InfoGenerator extends BaseApplicationGenerator<BaseApplicat
         console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
       },
 
-      displayEntities() {
-        console.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
-        const jdl = this.generateJDLFromEntities();
-        console.log('<details>\n<summary>JDL entity definitions</summary>\n');
-        console.log(`<pre>\n${jdl?.toString()}\n</pre>\n</details>\n`);
-      },
-
       async checkJava() {
         console.log('\n##### **Environment and Tools**\n');
         await this.checkCommand('java', ['-version'], ({ stderr }) => console.log(stderr));
@@ -95,6 +88,20 @@ export default class InfoGenerator extends BaseApplicationGenerator<BaseApplicat
 
       async checkDocker() {
         await this.checkCommand('docker', ['-v']);
+      },
+
+      checkApplication() {
+        if (this.jhipsterConfig.baseName === undefined) {
+          this.logger.warn("Current location doesn't contain a valid JHipster application");
+          this.cancelCancellableTasks();
+        }
+      },
+
+      displayEntities() {
+        console.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
+        const jdl = this.generateJDLFromEntities();
+        console.log('<details>\n<summary>JDL entity definitions</summary>\n');
+        console.log(`<pre>\n${jdl?.toString()}\n</pre>\n</details>\n`);
       },
     });
   }
