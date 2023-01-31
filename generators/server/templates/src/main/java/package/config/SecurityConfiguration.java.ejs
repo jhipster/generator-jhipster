@@ -69,10 +69,11 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
   <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
@@ -232,7 +233,18 @@ public class SecurityConfiguration {
                 exceptionHanding.defaultAuthenticationEntryPointFor(
                     (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) ->
                         response.setStatus(401),
-                    new AntPathRequestMatcher("/api/**")
+                        new OrRequestMatcher(
+  <%_ if (communicationSpringWebsocket) { _%>
+                            new AntPathRequestMatcher("/websocket/**"),
+  <%_ } _%>
+                            new AntPathRequestMatcher("/api/**"),
+                            /*
+                             * FormLogin is redirecting to "/error" instead of just passtrough.
+                             * Error started at https://github.com/jhipster/generator-jhipster/pull/20107.
+                             * Once the redirect cause is found this can be dropped in favor of the above "/api/**" entrypoint.
+                             */
+                            new AntPathRequestMatcher("/error")
+                        )
                 )
             )
             .formLogin(formLogin ->
