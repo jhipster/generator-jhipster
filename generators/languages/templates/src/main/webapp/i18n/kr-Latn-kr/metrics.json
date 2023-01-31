@@ -1,0 +1,94 @@
+{
+    "metrics": {
+        "title": "Esaplaǵısh ",
+        "refresh.button": "Jańalaw",
+        "updating": "Jańalanıp atır...",
+        "jvm": {
+            "title": "JVM Ólshemleri",
+            "memory": {
+                "title": "Yad ",
+                "total": "Jámi yad",
+                "heap": "Heap",
+                "nonheap": "Heap emes"
+            },
+            "threads": {
+                "title": "Thread lar",
+                "all": "Hámmesi",
+                "runnable": "Aktivleri",
+                "timedwaiting": "Waqtınshalıq kútiw",
+                "waiting": "Kútiw",
+                "blocked": "Bloklanǵan ",
+                "dump": {
+                    "title": "Thread lardıń tolıqlıǵı",
+                    "id": "Id: ",
+                    "blockedtime": "Bloklanǵanlar waqıtı",
+                    "blockedcount": "Bloklanǵanlar sanı",
+                    "waitedtime": "Kútiw waqıtı",
+                    "waitedcount": "Kútiw sanı",
+                    "lockname": "Bloktıń atı",
+                    "stacktrace": "Stacktrace",
+                    "show": "Kórset",
+                    "hide": "Jasırıw"
+                }
+            },
+            "gc": {
+                "title": "Garbage collector",
+                "marksweepcount": "Mark Sweep sanı",
+                "marksweeptime": "Mark Sweep waqıtı",
+                "scavengecount": "Garbage collector sanı",
+                "scavengetime": "Garbage collector waqıtı"
+            },
+            "http": {
+                "title": "HTTP sorawlar (sekundta júz bergen waqıyalar)",
+                "active": "Aktiv sorawlar :",
+                "total": "Jámi sorawlar :",
+                "table": {
+                    "code": "Kod",
+                    "count": "Sanı",
+                    "mean": "Ortasha",
+                    "average": "Ortasha",
+                    "max": "Max"
+                },
+                "code": {
+                    "ok": "OK",
+                    "notfound": "Tabılmadı",
+                    "servererror": "Server qateligi"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Servis statistikası (1/1000 sekundta júz bergen waqıyalar)",
+            "table": {
+                "name": "Servis atı",
+                "count": "Sanı",
+                "mean": "Ortasha",
+                "min": "Min",
+                "max": "Maks",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Statistika",
+            "cachename": "Kesh atı",
+            "hits": "Mas keldi",
+            "misses": "Mas kelmedi",
+            "evictions": "Tazalanǵanlar sanı"
+        },
+        "datasource": {
+            "usage": "Paydalanıw",
+            "title": "Maǵlıwmatlar bazası (1/1000 sekundta júz bergen waqıyalar)",
+            "name": "Puldan paydalanıw",
+            "count": "Sanı",
+            "mean": "Ortasha",
+            "min": "Min",
+            "max": "Maks",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
