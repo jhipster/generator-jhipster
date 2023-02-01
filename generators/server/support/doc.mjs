@@ -17,13 +17,9 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { stringNullOrEmpty, textToArray, isSimpleText } from '../../base/support/templates/doc-formatters.mjs';
+import { formatDocAsSingleLine } from '../../base-application/support/index.mjs';
 
-const indent = (indentSize = 0) => {
-  return _.repeat(' ', indentSize);
-};
-
-const removeDoubleQuotes = text => {
+const escapeDoubleQuotes = text => {
   if (text.includes('"')) {
     return text.replace(/"/g, '\\"');
   }
@@ -37,37 +33,23 @@ const removeDoubleQuotes = text => {
  * @param {number} indentSize indent size (default 0)
  * @returns javadoc formatted string
  */
-const getJavadoc = (text, indentSize = 0) => {
+export const formatDocAsJavaDoc = (text, indentSize = 0) => {
+  if (indentSize < 0) {
+    indentSize = 0;
+  }
   if (!text) {
     text = '';
   }
-  text = removeDoubleQuotes(text);
-  const rows = textToArray(text);
-  let javadoc = `${indent(indentSize)}/**\n`;
-  for (let i = 0; i < rows.length; i++) {
-    javadoc += `${indent(indentSize)} * ${rows[i]}\n`;
-  }
-  javadoc += `${indent(indentSize)} */`;
-  return javadoc;
+  text = escapeDoubleQuotes(text);
+  const indent = ' '.repeat(indentSize);
+  const rows = ['/**', ...text.split('/n').map(row => ` * ${row}`), ' */'].map(row => `${indent}${row}`);
+  return rows.join('\n');
 };
 
-const getApiDescription = text => {
+export const formatDocAsApiDescription = text => {
   if (!text) {
     return text;
   }
-  const rows = textToArray(text);
-  let description = removeDoubleQuotes(rows[0]);
-  for (let i = 1; i < rows.length; i++) {
-    // discard empty rows
-    if (!stringNullOrEmpty(rows[i])) {
-      // if simple text then put space between row strings
-      if (isSimpleText(description, rows[i])) {
-        description += ' ';
-      }
-      description += removeDoubleQuotes(rows[i]);
-    }
-  }
-  return description;
-};
 
-export { getJavadoc, getApiDescription };
+  return escapeDoubleQuotes(formatDocAsSingleLine(text));
+};

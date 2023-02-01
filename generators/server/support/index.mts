@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { getJavadoc as javadoc, getApiDescription } from './doc-formatting.mjs';
+export * from './doc.mjs';
 export * from './database.mjs';
 export * from './dependabot-maven.mjs';
 export * from './files.mjs';

@@ -16,10 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { stringNullOrEmpty, textToArray, isSimpleText, htmlEncode } from '../../base/support/index.mjs';
+import { formatDocAsSingleLine } from '../../base-application/support/index.mjs';
+
+const htmlEncode = text => {
+  let htmLifiedText = text;
+  // escape & to &amp;
+  htmLifiedText = htmLifiedText.replace(/&/g, '&amp;');
+  // escape " to &quot;
+  htmLifiedText = htmLifiedText.replace(/"/g, '&quot;');
+  // escape ' to &apos;
+  htmLifiedText = htmLifiedText.replace(/'/g, '&apos;');
+  // escape < to &lt;
+  htmLifiedText = htmLifiedText.replace(/</g, '&lt;');
+  // escape > to &gt;
+  htmLifiedText = htmLifiedText.replace(/>/g, '&gt;');
+  return htmLifiedText;
+};
 
 /**
- * @private
  * Format As Liquibase Remarks
  *
  * @param {string} text - text to format
@@ -30,19 +44,8 @@ const formatAsLiquibaseRemarks = (text, addRemarksTag = false) => {
   if (!text) {
     return addRemarksTag ? '' : text;
   }
-  const rows = textToArray(text);
-  let description = rows[0];
-  for (let i = 1; i < rows.length; i++) {
-    // discard empty rows
-    if (!stringNullOrEmpty(rows[i])) {
-      // if simple text then put space between row strings
-      if (isSimpleText(description, rows[i])) {
-        description += ' ';
-      }
-      description += rows[i];
-    }
-  }
-  description = htmlEncode(description);
+
+  const description = htmlEncode(formatDocAsSingleLine(text));
   return addRemarksTag ? ` remarks="${description}"` : description;
 };
 

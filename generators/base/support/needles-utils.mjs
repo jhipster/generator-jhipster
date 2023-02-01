@@ -17,7 +17,14 @@
  * limitations under the License.
  */
 
-export * from './doc.mjs';
-export * from './enum.mjs';
-export * from './entities.mjs';
-export * from './field-utils.mjs';
+/**
+ * @private
+ * @deprecated
+ * Strip margin indicated by pipe `|` from a string literal
+ *
+ *  @param {string} content - the string to process
+ */
+// eslint-disable-next-line import/prefer-default-export
+export const stripMargin = content => {
+  return content.replace(/^[ ]*\|/gm, '');
+};

@@ -93,8 +93,8 @@ import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.m
 import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
 import {
-  getApiDescription,
-  javadoc,
+  formatDocAsApiDescription,
+  formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
 } from './support/index.mjs';
@@ -955,7 +955,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return javadoc(text, 4);
+    return formatDocAsJavaDoc(text, 4);
   }
 
   /**
@@ -966,7 +966,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * @returns formatted api description
    */
   formatAsApiDescription(text) {
-    return getApiDescription(text);
+    return formatDocAsApiDescription(text);
   }
 
   /**
@@ -977,7 +977,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return javadoc(text, 0);
+    return formatDocAsJavaDoc(text, 0);
   }
 
   /**
