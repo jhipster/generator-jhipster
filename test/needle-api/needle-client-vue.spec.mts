@@ -33,7 +33,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       })
       .withMockedGenerators(['jhipster:languages'])
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         clientFramework: VUE,
         enableTranslation: false,

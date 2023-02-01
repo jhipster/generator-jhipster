@@ -1,21 +1,20 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
+import { skipPrettierHelpers as helpers } from './support/helpers.mjs';
 import { SERVER_MAIN_SRC_DIR } from '../generators/generator-constants.mjs';
-import { getGenerator, getTemplatePath } from './support/index.mjs';
-
-const generator = getGenerator('spring-service');
+import { GENERATOR_SPRING_SERVICE } from '../generators/generator-list.mjs';
+import { getTemplatePath } from './support/index.mjs';
 
 describe('generator - service', () => {
   describe('creates service without interface', () => {
     before(async () => {
       await helpers
-        .run(generator)
+        .runJHipster(GENERATOR_SPRING_SERVICE)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
-        .withPrompts({
+        .withAnswers({
           useInterface: false,
         });
     });
@@ -32,12 +31,12 @@ describe('generator - service', () => {
   describe('creates service with interface', () => {
     before(async () => {
       await helpers
-        .run(generator)
+        .runJHipster(GENERATOR_SPRING_SERVICE)
         .onTargetDirectory(dir => {
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
-        .withPrompts({
+        .withAnswers({
           useInterface: true,
         });
     });
@@ -53,7 +52,7 @@ describe('generator - service', () => {
   describe('creates service with --default flag', () => {
     before(async () => {
       await helpers
-        .run(generator)
+        .runJHipster(GENERATOR_SPRING_SERVICE)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
         })

@@ -54,7 +54,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         skipChecks: true,
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:vue']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         clientFramework: VUE,
         enableTranslation: false,

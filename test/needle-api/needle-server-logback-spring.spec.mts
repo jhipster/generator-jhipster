@@ -43,7 +43,7 @@ describe('needle API server log: JHipster server generator with blueprint', () =
         clientFramework: 'no',
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         packageName: 'com.mycompany.myapp',
         packageFolder: 'com/mycompany/myapp',
