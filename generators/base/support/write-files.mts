@@ -16,6 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { platform } from 'os';
+
+import { normalizeLineEndings } from './contents.mjs';
+import type { EditFileCallback } from '../api.mjs';
+
+const isWin32 = platform() === 'win32';
+
+/**
+ * TODO move to utils when converted to typescripts
+ * Converts multiples EditFileCallback callbacks into one.
+ */
+// eslint-disable-next-line import/prefer-default-export
+export function joinCallbacks<Generator>(...callbacks: EditFileCallback<Generator>[]): EditFileCallback<Generator> {
+  return function (this: Generator, content: string, filePath: string) {
+    if (isWin32 && content.match(/\r\n/)) {
+      const removeSlashRSlashN: EditFileCallback<Generator> = ct => normalizeLineEndings(ct, '\n');
+      const addSlashRSlashN: EditFileCallback<Generator> = ct => normalizeLineEndings(ct, '\r\n');
+      callbacks = [removeSlashRSlashN, ...callbacks, addSlashRSlashN];
+    }
+    for (const callback of callbacks) {
+      content = callback.call(this, content, filePath);
+    }
+    return content;
+  };
+}
 
 /**
  * Utility function add condition to every block in addition to the already existing condition.

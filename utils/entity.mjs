@@ -21,7 +21,7 @@ import pluralize from 'pluralize';
 import path from 'path';
 import { getDatabaseTypeData } from '../generators/server/support/index.mjs';
 import { hibernateSnakeCase } from './db.mjs';
-import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
+import { normalizePathEnd, parseChangelog } from '../generators/base/support/index.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../generators/client/support/index.mjs';

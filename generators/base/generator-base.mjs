@@ -28,14 +28,13 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import jhipster7Proxy from './jhipster7-proxy.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/index.mjs';
-import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
   databaseTypes,
@@ -1149,7 +1148,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         };
         const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
-        const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
+        const data = createJHipster7Context(this, context, { ignoreWarnings: true });
         if (useAsync) {
           await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {
@@ -1310,9 +1309,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
+      } else {
+        this.logger.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
     if (options.reproducible !== undefined) {
@@ -1445,12 +1446,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {
           this.jhipsterConfig.creationTimestamp = creationTimestamp;
         }
+      } else {
+        this.logger.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
 

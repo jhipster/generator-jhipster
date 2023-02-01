@@ -22,12 +22,17 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+
 import {
   getDBTypeFromDBValue,
   buildJavaGet as javaGetCall,
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
+  formatDocAsApiDescription,
+  formatDocAsJavaDoc,
+  getJavaValueGeneratorForType as getJavaValueForType,
+  getPrimaryKeyValue as getPKValue,
 } from './support/index.mjs';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -91,13 +96,7 @@ import {
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import checkJava from './support/checks/check-java.mjs';
-import { normalizePathEnd } from '../base/utils.mjs';
-import {
-  formatDocAsApiDescription,
-  formatDocAsJavaDoc,
-  getJavaValueGeneratorForType as getJavaValueForType,
-  getPrimaryKeyValue as getPKValue,
-} from './support/index.mjs';
+import { normalizePathEnd } from '../base/support/index.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 
 const dbTypes = fieldTypes;

@@ -5,9 +5,6 @@ import BaseGeneratorClass from '../generators/base/index.mjs';
 import { databaseTypes, entityOptions, fieldTypes } from '../jdl/jhipster/index.mjs';
 
 // eslint-disable-next-line import/no-named-default
-import { default as JHipsterServerGeneratorClass } from '../generators/server/generator.mjs';
-// eslint-disable-next-line import/no-named-default
-import { stripMargin } from '../generators/base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../generators/server/support/index.mjs';
 import { generateEntityClientImports, getTypescriptType, generateTestEntityId } from '../generators/client/support/index.mjs';
 
@@ -21,7 +18,6 @@ const { CommonDBTypes } = fieldTypes;
 
 const BaseGenerator = BaseGeneratorClass.prototype;
 const ClientGenerator = JHipsterClientGeneratorClass.prototype;
-const JHipsterServerGenerator = JHipsterServerGeneratorClass.prototype;
 
 const NO_DTO = MapperTypes.NO;
 
@@ -31,39 +27,6 @@ BaseGenerator.log = msg => {
 };
 
 describe('generator - base-private', () => {
-  describe('stripMargin', () => {
-    it('should produce correct output without margin', () => {
-      const entityFolderName = 'entityFolderName';
-      const entityFileName = 'entityFileName';
-      const content = `|export * from './${entityFolderName}/${entityFileName}-update.component';
-                 |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
-                 |export * from './${entityFolderName}/${entityFileName}-detail.component';
-                 |export * from './${entityFolderName}/${entityFileName}.component';
-                 |export * from './${entityFolderName}/${entityFileName}.state';`;
-      const out = `export * from './entityFolderName/entityFileName-update.component';
-export * from './entityFolderName/entityFileName-delete-dialog.component';
-export * from './entityFolderName/entityFileName-detail.component';
-export * from './entityFolderName/entityFileName.component';
-export * from './entityFolderName/entityFileName.state';`;
-      expect(stripMargin(content)).to.equal(out);
-    });
-    it('should produce correct indented output without margin', () => {
-      const routerName = 'routerName';
-      const enableTranslation = true;
-      const content = `|<li ui-sref-active="active">
-                 |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                 |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
-                 |    </a>
-                 |</li>`;
-      const out = `<li ui-sref-active="active">
-    <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
-        <span data-translate="global.menu.routerName">routerName</span>
-    </a>
-</li>`;
-      expect(stripMargin(content)).to.equal(out);
-    });
-  });
-
   describe('getDBTypeFromDBValue', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {

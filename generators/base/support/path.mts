@@ -16,15 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * @private
- * @deprecated
- * Strip margin indicated by pipe `|` from a string literal
- *
- *  @param {string} content - the string to process
- */
 // eslint-disable-next-line import/prefer-default-export
-export const stripMargin = content => {
-  return content.replace(/^[ ]*\|/gm, '');
-};
+export const normalizePathEnd = (directory: string): string => (directory.endsWith('/') ? directory : `${directory}/`);

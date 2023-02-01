@@ -16,14 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './configuration-helpers/options.mjs';
-export * from './config.mjs';
-export * from './contents.mjs';
-export { default as getHipster } from './hipster.mjs';
-export { default as createJHipster7Context } from './jhipster7-context.mjs';
-export * from './namespace.mjs';
-export * from './path.mjs';
-export { default as httpsGet } from './remote.mjs';
-export * from './string.mjs';
-export * from './timestamp.mjs';
-export * from './write-files.mjs';
+/**
+ * Replace line endings with the specified one.
+ *
+ * @param str
+ * @param lineEnding
+ * @returns normalized line ending string
+ */
+// eslint-disable-next-line import/prefer-default-export
+export function normalizeLineEndings(str: string, lineEnding: string): string {
+  return str.replace(/\r\n|\r|\n/g, lineEnding);
+}
+
+/**
+ * @private
+ * @deprecated
+ * Strip margin indicated by pipe `|` from a string literal
+ *
+ *  @param {string} content - the string to process
+ */
+// eslint-disable-next-line import/prefer-default-export
+export const stripMargin = content => {
+  return content.replace(/^[ ]*\|/gm, '');
+};
