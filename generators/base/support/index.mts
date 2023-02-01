@@ -24,6 +24,7 @@ export { default as createJHipster7Context } from './jhipster7-context.mjs';
 export * from './namespace.mjs';
 export * from './path.mjs';
 export { default as httpsGet } from './remote.mjs';
+export * from './secret.mjs';
 export * from './string.mjs';
 export * from './timestamp.mjs';
 export * from './write-files.mjs';
