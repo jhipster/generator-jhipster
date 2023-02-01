@@ -1,7 +1,7 @@
 export * from './application-samples.mjs';
 export * from './client-samples.mjs';
 export * from './entity-samples.mjs';
-export * from './get-generator.mjs';
+export { default as getGenerator } from './get-generator.mjs';
 export * from './get-template-path.mjs';
 export * from './helpers.mjs';
 export * from './matrix-utils.mjs';

@@ -1,7 +1,7 @@
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
-import EnvironmentBuilder from '../cli/environment-builder.mjs';
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generators/generator-constants.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
 

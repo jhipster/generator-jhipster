@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addEntityMenuEntry } from './needles.mjs';
+export * from './needles.mjs';
 export { default as updateLanguagesTask } from './update-languages.mjs';

@@ -41,7 +41,7 @@ describe(`generator - ${generator}`, () => {
     const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
-  describe.skip('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator));
 
   context('regenerating', () => {
     const applicationWithEntities = {
@@ -90,6 +90,7 @@ describe(`generator - ${generator}`, () => {
             regenerate: true,
             force: true,
             defaults: true,
+            ignoreNeedlesError: true,
             applicationWithEntities,
           });
       });
@@ -125,6 +126,7 @@ describe(`generator - ${generator}`, () => {
             force: true,
             writeEveryEntity: true,
             defaults: true,
+            ignoreNeedlesError: true,
             applicationWithEntities,
           });
       });
@@ -156,6 +158,7 @@ describe(`generator - ${generator}`, () => {
           regenerate: true,
           force: true,
           defaults: true,
+          ignoreNeedlesError: true,
           applicationWithEntities,
         });
       });

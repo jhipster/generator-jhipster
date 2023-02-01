@@ -23,7 +23,6 @@ import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../gener
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.mjs';
 import { writeFiles, cleanupFiles } from './files-react.mjs';
 import { prepareEntity } from './application/entities/index.mjs';
-import { addEntityMenuEntry as addReactEntityMenuEntry } from './support/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
@@ -149,7 +148,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     entityTranslationKeyMenu = _.camelCase(routerName),
     entityTranslationValue = _.startCase(routerName)
   ) {
-    addReactEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+    this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }
 
   /**

@@ -21,7 +21,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
+        // jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
 
@@ -49,7 +49,7 @@ plugins {
 <%_ if (gatlingTests) { _%>
     id "io.gatling.gradle"
 <%_ } _%>
-    //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
+    // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
 group = "<%= packageName %>"
@@ -66,7 +66,7 @@ apply from: "gradle/sonar.gradle"
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: "gradle/swagger.gradle"
 <%_ } _%>
-//jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
+// jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty("prod") || project.hasProperty("gae")) {
     apply from: "gradle/profile_prod.gradle"
@@ -295,7 +295,7 @@ repositories {
     <%_ if (serviceDiscoveryEureka) { _%>
     maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
     <%_ } _%>
-    //jhipster-needle-gradle-repositories - JHipster will add additional repositories
+    // jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
 dependencies {
@@ -570,7 +570,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
         }
     }
 <%_ } _%>
-    //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
 if (project.hasProperty("gae")) {

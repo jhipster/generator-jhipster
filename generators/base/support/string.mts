@@ -16,12 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './templates/doc-formatters.mjs';
-export * from './configuration-helpers/sequences.mjs';
-export { default as httpsGet } from './remote.mjs';
-export * from './configuration-helpers/options.mjs';
-export * from './config.mjs';
-export * from './namespace.mjs';
-export * from './string.mjs';
-export * from './write-files.mjs';
-export { default as getHipster } from './hipster.mjs';
+
+/**
+ * Calculate a hash code for a given string.
+ * @param str - any string
+ * @returns returns the calculated hash code.
+ */
+// eslint-disable-next-line import/prefer-default-export
+export function stringHashCode(str: string): number {
+  let hash = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    const character = str.charCodeAt(i);
+    hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+    hash |= 0; // eslint-disable-line no-bitwise
+  }
+
+  if (hash < 0) {
+    hash *= -1;
+  }
+  return hash;
+}

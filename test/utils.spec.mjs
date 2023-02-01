@@ -1,6 +1,5 @@
 import assert from 'yeoman-assert';
 
-import { stringHashCode } from '../generators/utils.mjs';
 import { javadoc } from '../generators/server/support/index.mjs';
 
 describe('utils - generator', () => {
@@ -25,11 +24,6 @@ describe('utils - generator', () => {
       it('escapes the quotes', () => {
         assert.textEqual(javadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
       });
-    });
-  });
-  describe('::stringHashCode', () => {
-    it('calculates hash', () => {
-      assert.equal(stringHashCode('some text'), 642107175);
     });
   });
 });

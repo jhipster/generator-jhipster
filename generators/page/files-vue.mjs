@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
-import { vueAddPageToRouterImport, vueAddPageToRouter, vueAddPageServiceToMainImport, vueAddPageServiceToMain } from '../utils.mjs';
+import { vueAddPageToRouterImport, vueAddPageToRouter, vueAddPageServiceToMainImport, vueAddPageServiceToMain } from './support/index.mjs';
 
 /* Constants use throughout */
 const VUE_DIR = 'src/main/webapp/app/';

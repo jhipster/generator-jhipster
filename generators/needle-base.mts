@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import BaseGenerator from './base/index.mjs';
-import { rewriteFile } from './utils.mjs';
+import { createNeedleCallback } from './base/support/needles.mjs';
 
 export type NeedleFileModel = {
   /**
@@ -70,13 +70,26 @@ export default class {
     return (this.generator.sharedData.getApplication() as any).clientFramework;
   }
 
-  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): boolean {
-    try {
-      return rewriteFile(rewriteFileModel, this.generator);
-    } catch (e: any) {
-      this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
-      return false;
+  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): void {
+    const ignoreNonExisting = errorMessage ?? true;
+    const { path: rewritePath, file } = rewriteFileModel;
+    let fullPath;
+    if (rewritePath) {
+      fullPath = this.generator.destinationPath(rewritePath, file);
+    } else {
+      fullPath = this.generator.destinationPath(file);
     }
+    this.generator.editFile(
+      fullPath,
+      { ignoreNonExisting },
+      createNeedleCallback({
+        needle: rewriteFileModel.needle,
+        contentToAdd: rewriteFileModel.splicable,
+        contentToCheck: rewriteFileModel.regexp,
+        ignoreWhitespaces: rewriteFileModel.prettierAware,
+        autoIndent: false,
+      })
+    );
   }
 
   logNeedleNotFound(exception: Error, message?: string, fullPath?: string): void {
