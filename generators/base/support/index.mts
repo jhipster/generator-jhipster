@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin, escapeRegExp } from './templates/doc-formatters.mjs';
-export { parseCreationTimestamp, resetFakerSeed } from './configuration-helpers/sequences.mjs';
+export * from './needles-utils.mjs';
+export * from './configuration-helpers/sequences.mjs';
 export { default as httpsGet } from './remote.mjs';
-export { isReproducible } from './configuration-helpers/options.mjs';
-export { removeFieldsWithUnsetValues } from './config.mjs';
+export * from './configuration-helpers/options.mjs';
+export * from './config.mjs';
+export * from './namespace.mjs';
+export * from './string.mjs';
 export * from './write-files.mjs';
+export { default as getHipster } from './hipster.mjs';

@@ -30,7 +30,6 @@ import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
@@ -55,7 +54,6 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
-  JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
   SERVER_MAIN_RES_DIR,
@@ -65,7 +63,7 @@ import {
   NODE_VERSION,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
+import { removeFieldsWithUnsetValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -689,30 +687,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntityNames() {
-    return this.getExistingEntities().map(entity => entity.name);
-  }
-
-  /**
-   * @private
-   * Read entity json from config folder.
-   * @param {string} entityName - Entity name
-   * @return {object} entity definition
-   */
-  readEntityJson(entityName) {
-    const file = path.join(path.dirname(this.config.path), JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-    try {
-      return this.fs.readJSON(file);
-    } catch (error) {
-      this.logger.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.logger.debug('Error:', error);
-      return undefined;
-    }
-  }
-
-  /**
    * @private
    * get a table name in JHipster preferred style.
    *
@@ -985,28 +959,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
     return acceptableForJava.test(main) ? main : 'Application';
-  }
-
-  /**
-   * @private
-   * get a hipster based on the applications name.
-   * @param {string} baseName of application
-   */
-  getHipster(baseName = this.baseName) {
-    const hash = stringHashCode(baseName);
-
-    switch (hash % 4) {
-      case 0:
-        return 'jhipster_family_member_0';
-      case 1:
-        return 'jhipster_family_member_1';
-      case 2:
-        return 'jhipster_family_member_2';
-      case 3:
-        return 'jhipster_family_member_3';
-      default:
-        return 'jhipster_family_member_0';
-    }
   }
 
   /**
@@ -1649,7 +1601,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // Application name modified, using each technology's conventions
     if (dest.baseName) {
       dest.camelizedBaseName = _.camelCase(dest.baseName);
-      dest.hipster = this.getHipster(dest.baseName);
+      dest.hipster = getHipster(dest.baseName);
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();

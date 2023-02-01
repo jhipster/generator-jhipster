@@ -1,0 +1,31 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Paydalanıwshı",
+            "refreshListLabel": "Refresh list",
+            "createLabel": "Jańa paydalanıwshı qosıw",
+            "createOrEditLabel": "Paydalanıwshını redaktorlaw"
+        },
+        "created": "Jańa paydalanıwshı {{ param }} menen qosıldı",
+        "updated": "{{ param }} - paydalanıwshı saqlandı",
+        "deleted": "{{ param }} - paydalanıwshı óshirildi",
+        "delete": {
+            "question": "Paydalanıwshı {{ login }} óshiriwdi qáleysizba?"
+        },
+        "detail": {
+            "title": "Paydalanıwshı"
+        },
+        "login": "Login",
+        "firstName": "Atı",
+        "lastName": "Familiyası",
+        "email": "Email",
+        "activated": "Aktiv",
+        "deactivated": "Aktiv emes",
+        "profiles": "Profili",
+        "langKey": "Tili",
+        "createdBy": "Qosqan",
+        "createdDate": "Qosılǵan waqıtı",
+        "lastModifiedBy": "Ózgertirgen",
+        "lastModifiedDate": "Ózgertirilgen sánesi"
+    }
+}

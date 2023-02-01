@@ -18,45 +18,49 @@
  */
 import chalk from 'chalk';
 import _ from 'lodash';
-import { checkStringInFile } from '../../utils.mjs';
 import needleClientBase from './needle-client.mjs';
 import { stripMargin } from '../../base/support/index.mjs';
+import { createNeedleCallback } from '../../base/support/needles.mjs';
 
 export default class extends needleClientBase {
-  addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
-    const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
+  addEntityToMenu(
+    routerName: string,
+    enableTranslation: boolean,
+    entityTranslationKeyMenu: string,
+    entityTranslationValue: string = _.startCase(routerName)
+  ) {
+    const ignoreNonExisting =
+      this.generator.sharedData.getControl().ignoreNeedlesError &&
+      `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
-
-    const isSpecificEntityAlreadyGenerated = checkStringInFile(filePath, `<b-dropdown-item to="/${routerName}">`, this.generator);
-    if (isSpecificEntityAlreadyGenerated) {
-      return;
-    }
 
     const menuI18nTitle = enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : '';
     const entityEntry =
       // prettier-ignore
       stripMargin(
-                `|<b-dropdown-item to="/${routerName}">
+              `|<b-dropdown-item to="/${routerName}">
 |            <font-awesome-icon icon="asterisk" />
 |            <span${menuI18nTitle}>${entityTranslationValue}</span>
 |          </b-dropdown-item>`);
 
-    const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-menu', entityEntry);
-    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    this.generator.editFile(
+      filePath,
+      { ignoreNonExisting },
+      createNeedleCallback({
+        needle: 'jhipster-needle-add-entity-to-menu',
+        contentToAdd: entityEntry,
+        ignoreWhitespaces: true,
+        contentToCheck: `<b-dropdown-item to="/${routerName}">`,
+        autoIndent: false,
+      })
+    );
   }
 
-  addEntityToRouterImport(entityName, fileName, folderName, readOnly) {
-    const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
+  addEntityToRouterImport(entityName: string, fileName: string, folderName: string, readOnly: string) {
+    const ignoreNonExisting =
+      this.generator.sharedData.getControl().ignoreNeedlesError &&
+      `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
-
-    const isSpecificEntityAlreadyGenerated = checkStringInFile(
-      filePath,
-      `import('@/entities/${folderName}/${fileName}.vue');`,
-      this.generator
-    );
-    if (isSpecificEntityAlreadyGenerated) {
-      return;
-    }
 
     let entityEntry;
     if (!readOnly) {
@@ -79,18 +83,24 @@ export default class extends needleClientBase {
             );
     }
 
-    const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-router-import', entityEntry);
-    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    this.generator.editFile(
+      filePath,
+      { ignoreNonExisting },
+      createNeedleCallback({
+        needle: 'jhipster-needle-add-entity-to-router-import',
+        contentToAdd: entityEntry,
+        ignoreWhitespaces: true,
+        contentToCheck: `import('@/entities/${folderName}/${fileName}.vue');`,
+        autoIndent: false,
+      })
+    );
   }
 
-  addEntityToRouter(entityInstance, entityName, entityFileName, readOnly) {
-    const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
+  addEntityToRouter(entityInstance: string, entityName: string, entityFileName: string, readOnly: boolean) {
+    const ignoreNonExisting =
+      this.generator.sharedData.getControl().ignoreNeedlesError &&
+      `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
-
-    const isSpecificEntityAlreadyGenerated = checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
-    if (isSpecificEntityAlreadyGenerated) {
-      return;
-    }
 
     let entityEntry;
     if (!readOnly) {
@@ -139,12 +149,20 @@ export default class extends needleClientBase {
             );
     }
 
-    const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-router', entityEntry);
-    rewriteFileModel.prettierAware = true;
-    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    this.generator.editFile(
+      filePath,
+      { ignoreNonExisting },
+      createNeedleCallback({
+        needle: 'jhipster-needle-add-entity-to-router',
+        contentToAdd: entityEntry,
+        ignoreWhitespaces: true,
+        contentToCheck: `path: '${entityFileName}'`,
+        autoIndent: false,
+      })
+    );
   }
 
-  addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName) {
+  addEntityServiceToMainImport(entityName: string, entityClass: string, entityFileName: string, entityFolderName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to import in main.\n')}`;
     const filePath = `${this.clientSrcDir}/app/main.ts`;
 
@@ -157,7 +175,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToMain(entityInstance, entityName) {
+  addEntityServiceToMain(entityInstance: string, entityName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to service in main.\n')}`;
     const filePath = `${this.clientSrcDir}/app/main.ts`;
 
@@ -170,7 +188,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName) {
+  addEntityServiceToEntitiesComponentImport(entityName: string, entityClass: string, entityFileName: string, entityFolderName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow(
       'not added to import in entities component.\n'
     )}`;
@@ -187,7 +205,7 @@ export default class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityServiceToEntitiesComponent(entityInstance, entityName) {
+  addEntityServiceToEntitiesComponent(entityInstance: string, entityName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow(
       'not added to service in entities component.\n'
     )}`;

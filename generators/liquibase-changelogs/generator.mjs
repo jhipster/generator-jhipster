@@ -26,7 +26,7 @@ import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { prepareFieldForTemplates } from '../../utils/field.mjs';
 import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
-import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
+import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { liquibaseComment } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;

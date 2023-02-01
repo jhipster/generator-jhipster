@@ -17,5 +17,7 @@
  * limitations under the License.
  */
 
-export * from './field-utils.mjs';
+export * from './doc.mjs';
 export * from './enum.mjs';
+export * from './entities.mjs';
+export * from './field-utils.mjs';

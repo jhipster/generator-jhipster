@@ -77,12 +77,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       type: Boolean,
     });
 
-    this.option('ignore-needles-error', {
-      desc: 'Ignore needles failures',
-      type: Boolean,
-      hide: true,
-    });
-
     this.option('regenerate', {
       desc: 'Regenerate languages files',
       type: Boolean,
@@ -143,7 +137,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       },
       exportControl({ control }) {
         control.supportedLanguages = this.supportedLanguages;
-        control.ignoreNeedlesError = this.options.ignoreNeedlesError;
       },
     };
   }

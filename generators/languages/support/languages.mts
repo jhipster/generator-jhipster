@@ -247,6 +247,13 @@ const partialLanguages: PartialLanguage[] = [
     dayjsLocale: 'uz-latn',
   },
   { name: 'Vietnamese', displayName: 'Tiếng Việt', languageTag: 'vi' },
+  {
+    name: 'Karakalpak (Latin)',
+    displayName: 'Qaraqalpaqsha',
+    languageTag: 'kr-Latn-kr',
+    angularLocale: 'en',
+    dayjsLocale: 'en',
+  },
 ];
 
 export const supportedLanguages: ReadonlyArray<Language> = partialLanguages.map(language => ({

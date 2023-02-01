@@ -1,0 +1,167 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Sizdiń brauzerińiz <strong>eski</strong>. Ótinish, <a href=\"http://browsehappy.com/?locale=ru\">jańalań</a>.",
+        "menu": {
+            "home": "Bas bet",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Maǵlıwmatlar ",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Profil",
+                "settings": "Sazlamalar",
+                "password": "Parol",
+                "sessions": "Sessiyalar",
+                "login": "Kiriw",
+                "logout": "Shıǵıw",
+                "register": "Dizimnen ótiw"
+            },
+            "admin": {
+                "main": "Basqarıw ",
+<%_ if (applicationTypeGateway) { _%>
+                "gateway": "Shlyuz",
+<%_ } _%>
+                "userManagement": "Paydalanıwshılar ",
+                "tracker": "Paydalauvshi gúzetiwi",
+                "metrics": "Metrikalar",
+                "health": "Jaǵday ",
+                "configuration": "Sazlamalar",
+                "logs": "Loglar",
+                "apidocs": "API",
+                "database": "Maǵlıwmatlar bazası ",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Til"
+        },
+        "form": {
+            "username.label": "Login",
+            "username.placeholder": "Sizdiń loginińiz",
+            "currentpassword.label": "Parol",
+            "currentpassword.placeholder": "Házirgi parolińiz",
+            "newpassword.label": "Jańa parol ",
+            "newpassword.placeholder": "Jańa parol ",
+            "confirmpassword.label": "Jańa paroldıń tastıyıǵı",
+            "confirmpassword.placeholder": "Jańa paroldıń tastıyıǵı",
+            "email.label": "Email",
+            "email.placeholder": "Sizdiń email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Eger ",
+                    "link": "avtorizatsiyadan ótiwdi",
+                    "suffix": " qálesańiz, ámeldegi paydalanıwshı tekserip kóriń:<br/>- Administrator  (login=\"admin\" va parol=\"admin\") <br/>- Ápiwayı paydalanıwshı (login=\"user\" va parol=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Siz dizimnen ótpegensizba?",
+                    "link": "Jańa paydalanıwshı qosiń"
+                }
+            },
+            "error": {
+                "dontmatch": "Parol jáne onıń tastıyıǵı mas kelmedi!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Parol kiritiliwi zárúr.",
+                    "minlength": "Parol uzınlıǵı keminde 4 háripten ibarat bolsın ",
+                    "maxlength": "Parol 50 háripten uzın bolmasın",
+                    "strength": "Parol quramalılıǵı :"
+                },
+                "confirmpassword": {
+                    "required": "Parol tastıyıǵı kiritiliwi zárúr.",
+                    "minlength": "Parol tastıyıǵı uzınlıǵı keminde 4 háripten ibarat bolsın ",
+                    "maxlength": "Parol tastıyıǵı 50 háripten uzın bolmasın"
+                },
+                "email": {
+                    "required": "Email kiritiliwi zárúr.",
+                    "invalid": "Ótinish, tuwrı Email kiritiń.",
+                    "minlength": "Email uzınlıǵı keminde 5 háripten ibarat bolsın ",
+                    "maxlength": "Email 50 háripten uzın bolmasın"
+                }
+            }
+        },
+        "field": {
+            "id" : "ID"
+        },
+        "ribbon": {
+            "dev": "Juwmaqlanbadi"
+        },
+        "item-count": "{{total}} dan {{first}} hám {{second}} - lari."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Binar maǵlıwmat qosıw",
+            "addimage": "Súwret qosıw",
+            "back": "Artqa",
+            "cancel": "Biykarlaw",
+            "delete": "Óshiriw",
+            "edit": "Ózgertiriw",
+            "open": "Ashiw",
+            "save": "Saqlaw",
+            "view": "Kóriw",
+            "show": "Show {{otherEntity}}"
+        },
+        "detail": {
+            "field": "Maydan",
+            "value": "Mánis"
+        },
+        "delete": {
+            "title": "Óshiriw ámelin tastıyıqlań"
+        },
+        "validation": {
+            "required": "Toltırıw zárúr",
+            "minlength": "Keminde {{min}} bolsın.",
+            "maxlength": "Ko'bi menen {{max}} bolsın.",
+            "min": "Keminde {{min}} bolsın.",
+            "max": "Ko'bi menen {{max}} bolsın.",
+            "minbytes": "Keminde {{min}} bayt bolsın.",
+            "maxbytes": "Ko'bi menen {{max}} bayt bolsın.",
+            "pattern": "Zárúr format {{pattern}}.",
+            "number": "San bolsın.",
+            "datetimelocal": "Sáne bolsın."
+        },
+        "filters": {
+          "set": "Following filters are set",
+          "clear": "Clear filter",
+          "clearAll": "Clear all filters"
+        }
+    },
+    "error": {
+        "internalServerError": "Ishki qátelik",
+        "server.not.reachable": "Serverge jetisip bolmaydı",
+        "url.not.found": "Tabilmadı",
+        "NotNull": "{{fieldName}} bos bolmasın!",
+        "Size": "{{fieldName}} Ólshemi nadurıs!",
+        "userexists": "Paydalanıwshı sistemada bar!",
+        "emailexists": "Email aldınnan bar!",
+        "idexists": "Jańa {{entityName}} IDsı bolmawı kerek",
+        "idnull": "Nadurıs ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID tabılmadı",
+        "file": {
+            "could.not.extract": "Fayldı shıǵarıp bolmaydı",
+            "not.image": "Fayl súwret bolıwı kerek edi, biraq \" {{ fileType }}\" tabıldı"
+        }
+    },
+    "footer": "Footer"
+}

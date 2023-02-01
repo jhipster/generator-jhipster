@@ -7,15 +7,10 @@ import { databaseTypes, entityOptions, fieldTypes } from '../jdl/jhipster/index.
 // eslint-disable-next-line import/no-named-default
 import { default as JHipsterServerGeneratorClass } from '../generators/server/generator.mjs';
 // eslint-disable-next-line import/no-named-default
-import { default as DatabaseChangelogLiquibaseClass } from '../generators/liquibase-changelogs/index.mjs';
 import { stripMargin } from '../generators/base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../generators/server/support/index.mjs';
 import { generateEntityClientImports, getTypescriptType, generateTestEntityId } from '../generators/client/support/index.mjs';
 
-// eslint-disable-next-line import/no-named-default
-import { default as JHipsterLanguagesGeneratorClass } from '../generators/languages/generator.mjs';
-// eslint-disable-next-line import/no-named-default
-import { default as JHipsterAngularGeneratorClass } from '../generators/angular/generator.mjs';
 // eslint-disable-next-line import/no-named-default
 import { default as JHipsterClientGeneratorClass } from '../generators/client/generator.mjs';
 import { getEntityParentPathAddition } from '../generators/client/support/index.mjs';
@@ -27,9 +22,6 @@ const { CommonDBTypes } = fieldTypes;
 const BaseGenerator = BaseGeneratorClass.prototype;
 const ClientGenerator = JHipsterClientGeneratorClass.prototype;
 const JHipsterServerGenerator = JHipsterServerGeneratorClass.prototype;
-const LanguagesGenerator = JHipsterLanguagesGeneratorClass.prototype;
-const AngularGenerator = JHipsterAngularGeneratorClass.prototype;
-const JHipsterDatabaseChangelogLiquibase = DatabaseChangelogLiquibaseClass.prototype;
 
 const NO_DTO = MapperTypes.NO;
 
@@ -139,102 +131,6 @@ export * from './entityFolderName/entityFileName.state';`;
     describe('when called with UUID', () => {
       it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
         expect(generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
-      });
-    });
-  });
-
-  describe('formatAsApiDescription', () => {
-    describe('when formatting a nil text', () => {
-      it('returns it', () => {
-        expect(JHipsterServerGenerator.formatAsApiDescription()).to.equal(undefined);
-      });
-    });
-    describe('when formatting an empty text', () => {
-      it('returns it', () => {
-        expect(JHipsterServerGenerator.formatAsApiDescription('')).to.equal('');
-      });
-    });
-    describe('when formatting normal texts', () => {
-      describe('when having empty lines', () => {
-        it('discards them', () => {
-          expect(JHipsterServerGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal(
-            'First line Second line Third line'
-          );
-        });
-      });
-      describe('when having HTML tags', () => {
-        it('keeps them', () => {
-          expect(JHipsterServerGenerator.formatAsApiDescription('Not boldy\n<b>boldy</b>')).to.equal('Not boldy<b>boldy</b>');
-        });
-      });
-      describe('when having a plain text', () => {
-        it('puts a space before each line', () => {
-          expect(JHipsterServerGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal(
-            'JHipster is a great generator'
-          );
-        });
-      });
-      describe('when having quotes', () => {
-        it('formats the text to make the string valid', () => {
-          expect(JHipsterServerGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
-        });
-      });
-    });
-  });
-
-  describe('formatAsLiquibaseRemarks', () => {
-    describe('when formatting a nil text', () => {
-      it('returns it', () => {
-        expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks()).to.equal(undefined);
-      });
-    });
-    describe('when formatting an empty text', () => {
-      it('returns it', () => {
-        expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('')).to.equal('');
-      });
-    });
-    describe('when formatting normal texts', () => {
-      describe('when having empty lines', () => {
-        it('discards them', () => {
-          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal(
-            'First line Second line Third line'
-          );
-        });
-      });
-      describe('when having a plain text', () => {
-        it('puts a space before each line', () => {
-          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal(
-            'JHipster is a great generator'
-          );
-        });
-      });
-      describe('when having ampersand', () => {
-        it('formats the text to escape it', () => {
-          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal(
-            'JHipster uses Spring &amp; Hibernate'
-          );
-        });
-      });
-      describe('when having quotes', () => {
-        it('formats the text to escape it', () => {
-          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal(
-            'JHipster is &quot;the&quot; best'
-          );
-        });
-      });
-      describe('when having apostrophe', () => {
-        it('formats the text to escape it', () => {
-          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal(
-            'JHipster is &apos;the&apos; best'
-          );
-        });
-      });
-      describe('when having HTML tags < and >', () => {
-        it('formats the text to escape it', () => {
-          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal(
-            'Not boldy&lt;b&gt;boldy&lt;/b&gt;'
-          );
-        });
       });
     });
   });

@@ -19,16 +19,16 @@
 import needleBase from '../../needle-base.mjs';
 
 export default class extends needleBase {
-  addStyle(style, comment, filePath, needle) {
-    const styleBlock = this._mergeStyleAndComment(style, comment);
-    const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
-    rewriteFileModel.regexp = `\n${style}\n`;
-    rewriteFileModel.prettierAware = true;
+  addStyle(style: string, comment: string, filePath: string, needle: string) {
+    const content = this._mergeStyleAndComment(style, comment);
 
-    this.addBlockContentToFile(rewriteFileModel, 'Style not added to JHipster app.\n');
+    this.addBlockContentToFile(
+      { file: filePath, needle, splicable: content, regexp: `\n${style}\n`, prettierAware: true },
+      'Style not added to JHipster app.\n'
+    );
   }
 
-  _mergeStyleAndComment(style, comment) {
+  _mergeStyleAndComment(style: string, comment: string) {
     let styleBlock = '';
 
     if (comment) {
@@ -41,16 +41,21 @@ export default class extends needleBase {
     return styleBlock;
   }
 
-  addExternalResourcesToRoot(resources, comment) {
+  addExternalResourcesToRoot(resources: string, comment: string) {
     const errorMessage = 'Resources are not added to JHipster app.';
-    const indexFilePath = `${this.clientSrcDir}index.html`;
+    const file = `${this.clientSrcDir}index.html`;
     let resourcesBlock = '';
     if (comment) {
       resourcesBlock += `<!-- ${comment} -->\n`;
     }
     resourcesBlock += `${resources}\n`;
-    const rewriteFileModel = this.generateFileModel(indexFilePath, 'jhipster-needle-add-resources-to-root', resourcesBlock);
-
-    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    this.addBlockContentToFile(
+      {
+        file,
+        needle: 'jhipster-needle-add-resources-to-root',
+        splicable: resourcesBlock,
+      },
+      errorMessage
+    );
   }
 }
