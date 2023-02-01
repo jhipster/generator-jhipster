@@ -83,9 +83,10 @@ public class SpaWebFilterIT {
             .andExpect(status().isNotFound());
     }
 
-
     /**
      * This test verifies that any files that aren't permitted by Spring Security will be forbidden.
+     * If you want to change this to return isNotFound(), you need to add a request mapping that
+     * allows this file in SecurityConfiguration.
      */
     @Test
     void getUnmappedSecondLevelFile() throws Exception {
