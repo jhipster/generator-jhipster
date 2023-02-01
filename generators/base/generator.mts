@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, mkdirSync, opendirSync } from 'fs';
-import { basename, extname, join as joinPath, dirname } from 'path';
+import { basename, join as joinPath, dirname } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
@@ -44,7 +43,6 @@ import type {
   CheckResult,
 } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -527,49 +525,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       ...process.env,
       LANG: 'en',
     });
-  }
-
-  /**
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param entityName - Name of the entity to load.
-   * @param {boolean} create - Create storage if doesn't exists.
-   */
-  getEntityConfig(entityName: string, create = false): Storage | undefined {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
-    if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true } as any);
-  }
-
-  /**
-   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntities() {
-    function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
-    }
-
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    if (!existsSync(configDir)) {
-      mkdirSync(configDir);
-    }
-    const dir = opendirSync(configDir);
-    const entityNames: string[] = [];
-    let dirent = dir.readSync();
-    while (dirent !== null) {
-      const extension = extname(dirent.name);
-      if (dirent.isFile() && extension === '.json') {
-        entityNames.push(basename(dirent.name, extension));
-      }
-      dirent = dir.readSync();
-    }
-    dir.closeSync();
-
-    const entities = [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(entityNames))]
-      .map(entityName => ({ name: entityName, definition: this.getEntityConfig(entityName)?.getAll() }))
-      .filter(entity => entity && entity.definition)
-      .sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
-    return entities;
   }
 
   private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {

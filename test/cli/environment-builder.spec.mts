@@ -303,12 +303,9 @@ describe('cli - EnvironmentBuilder', () => {
     after(() => {
       EnvironmentBuilder.prototype.getEnvironment.restore();
     });
-    it('calls getEnvironment', () => {
-      return helpers
-        .create('jhipster:info', { cwd: process.cwd(), autoCleanup: false }, { createEnv: EnvironmentBuilder.createEnv })
-        .run(() => {
-          expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
-        });
+    it('calls getEnvironment', async () => {
+      await helpers.run('jhipster:info', { cwd: process.cwd(), autoCleanup: false }, { createEnv: EnvironmentBuilder.createEnv });
+      expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
     });
   });
 });

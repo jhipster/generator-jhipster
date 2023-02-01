@@ -22,7 +22,7 @@ import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
 
-import BaseGenerator from '../base/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import prompts from './prompts.mjs';
 import { JHIPSTER_CONFIG_DIR, ANGULAR_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
@@ -34,7 +34,7 @@ const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO, ANGULAR } = clientFrameworkTypes;
 const { isReservedClassName } = reservedKeywords;
 
-export default class EntityGenerator extends BaseGenerator {
+export default class EntityGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'argument', ...features });
 
@@ -263,7 +263,7 @@ export default class EntityGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -284,7 +284,7 @@ export default class EntityGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.PROMPTING]() {
+  get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -305,7 +305,7 @@ export default class EntityGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.COMPOSING]() {
+  get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -328,7 +328,7 @@ export default class EntityGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -341,7 +341,7 @@ export default class EntityGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.END]() {
+  get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

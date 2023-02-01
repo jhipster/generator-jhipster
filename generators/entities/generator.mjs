@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseGenerator from '../base/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 
-export default class EntitiesGenerator extends BaseGenerator {
+export default class EntitiesGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -124,7 +124,7 @@ export default class EntitiesGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.COMPOSING]() {
+  get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 }
