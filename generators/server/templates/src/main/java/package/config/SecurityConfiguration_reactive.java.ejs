@@ -213,7 +213,7 @@ public class SecurityConfiguration {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**")
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**")
             )))
             .csrf(csrf -> csrf
 <%_ if ((authenticationTypeSession || authenticationTypeOauth2) && !applicationTypeMicroservice) { _%>
@@ -278,6 +278,7 @@ public class SecurityConfiguration {
 <%_ if (!applicationTypeMicroservice) { _%>
                     .pathMatchers("/services/**").authenticated()
 <%_ } _%>
+                    .pathMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .pathMatchers("/management/health").permitAll()
                     .pathMatchers("/management/health/**").permitAll()
                     .pathMatchers("/management/info").permitAll()

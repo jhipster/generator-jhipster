@@ -395,6 +395,9 @@ exports[`generator - server - needles generated project should match state snaps
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },

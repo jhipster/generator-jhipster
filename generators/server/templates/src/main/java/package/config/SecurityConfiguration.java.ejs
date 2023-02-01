@@ -193,6 +193,7 @@ public class SecurityConfiguration {
 <%_ if (communicationSpringWebsocket) { _%>
                     .requestMatchers("/websocket/**").authenticated()
 <%_ } _%>
+                    .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/management/health").permitAll()
                     .requestMatchers("/management/health/**").permitAll()
                     .requestMatchers("/management/info").permitAll()

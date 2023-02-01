@@ -592,6 +592,12 @@ export const baseServerFiles = {
       templates: ['web/filter/SpaWebFilter.java'],
     },
     {
+      condition: generator => !generator.skipClient && !generator.reactive,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/filter/SpaWebFilterIT.java'],
+    },
+    {
       condition: generator => !generator.skipClient && generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
