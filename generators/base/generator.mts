@@ -32,7 +32,7 @@ import type Storage from 'yeoman-generator/lib/util/storage.js';
 import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { joinCallbacks } from './ts-utils.mjs';
+import { joinCallbacks } from './support/index.mjs';
 import baseOptions from './options.mjs';
 
 import type {

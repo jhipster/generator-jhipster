@@ -19,11 +19,10 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { normalizeLineEndings, parseChangelog } from './utils.mjs';
-import { joinCallbacks } from './ts-utils.mjs';
-import { EditFileCallback } from './api.mjs';
+import { joinCallbacks } from './write-files.mjs';
+import { EditFileCallback } from '../api.mjs';
 
-describe('generator - base - utils', () => {
+describe('generator - base - support - writeFiles', () => {
   describe('joinCallbacks', () => {
     it('should return a function', () => {
       expect(typeof joinCallbacks()).toBe('function');
@@ -54,42 +53,6 @@ describe('generator - base - utils', () => {
 
       expect(mock2.mock.calls[0][0]).toBe('return1');
       expect(mock2.mock.calls[0][1]).toBe('file');
-    });
-  });
-
-  describe('::parseChangelog', () => {
-    describe('when not passing parameters', () => {
-      it('throws', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        expect(() => parseChangelog(undefined as any)).toThrow(/^changelogDate is required\.$/);
-      });
-    });
-    describe('when passing a number', () => {
-      it('throws', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        expect(() => parseChangelog(123)).toThrow(/^changelogDate 123 must be a string\.$/);
-      });
-    });
-    describe('when passing an invalid changelogDate', () => {
-      it('throws', () => {
-        expect(() => parseChangelog('1234')).toThrow(/^changelogDate 1234 is not a valid changelogDate\.$/);
-      });
-    });
-    describe('when passing a valid changelogDate', () => {
-      it('returns a date object', () => {
-        expect(parseChangelog('20160208210114') instanceof Date).toBeTruthy();
-      });
-      it('returns the date', () => {
-        expect(parseChangelog('20160208210114').toISOString()).toBe('2016-02-08T21:01:14.000Z');
-      });
-    });
-  });
-  describe('::normalizeLineEndings', () => {
-    it('should convert \\r\\n to \\n', () => {
-      expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\r\n')).toBe('a\r\ncrlf\r\nfile\r\nwith\r\nlf\r\nlines\r\n');
-    });
-    it('should convert \\n to \\r\\n', () => {
-      expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\n')).toBe('a\ncrlf\nfile\nwith\nlf\nlines\n');
     });
   });
 });

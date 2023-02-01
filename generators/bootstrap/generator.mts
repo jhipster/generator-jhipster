@@ -33,7 +33,7 @@ import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
-import { normalizeLineEndings } from '../base/utils.mjs';
+import { normalizeLineEndings } from '../base/support/index.mjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {

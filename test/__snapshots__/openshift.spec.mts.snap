@@ -787,7 +787,7 @@ objects:
       name: \${SECRET_REF}
     type: Opaque
     data:
-      registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+      registry-admin-password: YWRtaW4= # base64 encoded "admin"
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
@@ -3085,7 +3085,7 @@ objects:
       name: \${SECRET_REF}
     type: Opaque
     data:
-      registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+      registry-admin-password: YWRtaW4= # base64 encoded "admin"
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
@@ -4228,7 +4228,7 @@ objects:
       name: \${SECRET_REF}
     type: Opaque
     data:
-      registry-admin-password: SECRET-openshiftpaas-50 # base64 encoded "openshiftpaas"
+      registry-admin-password: b3BlbnNoaWZ0cGFhcw== # base64 encoded "openshiftpaas"
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
@@ -5267,7 +5267,7 @@ objects:
       name: \${SECRET_REF}
     type: Opaque
     data:
-      registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+      registry-admin-password: YWRtaW4= # base64 encoded "admin"
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:

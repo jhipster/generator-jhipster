@@ -22,7 +22,7 @@ import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
 import BaseGenerator from '../index.mjs';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.mjs';
-import { joinCallbacks } from '../ts-utils.mjs';
+import { joinCallbacks } from './write-files.mjs';
 
 const { kebabCase } = _;
 

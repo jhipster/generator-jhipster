@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const filterUndefinedAndNullValues = value => value !== undefined && value !== null;
+const filterNullishValues = value => value !== undefined && value !== null;
 
 /**
  * Copy and remove null and undefined values
@@ -25,16 +25,16 @@ const filterUndefinedAndNullValues = value => value !== undefined && value !== n
  * @returns
  */
 // eslint-disable-next-line import/prefer-default-export
-export function removeFieldsWithUnsetValues(object: Record<string, any>): Record<string, any> {
-  return filterValue(object, filterUndefinedAndNullValues);
+export function removeFieldsWithNullishValues(object: Record<string, any>): Record<string, any> {
+  return filterValue(object, filterNullishValues);
 }
 /**
  * Copy and remove null and undefined values
  * @param object
  * @returns
  */
-// eslint-disable-next-line import/prefer-default-export
-function filterValue(object: Record<string, any>, filterValue: (any) => boolean = filterUndefinedAndNullValues): Record<string, any> {
+// eslint-disable-next-line import/prefer-default-export, @typescript-eslint/no-explicit-any
+function filterValue(object: Record<string, any>, filterValue: (any) => boolean = filterNullishValues): Record<string, any> {
   const clone = {};
   for (const [key, value] of Object.entries(object)) {
     if (filterValue(value)) {
@@ -42,7 +42,7 @@ function filterValue(object: Record<string, any>, filterValue: (any) => boolean 
         if (Array.isArray(value)) {
           clone[key] = value.filter(filterValue);
         } else {
-          clone[key] = removeFieldsWithUnsetValues(value);
+          clone[key] = removeFieldsWithNullishValues(value);
         }
       } else {
         clone[key] = value;

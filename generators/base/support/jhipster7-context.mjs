@@ -148,6 +148,6 @@ const createHandler = ({ ignoreWarnings = false } = {}) => ({
   get: getProperty,
 });
 
-export default function createProxy(generator, data, options) {
+export default function createJHipster7Context(generator, data, options) {
   return new Proxy({ generator, data }, createHandler(options));
 }

@@ -22,12 +22,17 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+
 import {
   getDBTypeFromDBValue,
   buildJavaGet as javaGetCall,
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
+  formatDocAsApiDescription,
+  formatDocAsJavaDoc,
+  getJavaValueGeneratorForType as getJavaValueForType,
+  getPrimaryKeyValue as getPKValue,
 } from './support/index.mjs';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -89,15 +94,8 @@ import {
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
-import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
 import checkJava from './support/checks/check-java.mjs';
-import { normalizePathEnd } from '../base/utils.mjs';
-import {
-  formatDocAsApiDescription,
-  formatDocAsJavaDoc,
-  getJavaValueGeneratorForType as getJavaValueForType,
-  getPrimaryKeyValue as getPKValue,
-} from './support/index.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 
 const dbTypes = fieldTypes;
@@ -785,7 +783,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = createBase64Secret.call(this, null, 64);
+      config.jwtSecretKey = createBase64Secret(64, this.options.reproducibleTests);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === SESSION && !config.rememberMeKey) {

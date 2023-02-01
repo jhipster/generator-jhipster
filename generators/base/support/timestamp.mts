@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export function formatDateForChangelog(now) {
+export function formatDateForChangelog(now: Date): string {
   const nowUTC = new Date(
     now.getUTCFullYear(),
     now.getUTCMonth(),
@@ -55,7 +55,7 @@ export function formatDateForChangelog(now) {
   return `${year}${month}${day}${hour}${minute}${second}`;
 }
 
-export function parseChangelog(changelogDate) {
+export function parseChangelog(changelogDate: string): Date {
   if (!changelogDate) {
     throw new Error('changelogDate is required.');
   }
@@ -73,14 +73,20 @@ export function parseChangelog(changelogDate) {
 }
 
 /**
- * Replace line endings with the specified one.
- *
- * @param {string} str
- * @param {string} lineEnding
- * @returns {string} normalized line ending string
+ * Parse creationTimestamp option
+ * @returns representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
+ *                   obtained by parsing the given string representation of the creationTimestamp.
  */
-export function normalizeLineEndings(str, lineEnding) {
-  return str.replace(/\r\n|\r|\n/g, lineEnding);
-}
-
-export const normalizePathEnd = directory => (directory.endsWith('/') ? directory : `${directory}/`);
+export const parseCreationTimestamp = (creationTimestampOption: string): number | undefined => {
+  let creationTimestamp;
+  if (creationTimestampOption) {
+    creationTimestamp = Date.parse(creationTimestampOption);
+    if (!creationTimestamp) {
+      return undefined;
+    }
+    if (creationTimestamp > new Date().getTime()) {
+      throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
+    }
+  }
+  return creationTimestamp;
+};
