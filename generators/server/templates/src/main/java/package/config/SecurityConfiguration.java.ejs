@@ -20,9 +20,6 @@ package <%= packageName %>.config;
 
 import <%= packageName %>.security.*;
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (authenticationTypeSession) { _%>
-import tech.jhipster.security.*;
-<%_ } _%>
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,10 +68,11 @@ import java.util.*;
 <%_ if (authenticationTypeSession) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
-  <%_ if (generateUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 <%_ } _%>
@@ -124,23 +122,6 @@ public class SecurityConfiguration {
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
     }
-<%_ if (authenticationTypeSession) { _%>
-
-    @Bean
-    public AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
-        return new AjaxAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
-        return new AjaxAuthenticationFailureHandler();
-    }
-
-    @Bean
-    public AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler() {
-        return new AjaxLogoutSuccessHandler();
-    }
-<%_ } _%>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
 
     @Bean
@@ -233,28 +214,26 @@ public class SecurityConfiguration {
                 exceptionHanding.defaultAuthenticationEntryPointFor(
                     (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) ->
                         response.setStatus(401),
-                        new OrRequestMatcher(
+                    new OrRequestMatcher(
   <%_ if (communicationSpringWebsocket) { _%>
-                            new AntPathRequestMatcher("/websocket/**"),
+                        new AntPathRequestMatcher("/websocket/**"),
   <%_ } _%>
-                            new AntPathRequestMatcher("/api/**"),
-                            /*
-                             * FormLogin is redirecting to "/error" instead of just passtrough.
-                             * Error started at https://github.com/jhipster/generator-jhipster/pull/20107.
-                             * Once the redirect cause is found this can be dropped in favor of the above "/api/**" entrypoint.
-                             */
-                            new AntPathRequestMatcher("/error")
-                        )
+                        new AntPathRequestMatcher("/api/**")
+                    )
                 )
             )
             .formLogin(formLogin ->
                 formLogin
                     .loginProcessingUrl("/api/authentication")
-                    .successHandler(ajaxAuthenticationSuccessHandler())
-                    .failureHandler(ajaxAuthenticationFailureHandler())
+                    .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
+                    .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
                     .permitAll()
             )
-            .logout(logout -> logout.logoutUrl("/api/logout").logoutSuccessHandler(ajaxLogoutSuccessHandler()).permitAll());
+            .logout(logout ->
+                logout
+                    .logoutUrl("/api/logout")
+                    .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
+                    .permitAll());
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions
