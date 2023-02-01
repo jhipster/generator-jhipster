@@ -66,13 +66,12 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
-<%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 <%_ } _%>
@@ -212,8 +211,7 @@ public class SecurityConfiguration {
   <%_ } _%>
             .exceptionHandling(exceptionHanding ->
                 exceptionHanding.defaultAuthenticationEntryPointFor(
-                    (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) ->
-                        response.setStatus(401),
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                     new OrRequestMatcher(
   <%_ if (communicationSpringWebsocket) { _%>
                         new AntPathRequestMatcher("/websocket/**"),
@@ -230,10 +228,7 @@ public class SecurityConfiguration {
                     .permitAll()
             )
             .logout(logout ->
-                logout
-                    .logoutUrl("/api/logout")
-                    .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
-                    .permitAll());
+                logout.logoutUrl("/api/logout").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).permitAll());
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions
