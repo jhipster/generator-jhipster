@@ -19,7 +19,7 @@
 
 import _ from 'lodash';
 
-import { databaseTypes, fieldTypes } from '../jdl/jhipster/index.mjs';
+import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
@@ -28,7 +28,7 @@ const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_
 const { BYTES } = RelationalOnlyDBTypes;
 const { TEXT } = BlobTypes;
 
-export function parseLiquibaseColumnType(entity, field) {
+function parseLiquibaseColumnType(entity, field) {
   const fieldType = field.fieldType;
   if (fieldType === STRING || field.fieldIsEnum) {
     return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
@@ -95,7 +95,7 @@ export function parseLiquibaseColumnType(entity, field) {
   return undefined;
 }
 
-export function parseLiquibaseLoadColumnType(entity, field) {
+function parseLiquibaseLoadColumnType(entity, field) {
   const columnType = field.columnType;
   // eslint-disable-next-line no-template-curly-in-string
   if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
@@ -139,7 +139,7 @@ export function parseLiquibaseLoadColumnType(entity, field) {
   return 'string';
 }
 
-export function prepareFieldForLiquibaseTemplates(entity, field) {
+export default function prepareField(entity, field) {
   _.defaults(field, {
     columnType: parseLiquibaseColumnType(entity, field),
     shouldDropDefaultValue: field.fieldType === ZONED_DATE_TIME || field.fieldType === INSTANT,
