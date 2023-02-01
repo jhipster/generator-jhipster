@@ -21,11 +21,13 @@ import _ from 'lodash';
 
 import BaseApplication from '../base-application/index.mjs';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './files.mjs';
-import { stringify } from '../../utils/index.mjs';
+import {
+  stringifyApplicationData,
+  prepareRelationship,
+  prepareField as prepareFieldForTemplates,
+} from '../base-application/support/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
-import { prepareFieldForTemplates } from '../../utils/field.mjs';
-import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { liquibaseComment } from './support/index.mjs';
 
@@ -152,33 +154,35 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
         const databaseChangelog = this.databaseChangelog;
         const entity = this.entity;
         if (databaseChangelog.type === 'entity-new') {
-          entityChanges.relationships = entity.relationships.map(relationship =>
-            this._prepareRelationshipForTemplates(entity, relationship)
-          );
+          entityChanges.relationships = entity.relationships.map(relationship => this._prepareRelationship(entity, relationship));
         } else {
           entityChanges.addedRelationships = databaseChangelog.addedRelationships
             .map(relationship => {
               const otherEntityName = this._.upperFirst(relationship.otherEntityName);
               relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
               if (!relationship.otherEntity) {
-                throw new Error(`Error at entity ${entity.name}: could not find the entity of the relationship ${stringify(relationship)}`);
+                throw new Error(
+                  `Error at entity ${entity.name}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
+                );
               }
               return relationship;
             })
-            .map(relationship => prepareRelationshipForTemplates(entity, relationship, this))
-            .map(relationship => this._prepareRelationshipForTemplates(entity, relationship));
+            .map(relationship => prepareRelationship(entity, relationship, this))
+            .map(relationship => this._prepareRelationship(entity, relationship));
           entityChanges.removedRelationships = databaseChangelog.removedRelationships
             .map(relationship => {
               const otherEntityName = this._.upperFirst(relationship.otherEntityName);
               relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
 
               if (!relationship.otherEntity) {
-                throw new Error(`Error at entity ${entity.name}: could not find the entity of the relationship ${stringify(relationship)}`);
+                throw new Error(
+                  `Error at entity ${entity.name}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
+                );
               }
               return relationship;
             })
-            .map(relationship => prepareRelationshipForTemplates(entity, relationship, this, true))
-            .map(relationship => this._prepareRelationshipForTemplates(entity, relationship));
+            .map(relationship => prepareRelationship(entity, relationship, this, true))
+            .map(relationship => this._prepareRelationship(entity, relationship));
         }
       },
     };
@@ -381,7 +385,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     }
   }
 
-  _prepareRelationshipForTemplates(entity, relationship) {
+  _prepareRelationship(entity, relationship) {
     relationship.shouldWriteRelationship =
       relationship.relationshipType === 'many-to-one' ||
       (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);

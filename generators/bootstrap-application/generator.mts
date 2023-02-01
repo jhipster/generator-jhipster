@@ -21,17 +21,17 @@ import lodash from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
-import { stringify } from '../../utils/index.mjs';
 import {
+  fieldIsEnum,
+  stringifyApplicationData,
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
-  preparePostEntityServerDerivedProperties,
-} from '../../utils/entity.mjs';
-import { fieldIsEnum } from '../base-application/support/index.mjs';
+} from '../base-application/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
 import type { ClientServerApplication } from '../common/types.mjs';
+import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 const { sortedUniq, intersection } = lodash;
@@ -103,49 +103,49 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         entityConfig.fields.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
-          assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-          assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+          assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+          assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
 
           if (fieldValidateRules !== undefined) {
             assert(
               Array.isArray(fieldValidateRules),
-              `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             fieldValidateRules.forEach(fieldValidateRule => {
               assert(
                 SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule),
-                `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+                `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringifyApplicationData(
                   field
                 )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
               );
             });
             assert(
               !fieldValidateRules.includes(MAX) || field.fieldValidateRulesMax !== undefined,
-              `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MIN) || field.fieldValidateRulesMin !== undefined,
-              `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MAXLENGTH) || field.fieldValidateRulesMaxlength !== undefined,
-              `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MINLENGTH) || field.fieldValidateRulesMinlength !== undefined,
-              `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MAXBYTES) || field.fieldValidateRulesMaxbytes !== undefined,
-              `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MINBYTES) || field.fieldValidateRulesMinbytes !== undefined,
-              `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(PATTERN) || field.fieldValidateRulesPattern !== undefined,
-              `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
           }
         });
@@ -155,18 +155,21 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         entityConfig.relationships.forEach((relationship: any) => {
           const { otherEntityName, relationshipType } = relationship;
 
-          assert(otherEntityName, `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+          assert(
+            otherEntityName,
+            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+          );
           assert(
             relationshipType,
-            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
+            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
           );
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = otherEntityName;
             this.logger.warn(
-              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
-                relationship.otherEntityName
-              } as fallback`
+              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
+                relationship
+              )}, using ${relationship.otherEntityName} as fallback`
             );
           }
         });

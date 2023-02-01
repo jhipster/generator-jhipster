@@ -18,13 +18,8 @@
  */
 export { default as getTypescriptKeyType, getTypescriptType } from './types-utils.mjs';
 export { default as generateEntityClientFields } from './entity-definition.mjs';
-export {
-  generateEntityClientImports,
-  generateEntityClientEnumImports,
-  generateTestEntityId,
-  generateTestEntity,
-  generateTestEntityPrimaryKey,
-  generateTypescriptTestEntity,
-  getEntityParentPathAddition,
-} from './template-utils.mjs';
+export { default as prepareEntity } from './prepare-entity.mjs';
+export * from './prepare-entity.mjs';
+export { default as prepareField } from './prepare-field.mjs';
+export * from './template-utils.mjs';
 export * from './update-languages.mjs';

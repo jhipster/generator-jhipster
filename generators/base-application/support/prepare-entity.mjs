@@ -18,30 +18,26 @@
  */
 import _ from 'lodash';
 import pluralize from 'pluralize';
-import path from 'path';
-import { getDatabaseTypeData } from '../generators/server/support/index.mjs';
-import { hibernateSnakeCase } from './db.mjs';
-import { normalizePathEnd, parseChangelog } from '../generators/base/support/index.mjs';
-import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
-import { fieldToReference } from './field.mjs';
-import { getTypescriptKeyType, getEntityParentPathAddition } from '../generators/client/support/index.mjs';
+
+import { getDatabaseTypeData } from '../../server/support/index.mjs';
+import { parseChangelog } from '../../base/support/index.mjs';
+import { entityDefaultConfig } from '../../generator-defaults.mjs';
+import { fieldToReference } from './prepare-field.mjs';
+import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
   databaseTypes,
   entityOptions,
   fieldTypes,
-  reservedKeywords,
   searchEngineTypes,
-} from '../jdl/jhipster/index.mjs';
+} from '../../../jdl/jhipster/index.mjs';
 
-const { ELASTICSEARCH } = searchEngineTypes;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
-const { isReservedTableName } = reservedKeywords;
 
 const { BOOLEAN, LONG, STRING, UUID } = CommonDBTypes;
 const { NO: NO_DTO, MAPSTRUCT } = MapperTypes;
@@ -51,7 +47,7 @@ const NO_SERVICE = ServiceTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_MAPPER = MapperTypes.NO;
 
-const { POSTGRESQL, MYSQL, MARIADB, CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
+const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
 const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL } = fieldTypes.CommonDBTypes;
 
@@ -114,7 +110,7 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-export function _derivedProperties(entityWithConfig) {
+function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
@@ -128,7 +124,7 @@ export function _derivedProperties(entityWithConfig) {
   });
 }
 
-export function prepareEntityForTemplates(entityWithConfig, generator, application) {
+export default function prepareEntity(entityWithConfig, generator, application) {
   const entityName = _.upperFirst(entityWithConfig.name);
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
@@ -262,27 +258,6 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
   _derivedProperties(entityWithConfig);
 
   return entityWithConfig;
-}
-
-export function prepareEntityServerForTemplates(entity) {
-  const { entityPackage, packageName, packageFolder, persistClass } = entity;
-  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder = packageFolder } = entity;
-  if (entityPackage) {
-    entityJavaPackageFolder = `${entityPackage.replace(/\./g, '/')}/`;
-    entityAbsolutePackage = [packageName, entityPackage].join('.');
-    entityAbsoluteFolder = path.join(packageFolder, entityJavaPackageFolder);
-  }
-  entityAbsoluteFolder = normalizePathEnd(entityAbsoluteFolder);
-  entity.entityJavaPackageFolder = entityJavaPackageFolder;
-  entity.entityAbsolutePackage = entityAbsolutePackage;
-  entity.entityAbsoluteFolder = entityAbsoluteFolder;
-  entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
-
-  if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
-    entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
-  } else {
-    entity.entityInstanceDbSafe = entity.entityInstance;
-  }
 }
 
 export function derivedPrimaryKeyProperties(primaryKey) {
@@ -455,7 +430,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
   return entityWithConfig;
 }
 
-export function fieldToId(field) {
+function fieldToId(field) {
   return {
     field,
     get name() {
@@ -523,14 +498,6 @@ export function loadRequiredConfigIntoEntity(entity, config) {
     });
   }
   return entity;
-}
-
-export function loadRequiredConfigDerivedProperties(entity) {
-  entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
-  entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
-  entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
-  entity.searchEngineAny = ![undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
-  entity.searchEngineNo = [undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
 }
 
 export function preparePostEntityCommonDerivedProperties(entity) {
@@ -698,75 +665,5 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
   for (const entity of entities.filter(entity => !entity.otherDtoReferences)) {
     // Get all required back references for dto.
     entity.otherDtoReferences = entity.otherReferences.filter(reference => reference.entity.dtoReferences.includes(reference));
-  }
-}
-
-export function preparePostEntityServerDerivedProperties(entity) {
-  const { databaseType, reactive } = entity;
-  entity.officialDatabaseType = getDatabaseTypeData(databaseType).name;
-  let springDataDatabase;
-  if (entity.databaseType !== SQL) {
-    springDataDatabase = entity.officialDatabaseType;
-    if (reactive) {
-      springDataDatabase += ' reactive';
-    }
-  } else {
-    springDataDatabase = reactive ? 'R2DBC' : 'JPA';
-  }
-  entity.springDataDescription = `Spring Data ${springDataDatabase}`;
-
-  // Blueprints may disable cypress relationships by setting to false.
-  entity.cypressBootstrapEntities = true;
-
-  // Reactive with some r2dbc databases doesn't allow insertion without data.
-  entity.workaroundEntityCannotBeEmpty = entity.reactive && [POSTGRESQL, MYSQL, MARIADB].includes(entity.prodDatabaseType);
-  // Reactive with MariaDB doesn't allow null value at Instant fields.
-  entity.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
-
-  entity.relationships
-    .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
-    .forEach(relationship => {
-      relationship.ignoreOtherSideProperty =
-        !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
-    });
-  entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
-
-  entity.importApiModelProperty =
-    entity.relationships.some(relationship => relationship.javadoc) || entity.fields.some(field => field.javadoc);
-
-  entity.uniqueEnums = {};
-
-  entity.fields.forEach(field => {
-    if (
-      field.fieldIsEnum &&
-      (!entity.uniqueEnums[field.fieldType] || (entity.uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))
-    ) {
-      entity.uniqueEnums[field.fieldType] = field.fieldType;
-    }
-  });
-  if (entity.primaryKey && entity.primaryKey.derived) {
-    entity.isUsingMapsId = true;
-    entity.mapsIdAssoc = entity.relationships.find(rel => rel.id);
-  } else {
-    entity.isUsingMapsId = false;
-    entity.mapsIdAssoc = null;
-  }
-  entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
-  entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
-  entity.reactiveUniqueEntityTypes.add(entity.entityClass);
-  if (entity.databaseType === 'sql') {
-    for (const relationship of entity.relationships) {
-      if (!relationship.otherEntity.embedded) {
-        relationship.joinColumnNames = relationship.otherEntity.primaryKey.fields.map(
-          otherField => `${relationship.columnNamePrefix}${otherField.columnName}`
-        );
-      }
-    }
-  }
-}
-
-export function preparePostEntityClientDerivedProperties(entity) {
-  if (entity.primaryKey) {
-    entity.tsKeyType = getTypescriptKeyType(entity.primaryKey.type);
   }
 }

@@ -16,7 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import getTypescriptKeyType from './types-utils.mjs';
 
-export { default } from './generator.mjs';
-export { serverFiles as files } from './files.mjs';
-export * from './needles.mjs';
+export default function prepareEntity(entity) {}
+
+export function preparePostEntityClientDerivedProperties(entity) {
+  if (entity.primaryKey) {
+    entity.tsKeyType = getTypescriptKeyType(entity.primaryKey.type);
+  }
+}

@@ -18,7 +18,7 @@
  */
 
 // eslint-disable-next-line import/prefer-default-export
-export const stringify = data =>
+export const stringifyApplicationData = data =>
   JSON.stringify(
     data,
     (key, value) => {
