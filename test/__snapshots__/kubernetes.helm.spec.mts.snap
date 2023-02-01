@@ -555,7 +555,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -1314,7 +1314,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -1833,7 +1833,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -2562,7 +2562,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -3273,7 +3273,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -5020,7 +5020,7 @@ metadata:
   namespace: mynamespace
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -7818,7 +7818,7 @@ metadata:
   namespace: mynamespace
 type: Opaque
 data:
-  registry-admin-password: SECRET-admin-50 # base64 encoded "admin"
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
 ---
 apiVersion: v1
 kind: Service
@@ -8319,7 +8319,7 @@ metadata:
   namespace: jhipsternamespace
 type: Opaque
 data:
-  registry-admin-password: SECRET-meetup-50 # base64 encoded "meetup"
+  registry-admin-password: bWVldHVw # base64 encoded "meetup"
 ---
 apiVersion: v1
 kind: Service
