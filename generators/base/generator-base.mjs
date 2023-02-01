@@ -62,7 +62,7 @@ import {
   NODE_VERSION,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithUnsetValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
+import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -1899,7 +1899,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithUnsetValues(this.config.getAll()));
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     _.defaults(configWithDefaults, {
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,
