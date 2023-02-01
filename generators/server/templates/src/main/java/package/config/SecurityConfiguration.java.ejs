@@ -162,14 +162,12 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authz ->
                 // prettier-ignore
                 authz
-<%_ if (!applicationTypeMicroservice) { _%>
-  <%_ if (!skipClient) { _%>
+<%_ if (!skipClient) { _%>
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
                     .requestMatchers("/app/**").permitAll()
                     .requestMatchers("/i18n/**").permitAll()
                     .requestMatchers("/content/**").permitAll()
-  <%_ } _%>
                     .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
