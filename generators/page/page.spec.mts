@@ -23,7 +23,7 @@ const createPage = runResult =>
     .withOptions({
       skipInstall: true,
     })
-    .withPrompts({
+    .withAnswers({
       pageName,
     })
     .run();

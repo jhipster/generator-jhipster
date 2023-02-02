@@ -41,6 +41,16 @@ class JHipsterTest extends YeomanTest {
   ): JHipsterRunContext<GeneratorType> {
     return super.create(GeneratorOrNamespace, settings, envOptions) as any;
   }
+
+  createJHipster<
+    GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>
+  >(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings | undefined,
+    envOptions?: Options | undefined
+  ): JHipsterRunContext<GeneratorType> {
+    return this.create(getGenerator(jhipsterGenerator), settings, envOptions);
+  }
 }
 
 export function createTestHelpers(options: any = {}) {

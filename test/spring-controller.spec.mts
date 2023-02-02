@@ -16,7 +16,7 @@ describe('generator - spring-controller', () => {
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
-        .withPrompts({
+        .withAnswers({
           actionAdd: false,
         });
     });
@@ -60,7 +60,7 @@ describe('generator - spring-controller', () => {
           fse.writeJsonSync(path.join(dir, '.yo-rc.json'), { [GENERATOR_JHIPSTER]: config });
         })
         .withArguments(['fooBar'])
-        .withPrompts({
+        .withAnswers({
           actionAdd: false,
         });
     });

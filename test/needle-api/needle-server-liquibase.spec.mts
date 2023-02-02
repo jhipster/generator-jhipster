@@ -101,7 +101,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         skipPriorities: ['prompting'],
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         packageName: 'com.mycompany.myapp',
         packageFolder: 'com/mycompany/myapp',
