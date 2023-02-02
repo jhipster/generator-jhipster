@@ -31,14 +31,22 @@ public class SpaWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login") && !path.startsWith("/oauth2")<% } %>
-<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
-            && !path.startsWith("/services") && !path.startsWith("/v3/api-docs")
+        if (
+            !path.startsWith("/api")
+            && !path.startsWith("/management")
+            && !path.startsWith("/v3/api-docs")
+<%_ if (authenticationTypeOauth2 && (applicationTypeGateway || applicationTypeMonolith)) { _%>
+            && !path.startsWith("/login")
+            && !path.startsWith("/oauth2")
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+            && !path.startsWith("/services")
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
             && !path.startsWith("/websocket")
 <%_ } _%>
-            && !path.contains(".") && path.matches("/(.*)")
+            && !path.contains(".")
+            && path.matches("/(.*)")
         ) {
             return chain.filter(exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build() ).build());
         }

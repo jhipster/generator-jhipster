@@ -1,9 +1,7 @@
 package <%= packageName %>.web.filter;
 
 import <%= packageName %>.IntegrationTest;
-<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-<%_ } _%>
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,7 +35,6 @@ public class SpaWebFilterIT {
             .andExpect(forwardedUrl(null));
     }
 <%_ } _%>
-<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
@@ -46,7 +43,6 @@ public class SpaWebFilterIT {
             .andExpect(status().isOk())
             .andExpect(forwardedUrl(null));
     }
-<%_ } _%>
 
     @Test
     void testFilterDoesNotForwardToIndexForDotFile() throws Exception {
