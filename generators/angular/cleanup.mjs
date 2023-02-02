@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { ANGULAR_DIR, CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
+import { CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
@@ -27,8 +27,8 @@ import { ANGULAR_DIR, CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 export default function cleanupOldFilesTask({ application } = {}) {
   if (this.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
-    this.removeFile(`${ANGULAR_DIR}components/form/uib-pager.config.js`);
-    this.removeFile(`${ANGULAR_DIR}components/form/uib-pagination.config.js`);
+    this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);
+    this.removeFile(`${application.clientSrcDir}app/components/form/uib-pagination.config.js`);
   }
   if (this.isJhipsterVersionLessThan('3.11.0')) {
     this.removeFile(`${application.clientSrcDir}app/layouts/navbar/active-link.directive.js`);
@@ -37,25 +37,25 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientSrcDir}app/app.main-aot.ts`);
   }
   if (this.isJhipsterVersionLessThan('5.0.0')) {
-    this.removeFile(`${ANGULAR_DIR}/app.route.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/auth/account.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/auth/auth-jwt.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/auth/auth-session.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/auth/csrf.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/auth/state-storage.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/auth/user-route-access-service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/language/language.constants.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/language/language.helper.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/login/login-modal.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/login/login.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/model/base-entity.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/model/request-util.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/user/account.model.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/user/user.model.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/user/user.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-dialog.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-modal.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-modal.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app//app.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/auth/account.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/auth/auth-jwt.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/auth/auth-session.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/auth/csrf.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/auth/state-storage.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/auth/user-route-access-service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/language/language.constants.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/language/language.helper.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/login/login-modal.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/login/login.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/model/base-entity.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/model/request-util.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/user/account.model.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/user/user.model.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/user/user.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-dialog.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-modal.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-modal.service.ts`);
 
     this.removeFile(`${application.clientTestDir}spec/app/shared/user/user.service.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/admin/user-management/user-management-dialog.component.spec.ts`);
@@ -63,8 +63,8 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}karma.conf.js`);
   }
   if (this.isJhipsterVersionLessThan('5.8.0')) {
-    this.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.html`);
-    this.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics-modal.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics-modal.component.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
   }
   if (this.isJhipsterVersionLessThan('6.0.0')) {
@@ -72,70 +72,70 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFolder(`${application.clientTestDir}spec/app/shared/layout/header/menus`);
   }
   if (this.isJhipsterVersionLessThan('6.3.0')) {
-    this.removeFile(`${ANGULAR_DIR}account/index.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/index.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/index.ts`);
-    this.removeFile(`${ANGULAR_DIR}home/index.ts`);
-    this.removeFile(`${ANGULAR_DIR}layouts/index.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/index.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/shared-common.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/account/index.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/index.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/index.ts`);
+    this.removeFile(`${application.clientSrcDir}app/home/index.ts`);
+    this.removeFile(`${application.clientSrcDir}app/layouts/index.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/index.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/shared-common.module.ts`);
   }
   if (this.isJhipsterVersionLessThan('6.4.0')) {
-    this.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/admin.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/admin.module.ts`);
   }
   if (this.isJhipsterVersionLessThan('6.6.1')) {
-    this.removeFile(`${ANGULAR_DIR}core/language/language.helper.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/language/language.helper.ts`);
   }
   if (this.isJhipsterVersionLessThan('6.8.0')) {
-    this.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
+    this.removeFile(`${application.clientSrcDir}app/tsconfig-aot.json`);
   }
   if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
-    this.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
-    this.removeFile(`${ANGULAR_DIR}admin/docs/docs.scss`);
-    this.removeFile(`${ANGULAR_DIR}home/home.scss`);
-    this.removeFile(`${ANGULAR_DIR}layouts/navbar/navbar.scss`);
-    this.removeFile(`${ANGULAR_DIR}layouts/profiles/page-ribbon.scss`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audit-application.model.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.html`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.html`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.html`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.html`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.html`);
-    this.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
-    this.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/account/password/password-strength-bar.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/account/password/password-strength-bar.scss`);
+    this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.scss`);
+    this.removeFile(`${application.clientSrcDir}app/home/home.scss`);
+    this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.scss`);
+    this.removeFile(`${application.clientSrcDir}app/layouts/profiles/page-ribbon.scss`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audit-application.model.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audit.model.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/health/health-modal.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/health/health-modal.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-delete-dialog.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-delete-dialog.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-detail.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-detail.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-update.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-update.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/entities/entity.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/util/datepicker-adapter.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.html`);
+    this.removeFile(`${application.clientSrcDir}app/core/auth/user-route-access-service.ts`);
     if (!application.authenticationTypeSession || !application.communicationSpringWebsocket) {
-      this.removeFile(`${ANGULAR_DIR}core/auth/csrf.service.ts`);
+      this.removeFile(`${application.clientSrcDir}app/core/auth/csrf.service.ts`);
     }
-    this.removeFolder(`${ANGULAR_DIR}core/login`);
-    this.removeFolder(`${ANGULAR_DIR}blocks`);
-    this.removeFile(`${ANGULAR_DIR}core/date/datepicker-adapter.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/icons/font-awesome-icons.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/language/language.constants.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/constants/authority.constants.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/constants/error.constants.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/constants/input.constants.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/constants/pagination.constants.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/util/request-util.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/core.module.ts`);
-    this.removeFile(`${ANGULAR_DIR}vendor.ts`);
-    this.removeFile(`${ANGULAR_DIR}app.main.ts`);
-    this.removeFile(`${ANGULAR_DIR}polyfills.ts`);
+    this.removeFolder(`${application.clientSrcDir}app/core/login`);
+    this.removeFolder(`${application.clientSrcDir}app/blocks`);
+    this.removeFile(`${application.clientSrcDir}app/core/date/datepicker-adapter.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/icons/font-awesome-icons.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/language/language.constants.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/constants/authority.constants.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/constants/error.constants.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/constants/input.constants.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/constants/pagination.constants.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/util/request-util.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/core.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/vendor.ts`);
+    this.removeFile(`${application.clientSrcDir}app/app.main.ts`);
+    this.removeFile(`${application.clientSrcDir}app/polyfills.ts`);
     this.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
     this.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
     this.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);
@@ -146,24 +146,24 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile('tslint.json');
 
     // unreleased files and folders cleanup for v7 developers
-    this.removeFile(`${ANGULAR_DIR}shared/duration.pipe.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/find-language-from-key.pipe.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/translate.directive.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/user/authority.model.ts`);
-    this.removeFolder(`${ANGULAR_DIR}core/config`);
-    this.removeFolder(`${ANGULAR_DIR}core/event-manager`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-memory`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-threads`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-cache`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-datasource`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-endpoints-requests`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-garbagecollector`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-modal-threads`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-request`);
-    this.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-system`);
-    this.removeFile(`${ANGULAR_DIR}shared/has-any-authority.directive.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/item-count.component.ts`);
-    this.removeFile(`${ANGULAR_DIR}shared/item-count.component.spec.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/duration.pipe.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/find-language-from-key.pipe.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/translate.directive.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/user/authority.model.ts`);
+    this.removeFolder(`${application.clientSrcDir}app/core/config`);
+    this.removeFolder(`${application.clientSrcDir}app/core/event-manager`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/jvm-memory`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/jvm-threads`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-cache`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-datasource`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-endpoints-requests`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-garbagecollector`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-modal-threads`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-request`);
+    this.removeFolder(`${application.clientSrcDir}app/admin/metrics/metrics-system`);
+    this.removeFile(`${application.clientSrcDir}app/shared/has-any-authority.directive.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/item-count.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/item-count.component.spec.ts`);
 
     // test files removal from old location
     // a) deleted before moving tests next to files they are testing
@@ -235,14 +235,14 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}jest.conf.js`);
   }
   if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
-    this.removeFile(`${ANGULAR_DIR}core/user/account.model.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/user/account.model.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/user/user.model.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/user/user.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/user/user.service.spec.ts`);
   }
   if (this.isJhipsterVersionLessThan('7.0.0-beta.2')) {
-    this.removeFile(`${ANGULAR_DIR}core/config/config.service.ts`);
-    this.removeFile(`${ANGULAR_DIR}core/config/config.service.spec.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/config/config.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/core/config/config.service.spec.ts`);
     this.removeFile('.npmrc');
   }
   if (this.isJhipsterVersionLessThan('7.1.1')) {

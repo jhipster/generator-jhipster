@@ -17,17 +17,15 @@
  * limitations under the License.
  */
 
-import { VUE_DIR } from '../generator-constants.mjs';
-
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
 export default function cleanupOldFilesTask({ application } = {}) {
   if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
-    this.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
-    this.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
-    this.removeFile(`${VUE_DIR}admin/audits/audits.vue`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.vue`);
     this.removeFile(`${application.clientTestDir}spec/app/admin/audits/audits.component.spec.ts`);
   }
   if (this.isJhipsterVersionLessThan('7.0.2')) {

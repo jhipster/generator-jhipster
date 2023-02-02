@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import { REACT_DIR } from '../generator-constants.mjs';
-
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
@@ -28,7 +26,7 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile('tslint.json');
   }
   if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
-    this.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/audits/audits.tsx`);
     this.removeFile(`${application.clientTestDir}spec/enzyme-setup.ts`);
   }
   if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
@@ -56,8 +54,8 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}spec/app/shared/reducers/user-management.spec.ts`);
   }
   if (this.isJhipsterVersionLessThan('7.1.0')) {
-    this.removeFile(`${REACT_DIR}shared/reducers/action-type.util.ts`);
-    this.removeFile(`${REACT_DIR}config/devtools.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/shared/reducers/action-type.util.ts`);
+    this.removeFile(`${application.clientSrcDir}app/config/devtools.tsx`);
   }
 
   if (this.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
