@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import helpers from 'yeoman-test';
 import sinon from 'sinon';
+import { basicHelpers as helpers } from '../support/index.mjs';
 
 import AppGenerator from '../../generators/app/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';

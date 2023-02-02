@@ -1,4 +1,4 @@
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 
 import ClientGenerator from '../../generators/client/index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';

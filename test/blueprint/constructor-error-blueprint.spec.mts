@@ -1,8 +1,8 @@
 import path, { dirname } from 'path';
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

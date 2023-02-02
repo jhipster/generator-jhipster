@@ -2,8 +2,8 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import Environment from 'yeoman-environment';
+import { basicHelpers as helpers } from './support/index.mjs';
 
 import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
