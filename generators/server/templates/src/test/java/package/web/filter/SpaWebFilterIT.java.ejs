@@ -26,12 +26,14 @@ public class SpaWebFilterIT {
             .andExpect(status().isOk())
             .andExpect(forwardedUrl("/index.html"));
     }
+<%_ if (!skipUserManagement) { _%>
 
     @Test
     void testFilterDoesNotForwardToIndexForApi() throws Exception {
         mockMvc.perform(get("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>"))
             .andExpect(status().isOk());
     }
+<%_ } _%>
 
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
