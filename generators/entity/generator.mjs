@@ -24,14 +24,14 @@ import path from 'path';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import prompts from './prompts.mjs';
-import { JHIPSTER_CONFIG_DIR, ANGULAR_DIR } from '../generator-constants.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 import { removeFieldsWithNullishValues } from '../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { NO: CLIENT_FRAMEWORK_NO, ANGULAR } = clientFrameworkTypes;
+const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator {
@@ -307,29 +307,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get writing() {
-    if (this.options.skipWriting) {
-      return {};
-    }
-    return {
-      cleanup() {
-        const context = this.context;
-        const entityName = context.name;
-        if (this.isJhipsterVersionLessThan('5.0.0')) {
-          this.removeFile(`${ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
-        }
-        if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === ANGULAR) {
-          this.removeFile(`${ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
-        }
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   // Public API method used by the getter and also by Blueprints

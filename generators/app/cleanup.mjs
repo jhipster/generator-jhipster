@@ -16,24 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { binaryOptions } from '../jdl/jhipster/index.mjs';
 
-// eslint-disable-next-line import/prefer-default-export
-export const entityDefaultConfig = {
-  pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
-  validation: false,
-  dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
-  service: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
-  jpaMetamodelFiltering: false,
-  readOnly: false,
-  embedded: false,
-  entityAngularJSSuffix: '',
-  fluentMethods: true,
-  clientRootFolder: '',
-  get fields() {
-    return [];
-  },
-  get relationships() {
-    return [];
-  },
-};
+/**
+ * Removes files that where generated in previous JHipster versions and therefore
+ * need to be removed.
+ */
+export default function cleanupOldFilesTask({ application } = {}) {
+  if (this.isJhipsterVersionLessThan('6.1.0')) {
+    this.config.delete('blueprint');
+    this.config.delete('blueprintVersion');
+  }
+}

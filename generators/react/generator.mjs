@@ -21,7 +21,8 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.mjs';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.mjs';
-import { writeFiles, cleanupFiles } from './files-react.mjs';
+import cleanupOldFilesTask from './cleanup.mjs';
+import { writeFiles } from './files-react.mjs';
 import { prepareEntity } from './application/entities/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import {
@@ -103,7 +104,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return {
-      cleanupFiles,
+      cleanupOldFilesTask,
       writeFiles,
     };
   }

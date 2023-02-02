@@ -19,8 +19,7 @@
 
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.mjs';
-import { prepareEntityPrimaryKeyForTemplates } from './index.mjs';
-import { entityDefaultConfig } from '../../generator-defaults.mjs';
+import { prepareEntityPrimaryKeyForTemplates, entityDefaultConfig } from './prepare-entity.mjs';
 import BaseGenerator from '../../base/index.mjs';
 import { getConfigWithDefaults } from '../../../jdl/jhipster/index.mjs';
 

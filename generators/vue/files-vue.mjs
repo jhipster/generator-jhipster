@@ -323,20 +323,6 @@ export const entitiesFiles = {
   ],
 };
 
-export function cleanup({ application }) {
-  if (this.isJhipsterVersionLessThan('7.3.1')) {
-    this.removeFile('webpack/env.js');
-    this.removeFile('webpack/dev.env.js');
-    this.removeFile('webpack/prod.env.js');
-    this.removeFile('webpack/utils.js');
-    this.removeFile('webpack/loader.conf.js');
-  }
-
-  if (this.isJhipsterVersionLessThan('7.4.2')) {
-    this.removeFile(`${application.clientSrcDir}app/entities/user/user.oauth2.service.ts`);
-  }
-}
-
 export async function writeFiles({ application }) {
   await this.writeFiles({
     sections: vueFiles,
