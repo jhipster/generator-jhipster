@@ -29,7 +29,7 @@ public class SpaWebFilterIT {
 
     @Test
     void testFilterDoesNotForwardToIndexForApi() throws Exception {
-        mockMvc.perform(get("/api/authenticate"))
+        mockMvc.perform(get("/api/account"))
             .andExpect(status().isOk());
     }
 
