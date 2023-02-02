@@ -21,12 +21,12 @@ import pluralize from 'pluralize';
 
 import { getDatabaseTypeData } from '../../server/support/index.mjs';
 import { parseChangelog } from '../../base/support/index.mjs';
-import { entityDefaultConfig } from '../../generator-defaults.mjs';
 import { fieldToReference } from './prepare-field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
+  binaryOptions,
   databaseTypes,
   entityOptions,
   fieldTypes,
@@ -123,6 +123,25 @@ function _derivedProperties(entityWithConfig) {
     serviceNo: service === NO_SERVICE,
   });
 }
+
+export const entityDefaultConfig = {
+  pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
+  validation: false,
+  dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
+  service: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
+  jpaMetamodelFiltering: false,
+  readOnly: false,
+  embedded: false,
+  entityAngularJSSuffix: '',
+  fluentMethods: true,
+  clientRootFolder: '',
+  get fields() {
+    return [];
+  },
+  get relationships() {
+    return [];
+  },
+};
 
 export default function prepareEntity(entityWithConfig, generator, application) {
   const entityName = _.upperFirst(entityWithConfig.name);
