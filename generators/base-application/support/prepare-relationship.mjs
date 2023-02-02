@@ -19,8 +19,8 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 
-import { databaseTypes, entityOptions, reservedKeywords, validations } from '../jdl/jhipster/index.mjs';
-import { stringify } from './index.mjs';
+import { databaseTypes, entityOptions, reservedKeywords, validations } from '../../../jdl/jhipster/index.mjs';
+import { stringifyApplicationData } from './debug.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
@@ -41,13 +41,15 @@ function _derivedProperties(relationship) {
   });
 }
 
-export function prepareRelationshipForTemplates(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
+export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
   const entityName = entityWithConfig.name;
   const otherEntityName = relationship.otherEntityName;
   const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
 
   if (!relationship.otherEntity) {
-    throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
+    throw new Error(
+      `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
+    );
   }
   const otherEntityData = relationship.otherEntity;
   if (!relationship.otherEntityField && otherEntityData.primaryKey) {
@@ -86,9 +88,9 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
         otherRelationship.otherEntityRelationshipName !== relationship.relationshipName
       ) {
         throw new Error(
-          `Error at entity ${entityName}: relationship name is not synchronized ${stringify(relationship)} with ${stringify(
-            otherRelationship
-          )}`
+          `Error at entity ${entityName}: relationship name is not synchronized ${stringifyApplicationData(
+            relationship
+          )} with ${stringifyApplicationData(otherRelationship)}`
         );
       }
     } else {
@@ -111,9 +113,9 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
         !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
       ) {
         throw new Error(
-          `Error at entity ${entityName}: relationship type is not synchronized ${stringify(relationship)} with ${stringify(
-            otherRelationship
-          )}`
+          `Error at entity ${entityName}: relationship type is not synchronized ${stringifyApplicationData(
+            relationship
+          )} with ${stringifyApplicationData(otherRelationship)}`
         );
       }
       _.defaults(relationship, {
@@ -129,9 +131,11 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
       entityWithConfig.databaseType !== DATABASE_NO &&
       (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
     ) {
-      throw new Error(`Error at entity ${entityName}: could not find the other side of the relationship ${stringify(relationship)}`);
+      throw new Error(
+        `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`
+      );
     } else {
-      generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringify(relationship)}`);
+      generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
     }
     relationship.otherRelationship = otherRelationship;
   }
@@ -273,7 +277,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
   return relationship;
 }
 
-export function relationshipToReference(entity, relationship, pathPrefix = []) {
+function relationshipToReference(entity, relationship, pathPrefix = []) {
   const collection = relationship.collection;
   const name = collection ? relationship.relationshipNamePlural : relationship.relationshipName;
   const reference = {
