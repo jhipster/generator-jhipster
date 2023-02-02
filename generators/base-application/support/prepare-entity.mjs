@@ -193,11 +193,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
     : entityWithConfig.entityFileName;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
-  entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(
-    generator.logger,
-    generator.env,
-    entityWithConfig.clientRootFolder
-  );
+  entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
