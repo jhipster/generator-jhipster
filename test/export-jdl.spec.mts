@@ -1,6 +1,6 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
+import { basicHelpers as helpers } from './support/index.mjs';
 import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 describe('generator - export-jdl', () => {

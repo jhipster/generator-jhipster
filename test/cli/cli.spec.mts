@@ -3,10 +3,10 @@ import assert from 'assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { exec, fork } from 'child_process';
 import Environment from 'yeoman-environment';
-import helpers from 'yeoman-test';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { mock, resetAllMocks, fn } from '@node-loaders/jest-mock';
+import { basicHelpers as helpers } from '../support/index.mjs';
 
 import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
 import { createProgram } from '../../cli/program.mjs';

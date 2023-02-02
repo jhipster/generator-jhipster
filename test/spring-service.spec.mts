@@ -1,6 +1,6 @@
 import assert from 'yeoman-assert';
 import fse from 'fs-extra';
-import { skipPrettierHelpers as helpers } from './support/helpers.mjs';
+import { skipPrettierHelpers as helpers } from './support/index.mjs';
 import { SERVER_MAIN_SRC_DIR } from '../generators/generator-constants.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generators/generator-list.mjs';
 import { getTemplatePath } from './support/index.mjs';

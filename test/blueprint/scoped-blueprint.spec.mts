@@ -1,8 +1,8 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import path from 'path';
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
+import { basicHelpers as helpers } from '../support/index.mjs';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { getTemplatePath } from '../support/index.mjs';

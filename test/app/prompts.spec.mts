@@ -1,5 +1,5 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import {
   applicationTypes,
   databaseTypes,

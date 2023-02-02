@@ -1,7 +1,7 @@
 import path from 'path';
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import fse from 'fs-extra';
+import { basicHelpers as helpers } from './support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GENERATOR_JHIPSTER } from '../generators/generator-constants.mjs';
 import { getGenerator, getTemplatePath } from './support/index.mjs';
 
