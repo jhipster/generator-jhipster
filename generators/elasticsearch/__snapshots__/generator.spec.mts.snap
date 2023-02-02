@@ -2723,6 +2723,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
@@ -2730,9 +2733,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
@@ -2909,6 +2909,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -2916,9 +2919,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
@@ -3603,6 +3603,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
@@ -3610,9 +3613,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -3774,13 +3774,13 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -4555,13 +4555,13 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
@@ -4756,13 +4756,13 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {

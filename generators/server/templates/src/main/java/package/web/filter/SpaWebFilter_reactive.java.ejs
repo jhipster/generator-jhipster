@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2023 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,23 +18,19 @@
 -%>
 package <%= packageName %>.web.filter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-
-public class SpaWebFilter extends OncePerRequestFilter {
+public class SpaWebFilter implements WebFilter {
 
     /**
      * Forwards any unmapped paths (except those containing a period) to the client {@code index.html}.
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
-        String path = request.getRequestURI();
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String path = exchange.getRequest().getURI().getPath();
         if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login") && !path.startsWith("/oauth2")<% } %>
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
             && !path.startsWith("/services") && !path.startsWith("/v3/api-docs")
@@ -44,10 +40,8 @@ public class SpaWebFilter extends OncePerRequestFilter {
 <%_ } _%>
             && !path.contains(".") && path.matches("/(.*)")
         ) {
-            request.getRequestDispatcher("/index.html").forward(request, response);
-            return;
+            return chain.filter(exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build() ).build());
         }
-
-        filterChain.doFilter(request, response);
+        return chain.filter(exchange);
     }
 }

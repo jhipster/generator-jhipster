@@ -589,13 +589,19 @@ export const baseServerFiles = {
       condition: generator => !generator.skipClient && !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/ClientForwardController.java'],
+      templates: ['web/filter/SpaWebFilter.java'],
+    },
+    {
+      condition: generator => !generator.skipClient && !generator.reactive,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/filter/SpaWebFilterIT.java'],
     },
     {
       condition: generator => !generator.skipClient && generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/filter/SpaWebFilter.java'],
+      templates: ['web/filter/SpaWebFilter_reactive.java'],
     },
   ],
   serverJavaWebsocket: [
@@ -665,12 +671,6 @@ export const baseServerFiles = {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/errors/ExceptionTranslatorIT_reactive.java'],
-    },
-    {
-      condition: generator => !generator.skipClient && !generator.reactive,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/ClientForwardControllerTest.java'],
     },
     {
       path: SERVER_TEST_RES_DIR,
