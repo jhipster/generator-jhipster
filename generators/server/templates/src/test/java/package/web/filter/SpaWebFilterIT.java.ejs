@@ -31,7 +31,8 @@ public class SpaWebFilterIT {
     @Test
     void testFilterDoesNotForwardToIndexForApi() throws Exception {
         mockMvc.perform(get("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>"))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(forwardedUrl(null));
     }
 <%_ } _%>
 
@@ -39,7 +40,8 @@ public class SpaWebFilterIT {
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void testFilterDoesNotForwardToIndexForV3ApiDocs() throws Exception {
         mockMvc.perform(get("/v3/api-docs"))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(forwardedUrl(null));
     }
 
     @Test
@@ -51,7 +53,8 @@ public class SpaWebFilterIT {
     @Test
     void getBackendEndpoint() throws Exception {
         mockMvc.perform(get("/test"))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(forwardedUrl("/index.html"));
     }
 
     @Test
