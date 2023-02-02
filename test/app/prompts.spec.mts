@@ -32,7 +32,7 @@ describe('generator - app - prompts', () => {
             skipInstall: true,
             skipChecks: true,
           })
-          .withPrompts({
+          .withAnswers({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',
             applicationType: MONOLITH,

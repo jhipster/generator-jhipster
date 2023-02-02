@@ -54,7 +54,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         skipChecks: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, 'jhipster-myblueprint:react']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         clientFramework: REACT,
         enableTranslation: true,

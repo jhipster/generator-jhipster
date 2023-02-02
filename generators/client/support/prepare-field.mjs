@@ -16,7 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export default function prepareField(entityWithConfig, field, generator) {
+  if (field.fieldValidateRulesPatternAngular === undefined) {
+    field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
+      ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
+      : field.fieldValidateRulesPattern;
+  }
 
-export { default } from './generator.mjs';
-export { serverFiles as files } from './files.mjs';
-export * from './needles.mjs';
+  if (field.fieldValidateRulesPatternReact === undefined) {
+    field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
+      ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
+      : field.fieldValidateRulesPattern;
+  }
+}

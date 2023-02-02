@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
-import { loadRequiredConfigIntoEntity } from '../../utils/entity.mjs';
+import { loadRequiredConfigIntoEntity } from '../base-application/support/index.mjs';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;

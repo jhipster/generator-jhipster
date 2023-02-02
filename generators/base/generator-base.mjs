@@ -34,8 +34,7 @@ import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import { getDBTypeFromDBValue } from '../server/support/index.mjs';
-import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
+import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
 import {
   databaseTypes,
   monitoringTypes,

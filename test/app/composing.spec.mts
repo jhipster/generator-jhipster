@@ -5,7 +5,7 @@ import Environment from 'yeoman-environment';
 
 import { dryRunHelpers as helpers } from '../support/helpers.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
-import { getGenerator } from '../support/index.mjs';
+import { GENERATOR_APP } from '../../generators/generator-list.mjs';
 
 const { createEnv } = Environment;
 
@@ -29,7 +29,7 @@ describe('generator - app - composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(getGenerator('app'));
+        runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -78,7 +78,7 @@ describe('generator - app - composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(getGenerator('app'));
+        runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -129,7 +129,7 @@ describe('generator - app - composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(getGenerator('app'));
+        runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -176,7 +176,7 @@ describe('generator - app - composing', () => {
         let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.create(getGenerator('app'));
+          runContext = helpers.createJHipster(GENERATOR_APP);
           runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
@@ -231,7 +231,7 @@ describe('generator - app - composing', () => {
         let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.create(getGenerator('app'));
+          runContext = helpers.createJHipster(GENERATOR_APP);
           runResult = await runContext
             .withOptions({
               baseName: 'jhipster',

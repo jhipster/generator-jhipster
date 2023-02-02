@@ -103,7 +103,7 @@ describe('generator - languages', () => {
           helpers
             .create(generatorPath)
             .withOptions({ ignoreNeedlesError: true })
-            .withPrompts({
+            .withAnswers({
               enableTranslation: true,
               nativeLanguage: language.languageTag,
               languages: [language.languageTag],
@@ -148,7 +148,7 @@ describe('generator - languages', () => {
   context('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
       before(() =>
-        helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withPrompts({
+        helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withAnswers({
           enableTranslation: true,
           nativeLanguage: 'fr',
           languages: [],
@@ -192,7 +192,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withOptions({ ignoreNeedlesError: true })
-          .withPrompts({
+          .withAnswers({
             enableTranslation: true,
             nativeLanguage: 'fr',
             languages: ['en'],
@@ -230,7 +230,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withOptions({ ignoreNeedlesError: true })
-          .withPrompts({
+          .withAnswers({
             enableTranslation: true,
             nativeLanguage: 'fr',
             languages: ['fr', 'de'],
@@ -262,7 +262,7 @@ describe('generator - languages', () => {
         });
         await result
           .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-          .withPrompts({
+          .withAnswers({
             languages: ['fr', 'de'],
           })
           .run();
