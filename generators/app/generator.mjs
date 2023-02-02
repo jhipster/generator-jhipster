@@ -24,7 +24,7 @@ import BaseGenerator from '../base-application/index.mjs';
 import { checkNode } from './support/index.mjs';
 import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
-import { cleanupOldFiles } from '../cleanup.mjs';
+import cleanupOldFilesTask from './cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import statistics from '../statistics.mjs';
@@ -480,9 +480,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application }) {
-        cleanupOldFiles(this, application);
-      },
+      cleanupOldFilesTask,
     });
   }
 
