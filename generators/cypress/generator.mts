@@ -27,24 +27,19 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
 import type { CypressApplication } from './types.mjs';
-import type {
-  LoadingTaskGroup,
-  PostWritingTaskGroup,
-  PreparingEachEntityTaskGroup,
-  PreparingTaskGroup,
-  PromptingTaskGroup,
-  WritingEntitiesTaskGroup,
-  WritingTaskGroup,
-} from '../base-application/tasks.mjs';
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.mjs';
+import { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<CypressApplication>}
- */
-export default class CypressGenerator extends BaseApplicationGenerator<CypressApplication> {
+type ApplicationDefinition = {
+  applicationType: CypressApplication;
+  entityType: Entity;
+};
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
+
+export default class CypressGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -63,8 +58,8 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
     }
   }
 
-  get prompting(): PromptingTaskGroup<this> {
-    return {
+  get prompting() {
+    return this.asPromptingTaskGroup({
       async askForCypressOptions({ control }) {
         if (control.existingProject && !this.options.askAnswered) return;
         await (this.prompt as any)(
@@ -84,56 +79,56 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
           this.config
         );
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get loading(): LoadingTaskGroup<this, CypressApplication> {
-    return {
+  get loading() {
+    return this.asLoadingTaskGroup({
       prepareForTemplates({ application }) {
         const { cypressAudit = true, cypressCoverage = false } = this.jhipsterConfig as any;
         application.cypressAudit = cypressAudit;
         application.cypressCoverage = cypressCoverage;
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
-  get preparing(): PreparingTaskGroup<this, CypressApplication> {
-    return {
+  get preparing() {
+    return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
         application.cypressDir = application.cypressDir ?? application.clientTestDir ? `${application.clientTestDir}cypress/` : 'cypress';
         application.cypressTemporaryDir =
           application.cypressTemporaryDir ?? application.temporaryDir ? `${application.temporaryDir}cypress/` : '.cypress/';
         application.cypressBootstrapEntities = application.cypressBootstrapEntities ?? true;
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get preparingEachEntity(): PreparingEachEntityTaskGroup<this, CypressApplication> {
-    return {
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
       prepareForTemplates({ entity }) {
         this._.defaults(entity, { workaroundEntityCannotBeEmpty: false, workaroundInstantReactiveMariaDB: false });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
-  get writing(): WritingTaskGroup<this, CypressApplication> {
-    return {
+  get writing() {
+    return this.asWritingTaskGroup({
       cleanup({ application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
         if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${cypressDir}support/keycloak-oauth2.ts`);
@@ -166,15 +161,15 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
           },
         });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get writingEntities(): WritingEntitiesTaskGroup<this, CypressApplication> {
-    return {
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
       cleanupCypressEntityFiles({ application: { cypressDir }, entities }) {
         for (const entity of entities) {
           if (this.isJhipsterVersionLessThan('7.8.2')) {
@@ -191,15 +186,15 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
           });
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
-  get postWriting(): PostWritingTaskGroup<this, CypressApplication> {
-    return {
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
       loadPackageJson() {
         // Load common client package.json into dependabotPackageJson
         _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'package.json')));
@@ -277,7 +272,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
           );
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {

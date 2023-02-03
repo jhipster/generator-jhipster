@@ -141,7 +141,7 @@ const { NO: NO_SERVICE } = ServiceTypes;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */

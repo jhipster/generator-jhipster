@@ -1,3 +1,4 @@
+import { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 import type { ClientApplication } from '../client/types.mjs';
 import type { SpringBootApplication } from '../server/types.mjs';
 

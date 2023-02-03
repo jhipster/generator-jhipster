@@ -2,13 +2,16 @@ import _ from 'lodash';
 import type Storage from 'yeoman-generator/lib/util/storage.js';
 
 import BaseGenerator from '../base/index.mjs';
+import { BaseGeneratorDefinition } from '../base/tasks.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 
 const { upperFirst } = _;
 
 // Temporary Generator with Typescript implementations
-export default class BaseApplicationTsGenerator extends BaseGenerator {
+export default class BaseApplicationTsGenerator<
+  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition
+> extends BaseGenerator<Definition> {
   /**
    * Get all the generator configuration from the .yo-rc.json file
    * @param entityName - Name of the entity to load.

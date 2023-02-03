@@ -1,40 +1,5 @@
-import {
-  GenerericTaskParam,
-  GenericTaskGroup,
-  InitializingTaskGroup as BaseInitializingTaskGroup,
-  PromptingTaskGroup as BasePromptingTaskGroup,
-  ConfiguringTaskGroup as BaseConfiguringTaskGroup,
-  ComposingTaskGroup as BaseComposingTaskGroup,
-  LoadingTaskGroup as BaseLoadingTaskGroup,
-} from '../base/tasks.mjs';
-
-export type Application = Record<string, any>;
-
-export type ApplicationTaskParam<ApplicationType> = { application: ApplicationType } & GenerericTaskParam<any, any>;
-export type ApplicationTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, ApplicationTaskParam<ApplicationType>>;
-
-type ConfiguringEachEntityTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
-  entityName: string;
-  /** Entity storage */
-  entityStorage: import('yeoman-generator/lib/util/storage');
-  /** Proxy object for the entitystorage */
-  entityConfig: Record<string, any>;
-};
-type ConfiguringEachEntityTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<
-  ThisType,
-  ConfiguringEachEntityTaskParam<ApplicationType>
->;
-
-type LoadingEntitiesTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
-  entitiesToLoad: {
-    entityName: string;
-    /** Entity storage */
-    entityStorage: import('yeoman-generator/lib/util/storage');
-    /** Proxy object for the entitystorage */
-    entityConfig: Record<string, any>;
-  }[];
-};
-type LoadingEntitiesTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, LoadingEntitiesTaskParam<ApplicationType>>;
+import { GenerericTaskParam, GenericTaskGroup, BaseGeneratorDefinition } from '../base/tasks.mjs';
+import { BaseApplication } from './types.mjs';
 
 type Field = {
   fieldName: string;
@@ -46,60 +11,92 @@ type Relationship = {
   relationshipName: string;
 } & Record<string, any>;
 
-type Entity = {
+export type Entity = {
   fields: Field[];
   relationships: Relationship[];
 } & Record<string, any>;
 
-type EachEntityTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
-  entity: Entity;
+type ApplicationDefinition = {
+  applicationType: BaseApplication;
+  entityType: Entity;
+};
+
+type ConfiguringEachEntityTaskParam = {
+  entityName: string;
+  /** Entity storage */
+  entityStorage: import('yeoman-generator/lib/util/storage');
+  /** Proxy object for the entitystorage */
+  entityConfig: Record<string, any>;
+};
+
+type LoadingEntitiesTaskParam = {
+  entitiesToLoad: {
+    entityName: string;
+    /** Entity storage */
+    entityStorage: import('yeoman-generator/lib/util/storage');
+    /** Proxy object for the entitystorage */
+    entityConfig: Record<string, any>;
+  }[];
+};
+
+type ApplicationTaskParam<Definition extends ApplicationDefinition = GenerericTaskParam & ApplicationDefinition> = {
+  application: Definition['applicationType'] & { user: Definition['entityType'] };
+};
+
+type EntitiesTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = ApplicationTaskParam<Definition> & {
+  entities: Definition['entityType'][];
+};
+
+type EachEntityTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = ApplicationTaskParam<Definition> & {
+  entity: Definition['entityType'];
   entityName: string;
   description: string;
 };
 
-type EachEntityTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, EachEntityTaskParam<ApplicationType>>;
+export type BaseApplicationGeneratorDefinition<Definition extends ApplicationDefinition = ApplicationDefinition> = BaseGeneratorDefinition &
+  Record<
+    | 'loadingTaskParam'
+    | 'preparingTaskParam'
+    | 'writingTaskParam'
+    | 'postWritingTaskParam'
+    | 'preConflictsTaskParam'
+    | 'installTaskParam'
+    | 'postInstallTaskParam'
+    | 'endTaskParam',
+    ApplicationTaskParam<Definition>
+  > &
+  Record<'defaultTaskParam' | 'writingEntitiesTaskParam' | 'postWritingEntitiesTaskParam', EntitiesTaskParam<Definition>> & {
+    applicationType: Definition['applicationType'];
+    configuringEachEntityTaskParam: ConfiguringEachEntityTaskParam & GenerericTaskParam & ApplicationTaskParam<Definition>;
+    loadingEntitiesTaskParam: LoadingEntitiesTaskParam & GenerericTaskParam & ApplicationTaskParam<Definition>;
+    preparingEachEntityTaskParam: any;
+    preparingEachEntityFieldTaskParam: any;
+    preparingEachEntityRelationshipTaskParam: any;
+    postPreparingEachEntityTaskGroup: any;
+  };
 
-type PreparingEachEntityFieldTaskParam<ApplicationType> = EachEntityTaskParam<ApplicationType> & {
+type PreparingEachEntityFieldTaskParam<Definition extends GeneratorDefinition = GeneratorDefinition> = EachEntityTaskParam<Definition> & {
   field: Field;
   fieldName: string;
 };
-type PreparingEachEntityFieldTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<
+type PreparingEachEntityFieldTaskGroup<ThisType, Definition extends GeneratorDefinition = GeneratorDefinition> = GenericTaskGroup<
   ThisType,
-  PreparingEachEntityFieldTaskParam<ApplicationType>
+  PreparingEachEntityFieldTaskParam<Definition>
 >;
 
-type PreparingEachEntityRelationshipTaskParam<ApplicationType> = EachEntityTaskParam<ApplicationType> & {
-  relationship: Relationship;
-  relationshipName: string;
-};
-type PreparingEachEntityRelationshipTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<
+type PreparingEachEntityRelationshipTaskParam<Definition extends GeneratorDefinition = GeneratorDefinition> =
+  EachEntityTaskParam<Definition> & {
+    relationship: Relationship;
+    relationshipName: string;
+  };
+type PreparingEachEntityRelationshipTaskGroup<ThisType, Definition extends GeneratorDefinition = GeneratorDefinition> = GenericTaskGroup<
   ThisType,
-  PreparingEachEntityRelationshipTaskParam<ApplicationType>
+  PreparingEachEntityRelationshipTaskParam<Definition>
 >;
 
-type EntitiesTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & { entities: Entity[] };
+type EntitiesTaskParam<Definition extends GeneratorDefinition = GeneratorDefinition> = ApplicationTaskParam<Definition>;
 
-type EntitiesTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, EntitiesTaskParam<ApplicationType>>;
-
-export {
-  BaseInitializingTaskGroup as InitializingTaskGroup,
-  BasePromptingTaskGroup as PromptingTaskGroup,
-  BaseConfiguringTaskGroup as ConfiguringTaskGroup,
-  BaseComposingTaskGroup as ComposingTaskGroup,
-  ApplicationTaskGroup as LoadingTaskGroup,
-  ApplicationTaskGroup as PreparingTaskGroup,
-  ConfiguringEachEntityTaskGroup,
-  LoadingEntitiesTaskGroup,
-  EachEntityTaskGroup as PreparingEachEntityTaskGroup,
-  PreparingEachEntityFieldTaskGroup,
-  PreparingEachEntityRelationshipTaskGroup,
-  EachEntityTaskGroup as PostPreparingEachEntityTaskGroup,
-  EntitiesTaskGroup as DefaultTaskGroup,
-  ApplicationTaskGroup as WritingTaskGroup,
-  EntitiesTaskGroup as WritingEntitiesTaskGroup,
-  ApplicationTaskGroup as PostWritingTaskGroup,
-  EntitiesTaskGroup as PostWritingEntitiesTaskGroup,
-  ApplicationTaskGroup as InstallTaskGroup,
-  ApplicationTaskGroup as PostInstallTaskGroup,
-  ApplicationTaskGroup as EndTaskGroup,
-};
+type EntitiesTaskGroup<ThisType, Definition extends GeneratorDefinition = GeneratorDefinition> = GenericTaskGroup<
+  ThisType,
+  EntitiesTaskParam<Definition>
+>;

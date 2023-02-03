@@ -27,7 +27,6 @@ import {
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
-import type { CommonClientServerApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
 import { packageJson } from '../../lib/index.mjs';
@@ -35,11 +34,7 @@ import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const { upperFirst } = _;
 
-/**
- * @class
- * @extends { BaseApplicationGenerator<CommonClientServerApplication> }
- */
-export default class BootStrapApplicationBase extends BaseApplicationGenerator<CommonClientServerApplication> {
+export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -54,7 +49,7 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
   }
 
   get configuring() {
-    return this.asLoadingTaskGroup({
+    return this.asConfiguringTaskGroup({
       configuring() {
         if (this.jhipsterConfig.baseName === undefined) {
           this.jhipsterConfig.baseName = 'jhipster';

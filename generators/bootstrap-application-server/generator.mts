@@ -22,11 +22,14 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.mjs';
-import { loadRequiredConfigDerivedProperties, prepareEntity as prepareEntityServerForTemplates } from '../server/support/index.mjs';
-import type { SpringBootApplication } from '../server/types.mjs';
+import {
+  loadRequiredConfigDerivedProperties,
+  prepareEntity as prepareEntityServerForTemplates,
+  getPomVersionProperties,
+} from '../server/support/index.mjs';
+import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server/index.mjs';
 import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
-import { getPomVersionProperties } from '../server/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
@@ -34,11 +37,7 @@ const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
-export default class BoostrapApplicationServer extends BaseApplicationGenerator<SpringBootApplication> {
+export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
   }
@@ -52,7 +51,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
       async loadApplication({ application, control }) {
         this.loadServerConfig(undefined, application);
 
-        application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
+        (application as any).gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));

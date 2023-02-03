@@ -31,7 +31,7 @@ import { prettierTransform, generatedAnnotationTransform } from './transforms.mj
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
-import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
+import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/support/index.mjs';
 
@@ -91,7 +91,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     return this.transform;
   }
 
-  get preConflicts(): PreConflictsTaskGroup<this> {
+  get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
       async commitPrettierConfig() {
         if (this.options.skipCommit) {

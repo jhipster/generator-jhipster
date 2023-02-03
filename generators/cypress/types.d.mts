@@ -1,7 +1,5 @@
-import { BaseGeneratorApplicationType } from '../base-application/tasks.mjs';
-import { ClientApplication, ClientConfig, ClientEntity, ClientField, ClientRelationship } from '../client/types.mjs';
-
-export type CypressEntity = ClientEntity;
+import { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
+import { ClientApplication } from '../client/types.mjs';
 
 export type CypressProperties = {
   cypressAudit: boolean;
@@ -12,13 +10,3 @@ export type CypressProperties = {
 };
 
 export type CypressApplication = ClientApplication & CypressProperties;
-
-export type CypressApplicationConfig = ClientConfig & Partial<CypressProperties>;
-
-export type GeneratorCypressApplication = BaseGeneratorApplicationType<
-  CypressApplication,
-  CypressApplicationConfig,
-  ClientEntity,
-  ClientField,
-  ClientRelationship
->;

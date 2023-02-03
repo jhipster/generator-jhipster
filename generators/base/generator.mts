@@ -44,7 +44,7 @@ import type {
   JHipsterOptions,
   CheckResult,
 } from './api.mjs';
-import type { BaseTaskGroup } from './tasks.mjs';
+import type { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -60,11 +60,10 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 
 /**
  * This is the base class for a generator for every generator.
- *
- * @class
- * @extends {JHipsterBaseBlueprintGenerator}
  */
-export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
+export default class BaseGenerator<
+  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition
+> extends JHipsterBaseBlueprintGenerator<Definition> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -92,20 +91,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static END = asPriority(END);
 
   readonly sharedData!: SharedData<BaseApplication>;
-
-  declare _config: Record<string, any>;
-  jhipsterConfig!: Record<string, any>;
-  /**
-   * @deprecated
-   */
-  configOptions!: Record<string, any>;
-  jhipsterTemplatesFolders!: string[];
-
-  fromBlueprint!: boolean;
-  sbsBlueprint?: boolean;
-  blueprintStorage?: Storage;
-  blueprintConfig?: Record<string, any>;
-  jhipsterContext?: any;
 
   private _jhipsterGenerator?: string;
 
@@ -264,13 +249,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
     }
     return priorities;
-  }
-
-  /**
-   * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
-   */
-  delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
-    return this.delegateToBlueprint ? {} : tasksGetter();
   }
 
   /**

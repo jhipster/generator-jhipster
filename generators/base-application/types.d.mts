@@ -1,6 +1,7 @@
 import type { GenericDerivedProperty, OptionalGenericDerivedProperty } from '../base/application.mjs';
 import { Language } from '../languages/support/index.mjs';
 import { I18nApplication } from '../languages/types.mjs';
+import { BaseApplicationGeneratorDefinition, Entity } from './tasks.mjs';
 
 export type BaseApplication = {
   jhipsterVersion: string;
@@ -27,6 +28,15 @@ export type BaseApplication = {
   nodeVersion: string;
   nodePackageManager: string;
   nodeDependencies: Record<string, string>;
+
+  /**
+   * @deprecated
+   */
+  skipClient?: boolean;
+  /**
+   * @deprecated
+   */
+  skipServer?: boolean;
 } & I18nApplication;
 
 /* ApplicationType Start */

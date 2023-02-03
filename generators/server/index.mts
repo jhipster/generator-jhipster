@@ -17,6 +17,18 @@
  * limitations under the License.
  */
 
+import { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
+import { SpringBootApplication } from './types.mjs';
+
 export { default } from './generator.mjs';
 export { serverFiles as files } from './files.mjs';
 export * from './needles.mjs';
+
+// TODO move to ./generator.mts
+export type ApplicationDefinition = {
+  applicationType: SpringBootApplication;
+  entityType: Entity;
+};
+
+// TODO move to ./generator.mts
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
