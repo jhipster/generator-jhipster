@@ -30,7 +30,7 @@ import { fileURLToPath } from 'url';
 
 import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import PrivateBase from './generator-base-private.mjs';
+import PrivateBase from './generator-base-definitions.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
@@ -90,11 +90,7 @@ const NO_WEBSOCKET = websocketTypes.NO;
 const isWin32 = os.platform() === 'win32';
 
 /**
- * This is the Generator base class.
- * This provides all the public API methods exposed via the module system.
- * The public API methods can be directly utilized as well using commonJS require.
- *
- * The method signatures in public API should not be changed without a major version change
+ * Class the contains the methods that should be refactored and converted to typescript.
  *
  * @class
  * @extends {PrivateBase}

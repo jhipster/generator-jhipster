@@ -30,7 +30,7 @@ import { lt as semverLessThan } from 'semver';
 import type Storage from 'yeoman-generator/lib/util/storage.js';
 
 import SharedData from './shared-data.mjs';
-import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
+import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './support/index.mjs';
 import baseOptions from './options.mjs';
@@ -44,7 +44,6 @@ import type {
   JHipsterOptions,
   CheckResult,
 } from './api.mjs';
-import type { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -61,9 +60,7 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 /**
  * This is the base class for a generator for every generator.
  */
-export default class BaseGenerator<
-  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition
-> extends JHipsterBaseBlueprintGenerator<Definition> {
+export default class BaseGenerator extends YeomanGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -91,6 +88,15 @@ export default class BaseGenerator<
   static END = asPriority(END);
 
   readonly sharedData!: SharedData<BaseApplication>;
+  declare _config: Record<string, any>;
+  jhipsterConfig!: Record<string, any>;
+  /**
+   * @deprecated
+   */
+  configOptions!: Record<string, any>;
+  jhipsterTemplatesFolders!: string[];
+
+  blueprintStorage?: Storage;
 
   private _jhipsterGenerator?: string;
 
@@ -187,24 +193,6 @@ export default class BaseGenerator<
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
-
-    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
-
-    if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage({ sorted: true });
-      this.blueprintConfig = this.blueprintStorage.createProxy();
-
-      // jhipsterContext is the original generator
-      this.jhipsterContext = this.options.jhipsterContext;
-
-      try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
-      } catch (error) {
-        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
-        this.logger.log(error);
-      }
-    }
   }
 
   /**

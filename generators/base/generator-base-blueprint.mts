@@ -21,32 +21,51 @@ import fs from 'fs';
 import path from 'path';
 import semver from 'semver';
 
-import Storage from 'yeoman-generator/lib/util/storage.js';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace } from './support/index.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
+import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
 
 /**
- * Base class for a generator that can be extended through a blueprint.
+ * Base class that contains blueprints support.
  */
-export default class JHipsterBaseBlueprintGenerator<Definition extends BaseGeneratorDefinition> extends JHipsterBaseGenerator {
-  declare _config: Record<string, any>;
-  jhipsterConfig!: Record<string, any>;
-  /**
-   * @deprecated
-   */
-  configOptions!: Record<string, any>;
-  jhipsterTemplatesFolders!: string[];
-
+export default class JHipsterBaseBlueprintGenerator<
+  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition
+> extends JHipsterBaseGenerator {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;
-  blueprintStorage?: Storage;
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
+
+  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+    super(args, options, features);
+
+    if (this.options.help) {
+      return;
+    }
+
+    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
+
+    if (this.fromBlueprint) {
+      this.blueprintStorage = this._getStorage({ sorted: true });
+      this.blueprintConfig = this.blueprintStorage.createProxy();
+
+      // jhipsterContext is the original generator
+      this.jhipsterContext = this.options.jhipsterContext;
+
+      try {
+        // Fallback to the original generator if the file does not exists in the blueprint.
+        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
+      } catch (error) {
+        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
+        this.logger.log(error);
+      }
+    }
+  }
 
   /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.

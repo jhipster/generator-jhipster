@@ -22,7 +22,7 @@ import cleanupOauth2 from './cleanup-oauth2.mjs';
 import cleanupCucumber from './cleanup-cucumber.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
-import type BaseGenerator from '../base/generator.mjs';
+import type BaseGenerator from '../base/index.mjs';
 import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.mjs';
 
 /**
