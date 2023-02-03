@@ -29,13 +29,7 @@ export type BaseApplication = {
   nodePackageManager: string;
   nodeDependencies: Record<string, string>;
 
-  /**
-   * @deprecated
-   */
   skipClient?: boolean;
-  /**
-   * @deprecated
-   */
   skipServer?: boolean;
 } & I18nApplication;
 

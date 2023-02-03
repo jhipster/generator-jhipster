@@ -189,7 +189,7 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderSecurityMetersTests.java`);
       this.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderTest.java`);
     }
-    if ((application as any).clientFrameworkAny && !application.reactive) {
+    if (!application.skipClient && !application.reactive) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
       this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
     }
