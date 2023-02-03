@@ -36,18 +36,18 @@ public class SpaWebFilter extends OncePerRequestFilter {
         throws ServletException, IOException {
         String path = request.getRequestURI();
         if (
-            !path.startsWith("/api")
-            && !path.startsWith("/management")
-            && !path.startsWith("/v3/api-docs")
+            !path.startsWith("/api") &&
+            !path.startsWith("/management") &&
+            !path.startsWith("/v3/api-docs") &&
 <%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>
-            && !path.startsWith("/login")
-            && !path.startsWith("/oauth2")
+            !path.startsWith("/login") &&
+            !path.startsWith("/oauth2") &&
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-            && !path.startsWith("/websocket")
+            !path.startsWith("/websocket") &&
 <%_ } _%>
-            && !path.contains(".")
-            && path.matches("/(.*)")
+            !path.contains(".") &&
+            path.matches("/(.*)")
         ) {
             request.getRequestDispatcher("/index.html").forward(request, response);
             return;
