@@ -53,6 +53,18 @@ type EachEntityTaskParam<Definition extends ApplicationDefinition = ApplicationD
   description: string;
 };
 
+type PreparingEachEntityFieldTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> =
+  EachEntityTaskParam<Definition> & {
+    field: Field;
+    fieldName: string;
+  };
+
+type PreparingEachEntityRelationshipTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> =
+  EachEntityTaskParam<Definition> & {
+    relationship: Relationship;
+    relationshipName: string;
+  };
+
 export type BaseApplicationGeneratorDefinition<Definition extends ApplicationDefinition = ApplicationDefinition> = BaseGeneratorDefinition &
   Record<
     | 'loadingTaskParam'
@@ -69,34 +81,12 @@ export type BaseApplicationGeneratorDefinition<Definition extends ApplicationDef
     applicationType: Definition['applicationType'];
     configuringEachEntityTaskParam: ConfiguringEachEntityTaskParam & GenerericTaskParam & ApplicationTaskParam<Definition>;
     loadingEntitiesTaskParam: LoadingEntitiesTaskParam & GenerericTaskParam & ApplicationTaskParam<Definition>;
-    preparingEachEntityTaskParam: any;
-    preparingEachEntityFieldTaskParam: any;
-    preparingEachEntityRelationshipTaskParam: any;
-    postPreparingEachEntityTaskGroup: any;
+    preparingEachEntityTaskParam: EachEntityTaskParam<Definition> & GenerericTaskParam & ApplicationTaskParam<Definition>;
+    preparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<Definition> &
+      GenerericTaskParam &
+      ApplicationTaskParam<Definition>;
+    preparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<Definition> &
+      GenerericTaskParam &
+      ApplicationTaskParam<Definition>;
+    postPreparingEachEntityTaskParam: EachEntityTaskParam<Definition> & GenerericTaskParam & ApplicationTaskParam<Definition>;
   };
-
-type PreparingEachEntityFieldTaskParam<Definition extends GeneratorDefinition = GeneratorDefinition> = EachEntityTaskParam<Definition> & {
-  field: Field;
-  fieldName: string;
-};
-type PreparingEachEntityFieldTaskGroup<ThisType, Definition extends GeneratorDefinition = GeneratorDefinition> = GenericTaskGroup<
-  ThisType,
-  PreparingEachEntityFieldTaskParam<Definition>
->;
-
-type PreparingEachEntityRelationshipTaskParam<Definition extends GeneratorDefinition = GeneratorDefinition> =
-  EachEntityTaskParam<Definition> & {
-    relationship: Relationship;
-    relationshipName: string;
-  };
-type PreparingEachEntityRelationshipTaskGroup<ThisType, Definition extends GeneratorDefinition = GeneratorDefinition> = GenericTaskGroup<
-  ThisType,
-  PreparingEachEntityRelationshipTaskParam<Definition>
->;
-
-type EntitiesTaskParam<Definition extends GeneratorDefinition = GeneratorDefinition> = ApplicationTaskParam<Definition>;
-
-type EntitiesTaskGroup<ThisType, Definition extends GeneratorDefinition = GeneratorDefinition> = GenericTaskGroup<
-  ThisType,
-  EntitiesTaskParam<Definition>
->;

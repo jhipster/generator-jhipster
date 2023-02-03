@@ -194,7 +194,7 @@ export default class BaseApplicationGenerator<
   /**
    * Priority API stub for blueprints.
    */
-  get postPreparingEachEntity(): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskGroup']> {
+  get postPreparingEachEntity(): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']> {
     return this.asPostPreparingEachEntityTaskGroup({});
   }
 
@@ -261,8 +261,8 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postPreparingEachEntityTaskGroup']>
-  ): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskGroup']> {
+    taskGroup: GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']>
+  ): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']> {
     return taskGroup;
   }
 
