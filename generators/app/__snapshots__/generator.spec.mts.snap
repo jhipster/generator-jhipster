@@ -1213,7 +1213,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pages": [],
-  "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
+  "prettierExtensions": "md,json,yml,html,java",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabasePassword": "",

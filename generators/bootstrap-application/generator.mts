@@ -68,7 +68,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         }
 
         let prettierExtensions = 'md,json,yml,html';
-        if (!application.clientFrameworkAny) {
+        if (application.clientFrameworkAny) {
           prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
           if (application.clientFrameworkVue) {
             prettierExtensions = `${prettierExtensions},vue`;
