@@ -16,7 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
-export { default as postPrepareEntity } from './post-prepare-entity.mjs';
-export { default as prepareField } from './prepare-field.mjs';
-export { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from './relationship.mjs';
+
+const validOptions = ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT'];
+
+/**
+ * Checks that the value is a valid option for foreign key on handlers, and returns it if it is. If it isn't, resets the value to undefined.
+ * @param onValue
+ * @param generator
+ * @returns
+ */
+export default function checkAndReturnRelationshipOnValue(onValue, generator) {
+  let result = onValue;
+
+  if (result) {
+    if (!validOptions.includes(result)) {
+      generator.logger.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
+
+      result = undefined;
+    }
+  }
+
+  return result;
+}
