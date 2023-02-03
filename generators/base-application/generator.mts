@@ -17,13 +17,17 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import type Storage from 'yeoman-generator/lib/util/storage.js';
 
-import BaseApplicationTsGenerator from './generator-ts.mjs';
+import BaseGenerator from '../base/index.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { BaseApplicationGeneratorDefinition, Entity } from './tasks.mjs';
 import { GenericTaskGroup } from '../base/tasks.mjs';
 import { CommonClientServerApplication } from './types.mjs';
+import { getEntitiesFromDir } from './support/index.mjs';
+
+const { upperFirst } = _;
 
 const {
   LOADING,
@@ -55,7 +59,7 @@ const {
   POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
-const asPriority = BaseApplicationTsGenerator.asPriority;
+const asPriority = BaseGenerator.asPriority;
 
 type ApplicationDefinition = {
   applicationType: CommonClientServerApplication;
@@ -69,7 +73,7 @@ export type GeneratorDefinition = BaseApplicationGeneratorDefinition<Application
  */
 export default class BaseApplicationGenerator<
   Definition extends BaseApplicationGeneratorDefinition = GeneratorDefinition
-> extends BaseApplicationTsGenerator<Definition> {
+> extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -118,6 +122,46 @@ export default class BaseApplicationGenerator<
       }
       delete this.options.applicationWithEntities;
     }
+  }
+
+  /**
+   * Get all the generator configuration from the .yo-rc.json file
+   * @param entityName - Name of the entity to load.
+   * @param create - Create storage if doesn't exists.
+   */
+  getEntityConfig(entityName: string, create = false): Storage | undefined {
+    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+    if (!create && !this.fs.exists(entityPath)) return undefined;
+    return this.createStorage(entityPath, { sorted: true } as any);
+  }
+
+  /**
+   * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
+   */
+  getExistingEntityNames(): string[] {
+    return this.getExistingEntities().map(entity => entity.name);
+  }
+
+  /**
+   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
+   */
+  getExistingEntities(): { name: string; definition: Record<string, any> }[] {
+    function isBefore(e1, e2) {
+      return e1.definition.changelogDate - e2.definition.changelogDate;
+    }
+
+    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+
+    const entities: { name: string; definition: Record<string, any> }[] = [];
+    for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
+      const definition = this.getEntityConfig(entityName)?.getAll();
+      if (definition) {
+        entities.push({ name: entityName, definition });
+      }
+    }
+    entities.sort(isBefore);
+    this.jhipsterConfig.entities = entities.map(({ name }) => name);
+    return entities;
   }
 
   /**
