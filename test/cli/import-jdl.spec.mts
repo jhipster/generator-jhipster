@@ -3,11 +3,10 @@ import path from 'path';
 import fse from 'fs-extra';
 import assert from 'yeoman-assert';
 import { expect } from 'chai';
-import { getOptionAsArgs } from '../../cli/utils.mjs';
 
 import { getTemplatePath, testInTempDir, revertTempDir } from '../support/index.mjs';
 
-let subGenCallParams = {
+let subGenCallParams: { count: number; commands: string[]; options: any[]; entities: string[] } = {
   count: 0,
   commands: [],
   options: [],
@@ -36,19 +35,6 @@ const env = {
     return Promise.resolve();
   },
 };
-
-const utilsMock = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
-utilsMock.getOptionAsArgs.mockImplementation(getOptionAsArgs);
-
-const childProcessMock = await mock<typeof import('child_process')>('child_process');
-childProcessMock.fork.mockImplementation(((runYeomanProcess, argv, opts) => {
-  pushCall(argv[0], argv.slice(1));
-  return {
-    on(code, cb) {
-      cb(0);
-    },
-  };
-}) as any);
 
 const EnvironmentBuilderMock = await mock<typeof import('../../cli/environment-builder.mjs')>('../../cli/environment-builder.mjs');
 EnvironmentBuilderMock.default.createDefaultBuilder.mockImplementation((async () => {
@@ -115,15 +101,21 @@ describe('generator - import jdl', () => {
 
     it('calls generator in order', () => {
       expect(subGenCallParams.count).to.equal(5);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--from-jdl',
+      expect(subGenCallParams.commands).to.eql([
+        'jhipster:app',
+        'jhipster:app',
+        'jhipster:app',
+        'jhipster:docker-compose',
+        'jhipster:kubernetes',
       ]);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        withEntities: true,
+        skipInstall: true,
+        noInsight: true,
+        fromJdl: true,
+      });
       expect(subGenCallParams.options[3]).to.eql({
         force: true,
         skipInstall: true,
@@ -313,16 +305,16 @@ describe('generator - import jdl', () => {
     });
     it('calls application generator', () => {
       expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        withEntities: true,
+        skipInstall: true,
+        noInsight: true,
+        skipGit: false,
+        fromJdl: true,
+      });
     });
   });
 
@@ -388,16 +380,16 @@ describe('generator - import jdl', () => {
     });
     it('calls application generator', () => {
       expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        withEntities: true,
+        skipInstall: true,
+        noInsight: true,
+        skipGit: false,
+        fromJdl: true,
+      });
     });
   });
 
@@ -456,15 +448,15 @@ describe('generator - import jdl', () => {
     });
     it('calls application generator', () => {
       expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        skipInstall: true,
+        noInsight: true,
+        skipGit: false,
+        fromJdl: true,
+      });
     });
   });
 
@@ -531,16 +523,16 @@ describe('generator - import jdl', () => {
     });
     it('calls application generator', () => {
       expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+      expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        withEntities: true,
+        skipInstall: true,
+        noInsight: true,
+        skipGit: false,
+        fromJdl: true,
+      });
     });
   });
 
@@ -566,16 +558,16 @@ describe('generator - import jdl', () => {
     });
     it('calls application generator', () => {
       expect(subGenCallParams.count).to.equal(2);
-      expect(subGenCallParams.commands).to.eql(['app', 'app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+      expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app']);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        withEntities: true,
+        skipInstall: true,
+        noInsight: true,
+        skipGit: false,
+        fromJdl: true,
+      });
     });
   });
 
@@ -611,8 +603,8 @@ describe('generator - import jdl', () => {
     });
     it('does not call application generator', () => {
       expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['entities', 'entities', 'entities']);
-      expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--from-jdl']);
+      expect(subGenCallParams.commands).to.eql(['jhipster:entities', 'jhipster:entities', 'jhipster:entities']);
+      expect(subGenCallParams.options[0]).to.eql({ force: true, skipInstall: true, skipGit: false, fromJdl: true });
     });
   });
 
@@ -665,16 +657,22 @@ describe('generator - import jdl', () => {
 
       it('calls generator in order', () => {
         expect(subGenCallParams.count).to.equal(5);
-        expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
-        expect(subGenCallParams.options[0]).to.eql([
-          '--reproducible',
-          '--force',
-          '--with-entities',
-          '--skip-install',
-          '--no-insight',
-          '--no-skip-git',
-          '--from-jdl',
+        expect(subGenCallParams.commands).to.eql([
+          'jhipster:app',
+          'jhipster:app',
+          'jhipster:app',
+          'jhipster:docker-compose',
+          'jhipster:kubernetes',
         ]);
+        expect(subGenCallParams.options[0]).to.eql({
+          reproducible: true,
+          force: true,
+          withEntities: true,
+          skipInstall: true,
+          noInsight: true,
+          skipGit: false,
+          fromJdl: true,
+        });
         expect(subGenCallParams.options[3]).to.eql({
           force: true,
           skipInstall: true,
@@ -736,16 +734,16 @@ describe('generator - import jdl', () => {
 
     it('calls generator in order', () => {
       expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+      expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+      expect(subGenCallParams.options[0]).to.eql({
+        reproducible: true,
+        force: true,
+        withEntities: true,
+        skipInstall: true,
+        noInsight: true,
+        skipGit: false,
+        fromJdl: true,
+      });
     });
   });
 

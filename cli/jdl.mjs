@@ -38,9 +38,9 @@ const toJdlFile = file => {
  * @param {string[][]} args arguments passed for import-jdl
  * @param {string[]} args[0] jdl files
  * @param {any} options options passed from CLI
- * @param {any} env the yeoman environment
- * @param {EnvironmentBuilder} envBuilder
- * @param {(string[], object) => EnvironmentBuilder} createEnvBuilder
+ * @param {any} [env] the yeoman environment
+ * @param {EnvironmentBuilder} [envBuilder]
+ * @param {any} [createEnvBuilder]
  */
 const jdl = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
   logger.debug('cmd: import-jdl from ./import-jdl');

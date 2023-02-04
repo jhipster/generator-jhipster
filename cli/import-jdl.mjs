@@ -23,10 +23,9 @@ import path, { dirname, join } from 'path';
 import pluralize from 'pluralize';
 import { fileURLToPath } from 'url';
 import { inspect } from 'util';
-import { fork as forkProcess } from 'child_process';
 
 import EnvironmentBuilder from './environment-builder.mjs';
-import { CLI_NAME, GENERATOR_NAME, logger, printSuccess, getOptionAsArgs } from './utils.mjs';
+import { CLI_NAME, GENERATOR_NAME, logger, printSuccess } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
 import statistics from '../generators/statistics.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
@@ -171,42 +170,14 @@ async function runGenerator(command, { cwd, fork, env, createEnvBuilder }, gener
     delete generatorOptions.blueprints;
   }
 
-  if (!fork) {
-    const oldCwd = process.cwd();
-    process.chdir(cwd);
-    env = env || (await createEnvBuilder(undefined, { cwd })).getEnvironment();
-    return env
-      .run(`${CLI_NAME}:${command}`, generatorOptions)
-      .then(
-        () => {
-          logger.info(`Generator ${command} succeed`);
-        },
-        error => {
-          logger.error(`Error running generator ${command}: ${error}`, error);
-          return Promise.reject(error);
-        }
-      )
-      .finally(() => {
-        process.chdir(oldCwd);
-      });
+  const toRun = (fork ? undefined : env) ?? (await createEnvBuilder(undefined, { cwd })).getEnvironment();
+  try {
+    await toRun.run(`${CLI_NAME}:${command}`, generatorOptions);
+  } catch (error) {
+    logger.error(`Error running generator ${command}: ${error}`, error);
+    throw error;
   }
-  logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
-  const args = [command, ...getOptionAsArgs(generatorOptions)];
-  const childProc = forkProcess(jhipsterCli, args, {
-    cwd,
-  });
-  return new Promise((resolve, reject) => {
-    childProc.on('exit', code => {
-      logger.debug(`Process ${args} exited with code ${code}`);
-      logger.info(`Generator ${command} child process exited with code ${code}`);
-      if (code !== 0) {
-        process.exitCode = code;
-        reject(new Error(`Error executing ${args.join(' ')}`));
-        return;
-      }
-      resolve();
-    });
-  });
+  logger.info(`Generator ${command} succeed`);
 }
 
 /**
@@ -524,6 +495,8 @@ class JDLProcessor {
  * @param {any} jdlFiles jdl files
  * @param {any} [options] options passed from CLI
  * @param {any} [env] the yeoman environment
+ * @param {any} [_envBuilder] the yeoman environment
+ * @param {any} [createEnvBuilder] the yeoman environment
  */
 const jdl = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
