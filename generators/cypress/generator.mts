@@ -35,6 +35,7 @@ const { ANGULAR } = clientFrameworkTypes;
 type ApplicationDefinition = {
   applicationType: CypressApplication;
   entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;

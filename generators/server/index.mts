@@ -28,6 +28,7 @@ export * from './needles.mjs';
 export type ApplicationDefinition = {
   applicationType: SpringBootApplication;
   entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 // TODO move to ./generator.mts

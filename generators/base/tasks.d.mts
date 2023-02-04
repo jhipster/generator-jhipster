@@ -1,16 +1,19 @@
 import type { Control } from './types.mjs';
 
-export type GenerericTaskParam = {
+export type ControlTaskParam = {
   control: Control & Record<string, boolean | string | object>;
-  source: any;
+};
+
+export type SourceTaskParam<Definition extends { sourceType: unknown }> = {
+  source: Definition['sourceType'];
 };
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
-export type GenericTaskGroup<ThisType, Arg1Type = GenerericTaskParam> = Record<string, GenericTask<ThisType, Arg1Type>>;
+export type GenericTaskGroup<ThisType, Arg1Type = ControlTaskParam> = Record<string, GenericTask<ThisType, Arg1Type>>;
 
-export type BaseGeneratorDefinition<
-  Tasks extends string =
+export type BaseGeneratorDefinition<Definition extends { sourceType: unknown } = { sourceType: Record<string, (...args: any[]) => void> }> =
+  Record<
     | 'initializingTaskParam'
     | 'promptingTaskParam'
     | 'configuringTaskParam'
@@ -23,5 +26,7 @@ export type BaseGeneratorDefinition<
     | 'preConflictsTaskParam'
     | 'installTaskParam'
     | 'postInstallTaskParam'
-    | 'endTaskParam'
-> = Record<Tasks, GenerericTaskParam>;
+    | 'endTaskParam',
+    ControlTaskParam
+  > &
+    Record<'preparingTaskParam' | 'postWritingTaskParam', SourceTaskParam<Definition>>;

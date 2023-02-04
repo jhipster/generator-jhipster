@@ -1,4 +1,4 @@
-import { GenerericTaskParam, GenericTaskGroup, BaseGeneratorDefinition } from '../base/tasks.mjs';
+import { ControlTaskParam, BaseGeneratorDefinition, SourceTaskParam } from '../base/tasks.mjs';
 import { BaseApplication } from './types.mjs';
 
 type Field = {
@@ -19,6 +19,7 @@ export type Entity = {
 type ApplicationDefinition = {
   applicationType: BaseApplication;
   entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 type ConfiguringEachEntityTaskParam = {
@@ -39,15 +40,15 @@ type LoadingEntitiesTaskParam = {
   }[];
 };
 
-type ApplicationTaskParam<Definition extends ApplicationDefinition = GenerericTaskParam & ApplicationDefinition> = {
+type ApplicationTaskParam<Definition extends ApplicationDefinition = ControlTaskParam & ApplicationDefinition> = {
   application: Definition['applicationType'] & { user: Definition['entityType'] };
 };
 
-type EntitiesTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = ApplicationTaskParam<Definition> & {
+export type EntitiesTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = {
   entities: Definition['entityType'][];
 };
 
-type EachEntityTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = ApplicationTaskParam<Definition> & {
+type EachEntityTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = {
   entity: Definition['entityType'];
   entityName: string;
   description: string;
@@ -65,28 +66,47 @@ type PreparingEachEntityRelationshipTaskParam<Definition extends ApplicationDefi
     relationshipName: string;
   };
 
-export type BaseApplicationGeneratorDefinition<Definition extends ApplicationDefinition = ApplicationDefinition> = BaseGeneratorDefinition &
-  Record<
-    | 'loadingTaskParam'
-    | 'preparingTaskParam'
-    | 'writingTaskParam'
-    | 'postWritingTaskParam'
-    | 'preConflictsTaskParam'
-    | 'installTaskParam'
-    | 'postInstallTaskParam'
-    | 'endTaskParam',
-    ApplicationTaskParam<Definition>
-  > &
-  Record<'defaultTaskParam' | 'writingEntitiesTaskParam' | 'postWritingEntitiesTaskParam', EntitiesTaskParam<Definition>> & {
-    applicationType: Definition['applicationType'];
-    configuringEachEntityTaskParam: ConfiguringEachEntityTaskParam & GenerericTaskParam & ApplicationTaskParam<Definition>;
-    loadingEntitiesTaskParam: LoadingEntitiesTaskParam & GenerericTaskParam & ApplicationTaskParam<Definition>;
-    preparingEachEntityTaskParam: EachEntityTaskParam<Definition> & GenerericTaskParam & ApplicationTaskParam<Definition>;
-    preparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<Definition> &
-      GenerericTaskParam &
-      ApplicationTaskParam<Definition>;
-    preparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<Definition> &
-      GenerericTaskParam &
-      ApplicationTaskParam<Definition>;
-    postPreparingEachEntityTaskParam: EachEntityTaskParam<Definition> & GenerericTaskParam & ApplicationTaskParam<Definition>;
-  };
+type ClientSource<ExtendsSelf extends ClientSource = ClientSource> = {
+  addEntitiesToClient?: (param: ControlTaskParam & { source: ExtendsSelf } & EntitiesTaskParam<Definition>) => any;
+};
+
+export type BaseApplicationGeneratorDefinition<Definition extends ApplicationDefinition = ApplicationDefinition> =
+  BaseGeneratorDefinition<Definition> &
+    // Add application to existing priorities
+    Record<
+      | 'loadingTaskParam'
+      | 'preparingTaskParam'
+      | 'defaultTaskParam'
+      | 'writingTaskParam'
+      | 'postWritingTaskParam'
+      | 'preConflictsTaskParam'
+      | 'installTaskParam'
+      | 'postInstallTaskParam'
+      | 'endTaskParam',
+      ApplicationTaskParam<Definition>
+    > &
+    // Add entities to existing priorities
+    Record<'defaultTaskParam', EntitiesTaskParam<Definition>> &
+    // Add application and control to new priorities
+    Record<
+      | 'configuringEachEntityTaskParam'
+      | 'loadingEntitiesTaskParam'
+      | 'preparingEachEntityTaskParam'
+      | 'preparingEachEntityFieldTaskParam'
+      | 'preparingEachEntityRelationshipTaskParam'
+      | 'postPreparingEachEntityTaskParam'
+      | 'writingEntitiesTaskParam'
+      | 'postWritingEntitiesTaskParam',
+      ControlTaskParam & ApplicationTaskParam<Definition>
+    > & {
+      // Add additional types to each priority
+      applicationType: Definition['applicationType'];
+      configuringEachEntityTaskParam: ConfiguringEachEntityTaskParam;
+      loadingEntitiesTaskParam: LoadingEntitiesTaskParam;
+      preparingEachEntityTaskParam: EachEntityTaskParam<Definition>;
+      preparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<Definition>;
+      preparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<Definition>;
+      postPreparingEachEntityTaskParam: EachEntityTaskParam<Definition>;
+      writingEntitiesTaskParam: EntitiesTaskParam<Definition>;
+      postWritingEntitiesTaskParam: SourceTaskParam<Definition> & EntitiesTaskParam<Definition>;
+    };

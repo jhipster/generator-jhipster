@@ -28,6 +28,7 @@ import { liquibaseFiles } from './files.mjs';
 export type ApplicationDefinition = {
   applicationType: SpringBootApplication & LiquibaseApplication;
   entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;

@@ -25,6 +25,7 @@ export { files as commonFiles } from './files-common.mjs';
 type ApplicationDefinition = {
   applicationType: ClientApplication;
   entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
