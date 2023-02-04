@@ -275,7 +275,7 @@ describe(`generator - ${generator}`, () => {
 
       expect(defaultTask).toBeCalledWith(entitiesArg);
       expect(writingEntities).toBeCalledWith(entitiesArg);
-      expect(postWritingEntities).toBeCalledWith(entitiesArg);
+      expect(postWritingEntities).toBeCalledWith({ ...entitiesArg, source: expect.any(Object) });
 
       expect(writing).toBeCalledWith(applicationArg);
       expect(install).toBeCalledWith(applicationArg);
@@ -472,6 +472,11 @@ describe(`generator - ${generator}`, () => {
         entities: [expect.any(Object), expect.any(Object)],
       };
 
+      const postWritingEntitiesArg = {
+        ...writingEntitiesArg,
+        source: expect.any(Object),
+      };
+
       expect(initializing).toBeCalledWith(controlArg);
       expect(prompting).toBeCalledWith(controlArg);
       expect(configuring).toBeCalledWith(controlArg);
@@ -512,7 +517,7 @@ describe(`generator - ${generator}`, () => {
       expect(defaultTask).toBeCalledWith(entitiesArg);
 
       expect(writingEntities).toBeCalledWith(writingEntitiesArg);
-      expect(postWritingEntities).toBeCalledWith(writingEntitiesArg);
+      expect(postWritingEntities).toBeCalledWith(postWritingEntitiesArg);
 
       expect(writing).toBeCalledWith(applicationArg);
       expect(install).toBeCalledWith(applicationArg);

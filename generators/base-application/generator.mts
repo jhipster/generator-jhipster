@@ -64,6 +64,7 @@ const asPriority = BaseGenerator.asPriority;
 type ApplicationDefinition = {
   applicationType: CommonClientServerApplication;
   entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
@@ -361,9 +362,16 @@ export default class BaseApplicationGenerator<
       };
     }
     if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
-      return {
+      const applicationAndEntities = {
         application,
         ...this.getEntitiesDataToWrite(),
+      };
+      if (priorityName === WRITING_ENTITIES) {
+        return applicationAndEntities;
+      }
+      return {
+        ...applicationAndEntities,
+        source: this.sharedData.getSource(),
       };
     }
 
