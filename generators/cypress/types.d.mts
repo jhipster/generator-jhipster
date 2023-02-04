@@ -1,4 +1,3 @@
-import { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
 import { ClientApplication } from '../client/types.mjs';
 
 export type CypressProperties = {

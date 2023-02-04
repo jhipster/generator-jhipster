@@ -1,6 +1,5 @@
 import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
-import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 
 declare const CACHE_PROVIDER = 'cacheProvider';
 
