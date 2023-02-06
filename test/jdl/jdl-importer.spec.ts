@@ -668,6 +668,7 @@ paginate * with infinite-scroll
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -686,6 +687,7 @@ paginate * with infinite-scroll
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -705,6 +707,7 @@ paginate * with infinite-scroll
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -724,6 +727,7 @@ paginate * with infinite-scroll
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -742,6 +746,7 @@ paginate * with infinite-scroll
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -760,6 +765,7 @@ paginate * with infinite-scroll
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);

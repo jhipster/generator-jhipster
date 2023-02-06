@@ -82,6 +82,10 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
+              name: unaryOptions.NO_REST_RESOURCES,
+              entityNames: ['A'],
+            }),
+            new JDLUnaryOption({
               name: unaryOptions.SKIP_CLIENT,
               entityNames: ['A'],
             }),
@@ -143,6 +147,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
   "microserviceName": "myMs",
   "pagination": "pagination",
   "readOnly": true,
+  "restResources": false,
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,

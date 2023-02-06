@@ -113,6 +113,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);

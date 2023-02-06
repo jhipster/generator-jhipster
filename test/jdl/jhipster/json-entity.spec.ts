@@ -63,6 +63,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -117,6 +118,7 @@ JSONEntity {
     42,
     43,
   ],
+  "restResources": true,
   "service": "serviceClass",
   "skipClient": true,
   "skipServer": true,
@@ -285,6 +287,7 @@ JSONEntity {
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);

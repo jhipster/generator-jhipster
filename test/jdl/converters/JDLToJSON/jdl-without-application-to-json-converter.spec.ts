@@ -173,6 +173,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -278,6 +279,7 @@ JSONEntity {
   "pagination": "pagination",
   "readOnly": true,
   "relationships": [],
+  "restResources": true,
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,
@@ -340,6 +342,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -398,6 +401,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -446,6 +450,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "searchEngine": "no",
   "service": "no",
 }
@@ -507,6 +512,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -588,6 +594,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -640,6 +647,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -692,6 +700,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -829,6 +838,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
@@ -887,6 +897,7 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `);
