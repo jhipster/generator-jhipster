@@ -27,6 +27,7 @@ const tokens = [
   { name: 'FOR', pattern: 'for' },
   { name: 'CLIENT_ROOT_FOLDER', pattern: 'clientRootFolder', type: 'binary' },
   { name: 'NO_FLUENT_METHOD', pattern: 'noFluentMethod', type: 'unary' },
+  { name: 'NO_REST_RESOURCES', pattern: 'noRestResources', type: 'unary' },
   { name: 'READ_ONLY', pattern: 'readOnly', type: 'unary' },
   { name: 'EMBEDDED', pattern: 'embedded', type: 'unary' },
   { name: 'DTO', pattern: 'dto', type: 'binary' },

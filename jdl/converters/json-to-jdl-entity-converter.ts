@@ -34,7 +34,7 @@ const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { OptionNames } = applicationOptions;
 const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = relationshipTypes;
 const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
-const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = unaryOptions;
+const { FILTER, NO_FLUENT_METHOD, NO_REST_RESOURCES, READ_ONLY, EMBEDDED } = unaryOptions;
 const { ANGULAR_SUFFIX, CLIENT_ROOT_FOLDER, DTO, MICROSERVICE, PAGINATION, SEARCH, SERVICE } = binaryOptions.Options;
 
 const { ANY, IMAGE, TEXT } = BlobTypes;
@@ -343,6 +343,9 @@ function getInjectedFieldInSourceEntity(relationship) {
 function addEntityOptionsToJDL(entity: Entity, entityName: string) {
   if (entity.fluentMethods === false) {
     addUnaryOptionToJDL(NO_FLUENT_METHOD, entityName);
+  }
+  if (entity.restResources === false) {
+    addUnaryOptionToJDL(NO_REST_RESOURCES, entityName);
   }
   [DTO, PAGINATION, SERVICE].forEach(option => {
     if (entity[option] && entity[option] !== 'no') {

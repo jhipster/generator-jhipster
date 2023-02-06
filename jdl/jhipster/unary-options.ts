@@ -22,6 +22,7 @@ const Options: any = {
   SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
   SKIP_SERVER: applicationOptions.OptionNames.SKIP_SERVER,
   NO_FLUENT_METHOD: 'noFluentMethod',
+  NO_REST_RESOURCES: 'noRestResources',
   READ_ONLY: 'readOnly',
   FILTER: 'filter',
   EMBEDDED: 'embedded',

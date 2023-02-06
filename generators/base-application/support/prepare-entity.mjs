@@ -134,6 +134,7 @@ export const entityDefaultConfig = {
   embedded: false,
   entityAngularJSSuffix: '',
   fluentMethods: true,
+  restResources: true,
   clientRootFolder: '',
   get fields() {
     return [];

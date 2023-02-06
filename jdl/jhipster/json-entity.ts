@@ -45,6 +45,7 @@ class JSONEntity {
    *        - service, defaults to 'no',
    *        - jpaMetamodelFiltering, defaults to false,
    *        - fluentMethods, defaults to true,
+   *        - restResources, defaults to true,
    *        - clientRootFolder
    */
   constructor(args) {
@@ -62,6 +63,7 @@ class JSONEntity {
     this.service = merged.service;
     this.jpaMetamodelFiltering = merged.jpaMetamodelFiltering;
     this.fluentMethods = merged.fluentMethods;
+    this.restResources = merged.restResources;
     this.readOnly = merged.readOnly;
     this.embedded = merged.embedded;
     if (merged.clientRootFolder) {
@@ -128,6 +130,7 @@ function getDefaults(entityName) {
     [binaryOptions.Options.PAGINATION]: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
     [binaryOptions.Options.SERVICE]: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
     fluentMethods: true,
+    restResources: true,
     [unaryOptions.READ_ONLY]: false,
     [unaryOptions.EMBEDDED]: false,
     jpaMetamodelFiltering: false,
