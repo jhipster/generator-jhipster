@@ -287,8 +287,13 @@ export function writeFiles() {
 
     async writeServerFiles({ application, entities }) {
       for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+        var customServerFiles = serverFiles;
+        if (entity.restResources === false) {
+          customServerFiles = new Map(serverFiles);
+          customServerFiles.delete("restFiles");
+        }
         await this.writeFiles({
-          sections: serverFiles,
+          sections: customServerFiles,
           rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
           context: { ...application, ...entity },
         });
