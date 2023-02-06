@@ -361,6 +361,26 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           ]);
         });
       });
+      context('when using the noRestResources option', () => {
+        let input;
+        let jdlObject;
+
+        before(() => {
+          input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'rest_resources.jdl')]);
+          jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+            parsedContent: input,
+          });
+        });
+
+        it('should add it correctly', () => {
+          expect(jdlObject.getOptions()).to.deep.eq([
+            new JDLUnaryOption({
+              name: unaryOptions.NO_REST_RESOURCES,
+              entityNames: ['A'],
+            }),
+          ]);
+        });
+      });
       context('when having following comments', () => {
         let jdlObject;
 
