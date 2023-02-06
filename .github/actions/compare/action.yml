@@ -57,6 +57,6 @@ runs:
           ':!.jhipster/**' ':!**/.jhipster/**' \
           ':!package-lock.json' ':!**/package-lock.json' \
           ':!**/keystore.p12' \
-          && echo "::set-output name=equals::true" \
-          || echo "::set-output name=has-changes::true"
+          && echo "equals=true" >> $GITHUB_OUTPUT \
+          || echo "has-changes=true" >> $GITHUB_OUTPUT
       shell: bash
