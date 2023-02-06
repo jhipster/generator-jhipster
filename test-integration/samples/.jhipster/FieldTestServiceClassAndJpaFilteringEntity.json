@@ -89,5 +89,6 @@
   "jpaMetamodelFiltering": true,
   "pagination": "no",
   "relationships": [],
+  "restResources": true,
   "service": "serviceClass"
 }

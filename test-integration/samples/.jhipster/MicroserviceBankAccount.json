@@ -26,5 +26,6 @@
       "relationshipType": "one-to-many"
     }
   ],
+  "restResources": true,
   "service": "serviceImpl"
 }

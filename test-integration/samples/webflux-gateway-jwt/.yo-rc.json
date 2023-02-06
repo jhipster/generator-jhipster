@@ -18,6 +18,7 @@
     "packageName": "tech.jhipster.gateway",
     "prodDatabaseType": "mongodb",
     "reactive": true,
+    "restResources": true,
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "eureka",

@@ -56,5 +56,6 @@
       "relationshipType": "one-to-many"
     }
   ],
+  "restResources": true,
   "service": "no"
 }

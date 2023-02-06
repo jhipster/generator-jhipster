@@ -1,5 +1,6 @@
 {
     "fluentMethods": true,
+    "restResources": true,
     "fields": [
         {
             "fieldName": "userId",

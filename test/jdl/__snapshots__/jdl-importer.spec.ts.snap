@@ -33,6 +33,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-one",
     },
   ],
+  "restResources": true,
   "service": "no",
   "skipServer": true,
 }
@@ -99,6 +100,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-many",
     },
   ],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -181,6 +183,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-many",
     },
   ],
+  "restResources": true,
   "searchEngine": "elasticsearch",
   "service": "serviceClass",
 }
@@ -247,6 +250,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-many",
     },
   ],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -307,6 +311,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-many",
     },
   ],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -359,6 +364,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "one-to-one",
     },
   ],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -389,6 +395,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-one",
     },
   ],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -425,6 +432,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "relationshipType": "many-to-many",
     },
   ],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -468,6 +476,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-one",
         },
       ],
+      "restResources": true,
       "service": "no",
       "skipServer": true,
     },
@@ -532,6 +541,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
+      "restResources": true,
       "service": "no",
     },
     JSONEntity {
@@ -611,6 +621,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
+      "restResources": true,
       "searchEngine": "elasticsearch",
       "service": "serviceClass",
     },
@@ -675,6 +686,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
+      "restResources": true,
       "service": "no",
     },
     JSONEntity {
@@ -732,6 +744,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
+      "restResources": true,
       "service": "no",
     },
     JSONEntity {
@@ -782,6 +795,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "one-to-one",
         },
       ],
+      "restResources": true,
       "service": "no",
     },
     JSONEntity {
@@ -810,6 +824,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-one",
         },
       ],
+      "restResources": true,
       "service": "no",
     },
     JSONEntity {
@@ -844,6 +859,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
+      "restResources": true,
       "service": "no",
     },
   ],
@@ -1596,6 +1612,7 @@ exports[`jdl - JDLImporter import when parsing multiple JDL files with applicati
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -1615,6 +1632,7 @@ exports[`jdl - JDLImporter import when parsing multiple JDL files with applicati
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -1636,6 +1654,7 @@ exports[`jdl - JDLImporter import when parsing multiple JDL files with applicati
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -1656,6 +1675,7 @@ exports[`jdl - JDLImporter import when parsing multiple JDL files with applicati
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -1677,6 +1697,7 @@ exports[`jdl - JDLImporter import when parsing multiple JDL files with applicati
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -1697,6 +1718,7 @@ exports[`jdl - JDLImporter import when parsing multiple JDL files with applicati
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
+  "restResources": true,
   "service": "no",
 }
 `;
@@ -1775,6 +1797,7 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "unidirectional": false,
       },
     ],
+    "restResources": true,
     "service": "no",
   },
   JSONEntity {
@@ -1819,6 +1842,7 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "relationshipType": "many-to-many",
       },
     ],
+    "restResources": true,
     "service": "no",
   },
 ]

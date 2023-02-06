@@ -68,6 +68,7 @@
   "pagination": "infinite-scroll",
   "service": "serviceClass",
   "fluentMethods": false,
+  "restResources": true,
   "searchEngine": "elasticsearch",
   "angularJSSuffix": "myentities",
   "microserviceName": "mymicroservice",

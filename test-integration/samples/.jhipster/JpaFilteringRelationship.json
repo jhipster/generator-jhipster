@@ -70,6 +70,7 @@
       "relationshipType": "many-to-many"
     }
   ],
+  "restResources": true,
   "service": "serviceClass",
   "skipUiGrouping": false
 }

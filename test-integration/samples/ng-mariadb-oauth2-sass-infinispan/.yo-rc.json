@@ -18,6 +18,7 @@
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mariadb",
     "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
+    "restResources": true,
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",

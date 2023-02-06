@@ -30,5 +30,6 @@
     },
     { "otherEntityName": "track", "otherEntityRelationshipName": "album", "relationshipName": "track", "relationshipType": "one-to-many" }
   ],
+  "restResources": true,
   "service": "no"
 }

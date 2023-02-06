@@ -6,5 +6,6 @@
   "fluentMethods": true,
   "pagination": "no",
   "relationships": [],
+  "restResources": true,
   "service": "no"
 }

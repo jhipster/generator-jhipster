@@ -18,5 +18,6 @@
   ],
   "fluentMethods": true,
   "pagination": "no",
+  "restResources": true,
   "service": "serviceImpl"
 }

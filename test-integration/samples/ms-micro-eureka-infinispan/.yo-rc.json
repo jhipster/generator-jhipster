@@ -24,6 +24,7 @@
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "postgresql",
+    "restResources": true,
     "searchEngine": "no",
     "serverPort": "8081",
     "serviceDiscoveryType": "eureka",

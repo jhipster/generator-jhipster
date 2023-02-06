@@ -57,5 +57,6 @@
       "relationshipValidateRules": "required"
     }
   ],
+  "restResources": true,
   "service": "no"
 }

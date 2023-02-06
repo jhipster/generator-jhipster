@@ -88,5 +88,6 @@
   "fluentMethods": true,
   "pagination": "infinite-scroll",
   "relationships": [],
+  "restResources": true,
   "service": "no"
 }

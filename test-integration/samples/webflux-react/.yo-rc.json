@@ -20,6 +20,7 @@
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "reactive": true,
+    "restResources": true,
     "searchEngine": "no",
     "serverPort": "8080",
     "testFrameworks": ["gatling", "cypress"],

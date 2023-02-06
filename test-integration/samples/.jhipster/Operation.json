@@ -26,5 +26,6 @@
       "relationshipType": "many-to-many"
     }
   ],
+  "restResources": true,
   "service": "no"
 }
