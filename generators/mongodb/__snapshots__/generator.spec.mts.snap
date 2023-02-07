@@ -386,6 +386,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "src/test/java/com/package/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -779,6 +782,9 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/filter/ModifyServersOpenApiFilterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
@@ -2989,6 +2995,9 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -3767,6 +3776,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/test/java/com/package/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -4519,6 +4531,9 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
