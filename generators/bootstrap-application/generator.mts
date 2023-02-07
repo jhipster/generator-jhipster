@@ -30,7 +30,7 @@ import {
 } from '../base-application/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
-import type { ClientServerApplication } from '../common/types.mjs';
+import type { GeneratorDefinition as ServerGeneratorDefinition } from '../common/index.mjs';
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
@@ -45,11 +45,7 @@ const {
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<ClientServerApplication>}
- */
-export default class extends BaseApplicationGenerator<ClientServerApplication> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -72,9 +68,9 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         }
 
         let prettierExtensions = 'md,json,yml,html';
-        if (!application.applicationTypeAny) {
+        if (application.clientFrameworkAny) {
           prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
-          if (application.applicationTypeVue) {
+          if (application.clientFrameworkVue) {
             prettierExtensions = `${prettierExtensions},vue`;
           }
           if (application.clientFrameworkSvelte) {

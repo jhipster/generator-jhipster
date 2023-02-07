@@ -129,26 +129,4 @@ describe('enforce some developments patterns', () => {
       });
     });
   });
-
-  describe('at generators base', () => {
-    const filesToTest = [
-      path.join(__dirname, '..', 'generators', 'base', 'generator-base-private.mjs'),
-      path.join(__dirname, '..', 'generators', 'base', 'generator-base.mjs'),
-    ];
-    filesToTest.forEach(file => {
-      describe(`file ${path.basename(file)}`, () => {
-        let content;
-        before(() => {
-          content = fse.readFileSync(file, 'utf-8');
-        });
-
-        ['src/main/webapp', 'src/test/javascript'].forEach(notSpected => {
-          const regex = new RegExp(notSpected, 'g');
-          it(`should not contain ${notSpected}`, () => {
-            assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
-          });
-        });
-      });
-    });
-  });
 });

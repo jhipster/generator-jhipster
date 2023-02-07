@@ -21,6 +21,7 @@ import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.mjs';
+import { Entity } from '../base-application/tasks.mjs';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
@@ -94,7 +95,7 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication
   ],
 };
 
-export const cypressEntityFiles: WriteFileSection<CypressGenerator, CypressApplication> = {
+export const cypressEntityFiles: WriteFileSection<CypressGenerator, CypressApplication & Entity> = {
   testsCypress: [
     {
       condition: ctx => !ctx.builtIn && !ctx.embedded,

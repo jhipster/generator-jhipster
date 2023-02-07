@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseGenerator from '../../base/generator.mjs';
+import BaseGenerator from '../../base/index.mjs';
 import { ClientApplication } from '../types.mjs';
 
 export type UpdateClientLanguagesTaskParam = { application: ClientApplication & { enableTranslation: true }; control?: any };

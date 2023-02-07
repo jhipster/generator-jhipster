@@ -18,12 +18,20 @@
  */
 import fs from 'fs';
 
-import BaseApplication from '../base-application/index.mjs';
-import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
+import type { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
+
+export type ApplicationDefinition = {
+  applicationType: SpringBootApplication & LiquibaseApplication;
+  entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
+};
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
 
 const BASE_CHANGELOG = {
   addedFields: [],
@@ -31,7 +39,7 @@ const BASE_CHANGELOG = {
   addedRelationships: [],
   removedRelationships: [],
 };
-export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication & LiquibaseApplication> {
+export default class DatabaseChangelogGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -55,8 +63,8 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
     }
   }
 
-  override get default(): DefaultTaskGroup<this, SpringBootApplication> {
-    return {
+  get default() {
+    return this.asDefaultTaskGroup({
       async calculateChangelogs({ application, entities }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog) {
           return;
@@ -84,10 +92,10 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
           }
         }
       },
-    };
+    });
   }
 
-  get [BaseApplication.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -105,7 +113,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
     });
   }
 
-  get [BaseApplication.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 

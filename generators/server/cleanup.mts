@@ -22,15 +22,14 @@ import cleanupOauth2 from './cleanup-oauth2.mjs';
 import cleanupCucumber from './cleanup-cucumber.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
-import type BaseGenerator from '../base/generator.mjs';
-import { type ApplicationTaskParam } from '../base-application/tasks.mjs';
-import { type SpringBootApplication } from './types.mjs';
+import type BaseGenerator from '../base/index.mjs';
+import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: ApplicationTaskParam<SpringBootApplication>) {
+export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: ServerGeneratorDefinition['writingTaskParam']) {
   const { application } = taskParam;
   if (application.databaseTypeSql) {
     cleanupSql.call(this, taskParam);
@@ -190,7 +189,7 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderSecurityMetersTests.java`);
       this.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderTest.java`);
     }
-    if (application.clientFrameworkAny && !application.reactive) {
+    if (!application.skipClient && !application.reactive) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
       this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
     }

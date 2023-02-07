@@ -16,5 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
+import { ClientApplication } from './types.mjs';
+
 export { default } from './generator.mjs';
 export { files as commonFiles } from './files-common.mjs';
+
+type ApplicationDefinition = {
+  applicationType: ClientApplication;
+  entityType: Entity;
+  sourceType: Record<string, (...args: any[]) => void>;
+};
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;

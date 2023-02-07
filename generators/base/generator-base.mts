@@ -30,7 +30,7 @@ import { lt as semverLessThan } from 'semver';
 import type Storage from 'yeoman-generator/lib/util/storage.js';
 
 import SharedData from './shared-data.mjs';
-import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
+import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './support/index.mjs';
 import baseOptions from './options.mjs';
@@ -44,7 +44,6 @@ import type {
   JHipsterOptions,
   CheckResult,
 } from './api.mjs';
-import type { BaseTaskGroup } from './tasks.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -60,11 +59,8 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 
 /**
  * This is the base class for a generator for every generator.
- *
- * @class
- * @extends {JHipsterBaseBlueprintGenerator}
  */
-export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
+export default class BaseGenerator extends YeomanGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -92,7 +88,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static END = asPriority(END);
 
   readonly sharedData!: SharedData<BaseApplication>;
-
   declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -101,11 +96,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   configOptions!: Record<string, any>;
   jhipsterTemplatesFolders!: string[];
 
-  fromBlueprint!: boolean;
-  sbsBlueprint?: boolean;
   blueprintStorage?: Storage;
-  blueprintConfig?: Record<string, any>;
-  jhipsterContext?: any;
 
   private _jhipsterGenerator?: string;
 
@@ -202,24 +193,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
-
-    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
-
-    if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage({ sorted: true });
-      this.blueprintConfig = this.blueprintStorage.createProxy();
-
-      // jhipsterContext is the original generator
-      this.jhipsterContext = this.options.jhipsterContext;
-
-      try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
-      } catch (error) {
-        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
-        this.logger.log(error);
-      }
-    }
   }
 
   /**
@@ -264,13 +237,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
     }
     return priorities;
-  }
-
-  /**
-   * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
-   */
-  delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
-    return this.delegateToBlueprint ? {} : tasksGetter();
   }
 
   /**
