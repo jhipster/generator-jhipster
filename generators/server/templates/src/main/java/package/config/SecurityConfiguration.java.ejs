@@ -164,6 +164,7 @@ public class SecurityConfiguration {
                 authz
 <%_ if (!applicationTypeMicroservice) { _%>
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+<%_ } _%>
 <%_ if (!skipClient) { _%>
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
