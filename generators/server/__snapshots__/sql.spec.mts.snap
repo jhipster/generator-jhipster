@@ -17384,7 +17384,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/packager/web/filter/SpaWebFilterIT.java": {
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
