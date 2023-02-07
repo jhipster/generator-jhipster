@@ -163,7 +163,7 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!applicationTypeMicroservice) { _%>
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 <%_ } _%>
 <%_ if (!skipClient) { _%>
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
@@ -180,7 +180,7 @@ public class SecurityConfiguration {
                     .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
 <%_ } else { _%>
-            .requestMatchers("/api/authenticate").permitAll()
+                    .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
                     .requestMatchers("/api/register").permitAll()
@@ -246,7 +246,7 @@ public class SecurityConfiguration {
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt
                     .jwtAuthenticationConverter(authenticationConverter())))
-                .oauth2Client();
+            .oauth2Client();
 <%_ } _%>
         return http.build();
     }
