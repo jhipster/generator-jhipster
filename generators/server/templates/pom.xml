@@ -16,7 +16,7 @@
         <gatling.version>3.9.0</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.1</hazelcast-spring.version>
-        <jaxb-runtime.version>4.0.1</jaxb-runtime.version>
+        <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
         <liquibase.version>4.19.0</liquibase.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
