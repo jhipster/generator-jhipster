@@ -2,7 +2,7 @@ import { mock } from '@node-loaders/jest-mock';
 import path from 'path';
 import fse from 'fs-extra';
 import assert from 'yeoman-assert';
-import { expect } from 'chai';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { getTemplatePath, testInTempDir, revertTempDir } from '../support/index.mjs';
 
@@ -60,12 +60,12 @@ const defaultAddedOptions = {};
 
 function testDocumentsRelationships() {
   it('creates entity json files', () => {
-    expect(subGenCallParams.entities).to.eql(['Customer', 'CustomerOrder', 'OrderedItem', 'PaymentDetails', 'ShippingDetails']);
+    expect(subGenCallParams.entities).toEqual(['Customer', 'CustomerOrder', 'OrderedItem', 'PaymentDetails', 'ShippingDetails']);
   });
   it('calls entity subgenerator', () => {
-    expect(subGenCallParams.count).to.equal(1);
-    expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-    expect(subGenCallParams.options[0]).to.eql({
+    expect(subGenCallParams.count).toEqual(1);
+    expect(subGenCallParams.commands).toEqual(['jhipster:entities']);
+    expect(subGenCallParams.options[0]).toEqual({
       ...defaultAddedOptions,
       fromJdl: true,
     });
@@ -100,23 +100,24 @@ describe('generator - import jdl', () => {
     afterEach(() => revertTempDir(originalCwd));
 
     it('calls generator in order', () => {
-      expect(subGenCallParams.count).to.equal(5);
-      expect(subGenCallParams.commands).to.eql([
+      expect(subGenCallParams.count).toEqual(5);
+      expect(subGenCallParams.commands).toEqual([
         'jhipster:app',
         'jhipster:app',
         'jhipster:app',
         'jhipster:docker-compose',
         'jhipster:kubernetes',
       ]);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         withEntities: true,
         skipInstall: true,
         noInsight: true,
         fromJdl: true,
+        applicationWithEntities: expect.any(Object),
       });
-      expect(subGenCallParams.options[3]).to.eql({
+      expect(subGenCallParams.options[3]).toEqual({
         force: true,
         skipInstall: true,
         fromJdl: true,
@@ -151,7 +152,7 @@ describe('generator - import jdl', () => {
       ]);
     });
     it('does not call entity sub generator', () => {
-      expect(subGenCallParams.count).to.equal(0);
+      expect(subGenCallParams.count).toEqual(0);
     });
   });
 
@@ -168,16 +169,16 @@ describe('generator - import jdl', () => {
     afterEach(() => revertTempDir(originalCwd));
 
     it('passes entities to entities generator', () => {
-      expect(subGenCallParams.entities).to.eql(['Region', 'Country', 'Location', 'Department', 'Task', 'Employee', 'Job', 'JobHistory']);
+      expect(subGenCallParams.entities).toEqual(['Region', 'Country', 'Location', 'Department', 'Task', 'Employee', 'Job', 'JobHistory']);
     });
     it('calls entity subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:entities']);
     });
 
     it('calls entity subgenerator with correct options', () => {
       subGenCallParams.options.slice(0, subGenCallParams.options.length - 1).forEach(subGenOptions => {
-        expect(subGenOptions).to.eql({
+        expect(subGenOptions).toEqual({
           ...options,
           ...defaultAddedOptions,
           skipInstall: true,
@@ -201,12 +202,12 @@ describe('generator - import jdl', () => {
     afterEach(() => revertTempDir(originalCwd));
 
     it('passes entities to entities generator', () => {
-      expect(subGenCallParams.entities).to.eql(['Region', 'Country', 'Location', 'Department', 'Task', 'Employee', 'Job', 'JobHistory']);
+      expect(subGenCallParams.entities).toEqual(['Region', 'Country', 'Location', 'Department', 'Task', 'Employee', 'Job', 'JobHistory']);
     });
     it('calls entities subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:entities']);
+      expect(subGenCallParams.options[0]).toEqual({
         ...options,
         ...defaultAddedOptions,
         fromJdl: true,
@@ -227,7 +228,7 @@ describe('generator - import jdl', () => {
     afterEach(() => revertTempDir(originalCwd));
 
     it('passes entities to entities generator', () => {
-      expect(subGenCallParams.entities).to.eql([
+      expect(subGenCallParams.entities).toEqual([
         'Region',
         'Country',
         'Location',
@@ -244,9 +245,9 @@ describe('generator - import jdl', () => {
       ]);
     });
     it('calls entities subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:entities']);
+      expect(subGenCallParams.options[0]).toEqual({
         ...options,
         ...defaultAddedOptions,
         fromJdl: true,
@@ -266,13 +267,10 @@ describe('generator - import jdl', () => {
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create entity json files', () => {
-      assert.noFile(['.jhipster/WithSearch.json', '.jhipster/WithoutSearch.json']);
-    });
     it('calls entities subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:entities']);
+      expect(subGenCallParams.options[0]).toEqual({
         ...options,
         ...defaultAddedOptions,
         fromJdl: true,
@@ -287,26 +285,16 @@ describe('generator - import jdl', () => {
         fse.copySync(getTemplatePath('import-jdl/common'), dir);
         fse.removeSync(`${dir}/.yo-rc.json`);
         const importJdl = await createImportJdl();
-        await importJdl(['single-app-and-entities.jdl'], { ...options, fork: true }, env);
+        await importJdl(['single-app-and-entities.jdl'], { ...options }, env);
       });
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the application', () => {
-      assert.file(['.yo-rc.json']);
-      assert.JSONFileContent('.yo-rc.json', {
-        'generator-jhipster': { baseName: 'jhipsterApp' },
-      });
-    });
-    it('creates the entities', () => {
-      const aFile = path.join('.jhipster', 'A.json');
-      assert.file([aFile, path.join('.jhipster', 'B.json')]);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app']);
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         withEntities: true,
@@ -314,6 +302,10 @@ describe('generator - import jdl', () => {
         noInsight: true,
         skipGit: false,
         fromJdl: true,
+        applicationWithEntities: {
+          config: expect.any(Object),
+          entities: [expect.any(Object), expect.any(Object)],
+        },
       });
     });
   });
@@ -331,20 +323,13 @@ describe('generator - import jdl', () => {
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create .yo-rc.json', () => {
-      assert.noFile(['.yo-rc.json']);
-    });
-    it('should not create entity files', () => {
-      const aFile = path.join('.jhipster', 'A.json');
-      assert.noFile([aFile, path.join('.jhipster', 'B.json')]);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app']);
+      expect(subGenCallParams.options[0].applicationWithEntities).not.toBeUndefined();
     });
     it('calls application generator with options', () => {
-      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).toEqual({
         ...options,
         ...defaultAddedOptions,
         reproducible: true,
@@ -366,22 +351,16 @@ describe('generator - import jdl', () => {
     beforeEach(() => {
       return testInTempDir(async () => {
         const importJdl = await createImportJdl();
-        await importJdl([], { ...options, fork: true }, env);
+        await importJdl([], { ...options }, env);
       });
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the application', () => {
-      assert.file(['.yo-rc.json']);
-    });
-    it('creates the entities', () => {
-      assert.file([path.join('.jhipster', 'Customer.json')]);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app']);
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         withEntities: true,
@@ -389,6 +368,7 @@ describe('generator - import jdl', () => {
         noInsight: true,
         skipGit: false,
         fromJdl: true,
+        applicationWithEntities: expect.any(Object),
       });
     });
   });
@@ -408,17 +388,11 @@ describe('generator - import jdl', () => {
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create .yo-rc.json', () => {
-      assert.noFile(['.yo-rc.json']);
-    });
-    it('should not create entity files', () => {
-      assert.noFile([path.join('.jhipster', 'Customer.json')]);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
-      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app']);
+      expect(subGenCallParams.options[0].applicationWithEntities).not.toBeUndefined();
+      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).toEqual({
         ...options,
         ...defaultAddedOptions,
         reproducible: true,
@@ -437,25 +411,23 @@ describe('generator - import jdl', () => {
         fse.copySync(getTemplatePath('import-jdl/common'), dir);
         fse.removeSync(`${dir}/.yo-rc.json`);
         const importJdl = await createImportJdl();
-        await importJdl(['single-app-only.jdl'], { ...options, fork: true }, env);
+        await importJdl(['single-app-only.jdl'], { ...options }, env);
       });
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the application', () => {
-      assert.file(['.yo-rc.json']);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app']);
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         skipInstall: true,
         noInsight: true,
         skipGit: false,
         fromJdl: true,
+        applicationWithEntities: expect.any(Object),
       });
     });
   });
@@ -473,14 +445,11 @@ describe('generator - import jdl', () => {
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create .yo-rc.json', () => {
-      assert.noFile(['.yo-rc.json']);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
-      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+      expect(subGenCallParams.count).toEqual(1);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app']);
+      expect(subGenCallParams.options[0].applicationWithEntities).not.toBeUndefined();
+      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).toEqual({
         ...options,
         ...defaultAddedOptions,
         reproducible: true,
@@ -504,27 +473,10 @@ describe('generator - import jdl', () => {
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the applications', () => {
-      assert.file([
-        path.join('myFirstApp', '.yo-rc.json'),
-        path.join('mySecondApp', '.yo-rc.json'),
-        path.join('myThirdApp', '.yo-rc.json'),
-      ]);
-    });
-    it('creates the entities', () => {
-      assert.file([
-        path.join('myFirstApp', '.jhipster', 'A.json'),
-        path.join('myFirstApp', '.jhipster', 'B.json'),
-        path.join('myFirstApp', '.jhipster', 'E.json'),
-        path.join('myFirstApp', '.jhipster', 'F.json'),
-        path.join('mySecondApp', '.jhipster', 'E.json'),
-        path.join('myThirdApp', '.jhipster', 'F.json'),
-      ]);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(3);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         withEntities: true,
@@ -532,6 +484,7 @@ describe('generator - import jdl', () => {
         noInsight: true,
         skipGit: false,
         fromJdl: true,
+        applicationWithEntities: expect.any(Object),
       });
     });
   });
@@ -549,17 +502,10 @@ describe('generator - import jdl', () => {
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the applications', () => {
-      assert.file([path.join('app1', '.yo-rc.json'), path.join('app2', '.yo-rc.json')]);
-    });
-    it('creates the entities in one app only', () => {
-      assert.noFile([path.join('app1', '.jhipster', 'BankAccount.json')]);
-      assert.file([path.join('app2', '.jhipster', 'BankAccount.json')]);
-    });
     it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(2);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(2);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app', 'jhipster:app']);
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         withEntities: true,
@@ -567,12 +513,13 @@ describe('generator - import jdl', () => {
         noInsight: true,
         skipGit: false,
         fromJdl: true,
+        applicationWithEntities: expect.any(Object),
       });
     });
   });
 
   describe('skips JDL apps with --ignore-application', () => {
-    const options = { skipInstall: true, ignoreApplication: true, fork: true, skipGit: false };
+    const options = { skipInstall: true, ignoreApplication: true, skipGit: false };
     beforeEach(() => {
       return testInTempDir(async dir => {
         fse.copySync(getTemplatePath('import-jdl/common'), dir);
@@ -591,20 +538,10 @@ describe('generator - import jdl', () => {
         path.join('myThirdApp', '.yo-rc.json'),
       ]);
     });
-    it('creates the entities', () => {
-      assert.file([
-        path.join('myFirstApp', '.jhipster', 'A.json'),
-        path.join('myFirstApp', '.jhipster', 'B.json'),
-        path.join('myFirstApp', '.jhipster', 'E.json'),
-        path.join('myFirstApp', '.jhipster', 'F.json'),
-        path.join('mySecondApp', '.jhipster', 'E.json'),
-        path.join('myThirdApp', '.jhipster', 'F.json'),
-      ]);
-    });
     it('does not call application generator', () => {
-      expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities', 'jhipster:entities', 'jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({ force: true, skipInstall: true, skipGit: false, fromJdl: true });
+      expect(subGenCallParams.commands).toEqual(['jhipster:entities', 'jhipster:entities', 'jhipster:entities']);
+      expect(subGenCallParams.count).toEqual(3);
+      expect(subGenCallParams.options[0]).toEqual({ force: true, skipInstall: true, skipGit: false, fromJdl: true });
     });
   });
 
@@ -629,9 +566,9 @@ describe('generator - import jdl', () => {
     });
     it('calls deployment generator', () => {
       const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
-      expect(subGenCallParams.commands).to.eql(invokedSubgens);
-      expect(subGenCallParams.count).to.equal(invokedSubgens.length);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.commands).toEqual(invokedSubgens);
+      expect(subGenCallParams.count).toEqual(invokedSubgens.length);
+      expect(subGenCallParams.options[0]).toEqual({
         force: true,
         skipInstall: true,
         skipGit: false,
@@ -656,15 +593,15 @@ describe('generator - import jdl', () => {
       afterEach(() => revertTempDir(originalCwd));
 
       it('calls generator in order', () => {
-        expect(subGenCallParams.count).to.equal(5);
-        expect(subGenCallParams.commands).to.eql([
+        expect(subGenCallParams.count).toEqual(5);
+        expect(subGenCallParams.commands).toEqual([
           'jhipster:app',
           'jhipster:app',
           'jhipster:app',
           'jhipster:docker-compose',
           'jhipster:kubernetes',
         ]);
-        expect(subGenCallParams.options[0]).to.eql({
+        expect(subGenCallParams.options[0]).toEqual({
           reproducible: true,
           force: true,
           withEntities: true,
@@ -672,8 +609,43 @@ describe('generator - import jdl', () => {
           noInsight: true,
           skipGit: false,
           fromJdl: true,
+          applicationWithEntities: {
+            config: expect.any(Object),
+            entities: [
+              expect.objectContaining({ name: 'A' }),
+              expect.objectContaining({ name: 'B' }),
+              expect.objectContaining({ name: 'E' }),
+              expect.objectContaining({ name: 'F' }),
+            ],
+          },
         });
-        expect(subGenCallParams.options[3]).to.eql({
+        expect(subGenCallParams.options[1]).toEqual({
+          reproducible: true,
+          force: true,
+          withEntities: true,
+          skipInstall: true,
+          noInsight: true,
+          skipGit: false,
+          fromJdl: true,
+          applicationWithEntities: {
+            config: expect.any(Object),
+            entities: [expect.objectContaining({ name: 'E' })],
+          },
+        });
+        expect(subGenCallParams.options[2]).toEqual({
+          reproducible: true,
+          force: true,
+          withEntities: true,
+          skipInstall: true,
+          noInsight: true,
+          skipGit: false,
+          fromJdl: true,
+          applicationWithEntities: {
+            config: expect.any(Object),
+            entities: [expect.objectContaining({ name: 'F' })],
+          },
+        });
+        expect(subGenCallParams.options[3]).toEqual({
           force: true,
           skipInstall: true,
           skipGit: false,
@@ -696,23 +668,6 @@ describe('generator - import jdl', () => {
 
       afterEach(() => revertTempDir(originalCwd));
 
-      it('creates the applications', () => {
-        assert.file([
-          path.join('myFirstApp', '.yo-rc.json'),
-          path.join('mySecondApp', '.yo-rc.json'),
-          path.join('myThirdApp', '.yo-rc.json'),
-        ]);
-      });
-      it('creates the entities', () => {
-        assert.file([
-          path.join('myFirstApp', '.jhipster', 'A.json'),
-          path.join('myFirstApp', '.jhipster', 'B.json'),
-          path.join('myFirstApp', '.jhipster', 'E.json'),
-          path.join('myFirstApp', '.jhipster', 'F.json'),
-          path.join('mySecondApp', '.jhipster', 'E.json'),
-          path.join('myThirdApp', '.jhipster', 'F.json'),
-        ]);
-      });
       it('creates the deployments', () => {
         assert.file([path.join('docker-compose', '.yo-rc.json'), path.join('kubernetes', '.yo-rc.json')]);
       });
@@ -733,9 +688,9 @@ describe('generator - import jdl', () => {
     afterEach(() => revertTempDir(originalCwd));
 
     it('calls generator in order', () => {
-      expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
-      expect(subGenCallParams.options[0]).to.eql({
+      expect(subGenCallParams.count).toEqual(3);
+      expect(subGenCallParams.commands).toEqual(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+      expect(subGenCallParams.options[0]).toEqual({
         reproducible: true,
         force: true,
         withEntities: true,
@@ -743,6 +698,7 @@ describe('generator - import jdl', () => {
         noInsight: true,
         skipGit: false,
         fromJdl: true,
+        applicationWithEntities: expect.any(Object),
       });
     });
   });
