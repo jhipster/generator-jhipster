@@ -169,38 +169,38 @@ public class SecurityConfiguration {
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
                     .requestMatchers("/app/**").permitAll()
-            .requestMatchers("/i18n/**").permitAll()
-            .requestMatchers("/content/**").permitAll()
-            .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/i18n/**").permitAll()
+                    .requestMatchers("/content/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-            .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers("/h2-console/**").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-            .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
 <%_ } else { _%>
             .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
-            .requestMatchers("/api/register").permitAll()
-            .requestMatchers("/api/activate").permitAll()
-            .requestMatchers("/api/account/reset-password/init").permitAll()
-            .requestMatchers("/api/account/reset-password/finish").permitAll()
+                    .requestMatchers("/api/register").permitAll()
+                    .requestMatchers("/api/activate").permitAll()
+                    .requestMatchers("/api/account/reset-password/init").permitAll()
+                    .requestMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-            .requestMatchers("/api/auth-info").permitAll()
+                    .requestMatchers("/api/auth-info").permitAll()
 <%_ } _%>
-            .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/api/**").authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
-            .requestMatchers("/websocket/**").authenticated()
+                    .requestMatchers("/websocket/**").authenticated()
 <%_ } _%>
                     .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .requestMatchers("/management/health").permitAll()
-            .requestMatchers("/management/health/**").permitAll()
-            .requestMatchers("/management/info").permitAll()
-            .requestMatchers("/management/prometheus").permitAll()
+                    .requestMatchers("/management/health").permitAll()
+                    .requestMatchers("/management/health/**").permitAll()
+                    .requestMatchers("/management/info").permitAll()
+                    .requestMatchers("/management/prometheus").permitAll()
                     .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
@@ -218,9 +218,9 @@ public class SecurityConfiguration {
   <%_ if (communicationSpringWebsocket) { _%>
                         new AntPathRequestMatcher("/websocket/**"),
   <%_ } _%>
-                    new AntPathRequestMatcher("/api/**")
+                        new AntPathRequestMatcher("/api/**")
+                    )
                 )
-            )
             )
             .formLogin(formLogin ->
                 formLogin
