@@ -169,7 +169,7 @@ describe('generator - base', () => {
   describe('printJHipsterLogo', () => {
     describe('when called', () => {
       it('prints the logo', () => {
-        expect(BaseGenerator.printJHipsterLogo()).to.equal(undefined);
+        expect(BaseGenerator.printJHipsterLogo('')).to.equal(undefined);
       });
     });
   });
