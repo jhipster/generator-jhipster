@@ -18,7 +18,7 @@ LABEL ALIAS=keycloak
 
 FROM mysql:8.0.32
 
-FROM mariadb:10.10.2
+FROM mariadb:10.10.3
 
 FROM mongo:6.0.4
 LABEL ALIAS=mongodb
@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM confluentinc/cp-zookeeper:7.3.1
 LABEL ALIAS=zookeeper
 
-FROM sonarqube:9.8.0-community
+FROM sonarqube:9.9.0-community
 LABEL ALIAS=sonar
 
 FROM consul:1.14.4
