@@ -28,16 +28,13 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import jhipster7Proxy from './jhipster7-proxy.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import { getDBTypeFromDBValue } from '../server/support/index.mjs';
-import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
-import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
+import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
 import {
   databaseTypes,
   monitoringTypes,
@@ -55,7 +52,6 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
-  JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
   SERVER_MAIN_RES_DIR,
@@ -65,7 +61,7 @@ import {
   NODE_VERSION,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithUnsetValues, parseCreationTimestamp } from './support/index.mjs';
+import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -689,30 +685,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntityNames() {
-    return this.getExistingEntities().map(entity => entity.name);
-  }
-
-  /**
-   * @private
-   * Read entity json from config folder.
-   * @param {string} entityName - Entity name
-   * @return {object} entity definition
-   */
-  readEntityJson(entityName) {
-    const file = path.join(path.dirname(this.config.path), JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-    try {
-      return this.fs.readJSON(file);
-    } catch (error) {
-      this.logger.warn(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.logger.debug('Error:', error);
-      return undefined;
-    }
-  }
-
-  /**
    * @private
    * get a table name in JHipster preferred style.
    *
@@ -988,28 +960,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
-   * get a hipster based on the applications name.
-   * @param {string} baseName of application
-   */
-  getHipster(baseName = this.baseName) {
-    const hash = stringHashCode(baseName);
-
-    switch (hash % 4) {
-      case 0:
-        return 'jhipster_family_member_0';
-      case 1:
-        return 'jhipster_family_member_1';
-      case 2:
-        return 'jhipster_family_member_2';
-      case 3:
-        return 'jhipster_family_member_3';
-      default:
-        return 'jhipster_family_member_0';
-    }
-  }
-
-  /**
    * build a generated application.
    *
    * @param {String} buildTool - maven | gradle
@@ -1197,7 +1147,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         };
         const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
-        const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
+        const data = createJHipster7Context(this, context, { ignoreWarnings: true });
         if (useAsync) {
           await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {
@@ -1358,9 +1308,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
+      } else {
+        this.logger.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
     if (options.reproducible !== undefined) {
@@ -1493,12 +1445,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(this.logger, options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {
           this.jhipsterConfig.creationTimestamp = creationTimestamp;
         }
+      } else {
+        this.logger.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
 
@@ -1649,7 +1603,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // Application name modified, using each technology's conventions
     if (dest.baseName) {
       dest.camelizedBaseName = _.camelCase(dest.baseName);
-      dest.hipster = this.getHipster(dest.baseName);
+      dest.hipster = getHipster(dest.baseName);
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
@@ -1944,7 +1898,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithUnsetValues(this.config.getAll()));
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     _.defaults(configWithDefaults, {
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,

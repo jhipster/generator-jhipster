@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, mkdirSync, opendirSync } from 'fs';
-import { basename, extname, join as joinPath, dirname } from 'path';
+import { basename, join as joinPath, dirname } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
+import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
@@ -32,19 +32,19 @@ import type Storage from 'yeoman-generator/lib/util/storage.js';
 import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { joinCallbacks } from './ts-utils.mjs';
+import { joinCallbacks } from './support/index.mjs';
 import baseOptions from './options.mjs';
 
 import type {
   JHipsterGeneratorOptions,
   JHipsterGeneratorFeatures,
   EditFileCallback,
+  EditFileOptions,
   CascatedEditFileCallback,
   JHipsterOptions,
   CheckResult,
 } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
@@ -132,6 +132,12 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
       this.option('skip-prettier', {
         description: 'Skip prettier',
+        type: Boolean,
+        hide: true,
+      });
+
+      this.option('ignore-needles-error', {
+        description: 'Ignore needles failures',
         type: Boolean,
         hide: true,
       });
@@ -397,18 +403,14 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    * editFile('foo.txt')(content => content + 'foo.txt content');
    */
   editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
-  editFile(
-    file: string,
-    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean },
-    ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this>;
+  editFile(file: string, options: EditFileOptions, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
 
   editFile(
     file: string,
-    options?: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean } | EditFileCallback<this>,
+    options?: EditFileOptions | EditFileCallback<this>,
     ...transformCallbacks: EditFileCallback<this>[]
   ): CascatedEditFileCallback<this> {
-    let actualOptions: { create?: boolean; ignoreNonExisting?: boolean; assertModified?: boolean };
+    let actualOptions: EditFileOptions;
     if (typeof options === 'function') {
       transformCallbacks = [options, ...transformCallbacks];
       actualOptions = {};
@@ -426,13 +428,16 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     try {
       originalContent = this.readDestination(filePath);
     } catch (_error) {
-      if (actualOptions.ignoreNonExisting) {
+      const { ignoreNonExisting, create } = actualOptions;
+      const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
+      if (ignoreNonExisting) {
+        this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
         // return a noop.
         const noop = () => noop;
         return noop;
       }
-      if (!actualOptions.create || transformCallbacks.length === 0) {
-        throw new Error(`File ${filePath} doesn't exist`);
+      if (!create || transformCallbacks.length === 0) {
+        throw new Error(`Unable to find ${filePath}. ${errorMessage}`);
       }
       // allow to edit non existing files
       originalContent = '';
@@ -529,49 +534,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     });
   }
 
-  /**
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param entityName - Name of the entity to load.
-   * @param {boolean} create - Create storage if doesn't exists.
-   */
-  getEntityConfig(entityName: string, create = false): Storage | undefined {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
-    if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true } as any);
-  }
-
-  /**
-   * get sorted list of entities according to changelog date (i.e. the order in which they were added)
-   */
-  getExistingEntities() {
-    function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
-    }
-
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    if (!existsSync(configDir)) {
-      mkdirSync(configDir);
-    }
-    const dir = opendirSync(configDir);
-    const entityNames: string[] = [];
-    let dirent = dir.readSync();
-    while (dirent !== null) {
-      const extension = extname(dirent.name);
-      if (dirent.isFile() && extension === '.json') {
-        entityNames.push(basename(dirent.name, extension));
-      }
-      dirent = dir.readSync();
-    }
-    dir.closeSync();
-
-    const entities = [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(entityNames))]
-      .map(entityName => ({ name: entityName, definition: this.getEntityConfig(entityName)?.getAll() }))
-      .filter(entity => entity && entity.definition)
-      .sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
-    return entities;
-  }
-
   private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
@@ -584,6 +546,8 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
     }
-    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion });
+    const { ignoreNeedlesError } = this.options;
+
+    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion, ignoreNeedlesError });
   }
 }

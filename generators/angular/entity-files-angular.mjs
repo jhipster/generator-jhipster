@@ -121,7 +121,14 @@ export async function postWriteEntitiesFiles({ application, entities, control })
 
 export function cleanupEntitiesFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    const { entityFolderName, entityFileName } = entity;
+    const { entityFolderName, entityFileName, entityName } = entity;
+    if (this.isJhipsterVersionLessThan('5.0.0')) {
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityName}/${entityName}.model.ts`);
+    }
+
+    if (this.isJhipsterVersionLessThan('6.3.0')) {
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/index.ts`);
+    }
 
     if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.route.ts`);

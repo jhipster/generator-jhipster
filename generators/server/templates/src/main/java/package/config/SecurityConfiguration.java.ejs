@@ -20,9 +20,6 @@ package <%= packageName %>.config;
 
 import <%= packageName %>.security.*;
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (authenticationTypeSession) { _%>
-import tech.jhipster.security.*;
-<%_ } _%>
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +33,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (!skipClient || authenticationTypeSession || authenticationTypeOauth2) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import tech.jhipster.web.filter.CookieCsrfFilter;
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -64,10 +66,11 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
   <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
@@ -78,9 +81,12 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
+import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+  <%_ if (applicationTypeMonolith) { _%>
+import org.springframework.security.config.Customizer;
+  <%_ } _%>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
@@ -115,23 +121,6 @@ public class SecurityConfiguration {
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
     }
-<%_ if (authenticationTypeSession) { _%>
-
-    @Bean
-    public AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
-        return new AjaxAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
-        return new AjaxAuthenticationFailureHandler();
-    }
-
-    @Bean
-    public AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler() {
-        return new AjaxLogoutSuccessHandler();
-    }
-<%_ } _%>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
 
     @Bean
@@ -142,7 +131,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // @formatter:off
         http
             .csrf(csrf -> csrf
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -155,35 +143,34 @@ public class SecurityConfiguration {
 <%_ } else { _%>
                 .disable())
 <%_ } _%>
+<%_ if (!skipClient) { _%>
+            .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+<%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
   <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
             .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-            .headers()
-                .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
-            .and()
-                .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-            .and()
-                .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
-            .and()
-                .frameOptions().sameOrigin()
-        .and()
+            .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                .frameOptions(frameOptions -> frameOptions.sameOrigin())
+                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                .permissionsPolicy(permissions ->
+                    permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
 <%_ } _%>
-            .authorizeRequests()
+            .authorizeHttpRequests(authz ->
+                // prettier-ignore
+                authz
 <%_ if (!applicationTypeMicroservice) { _%>
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-  <%_ if (!skipClient) { _%>
-            .requestMatchers("/app/*.html").permitAll()
-            .requestMatchers("/app/*/*.html").permitAll()
-            .requestMatchers("/app/*.js").permitAll()
-            .requestMatchers("/app/*/*.js").permitAll()
+<%_ if (!skipClient) { _%>
+                    .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
+                    .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
+                    .requestMatchers("/app/**").permitAll()
             .requestMatchers("/i18n/**").permitAll()
             .requestMatchers("/content/**").permitAll()
-  <%_ } _%>
             .requestMatchers("/swagger-ui/**").permitAll()
-            .requestMatchers("/test/**").permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
             .requestMatchers("/h2-console/**").permitAll()
@@ -208,12 +195,12 @@ public class SecurityConfiguration {
 <%_ if (communicationSpringWebsocket) { _%>
             .requestMatchers("/websocket/**").authenticated()
 <%_ } _%>
+                    .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .requestMatchers("/management/health").permitAll()
             .requestMatchers("/management/health/**").permitAll()
             .requestMatchers("/management/info").permitAll()
             .requestMatchers("/management/prometheus").permitAll()
-            .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-        .and()
+                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
             .rememberMe(rememberMe ->
@@ -225,46 +212,42 @@ public class SecurityConfiguration {
   <%_ } _%>
             .exceptionHandling(exceptionHanding ->
                 exceptionHanding.defaultAuthenticationEntryPointFor(
-                    (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) ->
-                        response.setStatus(401),
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                    new OrRequestMatcher(
+  <%_ if (communicationSpringWebsocket) { _%>
+                        new AntPathRequestMatcher("/websocket/**"),
+  <%_ } _%>
                     new AntPathRequestMatcher("/api/**")
                 )
+            )
             )
             .formLogin(formLogin ->
                 formLogin
                     .loginProcessingUrl("/api/authentication")
-                    .successHandler(ajaxAuthenticationSuccessHandler())
-                    .failureHandler(ajaxAuthenticationFailureHandler())
+                    .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
+                    .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
                     .permitAll()
             )
-            .logout(logout -> logout.logoutUrl("/api/logout").logoutSuccessHandler(ajaxLogoutSuccessHandler()).permitAll());
+            .logout(logout ->
+                logout.logoutUrl("/api/logout").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).permitAll());
 <%_ } else if (authenticationTypeJwt) { _%>
-            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-            .exceptionHandling(exceptions -> exceptions
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling((exceptions) -> exceptions
 				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-				.accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-			);
+				.accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (applicationTypeMonolith) { _%>
-            .oauth2Login()
-        .and()
+            .oauth2Login(withDefaults())
   <%_ } else if (applicationTypeMicroservice) { _%>
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } _%>
-            .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(authenticationConverter())
-                .and()
-            .and()
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(authenticationConverter())))
                 .oauth2Client();
 <%_ } _%>
         return http.build();
-        // @formatter:on
     }
 <%_ if (authenticationTypeOauth2) { _%>
 

@@ -2,7 +2,8 @@ import assert from 'yeoman-assert';
 import fse from 'fs-extra';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { getTemplatePath, getGenerator, basicHelpers as helpers } from './support/index.mjs';
+import { getTemplatePath, basicHelpers as helpers } from './support/index.mjs';
+import { GENERATOR_OPENAPI_CLIENT } from '../generators/generator-list.mjs';
 
 const basePackage = 'src/main/java/com/mycompany/myapp';
 
@@ -14,13 +15,13 @@ describe('generator - OpenAPI Client', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openapi-client'))
+        .createJHipster(GENERATOR_OPENAPI_CLIENT)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('openapi-client/microservice-simple'), dir);
           fse.copySync(getTemplatePath('openapi-client'), dir);
         })
         .withOptions({ skipChecks: true })
-        .withPrompts({
+        .withAnswers({
           action: 'new',
           specOrigin: 'custom-endpoint',
           customEndpoint: 'petstore-openapi-3.yml',
@@ -40,7 +41,7 @@ describe('generator - OpenAPI Client', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openapi-client'))
+        .createJHipster(GENERATOR_OPENAPI_CLIENT)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('openapi-client/microservice-with-client'), dir);
           fse.copySync(getTemplatePath('openapi-client'), dir);

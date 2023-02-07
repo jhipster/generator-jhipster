@@ -29,7 +29,7 @@ import BaseGenerator from '../base/index.mjs';
 import { upgradeFilesTask as upgradeLanguagesFilesTask } from '../languages/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
-import { parseBluePrints } from '../../utils/blueprint.mjs';
+import { parseBluePrints } from '../base/internal/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 
 /* Constants used throughout */

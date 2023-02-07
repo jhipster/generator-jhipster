@@ -2,12 +2,12 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import Environment from 'yeoman-environment';
+import { basicHelpers as helpers } from './support/index.mjs';
 
 import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
-import { parseChangelog } from '../generators/base/utils.mjs';
+import { parseChangelog } from '../generators/base/support/index.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
 import { Logger } from '../generators/base/support/logging.mjs';
 

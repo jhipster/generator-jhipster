@@ -83,7 +83,7 @@ export const basicTests = data => {
       before(async () => {
         runResult = await contextBuilder()
           .withOptions({ configure: true, skipPriorities: skipWritingPriorities })
-          .withPrompts(customPrompts)
+          .withAnswers(customPrompts)
           .run();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
@@ -97,7 +97,7 @@ export const basicTests = data => {
       before(async () => {
         runResult = await contextBuilder()
           .withOptions({ defaults: true, skipPriorities: skipWritingPriorities })
-          .withPrompts(customPrompts)
+          .withAnswers(customPrompts)
           .run();
       });
       it('should not show prompts and write default config to .yo-rc.json', () => {
@@ -112,7 +112,7 @@ export const basicTests = data => {
       before(async () => {
         runResult = await contextBuilder()
           .withOptions({ skipPrompts: true, skipPriorities: skipWritingPriorities })
-          .withPrompts(customPrompts)
+          .withAnswers(customPrompts)
           .run();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
@@ -129,7 +129,7 @@ export const basicTests = data => {
         runResult = await contextBuilder()
           .withJHipsterConfig(existing)
           .withOptions({ skipPriorities: skipWritingPriorities })
-          .withPrompts(customPrompts)
+          .withAnswers(customPrompts)
           .run();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
@@ -148,7 +148,7 @@ export const basicTests = data => {
             askAnswered: true,
             skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
           })
-          .withPrompts(customPrompts)
+          .withAnswers(customPrompts)
           .run();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
@@ -168,7 +168,7 @@ export const basicTests = data => {
             add: true,
             skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
           })
-          .withPrompts(customPrompts)
+          .withAnswers(customPrompts)
           .run();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {

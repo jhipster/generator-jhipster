@@ -21,7 +21,7 @@ import { Faker } from '@faker-js/faker';
 import Randexp from 'randexp';
 
 import { languageToJavaLanguage } from '../languages/support/index.mjs';
-import { stringHashCode } from '../utils.mjs';
+import { stringHashCode } from '../base/support/index.mjs';
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;

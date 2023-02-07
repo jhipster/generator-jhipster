@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';

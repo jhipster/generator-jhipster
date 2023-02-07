@@ -22,7 +22,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { defaultLanguage } from '../languages/support/index.mjs';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
-import { writeFiles, cleanup } from './files-angular.mjs';
+import { writeFiles } from './files-angular.mjs';
+import cleanupOldFilesTask from './cleanup.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { buildAngularFormPath as angularFormPath } from './support/index.mjs';
 import {
@@ -102,7 +103,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return {
-      cleanup,
+      cleanupOldFilesTask,
       writeFiles,
     };
   }

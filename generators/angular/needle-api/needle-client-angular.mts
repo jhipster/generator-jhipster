@@ -21,9 +21,9 @@ import _ from 'lodash';
 
 import needleClientBase from '../../client/needle-api/needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
-import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
 import { stripMargin } from '../../base/support/index.mjs';
 import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
+import { createNeedleCallback } from '../../base/support/needles.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 export default class extends needleClientBase {
@@ -117,28 +117,21 @@ export default class extends needleClientBase {
 
   addIcon(iconName) {
     const iconsPath = `${this.clientSrcDir}app/config/font-awesome-icons.ts`;
+    const ignoreNonExisting = this.generator.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
     const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
-    if (!checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
-      try {
-        replaceContent(
-          {
-            file: iconsPath,
-            pattern: /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
-            content: `\n  ${iconImport},\n  // jhipster-needle-add-icon-import`,
-          },
-          this.generator
-        );
-      } catch (e) {
-        this.generator.log(
-          chalk.yellow('\nUnable to find ') +
-            iconsPath +
-            chalk.yellow(' or other error. Icon imports not updated with icon ') +
-            iconImport +
-            chalk.yellow('.\n')
-        );
-        this.generator.logger.debug('Error:', e);
-      }
-    }
+    this.generator.editFile(
+      iconsPath,
+      { ignoreNonExisting },
+      createNeedleCallback({
+        needle: 'jhipster-needle-add-icon-import',
+        contentToCheck: new RegExp(`\\b${iconImport}\\b`),
+        contentToAdd: (content, { indentPrefix }) =>
+          content.replace(
+            /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
+            `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`
+          ),
+      })
+    );
   }
 
   addEntityToMenu(
@@ -201,12 +194,8 @@ export default class extends needleClientBase {
     this.addIcon(iconName);
   }
 
-  _addRoute(route, modulePath, moduleName, needleName, filePath, pageTitle) {
-    const isRouteAlreadyAdded = checkStringInFile(filePath, `path: '${route}'`, this.generator);
-    if (isRouteAlreadyAdded) {
-      return;
-    }
-    const errorMessage = `${chalk.yellow('Route ') + route + chalk.yellow(` not added to ${filePath}.\n`)}`;
+  _addRoute(route, modulePath, moduleName, needleName, filePath, pageTitle, { contentToCheck }: { contentToCheck?: string } = {}) {
+    const ignoreNonExisting = `${chalk.yellow('Route ') + route + chalk.yellow(` not added to ${filePath}.\n`)}`;
     let pageTitleTemplate = '';
     if (pageTitle) {
       pageTitleTemplate = `
@@ -218,24 +207,25 @@ export default class extends needleClientBase {
             |        loadChildren: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
             |      },`
     );
-    const rewriteFileModel = this.generateFileModel(filePath, needleName, routingEntry);
-    rewriteFileModel.prettierAware = true;
-    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    this.generator.editFile(
+      filePath,
+      { ignoreNonExisting },
+      createNeedleCallback({
+        needle: needleName,
+        contentToAdd: routingEntry,
+        ignoreWhitespaces: true,
+        contentToCheck: `path: '${route}'`,
+        autoIndent: false,
+      })
+    );
   }
 
   addEntityToModule(entityAngularName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle) {
     const entityModulePath = `${this.clientSrcDir}app/entities/entity-routing.module.ts`;
-    try {
-      const isSpecificEntityAlreadyGenerated = checkStringInFile(entityModulePath, `path: '${entityUrl}'`, this.generator);
-
-      if (!isSpecificEntityAlreadyGenerated) {
-        const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
-
-        this._addRoute(entityUrl, modulePath, undefined, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
-      }
-    } catch (e) {
-      this.generator.logger.debug('Error:', e);
-    }
+    const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
+    this._addRoute(entityUrl, modulePath, undefined, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle, {
+      contentToCheck: `path: '${entityUrl}'`,
+    });
   }
 
   addAdminRoute(route, modulePath, moduleName, pageTitle) {

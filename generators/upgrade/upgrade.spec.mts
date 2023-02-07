@@ -1,12 +1,14 @@
 import path, { dirname } from 'path';
 import shelljs from 'shelljs';
 import fse from 'fs-extra';
+import _ from 'lodash';
 import { fileURLToPath } from 'url';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { packageJson } from '../../lib/index.mjs';
 import { prepareTempDir, basicHelpers as helpers } from '../../test/support/index.mjs';
-import { escapeRegExp } from '../base/support/index.mjs';
+
+const { escapeRegExp } = _;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

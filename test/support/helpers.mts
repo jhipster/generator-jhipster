@@ -5,6 +5,7 @@ import { YeomanTest, RunContext, RunContextSettings } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import getGenerator from './get-generator.mjs';
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
@@ -25,12 +26,30 @@ class JHipsterTest extends YeomanTest {
     return super.run(GeneratorOrNamespace, settings, envOptions) as any;
   }
 
+  runJHipster<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings | undefined,
+    envOptions?: Options | undefined
+  ): JHipsterRunContext<GeneratorType> {
+    return this.run(getGenerator(jhipsterGenerator), settings, envOptions);
+  }
+
   create<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
     GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
     envOptions?: Options | undefined
   ): JHipsterRunContext<GeneratorType> {
     return super.create(GeneratorOrNamespace, settings, envOptions) as any;
+  }
+
+  createJHipster<
+    GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>
+  >(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings | undefined,
+    envOptions?: Options | undefined
+  ): JHipsterRunContext<GeneratorType> {
+    return this.create(getGenerator(jhipsterGenerator), settings, envOptions);
   }
 }
 

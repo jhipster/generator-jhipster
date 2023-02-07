@@ -24,7 +24,7 @@ import sortKeys from 'sort-keys';
 import { fileURLToPath } from 'url';
 
 import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
-import { formatDateForChangelog } from '../generators/base/utils.mjs';
+import { formatDateForChangelog } from '../generators/base/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

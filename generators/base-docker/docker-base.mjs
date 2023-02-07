@@ -19,9 +19,8 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
+import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../base/support/index.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
-import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -59,7 +58,7 @@ export function checkImages() {
  */
 export function generateJwtSecret() {
   if (this.jwtSecretKey === undefined) {
-    this.jwtSecretKey = createBase64Secret.call(this);
+    this.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
   }
 }
 
@@ -101,7 +100,7 @@ export function loadConfigs() {
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = getConfigWithDefaults(removeFieldsWithUnsetValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
+      const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       config.composePort = serverPort + index;
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
@@ -162,7 +161,7 @@ export function loadFromYoRc() {
     setClusteredApps.call(this);
     if (!this.adminPassword) {
       this.adminPassword = 'admin'; // TODO find a better way to do this
-      this.adminPasswordBase64 = createBase64Secret.call(this, this.adminPassword);
+      this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
     }
   }
 }

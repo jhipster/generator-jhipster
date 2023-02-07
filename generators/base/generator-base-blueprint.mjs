@@ -22,9 +22,9 @@ import path from 'path';
 import semver from 'semver';
 
 import { packageJson } from '../../lib/index.mjs';
-import { packageNameToNamespace } from '../utils.mjs';
+import { packageNameToNamespace } from './support/index.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
-import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from '../../utils/blueprint.mjs';
+import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
 
 /**

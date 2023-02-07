@@ -1,5 +1,6 @@
 export type Control = {
   existingProject: boolean;
-  useVersionPlaceholders?: boolean;
+  ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;
+  useVersionPlaceholders?: boolean;
 };

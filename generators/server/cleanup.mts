@@ -87,6 +87,9 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/ErrorVM.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/ParameterizedErrorVM.java`);
   }
+  if (this.isJhipsterVersionLessThan('4.13.1')) {
+    this.config.delete('hibernateCache');
+  }
   if (this.isJhipsterVersionLessThan('5.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ThymeleafConfiguration.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/ProfileInfoResource.java`);
@@ -96,6 +99,12 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     this.removeFile(`${application.srcMainResources}mails/socialRegistrationValidationEmail.html`);
     this.removeFile(`${application.srcTestResources}mail/testEmail.html`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/ProfileInfoResourceIT.java`);
+  }
+  if (this.isJhipsterVersionLessThan('5.2.2')) {
+    if (application.authenticationTypeOauth2 && application.applicationTypeMicroservice) {
+      this.removeFolder(`${DOCKER_DIR}realm-config`);
+      this.removeFile(`${DOCKER_DIR}keycloak.yml`);
+    }
   }
   if (this.isJhipsterVersionLessThan('5.8.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/MetricsConfiguration.java`);
@@ -180,6 +189,10 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.javaPackageTestDir}security/jwt/JWTFilterTest.java`);
       this.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderSecurityMetersTests.java`);
       this.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderTest.java`);
+    }
+    if (application.clientFrameworkAny && !application.reactive) {
+      this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
+      this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
     }
   }
 }

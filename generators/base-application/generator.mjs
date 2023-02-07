@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 
-import BaseGenerator from '../base/index.mjs';
+import BaseApplicationTsGenerator from './generator-ts.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 
@@ -52,16 +52,16 @@ const {
   POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
-const asPriority = BaseGenerator.asPriority;
+const asPriority = BaseApplicationTsGenerator.asPriority;
 
 /**
  * This is the base class for a generator that generates entities.
  *
  * @class
  * @template ApplicationType
- * @extends {BaseGenerator}
+ * @extends {BaseApplicationTsGenerator}
  */
-export default class BaseApplicationGenerator extends BaseGenerator {
+export default class BaseApplicationGenerator extends BaseApplicationTsGenerator {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);

@@ -30,7 +30,7 @@ describe('generator - entity database changelogs', () => {
             fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withArguments(['Foo'])
-          .withOptions({ regenerate: true, force: true });
+          .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });
 
       after(() => runResult.cleanup());
@@ -56,7 +56,7 @@ describe('generator - entity database changelogs', () => {
             });
           })
           .withArguments(['Foo'])
-          .withOptions({ regenerate: true, force: true });
+          .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });
 
       after(() => runResult.cleanup());

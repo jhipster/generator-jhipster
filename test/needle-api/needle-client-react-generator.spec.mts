@@ -1,5 +1,5 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
@@ -54,7 +54,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         skipChecks: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, 'jhipster-myblueprint:react']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         clientFramework: REACT,
         enableTranslation: true,

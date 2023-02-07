@@ -465,41 +465,6 @@ export const files = {
   ],
 };
 
-export function cleanup({ application }) {
-  if (!application.clientFrameworkAngular) return;
-
-  if (this.isJhipsterVersionLessThan('7.6.1')) {
-    this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
-  }
-  if (this.isJhipsterVersionLessThan('7.10.0')) {
-    this.removeFile('.browserslistrc');
-    this.removeFile(`${application.clientSrcDir}polyfills.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/health/health.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/home/home.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/home/home.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/health/health.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/login/login.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/login/login.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.route.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/account/account.module.ts`);
-  }
-}
-
 export async function writeFiles({ application, control }) {
   if (!application.clientFrameworkAngular) return;
 

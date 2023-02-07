@@ -308,27 +308,6 @@ export const files = {
   ],
 };
 
-export function cleanupFiles({ application }) {
-  if (!application.clientFrameworkReact) return;
-
-  if (this.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
-    this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
-  }
-  if (this.isJhipsterVersionLessThan('7.4.1')) {
-    this.removeFile('.npmrc');
-  }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
-    this.removeFile(`${application.clientSrcDir}app/entities/index.tsx`);
-  }
-  if (this.isJhipsterVersionLessThan('7.8.2')) {
-    this.removeFile(`${application.clientSrcDir}app/shared/error/error-boundary-route.tsx`);
-    this.removeFile(`${application.clientSrcDir}app/shared/error/error-boundary-route.spec.tsx`);
-  }
-  if (this.isJhipsterVersionLessThan('7.9.3')) {
-    this.removeFile(`${application.clientSrcDir}app/config/translation-middleware.ts`);
-  }
-}
-
 export async function writeFiles({ application, control }) {
   if (!application.clientFrameworkReact) return;
 

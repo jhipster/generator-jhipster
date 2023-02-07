@@ -19,10 +19,12 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { prepareEntityForTemplates } from '../../utils/entity.mjs';
-import { prepareFieldForTemplates } from '../../utils/field.mjs';
-import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
-import { stringify } from '../../utils/index.mjs';
+import {
+  prepareEntity as prepareEntityForTemplates,
+  prepareField as prepareFieldForTemplates,
+  prepareRelationship,
+  stringifyApplicationData,
+} from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
@@ -165,7 +167,9 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
             }
             const otherEntity = this.sharedData.getEntity(upperFirst(otherEntityName));
             if (!otherEntity) {
-              throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
+              throw new Error(
+                `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
+              );
             }
             relationship.otherEntity = otherEntity;
 
@@ -209,7 +213,7 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipsForTemplates({ entity, relationship }) {
-        prepareRelationshipForTemplates(entity, relationship, this);
+        prepareRelationship(entity, relationship, this);
       },
     });
   }
