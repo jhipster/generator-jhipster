@@ -83,7 +83,6 @@ const BASE_TEMPLATE_DATA = {
   fieldsContainOneToMany: false,
   fieldsContainManyToOne: false,
   fieldsContainEmbedded: false,
-  fieldsIsReactAvField: false,
 
   get otherRelationships() {
     return [];
@@ -104,9 +103,6 @@ const BASE_TEMPLATE_DATA = {
   },
   get differentRelationships() {
     return {};
-  },
-  get i18nToLoad() {
-    return [];
   },
 };
 
@@ -234,7 +230,6 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   );
 
   entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
-  entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
   entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
   entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
   if (entityWithConfig.microserviceAppName) {
@@ -550,16 +545,9 @@ export function preparePostEntityCommonDerivedProperties(entity) {
 
   entity.fields.forEach(field => {
     const fieldType = field.fieldType;
-    if (![INSTANT, ZONED_DATE_TIME, BOOLEAN].includes(fieldType)) {
-      entity.fieldsIsReactAvField = true;
-    }
 
     if (field.javadoc) {
       entity.haveFieldWithJavadoc = true;
-    }
-
-    if (field.fieldIsEnum) {
-      entity.i18nToLoad.push(field.enumInstance);
     }
 
     if (fieldType === ZONED_DATE_TIME) {

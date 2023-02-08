@@ -16,14 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const i18nToLoad = [entityInstance];
-for (const field of fields.filter(field => !field.id)) {
-  if (field.fieldIsEnum) {
-    i18nToLoad.push(field.enumInstance);
-  }
-}
-_%>
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {

@@ -201,11 +201,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         const { fields } = entity;
         const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
-        // TODO move to react generator
-        entity.fieldsIsReactAvField = intersection(fieldsType, [INSTANT, ZONED_DATE_TIME, BOOLEAN]).length > 0;
-
-        entity.i18nToLoad = fields.filter(({ fieldType }) => fieldIsEnum(fieldType)).map(({ enumInstance }) => enumInstance);
-
         // TODO move to server generator
         entity.haveFieldWithJavadoc = entity.fields.some(({ javadoc }) => javadoc);
 
