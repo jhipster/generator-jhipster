@@ -21,7 +21,7 @@ import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.mjs';
-import { Entity } from '../base-application/tasks.mjs';
+import { type Entity } from '../base-application/index.mjs';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 

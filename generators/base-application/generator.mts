@@ -22,10 +22,11 @@ import type Storage from 'yeoman-generator/lib/util/storage.js';
 import BaseGenerator from '../base/index.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
-import { BaseApplicationGeneratorDefinition, Entity } from './tasks.mjs';
-import { GenericTaskGroup } from '../base/tasks.mjs';
-import { CommonClientServerApplication } from './types.mjs';
+import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from './tasks.mjs';
+import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs';
+import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
+import type { Entity } from './types/index.mjs';
 
 const { upperFirst } = _;
 
@@ -61,19 +62,19 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-type ApplicationDefinition = {
-  applicationType: CommonClientServerApplication;
-  entityType: Entity;
-  sourceType: Record<string, (...args: any[]) => void>;
-};
-
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
+  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<Record<string, (...args: any[]) => void>>
+>;
 
 /**
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  Definition extends BaseApplicationGeneratorDefinition = GeneratorDefinition
+  Definition extends BaseApplicationGeneratorDefinition<{
+    applicationType: BaseApplication;
+    entityType: Entity;
+    sourceType: any;
+  }> = GeneratorDefinition
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 

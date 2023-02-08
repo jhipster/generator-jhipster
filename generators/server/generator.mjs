@@ -523,7 +523,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
                 field
               )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
             );
-            field.validation = false;
+            field.fieldValidate = false;
             field.fieldValidateRules = [];
           }
         });

@@ -47,6 +47,7 @@ import type {
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import NeedleApi from '../needle-api.mjs';
 
 const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -99,6 +100,7 @@ export default class BaseGenerator extends YeomanGenerator {
   blueprintStorage?: Storage;
 
   private _jhipsterGenerator?: string;
+  private _needleApi?: NeedleApi;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
@@ -200,6 +202,16 @@ export default class BaseGenerator extends YeomanGenerator {
    */
   usage(): string {
     return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  /**
+   * @deprecated
+   */
+  get needleApi() {
+    if (this._needleApi === undefined || this._needleApi === null) {
+      this._needleApi = new NeedleApi(this);
+    }
+    return this._needleApi;
   }
 
   /**

@@ -17,12 +17,10 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import lodash from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 import {
-  fieldIsEnum,
   stringifyApplicationData,
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
@@ -32,13 +30,6 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION
 
 import type { GeneratorDefinition as ServerGeneratorDefinition } from '../common/index.mjs';
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
-
-const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
-const { sortedUniq, intersection } = lodash;
-
-const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
-const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
-const { IMAGE, TEXT } = BlobTypes;
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -198,63 +189,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         if (!entity.skipServer) {
           preparePostEntityServerDerivedProperties(entity);
         }
-        const { fields } = entity;
-        const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
-
-        // TODO move to server generator
-        entity.haveFieldWithJavadoc = entity.fields.some(({ javadoc }) => javadoc);
-
-        entity.fieldsContainZonedDateTime = fieldsType.includes(ZONED_DATE_TIME);
-        entity.fieldsContainInstant = fieldsType.includes(INSTANT);
-        entity.fieldsContainDuration = fieldsType.includes(DURATION);
-        entity.fieldsContainLocalDate = fieldsType.includes(LOCAL_DATE);
-        entity.fieldsContainBigDecimal = fieldsType.includes(BIG_DECIMAL);
-        entity.fieldsContainUUID = fieldsType.includes(UUID);
-        entity.fieldsContainDate = intersection(fieldsType, [ZONED_DATE_TIME, INSTANT, LOCAL_DATE]).length > 0;
-        entity.fieldsContainTimed = intersection(fieldsType, [ZONED_DATE_TIME, INSTANT]).length > 0;
-
-        entity.fieldsContainBlob = intersection(fieldsType, [BYTES, BYTE_BUFFER]).length > 0;
-        if (entity.fieldsContainBlob) {
-          const blobFields = fields.filter(({ fieldType }) => [BYTES, BYTE_BUFFER].includes(fieldType));
-          entity.blobFields = blobFields;
-          const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
-          entity.fieldsContainImageBlob = blobFieldsContentType.includes(IMAGE);
-          entity.fieldsContainBlobOrImage = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
-          entity.fieldsContainTextBlob = blobFieldsContentType.includes(TEXT);
-        }
-
-        entity.validation = entity.validation || fields.some(({ fieldValidate }) => fieldValidate);
-      },
-
-      prepareEntityRelationshipsDerivedProperties({ entity }) {
-        const { relationships } = entity;
-        const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
-        entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
-        entity.fieldsContainOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => ownerSide);
-
-        entity.fieldsContainManyToOne = relationships.some(({ relationshipType }) => relationshipType === 'many-to-one');
-        entity.fieldsContainOneToMany = relationships.some(({ relationshipType }) => relationshipType === 'one-to-many');
-
-        entity.fieldsContainOwnerManyToMany = relationships.some(
-          ({ relationshipType, ownerSide }) => ownerSide && relationshipType === 'many-to-many'
-        );
-
-        entity.fieldsContainEmbedded = relationships.some(({ otherEntityIsEmbedded }) => otherEntityIsEmbedded);
-        entity.validation = entity.validation || relationships.some(({ relationshipValidate }) => relationshipValidate);
-
-        const relationshipsByType = relationships
-          .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
-          .reduce((relationshipsByType: any, [type, relationship]) => {
-            if (!relationshipsByType[type]) {
-              relationshipsByType[type] = [relationship];
-            } else {
-              relationshipsByType[type].push(relationship);
-            }
-            return relationshipsByType;
-          }, {});
-
-        entity.differentTypes = Object.keys(relationshipsByType);
-        entity.differentRelationships = relationshipsByType;
       },
     });
   }

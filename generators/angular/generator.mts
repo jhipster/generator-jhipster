@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import chalk from 'chalk';
 
-import BaseApplicationGenerator from '../base-application/index.mjs';
+import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { defaultLanguage } from '../languages/support/index.mjs';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
 import { writeFiles } from './files-angular.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { buildAngularFormPath as angularFormPath } from './support/index.mjs';
+import { buildAngularFormPath as angularFormPath, addEntitiesRoute, addToEntitiesMenu } from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
@@ -33,14 +34,22 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
+import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.mjs';
+import type { ClientApplication } from '../client/types.mjs';
+import type { SourceType as ClientSourceType } from '../client/index.mjs';
+import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
+
+type AngularApplication = ClientApplication & { angularLocaleId: string };
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
+  GenericApplicationDefinition<AngularApplication> & GenericSourceTypeDefinition<ClientSourceType>
+>;
 
 const { ANGULAR } = clientFrameworkTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
- */
-export default class AngularGenerator extends BaseApplicationGenerator {
+export default class AngularGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+  localEntities?: any[];
+
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
@@ -81,6 +90,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
         application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale;
       },
+      addNeedles({ source }) {
+        source.addEntitiesToClient = param => {
+          const { application, entities } = param;
+          this.addEntitiesToModule({ application, entities });
+          this.addEntitiesToMenu({ application, entities });
+        };
+      },
     });
   }
 
@@ -102,10 +118,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -113,10 +129,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       cleanupEntitiesFiles,
       writeEntitiesFiles,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
@@ -124,38 +140,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get postWritingEntities() {
-    return {
+    return this.asPostWritingEntitiesTaskGroup({
       postWriteEntitiesFiles,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
-  }
-
-  /**
-   * @private
-   * Add a new entity in the "entities" menu.
-   *
-   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
-   * @param {string} entityTranslationValue - i18n value for entity entry in menu
-   */
-  addEntityToMenu(
-    routerName,
-    enableTranslation,
-    entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
-    jhiPrefix = this.jhiPrefix
-  ) {
-    this.needleApi.clientAngular.addEntityToMenu(
-      routerName,
-      enableTranslation,
-      entityTranslationKeyMenu,
-      entityTranslationValue,
-      jhiPrefix
-    );
   }
 
   /**
@@ -192,17 +183,9 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} adminFolderName - The name of the folder.
    * @param {string} adminFileName - The name of the file.
    * @param {boolean} enableTranslation - If translations are enabled or not.
-   * @param {string} clientFramework - The name of the client framework.
    */
-  addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-    this.needleApi.clientAngular.addToAdminModule(
-      appName,
-      adminAngularName,
-      adminFolderName,
-      adminFileName,
-      enableTranslation,
-      clientFramework
-    );
+  addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation) {
+    this.needleApi.clientAngular.addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation);
   }
 
   /**
@@ -237,34 +220,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   /**
    * @private
-   * Add a new entity in the TS modules file.
-   *
-   * @param {string} entityInstance - Entity Instance
-   * @param {string} entityClass - Entity Class
-   * @param {string} entityName - Entity Name
-   * @param {string} entityFolderName - Entity Folder Name
-   * @param {string} entityFileName - Entity File Name
-   * @param {string} entityUrl - Entity router URL
-   * @param {string} microserviceName - Microservice Name
-   * @param {boolean} readOnly - If the entity is read-only or not
-   * @param {string} pageTitle - The translation key or the text for the page title in the browser
-   */
-  addEntityToModule(
-    entityInstance = this.entityInstance,
-    entityClass = this.entityClass,
-    entityName = this.entityAngularName,
-    entityFolderName = this.entityFolderName,
-    entityFileName = this.entityFileName,
-    entityUrl = this.entityUrl,
-    microserviceName = this.microserviceName,
-    readOnly = this.readOnly,
-    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
-  ) {
-    this.needleApi.clientAngular.addEntityToModule(entityName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle);
-  }
-
-  /**
-   * @private
    * Add a new icon to icon imports.
    *
    * @param {string} iconName - The name of the Font Awesome icon.
@@ -281,8 +236,23 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {boolean} enableTranslation - If translations are enabled or not
    * @param {string} translationKeyMenu - i18n key for entry in the admin menu
    */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName)) {
-    this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
+  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName), jhiPrefix?) {
+    this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
+  }
+
+  addEntitiesToMenu({ application, entities }: { application: ClientApplication; entities: Entity[] }) {
+    const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
+    const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
+    const editCallback = addToEntitiesMenu({ application, entities });
+
+    this.editFile(filePath, { ignoreNonExisting }, editCallback);
+  }
+
+  addEntitiesToModule({ application, entities }: { application: ClientApplication; entities: Entity[] }) {
+    const filePath = `${application.clientSrcDir}app/entities/entity-routing.module.ts`;
+    const ignoreNonExisting = chalk.yellow(`Route(s) not added to ${filePath}.`);
+    const addRouteCallback = addEntitiesRoute({ application, entities });
+    this.editFile(filePath, { ignoreNonExisting }, addRouteCallback);
   }
 
   /**

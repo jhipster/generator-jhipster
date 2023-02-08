@@ -30,10 +30,7 @@ export const addEntityFiles = {
       ],
     },
     {
-      condition: generator =>
-        generator.entity.fieldsContainOwnerManyToMany ||
-        generator.entity.fieldsContainOwnerOneToOne ||
-        generator.entity.fieldsContainManyToOne,
+      condition: generator => generator.entity.anyRelationshipIsOwnerSide,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -109,7 +106,7 @@ export const fakeFiles = {
       ],
     },
     {
-      condition: generator => generator.entity.fieldsContainImageBlob === true || generator.entity.fieldsContainBlob === true,
+      condition: generator => generator.entity.anyFieldHasImageContentType === true || generator.entity.anyFieldIsBlobDerived === true,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -119,7 +116,7 @@ export const fakeFiles = {
       ],
     },
     {
-      condition: generator => generator.entity.fieldsContainTextBlob === true,
+      condition: generator => generator.entity.anyFieldHasTextContentType === true,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/fake-data/blob/hipster.txt'],
     },

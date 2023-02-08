@@ -1881,16 +1881,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
-   */
-  get needleApi() {
-    if (this._needleApi === undefined || this._needleApi === null) {
-      this._needleApi = new NeedleApi(this);
-    }
-    return this._needleApi;
-  }
-
-  /**
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults() {

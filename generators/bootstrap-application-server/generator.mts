@@ -28,14 +28,12 @@ import {
   getPomVersionProperties,
 } from '../server/support/index.mjs';
 import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server/index.mjs';
-import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
+import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
 const { CommonDBTypes } = fieldTypes;
-const { OAUTH2 } = authenticationTypes;
-const { LONG: TYPE_LONG } = CommonDBTypes;
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
@@ -172,22 +170,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
         const derivedFields = entity.primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields);
-      },
-      prepareUser({ entity }) {
-        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
-        if (entity.builtIn && entity.name === 'User') {
-          const oauth2 = entity.authenticationType === OAUTH2;
-          const userIdType = entity.primaryKey.type;
-          const liquibaseFakeData = oauth2
-            ? []
-            : [
-                { id: userIdType === TYPE_LONG ? 1 : entity.primaryKey.fields[0].generateFakeData() },
-                { id: userIdType === TYPE_LONG ? 2 : entity.primaryKey.fields[0].generateFakeData() },
-              ];
-          entity.liquibaseFakeData = liquibaseFakeData;
-          entity.fakeDataCount = liquibaseFakeData.length;
-          this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
-        }
       },
     });
   }
