@@ -19,7 +19,7 @@
 <%
 const enumImports = this.generateEntityClientEnumImports(fields);
 %>
-<%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
+<%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 <%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => (relationship.ownerSide || relationship.relationshipManyToMany) && relationship.otherEntity.entityAngularName !== entityAngularName))) {

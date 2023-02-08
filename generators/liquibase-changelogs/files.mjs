@@ -106,7 +106,7 @@ export const fakeFiles = {
       ],
     },
     {
-      condition: generator => generator.entity.anyFieldHasImageContentType === true || generator.entity.anyFieldIsBlobDerived === true,
+      condition: generator => generator.entity.anyFieldHasImageContentType || generator.entity.anyFieldIsBlobDerived,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -116,7 +116,7 @@ export const fakeFiles = {
       ],
     },
     {
-      condition: generator => generator.entity.anyFieldHasTextContentType === true,
+      condition: generator => generator.entity.anyFieldHasTextContentType,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/fake-data/blob/hipster.txt'],
     },
