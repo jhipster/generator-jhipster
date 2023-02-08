@@ -22,7 +22,7 @@
     .map(relationships => relationships.filter(rel => rel.ownerSide))
     .filter(relationships => relationships.length > 0);
 _%>
-import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+import { Component, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -34,7 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { <%= entityAngularName %>FormService, <%= entityAngularName %>FormGroup } from './<%= entityFileName %>-form.service';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
@@ -91,7 +91,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
 
     constructor(
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
         protected dataUtils: DataUtils,
         protected eventManager: EventManager,
 <%_ } _%>
@@ -109,7 +109,7 @@ _%>
   }
 });
 _%>
-<%_ if (fieldsContainImageBlob) { _%>
+<%_ if (anyFieldHasImageContentType) { _%>
         protected elementRef: ElementRef,
 <%_ } _%>
         protected activatedRoute: ActivatedRoute,
@@ -135,7 +135,7 @@ _%>
         });
     }
 
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
     }
@@ -153,7 +153,7 @@ _%>
         });
     }
 
-  <%_ if (fieldsContainImageBlob) { _%>
+  <%_ if (anyFieldHasImageContentType) { _%>
     clearInputImage(field: string, fieldContentType: string, idInput: string): void {
         this.editForm.patchValue({
             [field]: null,

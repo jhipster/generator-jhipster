@@ -73,7 +73,7 @@ import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../ser
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialogComponent } from '../delete/<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
@@ -148,7 +148,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } else if (paginationInfiniteScroll) { _%>
       protected parseLinks: ParseLinks,
 <%_ } _%>
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
       protected dataUtils: DataUtils,
 <%_ } _%>
 <%_ if (!readOnly) { _%>
@@ -200,7 +200,7 @@ export class <%= componentName %> implements OnInit {
 <% } %>
     }
 
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {
       return this.dataUtils.byteSize(base64String);
     }

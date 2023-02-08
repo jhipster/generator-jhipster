@@ -23,14 +23,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, <% if (searchEngineAny) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
-<%_ if (blobFields.length > 0) { _%>
-  <%_ if (fieldsContainBlobOrImage) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+  <%_ if (anyFieldHasFileBasedContentType) { _%>
   openFile,
   <%_ } _%>
   byteSize,
 <%_ } _%>
   Translate<% if (searchEngineAny) { %>, translate<% } %>
-  <% if (fieldsContainDate) { %>, TextFormat<% } %>
+  <% if (anyFieldIsDateDerived) { %>, TextFormat<% } %>
 <%_ if (paginationNo) { _%>
   , getSortState
 <%_ } else { _%>
@@ -41,7 +41,7 @@ import {
 <%_ } _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+<%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ } _%>
 import { ASC, DESC<%_ if (!paginationNo) { _%>, ITEMS_PER_PAGE<%_ } _%>, SORT } from 'app/shared/util/pagination.constants';
@@ -51,7 +51,7 @@ import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } _%>
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-<%_ if (fieldsContainDuration) { _%>
+<%_ if (anyFieldIsDuration) { _%>
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 
