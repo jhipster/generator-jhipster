@@ -16,19 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createBaseNeedle } from '../base/support/needles.mjs';
+import BaseGenerator from '../../base/index.mjs';
+import { createBaseNeedle } from '../../base/support/needles.mjs';
+import { SpringBootApplication } from '../types.mjs';
 
-/**
- * @typedef {Object} ApplicationPropertiesNeedles - creates a new type named 'SpecialType'
- * @property {string} [property] - property declaration
- * @property {string} [propertyGetter] - property getter
- * @property {string} [propertyClass] - property class
- */
+type ApplicationPropertiesNeedles = {
+  property?: string;
+  propertyGetter?: string;
+  propertyClass?: string;
+};
 
 /**
  * Insert content into ApplicationProperties class
  * @example
- * insertContentIntoApplicationProperties(generator, application, {
+ * insertContentIntoApplicationProperties.call(generator, application, {
  *   property: 'private final bar = new Bar();',
  *   proppertyGetter: `
  * public getBar() {
@@ -54,24 +55,27 @@ import { createBaseNeedle } from '../base/support/needles.mjs';
  * }`,
  *   });
  * );
- * @param {import('../generator-base.js')} [generator]
- * @param {any} context
- * @param {ApplicationPropertiesNeedles} needles
- * @returns {import('../generator-base.js').CascatedEditFileCallback | import('../generator-base.js').EditFileCallback}
  */
 // eslint-disable-next-line import/prefer-default-export
-export const insertContentIntoApplicationProperties = (generator, data, needles) => {
-  if (!needles) {
-    needles = generator;
-    generator = null;
+export function insertContentIntoApplicationProperties(
+  this: BaseGenerator | void,
+  application: SpringBootApplication,
+  needles: ApplicationPropertiesNeedles
+) {
+  if (this) {
+    return createBaseNeedle.call(
+      this,
+      {
+        filePath: `${application.javaPackageSrcDir}config/ApplicationProperties.java`,
+        needlesPrefix: 'application-properties',
+      },
+      needles
+    );
   }
-
-  return createBaseNeedle.call(
-    generator,
+  return createBaseNeedle(
     {
-      filePath: generator ? `${data.SERVER_MAIN_SRC_DIR}${data.javaDir}config/ApplicationProperties.java` : undefined,
       needlesPrefix: 'application-properties',
     },
     needles
   );
-};
+}

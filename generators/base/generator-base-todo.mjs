@@ -860,8 +860,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   /**
    * Prints a JHipster logo.
    */
-  printJHipsterLogo() {
-    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
+  printJHipsterLogo(cwd = this.destinationPath()) {
+    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(cwd)}`));
     if (process.cwd() === this.getUserHome()) {
       this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
       this.logger.log(

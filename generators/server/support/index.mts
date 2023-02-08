@@ -21,6 +21,7 @@ export * from './database.mjs';
 export * from './dependabot-maven.mjs';
 export * from './files.mjs';
 export * from './java-formatting.mjs';
+export * from './needles.mjs';
 export { default as prepareEntity } from './prepare-entity.mjs';
 export * from './prepare-entity.mjs';
 export { default as prepareField } from './prepare-field.mjs';
