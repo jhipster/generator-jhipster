@@ -1,5 +1,6 @@
 {
   "changelogDate": "20170626061520",
+  "clientInterface": "restful-resources",
   "clientRootFolder": "test-root",
   "dto": "no",
   "entityTableName": "division",
@@ -33,6 +34,5 @@
       "relationshipType": "many-to-many"
     }
   ],
-  "restResources": true,
   "service": "no"
 }

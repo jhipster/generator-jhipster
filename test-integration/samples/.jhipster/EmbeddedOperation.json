@@ -1,5 +1,6 @@
 {
   "changelogDate": "20200804163351",
+  "clientInterface": "restful-resources",
   "clientRootFolder": "test-root",
   "dto": "mapstruct",
   "embedded": true,
@@ -19,6 +20,5 @@
       "relationshipType": "many-to-one"
     }
   ],
-  "restResources": true,
   "service": "no"
 }

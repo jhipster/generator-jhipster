@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220313234025",
+  "clientInterface": "restful-resources",
   "clientRootFolder": "",
   "databaseType": "sql",
   "dto": "mapstruct",
@@ -19,7 +20,6 @@
       "relationshipType": "one-to-one"
     }
   ],
-  "restResources": true,
   "searchEngine": "no",
   "service": "serviceImpl"
 }

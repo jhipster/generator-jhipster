@@ -1,6 +1,7 @@
 {
   "applications": "*",
   "changelogDate": "20200417191023",
+  "clientInterface": "restful-resources",
   "clientRootFolder": "",
   "dto": "no",
   "embedded": false,
@@ -30,6 +31,5 @@
     },
     { "otherEntityName": "track", "otherEntityRelationshipName": "album", "relationshipName": "track", "relationshipType": "one-to-many" }
   ],
-  "restResources": true,
   "service": "no"
 }

@@ -1,5 +1,6 @@
 {
   "changelogDate": "20160208184036",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "fields": [
     { "fieldName": "stringHugo", "fieldType": "String" },
@@ -88,6 +89,5 @@
   "fluentMethods": true,
   "pagination": "infinite-scroll",
   "relationships": [],
-  "restResources": true,
   "service": "no"
 }

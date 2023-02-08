@@ -1,6 +1,7 @@
 {
   "applications": "*",
   "changelogDate": "20200415193919",
+  "clientInterface": "restful-resources",
   "clientRootFolder": "",
   "dto": "no",
   "embedded": false,
@@ -16,6 +17,5 @@
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no"
 }

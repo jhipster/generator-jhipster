@@ -1,11 +1,11 @@
 {
   "changelogDate": "20160806123845",
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "entityTableName": "entity_with_service_impl_pagination_and_dto",
   "fields": [{ "fieldName": "theo", "fieldType": "String" }],
   "fluentMethods": true,
   "pagination": "pagination",
   "relationships": [],
-  "restResources": true,
   "service": "serviceImpl"
 }

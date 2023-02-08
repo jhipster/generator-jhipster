@@ -1,5 +1,6 @@
 {
   "changelogDate": "20160208184037",
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "fields": [
     { "fieldName": "stringEva", "fieldType": "String" },
@@ -88,6 +89,5 @@
   "fluentMethods": true,
   "pagination": "no",
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass"
 }

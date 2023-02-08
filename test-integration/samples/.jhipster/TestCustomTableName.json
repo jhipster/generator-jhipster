@@ -1,5 +1,6 @@
 {
   "changelogDate": "20160208210109",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "entityTableName": "test_custom_table_name_entity",
   "fields": [],
@@ -57,6 +58,5 @@
       "relationshipValidateRules": "required"
     }
   ],
-  "restResources": true,
   "service": "no"
 }

@@ -6,6 +6,7 @@
     "buildTool": "gradle",
     "cacheProvider": "no",
     "clientFramework": "angular",
+    "clientInterface": "restful-resources",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",

@@ -1,5 +1,6 @@
 {
   "changelogDate": "20160208210115",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "fields": [],
   "fluentMethods": true,
@@ -43,6 +44,5 @@
       "relationshipType": "one-to-one"
     }
   ],
-  "restResources": true,
   "service": "serviceImpl"
 }

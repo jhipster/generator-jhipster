@@ -1,6 +1,7 @@
 {
   "angularJSSuffix": "mySuffixAlt",
   "changelogDate": "20160208210110",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "fields": [],
   "fluentMethods": true,
@@ -56,6 +57,5 @@
       "relationshipType": "one-to-many"
     }
   ],
-  "restResources": true,
   "service": "no"
 }

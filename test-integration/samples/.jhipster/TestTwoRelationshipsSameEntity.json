@@ -1,6 +1,7 @@
 {
   "angularJSSuffix": "mySuffix",
   "changelogDate": "20160208210116",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "entityTableName": "test_multiple_rel",
   "fields": [],
@@ -40,6 +41,5 @@
       "relationshipValidateRules": "required"
     }
   ],
-  "restResources": true,
   "service": "no"
 }

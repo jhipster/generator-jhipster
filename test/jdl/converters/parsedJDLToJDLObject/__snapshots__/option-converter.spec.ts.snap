@@ -102,20 +102,6 @@ exports[`jdl - OptionConverter convertOptions when passing options such as noFlu
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as noRestResources should convert it 1`] = `
-[
-  JDLUnaryOption {
-    "entityNames": Set {
-      "A",
-    },
-    "excludedNames": Set {
-      "B",
-    },
-    "name": "noRestResources",
-  },
-]
-`;
-
 exports[`jdl - OptionConverter convertOptions when passing options such as pagination should convert it 1`] = `
 [
   JDLBinaryOption {

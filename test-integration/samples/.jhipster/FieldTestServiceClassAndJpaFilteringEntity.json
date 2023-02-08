@@ -1,5 +1,6 @@
 {
   "changelogDate": "20160208184039",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "fields": [
     { "fieldName": "stringBob", "fieldType": "String" },
@@ -89,6 +90,5 @@
   "jpaMetamodelFiltering": true,
   "pagination": "no",
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass"
 }

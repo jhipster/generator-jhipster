@@ -1,6 +1,7 @@
 {
   "applications": ["jhipster"],
   "changelogDate": "20200820222459",
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "jpa_filtering_other_side",
@@ -52,7 +53,6 @@
       "relationshipType": "many-to-many"
     }
   ],
-  "restResources": true,
   "service": "serviceClass",
   "skipUiGrouping": false
 }

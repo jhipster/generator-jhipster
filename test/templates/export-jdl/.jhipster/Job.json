@@ -1,6 +1,6 @@
 {
     "fluentMethods": true,
-    "restResources": true,
+    "clientInterface": "restful-resources",
     "relationships": [
         {
             "relationshipName": "employee",

@@ -1,5 +1,6 @@
 {
   "changelogDate": "20150805125054",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "fields": [
     { "fieldName": "date", "fieldType": "Instant", "fieldValidateRules": ["required"] },
@@ -25,6 +26,5 @@
       "relationshipType": "many-to-many"
     }
   ],
-  "restResources": true,
   "service": "no"
 }

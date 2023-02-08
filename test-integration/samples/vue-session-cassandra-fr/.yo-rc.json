@@ -7,6 +7,7 @@
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "vue",
+    "clientInterface": "restful-resources",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "primary",

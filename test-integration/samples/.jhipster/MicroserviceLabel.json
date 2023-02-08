@@ -1,5 +1,6 @@
 {
   "changelogDate": "20150805124936",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "fields": [
     { "fieldName": "label", "fieldType": "String", "fieldValidateRules": ["required", "minlength"], "fieldValidateRulesMinlength": "3" }
@@ -16,6 +17,5 @@
       "relationshipType": "many-to-many"
     }
   ],
-  "restResources": true,
   "service": "serviceClass"
 }

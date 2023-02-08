@@ -1,11 +1,11 @@
 {
   "changelogDate": "20160806123744",
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "entityTableName": "entity_with_service_class_pagination_and_dto",
   "fields": [{ "fieldName": "lena", "fieldType": "String" }],
   "fluentMethods": true,
   "pagination": "pagination",
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass"
 }
