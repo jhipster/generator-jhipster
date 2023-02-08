@@ -22,7 +22,7 @@
 -%>
 <&_ if (fragment.importSection) { -&>
 import org.springframework.data.annotation.Id;
-    <%_ if (fieldsContainBlob) { _%>
+    <%_ if (anyFieldIsBlobDerived) { _%>
 import java.nio.ByteBuffer;
 import org.springframework.data.cassandra.core.mapping.Column;
     <%_ } _%>

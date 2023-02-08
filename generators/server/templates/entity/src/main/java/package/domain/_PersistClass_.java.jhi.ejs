@@ -59,21 +59,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
 
 import java.io.Serializable;
-<%_ if (fieldsContainBigDecimal) { _%>
+<%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_ } if (fieldsContainInstant) { _%>
+<%_ } if (anyFieldIsInstant) { _%>
 import java.time.Instant;
-<%_ } if (fieldsContainLocalDate) { _%>
+<%_ } if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
-<%_ } if (fieldsContainZonedDateTime) { _%>
+<%_ } if (anyFieldIsZonedDateTime) { _%>
 import java.time.ZonedDateTime;
-<%_ } if (fieldsContainDuration) { _%>
+<%_ } if (anyFieldIsDuration) { _%>
 import java.time.Duration;
 <%_ } if (entityContainsCollectionField) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
-<%_ if (fieldsContainUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
+<%_ if (anyFieldIsUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>

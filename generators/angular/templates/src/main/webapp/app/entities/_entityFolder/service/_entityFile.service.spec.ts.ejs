@@ -23,15 +23,15 @@ _%>
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-<%_ if (fieldsContainLocalDate) { _%>
+<%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../<%= entityFileName %>.test-samples';
 
-import { <%= entityAngularName %>Service<% if (fieldsContainDate) { %>, Rest<%= entityAngularName %><% } %> } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %>Service<% if (anyFieldIsDateDerived) { %>, Rest<%= entityAngularName %><% } %> } from './<%= entityFileName %>.service';
 
-const requireRestSample: <% if (fieldsContainDate) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
+const requireRestSample: <% if (anyFieldIsDateDerived) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
   ...sampleWithRequiredData,
 <%_ fields.forEach((field) => { _%>
 <%_  if (field.fieldTypeLocalDate) { _%>

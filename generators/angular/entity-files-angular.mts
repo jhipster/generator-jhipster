@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createTranslationReplacer } from './transform-angular.mjs';
+import { createTranslationReplacer } from './support/index.mjs';
 import { clientApplicationBlock } from '../client/utils.mjs';
+import AngularGenerator, { type GeneratorDefinition } from './generator.mjs';
 
 export const angularFiles = {
   client: [
@@ -59,11 +60,10 @@ export const angularFiles = {
   ],
 };
 
-/**
- * @this {import('./index.mjs')}
- * @returns
- */
-export async function writeEntitiesFiles({ application, entities, control }) {
+export async function writeEntitiesFiles(
+  this: AngularGenerator,
+  { application, entities, control }: GeneratorDefinition['writingEntitiesTaskParam']
+) {
   await control.loadClientTranslations?.();
 
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
@@ -75,53 +75,15 @@ export async function writeEntitiesFiles({ application, entities, control }) {
   }
 }
 
-/**
- * @this {import('./index.mjs')}
- * @returns
- */
-export async function postWriteEntitiesFiles({ application, entities, control }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    if (!entity.embedded) {
-      const { enableTranslation } = application;
-      const {
-        entityInstance,
-        entityClass,
-        entityAngularName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        microserviceName,
-        readOnly,
-        entityClassPlural,
-        i18nKeyPrefix,
-        pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural,
-      } = entity;
-
-      this.addEntityToModule(
-        entityInstance,
-        entityClass,
-        entityAngularName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        microserviceName,
-        readOnly,
-        pageTitle
-      );
-      this.addEntityToMenu(
-        entity.entityPage,
-        application.enableTranslation,
-        entity.entityTranslationKeyMenu,
-        entity.entityClassHumanized,
-        application.jhiPrefix
-      );
-    }
-  }
+export async function postWriteEntitiesFiles(this: AngularGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
+  const { source, application } = taskParam;
+  const entities = taskParam.entities.filter(entity => !entity.skipClient && !entity.builtIn && !entity.embedded);
+  source.addEntitiesToClient({ application, entities });
 }
 
-export function cleanupEntitiesFiles({ application, entities }) {
+export function cleanupEntitiesFiles(this: AngularGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    const { entityFolderName, entityFileName, entityName } = entity;
+    const { entityFolderName, entityFileName, name: entityName } = entity;
     if (this.isJhipsterVersionLessThan('5.0.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityName}/${entityName}.model.ts`);
     }

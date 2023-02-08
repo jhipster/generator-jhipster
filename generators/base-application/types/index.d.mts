@@ -16,20 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
-import { type Entity } from '../base-application/index.mjs';
-import { ClientServerApplication } from './types.mjs';
 
-export { default } from './generator.mjs';
-export { commonFiles as files } from './files.mjs';
-
-// TODO move to ./generator.mts
-type ApplicationDefinition = {
-  applicationType: ClientServerApplication;
-  entityType: Entity;
-  sourceType: Record<string, (...args: any[]) => void>;
-};
-
-// TODO move to ./generator.mts
-export type GeneratorDefinition<Definition extends ApplicationDefinition = ApplicationDefinition> =
-  BaseApplicationGeneratorDefinition<Definition>;
+export type { default as Entity, BaseEntity } from './entity.mjs';
+export type { default as Field } from './field.mjs';
+export type { default as Relationship } from './relationship.mjs';

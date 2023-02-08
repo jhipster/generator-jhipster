@@ -18,16 +18,23 @@
  */
 import fs from 'fs';
 
-import BaseApplicationGenerator from '../base-application/index.mjs';
-import type { BaseApplicationGeneratorDefinition, Entity } from '../base-application/tasks.mjs';
+import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
+import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
+import { postPrepareEntity } from './support/index.mjs';
+
+export type LiquibaseEntity = Entity & {
+  anyRelationshipIsOwnerSide: boolean;
+  liquibaseFakeData: Record<string, any>[];
+  fakeDataCount: number;
+};
 
 export type ApplicationDefinition = {
   applicationType: SpringBootApplication & LiquibaseApplication;
-  entityType: Entity;
+  entityType: LiquibaseEntity;
   sourceType: Record<string, (...args: any[]) => void>;
 };
 
@@ -61,6 +68,18 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
     }
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareUser({ application, entity }) {
+        postPrepareEntity({ application, entity });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {

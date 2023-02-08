@@ -22,36 +22,36 @@ import java.util.Objects;
 <%_ if (typeof javadoc !== 'undefined' || importApiModelProperty) { _%>
 import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
-<%_ if (fieldsContainInstant) { _%>
+<%_ if (anyFieldIsInstant) { _%>
 import java.time.Instant;
 <%_ } _%>
-<%_ if (fieldsContainLocalDate) { _%>
+<%_ if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (fieldsContainZonedDateTime) { _%>
+<%_ if (anyFieldIsZonedDateTime) { _%>
 import java.time.ZonedDateTime;
 <%_ } _%>
-<%_ if (fieldsContainDuration) { _%>
+<%_ if (anyFieldIsDuration) { _%>
 import java.time.Duration;
 <%_ } _%>
-<%_ if (validation) { _%>
+<%_ if (anyPropertyHasValidation) { _%>
 import jakarta.validation.constraints.*;
 <%_ } _%>
 import java.io.Serializable;
-<%_ if (fieldsContainBigDecimal) { _%>
+<%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
 <%_ } _%>
-<%_ if (fieldsContainBlob && databaseTypeCassandra) { _%>
+<%_ if (anyFieldIsBlobDerived && databaseTypeCassandra) { _%>
 import java.nio.ByteBuffer;
 <%_ } _%>
 <%_ if (dtoReferences.some(reference => reference.collection)) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
-<%_ if (fieldsContainUUID) { _%>
+<%_ if (anyFieldIsUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fieldsContainBlob && databaseTypeSql) { _%>
+<%_ if (anyFieldIsBlobDerived && databaseTypeSql) { _%>
 import jakarta.persistence.Lob;
 <%_ } _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>

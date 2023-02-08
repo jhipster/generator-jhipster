@@ -13,26 +13,31 @@ const mockAngularBlueprintSubGen = class extends AngularGenerator {
     this.sbsBlueprint = true;
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return {
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup({
       addToMenuStep() {
-        this.addEntityToMenu('routerName3', true, 'routerName3');
         this.addElementToAdminMenu('routerName2', 'iconName2', true);
       },
-      addToModuleStep() {
-        this.addEntityToModule(
-          'entityInstance',
-          'entityClass',
-          'entityName',
-          'entityFolderName',
-          'entityFileName',
-          'entityUrl',
-          'microserviceName',
-          false,
-          'entity.home.title'
-        );
+      addToModuleStep({ application, source }) {
+        source.addEntitiesToClient({
+          application,
+          entities: [
+            {
+              name: 'entityName',
+              entityInstance: 'entityInstance',
+              entityClass: 'entityClass',
+              entityFolderName: 'entityFolderName',
+              entityFileName: 'entityFileName',
+              entityUrl: 'entityUrl',
+              i18nKeyPrefix: 'entity',
+              entityPage: 'entityPage',
+              entityTranslationKeyMenu: 'entityTranslationKeyMenu',
+              entityClassHumanized: 'entityClassHumanized',
+            } as any,
+          ],
+        });
       },
-    };
+    });
   }
 };
 
@@ -61,13 +66,13 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
             <li>
               <a
                 class="dropdown-item"
-                routerLink="routerName3"
+                routerLink="entityPage"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
                 (click)="collapseNavbar()"
               >
                 <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>
+                <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityClassHumanized</span>
               </a>
             </li>
 `

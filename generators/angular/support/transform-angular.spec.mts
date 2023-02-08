@@ -23,7 +23,6 @@ import { createTranslationReplacer } from './transform-angular.mjs';
 
 describe('generator - angular - transform', () => {
   describe('replaceAngularTranslations', () => {
-    let generator;
     let replaceAngularTranslations;
 
     beforeEach(() => {
