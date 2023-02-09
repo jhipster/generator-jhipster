@@ -143,8 +143,7 @@ export default class BaseGenerator extends YeomanGenerator {
     let jhipsterOldVersion = null;
     if (!this.options.help) {
       // JHipster runtime config that should not be stored to .yo-rc.json.
-      this.configOptions = this.options.configOptions || { sharedEntities: {} };
-      this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+      this.configOptions = this.options.configOptions || {};
 
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster', { sorted: true });

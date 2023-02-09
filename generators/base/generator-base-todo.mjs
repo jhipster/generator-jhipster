@@ -1087,9 +1087,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
           const basename = path.basename(sourceFileFrom);
           const seed = `${context.entityClass}-${basename}${context.fakerSeed ?? ''}`;
-          Object.values(this.configOptions?.sharedEntities ?? {}).forEach(entity => {
-            entity.resetFakerSeed(seed);
-          });
           Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach(entity => {
             entity.resetFakerSeed(seed);
           });
