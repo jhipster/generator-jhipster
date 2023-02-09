@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import os from 'os';
 import _ from 'lodash';
+import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import {
@@ -32,6 +34,8 @@ import { addFakerToEntity } from './faker.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
+const isWin32 = os.platform() === 'win32';
+
 const { upperFirst } = _;
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
@@ -46,6 +50,18 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      displayLogo() {
+        this.printDestinationInfo();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.initializing;
   }
 
   get configuring() {
@@ -215,5 +231,37 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.preparingEachEntityRelationship;
+  }
+
+  /**
+   * Return the user home
+   */
+  getUserHome() {
+    return process.env[isWin32 ? 'USERPROFILE' : 'HOME'];
+  }
+
+  printDestinationInfo(cwd = this.destinationPath()) {
+    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(cwd)}`));
+    if (process.cwd() === this.getUserHome()) {
+      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.logger.log(
+        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
+      );
+      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+    }
+    this.logger.log(
+      chalk.green(' _______________________________________________________________________________________________________________\n')
+    );
+    this.logger.log(
+      chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
+    );
+    this.logger.log(
+      chalk.white(
+        `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
+      )
+    );
+    this.logger.log(
+      chalk.green(' _______________________________________________________________________________________________________________\n')
+    );
   }
 }

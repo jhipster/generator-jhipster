@@ -78,20 +78,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
-  }
-
   get prompting() {
     return this.asPromptingTaskGroup({
       askForClient,

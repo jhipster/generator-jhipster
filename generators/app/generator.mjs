@@ -316,10 +316,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return {
-      displayLogo() {
-        this.printJHipsterLogo();
-      },
-
       validateBlueprint() {
         if (this.jhipsterConfig.blueprints && !this.options.skipChecks) {
           this.jhipsterConfig.blueprints.forEach(blueprint => {
@@ -368,7 +364,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   get configuring() {
     return {
       setup() {
-        this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient =
             this.jhipsterConfig.skipClient ||
