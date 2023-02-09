@@ -129,12 +129,12 @@ export const entityDefaultConfig = {
   validation: false,
   dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
   service: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
+  clientInterface: binaryOptions.DefaultValues[binaryOptions.Options.CLIENT_INTERFACE],
   jpaMetamodelFiltering: false,
   readOnly: false,
   embedded: false,
   entityAngularJSSuffix: '',
   fluentMethods: true,
-  restResources: true,
   clientRootFolder: '',
   get fields() {
     return [];

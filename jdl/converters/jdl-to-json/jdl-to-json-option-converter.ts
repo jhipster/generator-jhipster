@@ -22,7 +22,7 @@ import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '.
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 
-const { FILTER, NO_FLUENT_METHOD, NO_REST_RESOURCES, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
+const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 const { ServiceTypes } = entityOptions;
 const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
@@ -109,8 +109,6 @@ function getJSONOptionKeyAndValue(jdlOption) {
       return { key: 'microserviceName', value: jdlOption.value };
     case NO_FLUENT_METHOD:
       return { key: 'fluentMethods', value: false };
-    case NO_REST_RESOURCES:
-      return { key: 'restResources', value: false };
     case ANGULAR_SUFFIX:
       return { key: 'angularJSSuffix', value: jdlOption.value };
     case SEARCH:

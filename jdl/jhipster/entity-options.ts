@@ -44,10 +44,16 @@ export const FilteringTypes = {
   NO: 'no',
 };
 
+export const ClientInterfaceTypes = {
+  RESTFUL_RESOURCES: 'restful-resources',
+  NO: 'no',
+};
+
 export default {
   MapperTypes,
   ServiceTypes,
   PaginationTypes,
   SearchTypes,
   FilteringTypes,
+  ClientInterfaceTypes,
 };

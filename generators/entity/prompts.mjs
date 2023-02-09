@@ -33,7 +33,7 @@ import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from '
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { CASSANDRA, SQL } = databaseTypes;
 const { GATEWAY } = applicationTypes;
-const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
+const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes, ClientInterfaceTypes } = entityOptions;
 const { ANGULAR, REACT } = clientFrameworkTypes;
 const { JPA_METAMODEL } = FilteringTypes;
 const NO_FILTERING = FilteringTypes.NO;
@@ -41,6 +41,8 @@ const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
 const { SERVICE_IMPL, SERVICE_CLASS } = ServiceTypes;
 const NO_SERVICE = ServiceTypes.NO;
+const { RESTFUL_RESOURCES } = ClientInterfaceTypes;
+const NO_CLIENT_INTERFACE = ClientInterfaceTypes.NO;
 const { MAPSTRUCT } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
 
@@ -65,6 +67,7 @@ const prompts = {
   askForRelationsToRemove,
   askForDTO,
   askForService,
+  askForClientInterface,
   askForFiltering,
   askForReadOnly,
   askForPagination,
@@ -385,6 +388,35 @@ function askForService() {
   ];
   return this.prompt(prompts).then(props => {
     this.entityConfig.service = props.service;
+  });
+}
+
+function askForClientInterface() {
+  const context = this.context;
+  // don't prompt if data is imported from a file or server is skipped
+  if (context.useConfigurationFile || context.skipServer) {
+    return undefined;
+  }
+  const prompts = [
+    {
+      type: 'list',
+      name: 'clientInterface',
+      message: 'Do you want to generate a REST controller for your entity?',
+      choices: [
+        {
+          value: NO_CLIENT_INTERFACE,
+          name: 'No, do not generate REST controller',
+        },
+        {
+          value: RESTFUL_RESOURCES,
+          name: 'Yes, generate a REST controller',
+        },
+      ],
+      default: 0,
+    },
+  ];
+  return this.prompt(prompts).then(props => {
+    this.entityConfig.clientInterface = props.clientInterface;
   });
 }
 

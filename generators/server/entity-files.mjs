@@ -26,10 +26,11 @@ import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/ind
 import { getEnumInfo } from '../base-application/support/index.mjs';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
-const { MapperTypes, ServiceTypes } = entityOptions;
+const { MapperTypes, ServiceTypes, ClientInterfaceTypes } = entityOptions;
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = cacheTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
+const { RESTFUL_RESOURCES } = ClientInterfaceTypes;
 
 export const modelFiles = {
   model: [
@@ -121,7 +122,7 @@ export const entityFiles = {
 export const restFiles = {
   restFiles: [
     {
-      condition: generator => !generator.embedded,
+      condition: generator => generator.clientInterface === RESTFUL_RESOURCES && !generator.embedded,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['web/rest/_EntityClass_Resource.java'],
@@ -129,7 +130,7 @@ export const restFiles = {
   ],
   restTestFiles: [
     {
-      condition: generator => !generator.embedded,
+      condition: generator => generator.clientInterface === RESTFUL_RESOURCES && !generator.embedded,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -287,13 +288,8 @@ export function writeFiles() {
 
     async writeServerFiles({ application, entities }) {
       for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
-        var customServerFiles = serverFiles;
-        if (entity.restResources === false) {
-          customServerFiles = new Map(serverFiles);
-          customServerFiles.delete("restFiles");
-        }
         await this.writeFiles({
-          sections: customServerFiles,
+          sections: serverFiles,
           rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
           context: { ...application, ...entity },
         });
