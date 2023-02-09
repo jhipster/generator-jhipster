@@ -44,7 +44,16 @@ spec:
         - name: KEYCLOAK_ADMIN_PASSWORD
           value: "admin"
         - name: KC_DB
-          value: dev-file
+          value: postgres
+        - name: KC_DB_URL_HOST
+          value: keycloak-postgresql.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: KC_DB_USERNAME
+          value: keycloak
+        - name: KC_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-postgresql
+              key: postgresql-password
         - name: KC_FEATURES
           value: scripts
         - name: KC_PROXY

@@ -4919,6 +4919,87 @@ data:
 ",
     "stateCleared": "modified",
   },
+  "keycloak-k8s/keycloak-postgresql.yml": {
+    "contents": "apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: keycloak-postgresql-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-postgresql
+  namespace: default
+  labels:
+    app: keycloak-postgresql
+type: Opaque
+data:
+  postgresql-password: U0VDUkVULVBBU1NXT1JE
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-postgresql
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-postgresql
+  template:
+    metadata:
+      labels:
+        app: keycloak-postgresql
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: keycloak-postgresql-pvc
+      containers:
+        - name: postgres
+          image: postgresql-placeholder
+          env:
+            - name: POSTGRES_USER
+              value: keycloak
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-postgresql
+                  key: postgresql-password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-postgresql
+  namespace: default
+spec:
+  selector:
+    app: keycloak-postgresql
+  ports:
+    - port: 5432
+",
+    "stateCleared": "modified",
+  },
   "keycloak-k8s/keycloak.yml": {
     "contents": "apiVersion: v1
 kind: Service
@@ -4966,7 +5047,16 @@ spec:
             - name: KEYCLOAK_ADMIN_PASSWORD
               value: "admin"
             - name: KC_DB
-              value: dev-file
+              value: postgres
+            - name: KC_DB_URL_HOST
+              value: keycloak-postgresql.default.svc.cluster.local
+            - name: KC_DB_USERNAME
+              value: keycloak
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-postgresql
+                  key: postgresql-password
             - name: KC_FEATURES
               value: scripts
             - name: KC_PROXY

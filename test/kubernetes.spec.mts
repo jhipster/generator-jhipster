@@ -41,7 +41,7 @@ const expectedFiles = {
   ],
   jhgategateway: ['./jhgate-k8s/jhgate-gateway.yml', './jhgate-k8s/jhgate-destination-rule.yml', './jhgate-k8s/jhgate-virtual-service.yml'],
   applyScript: ['./kubectl-apply.sh'],
-  keycloak: ['./keycloak-k8s/keycloak.yml', './keycloak-k8s/keycloak-configmap.yml'],
+  keycloak: ['./keycloak-k8s/keycloak.yml', './keycloak-k8s/keycloak-configmap.yml', './keycloak-k8s/keycloak-postgresql.yml'],
   certmanager: ['./cert-manager/letsencrypt-staging-ca-secret.yml', './cert-manager/letsencrypt-staging-issuer.yml'],
 };
 
