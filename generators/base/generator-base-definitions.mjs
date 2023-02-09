@@ -25,6 +25,10 @@ import Generator from 'yeoman-generator';
  */
 
 /**
+ * @typedef {import('./api.mjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions
+ */
+
+/**
  * This class changes/corrects the yeoman-generator typescript definitions.
  *
  * @class

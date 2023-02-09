@@ -43,6 +43,7 @@ import type {
   JHipsterOptions,
   ValidationResult,
   WriteFileOptions,
+  JHipsterArguments,
 } from './api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
@@ -272,6 +273,23 @@ export default class CoreGenerator extends YeomanGenerator {
         } else {
           throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
+      }
+    });
+  }
+
+  parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
+    const { positionalArguments = [] } = this.options;
+    const argumentEntries = Object.entries(jhipsterArguments);
+    if (positionalArguments.length > argumentEntries.length) {
+      throw new Error('More arguments than allowed');
+    }
+    argumentEntries.forEach(([argumentName, argumentDef], index) => {
+      if (positionalArguments.length > index) {
+        const argument = positionalArguments[index];
+        const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
+        this[argumentName] = convertedValue;
+      } else if (argumentDef.required) {
+        throw new Error(`Missing required argument ${argumentName}`);
       }
     });
   }
