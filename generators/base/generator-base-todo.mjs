@@ -1295,9 +1295,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.incrementalChangelog !== undefined) {
       this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
     }
-    if (options.recreateInitialChangelog) {
-      this.configOptions.recreateInitialChangelog = options.recreateInitialChangelog;
-    }
     if (options.withAdminUi !== undefined) {
       this.jhipsterConfig.withAdminUi = options.withAdminUi;
     }

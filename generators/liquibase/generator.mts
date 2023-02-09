@@ -47,6 +47,8 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
 };
 export default class LiquibaseGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+  recreateInitialChangelog: boolean;
+
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -55,6 +57,8 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       type: Array,
       required: false,
     });
+
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
   }
 
   async beforeQueue() {
@@ -118,7 +122,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
           sections: liquibaseFiles,
           context: {
             ...application,
-            recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+            recreateInitialChangelog: this.recreateInitialChangelog,
           },
         });
       },
@@ -155,7 +159,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       const newRelationships: any[] = newConfig.relationships || [];
 
       if (
-        this.configOptions.recreateInitialChangelog ||
+        this.recreateInitialChangelog ||
         !application.incrementalChangelog ||
         !fs.existsSync(filename) ||
         !fs.existsSync(

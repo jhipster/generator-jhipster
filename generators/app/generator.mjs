@@ -438,8 +438,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       },
 
       async composePages() {
-        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
-        this.configOptions.skipComposePage = true;
+        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
         await Promise.all(
           this.jhipsterConfig.pages.map(page => {
             return this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
