@@ -29,14 +29,7 @@ import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../bas
 
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { unique: 'namespace', ...features });
-
-    this.option('skipCommit', {
-      description: 'Skip commit',
-      type: Boolean,
-      hide: true,
-      default: true,
-    });
+    super(args, options, features);
 
     if (this.options.help) return;
 

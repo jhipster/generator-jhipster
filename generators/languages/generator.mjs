@@ -50,7 +50,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   languagesToApply;
 
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     this.option('skip-prompts', {
       desc: 'Skip prompts',

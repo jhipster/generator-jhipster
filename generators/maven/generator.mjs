@@ -32,7 +32,7 @@ import cleanupOldServerFilesTask from './cleanup.mjs';
  */
 export default class MavenGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) return;
 

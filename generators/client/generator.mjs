@@ -42,7 +42,7 @@ const { CYPRESS } = testFrameworkTypes;
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This adds support for a `--auth` flag
     this.option('auth', {
