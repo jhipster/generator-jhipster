@@ -179,6 +179,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -190,7 +191,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -288,6 +288,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "clientRootFolder": "../client_root_folder",
   "dto": "mapstruct",
   "embedded": true,
@@ -301,7 +302,6 @@ JSONEntity {
   "pagination": "pagination",
   "readOnly": true,
   "relationships": [],
-  "restResources": true,
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,
@@ -355,6 +355,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -366,7 +367,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -419,6 +419,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -430,7 +431,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -473,6 +473,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -484,7 +485,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "searchEngine": "no",
   "service": "no",
 }
@@ -531,6 +531,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -551,7 +552,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -606,6 +606,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -638,7 +639,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -679,6 +679,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
@@ -696,7 +697,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -737,6 +737,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -754,7 +755,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -850,6 +850,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -897,7 +898,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -941,6 +941,7 @@ JSONEntity {
   "applications": [
     "toto",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -961,7 +962,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -1818,6 +1818,7 @@ JSONEntity {
     "applications": [
       "tata",
     ],
+    "clientInterface": "restful-resources",
     "dto": "no",
     "embedded": false,
     "entityTableName": "entity_a",
@@ -1829,13 +1830,13 @@ JSONEntity {
     "pagination": "pagination",
     "readOnly": false,
     "relationships": [],
-    "restResources": true,
     "service": "no",
   },
   JSONEntity {
     "applications": [
       "tata",
     ],
+    "clientInterface": "restful-resources",
     "dto": "no",
     "embedded": false,
     "entityTableName": "entity_b",
@@ -1847,7 +1848,6 @@ JSONEntity {
     "pagination": "infinite-scroll",
     "readOnly": false,
     "relationships": [],
-    "restResources": true,
     "service": "no",
   },
   JSONEntity {
@@ -1855,6 +1855,7 @@ JSONEntity {
       "tata",
       "tutu",
     ],
+    "clientInterface": "restful-resources",
     "dto": "no",
     "embedded": false,
     "entityTableName": "entity_c",
@@ -1866,7 +1867,6 @@ JSONEntity {
     "pagination": "pagination",
     "readOnly": false,
     "relationships": [],
-    "restResources": true,
     "service": "no",
   },
 ]
@@ -1878,6 +1878,7 @@ JSONEntity {
       "tata",
       "tutu",
     ],
+    "clientInterface": "restful-resources",
     "dto": "no",
     "embedded": false,
     "entityTableName": "entity_c",
@@ -1889,13 +1890,13 @@ JSONEntity {
     "pagination": "pagination",
     "readOnly": false,
     "relationships": [],
-    "restResources": true,
     "service": "no",
   },
   JSONEntity {
     "applications": [
       "tutu",
     ],
+    "clientInterface": "restful-resources",
     "dto": "mapstruct",
     "embedded": false,
     "entityTableName": "entity_d",
@@ -1907,13 +1908,13 @@ JSONEntity {
     "pagination": "infinite-scroll",
     "readOnly": false,
     "relationships": [],
-    "restResources": true,
     "service": "serviceClass",
   },
   JSONEntity {
     "applications": [
       "tutu",
     ],
+    "clientInterface": "restful-resources",
     "dto": "no",
     "embedded": false,
     "entityTableName": "entity_e",
@@ -1925,7 +1926,6 @@ JSONEntity {
     "pagination": "infinite-scroll",
     "readOnly": false,
     "relationships": [],
-    "restResources": true,
     "service": "no",
   },
 ]

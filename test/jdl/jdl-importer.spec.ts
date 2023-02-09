@@ -658,6 +658,7 @@ paginate * with infinite-scroll
   "applications": [
     "tata",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
@@ -668,7 +669,6 @@ paginate * with infinite-scroll
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -677,6 +677,7 @@ paginate * with infinite-scroll
   "applications": [
     "tata",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "b",
@@ -687,7 +688,6 @@ paginate * with infinite-scroll
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -697,6 +697,7 @@ paginate * with infinite-scroll
     "tata",
     "tutu",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "c",
@@ -707,7 +708,6 @@ paginate * with infinite-scroll
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -717,6 +717,7 @@ paginate * with infinite-scroll
     "tata",
     "tutu",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "c",
@@ -727,7 +728,6 @@ paginate * with infinite-scroll
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -736,6 +736,7 @@ paginate * with infinite-scroll
   "applications": [
     "tutu",
   ],
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "d",
@@ -746,7 +747,6 @@ paginate * with infinite-scroll
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -755,6 +755,7 @@ paginate * with infinite-scroll
   "applications": [
     "tutu",
   ],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "e",
@@ -765,7 +766,6 @@ paginate * with infinite-scroll
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);

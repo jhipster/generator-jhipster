@@ -52,6 +52,7 @@ describe('jdl - JSONEntity', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "toto",
@@ -63,7 +64,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -74,6 +74,7 @@ JSONEntity {
 
       before(() => {
         entity = new JSONEntity({
+          clientInterface: 'restful-resources',
           entityName: 'Titi',
           dto: 'mapstruct',
           entityTableName: 'titi',
@@ -100,6 +101,7 @@ JSONEntity {
 JSONEntity {
   "angularJSSuffix": "yes",
   "applications": [],
+  "clientInterface": "restful-resources",
   "clientRootFolder": "oh",
   "dto": "mapstruct",
   "embedded": true,
@@ -118,7 +120,6 @@ JSONEntity {
     42,
     43,
   ],
-  "restResources": true,
   "service": "serviceClass",
   "skipClient": true,
   "skipServer": true,
@@ -276,6 +277,7 @@ JSONEntity {
         jestExpect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "toto",
@@ -287,7 +289,6 @@ JSONEntity {
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);

@@ -55,7 +55,6 @@ describe('jdl - UnaryOptions', () => {
   "skipClient",
   "skipServer",
   "noFluentMethod",
-  "noRestResources",
   "readOnly",
   "filter",
   "embedded",

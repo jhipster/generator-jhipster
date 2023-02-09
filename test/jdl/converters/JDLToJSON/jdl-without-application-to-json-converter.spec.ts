@@ -162,6 +162,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -173,7 +174,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -266,6 +266,7 @@ JSONEntity {
 JSONEntity {
   "angularJSSuffix": "suffix",
   "applications": "*",
+  "clientInterface": "restful-resources",
   "clientRootFolder": "../client_root_folder",
   "dto": "mapstruct",
   "embedded": true,
@@ -279,7 +280,6 @@ JSONEntity {
   "pagination": "pagination",
   "readOnly": true,
   "relationships": [],
-  "restResources": true,
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,
@@ -331,6 +331,7 @@ JSONEntity {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -342,7 +343,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -390,6 +390,7 @@ JSONEntity {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -401,7 +402,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "serviceClass",
 }
 `);
@@ -439,6 +439,7 @@ JSONEntity {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -450,7 +451,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "searchEngine": "no",
   "service": "no",
 }
@@ -492,6 +492,7 @@ JSONEntity {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -512,7 +513,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -562,6 +562,7 @@ JSONEntity {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -594,7 +595,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -630,6 +630,7 @@ JSONEntity {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
@@ -647,7 +648,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -683,6 +683,7 @@ JSONEntity {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -700,7 +701,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -791,6 +791,7 @@ JSONEntity {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -838,7 +839,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);
@@ -877,6 +877,7 @@ JSONEntity {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": "*",
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -897,7 +898,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);

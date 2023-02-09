@@ -26,6 +26,10 @@ describe('jdl - BinaryOptions', () => {
   it('should match values', () => {
     jestExpect(binaryOptions.Values).toMatchInlineSnapshot(`
 {
+  "clientInterface": {
+    "NO": "no",
+    "RESTFUL_RESOURCES": "restful-resources",
+  },
   "dto": {
     "MAPSTRUCT": "mapstruct",
     "NO": "no",
@@ -81,6 +85,7 @@ describe('jdl - BinaryOptions', () => {
 [
   "dto",
   "service",
+  "clientInterface",
   "pagination",
   "microservice",
   "search",

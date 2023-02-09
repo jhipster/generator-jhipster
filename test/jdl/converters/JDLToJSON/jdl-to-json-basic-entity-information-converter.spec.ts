@@ -102,6 +102,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
+  "clientInterface": "restful-resources",
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
@@ -113,7 +114,6 @@ JSONEntity {
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "restResources": true,
   "service": "no",
 }
 `);

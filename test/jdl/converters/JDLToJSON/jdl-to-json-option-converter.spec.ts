@@ -82,10 +82,6 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.NO_REST_RESOURCES,
-              entityNames: ['A'],
-            }),
-            new JDLUnaryOption({
               name: unaryOptions.SKIP_CLIENT,
               entityNames: ['A'],
             }),
@@ -128,6 +124,11 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               value: binaryOptions.Values.service.SERVICE_IMPL,
               entityNames: ['A'],
             }),
+            new JDLBinaryOption({
+              name: binaryOptions.Options.CLIENT_INTERFACE,
+              value: binaryOptions.Values.clientInterface.NO,
+              entityNames: ['A'],
+            }),
           ];
           jdlObject.addEntity(entityA);
           options.forEach(option => jdlObject.addOption(option));
@@ -139,6 +140,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
 {
   "angularJSSuffix": "suffix",
+  "clientInterface": "no",
   "clientRootFolder": "../client_root_folder",
   "dto": "mapstruct",
   "embedded": true,
@@ -147,7 +149,6 @@ describe('jdl - JDLToJSONOptionConverter', () => {
   "microserviceName": "myMs",
   "pagination": "pagination",
   "readOnly": true,
-  "restResources": false,
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,

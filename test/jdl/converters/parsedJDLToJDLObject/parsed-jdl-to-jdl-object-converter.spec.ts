@@ -361,12 +361,12 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           ]);
         });
       });
-      context('when using the noRestResources option', () => {
+      context('when using the clientInterface option', () => {
         let input;
         let jdlObject;
 
         before(() => {
-          input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'rest_resources.jdl')]);
+          input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'client_interface.jdl')]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -374,9 +374,11 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
 
         it('should add it correctly', () => {
           expect(jdlObject.getOptions()).to.deep.eq([
-            new JDLUnaryOption({
-              name: unaryOptions.NO_REST_RESOURCES,
-              entityNames: ['A'],
+            new JDLBinaryOption({
+              name: binaryOptions.Options.CLIENT_INTERFACE,
+              entityNames: ['*'],
+              excludedNames: ['A'],
+              value: BinaryOptionValues.clientInterface.RESTFUL_RESOURCES,
             }),
           ]);
         });
