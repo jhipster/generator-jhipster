@@ -28,18 +28,11 @@ import {
   getPomVersionProperties,
 } from '../server/support/index.mjs';
 import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server/index.mjs';
-import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
-const { CommonDBTypes } = fieldTypes;
-
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerGeneratorDefinition> {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
-  }
-
   async _postConstruct() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }

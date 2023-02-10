@@ -42,7 +42,7 @@ export type GeneratorDefinition = BaseApplicationGeneratorDefinition<Application
 
 export default class CypressGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) {
       return;

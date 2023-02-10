@@ -23,7 +23,7 @@ import type { GeneratorDefinition as ClientGeneratorDefinition } from '../client
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator<ClientGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) return;
 

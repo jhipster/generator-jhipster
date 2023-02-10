@@ -150,7 +150,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   projectVersion;
 
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {
@@ -201,12 +201,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-
       validateJava() {
         if (!this.options.skipChecks) {
           this.checkJava();

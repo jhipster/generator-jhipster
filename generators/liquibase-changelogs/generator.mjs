@@ -49,6 +49,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     // Set number of rows to be generated
     this.numberOfRows = 10;
     this.entityChanges = {};
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
   }
 
   async beforeQueue() {
@@ -213,7 +214,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
           jhiPrefix: entity.jhiPrefix,
           reactive: application.reactive,
           incrementalChangelog: application.incrementalChangelog,
-          recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+          recreateInitialChangelog: this.recreateInitialChangelog,
         };
 
         if (databaseChangelog.type === 'entity-new') {

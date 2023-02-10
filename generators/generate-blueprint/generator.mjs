@@ -52,7 +52,7 @@ const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } =
 
 export default class extends BaseGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+    super(args, opts, features);
 
     // Register options available to cli.
     if (!this.fromBlueprint) {

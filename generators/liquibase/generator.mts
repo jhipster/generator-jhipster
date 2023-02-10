@@ -46,7 +46,9 @@ const BASE_CHANGELOG = {
   addedRelationships: [],
   removedRelationships: [],
 };
-export default class DatabaseChangelogGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class LiquibaseGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+  recreateInitialChangelog: boolean;
+
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -56,11 +58,7 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
       required: false,
     });
 
-    if (this.options.help) {
-      return;
-    }
-    this.logger.info(`Creating changelog for entities ${this.options.entities}`);
-    this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
   }
 
   async beforeQueue() {
@@ -88,16 +86,15 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
         if (!application.databaseTypeSql || this.options.skipDbChangelog) {
           return;
         }
-        if (!this.options.entities) {
-          this.options.entities = entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
-        }
+        const entitiesToWrite =
+          this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         const diffs = this._generateChangelogFromFiles(application);
         for (const [fieldChanges] of diffs) {
           if (fieldChanges.type === 'entity-new') {
-            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
           }
           if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
-            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
           }
         }
         // eslint-disable-next-line no-unused-vars
@@ -107,7 +104,7 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
             relationshipChanges.incremental &&
             (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
           ) {
-            await this._composeWithIncrementalChangelogProvider(relationshipChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, relationshipChanges);
           }
         }
       },
@@ -125,7 +122,7 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
           sections: liquibaseFiles,
           context: {
             ...application,
-            recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+            recreateInitialChangelog: this.recreateInitialChangelog,
           },
         });
       },
@@ -140,8 +137,8 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
   /* private methods use within generator                                     */
   /* ======================================================================== */
 
-  _composeWithIncrementalChangelogProvider(databaseChangelog: any) {
-    const skipWriting = this.options.entities.length !== 0 && !this.options.entities.includes(databaseChangelog.entityName);
+  _composeWithIncrementalChangelogProvider(entities: any[], databaseChangelog: any) {
+    const skipWriting = entities!.length !== 0 && !entities!.includes(databaseChangelog.entityName);
     return this.composeWithJHipster(GENERATOR_LIQUIBASE_CHANGELOGS, {
       databaseChangelog,
       skipWriting,
@@ -162,7 +159,7 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
       const newRelationships: any[] = newConfig.relationships || [];
 
       if (
-        this.configOptions.recreateInitialChangelog ||
+        this.recreateInitialChangelog ||
         !application.incrementalChangelog ||
         !fs.existsSync(filename) ||
         !fs.existsSync(
@@ -182,8 +179,6 @@ export default class DatabaseChangelogGenerator extends BaseApplicationGenerator
       (this as any)._debug(`Calculating diffs for ${entityName}`);
 
       const oldConfig: any = JSON.parse(fs.readFileSync(filename) as any);
-      // Share old entity
-      this.configOptions.oldSharedEntities[entityName] = oldConfig;
 
       const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
       const oldFieldNames: string[] = oldFields.map(field => field.fieldName);

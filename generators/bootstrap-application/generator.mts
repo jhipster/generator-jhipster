@@ -38,7 +38,7 @@ const {
 
 export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) return;
 

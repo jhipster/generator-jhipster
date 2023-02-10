@@ -105,36 +105,34 @@ export default class BaseGenerator extends YeomanGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
 
-    if (!this.features.jhipsterModular) {
-      // This adds support for a `--from-cli` flag
-      this.option('from-cli', {
-        description: 'Indicates the command is run from JHipster CLI',
-        type: Boolean,
-        hide: true,
-      });
+    // This adds support for a `--from-cli` flag
+    this.option('from-cli', {
+      description: 'Indicates the command is run from JHipster CLI',
+      type: Boolean,
+      hide: true,
+    });
 
-      this.option('with-generated-flag', {
-        description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-        type: Boolean,
-      });
+    this.option('with-generated-flag', {
+      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+      type: Boolean,
+    });
 
-      this.option('skip-prompts', {
-        description: 'Skip prompts',
-        type: Boolean,
-      });
+    this.option('skip-prompts', {
+      description: 'Skip prompts',
+      type: Boolean,
+    });
 
-      this.option('skip-prettier', {
-        description: 'Skip prettier',
-        type: Boolean,
-        hide: true,
-      });
+    this.option('skip-prettier', {
+      description: 'Skip prettier',
+      type: Boolean,
+      hide: true,
+    });
 
-      this.option('ignore-needles-error', {
-        description: 'Ignore needles failures',
-        type: Boolean,
-        hide: true,
-      });
-    }
+    this.option('ignore-needles-error', {
+      description: 'Ignore needles failures',
+      type: Boolean,
+      hide: true,
+    });
 
     /*
      * When building help, this.jhipsterConfig is not available.
@@ -145,8 +143,7 @@ export default class BaseGenerator extends YeomanGenerator {
     let jhipsterOldVersion = null;
     if (!this.options.help) {
       // JHipster runtime config that should not be stored to .yo-rc.json.
-      this.configOptions = this.options.configOptions || { sharedEntities: {} };
-      this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+      this.configOptions = this.options.configOptions || {};
 
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster', { sorted: true });

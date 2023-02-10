@@ -23,7 +23,7 @@ import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This makes `name` a required argument.
     this.argument('entities', {
