@@ -14,7 +14,6 @@ const generatorPath = join(__dirname, 'index.mjs');
 
 const createClientProject = options =>
   basicHelpers.run('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv }).withOptions({
-    skipInstall: true,
     defaults: true,
     ...options,
   });

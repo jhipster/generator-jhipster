@@ -31,7 +31,6 @@ describe('generator - app - with blueprint', () => {
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
         .withOptions({
-          skipInstall: true,
           skipChecks: false,
           blueprint: 'myblueprint',
           baseName: 'jhipster',
@@ -74,7 +73,6 @@ describe('generator - app - with blueprint', () => {
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
           .withOptions({
-            skipInstall: true,
             skipChecks: false,
             blueprint: 'myblueprint',
             defaults: true,
@@ -102,7 +100,6 @@ describe('generator - app - with blueprint', () => {
         })
         .withOptions({
           defaults: true,
-          skipInstall: true,
           skipChecks: false,
           blueprint: 'myblueprint',
         }));
@@ -128,7 +125,6 @@ describe('generator - app - with blueprint', () => {
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
         .withOptions({
-          skipInstall: true,
           skipChecks: false,
           blueprint: 'myblueprint',
           baseName: 'jhipster',
@@ -171,7 +167,6 @@ describe('generator - app - with blueprint', () => {
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
           .withOptions({
-            skipInstall: true,
             skipChecks: false,
             blueprint: 'myblueprint',
             defaults: true,

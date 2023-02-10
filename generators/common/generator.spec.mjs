@@ -77,7 +77,6 @@ describe(`generator - ${generator}`, () => {
           .withMockedGenerators(mockedGenerators)
           .withOptions({
             prettierTabWidth: 10,
-            skipInstall: true,
             defaults: true,
             applicationWithEntities: {
               config: {

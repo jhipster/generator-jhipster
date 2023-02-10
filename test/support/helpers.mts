@@ -12,8 +12,8 @@ const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
 class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunContext<GeneratorType> {
-  withJHipsterConfig(content: Record<string, unknown>): this {
-    return this.withYoRcConfig('generator-jhipster', content);
+  withJHipsterConfig(content?: Record<string, unknown>): this {
+    return this.withYoRcConfig('generator-jhipster', { baseName: 'jhipster', ...content });
   }
 }
 
@@ -68,16 +68,18 @@ export function createTestHelpers(options: any = {}) {
   return helper;
 }
 
-export const basicHelpers = createTestHelpers({ generatorOptions: { reproducible: true, skipChecks: true } });
+const commonTestOptions = { reproducible: true, skipChecks: true, reproducibleTests: true, noInsight: true };
+
+export const basicHelpers = createTestHelpers({ generatorOptions: { ...commonTestOptions } });
 
 export const defaultHelpers = createTestHelpers({
-  generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true },
+  generatorOptions: { skipPrettier: true, ...commonTestOptions },
   environmentOptions: { dryRun: true },
 });
 
-export const skipPrettierHelpers = createTestHelpers({ generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true } });
+export const skipPrettierHelpers = createTestHelpers({ generatorOptions: { skipPrettier: true, ...commonTestOptions } });
 
 export const dryRunHelpers = createTestHelpers({
-  generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true },
+  generatorOptions: { skipPrettier: true, ...commonTestOptions },
   environmentOptions: { dryRun: true },
 });

@@ -38,7 +38,6 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
         db: 'postgresql',
         auth: 'jwt',
         blueprint: 'myblueprint',
-        skipChecks: true,
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
       .on('end', done);

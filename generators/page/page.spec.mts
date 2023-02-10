@@ -11,7 +11,6 @@ const pageInstance = 'myTestPage';
 
 const createClientProject = (options?: any) =>
   helpers.run('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv }).withOptions({
-    skipInstall: true,
     defaults: true,
     skipServer: true, // We don't need server for this test
     ...options,
@@ -20,9 +19,6 @@ const createClientProject = (options?: any) =>
 const createPage = runResult =>
   runResult
     .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
-    .withOptions({
-      skipInstall: true,
-    })
     .withAnswers({
       pageName,
     })

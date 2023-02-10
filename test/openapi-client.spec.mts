@@ -20,7 +20,6 @@ describe('generator - OpenAPI Client', () => {
           fse.copySync(getTemplatePath('openapi-client/microservice-simple'), dir);
           fse.copySync(getTemplatePath('openapi-client'), dir);
         })
-        .withOptions({ skipChecks: true })
         .withAnswers({
           action: 'new',
           specOrigin: 'custom-endpoint',
@@ -46,7 +45,7 @@ describe('generator - OpenAPI Client', () => {
           fse.copySync(getTemplatePath('openapi-client/microservice-with-client'), dir);
           fse.copySync(getTemplatePath('openapi-client'), dir);
         })
-        .withOptions({ skipChecks: true, regen: true })
+        .withOptions({ regen: true })
         .run();
     });
 

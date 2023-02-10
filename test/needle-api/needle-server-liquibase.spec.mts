@@ -94,9 +94,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         );
       })
       .withOptions({
-        skipInstall: true,
         blueprint: 'myblueprint',
-        skipChecks: true,
         clientFramework: 'no',
         skipPriorities: ['prompting'],
       })
