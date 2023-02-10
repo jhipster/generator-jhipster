@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 
+import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 import { skipPrettierHelpers as helpers } from './helpers.mjs';
 import * as GeneratorList from '../../generators/generator-list.mjs';
@@ -23,6 +24,16 @@ const {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+export const getCommandHelpOutput = async command => {
+  const program = await buildJHipster();
+  const cmd = program.commands.find(cmd => cmd.name() === command);
+  if (!cmd) {
+    throw new Error(`Command ${command} not found.`);
+  }
+  await cmd._lazyBuildCommandCallBack();
+  return cmd.configureOutput({ getOutHelpWidth: () => 1000, getErrHelpWidth: () => 1000 }).helpInformation();
+};
+
 export const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
   let runResult;
@@ -30,6 +41,9 @@ export const testOptions = data => {
     runResult = await contextBuilder()
       .withOptions({ ...customOptions })
       .run();
+  });
+  after(() => {
+    runResult.cleanup();
   });
   it('should write options to .yo-rc.json', () => {
     runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customOptions });
@@ -58,6 +72,9 @@ export const basicTests = data => {
         })
         .run();
     });
+    after(() => {
+      runResult.cleanup();
+    });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
@@ -69,6 +86,9 @@ export const basicTests = data => {
     let runResult;
     before(async () => {
       runResult = await contextBuilder().withOptions({ defaults: true, skipPriorities: skipWritingPriorities }).run();
+    });
+    after(() => {
+      runResult.cleanup();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -86,6 +106,9 @@ export const basicTests = data => {
           .withAnswers(customPrompts)
           .run();
       });
+      after(() => {
+        runResult.cleanup();
+      });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
@@ -99,6 +122,9 @@ export const basicTests = data => {
           .withOptions({ defaults: true, skipPriorities: skipWritingPriorities })
           .withAnswers(customPrompts)
           .run();
+      });
+      after(() => {
+        runResult.cleanup();
       });
       it('should not show prompts and write default config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -114,6 +140,9 @@ export const basicTests = data => {
           .withOptions({ skipPrompts: true, skipPriorities: skipWritingPriorities })
           .withAnswers(customPrompts)
           .run();
+      });
+      after(() => {
+        runResult.cleanup();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -131,6 +160,9 @@ export const basicTests = data => {
           .withOptions({ skipPriorities: skipWritingPriorities })
           .withAnswers(customPrompts)
           .run();
+      });
+      after(() => {
+        runResult.cleanup();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
@@ -151,6 +183,9 @@ export const basicTests = data => {
           .withAnswers(customPrompts)
           .run();
       });
+      after(() => {
+        runResult.cleanup();
+      });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
@@ -170,6 +205,9 @@ export const basicTests = data => {
           })
           .withAnswers(customPrompts)
           .run();
+      });
+      after(() => {
+        runResult.cleanup();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
@@ -256,6 +294,9 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
           spy = addSpies(generator);
         });
     });
+    after(() => {
+      result.cleanup();
+    });
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
       expect(result.mockedGenerators[`jhipster-foo:${generatorName}`].callCount).toBe(1);
     });
@@ -323,6 +364,9 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       });
 
       result = await context;
+    });
+    after(() => {
+      result.cleanup();
     });
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
       expect(result.mockedGenerators[`jhipster-foo-sbs:${generatorName}`].callCount).toBe(1);

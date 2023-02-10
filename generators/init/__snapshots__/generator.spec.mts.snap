@@ -6,6 +6,8 @@ exports[`generator - init help should print expected information 1`] = `
 Init project (alpha)
 
 Options:
+  --auto-crlf            Detect line endings
+  --skip-checks          Check the status of the required tools
   --skip-commit-hook     Skip adding husky commit hooks
   --skip-cache           Do not remember prompt answers (default: false)
   --skip-install         Do not automatically install dependencies (default: false)
@@ -13,7 +15,6 @@ Options:
   --ask-answered         Show prompts for already configured options (default: false)
   --with-generated-flag  Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --skip-prompts         Skip prompts
-  --auto-crlf            Detect line endings
   --base-name <value>    Application base name
   -h, --help             display help for command
 "

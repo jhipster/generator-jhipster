@@ -24,7 +24,7 @@ import { inspect } from 'util';
 import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
 
-const downloadFile = (url, filename) => {
+const downloadFile = (url: string, filename: string): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
     logger.info(`Downloading file: ${url}`);
     get(url, response => {
@@ -46,18 +46,18 @@ const downloadFile = (url, filename) => {
 
 /**
  * Download command
- * @param {string[][]} args arguments passed for import-jdl
- * @param {string[]} args[0] jdl files
- * @param {any} options options passed from CLI
+ * @param positionalArgs
+ * @param options options passed from CLI
  */
-const downloadJdl = ([jdlFiles = []], options = {}) => {
+const downloadJdl = async (positionalArgs: [string[]], options: Record<string, any> = {}): Promise<string[]> => {
+  const [jdlFiles] = positionalArgs;
   logger.debug('cmd: download');
   logger.debug(`jdlFiles: ${inspect(jdlFiles)}`);
   if (!jdlFiles || jdlFiles.length === 0) {
-    return Promise.reject(new Error('\nAt least one jdl file is required.\n'));
+    throw new Error('\nAt least one jdl file is required.\n');
   }
-  return Promise.all(
-    jdlFiles.map(filename => {
+  const downloadedFiles = await Promise.all(
+    jdlFiles.map(async filename => {
       let url;
       try {
         const urlObject = new URL(filename);
@@ -65,18 +65,21 @@ const downloadJdl = ([jdlFiles = []], options = {}) => {
         filename = path.basename(urlObject.pathname);
       } catch (_error) {
         if (options.skipSampleRepository) {
-          return Promise.reject(new Error(`Could not find ${filename}, make sure the path is correct.`));
+          throw new Error(`Could not find ${filename}, make sure the path is correct.`);
         }
         url = new URL(filename, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/`).toString();
         filename = path.basename(filename);
       }
-      return downloadFile(url, filename).catch(error => {
-        logger.info(error.message);
+      try {
+        return await downloadFile(url, filename);
+      } catch (error) {
+        logger.info((error as any).message);
         url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/').toString();
         return downloadFile(url, filename);
-      });
+      }
     })
   );
+  return downloadedFiles.filter(file => file) as string[];
 };
 
 export default downloadJdl;

@@ -16,7 +16,8 @@ import { getTemplatePath } from '../support/index.mjs';
 const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
 const { buildJHipster } = await import('../../cli/program.mjs');
 
-const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'dist', 'cli', 'cli.mjs');
+const __filename = fileURLToPath(import.meta.url);
+const jhipsterCli = join(dirname(__filename), '..', '..', 'dist', 'cli', 'cli.mjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -111,7 +112,17 @@ describe('cli', () => {
         return Promise.resolve();
       });
       env.composeWith = fn<typeof env.composeWith>();
-      env.create = fn<typeof env.create>().mockReturnValue(generator) as any;
+      const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
+      env.getGeneratorMeta = fn<typeof env.create>().mockImplementation((namespace, args, options) => {
+        if (namespace === 'jhipster:mocked') {
+          return {
+            importModule: () => ({}),
+            resolved: __filename,
+            instantiateHelp: () => generator,
+          };
+        }
+        return originalGetGeneratorMeta(namespace, args, options);
+      });
     });
 
     const commonTests = () => {
@@ -326,8 +337,8 @@ describe('cli', () => {
         });
         it('should print warnings', () => {
           /* eslint-disable prettier/prettier */
-          expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-bar')).toBe(true);
-          expect(cbArgs[2].includes('foo is not a known command')).toBe(true);
+          expect(cbArgs[1]).toMatch('No custom commands found within blueprint: generator-jhipster-bar');
+          expect(cbArgs[2]).toMatch('foo is not a known command');
         });
       });
 
@@ -371,9 +382,9 @@ describe('cli', () => {
 
         it('should print sharedOptions info', () => {
           expect(stdout).toMatch('Running foo');
-          expect(stdout.includes('Running bar')).toBe(true);
-          expect(stdout.includes('barValue')).toBe(true);
-          expect(stdout.includes('fooValue')).toBe(false);
+          expect(stdout).toMatch('Running bar');
+          expect(stdout).toMatch('barValue');
+          expect(stdout).not.toMatch('fooValue');
         });
       });
 
@@ -392,10 +403,10 @@ describe('cli', () => {
         });
 
         it('should print sharedOptions info', () => {
-          expect(stdout.includes('Running foo')).toBe(true);
-          expect(stdout.includes('Running bar')).toBe(true);
-          expect(stdout.includes('barValue')).toBe(true);
-          expect(stdout.includes('fooValue')).toBe(false);
+          expect(stdout).toMatch('Running foo');
+          expect(stdout).toMatch('Running bar');
+          expect(stdout).toMatch('barValue');
+          expect(stdout).not.toMatch('fooValue');
         });
       });
     });
@@ -414,11 +425,11 @@ describe('cli', () => {
         });
 
         it('should print foo command', () => {
-          expect(stdout.includes('Create a new foo. (blueprint: generator-jhipster-cli)')).toBe(true);
+          expect(stdout).toMatch('Create a new foo. (blueprint: generator-jhipster-cli)');
         });
 
         it('should print foo options', () => {
-          expect(stdout.includes('--foo')).toBe(true);
+          expect(stdout).toMatch('--foo');
         });
       });
 
@@ -436,11 +447,11 @@ describe('cli', () => {
         });
 
         it('should print bar command help', () => {
-          expect(stdout.includes('Create a new bar. (blueprint: generator-jhipster-cli-shared)')).toBe(true);
+          expect(stdout).toMatch('Create a new bar. (blueprint: generator-jhipster-cli-shared)');
         });
         it('should print foo option', () => {
-          expect(stdout.includes('--foo')).toBe(true);
-          expect(stdout.includes('foo description')).toBe(true);
+          expect(stdout).toMatch('--foo');
+          expect(stdout).toMatch('foo description');
         });
       });
 
@@ -507,11 +518,11 @@ describe('cli', () => {
         });
 
         it('should print usage', () => {
-          expect(stdout.includes('Usage: jhipster run cli:foo [options]')).toBe(true);
+          expect(stdout).toMatch('Usage: jhipster run cli:foo [options]');
         });
         it('should print options', () => {
-          expect(stdout.includes('--foo-bar')).toBe(true);
-          expect(stdout.includes('Sample option')).toBe(true);
+          expect(stdout).toMatch('--foo-bar');
+          expect(stdout).toMatch('Sample option');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);
@@ -533,8 +544,8 @@ describe('cli', () => {
         });
 
         it('should print runtime log', () => {
-          expect(stdout.includes('Running foo')).toBe(true);
-          expect(stdout.includes('Running bar')).toBe(true);
+          expect(stdout).toMatch('Running foo');
+          expect(stdout).toMatch('Running bar');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);
