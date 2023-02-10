@@ -205,9 +205,10 @@ export const buildCommands = async ({
           return;
         }
 
-        if (!cliOnly || cmdName === 'jdl') {
+        const jdlCommand = cmdName === 'jdl';
+        if (!cliOnly || jdlCommand) {
           let generator;
-          if (cmdName === 'jdl') {
+          if (jdlCommand) {
             generator = 'app';
           } else if (blueprint) {
             generator = `${packageNameToNamespace(blueprint)}:${cmdName}`;
@@ -222,7 +223,8 @@ export const buildCommands = async ({
           await addCommandRootGeneratorOptions(command, generatorMeta);
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
-          const allDependencies = await buildAllDependencies(['bootstrap', generator], { env });
+          const boostrapGen = [...(jdlCommand ? ['workspaces'] : []), 'bootstrap', generator];
+          const allDependencies = await buildAllDependencies(boostrapGen, { env });
           for (const [metaName, generatorMeta] of Object.entries(allDependencies)) {
             await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
           }
