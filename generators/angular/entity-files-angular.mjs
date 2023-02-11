@@ -18,6 +18,10 @@
  */
 import { createTranslationReplacer } from './transform-angular.mjs';
 import { clientApplicationBlock } from '../client/utils.mjs';
+import { entityOptions } from '../../jdl/jhipster/index.mjs';
+
+const { ClientInterfaceTypes } = entityOptions;
+const { NO: NO_CLIENT_INTERFACE } = ClientInterfaceTypes;
 
 export const angularFiles = {
   client: [
@@ -66,7 +70,7 @@ export const angularFiles = {
 export async function writeEntitiesFiles({ application, entities, control }) {
   await control.loadClientTranslations?.();
 
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
     await this.writeFiles({
       sections: angularFiles,
       transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
@@ -80,7 +84,7 @@ export async function writeEntitiesFiles({ application, entities, control }) {
  * @returns
  */
 export async function postWriteEntitiesFiles({ application, entities, control }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
     if (!entity.embedded) {
       const { enableTranslation } = application;
       const {

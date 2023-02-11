@@ -30,7 +30,7 @@ const { MapperTypes, ServiceTypes, ClientInterfaceTypes } = entityOptions;
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = cacheTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-const { RESTFUL_RESOURCES } = ClientInterfaceTypes;
+const { NO: NO_CLIENT_INTERFACE } = ClientInterfaceTypes;
 
 export const modelFiles = {
   model: [
@@ -122,7 +122,7 @@ export const entityFiles = {
 export const restFiles = {
   restFiles: [
     {
-      condition: generator => generator.clientInterface === RESTFUL_RESOURCES && !generator.embedded,
+      condition: generator => !generator.embedded,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['web/rest/_EntityClass_Resource.java'],
@@ -130,7 +130,7 @@ export const restFiles = {
   ],
   restTestFiles: [
     {
-      condition: generator => generator.clientInterface === RESTFUL_RESOURCES && !generator.embedded,
+      condition: generator => !generator.embedded,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -281,13 +281,13 @@ export const serverFiles = {
 export function writeFiles() {
   return {
     cleanupOldServerFiles({ application, entities }) {
-      for (const entity of entities.filter(entity => !entity.skipServer)) {
+      for (const entity of entities.filter(entity => !entity.skipServer && entity.clientInterface != NO_CLIENT_INTERFACE)) {
         cleanupOldFiles.call(this, { application, entity });
       }
     },
 
     async writeServerFiles({ application, entities }) {
-      for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+      for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
         await this.writeFiles({
           sections: serverFiles,
           rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
@@ -324,7 +324,7 @@ export function writeFiles() {
 
 export function customizeFiles({ application, entities }) {
   if (application.databaseType === SQL) {
-    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
       if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
         this.addEntityToCache(
           entity.entityAbsoluteClass,
