@@ -50,6 +50,8 @@ type Entity = Required<BaseEntity> & {
   restClass: string;
   restInstance: string;
 
+  clientInterface: string;
+
   entityNamePluralizedAndSpinalCased: string;
   entityClassPlural: string;
   entityInstancePlural: string;
