@@ -404,12 +404,12 @@ function askForClientInterface() {
       message: 'Do you want to generate a REST controller for your entity?',
       choices: [
         {
-          value: NO_CLIENT_INTERFACE,
-          name: 'No, do not generate REST controller',
-        },
-        {
           value: RESTFUL_RESOURCES,
           name: 'Yes, generate a REST controller',
+        },
+        {
+          value: NO_CLIENT_INTERFACE,
+          name: 'No, do not generate REST controller',
         },
       ],
       default: 0,
