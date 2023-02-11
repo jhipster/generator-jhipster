@@ -22,8 +22,7 @@ import { createDockerComposeFile, createDockerExtendedServices } from '../base-d
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
-import { stringHashCode } from '../base/support/index.mjs';
-import { createFaker } from '../bootstrap-application-base/faker.mjs';
+import { stringHashCode, createFaker } from '../base/support/index.mjs';
 
 /**
  * @class
