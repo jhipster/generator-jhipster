@@ -116,10 +116,10 @@ describe(`generator - ${clientFramework}`, () => {
       describe('clientInterface', () => {
         const { clientSrcDir = CLIENT_MAIN_SRC_DIR } = sampleConfig;
         it('should not generate client files for entities with "no" client interface', () => {
-          runResult.assertNoFile(`${clientSrcDir}app/entities/no-client-interface/no-client-interface.model.ts`);
+          runResult.assertNoFile(`${clientSrcDir}app/entities/no-client-interface/index.tsx`);
         });
         it('should generate client files for entities with "restful-resources" client interface', () => {
-          runResult.assertFile(`${clientSrcDir}app/entities/simple/simple.model.ts`);
+          runResult.assertFile(`${clientSrcDir}app/entities/simple/index.tsx`);
         });
       });
 
