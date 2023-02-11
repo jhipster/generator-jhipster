@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import memFsEditor from 'mem-fs-editor';
 import environmentTransfrom from 'yeoman-environment/transform';
 import { transform } from 'p-transform';
 import { stat } from 'fs/promises';
@@ -44,9 +43,6 @@ const {
   patternFilter,
   patternSpy,
 } = environmentTransfrom;
-
-const { State } = memFsEditor as any;
-const { hasState, setModifiedFileState } = State;
 
 const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -170,15 +166,6 @@ export default class BootstrapGenerator extends BaseGenerator {
 
     // JDL writes directly to disk, set the file as modified so prettier will be applied
     const { ignoreErrors } = this.options;
-    if (!this.upgradeCommand) {
-      stream = stream.pipe(
-        patternSpy((file: any) => {
-          if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
-            setModifiedFileState(file);
-          }
-        }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
-      );
-    }
 
     const conflicterStatus = {
       fileActions: [
