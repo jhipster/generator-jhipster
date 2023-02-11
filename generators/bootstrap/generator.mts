@@ -164,7 +164,6 @@ export default class BootstrapGenerator extends BaseGenerator {
     const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
     const env: any = this.env;
 
-    // JDL writes directly to disk, set the file as modified so prettier will be applied
     const { ignoreErrors } = this.options;
 
     const conflicterStatus = {
