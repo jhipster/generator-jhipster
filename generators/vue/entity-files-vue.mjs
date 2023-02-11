@@ -66,7 +66,7 @@ export const entityFiles = {
 };
 
 export async function writeEntityFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface !== NO_CLIENT_INTERFACE)) {
     await this.writeFiles({
       sections: entityFiles,
       transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,
@@ -77,7 +77,7 @@ export async function writeEntityFiles({ application, entities }) {
 
 export async function postWriteEntityFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    if (!entity.embedded && entity.clientInterface != NO_CLIENT_INTERFACE) {
+    if (!entity.embedded && entity.clientInterface !== NO_CLIENT_INTERFACE) {
       const { enableTranslation } = application;
       const {
         entityInstance,

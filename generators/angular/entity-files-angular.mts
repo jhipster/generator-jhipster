@@ -70,7 +70,7 @@ export async function writeEntitiesFiles(
 ) {
   await control.loadClientTranslations?.();
 
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface !== NO_CLIENT_INTERFACE)) {
     await this.writeFiles({
       sections: angularFiles,
       transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
@@ -81,7 +81,9 @@ export async function writeEntitiesFiles(
 
 export async function postWriteEntitiesFiles(this: AngularGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
   const { source, application } = taskParam;
-  const entities = taskParam.entities.filter(entity => !entity.skipClient && !entity.builtIn && !entity.embedded && entity.clientInterface != NO_CLIENT_INTERFACE);
+  const entities = taskParam.entities.filter(
+    entity => !entity.skipClient && !entity.builtIn && !entity.embedded && entity.clientInterface !== NO_CLIENT_INTERFACE
+  );
   source.addEntitiesToClient({ application, entities });
 }
 

@@ -60,7 +60,7 @@ export async function writeEntitiesFiles({ application, entities, control }) {
     await control.loadClientTranslations?.();
   }
 
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface !== NO_CLIENT_INTERFACE)) {
     await this.writeFiles({
       sections: reactFiles,
       transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
@@ -70,7 +70,7 @@ export async function writeEntitiesFiles({ application, entities, control }) {
 }
 
 export async function postWriteEntitiesFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface != NO_CLIENT_INTERFACE)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn && entity.clientInterface !== NO_CLIENT_INTERFACE)) {
     if (!entity.embedded) {
       const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
