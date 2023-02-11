@@ -14,6 +14,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/NoClientInterface.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
@@ -455,6 +458,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -975,6 +981,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/NoClientInterface.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
@@ -1425,6 +1434,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -1880,6 +1892,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -2487,6 +2502,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/NoClientInterface.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
@@ -2910,6 +2928,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -3398,6 +3419,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           "name": "SkipClient",
           "skipClient": true,
         },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
       ],
     },
     "skipInstall": true,
@@ -3467,6 +3503,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -3539,6 +3590,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           "name": "SkipClient",
           "skipClient": true,
         },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
       ],
     },
     "skipInstall": true,
@@ -3608,6 +3674,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -3680,6 +3761,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           "name": "SkipClient",
           "skipClient": true,
         },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
       ],
     },
     "skipInstall": true,
@@ -3748,6 +3844,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -3818,6 +3929,21 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },

@@ -14,6 +14,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/NoClientInterface.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
@@ -689,6 +692,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -1521,6 +1527,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/NoClientInterface.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
@@ -2187,6 +2196,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -2864,6 +2876,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -3867,6 +3882,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   ".jhipster/Microservice.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/NoClientInterface.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/Simple.json": {
     "stateCleared": "modified",
   },
@@ -4524,6 +4542,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/NoClientInterface.json": {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": {
@@ -5240,6 +5261,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           "name": "SkipClient",
           "skipClient": true,
         },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
       ],
     },
     "skipInstall": true,
@@ -5309,6 +5345,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5381,6 +5432,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           "name": "SkipClient",
           "skipClient": true,
         },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
       ],
     },
     "skipInstall": true,
@@ -5450,6 +5516,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5522,6 +5603,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           "name": "SkipClient",
           "skipClient": true,
         },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
       ],
     },
     "skipInstall": true,
@@ -5590,6 +5686,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5660,6 +5771,21 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
           ],
           "name": "SkipClient",
           "skipClient": true,
+        },
+        {
+          "changelogDate": "20220129000500",
+          "clientInterface": "no",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": [
+            {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "NoClientInterface",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },

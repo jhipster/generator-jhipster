@@ -63,6 +63,17 @@ export const entitySkipClient = {
   fields: [{ fieldName: 'skipClientName', fieldType: 'String' }],
 };
 
+export const entityNoClientInterface = {
+  name: 'NoClientInterface',
+  changelogDate: '20220129000500',
+  fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
+  dto: 'mapstruct',
+  service: 'serviceImpl',
+  pagination: 'pagination',
+  clientRootFolder: 'test-root',
+  clientInterface: 'no',
+};
+
 export const entitiesServerSamples = [entitySimple, entityAnotherSimple, entityCustomId, entitiesMicroservice];
 
-export const entitiesClientSamples = [entitySimple, entityCustomId, entitiesMicroservice, entitySkipClient];
+export const entitiesClientSamples = [entitySimple, entityCustomId, entitiesMicroservice, entitySkipClient, entityNoClientInterface];
