@@ -119,7 +119,7 @@ describe(`generator - ${clientFramework}`, () => {
           runResult.assertNoFile(`${clientSrcDir}app/entities/no-client-interface/no-client-interface.model.ts`);
         });
         it('should generate client files for entities with "restful-resources" client interface', () => {
-          runResult.assertNoFile(`${clientSrcDir}app/entities/simple/simple.model.ts`);
+          runResult.assertFile(`${clientSrcDir}app/entities/simple/simple.model.ts`);
         });
       });
 
