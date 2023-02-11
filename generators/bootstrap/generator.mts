@@ -29,13 +29,14 @@ import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
-import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
+import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/support/index.mjs';
 import command from './command.mjs';
 
-const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
+const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
+const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
@@ -45,11 +46,11 @@ const {
   patternSpy,
 } = environmentTransfrom;
 
-const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
+const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
 export default class BootstrapGenerator extends BaseGenerator {
-  static TRANSFORM = TRANSFORM_PRIORITY;
+  static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
@@ -88,16 +89,16 @@ export default class BootstrapGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get transform() {
-    return this.asWritingTaskGroup({
+  get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
+    return {
       queueTransform() {
         this.queueMultistepTransform();
       },
-    });
+    };
   }
 
-  get [TRANSFORM_PRIORITY]() {
-    return this.transform;
+  get [MULTISTEP_TRANSFORM_PRIORITY]() {
+    return this.multistepTransform;
   }
 
   get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
@@ -139,8 +140,9 @@ export default class BootstrapGenerator extends BaseGenerator {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return env.applyTransforms([new MultiStepTransform() as unknown as Transform], { stream } as any);
       },
-      taskName: 'jhipster:transformStream',
-      queueName: 'transform',
+      taskName: MULTISTEP_TRANSFORM_QUEUE,
+      queueName: MULTISTEP_TRANSFORM_QUEUE,
+      once: true,
     });
   }
 
