@@ -21,7 +21,6 @@ import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import pathjs from 'path';
 import normalize from 'normalize-path';
-import { faker } from '@faker-js/faker/locale/en';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -38,6 +37,7 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { stringHashCode } from '../base/support/index.mjs';
+import { createFaker } from '../bootstrap-application-base/faker.mjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -144,7 +144,9 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
         this.entryPort = 8080;
       },
 
-      setAppsYaml() {
+      async setAppsYaml() {
+        const faker = await createFaker();
+
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
         this.includesApplicationTypeGateway = false;
