@@ -80,14 +80,6 @@ export default class BootstrapGenerator extends BaseGenerator {
     this.env.options.nodePackageManager = 'npm';
   }
 
-  get transform() {
-    return this.asWritingTaskGroup({
-      queueTransform() {
-        this.queueMultistepTransform();
-      },
-    });
-  }
-
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
@@ -98,6 +90,14 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get [BaseGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get transform() {
+    return this.asWritingTaskGroup({
+      queueTransform() {
+        this.queueMultistepTransform();
+      },
+    });
   }
 
   get [TRANSFORM_PRIORITY]() {
