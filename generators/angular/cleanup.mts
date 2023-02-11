@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
+import AngularGenerator from './generator.mjs';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
+import type { ClientApplication } from '../client/types.mjs';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
 // eslint-disable-next-line import/prefer-default-export
-export default function cleanupOldFilesTask({ application } = {}) {
+export default function cleanupOldFilesTask(this: AngularGenerator, { application }: { application: ClientApplication }) {
   if (this.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);
@@ -119,7 +121,7 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.html`);
     this.removeFile(`${application.clientSrcDir}app/core/auth/user-route-access-service.ts`);
-    if (!application.authenticationTypeSession || !application.communicationSpringWebsocket) {
+    if (!application.authenticationTypeSession || !(application as any).communicationSpringWebsocket) {
       this.removeFile(`${application.clientSrcDir}app/core/auth/csrf.service.ts`);
     }
     this.removeFolder(`${application.clientSrcDir}app/core/login`);

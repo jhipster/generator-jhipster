@@ -945,13 +945,9 @@ export function writeFiles() {
     cleanupOldServerFiles,
 
     async writeFiles({ application }) {
-      const recreateInitialChangelog = this.configOptions.recreateInitialChangelog;
       return this.writeFiles({
         sections: serverFiles,
-        context: {
-          ...application,
-          recreateInitialChangelog,
-        },
+        context: application,
       });
     },
     ...writeSqlFiles.call(this),

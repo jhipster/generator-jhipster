@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import os from 'os';
 import _ from 'lodash';
+import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import {
@@ -27,21 +29,18 @@ import {
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
-import type { CommonClientServerApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
+const isWin32 = os.platform() === 'win32';
+
 const { upperFirst } = _;
 
-/**
- * @class
- * @extends { BaseApplicationGenerator<CommonClientServerApplication> }
- */
-export default class BootStrapApplicationBase extends BaseApplicationGenerator<CommonClientServerApplication> {
+export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) return;
 
@@ -53,8 +52,20 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
 
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      displayLogo() {
+        this.printDestinationInfo();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.initializing;
+  }
+
   get configuring() {
-    return this.asLoadingTaskGroup({
+    return this.asConfiguringTaskGroup({
       configuring() {
         if (this.jhipsterConfig.baseName === undefined) {
           this.jhipsterConfig.baseName = 'jhipster';
@@ -220,5 +231,37 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.preparingEachEntityRelationship;
+  }
+
+  /**
+   * Return the user home
+   */
+  getUserHome() {
+    return process.env[isWin32 ? 'USERPROFILE' : 'HOME'];
+  }
+
+  printDestinationInfo(cwd = this.destinationPath()) {
+    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(cwd)}`));
+    if (process.cwd() === this.getUserHome()) {
+      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.logger.log(
+        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
+      );
+      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+    }
+    this.logger.log(
+      chalk.green(' _______________________________________________________________________________________________________________\n')
+    );
+    this.logger.log(
+      chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
+    );
+    this.logger.log(
+      chalk.white(
+        `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
+      )
+    );
+    this.logger.log(
+      chalk.green(' _______________________________________________________________________________________________________________\n')
+    );
   }
 }

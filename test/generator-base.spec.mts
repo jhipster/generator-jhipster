@@ -166,13 +166,6 @@ describe('generator - base', () => {
       });
     });
   });
-  describe('printJHipsterLogo', () => {
-    describe('when called', () => {
-      it('prints the logo', () => {
-        expect(BaseGenerator.printJHipsterLogo()).to.equal(undefined);
-      });
-    });
-  });
   describe('checkForNewVersion', () => {
     describe('when called', () => {
       it('prints the new version info', () => {

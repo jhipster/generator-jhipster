@@ -18,12 +18,27 @@
  */
 import fs from 'fs';
 
-import BaseApplication from '../base-application/index.mjs';
-import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
+import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
+import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
+import { postPrepareEntity } from './support/index.mjs';
+
+export type LiquibaseEntity = Entity & {
+  anyRelationshipIsOwnerSide: boolean;
+  liquibaseFakeData: Record<string, any>[];
+  fakeDataCount: number;
+};
+
+export type ApplicationDefinition = {
+  applicationType: SpringBootApplication & LiquibaseApplication;
+  entityType: LiquibaseEntity;
+  sourceType: Record<string, (...args: any[]) => void>;
+};
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
 
 const BASE_CHANGELOG = {
   addedFields: [],
@@ -31,7 +46,9 @@ const BASE_CHANGELOG = {
   addedRelationships: [],
   removedRelationships: [],
 };
-export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication & LiquibaseApplication> {
+export default class LiquibaseGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+  recreateInitialChangelog: boolean;
+
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -41,11 +58,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       required: false,
     });
 
-    if (this.options.help) {
-      return;
-    }
-    this.logger.info(`Creating changelog for entities ${this.options.entities}`);
-    this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
   }
 
   async beforeQueue() {
@@ -55,22 +68,33 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
     }
   }
 
-  override get default(): DefaultTaskGroup<this, SpringBootApplication> {
-    return {
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareUser({ application, entity }) {
+        postPrepareEntity({ application, entity });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
       async calculateChangelogs({ application, entities }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog) {
           return;
         }
-        if (!this.options.entities) {
-          this.options.entities = entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
-        }
+        const entitiesToWrite =
+          this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         const diffs = this._generateChangelogFromFiles(application);
         for (const [fieldChanges] of diffs) {
           if (fieldChanges.type === 'entity-new') {
-            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
           }
           if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
-            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
           }
         }
         // eslint-disable-next-line no-unused-vars
@@ -80,14 +104,14 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
             relationshipChanges.incremental &&
             (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
           ) {
-            await this._composeWithIncrementalChangelogProvider(relationshipChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, relationshipChanges);
           }
         }
       },
-    };
+    });
   }
 
-  get [BaseApplication.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -98,14 +122,14 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
           sections: liquibaseFiles,
           context: {
             ...application,
-            recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+            recreateInitialChangelog: this.recreateInitialChangelog,
           },
         });
       },
     });
   }
 
-  get [BaseApplication.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -113,8 +137,8 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
   /* private methods use within generator                                     */
   /* ======================================================================== */
 
-  _composeWithIncrementalChangelogProvider(databaseChangelog: any) {
-    const skipWriting = this.options.entities.length !== 0 && !this.options.entities.includes(databaseChangelog.entityName);
+  _composeWithIncrementalChangelogProvider(entities: any[], databaseChangelog: any) {
+    const skipWriting = entities!.length !== 0 && !entities!.includes(databaseChangelog.entityName);
     return this.composeWithJHipster(GENERATOR_LIQUIBASE_CHANGELOGS, {
       databaseChangelog,
       skipWriting,
@@ -135,7 +159,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       const newRelationships: any[] = newConfig.relationships || [];
 
       if (
-        this.configOptions.recreateInitialChangelog ||
+        this.recreateInitialChangelog ||
         !application.incrementalChangelog ||
         !fs.existsSync(filename) ||
         !fs.existsSync(
@@ -155,8 +179,6 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       (this as any)._debug(`Calculating diffs for ${entityName}`);
 
       const oldConfig: any = JSON.parse(fs.readFileSync(filename) as any);
-      // Share old entity
-      this.configOptions.oldSharedEntities[entityName] = oldConfig;
 
       const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
       const oldFieldNames: string[] = oldFields.map(field => field.fieldName);

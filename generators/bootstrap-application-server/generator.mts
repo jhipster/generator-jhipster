@@ -22,27 +22,17 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.mjs';
-import { loadRequiredConfigDerivedProperties, prepareEntity as prepareEntityServerForTemplates } from '../server/support/index.mjs';
-import type { SpringBootApplication } from '../server/types.mjs';
-import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
+import {
+  loadRequiredConfigDerivedProperties,
+  prepareEntity as prepareEntityServerForTemplates,
+  getPomVersionProperties,
+} from '../server/support/index.mjs';
+import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
-import { getPomVersionProperties } from '../server/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
-const { CommonDBTypes } = fieldTypes;
-const { OAUTH2 } = authenticationTypes;
-const { LONG: TYPE_LONG } = CommonDBTypes;
-
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
-export default class BoostrapApplicationServer extends BaseApplicationGenerator<SpringBootApplication> {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
-  }
-
+export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   async _postConstruct() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
@@ -52,7 +42,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
       async loadApplication({ application, control }) {
         this.loadServerConfig(undefined, application);
 
-        application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
+        (application as any).gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
@@ -173,22 +163,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
         const derivedFields = entity.primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields);
-      },
-      prepareUser({ entity }) {
-        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
-        if (entity.builtIn && entity.name === 'User') {
-          const oauth2 = entity.authenticationType === OAUTH2;
-          const userIdType = entity.primaryKey.type;
-          const liquibaseFakeData = oauth2
-            ? []
-            : [
-                { id: userIdType === TYPE_LONG ? 1 : entity.primaryKey.fields[0].generateFakeData() },
-                { id: userIdType === TYPE_LONG ? 2 : entity.primaryKey.fields[0].generateFakeData() },
-              ];
-          entity.liquibaseFakeData = liquibaseFakeData;
-          entity.fakeDataCount = liquibaseFakeData.length;
-          this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
-        }
       },
     });
   }

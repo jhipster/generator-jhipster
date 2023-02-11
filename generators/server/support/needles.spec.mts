@@ -17,23 +17,16 @@
  * limitations under the License.
  */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../../test/support/helpers.mjs';
+import { GENERATOR_SERVER } from '../../generator-list.mjs';
 import { insertContentIntoApplicationProperties } from './needles.mjs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generatorPath = join(__dirname, 'index.mjs');
-const generator = basename(__dirname);
-
-describe(`generator - ${generator} - needles`, () => {
+describe('generator - server - support - needles', () => {
   describe('generated project', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+      runResult = await helpers.runJHipster(GENERATOR_SERVER).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
     });
 
     it('should match state snapshot', () => {
@@ -43,24 +36,28 @@ describe(`generator - ${generator} - needles`, () => {
     describe('insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
         const application = runResult.generator.sharedData.getApplication();
-        expect(() => insertContentIntoApplicationProperties(runResult.generator, application, { foo: 'foo' })).toThrow(
+        expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' })).toThrow(
           /Missing required jhipster-needle application-properties-foo not found at/
         );
       });
 
       it('without a needle', () => {
         const application = runResult.generator.sharedData.getApplication();
-        expect(() => insertContentIntoApplicationProperties(runResult.generator, application, {})).toThrow(/At least 1 needle is required/);
+        expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, {})).toThrow(
+          /At least 1 needle is required/
+        );
       });
 
       describe('when applied', () => {
         const fileRegexp = /config\/ApplicationProperties.java/;
         const property = 'private Foo foo;';
         const propertyGetter = `
+
     private Foo getFoo() {
         return foo;
     };`;
         const propertyClass = `
+
         public static Foo{} {
             private String bar;
 
@@ -72,7 +69,7 @@ describe(`generator - ${generator} - needles`, () => {
 
         before(() => {
           const application = runResult.generator.sharedData.getApplication();
-          insertContentIntoApplicationProperties(runResult.generator, application, {
+          insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
             propertyGetter,
             propertyClass,
@@ -123,7 +120,7 @@ public class ApplicationProperties {
 
         it('should not be add the content at second call', () => {
           const application = runResult.generator.sharedData.getApplication();
-          insertContentIntoApplicationProperties(runResult.generator, application, {
+          insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
             propertyGetter,
             propertyClass,
@@ -133,7 +130,7 @@ public class ApplicationProperties {
 
         it('should not be add new content with prettier differences', () => {
           const application = runResult.generator.sharedData.getApplication();
-          insertContentIntoApplicationProperties(runResult.generator, application, {
+          insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: '  private   Foo   foo;',
           });
           expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
@@ -141,7 +138,7 @@ public class ApplicationProperties {
 
         it('should not be add new content with prettier differences and new lines', () => {
           const application = runResult.generator.sharedData.getApplication();
-          insertContentIntoApplicationProperties(runResult.generator, application, {
+          insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: `  private Foo getFoo() {
 
         return foo;

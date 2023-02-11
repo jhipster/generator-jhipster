@@ -62,6 +62,62 @@ const deprecatedProperties = {
     replacement: 'authenticationUsesCsrf',
     get: ({ data }) => data.authenticationUsesCsrf,
   },
+  haveFieldWithJavadoc: {
+    replacement: 'anyFieldHasDocumentation',
+    get: ({ data }) => data.anyFieldHasDocumentation,
+  },
+  fieldsContainBigDecimal: {
+    replacement: 'anyFieldIsDuration',
+    get: ({ data }) => data.anyFieldIsDuration,
+  },
+  fieldsContainBlob: {
+    replacement: 'anyFieldIsBlobDerived',
+    get: ({ data }) => data.anyFieldIsBlobDerived,
+  },
+  fieldsContainDate: {
+    replacement: 'anyFieldIsDateDerived',
+    get: ({ data }) => data.anyFieldIsDateDerived,
+  },
+  fieldsContainDuration: {
+    replacement: 'anyFieldIsBigDecimal',
+    get: ({ data }) => data.anyFieldIsBigDecimal,
+  },
+  fieldsContainInstant: {
+    replacement: 'anyFieldIsInstant',
+    get: ({ data }) => data.anyFieldIsInstant,
+  },
+  fieldsContainLocalDate: {
+    replacement: 'anyFieldIsLocalDate',
+    get: ({ data }) => data.anyFieldIsLocalDate,
+  },
+  fieldsContainTimed: {
+    replacement: 'anyFieldIsTimeDerived',
+    get: ({ data }) => data.anyFieldIsTimeDerived,
+  },
+  fieldsContainUUID: {
+    replacement: 'anyFieldIsUUID',
+    get: ({ data }) => data.anyFieldIsUUID,
+  },
+  fieldsContainZonedDateTime: {
+    replacement: 'anyFieldIsZonedDateTime',
+    get: ({ data }) => data.anyFieldIsZonedDateTime,
+  },
+  fieldsContainImageBlob: {
+    replacement: 'anyFieldHasImageContentType',
+    get: ({ data }) => data.anyFieldHasImageContentType,
+  },
+  fieldsContainTextBlob: {
+    replacement: 'anyFieldHasTextContentType',
+    get: ({ data }) => data.anyFieldHasTextContentType,
+  },
+  fieldsContainBlobOrImage: {
+    replacement: 'anyFieldHasFileBasedContentType',
+    get: ({ data }) => data.anyFieldHasFileBasedContentType,
+  },
+  validation: {
+    replacement: 'anyPropertyHasValidation',
+    get: ({ data }) => data.anyPropertyHasValidation,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

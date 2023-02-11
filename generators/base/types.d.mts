@@ -3,4 +3,6 @@ export type Control = {
   ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;
   useVersionPlaceholders?: boolean;
+
+  loadClientTranslations?: () => Promise<void>;
 };

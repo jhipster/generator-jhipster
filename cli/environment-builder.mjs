@@ -41,7 +41,7 @@ function loadYoRc(filePath = '.yo-rc.json') {
 
 const createEnvironment = (args, options = {}, adapter) => {
   // Remove after migration to environment 3.
-  const configOptions = { sharedEntities: {} };
+  const configOptions = {};
   const sharedOptions = {
     fromCli: true,
     localConfigOnly: true,
@@ -55,7 +55,7 @@ export default class EnvironmentBuilder {
   /**
    * Creates a new EnvironmentBuilder with a new Environment.
    *
-   * @param {any} args - Arguments passed to Environment.createEnv().
+   * @param {any} [args] - Arguments passed to Environment.createEnv().
    * @param {Object} [options] - options passed to Environment.createEnv().
    * @param [adapter] - adapter passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder

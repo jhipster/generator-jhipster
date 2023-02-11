@@ -17,4 +17,5 @@
  * limitations under the License.
  */
 export { default } from './generator.mjs';
+export * from './generator.mjs';
 export { cypressFiles, cypressEntityFiles } from './files.mjs';

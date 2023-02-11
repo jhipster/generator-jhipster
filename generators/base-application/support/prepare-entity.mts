@@ -32,6 +32,11 @@ import {
   fieldTypes,
   searchEngineTypes,
 } from '../../../jdl/jhipster/index.mjs';
+import { fieldIsEnum } from './field-utils.mjs';
+
+import { Entity } from '../types/index.mjs';
+
+const { sortedUniq, intersection } = _;
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
@@ -58,32 +63,26 @@ const BASE_TEMPLATE_DATA = {
   primaryKey: undefined,
   entityPackage: undefined,
   skipUiGrouping: false,
-  haveFieldWithJavadoc: false,
+  anyFieldHasDocumentation: false,
   existingEnum: false,
   searchEngine: NO_SEARCH_ENGINE,
   microserviceName: undefined,
 
   requiresPersistableImplementation: false,
-  fieldsContainDate: false,
-  fieldsContainTimed: false,
-  fieldsContainInstant: false,
-  fieldsContainUUID: false,
-  fieldsContainZonedDateTime: false,
-  fieldsContainDuration: false,
-  fieldsContainLocalDate: false,
-  fieldsContainBigDecimal: false,
-  fieldsContainBlob: false,
-  fieldsContainImageBlob: false,
-  fieldsContainTextBlob: false,
-  fieldsContainBlobOrImage: false,
-  validation: false,
-  fieldsContainOwnerManyToMany: false,
+  anyFieldIsDateDerived: false,
+  anyFieldIsTimeDerived: false,
+  anyFieldIsInstant: false,
+  anyFieldIsUUID: false,
+  anyFieldIsZonedDateTime: false,
+  anyFieldIsDuration: false,
+  anyFieldIsLocalDate: false,
+  anyFieldIsBigDecimal: false,
+  anyFieldIsBlobDerived: false,
+  anyFieldHasImageContentType: false,
+  anyFieldHasTextContentType: false,
+  anyFieldHasFileBasedContentType: false,
+  anyPropertyHasValidation: false,
   fieldsContainNoOwnerOneToOne: false,
-  fieldsContainOwnerOneToOne: false,
-  fieldsContainOneToMany: false,
-  fieldsContainManyToOne: false,
-  fieldsContainEmbedded: false,
-  fieldsIsReactAvField: false,
 
   get otherRelationships() {
     return [];
@@ -96,17 +95,8 @@ const BASE_TEMPLATE_DATA = {
   get fieldNameChoices() {
     return [];
   },
-  get blobFields() {
-    return [];
-  },
-  get differentTypes() {
-    return [];
-  },
   get differentRelationships() {
     return {};
-  },
-  get i18nToLoad() {
-    return [];
   },
 };
 
@@ -126,7 +116,7 @@ function _derivedProperties(entityWithConfig) {
 
 export const entityDefaultConfig = {
   pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
-  validation: false,
+  anyPropertyHasValidation: false,
   dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
   service: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
   clientInterface: binaryOptions.DefaultValues[binaryOptions.Options.CLIENT_INTERFACE],
@@ -234,8 +224,6 @@ export default function prepareEntity(entityWithConfig, generator, application) 
       : entityWithConfig.entityStateName
   );
 
-  entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
-  entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
   entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
   entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
   if (entityWithConfig.microserviceAppName) {
@@ -516,87 +504,57 @@ export function loadRequiredConfigIntoEntity(entity, config) {
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity) {
-  entity.relationships.forEach(relationship => {
-    // Load in-memory data for root
-    if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
-      entity.fieldsContainOwnerManyToMany = true;
-    } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
-      entity.fieldsContainNoOwnerOneToOne = true;
-    } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
-      entity.fieldsContainOwnerOneToOne = true;
-    } else if (relationship.relationshipType === 'one-to-many') {
-      entity.fieldsContainOneToMany = true;
-    } else if (relationship.relationshipType === 'many-to-one') {
-      entity.fieldsContainManyToOne = true;
-    }
-    if (relationship.otherEntityIsEmbedded) {
-      entity.fieldsContainEmbedded = true;
-    }
-    if (relationship.relationshipValidate) {
-      entity.validation = true;
-    }
+export function preparePostEntityCommonDerivedProperties(entity: Entity) {
+  const { fields } = entity;
+  const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
-    const entityType = relationship.otherEntityNameCapitalized;
-    if (!entity.differentTypes.includes(entityType)) {
-      entity.differentTypes.push(entityType);
-    }
-    if (!entity.differentRelationships[entityType]) {
-      entity.differentRelationships[entityType] = [];
-    }
-    if (!relationship.otherEntityIsEmbedded) {
-      entity.differentRelationships[entityType].push(relationship);
-    }
-  });
+  // TODO move to server generator
+  entity.anyFieldHasDocumentation = entity.fields.some(({ javadoc }) => javadoc);
 
-  entity.fields.forEach(field => {
-    const fieldType = field.fieldType;
-    if (![INSTANT, ZONED_DATE_TIME, BOOLEAN].includes(fieldType)) {
-      entity.fieldsIsReactAvField = true;
-    }
+  entity.anyFieldIsZonedDateTime = fieldsType.includes(ZONED_DATE_TIME);
+  entity.anyFieldIsInstant = fieldsType.includes(INSTANT);
+  entity.anyFieldIsDuration = fieldsType.includes(DURATION);
+  entity.anyFieldIsLocalDate = fieldsType.includes(LOCAL_DATE);
+  entity.anyFieldIsBigDecimal = fieldsType.includes(BIG_DECIMAL);
+  entity.anyFieldIsUUID = fieldsType.includes(UUID);
 
-    if (field.javadoc) {
-      entity.haveFieldWithJavadoc = true;
-    }
+  entity.anyFieldIsTimeDerived = entity.anyFieldIsZonedDateTime || entity.anyFieldIsInstant;
+  entity.anyFieldIsDateDerived = entity.anyFieldIsTimeDerived || entity.anyFieldIsLocalDate;
 
-    if (field.fieldIsEnum) {
-      entity.i18nToLoad.push(field.enumInstance);
-    }
+  entity.anyFieldIsBlobDerived = intersection(fieldsType, [BYTES, BYTE_BUFFER]).length > 0;
+  if (entity.anyFieldIsBlobDerived) {
+    const blobFields = fields.filter(({ fieldType }) => [BYTES, BYTE_BUFFER].includes(fieldType));
+    const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
+    entity.anyFieldHasImageContentType = blobFieldsContentType.includes(IMAGE);
+    entity.anyFieldHasFileBasedContentType = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
+    entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
+  }
 
-    if (fieldType === ZONED_DATE_TIME) {
-      entity.fieldsContainZonedDateTime = true;
-      entity.fieldsContainTimed = true;
-      entity.fieldsContainDate = true;
-    } else if (fieldType === INSTANT) {
-      entity.fieldsContainInstant = true;
-      entity.fieldsContainTimed = true;
-      entity.fieldsContainDate = true;
-    } else if (fieldType === DURATION) {
-      entity.fieldsContainDuration = true;
-    } else if (fieldType === LOCAL_DATE) {
-      entity.fieldsContainLocalDate = true;
-      entity.fieldsContainDate = true;
-    } else if (fieldType === BIG_DECIMAL) {
-      entity.fieldsContainBigDecimal = true;
-    } else if (fieldType === UUID) {
-      entity.fieldsContainUUID = true;
-    } else if (fieldType === BYTES || fieldType === BYTE_BUFFER) {
-      entity.blobFields.push(field);
-      entity.fieldsContainBlob = true;
-      if (field.fieldTypeBlobContent === IMAGE) {
-        entity.fieldsContainImageBlob = true;
-      }
-      if (field.fieldTypeBlobContent !== TEXT) {
-        entity.fieldsContainBlobOrImage = true;
+  preparePostEntityCommonDerivedPropertiesNotTyped(entity);
+}
+
+function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
+  const { relationships, fields } = entity;
+  const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
+  entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
+
+  entity.anyPropertyHasValidation =
+    entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
+
+  const relationshipsByType = relationships
+    .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
+    .reduce((relationshipsByType: any, [type, relationship]) => {
+      if (!relationshipsByType[type]) {
+        relationshipsByType[type] = [relationship];
       } else {
-        entity.fieldsContainTextBlob = true;
+        relationshipsByType[type].push(relationship);
       }
-    }
+      return relationshipsByType;
+    }, {});
 
-    if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
-      entity.validation = true;
-    }
-  });
+  entity.differentRelationships = relationshipsByType;
+
+  entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
 
   entity.allReferences = [
     ...entity.fields.map(field => field.reference),

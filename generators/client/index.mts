@@ -16,5 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {
+  ApplicationTaskParam,
+  BaseApplicationGeneratorDefinition,
+  EntitiesTaskParam,
+  GenericApplicationDefinition,
+} from '../base-application/tasks.mjs';
+import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
+import { ClientApplication } from './types.mjs';
+
 export { default } from './generator.mjs';
 export { files as commonFiles } from './files-common.mjs';
+
+export type ApplicationDefinition = GenericApplicationDefinition<ClientApplication> & GenericSourceTypeDefinition<never>;
+
+type ApplicationAndEntitiesSourceMethodArg = ApplicationTaskParam<ApplicationDefinition> & EntitiesTaskParam<ApplicationDefinition>;
+
+export type SourceType = {
+  addEntitiesToClient: (arg1: ApplicationAndEntitiesSourceMethodArg) => void;
+};
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition<SourceType>>;

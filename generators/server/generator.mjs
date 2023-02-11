@@ -141,7 +141,7 @@ const { NO: NO_SERVICE } = ServiceTypes;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
@@ -150,7 +150,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   projectVersion;
 
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {
@@ -201,12 +201,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-
       validateJava() {
         if (!this.options.skipChecks) {
           this.checkJava();
@@ -523,7 +517,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
                 field
               )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
             );
-            field.validation = false;
+            field.fieldValidate = false;
             field.fieldValidateRules = [];
           }
         });

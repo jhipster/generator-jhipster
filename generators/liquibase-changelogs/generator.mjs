@@ -28,7 +28,7 @@ import {
 } from '../base-application/support/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
-import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
+import { postPrepareEntity, prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { liquibaseComment } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
@@ -49,6 +49,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     // Set number of rows to be generated
     this.numberOfRows = 10;
     this.entityChanges = {};
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
   }
 
   async beforeQueue() {
@@ -137,8 +138,6 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
 
           entity.liquibaseFakeData.push(rowData);
         }
-        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
-        this.configOptions.sharedLiquibaseFakeData[_.upperFirst(entity.name)] = entity.liquibaseFakeData;
       },
     });
   }
@@ -149,7 +148,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
 
   get default() {
     return {
-      prepareRelationshipsForTemplates() {
+      prepareRelationshipsForTemplates({ application }) {
         const entityChanges = this.entityChanges;
         const databaseChangelog = this.databaseChangelog;
         const entity = this.entity;
@@ -184,6 +183,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
             .map(relationship => prepareRelationship(entity, relationship, this, true))
             .map(relationship => this._prepareRelationship(entity, relationship));
         }
+        postPrepareEntity({ application, entity });
       },
     };
   }
@@ -214,7 +214,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
           jhiPrefix: entity.jhiPrefix,
           reactive: application.reactive,
           incrementalChangelog: application.incrementalChangelog,
-          recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+          recreateInitialChangelog: this.recreateInitialChangelog,
         };
 
         if (databaseChangelog.type === 'entity-new') {
@@ -316,7 +316,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
       this.addChangelogToLiquibase(fileName);
     }
 
-    if (entity.fieldsContainOwnerManyToMany || entity.fieldsContainOwnerOneToOne || entity.fieldsContainManyToOne) {
+    if (entity.anyRelationshipIsOwnerSide) {
       const constFileName = `${databaseChangelog.changelogDate}_added_entity_constraints_${entity.entityClass}`;
       if (entity.incremental) {
         this.addIncrementalChangelogToLiquibase(constFileName);

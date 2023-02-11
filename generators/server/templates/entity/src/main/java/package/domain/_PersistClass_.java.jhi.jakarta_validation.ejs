@@ -21,7 +21,7 @@
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (fragment.importSection) { -&>
-<%_ if (validation) { _%>
+<%_ if (anyPropertyHasValidation) { _%>
 import jakarta.validation.constraints.*;
 <%_ } _%>
 <&_ } -&>

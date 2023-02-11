@@ -77,29 +77,6 @@ export const logger = {
   fatal,
 };
 
-/* Convert option objects to command line args */
-export const getOptionAsArgs = (options = {}) => {
-  options = Object.fromEntries(
-    Object.entries(options).map(([key, value]) => {
-      return [_.kebabCase(key), value];
-    })
-  );
-  const args = Object.entries(options)
-    .map(([key, value]) => {
-      const prefix = key.length === 1 ? '-' : '--';
-      if (value === true) {
-        return `${prefix}${key}`;
-      }
-      if (value === false) {
-        return `${prefix}no-${key}`;
-      }
-      return value !== undefined ? [`${prefix}${key}`, `${value}`] : undefined;
-    })
-    .filter(arg => arg !== undefined);
-  logger.debug(`converted options: ${args}`);
-  return args.flat();
-};
-
 /**
  *  Get options for the command
  */

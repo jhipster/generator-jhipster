@@ -152,7 +152,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 <%_ } _%>
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
 import org.springframework.util.Base64Utils;
 <%_ } _%>
 <%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
@@ -162,29 +162,29 @@ import reactor.core.publisher.Mono;
 <%_ if (databaseTypeSql && !reactive) { _%>
 import jakarta.persistence.EntityManager;
 <%_ } _%>
-<%_ if (fieldsContainBigDecimal) { _%>
+<%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
 <%_ } _%>
-<%_ if (fieldsContainBlob && databaseTypeCassandra) { _%>
+<%_ if (anyFieldIsBlobDerived && databaseTypeCassandra) { _%>
 import java.nio.ByteBuffer;
 <%_ } _%>
-<%_ if (reactive || fieldsContainDuration) { _%>
+<%_ if (reactive || anyFieldIsDuration) { _%>
 import java.time.Duration;
 <%_ } _%>
-<%_ if (fieldsContainLocalDate) { _%>
+<%_ if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+<%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
 import java.time.Instant;
 <%_ } _%>
-<%_ if (fieldsContainZonedDateTime) { _%>
+<%_ if (anyFieldIsZonedDateTime) { _%>
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (fieldsContainLocalDate || fieldsContainZonedDateTime) { _%>
+<%_ if (anyFieldIsLocalDate || anyFieldIsZonedDateTime) { _%>
 import java.time.ZoneId;
 <%_ } _%>
-<%_ if (fieldsContainInstant) { _%>
+<%_ if (anyFieldIsInstant) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 <%_ if (!reactive && implementsEagerLoadApis) { _%>
@@ -197,7 +197,7 @@ import java.util.stream.Stream;
   <%_ } _%>
 <%_ } _%>
 import java.util.List;
-<%_ if (fieldsContainUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
+<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (!embedded && primaryKey.hasLong) { _%>
@@ -205,10 +205,10 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 <%_ } _%>
 
-<%_ if (fieldsContainBigDecimal) { _%>
+<%_ if (anyFieldIsBigDecimal) { _%>
 import static <%= packageName %>.web.rest.TestUtil.sameNumber;
 <%_ } _%>
-<%_ if (fieldsContainZonedDateTime) { _%>
+<%_ if (anyFieldIsZonedDateTime) { _%>
 import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;

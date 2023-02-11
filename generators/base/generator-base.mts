@@ -30,7 +30,7 @@ import { lt as semverLessThan } from 'semver';
 import type Storage from 'yeoman-generator/lib/util/storage.js';
 
 import SharedData from './shared-data.mjs';
-import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
+import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './support/index.mjs';
 import baseOptions from './options.mjs';
@@ -44,10 +44,10 @@ import type {
   JHipsterOptions,
   CheckResult,
 } from './api.mjs';
-import type { BaseTaskGroup } from './tasks.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import NeedleApi from '../needle-api.mjs';
 
 const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -60,11 +60,8 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 
 /**
  * This is the base class for a generator for every generator.
- *
- * @class
- * @extends {JHipsterBaseBlueprintGenerator}
  */
-export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
+export default class BaseGenerator extends YeomanGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -92,7 +89,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static END = asPriority(END);
 
   readonly sharedData!: SharedData<BaseApplication>;
-
   declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -101,47 +97,42 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   configOptions!: Record<string, any>;
   jhipsterTemplatesFolders!: string[];
 
-  fromBlueprint!: boolean;
-  sbsBlueprint?: boolean;
   blueprintStorage?: Storage;
-  blueprintConfig?: Record<string, any>;
-  jhipsterContext?: any;
 
   private _jhipsterGenerator?: string;
+  private _needleApi?: NeedleApi;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
 
-    if (!this.features.jhipsterModular) {
-      // This adds support for a `--from-cli` flag
-      this.option('from-cli', {
-        description: 'Indicates the command is run from JHipster CLI',
-        type: Boolean,
-        hide: true,
-      });
+    // This adds support for a `--from-cli` flag
+    this.option('from-cli', {
+      description: 'Indicates the command is run from JHipster CLI',
+      type: Boolean,
+      hide: true,
+    });
 
-      this.option('with-generated-flag', {
-        description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-        type: Boolean,
-      });
+    this.option('with-generated-flag', {
+      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+      type: Boolean,
+    });
 
-      this.option('skip-prompts', {
-        description: 'Skip prompts',
-        type: Boolean,
-      });
+    this.option('skip-prompts', {
+      description: 'Skip prompts',
+      type: Boolean,
+    });
 
-      this.option('skip-prettier', {
-        description: 'Skip prettier',
-        type: Boolean,
-        hide: true,
-      });
+    this.option('skip-prettier', {
+      description: 'Skip prettier',
+      type: Boolean,
+      hide: true,
+    });
 
-      this.option('ignore-needles-error', {
-        description: 'Ignore needles failures',
-        type: Boolean,
-        hide: true,
-      });
-    }
+    this.option('ignore-needles-error', {
+      description: 'Ignore needles failures',
+      type: Boolean,
+      hide: true,
+    });
 
     /*
      * When building help, this.jhipsterConfig is not available.
@@ -152,8 +143,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     let jhipsterOldVersion = null;
     if (!this.options.help) {
       // JHipster runtime config that should not be stored to .yo-rc.json.
-      this.configOptions = this.options.configOptions || { sharedEntities: {} };
-      this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+      this.configOptions = this.options.configOptions || {};
 
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster', { sorted: true });
@@ -202,24 +192,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
-
-    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
-
-    if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage({ sorted: true });
-      this.blueprintConfig = this.blueprintStorage.createProxy();
-
-      // jhipsterContext is the original generator
-      this.jhipsterContext = this.options.jhipsterContext;
-
-      try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
-      } catch (error) {
-        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
-        this.logger.log(error);
-      }
-    }
   }
 
   /**
@@ -227,6 +199,16 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   usage(): string {
     return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  /**
+   * @deprecated
+   */
+  get needleApi() {
+    if (this._needleApi === undefined || this._needleApi === null) {
+      this._needleApi = new NeedleApi(this);
+    }
+    return this._needleApi;
   }
 
   /**
@@ -264,13 +246,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
     }
     return priorities;
-  }
-
-  /**
-   * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
-   */
-  delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
-    return this.delegateToBlueprint ? {} : tasksGetter();
   }
 
   /**

@@ -31,7 +31,7 @@ import { prettierTransform, generatedAnnotationTransform } from './transforms.mj
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
-import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
+import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/support/index.mjs';
 
@@ -56,15 +56,15 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
+  upgradeCommand!: boolean;
+
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', uniqueGlobally: true, customCommitTask: true, ...features });
+    super(args, options, { uniqueGlobally: true, customCommitTask: true, ...features });
 
     if (this.options.help) return;
 
-    if (!this.options.upgradeCommand) {
-      const { commandName } = this.options;
-      this.options.upgradeCommand = commandName === GENERATOR_UPGRADE;
-    }
+    const { commandName } = this.options;
+    this.upgradeCommand = commandName === GENERATOR_UPGRADE;
   }
 
   _postConstruct() {
@@ -91,7 +91,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     return this.transform;
   }
 
-  get preConflicts(): PreConflictsTaskGroup<this> {
+  get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
       async commitPrettierConfig() {
         if (this.options.skipCommit) {
@@ -169,8 +169,8 @@ export default class BootstrapGenerator extends BaseGenerator {
     const env: any = this.env;
 
     // JDL writes directly to disk, set the file as modified so prettier will be applied
-    const { upgradeCommand, ignoreErrors } = this.options;
-    if (!upgradeCommand) {
+    const { ignoreErrors } = this.options;
+    if (!this.upgradeCommand) {
       stream = stream.pipe(
         patternSpy((file: any) => {
           if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
@@ -197,7 +197,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     const createApplyPrettierTransform = () => {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      const transformOptions = { ignoreErrors: ignoreErrors || upgradeCommand, extensions: PRETTIER_EXTENSIONS };
+      const transformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
       return prettierTransform(prettierOptions, this, transformOptions);
     };
 

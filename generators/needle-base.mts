@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import BaseGenerator from './base/index.mjs';
-import { createNeedleCallback } from './base/support/needles.mjs';
+import { createNeedleCallback, NeedleInsertion } from './base/support/needles.mjs';
 
 export type NeedleFileModel = {
   /**
@@ -70,6 +70,11 @@ export default class {
     return (this.generator.sharedData.getApplication() as any).clientFramework;
   }
 
+  /**
+   * @deprecated use editFile
+   * @param rewriteFileModel
+   * @param errorMessage
+   */
   addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): void {
     const ignoreNonExisting = errorMessage ?? true;
     const { path: rewritePath, file } = rewriteFileModel;
@@ -90,6 +95,11 @@ export default class {
         autoIndent: false,
       })
     );
+  }
+
+  editFile(fullPath, errorMessage: string, needleData: NeedleInsertion): void {
+    const ignoreNonExisting = errorMessage ?? true;
+    this.generator.editFile(fullPath, { ignoreNonExisting }, createNeedleCallback(needleData));
   }
 
   logNeedleNotFound(exception: Error, message?: string, fullPath?: string): void {

@@ -38,11 +38,11 @@ const toJdlFile = file => {
  * @param {string[][]} args arguments passed for import-jdl
  * @param {string[]} args[0] jdl files
  * @param {any} options options passed from CLI
- * @param {any} env the yeoman environment
- * @param {EnvironmentBuilder} envBuilder
- * @param {(string[], object) => EnvironmentBuilder} createEnvBuilder
+ * @param {any} [env] the yeoman environment
+ * @param {EnvironmentBuilder} [envBuilder]
+ * @param {any} [createEnvBuilder]
  */
-const jdl = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
+const jdl = async ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
   logger.debug('cmd: import-jdl from ./import-jdl');
   logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
   if (options.inline) {
@@ -51,14 +51,16 @@ const jdl = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) =
   if (!jdlFiles || jdlFiles.length === 0) {
     logger.fatal(chalk.red('\nAt least one jdl file is required.\n'));
   }
-  const promises = jdlFiles.map(toJdlFile).map(filename => {
-    if (!fs.existsSync(filename)) {
-      logger.info(`File not found: ${filename}. Attempting download from jdl-samples repository`);
-      return download([[filename]], options);
-    }
-    return Promise.resolve(filename);
-  });
-  return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, envBuilder, createEnvBuilder));
+  const downloadedJdlFiles = await Promise.all(
+    jdlFiles.map(toJdlFile).map(async filename => {
+      if (!fs.existsSync(filename)) {
+        logger.info(`File not found: ${filename}. Attempting download from jdl-samples repository`);
+        return download([[filename]], options);
+      }
+      return filename;
+    })
+  );
+  return importJdl(downloadedJdlFiles.flat(), options, env, envBuilder, createEnvBuilder);
 };
 
 export default jdl;

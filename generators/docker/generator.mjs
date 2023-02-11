@@ -30,10 +30,6 @@ import { stringHashCode } from '../base/support/index.mjs';
  * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
  */
 export default class DockerGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
-  }
-
   async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);

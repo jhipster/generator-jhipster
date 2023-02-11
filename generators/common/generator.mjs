@@ -40,7 +40,7 @@ const { REACT, ANGULAR, VUE } = clientFrameworkTypes;
  */
 export default class CommonGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     this.jhipsterOptions({
       prettierTabWidth: {
