@@ -22,7 +22,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode } from './support/index.mjs';
-import gitOptions from '../git/options.mjs';
+import gitOptions from '../git/command.mjs';
 import serverOptions from '../server/options.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
 import prompts from './prompts.mjs';
@@ -106,12 +106,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     this.option('with-entities', {
       alias: 'e',
       desc: 'Regenerate the existing entities if any',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-checks` flag
-    this.option('skip-checks', {
-      desc: 'Check the status of the required tools',
       type: Boolean,
     });
 
@@ -282,11 +276,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
     this.option('enable-hibernate-cache', {
       desc: 'Enable hibernate cache',
-      type: Boolean,
-    });
-
-    this.option('auto-crlf', {
-      desc: 'Detect line endings',
       type: Boolean,
     });
 

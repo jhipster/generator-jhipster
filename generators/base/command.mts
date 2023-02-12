@@ -16,12 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SKIP_COMMIT_HOOK, SKIP_COMMIT_HOOK_DESCRIPTION } from './constants.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
 
-export default {
-  [SKIP_COMMIT_HOOK]: {
-    desc: SKIP_COMMIT_HOOK_DESCRIPTION,
-    type: Boolean,
-    scope: 'storage',
+const command: JHipsterCommandDefinition = {
+  options: {
+    useVersionPlaceholders: {
+      description: 'replace mutable versions with placeholders',
+      type: Boolean,
+      env: 'VERSION_PLACEHOLDERS',
+      scope: 'control',
+      hide: true,
+    },
+    skipChecks: {
+      description: 'Check the status of the required tools',
+      type: Boolean,
+    },
   },
 };
+
+export default command;

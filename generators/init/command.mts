@@ -16,6 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
-export { files, generatorFiles } from './files.mjs';
+import { SKIP_COMMIT_HOOK, SKIP_COMMIT_HOOK_DESCRIPTION } from './constants.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
+
+const command: JHipsterCommandDefinition = {
+  options: {
+    [SKIP_COMMIT_HOOK]: {
+      description: SKIP_COMMIT_HOOK_DESCRIPTION,
+      type: Boolean,
+      scope: 'storage',
+    },
+  },
+  import: [GENERATOR_PROJECT_NAME],
+};
+
+export default command;

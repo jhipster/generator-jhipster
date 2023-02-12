@@ -16,10 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default {
-  skipGit: {
-    desc: 'Skip git repository initialization',
-    type: Boolean,
-    scope: 'generator',
+import { BASE_NAME, BASE_NAME_DESCRIPTION } from './constants.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const command: JHipsterCommandDefinition = {
+  options: {
+    [BASE_NAME]: {
+      description: BASE_NAME_DESCRIPTION,
+      type: String,
+      scope: 'storage',
+    },
   },
 };
+
+export default command;

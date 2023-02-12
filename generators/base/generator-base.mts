@@ -33,7 +33,6 @@ import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './support/index.mjs';
-import baseOptions from './options.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -48,6 +47,7 @@ import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
+import command from './command.mjs';
 
 const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -160,11 +160,11 @@ export default class BaseGenerator extends YeomanGenerator {
 
     this.sharedData = this.createSharedData(jhipsterOldVersion);
 
-    this.jhipsterOptions(baseOptions as JHipsterOptions);
-
     if (this.options.help) {
       return;
     }
+
+    this.parseJHipsterOptions(command.options);
 
     this.registerPriorities(CUSTOM_PRIORITIES as any);
 
@@ -282,6 +282,40 @@ export default class BaseGenerator extends YeomanGenerator {
         if (optionDesc.scope !== 'generator') {
           // generator scoped options may be duplicated
           delete this.options[optionName];
+        }
+      }
+    });
+  }
+
+  /**
+   * Load options from an object.
+   * When composing, we need to load options from others generators, externalising options allow to easily load them.
+   * @param options - Object containing options.
+   * @param common - skip generator scoped options.
+   */
+  parseJHipsterOptions(options: JHipsterOptions, common = false) {
+    Object.entries(options).forEach(([optionName, optionDesc]) => {
+      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
+      let optionValue;
+      // Hidden options are test options, which doesn't rely on commoander for options parsing.
+      // We must parse environment variables manually
+      if (this.options[optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
+        optionValue = process.env[optionDesc.env];
+      } else {
+        optionValue = this.options[optionName];
+      }
+      if (optionValue !== undefined) {
+        optionValue = optionDesc.type(optionValue);
+        if (optionDesc.scope === 'storage') {
+          this.config.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'blueprint') {
+          this.blueprintStorage!.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'control') {
+          this.sharedData.getControl()[optionName] = optionValue;
+        } else if (optionDesc.scope === 'generator') {
+          this[optionName] = optionValue;
+        } else {
+          throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
       }
     });

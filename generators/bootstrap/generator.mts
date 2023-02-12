@@ -34,6 +34,7 @@ import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/support/index.mjs';
+import command from './command.mjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {
@@ -77,6 +78,18 @@ export default class BootstrapGenerator extends BaseGenerator {
 
     // Force npm override later if needed
     this.env.options.nodePackageManager = 'npm';
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get transform() {
