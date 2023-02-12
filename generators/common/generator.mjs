@@ -32,37 +32,34 @@ import {
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
+import command from './command.mjs';
 
-const { REACT, ANGULAR, VUE } = clientFrameworkTypes;
+const { REACT, ANGULAR } = clientFrameworkTypes;
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').CommonClientServerApplication>}
  */
 export default class CommonGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    this.jhipsterOptions({
-      prettierTabWidth: {
-        desc: 'Default tab width for prettier',
-        type: Number,
-        scope: 'storage',
-      },
-    });
-
-    if (this.options.help) {
-      return;
-    }
-
+  async beforeQueue() {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-  }
 
-  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   // Public API method used by the getter and also by Blueprints
