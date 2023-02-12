@@ -20,8 +20,8 @@
 import { Faker } from '@faker-js/faker';
 import Randexp from 'randexp';
 
-import { languageToJavaLanguage } from '../languages/support/index.mjs';
-import { stringHashCode } from '../base/support/index.mjs';
+import { languageToJavaLanguage } from '../../languages/support/index.mjs';
+import { stringHashCode } from './string.mjs';
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;
@@ -51,6 +51,7 @@ class FakerWithRandexp extends Faker {
  * @param nativeLanguage - native language
  * @returns Faker instance
  */
+// eslint-disable-next-line import/prefer-default-export
 export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
   let nativeFakerInstance;
@@ -73,11 +74,4 @@ export async function createFaker(nativeLanguage = 'en') {
   });
   faker.createRandexp = (pattern, m) => new RandexpWithFaker(pattern, m, faker);
   return faker;
-}
-
-export async function addFakerToEntity(entityWithConfig: any, nativeLanguage = 'en') {
-  entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
-  entityWithConfig.resetFakerSeed = (suffix = '') =>
-    entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
-  entityWithConfig.resetFakerSeed();
 }

@@ -21,6 +21,7 @@ import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
+import { addFakerToEntity } from '../base-application/support/index.mjs';
 import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
@@ -30,7 +31,6 @@ import {
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
-import { addFakerToEntity } from './faker.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
