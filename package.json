@@ -104,7 +104,7 @@
     "mem-fs-editor": "9.6.0",
     "minimatch": "6.2.0",
     "normalize-path": "3.0.0",
-    "os-locale": "5.0.0",
+    "os-locale": "6.0.2",
     "p-queue": "7.3.4",
     "p-transform": "2.0.1",
     "parse-gitignore": "2.0.0",
