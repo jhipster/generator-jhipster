@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { faker } from '@faker-js/faker/locale/en';
 import _ from 'lodash';
 
-import { stringHashCode } from '../base/support/index.mjs';
+import { stringHashCode, createFaker } from '../base/support/index.mjs';
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import { cypressFiles, cypressEntityFiles } from './files.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -152,7 +151,8 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
           }
         }
       },
-      writeFiles({ application }) {
+      async writeFiles({ application }) {
+        const faker = await createFaker();
         faker.seed(stringHashCode(application.baseName));
         return this.writeFiles({
           sections: cypressFiles,

@@ -16,12 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { BASE_NAME, BASE_NAME_DESCRIPTION } from './constants.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
 
-export default {
-  [BASE_NAME]: {
-    desc: BASE_NAME_DESCRIPTION,
-    type: String,
-    scope: 'storage',
+const command: JHipsterCommandDefinition = {
+  options: {
+    autoCrlf: {
+      description: 'Detect line endings',
+      type: Boolean,
+      scope: 'storage',
+    },
+    skipPrettier: {
+      description: 'Skip prettier',
+      type: Boolean,
+      hide: true,
+    },
   },
+  import: ['base'],
 };
+
+export default command;

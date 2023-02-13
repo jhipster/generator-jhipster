@@ -41,60 +41,6 @@ export const ALL_PRIORITIES = 'allPriorities';
 export const WRITTEN = 'written';
 
 /**
- * Options exposed to cli
- */
-export const options = () => ({
-  [GENERATE_SNAPSHOTS]: {
-    desc: 'Generate test snapshots',
-    type: Boolean,
-  },
-  [LINK_JHIPSTER_DEPENDENCY]: {
-    desc: 'Link JHipster dependency for testing',
-    type: Boolean,
-    hide: true,
-  },
-  [SUB_GENERATORS]: {
-    desc: 'Sub generators to generate',
-    type: Array,
-    scope: 'storage',
-  },
-  [ADDITIONAL_SUB_GENERATORS]: {
-    desc: 'Comma separated additional sub generators to generate',
-    type: String,
-    scope: 'storage',
-  },
-  [DYNAMIC]: {
-    desc: 'Genate dynamic generators (advanced)',
-    type: Boolean,
-    scope: 'storage',
-  },
-  [JS]: {
-    desc: 'Use js extension',
-    type: Boolean,
-    scope: 'storage',
-  },
-  [LOCAL_BLUEPRINT_OPTION]: {
-    desc: 'Generate a local blueprint',
-    type: Boolean,
-    scope: 'storage',
-  },
-  [CLI_OPTION]: {
-    desc: 'Generate a cli for the blueprint',
-    type: Boolean,
-    scope: 'storage',
-  },
-  [ALL_GENERATORS]: {
-    desc: 'Generate every sub generator',
-    type: Boolean,
-    scope: 'generator',
-  },
-  [ALL_PRIORITIES]: {
-    desc: 'Generate every priority',
-    type: Boolean,
-  },
-});
-
-/**
  * Config that needs to be written to config
  */
 export const requiredConfig = () => ({});

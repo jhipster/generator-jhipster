@@ -18,3 +18,4 @@
  */
 
 export { default } from './generator-base-blueprint.mjs';
+export { default as command } from './command.mjs';

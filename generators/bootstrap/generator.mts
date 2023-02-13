@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import memFsEditor from 'mem-fs-editor';
 import environmentTransfrom from 'yeoman-environment/transform';
 import { transform } from 'p-transform';
 import { stat } from 'fs/promises';
@@ -34,6 +33,7 @@ import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/support/index.mjs';
+import command from './command.mjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {
@@ -44,9 +44,6 @@ const {
   patternFilter,
   patternSpy,
 } = environmentTransfrom;
-
-const { State } = memFsEditor as any;
-const { hasState, setModifiedFileState } = State;
 
 const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -77,6 +74,18 @@ export default class BootstrapGenerator extends BaseGenerator {
 
     // Force npm override later if needed
     this.env.options.nodePackageManager = 'npm';
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get transform() {
@@ -168,17 +177,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
     const env: any = this.env;
 
-    // JDL writes directly to disk, set the file as modified so prettier will be applied
     const { ignoreErrors } = this.options;
-    if (!this.upgradeCommand) {
-      stream = stream.pipe(
-        patternSpy((file: any) => {
-          if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
-            setModifiedFileState(file);
-          }
-        }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
-      );
-    }
 
     const conflicterStatus = {
       fileActions: [

@@ -35,14 +35,14 @@ const toJdlFile = file => {
 
 /**
  * JDL command
- * @param {string[][]} args arguments passed for import-jdl
- * @param {string[]} args[0] jdl files
+ * @param {[string[]]} positionalArgs jdl files
  * @param {any} options options passed from CLI
  * @param {any} [env] the yeoman environment
  * @param {EnvironmentBuilder} [envBuilder]
  * @param {any} [createEnvBuilder]
  */
-const jdl = async ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
+const jdl = async (positionalArgs, options = {}, env, envBuilder, createEnvBuilder) => {
+  const [jdlFiles = []] = positionalArgs;
   logger.debug('cmd: import-jdl from ./import-jdl');
   logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
   if (options.inline) {

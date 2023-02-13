@@ -1,4 +1,4 @@
-import type { OptionConfig, GeneratorOptions, GeneratorFeatures } from 'yeoman-generator';
+import type { OptionConfig, GeneratorOptions, GeneratorFeatures, ArgumentConfig } from 'yeoman-generator';
 
 export type ApplicationWithConfig = {
   config: {
@@ -96,4 +96,14 @@ export type CheckResult = {
   error?: string;
 };
 
+export type JHipsterArgumentConfig = ArgumentConfig;
+
+export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
+
 export type JHipsterOptions = Record<string, JHipsterOption>;
+
+export type JHipsterCommandDefinition = {
+  arguments?: JHipsterArguments;
+  options: JHipsterOptions;
+  import?: string[];
+};

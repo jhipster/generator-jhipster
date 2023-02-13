@@ -20,7 +20,7 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 
 import { getDatabaseTypeData } from '../../server/support/index.mjs';
-import { parseChangelog } from '../../base/support/index.mjs';
+import { createFaker, parseChangelog, stringHashCode } from '../../base/support/index.mjs';
 import { fieldToReference } from './prepare-field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
 import {
@@ -640,4 +640,11 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
     // Get all required back references for dto.
     entity.otherDtoReferences = entity.otherReferences.filter(reference => reference.entity.dtoReferences.includes(reference));
   }
+}
+
+export async function addFakerToEntity(entityWithConfig: any, nativeLanguage = 'en') {
+  entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
+  entityWithConfig.resetFakerSeed = (suffix = '') =>
+    entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
+  entityWithConfig.resetFakerSeed();
 }

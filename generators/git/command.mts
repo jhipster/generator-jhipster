@@ -16,17 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default {
-  skipPrettier: {
-    desc: 'Skip prettier',
-    type: Boolean,
-    hide: true,
-  },
-  useVersionPlaceholders: {
-    desc: 'replace mutable versions with placeholders',
-    type: Boolean,
-    env: 'VERSION_PLACEHOLDERS',
-    scope: 'control',
-    hide: true,
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const command: JHipsterCommandDefinition = {
+  options: {
+    skipGit: {
+      description: 'Skip git repository initialization',
+      type: Boolean,
+      scope: 'generator',
+    },
   },
 };
+
+export default command;

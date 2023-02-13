@@ -19,6 +19,7 @@
 export * from './configuration-helpers/options.mjs';
 export * from './config.mjs';
 export * from './contents.mjs';
+export * from './faker.mjs';
 export { default as getHipster } from './hipster.mjs';
 export { default as createJHipster7Context } from './jhipster7-context.mjs';
 export * from './namespace.mjs';

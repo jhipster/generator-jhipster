@@ -31,7 +31,6 @@ import { fileURLToPath } from 'url';
 import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import PrivateBase from './generator-base-definitions.mjs';
-import commonOptions from './options.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
 import {
@@ -98,17 +97,6 @@ const isWin32 = os.platform() === 'win32';
 export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
   dependabotPackageJson;
-
-  /**
-   * @private
-   * Get generator dependencies for building help
-   * This is a stub and should be overwritten by the generator.
-   *
-   * @returns {string[]}
-   */
-  getPossibleDependencies() {
-    return [];
-  }
 
   /**
    * @private
@@ -1374,9 +1362,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.enableTranslation !== undefined) {
       this.jhipsterConfig.enableTranslation = options.enableTranslation;
     }
-    if (options.autoCrlf !== undefined) {
-      this.jhipsterConfig.autoCrlf = options.autoCrlf;
-    }
     if (options.language) {
       // workaround double options parsing, remove once generator supports skipping parse options
       const languages = options.language.flat();
@@ -1471,13 +1456,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // Deprecated use nodeDependencies instead
     config.dependabotPackageJson = config.dependabotPackageJson || {};
     dest.dependabotPackageJson = config.dependabotPackageJson;
-  }
-
-  /**
-   * Register and parse common options.
-   */
-  registerCommonOptions() {
-    this.jhipsterOptions(commonOptions);
   }
 
   /**

@@ -20,7 +20,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { basicTests, testBlueprintSupport } from '../../test/support/tests.mjs';
+import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { defaultConfig, requiredConfig } from './config.mjs';
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
@@ -45,6 +45,11 @@ describe(`generator - ${generator}`, () => {
     contextBuilder,
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('help', () => {
+    it('should print expected information', async () => {
+      expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
+    });
+  });
   describe('with', () => {
     describe('default config', () => {
       let runResult;
