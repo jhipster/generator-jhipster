@@ -3,7 +3,6 @@ import fse from 'fs-extra';
 
 import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
-import createMockedConfig from '../support/mock-config.mjs';
 import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/generator.mjs';
 
@@ -25,8 +24,8 @@ describe('generator - entity database changelogs', () => {
         runResult = await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withJHipsterConfig({ databaseType: 'cassandra' })
           .doInDir(dir => {
-            createMockedConfig('05-cassandra', dir, { appDir: '' });
             fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withArguments(['Foo'])
@@ -45,8 +44,8 @@ describe('generator - entity database changelogs', () => {
         runResult = await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withJHipsterConfig({ applicationType: 'gateway' })
           .doInDir(dir => {
-            createMockedConfig('01-gateway', dir, { appDir: '' });
             const jsonFile = path.join(dir, '.jhipster/Foo.json');
             fse.copySync(getEntityTemplatePath('Simple'), jsonFile);
             fse.writeJsonSync(jsonFile, {

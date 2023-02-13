@@ -1,7 +1,6 @@
 import path from 'path';
 import fse from 'fs-extra';
 import { basicHelpers as helpers } from '../support/index.mjs';
-import createMockedConfig from '../support/mock-config.mjs';
 
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
@@ -13,8 +12,8 @@ describe('generator - app - database changelogs', () => {
       before(() =>
         helpers
           .create(getGenerator('app'))
+          .withJHipsterConfig({ databaseType: 'cassandra' })
           .doInDir(dir => {
-            createMockedConfig('05-cassandra', dir, { appDir: '' });
             fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withOptions({ withEntities: true, force: true, skipClient: true })
