@@ -2,8 +2,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
 import applicationTypes from '../../jdl/jhipster/application-types.js';
-import { deploymentTestSamples } from '../../test/support/mock-config.mjs';
-import { GENERATOR_WORKSPACES, GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { skipPrettierHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
@@ -11,28 +10,10 @@ const { MICROSERVICE, MONOLITH } = applicationTypes;
 
 const NO_MONITORING = monitoringTypes.NO;
 
-const mockedComposedGenerators = ['jhipster:common', 'jhipster:client', 'jhipster:languages', 'jhipster:cypress'];
-
 const expectedFiles = {
   dockercompose: ['docker-compose.yml', 'central-server-config/application.yml'],
   prometheus: ['prometheus-conf/alert_rules.yml', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
   monolith: ['docker-compose.yml'],
-};
-
-const getTestApplicationWithEntitiesWithConfig = (additionalConfig, ...appNames) =>
-  Object.fromEntries(
-    Object.entries(deploymentTestSamples)
-      .filter(([appName]) => appNames.includes(appName))
-      .map(([appName, config]) => [appName, { config: { ...config, ...additionalConfig } }])
-  );
-
-const getTestApplicationWithEntities = (...appNames) => getTestApplicationWithEntitiesWithConfig({}, ...appNames);
-
-const workspacesOptions = {
-  generateApplications: true,
-  generateWorkspaces: true,
-  generateWith: 'docker',
-  skipPriorities: ['prompting'],
 };
 
 describe('generator - Docker Compose', () => {
@@ -41,15 +22,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -83,15 +58,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -125,15 +94,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -162,15 +125,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -204,15 +161,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -248,15 +199,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -292,15 +237,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -337,15 +276,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -378,15 +311,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -419,15 +346,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '05-cassandra'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -460,15 +381,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['08-monolith'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -498,15 +413,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntitiesWithConfig({ authenticationType: 'oauth2' }, ...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -544,15 +453,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -585,15 +488,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '10-couchbase'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
@@ -626,15 +523,9 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['12-oracle'];
     before(async () => {
       runResult = await helpers
-        .createJHipster(GENERATOR_WORKSPACES)
-        .withMockedGenerators(mockedComposedGenerators)
-        .withOptions({
-          ...workspacesOptions,
-          importState: {
-            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
-          },
-        })
-        .run();
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))

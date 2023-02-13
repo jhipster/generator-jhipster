@@ -7,19 +7,24 @@ import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { BaseEntity } from '../../generators/base-application/index.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
+import { GENERATOR_WORKSPACES } from '../../generators/generator-list.mjs';
 import getGenerator from './get-generator.mjs';
+import { deploymentTestSamples } from './mock-config.mjs';
+import { normalizePathEnd } from '../../generators/base/support/index.mjs';
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
-const createFiles = (workspace: boolean, configuration: Record<string, unknown>, entities: BaseEntity[] = []) => {
+const createFiles = (workspaceFolder: string, configuration: Record<string, unknown>, entities?: BaseEntity[]) => {
   if (!configuration.baseName) {
     throw new Error('baseName is required');
   }
-  const workspaceFolder = workspace ? `${configuration.baseName}/` : '';
-  const entityFiles = Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity]));
-  configuration = { entities: entities.map(e => e.name), ...configuration };
+  workspaceFolder = workspaceFolder ? normalizePathEnd(workspaceFolder) : workspaceFolder;
+  const entityFiles = entities
+    ? Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity]))
+    : {};
+  configuration = { entities: entities?.map(e => e.name), ...configuration };
   return {
     [`${workspaceFolder}.yo-rc.json`]: { 'generator-jhipster': configuration },
     ...entityFiles,
@@ -27,19 +32,52 @@ const createFiles = (workspace: boolean, configuration: Record<string, unknown>,
 };
 
 class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunContext<GeneratorType> {
-  workspaceApplications: string[] = [];
+  private workspaceApplications: string[] = [];
+  private commonWorkspacesConfig: Record<string, unknown>;
+  private generateApplicationsSet = false;
 
-  withJHipsterConfig(configuration?: Record<string, unknown>, entities: BaseEntity[] = []): this {
-    return this.withFiles(createFiles(false, { baseName: 'jhipster', ...configuration }, entities));
+  withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
+    return this.withFiles(createFiles('', { baseName: 'jhipster', ...configuration }, entities));
   }
 
   withSkipWritingPriorities(): this {
     return this.withOptions({ skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'] });
   }
 
-  withWorkspaceApplication(configuration: Record<string, unknown> = {}, entities?: BaseEntity[]): this {
-    this.workspaceApplications.push(configuration.baseName as string);
-    return this.withFiles(createFiles(true, configuration, entities));
+  withWorkspacesCommonConfig(commonWorkspacesConfig: Record<string, unknown>): this {
+    if (this.workspaceApplications.length > 0) {
+      throw new Error('Cannot be called after withWorkspaceApplication');
+    }
+    this.commonWorkspacesConfig = { ...this.commonWorkspacesConfig, ...commonWorkspacesConfig };
+    return this;
+  }
+
+  withWorkspaceApplicationAtFolder(workspaceFolder: string, configuration: Record<string, unknown>, entities?: BaseEntity[]): this {
+    if (this.generateApplicationsSet) {
+      throw new Error('Cannot be called after withWorkspaceApplication');
+    }
+    this.workspaceApplications.push(workspaceFolder);
+    return this.withFiles(createFiles(workspaceFolder, { ...configuration, ...this.commonWorkspacesConfig }, entities));
+  }
+
+  withWorkspaceApplication(configuration: Record<string, unknown>, entities?: BaseEntity[]): this {
+    return this.withWorkspaceApplicationAtFolder(configuration.baseName as string, configuration, entities);
+  }
+
+  withWorkspacesSamples(...appNames: string[]): this {
+    for (const appName of appNames) {
+      const application = deploymentTestSamples[appName];
+      if (!application) {
+        throw new Error(`Application ${appName} not found`);
+      }
+      this.withWorkspaceApplicationAtFolder(appName, deploymentTestSamples[appName]);
+    }
+    return this;
+  }
+
+  withGenerateWorkspaceApplications(): this {
+    this.generateApplicationsSet = true;
+    return this.withOptions({ generateApplications: this.workspaceApplications });
   }
 }
 
@@ -76,6 +114,16 @@ class JHipsterTest extends YeomanTest {
     envOptions?: Options | undefined
   ): JHipsterRunContext<GeneratorType> {
     return this.create(getGenerator(jhipsterGenerator), settings, envOptions);
+  }
+
+  generateDeploymentWorkspaces(commonConfig?: Record<string, unknown>) {
+    return this.runJHipster(GENERATOR_WORKSPACES)
+      .withWorkspacesCommonConfig(commonConfig ?? {})
+      .withOptions({
+        generateWorkspaces: true,
+        generateWith: 'docker',
+        skipPriorities: ['prompting'],
+      });
   }
 }
 
