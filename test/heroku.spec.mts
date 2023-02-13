@@ -231,9 +231,7 @@ describe('generator - Heroku', () => {
         stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${existingHerokuAppName}`).yields(false, '', '');
         runResult = await helpers
           .createJHipster(GENERATOR_HEROKU)
-          .inTmpDir(dir => {
-            fse.copySync(getTemplatePath('heroku/'), dir);
-          })
+          .withJHipsterConfig({ herokuAppName: 'jhipster-existing', herokuDeployType: 'git' })
           .withOptions({ skipBuild: true })
           .run();
       });

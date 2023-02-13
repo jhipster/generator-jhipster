@@ -479,26 +479,10 @@ exports[`generator - Heroku monolith application with existing app should match 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-existing",
     "herokuDeployType": "git",
-    "herokuJavaVersion": "17",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "17"
   }
 }
 ",
