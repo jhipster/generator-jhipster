@@ -105,7 +105,7 @@
     "minimatch": "6.1.8",
     "normalize-path": "3.0.0",
     "os-locale": "5.0.0",
-    "p-queue": "7.3.3",
+    "p-queue": "7.3.4",
     "p-transform": "2.0.1",
     "parse-gitignore": "2.0.0",
     "pluralize": "8.0.0",
