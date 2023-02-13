@@ -51,6 +51,7 @@ export function convert(jdlRelationships: JDLRelationship[] = [], entityNames: s
   convertedRelationships = new Map(entityNames.map(entityName => [entityName, []]));
   const relatedRelationships = getRelatedRelationships(jdlRelationships, entityNames);
   relatedRelationships.forEach((relatedRelationship, currentEntityName) => {
+    console.log(convertedRelationships);
     setRelationshipsFromEntity(relatedRelationship, currentEntityName, conversionOptions);
     setRelationshipsToEntity(relatedRelationship, currentEntityName, conversionOptions);
   });
@@ -120,7 +121,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName, conversion
             otherEntityName: camelCase(relationshipToConvert.from),
             relationshipType: _.kebabCase(MANY_TO_MANY),
             otherEntityRelationshipName: lowerFirst(relationshipToConvert.to),
-            ownerSide: false,
+            ownerSide: true
           };
           if (otherSplitField.otherEntityField) {
             otherSideRelationship.otherEntityField = lowerFirst(otherSplitField.otherEntityField);
@@ -163,6 +164,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName, conversionOp
       convertedRelationship.ownerSide = false;
     } else if (relationshipToConvert.type === ONE_TO_MANY) {
       relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
+      convertedRelationship.ownerSide = true;
     } else if (relationshipToConvert.type === MANY_TO_ONE) {
       convertedRelationship.relationshipType = 'one-to-many';
     }

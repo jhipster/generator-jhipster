@@ -18,11 +18,18 @@
 -%>
 <%
 const enumImports = this.generateEntityClientEnumImports(fields);
+const predicate = (relationship) => {
+  return relationship.relationshipManyToOne
+  || relationship.relationshipOneToMany
+  || (relationship.relationshipOneToOne && relationship.ownerSide)
+  || (relationship.relationshipManyToMany && relationship.ownerSide);
+}
 %>
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs/esm';
 <%_ } _%>
-<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => (relationship.ownerSide || relationship.relationshipManyToMany) && relationship.otherEntity.entityAngularName !== entityAngularName))) {
+<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship =>
+(predicate(relationship)) && relationship.otherEntity.entityAngularName !== entityAngularName))) {
       const { otherEntity } = relationshipsByType[0];
 _%>
 import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%= otherEntity.entityClientRootFolder %><%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.model';
@@ -40,7 +47,7 @@ _%>
   <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
+<%_ for (const relationship of relationships.filter(predicate)) {
       const { propertyName, relationshipRequired, otherEntity, id, collection, otherEntityField } = relationship;
 _%>
   <%= propertyName %>?: Pick<I<%= otherEntity.entityAngularName %>, '<%= otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%= otherEntityField %>'<% } %>><% if (collection) { %>[]<% } %> | null;
