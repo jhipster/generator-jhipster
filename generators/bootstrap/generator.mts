@@ -34,6 +34,7 @@ import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mj
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/support/index.mjs';
 import command from './command.mjs';
+import { createSortConfigFilesTransform } from './support/index.mjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {
@@ -235,6 +236,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     const transformStreams = [
       ...(skipYoResolve ? [] : [createApplyYoResolveTransform(env.conflicter)]),
       createForceYoRcTransform(),
+      createSortConfigFilesTransform(),
       createForceWriteConfigFiles(),
       ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
       ...(skipPrettier ? [] : [createApplyPrettierTransform()]),
