@@ -1,7 +1,6 @@
 import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import createMockedConfig from './support/mock-config.mjs';
 import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
 import { GENERATOR_KUBERNETES_HELM } from '../generators/generator-list.mjs';
 

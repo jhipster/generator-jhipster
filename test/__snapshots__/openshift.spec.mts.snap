@@ -6,6 +6,8 @@ exports[`generator - OpenShift gateway and one microservice with mysql should ma
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -13,6 +15,7 @@ exports[`generator - OpenShift gateway and one microservice with mysql should ma
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
+    "packages": ["01-gateway", "02-mysql"],
     "registryReplicas": 2,
     "serviceDiscoveryType": "eureka",
     "storageType": "ephemeral"
@@ -962,6 +965,8 @@ exports[`generator - OpenShift gateway with multiple microservices backed by mys
       "05-cassandra",
       "07-mariadb"
     ],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -969,6 +974,14 @@ exports[`generator - OpenShift gateway with multiple microservices backed by mys
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
+    "packages": [
+      "01-gateway",
+      "02-mysql",
+      "03-psql",
+      "04-mongo",
+      "05-cassandra",
+      "07-mariadb"
+    ],
     "registryReplicas": 2,
     "serviceDiscoveryType": "eureka",
     "storageType": "ephemeral"
@@ -3253,6 +3266,8 @@ exports[`generator - OpenShift monolith application should match files snapshot 
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3260,6 +3275,7 @@ exports[`generator - OpenShift monolith application should match files snapshot 
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
+    "packages": ["08-monolith"],
     "registryReplicas": 2,
     "serviceDiscoveryType": false,
     "storageType": "ephemeral"
@@ -3772,6 +3788,8 @@ exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3779,6 +3797,7 @@ exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
+    "packages": ["01-gateway"],
     "registryReplicas": 2,
     "serviceDiscoveryType": "eureka",
     "storageType": "ephemeral"
@@ -4396,6 +4415,8 @@ exports[`generator - OpenShift two microservices backed by mysql and postgres wi
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -4403,6 +4424,7 @@ exports[`generator - OpenShift two microservices backed by mysql and postgres wi
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
+    "packages": ["02-mysql", "03-psql"],
     "registryReplicas": 2,
     "serviceDiscoveryType": "eureka",
     "storageType": "ephemeral"
