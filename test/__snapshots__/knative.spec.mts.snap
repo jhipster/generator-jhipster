@@ -6,6 +6,8 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -17,6 +19,7 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["02-mysql", "03-psql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -947,6 +950,8 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -958,6 +963,7 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -1641,6 +1647,8 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1652,6 +1660,7 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway", "02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -2551,6 +2560,8 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -2562,6 +2573,7 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -3251,6 +3263,8 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
       "04-mongo",
       "07-mariadb"
     ],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3262,6 +3276,7 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway", "02-mysql", "03-psql", "04-mongo", "07-mariadb"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -4900,6 +4915,8 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -4911,6 +4928,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
+    "packages": ["02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -7947,6 +7965,8 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -7958,6 +7978,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -8597,6 +8618,8 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -8608,6 +8631,7 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -9300,6 +9324,8 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -9311,6 +9337,7 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["02-mysql", "03-psql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -10163,6 +10190,8 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -10174,6 +10203,7 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -10786,6 +10816,8 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -10797,6 +10829,7 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway", "02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -11610,6 +11643,8 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -11621,6 +11656,7 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -12240,6 +12276,8 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
       "07-mariadb",
       "11-mssql"
     ],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -12251,6 +12289,14 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": [
+      "01-gateway",
+      "02-mysql",
+      "03-psql",
+      "04-mongo",
+      "07-mariadb",
+      "11-mssql"
+    ],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -14262,6 +14308,8 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -14273,6 +14321,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
+    "packages": ["02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -17532,6 +17581,8 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -17543,6 +17594,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -18110,6 +18162,8 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -18121,6 +18175,7 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }

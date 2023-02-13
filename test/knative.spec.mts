@@ -2,7 +2,7 @@ import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import createMockedConfig from './support/mock-config.mjs';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
@@ -103,15 +103,19 @@ describe('generator - Knative', () => {
     describe('only gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             adminPassword: 'meetup',
             dockerRepositoryName: 'jhipsterrepository',
             dockerPushCommand: 'docker push',
@@ -142,16 +146,19 @@ describe('generator - Knative', () => {
     describe('gateway and mysql microservice', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -182,15 +189,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -221,15 +232,19 @@ describe('generator - Knative', () => {
     describe('gateway and ingress', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -258,16 +273,19 @@ describe('generator - Knative', () => {
     describe('MySQL and PostgreSQL microservices without gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql', '03-psql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql', '03-psql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -301,20 +319,19 @@ describe('generator - Knative', () => {
     describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-            createMockedConfig('04-mongo', dir);
-            createMockedConfig('07-mariadb', dir);
-            createMockedConfig('11-mssql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -357,15 +374,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -398,15 +419,19 @@ describe('generator - Knative', () => {
     describe('gateway with istio routing files', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -439,15 +464,19 @@ describe('generator - Knative', () => {
     describe('only gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             adminPassword: 'meetup',
             dockerRepositoryName: 'jhipsterrepository',
             dockerPushCommand: 'docker push',
@@ -478,16 +507,19 @@ describe('generator - Knative', () => {
     describe('gateway and mysql microservice', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -520,15 +552,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -561,15 +597,19 @@ describe('generator - Knative', () => {
     describe('gateway and ingress', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -605,16 +645,19 @@ describe('generator - Knative', () => {
     describe('MySQL and PostgreSQL microservices without gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql', '03-psql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql', '03-psql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -652,19 +695,19 @@ describe('generator - Knative', () => {
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-            createMockedConfig('04-mongo', dir);
-            createMockedConfig('07-mariadb', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -711,15 +754,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -755,15 +802,19 @@ describe('generator - Knative', () => {
     describe('gateway with istio routing files', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
+          .generateDeploymentWorkspaces()
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
