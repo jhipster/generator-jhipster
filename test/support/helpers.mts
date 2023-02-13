@@ -9,7 +9,7 @@ import { BaseEntity } from '../../generators/base-application/index.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
 import { GENERATOR_WORKSPACES } from '../../generators/generator-list.mjs';
 import getGenerator from './get-generator.mjs';
-import { deploymentTestSamples } from './mock-config.mjs';
+import deploymentTestSamples from './deployment-samples.mjs';
 import { normalizePathEnd } from '../../generators/base/support/index.mjs';
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };

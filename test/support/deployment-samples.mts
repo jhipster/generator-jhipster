@@ -1,28 +1,4 @@
-import path from 'path';
-import fse from 'fs-extra';
-import { writeFileSync, mkdirSync, readFileSync } from 'fs';
-import { getTemplatePath } from './get-template-path.mjs';
-
-import GeneratorBase from '../../generators/base/index.mjs';
-import { getConfigWithDefaults } from '../../jdl/jhipster/default-application-options.js';
-
-const { loadDerivedAppConfig, loadDerivedServerConfig } = GeneratorBase.prototype;
-
-const writeCallbacks = (filePath, ...callbacks) => {
-  let content;
-  try {
-    content = readFileSync(filePath).toString();
-    // eslint-disable-next-line no-empty
-  } catch (_error) {}
-  for (const callback of callbacks) {
-    content = callback(content, filePath);
-  }
-  mkdirSync(path.dirname(filePath), { recursive: true });
-  writeFileSync(filePath, content);
-  return (...callbacks) => writeCallbacks(filePath, ...callbacks);
-};
-
-export const deploymentTestSamples = {
+const deploymentTestSamples = {
   '01-gateway': {
     applicationType: 'gateway',
     baseName: 'jhgate',
@@ -113,36 +89,4 @@ export const deploymentTestSamples = {
   },
 };
 
-const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config = {} } = {}) => {
-  const generator = {
-    testDir,
-    editFile(filePath, ...callbacks) {
-      return writeCallbacks(filePath, ...callbacks);
-    },
-  };
-  if (appDir) {
-    appDir = `${appDir}/`;
-  }
-
-  mkdirSync(`${appDir}target/jib-cache`, { recursive: true });
-
-  let appConfig = deploymentTestSamples[sampleDir];
-  if (!appConfig) {
-    throw new Error(`Sample ${sampleDir} not found`);
-  }
-  appConfig = getConfigWithDefaults({ packageName: 'com.mycompany.myapp', ...appConfig, ...config });
-  generator.editFile(`${appDir}.yo-rc.json`, () => JSON.stringify({ 'generator-jhipster': { ...appConfig, mockAppConfig: undefined } }));
-  Object.assign(generator, appConfig);
-  loadDerivedAppConfig.call(GeneratorBase.prototype, generator);
-  loadDerivedServerConfig.call(GeneratorBase.prototype, generator);
-
-  if (appConfig.mockAppConfig) {
-    appConfig.mockAppConfig(generator, appDir, testDir);
-  } else {
-    fse.copySync(getTemplatePath(`compose/${sampleDir}`), path.join(testDir, appDir));
-  }
-
-  return generator;
-};
-
-export default createMockedConfig;
+export default deploymentTestSamples;
