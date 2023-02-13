@@ -10,15 +10,9 @@ const generator = getGenerator('spring-controller');
 describe('generator - spring-controller', () => {
   describe('creates spring controller', () => {
     before(async () => {
-      await helpers
-        .run(generator)
-        .inTmpDir(dir => {
-          fse.copySync(getTemplatePath('default'), dir);
-        })
-        .withArguments(['foo'])
-        .withAnswers({
-          actionAdd: false,
-        });
+      await helpers.run(generator).withJHipsterConfig().withArguments(['foo']).withAnswers({
+        actionAdd: false,
+      });
     });
 
     it('creates controller files', () => {
@@ -30,13 +24,7 @@ describe('generator - spring-controller', () => {
 
   describe('creates spring controller with --default flag', () => {
     before(async () => {
-      await helpers
-        .run(generator)
-        .inTmpDir(dir => {
-          fse.copySync(getTemplatePath('default'), dir);
-        })
-        .withArguments(['foo'])
-        .withOptions({ default: true });
+      await helpers.run(generator).withJHipsterConfig().withArguments(['foo']).withOptions({ default: true });
     });
 
     it('creates controller files', () => {
@@ -51,13 +39,8 @@ describe('generator - spring-controller', () => {
     before(async () => {
       runResult = await helpers
         .run(generator)
-        .inTmpDir(dir => {
-          const config = {
-            ...fse.readJSONSync(getTemplatePath('default/.yo-rc.json'))[GENERATOR_JHIPSTER],
-            packageFolder: undefined,
-            packageName: 'com.test',
-          };
-          fse.writeJsonSync(path.join(dir, '.yo-rc.json'), { [GENERATOR_JHIPSTER]: config });
+        .withJHipsterConfig({
+          packageName: 'com.test',
         })
         .withArguments(['fooBar'])
         .withAnswers({

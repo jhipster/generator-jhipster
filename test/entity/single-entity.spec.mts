@@ -26,8 +26,8 @@ describe('generator - entity --single-entity', () => {
         runResult = await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withJHipsterConfig()
           .doInDir(dir => {
-            fse.copySync(getTemplatePath('default'), dir);
             fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
             fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
           })
