@@ -19996,7 +19996,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "gateway-jwt-mssql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-infinispan": {
     "applicationWithEntities": {
@@ -20032,7 +20031,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "gateway-jwt-mysql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(true)-h2Disk-caffeine": {
     "applicationWithEntities": {
@@ -20066,7 +20064,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "gateway-jwt-oracle-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(true)-h2Disk-hazelcast": {
     "applicationWithEntities": {
@@ -20098,7 +20095,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "gateway-jwt-postgresql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Disk-ehcache": {
     "applicationWithEntities": {
@@ -20132,7 +20128,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "gateway-oauth2-mariadb-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-consul-enableHibernateCache(true)-h2Memory-infinispan": {
     "applicationWithEntities": {
@@ -20165,7 +20160,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "gateway-oauth2-mssql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(false)-eureka-enableHibernateCache(true)-h2Memory-cacheProvider(no)": {
     "applicationWithEntities": {
@@ -20200,7 +20194,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "gateway-oauth2-mysql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast": {
     "applicationWithEntities": {
@@ -20233,7 +20226,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "gateway-oauth2-oracle-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-h2Memory-redis": {
     "applicationWithEntities": {
@@ -20268,7 +20260,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "gateway-oauth2-postgresql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-h2Memory-caffeine": {
     "applicationWithEntities": {
@@ -20301,7 +20292,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no)": {
     "applicationWithEntities": {
@@ -20338,7 +20328,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mariadb": {
     "applicationWithEntities": {
@@ -20371,7 +20360,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache": {
     "applicationWithEntities": {
@@ -20408,7 +20396,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-skipUserManagement(true)-eureka-enableHibernateCache(true)-mssql": {
     "applicationWithEntities": {
@@ -20439,7 +20426,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis": {
     "applicationWithEntities": {
@@ -20474,7 +20460,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-mysql": {
     "applicationWithEntities": {
@@ -20507,7 +20492,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-memcached": {
     "applicationWithEntities": {
@@ -20540,7 +20524,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-oracle": {
     "applicationWithEntities": {
@@ -20575,7 +20558,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast": {
     "applicationWithEntities": {
@@ -20610,7 +20592,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "microservice-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-postgresql": {
     "applicationWithEntities": {
@@ -20645,7 +20626,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-websocket(false)-eureka-enableHibernateCache(false)-mariadb-ehcache": {
     "applicationWithEntities": {
@@ -20679,7 +20659,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -20711,7 +20690,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-websocket(false)-consul-enableHibernateCache(false)-mssql-caffeine": {
     "applicationWithEntities": {
@@ -20743,7 +20721,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -20777,7 +20754,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-mysql-memcached": {
     "applicationWithEntities": {
@@ -20813,7 +20789,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-eureka-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -20843,7 +20818,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-oracle-infinispan": {
     "applicationWithEntities": {
@@ -20877,7 +20851,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-consul-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -20909,7 +20882,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-postgresql-redis": {
     "applicationWithEntities": {
@@ -20945,7 +20917,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "microservice-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -20977,7 +20948,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast": {
     "applicationWithEntities": {
@@ -21010,7 +20980,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-mariadb": {
     "applicationWithEntities": {
@@ -21045,7 +21014,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis": {
     "applicationWithEntities": {
@@ -21080,7 +21048,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-mssql": {
     "applicationWithEntities": {
@@ -21115,7 +21082,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no)": {
     "applicationWithEntities": {
@@ -21150,7 +21116,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mysql": {
     "applicationWithEntities": {
@@ -21183,7 +21148,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache": {
     "applicationWithEntities": {
@@ -21220,7 +21184,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-skipUserManagement(true)-eureka-enableHibernateCache(true)-oracle": {
     "applicationWithEntities": {
@@ -21253,7 +21216,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-infinispan": {
     "applicationWithEntities": {
@@ -21290,7 +21252,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-skipUserManagement(true)-consul-enableHibernateCache(true)-postgresql": {
     "applicationWithEntities": {
@@ -21321,7 +21282,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-mariadb-redis": {
     "applicationWithEntities": {
@@ -21355,7 +21315,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -21387,7 +21346,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-mssql-memcached": {
     "applicationWithEntities": {
@@ -21423,7 +21381,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-eureka-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -21455,7 +21412,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-eureka-enableHibernateCache(false)-mysql-ehcache": {
     "applicationWithEntities": {
@@ -21489,7 +21445,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -21523,7 +21478,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-consul-enableHibernateCache(false)-oracle-caffeine": {
     "applicationWithEntities": {
@@ -21557,7 +21511,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -21589,7 +21542,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-postgresql-cacheProvider(no)": {
     "applicationWithEntities": {
@@ -21621,7 +21573,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-enableHibernateCache(true)-h2Memory": {
     "applicationWithEntities": {
@@ -21655,7 +21606,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-session-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-caffeine": {
     "applicationWithEntities": {
@@ -21692,7 +21642,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-session-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": {
     "applicationWithEntities": {
@@ -21723,7 +21672,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
   "monolith-session-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast": {
     "applicationWithEntities": {
@@ -21758,7 +21706,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": true,
       },
     },
-    "defaults": true,
   },
   "monolith-session-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": {
     "applicationWithEntities": {
@@ -21791,7 +21738,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-session-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-infinispan": {
     "applicationWithEntities": {
@@ -21824,7 +21770,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-session-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": {
     "applicationWithEntities": {
@@ -21859,7 +21804,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-session-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-cacheProvider(no)": {
     "applicationWithEntities": {
@@ -21894,7 +21838,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-session-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": {
     "applicationWithEntities": {
@@ -21929,7 +21872,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         ],
       },
     },
-    "defaults": true,
   },
   "monolith-session-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-memcached": {
     "applicationWithEntities": {
@@ -21964,7 +21906,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "websocket": false,
       },
     },
-    "defaults": true,
   },
   "monolith-session-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": {
     "applicationWithEntities": {
@@ -21997,7 +21938,6 @@ exports[`generator - sql samples matrix should match snapshot 1`] = `
         "testFrameworks": [],
       },
     },
-    "defaults": true,
   },
 }
 `;

@@ -59,7 +59,6 @@ const samplesBuilder = (): [string, any][] =>
   Object.entries(sqlSamples).map(([name, sample]) => [
     name,
     {
-      defaults: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,

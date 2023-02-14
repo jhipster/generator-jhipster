@@ -26,7 +26,6 @@ const samplesBuilder = (): [string, any][] =>
   Object.entries(buildServerMatrix()).map(([name, sample]) => [
     name,
     {
-      defaults: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,

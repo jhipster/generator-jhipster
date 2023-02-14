@@ -55,7 +55,6 @@ const samplesBuilder = () =>
   Object.entries(couchbaseSamples).map(([name, sample]) => [
     name,
     {
-      defaults: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,

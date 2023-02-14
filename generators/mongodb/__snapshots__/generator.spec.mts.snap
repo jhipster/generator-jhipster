@@ -4624,7 +4624,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul": {
     "applicationWithEntities": {
@@ -4682,7 +4681,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": {
     "applicationWithEntities": {
@@ -4740,7 +4738,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka": {
     "applicationWithEntities": {
@@ -4797,7 +4794,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka": {
     "applicationWithEntities": {
@@ -4856,7 +4852,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul": {
     "applicationWithEntities": {
@@ -4912,7 +4907,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul": {
     "applicationWithEntities": {
@@ -4970,7 +4964,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)": {
     "applicationWithEntities": {
@@ -5027,7 +5020,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)": {
     "applicationWithEntities": {
@@ -5082,7 +5074,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka": {
     "applicationWithEntities": {
@@ -5140,7 +5131,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": {
     "applicationWithEntities": {
@@ -5198,7 +5188,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
   "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul": {
     "applicationWithEntities": {
@@ -5257,7 +5246,6 @@ exports[`generator - mongodb samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
   },
 }
 `;

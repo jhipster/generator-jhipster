@@ -46,7 +46,6 @@ const samplesBuilder = (): [string, any][] =>
   Object.entries(samples).map(([name, sample]) => [
     name,
     {
-      defaults: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,
