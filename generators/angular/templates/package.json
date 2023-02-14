@@ -29,7 +29,7 @@
     "browser-sync": "2.27.11",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "11.0.0",
-    "eslint": "8.33.0",
+    "eslint": "8.34.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-webpack-plugin": "4.0.0",
     "folder-hash": "4.0.4",
