@@ -13110,3 +13110,564 @@ deploy:
   },
 }
 `;
+
+exports[`generator - Kubernetes only gateway with eureka should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": ["13-gateway-eureka"],
+    "clusteredDbApps": {},
+    "directoryPath": "./",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipsterrepository",
+    "ingressDomain": "",
+    "istio": false,
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "jhipsternamespace",
+    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesStorageClassName": "",
+    "kubernetesUseDynamicStorage": true,
+    "monitoring": "no",
+    "serviceDiscoveryType": "eureka"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "K8S-README.md": {
+    "contents": "# JHipster-generated Kubernetes configuration
+
+## Preparation
+
+You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:
+
+\`\`\`
+$ docker image tag jhgate jhipsterrepository/jhgate
+$ docker push jhipsterrepository/jhgate
+\`\`\`
+
+## Deployment
+
+You can deploy all your apps by running the below bash command:
+
+\`\`\`
+./kubectl-apply.sh -f (default option)  [or] ./kubectl-apply.sh -k (kustomize option) [or] ./kubectl-apply.sh -s (skaffold run)
+\`\`\`
+
+If you want to apply kustomize manifest directly using kubectl, then run
+
+\`\`\`
+kubectl apply -k ./
+\`\`\`
+
+If you want to deploy using skaffold binary, then run
+
+\`\`\`
+skaffold run [or] skaffold deploy
+\`\`\`
+
+## Exploring your services
+
+Use these commands to find your application's IP addresses:
+
+\`\`\`
+$ kubectl get svc jhgate -n jhipsternamespace
+\`\`\`
+
+## Scaling your deployments
+
+You can scale your apps using
+
+\`\`\`
+$ kubectl scale deployment <app-name> --replicas <replica-count> -n jhipsternamespace
+\`\`\`
+
+## zero-downtime deployments
+
+The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using
+
+\`\`\`
+$ kubectl set image deployment/<app-name>-app <app-name>=<new-image>  -n jhipsternamespace
+\`\`\`
+
+Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
+This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
+
+## JHipster registry
+
+The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
+
+\`\`\`
+$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry -n jhipsternamespace
+\`\`\`
+
+and explore the details using
+
+\`\`\`
+$ kubectl get svc exposed-registry -n jhipsternamespace
+\`\`\`
+
+For scaling the JHipster registry, use
+
+\`\`\`
+$ kubectl scale statefulset jhipster-registry --replicas 3 -n jhipsternamespace
+\`\`\`
+
+## Troubleshooting
+
+> my apps doesn't get pulled, because of 'imagePullBackof'
+
+Check the docker registry your Kubernetes cluster is accessing. If you are using a private registry, you should add it to your namespace by \`kubectl create secret docker-registry\` (check the [docs](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for more info)
+
+> my applications are stopped, before they can boot up
+
+This can occur if your cluster has low resource (e.g. Minikube). Increase the \`initialDelaySeconds\` value of livenessProbe of your deployments
+
+> my applications are starting very slow, despite I have a cluster with many resources
+
+The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
+",
+    "stateCleared": "modified",
+  },
+  "jhgate-k8s/jhgate-deployment.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jhgate
+  namespace: jhipsternamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jhgate
+      version: "v1"
+  template:
+    metadata:
+      labels:
+        app: jhgate
+        version: "v1"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - jhgate
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      initContainers:
+        - name: init-ds
+          image: busybox:latest
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              while true
+              do
+                rt=$(nc -z -w 1 jhgate-mysql 3306)
+                if [ $? -eq 0 ]; then
+                  echo "DB is UP"
+                  break
+                fi
+                echo "DB is not yet reachable;sleep for 10s before retry"
+                sleep 10
+              done
+      containers:
+        - name: jhgate-app
+          image: jhipsterrepository/jhgate
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.jhipsternamespace.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_LIQUIBASE_URL
+              value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+              value: "x-request-id,x-ot-span-context"
+            - name: JAVA_OPTS
+              value: " -Xmx256m -Xms256m"
+            - name: SERVER_SHUTDOWN
+              value: graceful
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /management/health/readiness
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /management/health/liveness
+              port: http
+            initialDelaySeconds: 120
+",
+    "stateCleared": "modified",
+  },
+  "jhgate-k8s/jhgate-mysql.yml": {
+    "contents": "apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jhgate-mysql-pvc
+  namespace: jhipsternamespace
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jhgate-mysql
+  namespace: jhipsternamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jhgate-mysql
+  template:
+    metadata:
+      labels:
+        app: jhgate-mysql
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: jhgate-mysql-pvc
+      containers:
+        - name: mysql
+          image: mysql-placeholder
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: jhgate
+          args:
+            - --lower_case_table_names=1
+            - --skip-ssl
+            - --character_set_server=utf8mb4
+            - --explicit_defaults_for_timestamp
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql/
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhgate-mysql
+  namespace: jhipsternamespace
+spec:
+  selector:
+    app: jhgate-mysql
+  ports:
+    - port: 3306
+",
+    "stateCleared": "modified",
+  },
+  "jhgate-k8s/jhgate-service.yml": {
+    "contents": "apiVersion: v1
+kind: Service
+metadata:
+  name: jhgate
+  namespace: jhipsternamespace
+  labels:
+    app: jhgate
+spec:
+  selector:
+    app: jhgate
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 8080
+",
+    "stateCleared": "modified",
+  },
+  "kubectl-apply.sh": {
+    "contents": "#!/bin/bash
+# Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
+# Usage: bash kubectl-apply.sh
+
+usage(){
+ cat << EOF
+
+ Usage: $0 -f
+ Description: To apply k8s manifests using the default \\\`kubectl apply -f\\\` command
+[OR]
+ Usage: $0 -k
+ Description: To apply k8s manifests using the kustomize \\\`kubectl apply -k\\\` command
+[OR]
+ Usage: $0 -s
+ Description: To apply k8s manifests using the skaffold binary \\\`skaffold run\\\` command
+
+EOF
+exit 0
+}
+
+logSummary() {
+    echo ""
+}
+
+default() {
+    suffix=k8s
+    kubectl apply -f namespace.yml
+    kubectl apply -f registry-\${suffix}/
+    kubectl apply -f jhgate-\${suffix}/
+
+}
+
+kustomize() {
+    kubectl apply -k ./
+}
+
+scaffold() {
+    // this will build the source and apply the manifests the K8s target. To turn the working directory
+    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    skaffold run
+}
+
+[[ "$@" =~ ^-[fks]{1}$ ]]  || usage;
+
+while getopts ":fks" opt; do
+    case \${opt} in
+    f ) echo "Applying default \\\`kubectl apply -f\\\`"; default ;;
+    k ) echo "Applying kustomize \\\`kubectl apply -k\\\`"; kustomize ;;
+    s ) echo "Applying using skaffold \\\`skaffold run\\\`"; scaffold ;;
+    \\? | * ) usage ;;
+    esac
+done
+
+logSummary
+",
+    "stateCleared": "modified",
+  },
+  "kustomization.yml": {
+    "contents": "commonLabels:
+  app.kubernetes.io/genereted-by: JHipster
+
+namespace: jhipsternamespace
+
+resources:
+  - namespace.yml
+  # Individual apps
+  - jhgate-k8s/jhgate-deployment.yml
+  - jhgate-k8s/jhgate-service.yml
+  - jhgate-k8s/jhgate-mysql.yml
+  # service discovery eureka/consul
+  - registry-k8s/jhipster-registry.yml
+  - registry-k8s/application-configmap.yml
+
+patchesJson6902:
+",
+    "stateCleared": "modified",
+  },
+  "namespace.yml": {
+    "contents": "apiVersion: v1
+kind: Namespace
+metadata:
+  name: jhipsternamespace
+",
+    "stateCleared": "modified",
+  },
+  "registry-k8s/application-configmap.yml": {
+    "contents": "apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-config
+  namespace: jhipsternamespace
+#common configuration shared between all applications
+data:
+  application.yml: |-
+    configserver:
+      name:  JHipster Registry
+      status: Connected to the JHipster Registry running in Kubernetes
+    eureka:
+      client:
+        initial-instance-info-replication-interval-seconds: 15
+        instance-info-replication-interval-seconds: 15
+        registry-fetch-interval-seconds: 15
+        fetch-registry: true
+        register-with-eureka: true
+        eureka-service-url-poll-interval-seconds: 15
+      instance:
+        lease-renewal-interval-in-seconds: 10
+        registry-default-open-for-traffic-count: 0
+    jhipster:
+      security:
+        authentication:
+          jwt:
+            base64-secret: SECRET--50
+  # app specific configuration
+  jhipster-registry.yml: |-
+    eureka:
+      client:
+        service-url:
+          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "registry-k8s/jhipster-registry.yml": {
+    "contents": "# JHipster Registry HA cluster
+#
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8761 by running :
+#   kubectl port-forward jhipster-registry-0 8761
+#
+# To scale your JHipster Registry cluster :
+#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
+#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
+#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
+#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
+#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-secret
+  namespace: jhipsternamespace
+type: Opaque
+data:
+  registry-admin-password: bWVldHVw # base64 encoded "meetup"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry
+  namespace: jhipsternamespace
+  labels:
+    app: jhipster-registry
+spec:
+  ports:
+    - port: 8761
+      name: http
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    app: jhipster-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jhipster-registry
+  namespace: jhipsternamespace
+spec:
+  # added to circumvent kustomize bug
+  volumeClaimTemplates: []
+  serviceName: jhipster-registry
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jhipster-registry
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: jhipster-registry
+        version: "1.0"
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: jhipster-registry
+          image: jhipster-registry-placeholder
+          ports:
+            - containerPort: 8761
+          env:
+            # StatefulSet specific configuration
+            # Registry configuration
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod,k8s
+            - name: SPRING_SECURITY_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+              value: native
+            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+              value: file:./central-config
+            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
+              value: "15"
+            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
+              value: "30"
+            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+              value: "15000"
+            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+              value: "15000"
+            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+              value: "3"
+            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
+              value: "false"
+            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
+              value: "2000"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "true"
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: "true"
+            - name: K8S_CONFIG_PATH
+              value: "/central-config/"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /central-config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "skaffold.yml": {
+    "contents": "apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+    - image: jhipsterrepository/jhgate
+      context: ./13-gateway-eureka
+      jib: {}
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:latest"
+deploy:
+  kustomize: {}
+",
+    "stateCleared": "modified",
+  },
+}
+`;

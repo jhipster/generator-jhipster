@@ -71,8 +71,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -114,8 +114,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -195,8 +195,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -237,8 +237,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('no prometheus files', () => {
       runResult.assertNoFile(expectedFiles.prometheus);
@@ -282,8 +282,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('no prometheus files', () => {
       runResult.assertNoFile(expectedFiles.prometheus);
@@ -331,8 +331,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected prometheus files', () => {
       runResult.assertFile(expectedFiles.prometheus);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -373,8 +373,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -415,8 +415,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -457,8 +457,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -543,8 +543,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -585,8 +585,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -615,6 +615,7 @@ describe('generator - Docker Compose', () => {
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
+          serviceDiscoveryType: 'eureka',
           directoryPath: './',
           chosenApps,
           clusteredDbApps: ['10-couchbase'],
@@ -630,6 +631,9 @@ describe('generator - Docker Compose', () => {
     it('creates jhipster-registry content', () => {
       runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
+    // it('creates consul content', () => {
+    //   runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
+    // });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
       runResult.assertNoFileContent('docker-compose.yml', /external_links:/);

@@ -90,7 +90,7 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('13-gateway-eureka', dir);
         })
