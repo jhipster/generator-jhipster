@@ -24,7 +24,6 @@ const writeCallbacks = (filePath, ...callbacks) => {
 
 export const deploymentTestSamples = {
   '01-gateway': {
-    applicationIndex: 0,
     applicationType: 'gateway',
     baseName: 'jhgate',
     databaseType: 'sql',
@@ -33,7 +32,6 @@ export const deploymentTestSamples = {
     serverPort: 8080,
   },
   '02-mysql': {
-    applicationIndex: 1,
     applicationType: 'microservice',
     baseName: 'msmysql',
     databaseType: 'sql',
@@ -72,7 +70,6 @@ export const deploymentTestSamples = {
     serverPort: 8081,
   },
   '08-monolith': {
-    applicationIndex: 0,
     applicationType: 'monolith',
     baseName: 'sampleMysql',
     databaseType: 'sql',
@@ -107,7 +104,6 @@ export const deploymentTestSamples = {
     serverPort: 8081,
   },
   '12-oracle': {
-    applicationIndex: 0,
     applicationType: 'monolith',
     baseName: 'oracle-mono',
     databaseType: 'sql',

@@ -216,12 +216,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir, { config: { authenticationType: 'oauth2' } });
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway'],
