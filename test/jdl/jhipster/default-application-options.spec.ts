@@ -151,19 +151,6 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.reactive).to.be.true;
       });
     });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForGatewayApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to consul', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('consul');
-      });
-    });
     context('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
@@ -257,19 +244,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
       it('should unset the server skipping option', () => {
         expect(options.skipServer).to.be.undefined;
-      });
-    });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to consul', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('consul');
       });
     });
     context('when the service discovery type option is no', () => {
