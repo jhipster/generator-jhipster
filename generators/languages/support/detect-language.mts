@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import osLocale from 'os-locale';
+import { osLocaleSync } from 'os-locale';
 import { findLanguageForTag, Language, supportedLanguages } from './languages.mjs';
 
 const detectLanguage = (languages: ReadonlyArray<Language> = supportedLanguages) => {
-  const locale = osLocale.sync();
+  const locale = osLocaleSync();
   if (locale) {
     const language = findLanguageForTag(locale.toLowerCase(), languages) ?? findLanguageForTag(locale.split('-')[0], languages);
     if (language) {
