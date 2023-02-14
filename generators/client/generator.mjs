@@ -42,7 +42,7 @@ const { CYPRESS } = testFrameworkTypes;
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This adds support for a `--auth` flag
     this.option('auth', {
@@ -76,20 +76,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
     }
-  }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {

@@ -1,10 +1,10 @@
-<%_ if (fieldsContainBlob || paginationInfiniteScroll) { -%>
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { -%>
 import { mixins } from 'vue-class-component';
 <%_ } -%>
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
-<% if (fieldsContainBlob || paginationInfiniteScroll) { %>
+<% if (anyFieldIsBlobDerived || paginationInfiniteScroll) { %>
 import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
@@ -13,7 +13,7 @@ import AlertService from '@/shared/alert/alert.service';
 @Component({
   mixins: [Vue2Filters.mixin]
 })
-export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || paginationInfiniteScroll) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+export default class <%= entityAngularName %> extends <% if (anyFieldIsBlobDerived || paginationInfiniteScroll) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   @Inject('alertService') private alertService: () => AlertService;
 

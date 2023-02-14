@@ -18,9 +18,10 @@
  */
 import chalk from 'chalk';
 import shelljs from 'shelljs';
+
 import { loadConfigs, setClusteredApps } from './docker-base.mjs';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
-import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
+import { convertSecretToBase64 } from '../base/support/index.mjs';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -317,7 +318,7 @@ async function askForAdminPassword() {
 
   const props = await this.prompt(prompts);
   this.adminPassword = props.adminPassword;
-  this.adminPasswordBase64 = createBase64Secret.call(this, this.adminPassword);
+  this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
 }
 
 /**

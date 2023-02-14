@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - init help should print expected information 1`] = `
+"Usage: jhipster init [options]
+
+Init project (alpha)
+
+Options:
+  --auto-crlf            Detect line endings
+  --skip-checks          Check the status of the required tools
+  --skip-commit-hook     Skip adding husky commit hooks
+  --skip-cache           Do not remember prompt answers (default: false)
+  --skip-install         Do not automatically install dependencies (default: false)
+  --force-install        Fail on install dependencies error (default: false)
+  --ask-answered         Show prompts for already configured options (default: false)
+  --with-generated-flag  Add a GeneratedByJHipster annotation to all generated java classes and interfaces
+  --skip-prompts         Skip prompts
+  --base-name <value>    Application base name
+  -h, --help             display help for command
+"
+`;
+
 exports[`generator - init with default config should write files and match snapshot 1`] = `
 {
   ".editorconfig": {

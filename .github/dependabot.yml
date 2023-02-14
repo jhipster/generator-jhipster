@@ -24,23 +24,21 @@ updates:
     rebase-strategy: 'auto'
     schedule:
       interval: 'weekly'
+      # Before cache workflow
+      time: '23:00'
     open-pull-requests-limit: 10
     labels:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
       - 'skip-changelog'
-    ignore:
-      # ESM only version
-      - dependency-name: 'os-locale'
-        versions: ['>=6']
-      # https://github.com/jhipster/generator-jhipster/issues/20782
-      - dependency-name: 'prettier'
 
   - package-ecosystem: 'npm'
     directory: '/generators/angular/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
+      # Angular workflow is quite big. Give at least 2h interval.
+      time: '03:00'
     open-pull-requests-limit: 10
     versioning-strategy: increase
     labels:
@@ -57,6 +55,7 @@ updates:
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
+      time: '00:00'
     open-pull-requests-limit: 10
     versioning-strategy: increase
     labels:
@@ -68,6 +67,7 @@ updates:
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
+      time: '07:00'
     open-pull-requests-limit: 10
     versioning-strategy: increase
     labels:
@@ -80,6 +80,7 @@ updates:
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
+      time: '01:00'
     open-pull-requests-limit: 10
     versioning-strategy: increase
     labels:
@@ -96,6 +97,7 @@ updates:
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
+      time: '02:00'
     open-pull-requests-limit: 10
     versioning-strategy: increase
     labels:
@@ -117,6 +119,7 @@ updates:
     directory: '/generators/server/templates/'
     schedule:
       interval: 'daily'
+      time: '00:20'
     open-pull-requests-limit: 5
     labels:
       - 'theme: dependencies'
@@ -127,6 +130,8 @@ updates:
     directory: '/generators/server/templates/'
     schedule:
       interval: 'daily'
+      # Maven doesn't have many PRs, but it triggers every client workflow. Let 2h of interval.
+      time: '05:00'
     open-pull-requests-limit: 5
     labels:
       - 'theme: dependencies'
@@ -137,6 +142,7 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+      time: '00:30'
     open-pull-requests-limit: 10
     labels:
       - 'theme: github_actions'

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { getJavadoc as javadoc } from '../../server/support/doc-formatting.mjs';
+import { formatDocAsJavaDoc } from '../../server/support/doc.mjs';
 
 const doesTheEnumValueHaveACustomValue = enumValue => {
   return enumValue.includes('(');
@@ -47,7 +47,7 @@ const getEnums = (enums, customValuesState, comments) => {
     return enums.map(enumValue => ({
       name: enumValue,
       value: enumValue,
-      comment: comments && comments[enumValue] && javadoc(comments[enumValue], 4),
+      comment: comments && comments[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
     }));
   }
   return enums.map(enumValue => {
@@ -55,7 +55,7 @@ const getEnums = (enums, customValuesState, comments) => {
       return {
         name: enumValue.trim(),
         value: enumValue.trim(),
-        comment: comments && comments[enumValue] && javadoc(comments[enumValue], 4),
+        comment: comments && comments[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
       };
     }
     // eslint-disable-next-line no-unused-vars
@@ -63,7 +63,7 @@ const getEnums = (enums, customValuesState, comments) => {
     return {
       name: matched[1],
       value: matched[2],
-      comment: comments && comments[matched[1]] && javadoc(comments[matched[1]], 4),
+      comment: comments && comments[matched[1]] && formatDocAsJavaDoc(comments[matched[1]], 4),
     };
   });
 };
@@ -90,7 +90,7 @@ export const getEnumInfo = (field, clientRootFolder) => {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: field.fieldType,
-    javadoc: field.fieldTypeJavadoc && javadoc(field.fieldTypeJavadoc),
+    javadoc: field.fieldTypeJavadoc && formatDocAsJavaDoc(field.fieldTypeJavadoc),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,

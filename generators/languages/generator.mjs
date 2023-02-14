@@ -50,7 +50,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   languagesToApply;
 
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     this.option('skip-prompts', {
       desc: 'Skip prompts',
@@ -75,12 +75,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     this.option('skip-server', {
       desc: 'Skip installing server files',
       type: Boolean,
-    });
-
-    this.option('ignore-needles-error', {
-      desc: 'Ignore needles failures',
-      type: Boolean,
-      hide: true,
     });
 
     this.option('regenerate', {
@@ -143,7 +137,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       },
       exportControl({ control }) {
         control.supportedLanguages = this.supportedLanguages;
-        control.ignoreNeedlesError = this.options.ignoreNeedlesError;
       },
     };
   }

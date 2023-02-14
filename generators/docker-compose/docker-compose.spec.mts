@@ -3,8 +3,8 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
 import applicationTypes from '../../jdl/jhipster/application-types.js';
 import { deploymentTestSamples } from '../../test/support/mock-config.mjs';
-import { getGenerator } from '../../test/support/index.mjs';
-import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { GENERATOR_WORKSPACES, GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import { skipPrettierHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
@@ -43,7 +43,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -54,9 +54,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -86,7 +86,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -97,9 +97,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -129,7 +129,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -140,9 +140,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: '.',
           chosenApps,
@@ -167,7 +167,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -178,9 +178,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -210,7 +210,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -221,9 +221,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -255,7 +255,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -266,9 +266,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -300,7 +300,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -311,9 +311,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -346,7 +346,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -357,9 +357,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -388,7 +388,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -399,9 +399,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -430,7 +430,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '05-cassandra'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -441,9 +441,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -472,7 +472,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['08-monolith'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -483,9 +483,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
           chosenApps,
@@ -511,7 +511,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -522,9 +522,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -558,7 +558,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -569,9 +569,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -600,7 +600,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '10-couchbase'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -611,9 +611,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps,
@@ -642,7 +642,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['12-oracle'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('workspaces'))
+        .createJHipster(GENERATOR_WORKSPACES)
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           ...workspacesOptions,
@@ -653,9 +653,9 @@ describe('generator - Docker Compose', () => {
         .run();
 
       runResult = await runResult
-        .create(getGenerator('docker-compose'))
+        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
           chosenApps,

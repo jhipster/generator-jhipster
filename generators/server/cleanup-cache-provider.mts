@@ -16,18 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../base/generator.mjs';
-import { type ApplicationTaskParam } from '../base-application/tasks.mjs';
-import { type CacheProviderApplication, type SpringBootApplication } from './types.mjs';
+import type BaseGenerator from '../base/index.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(
-  this: BaseGenerator,
-  { application }: ApplicationTaskParam<CacheProviderApplication & SpringBootApplication>
-) {
+export default function cleanupOldServerFilesTask(this: BaseGenerator, { application }: any) {
   if (application.cacheProviderHazelcast) {
     if (this.isJhipsterVersionLessThan('3.12.0')) {
       this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);

@@ -1,15 +1,15 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
-import ClientGenerator from '../../generators/client/index.mjs';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
+import ReactGenerator from '../../generators/react/index.mjs';
 
 const { REACT } = clientFrameworkTypes;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockBlueprintSubGen: any = class extends ClientGenerator {
+const mockBlueprintSubGen: any = class extends ReactGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
@@ -34,12 +34,12 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   }
 };
 
-describe('needle API React: JHipster client generator with blueprint', () => {
+describe('needle API React: JHipster react generator with blueprint', () => {
   let result;
 
   before(async () => {
     result = await helpers
-      .run(getGenerator('client'))
+      .run(getGenerator('react'))
       .withOptions({
         build: 'maven',
         auth: 'jwt',
@@ -48,8 +48,8 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         blueprint: 'myblueprint',
         skipChecks: true,
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .withPrompts({
+      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:react']])
+      .withAnswers({
         baseName: 'jhipster',
         clientFramework: REACT,
         enableTranslation: true,

@@ -17,41 +17,28 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import lodash from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
-import { stringify } from '../../utils/index.mjs';
 import {
+  stringifyApplicationData,
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
-  preparePostEntityServerDerivedProperties,
-} from '../../utils/entity.mjs';
-import { fieldIsEnum } from '../base-application/support/index.mjs';
+} from '../base-application/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
-import type { ClientServerApplication } from '../common/types.mjs';
-
-const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
-const { sortedUniq, intersection } = lodash;
-
-const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
-const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
-const { IMAGE, TEXT } = BlobTypes;
+import type { GeneratorDefinition as ServerGeneratorDefinition } from '../common/index.mjs';
+import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<ClientServerApplication>}
- */
-export default class extends BaseApplicationGenerator<ClientServerApplication> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) return;
 
@@ -72,9 +59,9 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         }
 
         let prettierExtensions = 'md,json,yml,html';
-        if (!application.applicationTypeAny) {
+        if (application.clientFrameworkAny) {
           prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
-          if (application.applicationTypeVue) {
+          if (application.clientFrameworkVue) {
             prettierExtensions = `${prettierExtensions},vue`;
           }
           if (application.clientFrameworkSvelte) {
@@ -103,49 +90,49 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         entityConfig.fields.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
-          assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-          assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+          assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+          assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
 
           if (fieldValidateRules !== undefined) {
             assert(
               Array.isArray(fieldValidateRules),
-              `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             fieldValidateRules.forEach(fieldValidateRule => {
               assert(
                 SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule),
-                `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+                `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringifyApplicationData(
                   field
                 )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
               );
             });
             assert(
               !fieldValidateRules.includes(MAX) || field.fieldValidateRulesMax !== undefined,
-              `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MIN) || field.fieldValidateRulesMin !== undefined,
-              `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MAXLENGTH) || field.fieldValidateRulesMaxlength !== undefined,
-              `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MINLENGTH) || field.fieldValidateRulesMinlength !== undefined,
-              `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MAXBYTES) || field.fieldValidateRulesMaxbytes !== undefined,
-              `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(MINBYTES) || field.fieldValidateRulesMinbytes !== undefined,
-              `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
             assert(
               !fieldValidateRules.includes(PATTERN) || field.fieldValidateRulesPattern !== undefined,
-              `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
+              `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
             );
           }
         });
@@ -155,18 +142,21 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         entityConfig.relationships.forEach((relationship: any) => {
           const { otherEntityName, relationshipType } = relationship;
 
-          assert(otherEntityName, `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+          assert(
+            otherEntityName,
+            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+          );
           assert(
             relationshipType,
-            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
+            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
           );
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = otherEntityName;
             this.logger.warn(
-              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
-                relationship.otherEntityName
-              } as fallback`
+              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
+                relationship
+              )}, using ${relationship.otherEntityName} as fallback`
             );
           }
         });
@@ -199,68 +189,6 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         if (!entity.skipServer) {
           preparePostEntityServerDerivedProperties(entity);
         }
-        const { fields } = entity;
-        const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
-
-        // TODO move to react generator
-        entity.fieldsIsReactAvField = intersection(fieldsType, [INSTANT, ZONED_DATE_TIME, BOOLEAN]).length > 0;
-
-        entity.i18nToLoad = fields.filter(({ fieldType }) => fieldIsEnum(fieldType)).map(({ enumInstance }) => enumInstance);
-
-        // TODO move to server generator
-        entity.haveFieldWithJavadoc = entity.fields.some(({ javadoc }) => javadoc);
-
-        entity.fieldsContainZonedDateTime = fieldsType.includes(ZONED_DATE_TIME);
-        entity.fieldsContainInstant = fieldsType.includes(INSTANT);
-        entity.fieldsContainDuration = fieldsType.includes(DURATION);
-        entity.fieldsContainLocalDate = fieldsType.includes(LOCAL_DATE);
-        entity.fieldsContainBigDecimal = fieldsType.includes(BIG_DECIMAL);
-        entity.fieldsContainUUID = fieldsType.includes(UUID);
-        entity.fieldsContainDate = intersection(fieldsType, [ZONED_DATE_TIME, INSTANT, LOCAL_DATE]).length > 0;
-        entity.fieldsContainTimed = intersection(fieldsType, [ZONED_DATE_TIME, INSTANT]).length > 0;
-
-        entity.fieldsContainBlob = intersection(fieldsType, [BYTES, BYTE_BUFFER]).length > 0;
-        if (entity.fieldsContainBlob) {
-          const blobFields = fields.filter(({ fieldType }) => [BYTES, BYTE_BUFFER].includes(fieldType));
-          entity.blobFields = blobFields;
-          const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
-          entity.fieldsContainImageBlob = blobFieldsContentType.includes(IMAGE);
-          entity.fieldsContainBlobOrImage = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
-          entity.fieldsContainTextBlob = blobFieldsContentType.includes(TEXT);
-        }
-
-        entity.validation = entity.validation || fields.some(({ fieldValidate }) => fieldValidate);
-      },
-
-      prepareEntityRelationshipsDerivedProperties({ entity }) {
-        const { relationships } = entity;
-        const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
-        entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
-        entity.fieldsContainOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => ownerSide);
-
-        entity.fieldsContainManyToOne = relationships.some(({ relationshipType }) => relationshipType === 'many-to-one');
-        entity.fieldsContainOneToMany = relationships.some(({ relationshipType }) => relationshipType === 'one-to-many');
-
-        entity.fieldsContainOwnerManyToMany = relationships.some(
-          ({ relationshipType, ownerSide }) => ownerSide && relationshipType === 'many-to-many'
-        );
-
-        entity.fieldsContainEmbedded = relationships.some(({ otherEntityIsEmbedded }) => otherEntityIsEmbedded);
-        entity.validation = entity.validation || relationships.some(({ relationshipValidate }) => relationshipValidate);
-
-        const relationshipsByType = relationships
-          .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
-          .reduce((relationshipsByType: any, [type, relationship]) => {
-            if (!relationshipsByType[type]) {
-              relationshipsByType[type] = [relationship];
-            } else {
-              relationshipsByType[type].push(relationship);
-            }
-            return relationshipsByType;
-          }, {});
-
-        entity.differentTypes = Object.keys(relationshipsByType);
-        entity.differentRelationships = relationshipsByType;
       },
     });
   }

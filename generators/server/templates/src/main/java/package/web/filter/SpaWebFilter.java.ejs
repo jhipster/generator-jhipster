@@ -18,28 +18,41 @@
 -%>
 package <%= packageName %>.web.filter;
 
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
-import reactor.core.publisher.Mono;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class SpaWebFilter implements WebFilter {
+import java.io.IOException;
+
+public class SpaWebFilter extends OncePerRequestFilter {
 
     /**
      * Forwards any unmapped paths (except those containing a period) to the client {@code index.html}.
      */
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String path = exchange.getRequest().getURI().getPath();
-        if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login") && !path.startsWith("/oauth2")<% } %>
-<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
-            && !path.startsWith("/services") && !path.startsWith("/v3/api-docs")
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
+        String path = request.getRequestURI();
+        if (
+            !path.startsWith("/api") &&
+            !path.startsWith("/management") &&
+            !path.startsWith("/v3/api-docs") &&
+<%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>
+            !path.startsWith("/login") &&
+            !path.startsWith("/oauth2") &&
 <%_ } _%>
-            && path.matches("[^\\\\.]*")) {
-            return chain.filter(
-                exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build()
-                ).build());
+<%_ if (communicationSpringWebsocket) { _%>
+            !path.startsWith("/websocket") &&
+<%_ } _%>
+            !path.contains(".") &&
+            path.matches("/(.*)")
+        ) {
+            request.getRequestDispatcher("/index.html").forward(request, response);
+            return;
         }
-        return chain.filter(exchange);
+
+        filterChain.doFilter(request, response);
     }
 }

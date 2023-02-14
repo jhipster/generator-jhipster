@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import memFsEditor from 'mem-fs-editor';
 import environmentTransfrom from 'yeoman-environment/transform';
 import { transform } from 'p-transform';
 import { stat } from 'fs/promises';
@@ -30,12 +29,14 @@ import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
-import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
-import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
+import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
+import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
-import { normalizeLineEndings } from '../base/utils.mjs';
+import { normalizeLineEndings } from '../base/support/index.mjs';
+import command from './command.mjs';
 
-const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
+const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
+const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
@@ -45,48 +46,26 @@ const {
   patternSpy,
 } = environmentTransfrom;
 
-const { State } = memFsEditor as any;
-const { hasState, setModifiedFileState } = State;
-
-const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
+const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
 export default class BootstrapGenerator extends BaseGenerator {
-  static TRANSFORM = TRANSFORM_PRIORITY;
+  static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
+  upgradeCommand!: boolean;
+
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', uniqueGlobally: true, customCommitTask: true, ...features });
+    super(args, options, { uniqueGlobally: true, customCommitTask: true, ...features });
 
     if (this.options.help) return;
 
-    if (!this.options.upgradeCommand) {
-      const { commandName } = this.options;
-      this.options.upgradeCommand = commandName === GENERATOR_UPGRADE;
-    }
+    const { commandName } = this.options;
+    this.upgradeCommand = commandName === GENERATOR_UPGRADE;
   }
 
   _postConstruct() {
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
-    }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      (this.config as any).set(this.options.localConfig);
-    }
-
     if (this.options.help) return;
 
     this.loadStoredAppOptions();
@@ -98,19 +77,31 @@ export default class BootstrapGenerator extends BaseGenerator {
     this.env.options.nodePackageManager = 'npm';
   }
 
-  get transform() {
-    return this.asWritingTaskGroup({
-      queueTransform() {
-        this.queueMultistepTransform();
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
       },
     });
   }
 
-  get [TRANSFORM_PRIORITY]() {
-    return this.transform;
+  get [BaseGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get preConflicts(): PreConflictsTaskGroup<this> {
+  get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
+    return {
+      queueTransform() {
+        this.queueMultistepTransform();
+      },
+    };
+  }
+
+  get [MULTISTEP_TRANSFORM_PRIORITY]() {
+    return this.multistepTransform;
+  }
+
+  get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
       async commitPrettierConfig() {
         if (this.options.skipCommit) {
@@ -149,8 +140,9 @@ export default class BootstrapGenerator extends BaseGenerator {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return env.applyTransforms([new MultiStepTransform() as unknown as Transform], { stream } as any);
       },
-      taskName: 'jhipster:transformStream',
-      queueName: 'transform',
+      taskName: MULTISTEP_TRANSFORM_QUEUE,
+      queueName: MULTISTEP_TRANSFORM_QUEUE,
+      once: true,
     });
   }
 
@@ -187,17 +179,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
     const env: any = this.env;
 
-    // JDL writes directly to disk, set the file as modified so prettier will be applied
-    const { upgradeCommand, ignoreErrors } = this.options;
-    if (!upgradeCommand) {
-      stream = stream.pipe(
-        patternSpy((file: any) => {
-          if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
-            setModifiedFileState(file);
-          }
-        }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
-      );
-    }
+    const { ignoreErrors } = this.options;
 
     const conflicterStatus = {
       fileActions: [
@@ -216,7 +198,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     const createApplyPrettierTransform = () => {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      const transformOptions = { ignoreErrors: ignoreErrors || upgradeCommand, extensions: PRETTIER_EXTENSIONS };
+      const transformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
       return prettierTransform(prettierOptions, this, transformOptions);
     };
 

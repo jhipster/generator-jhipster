@@ -25,13 +25,13 @@ _%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<%_ if (fieldsContainDate) { _%>
+<%_ if (anyFieldIsDateDerived) { _%>
 import { map } from 'rxjs/operators';
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
 import { isPresent } from 'app/core/util/operators';
-<%_ if (fieldsContainLocalDate) { _%>
+<%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -43,8 +43,8 @@ import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= e
 
 export type PartialUpdate<%= entityAngularName %> = Partial<I<%= entityAngularName %>> & Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>;
 
-<%_ const entityRestName = fieldsContainDate ? `Rest${entityAngularName}` : `I${entityAngularName}`; _%>
-<%_ if (fieldsContainDate) { _%>
+<%_ const entityRestName = anyFieldIsDateDerived ? `Rest${entityAngularName}` : `I${entityAngularName}`; _%>
+<%_ if (anyFieldIsDateDerived) { _%>
 type RestOf<T extends I<%= entityAngularName %> | New<%= entityAngularName %>> =
   Omit<T, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> &
   {
@@ -74,45 +74,45 @@ export class <%= entityAngularName %>Service {
 
 <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: New<%= entityAngularName %>): Observable<EntityResponseType> {
-    <%_ if (fieldsContainDate) { _%>
+    <%_ if (anyFieldIsDateDerived) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.post<<%= entityRestName %>>(this.resourceUrl,
-                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                <% if (anyFieldIsDateDerived) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
-        <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
+        <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
-    <%_ if (fieldsContainDate) { _%>
+    <%_ if (anyFieldIsDateDerived) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.put<<%= entityRestName %>>(`${this.resourceUrl}/${this.get<%= entityAngularName %>Identifier(<%= entityInstance %>)}`,
-                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                <% if (anyFieldIsDateDerived) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
-        <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
+        <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 
     partialUpdate(<%= entityInstance %>: PartialUpdate<%= entityAngularName %>): Observable<EntityResponseType> {
-    <%_ if (fieldsContainDate) { _%>
+    <%_ if (anyFieldIsDateDerived) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.patch<<%= entityRestName %>>(`${this.resourceUrl}/${this.get<%= entityAngularName %>Identifier(<%= entityInstance %>)}`,
-                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                <% if (anyFieldIsDateDerived) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
-        <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
+        <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 <%_ } _%>
 
     find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
         return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-            <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
+            <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<<%= entityRestName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
-            <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseArrayFromServer(res)))<% } %>;
+            <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseArrayFromServer(res)))<% } %>;
     }
 
 <%_ if (!readOnly) { _%>
@@ -125,7 +125,7 @@ export class <%= entityAngularName %>Service {
     search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<<%= entityRestName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-            <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseArrayFromServer(res)))<% } %>;
+            <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseArrayFromServer(res)))<% } %>;
     }
 <%_ } _%>
 
@@ -154,7 +154,7 @@ export class <%= entityAngularName %>Service {
         return <%= entityInstance %>Collection;
     }
 
-<%_ if (fieldsContainDate) { _%>
+<%_ if (anyFieldIsDateDerived) { _%>
     protected convertDateFromClient<T extends I<%= entityAngularName %> | New<%= entityAngularName %> | PartialUpdate<%= entityAngularName %>>(<%= entityInstance %>: T): RestOf<T> {
         return {
             ...<%= entityInstance %>,

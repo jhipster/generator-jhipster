@@ -131,10 +131,9 @@ runs:
           echo "::endgroup::"
         fi
 
-        MATRIX=$(cat matrix.json)
+        echo 'matrix<<EOF' >> $GITHUB_OUTPUT
+        cat matrix.json >> $GITHUB_OUTPUT
+        echo '' >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
         rm matrix.json
-        MATRIX="${MATRIX//'%'/'%25'}"
-        MATRIX="${MATRIX//$'\n'/'%0A'}"
-        MATRIX="${MATRIX//$'\r'/'%0D'}"
-        echo "::set-output name=matrix::$MATRIX"
       shell: bash

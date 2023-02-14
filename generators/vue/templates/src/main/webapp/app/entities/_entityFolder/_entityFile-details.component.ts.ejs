@@ -1,5 +1,5 @@
-import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
-<% if (fieldsContainBlob) { %>
+import { Component,<% if (!anyFieldIsBlobDerived) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
+<% if (anyFieldIsBlobDerived) { %>
 import { mixins } from 'vue-class-component';
 import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
@@ -8,7 +8,7 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import AlertService from '@/shared/alert/alert.service';
 
 @Component
-export default class <%= entityAngularName %>Details extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+export default class <%= entityAngularName %>Details extends <% if (anyFieldIsBlobDerived) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   @Inject('alertService') private alertService: () => AlertService;
 

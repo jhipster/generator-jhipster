@@ -2585,6 +2585,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
@@ -2592,9 +2595,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -2783,6 +2783,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -2790,9 +2793,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -3402,6 +3402,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
@@ -3409,9 +3412,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -3561,13 +3561,13 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -4255,13 +4255,13 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -4438,13 +4438,13 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {

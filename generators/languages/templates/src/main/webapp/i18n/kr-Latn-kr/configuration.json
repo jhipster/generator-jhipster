@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Sazlamalar",
+        "filter": "Filter (prefiks boyinsha)",
+        "table": {
+            "prefix": "Prefiks",
+            "properties": "Xarakteristikalar"
+        }
+    }
+}

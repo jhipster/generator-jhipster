@@ -1,9 +1,9 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import createMockedConfig from './support/mock-config.mjs';
-import { getGenerator } from './support/index.mjs';
+import { basicHelpers as helpers } from './support/index.mjs';
+import { GENERATOR_KUBERNETES_KNATIVE } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
   eurekaregistry: ['./registry-knative/jhipster-registry.yml', './registry-knative/application-configmap.yml'],
@@ -104,12 +104,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway'],
@@ -144,13 +144,13 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway', '02-mysql'],
@@ -185,12 +185,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['02-mysql'],
@@ -225,12 +225,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway'],
@@ -263,13 +263,13 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
             createMockedConfig('03-psql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['02-mysql', '03-psql'],
@@ -307,7 +307,7 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
@@ -317,7 +317,7 @@ describe('generator - Knative', () => {
             createMockedConfig('11-mssql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
@@ -364,12 +364,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['02-mysql'],
@@ -406,12 +406,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway'],
@@ -448,12 +448,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway'],
@@ -488,13 +488,13 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway', '02-mysql'],
@@ -531,12 +531,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['02-mysql'],
@@ -573,12 +573,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway'],
@@ -618,13 +618,13 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
             createMockedConfig('03-psql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['02-mysql', '03-psql'],
@@ -666,7 +666,7 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
@@ -675,7 +675,7 @@ describe('generator - Knative', () => {
             createMockedConfig('07-mariadb', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
@@ -726,12 +726,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['02-mysql'],
@@ -771,12 +771,12 @@ describe('generator - Knative', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(getGenerator('kubernetes-knative'))
+          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
           .withOptions({ skipChecks: true, reproducibleTests: true })
-          .withPrompts({
+          .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
             chosenApps: ['01-gateway'],

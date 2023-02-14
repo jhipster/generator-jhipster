@@ -29,7 +29,7 @@ import BaseGenerator from '../base/index.mjs';
 import { upgradeFilesTask as upgradeLanguagesFilesTask } from '../languages/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
-import { parseBluePrints } from '../../utils/blueprint.mjs';
+import { parseBluePrints } from '../base/internal/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 
 /* Constants used throughout */
@@ -116,9 +116,6 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.skipInstall = this.options.skipInstall;
     this.silent = this.options.silent;
     this.skipChecks = this.options.skipChecks;
-
-    // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
-    this.jhipsterOldVersion = this.config.get('jhipsterVersion');
 
     if (!this.config.existed) {
       throw new Error(

@@ -12,15 +12,12 @@ const __dirname = dirname(__filename);
 
 const generatorPath = join(__dirname, 'index.mjs');
 
-const createClientProject = async options =>
-  basicHelpers
-    .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
-    .withOptions({
-      skipInstall: true,
-      defaults: true,
-      ...options,
-    })
-    .run();
+const createClientProject = options =>
+  basicHelpers.run('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv }).withOptions({
+    skipInstall: true,
+    defaults: true,
+    ...options,
+  });
 
 const containsLanguageFiles = languageValue => {
   it(`creates expected files for ${languageValue}`, () => {
@@ -106,7 +103,7 @@ describe('generator - languages', () => {
           helpers
             .create(generatorPath)
             .withOptions({ ignoreNeedlesError: true })
-            .withPrompts({
+            .withAnswers({
               enableTranslation: true,
               nativeLanguage: language.languageTag,
               languages: [language.languageTag],
@@ -151,7 +148,7 @@ describe('generator - languages', () => {
   context('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
       before(() =>
-        helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withPrompts({
+        helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withAnswers({
           enableTranslation: true,
           nativeLanguage: 'fr',
           languages: [],
@@ -195,7 +192,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withOptions({ ignoreNeedlesError: true })
-          .withPrompts({
+          .withAnswers({
             enableTranslation: true,
             nativeLanguage: 'fr',
             languages: ['en'],
@@ -233,7 +230,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withOptions({ ignoreNeedlesError: true })
-          .withPrompts({
+          .withAnswers({
             enableTranslation: true,
             nativeLanguage: 'fr',
             languages: ['fr', 'de'],
@@ -258,12 +255,14 @@ describe('generator - languages', () => {
   context('Creates default i18n files for Vue applications', () => {
     describe('using prompts', () => {
       before(async () => {
-        const result = await createClientProject({
-          localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
+        const result = await createClientProject().withJHipsterConfig({
+          clientFramework: 'vue',
+          enableTranslation: true,
+          nativeLanguage: 'en',
         });
         await result
           .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-          .withPrompts({
+          .withAnswers({
             languages: ['fr', 'de'],
           })
           .run();
@@ -282,8 +281,10 @@ describe('generator - languages', () => {
 
     describe('using options', () => {
       before(async () => {
-        const result = await createClientProject({
-          localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
+        const result = await createClientProject().withJHipsterConfig({
+          clientFramework: 'vue',
+          enableTranslation: true,
+          nativeLanguage: 'en',
         });
         await result
           .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })

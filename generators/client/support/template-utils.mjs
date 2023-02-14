@@ -34,7 +34,6 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  * @param {string} clientFramework the client framework, 'angular', 'vue' or 'react'.
  * @returns typeImports: Map
  */
-// eslint-disable-next-line import/prefer-default-export
 export const generateEntityClientImports = (relationships, dto, clientFramework) => {
   const typeImports = new Map();
   relationships.forEach(relationship => {
@@ -189,7 +188,7 @@ export const generateTestEntityPrimaryKey = (primaryKey, index) => {
  * Get a parent folder path addition for entity
  * @param {string} clientRootFolder
  */
-export const getEntityParentPathAddition = (logger, env, clientRootFolder) => {
+export const getEntityParentPathAddition = clientRootFolder => {
   if (!clientRootFolder) {
     return '';
   }

@@ -38,11 +38,9 @@ describe(`generator - ${generator}`, () => {
   describe('with valid configuration', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorFile).withOptions({
-        localConfig: {
-          baseName: 'existing',
-          packageName: 'tech.jhipster',
-        },
+      runResult = await helpers.run(generatorFile).withJHipsterConfig({
+        baseName: 'existing',
+        packageName: 'tech.jhipster',
       });
     });
     it('should generate only maven files', () => {

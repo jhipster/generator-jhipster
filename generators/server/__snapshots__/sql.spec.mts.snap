@@ -9839,13 +9839,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -10004,13 +10004,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -10548,13 +10548,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -10731,13 +10731,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -11257,13 +11257,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -11428,13 +11428,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -11954,13 +11954,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -12122,13 +12122,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -12654,13 +12654,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -12837,13 +12837,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -13357,13 +13357,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -13498,10 +13498,10 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -14066,13 +14066,13 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -14201,10 +14201,10 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -14769,13 +14769,13 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -14910,10 +14910,10 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -15475,13 +15475,13 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -15616,10 +15616,10 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -16163,13 +16163,13 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
@@ -16292,10 +16292,10 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
@@ -16875,10 +16875,10 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -17031,10 +17031,10 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -17536,10 +17536,10 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -17680,10 +17680,10 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -18188,10 +18188,10 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -18332,10 +18332,10 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -18834,10 +18834,10 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -18981,10 +18981,10 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -19477,10 +19477,10 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -19633,10 +19633,10 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {

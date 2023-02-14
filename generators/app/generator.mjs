@@ -20,13 +20,12 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import BaseGenerator from '../base-application/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode } from './support/index.mjs';
-import gitOptions from '../git/options.mjs';
+import gitOptions from '../git/command.mjs';
 import serverOptions from '../server/options.mjs';
-import { cleanupOldFiles } from '../cleanup.mjs';
+import cleanupOldFilesTask from './cleanup.mjs';
 import prompts from './prompts.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
@@ -44,9 +43,9 @@ const { MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
-export default class JHipsterAppGenerator extends BaseGenerator {
+export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     this.option('defaults', {
       desc: 'Execute jhipster with default config',
@@ -107,12 +106,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.option('with-entities', {
       alias: 'e',
       desc: 'Regenerate the existing entities if any',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-checks` flag
-    this.option('skip-checks', {
-      desc: 'Check the status of the required tools',
       type: Boolean,
     });
 
@@ -286,11 +279,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       type: Boolean,
     });
 
-    this.option('auto-crlf', {
-      desc: 'Detect line endings',
-      type: Boolean,
-    });
-
     this.jhipsterOptions(
       {
         ...gitOptions,
@@ -306,9 +294,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-
-    // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-    this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
   async beforeQueue() {
@@ -320,10 +305,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      displayLogo() {
-        this.printJHipsterLogo();
-      },
-
       validateBlueprint() {
         if (this.jhipsterConfig.blueprints && !this.options.skipChecks) {
           this.jhipsterConfig.blueprints.forEach(blueprint => {
@@ -354,7 +335,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -365,17 +346,13 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.PROMPTING]() {
+  get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
     return {
       setup() {
-        // Update jhipsterVersion.
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
-
-        this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient =
             this.jhipsterConfig.skipClient ||
@@ -399,7 +376,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.CONFIGURING]() {
+  get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -450,8 +427,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       },
 
       async composePages() {
-        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
-        this.configOptions.skipComposePage = true;
+        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
         await Promise.all(
           this.jhipsterConfig.pages.map(page => {
             return this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
@@ -464,7 +440,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.COMPOSING]() {
+  get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -480,19 +456,17 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application }) {
-        cleanupOldFiles(this, application);
-      },
+      cleanupOldFilesTask,
     });
   }
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -508,7 +482,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.END]() {
+  get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

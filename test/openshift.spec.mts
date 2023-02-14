@@ -1,9 +1,9 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import createMockedConfig from './support/mock-config.mjs';
-import { getGenerator } from './support/index.mjs';
+import { basicHelpers as helpers } from './support/index.mjs';
+import { GENERATOR_OPENSHIFT } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
   sccconfig: ['./ocp/registry/scc-config.yml'],
@@ -27,12 +27,12 @@ describe('generator - OpenShift', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openshift'))
+        .createJHipster(GENERATOR_OPENSHIFT)
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway'],
@@ -64,13 +64,13 @@ describe('generator - OpenShift', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openshift'))
+        .createJHipster(GENERATOR_OPENSHIFT)
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
@@ -102,13 +102,13 @@ describe('generator - OpenShift', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openshift'))
+        .createJHipster(GENERATOR_OPENSHIFT)
         .inTmpDir(dir => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['02-mysql', '03-psql'],
@@ -143,7 +143,7 @@ describe('generator - OpenShift', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openshift'))
+        .createJHipster(GENERATOR_OPENSHIFT)
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -153,7 +153,7 @@ describe('generator - OpenShift', () => {
           createMockedConfig('07-mariadb', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'],
@@ -196,12 +196,12 @@ describe('generator - OpenShift', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('openshift'))
+        .createJHipster(GENERATOR_OPENSHIFT)
         .inTmpDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
           chosenApps: ['08-monolith'],

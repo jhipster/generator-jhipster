@@ -1,9 +1,9 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import createMockedConfig from './support/mock-config.mjs';
-import { getGenerator } from './support/index.mjs';
+import { basicHelpers as helpers } from './support/index.mjs';
+import { GENERATOR_KUBERNETES } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
   eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],
@@ -50,12 +50,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway'],
@@ -92,13 +92,13 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
@@ -134,12 +134,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['02-mysql'],
@@ -175,12 +175,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway'],
@@ -264,13 +264,13 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['02-mysql', '03-psql'],
@@ -309,7 +309,7 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -319,7 +319,7 @@ describe('generator - Kubernetes', () => {
           createMockedConfig('11-mssql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
@@ -367,12 +367,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
           chosenApps: ['08-monolith'],
@@ -405,12 +405,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('09-kafka', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
           chosenApps: ['09-kafka'],
@@ -443,12 +443,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['02-mysql'],
@@ -486,12 +486,12 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway'],
@@ -527,7 +527,7 @@ describe('generator - Kubernetes', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('kubernetes'))
+        .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -537,7 +537,7 @@ describe('generator - Kubernetes', () => {
           createMockedConfig('11-mssql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
+        .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],

@@ -16,32 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
-import chalk from 'chalk';
-
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { defaultConfig } from './config.mjs';
 import { NODE_VERSION, SKIP_COMMIT_HOOK } from './constants.mjs';
 import { files, commitHooksFiles } from './files.mjs';
-import generatorOptions from './options.mjs';
+import command from './command.mjs';
 
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class InitGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    this.jhipsterOptions(generatorOptions);
-  }
-
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_INIT);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get loading() {

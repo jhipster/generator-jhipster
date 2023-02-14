@@ -16,18 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { preparePostEntityClientDerivedProperties } from '../../utils/entity.mjs';
+import { preparePostEntityClientDerivedProperties } from '../client/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import type { ClientApplication } from '../client/types.mjs';
+import type { GeneratorDefinition as ClientGeneratorDefinition } from '../client/index.mjs';
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<ClientApplication>}
- */
-export default class BootStrapApplicationClient extends BaseApplicationGenerator<ClientApplication> {
+export default class BootStrapApplicationClient extends BaseApplicationGenerator<ClientGeneratorDefinition> {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     if (this.options.help) return;
 

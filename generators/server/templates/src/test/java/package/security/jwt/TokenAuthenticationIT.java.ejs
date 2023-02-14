@@ -36,22 +36,22 @@ class TokenAuthenticationIT {
     private String jwtKey;
 
     @Test
-    public void testLoginWithValidToken() throws Exception {
+    void testLoginWithValidToken() throws Exception {
         expectOk(createValidToken(jwtKey));
     }
 
     @Test
-    public void testReturnFalseWhenJWThasInvalidSignature() throws Exception {
+    void testReturnFalseWhenJWThasInvalidSignature() throws Exception {
         expectUnauthorized(createTokenWithDifferentSignature());
     }
 
     @Test
-    public void testReturnFalseWhenJWTisMalformed() throws Exception {
+    void testReturnFalseWhenJWTisMalformed() throws Exception {
         expectUnauthorized(createSignedInvalidJwt(jwtKey));
     }
 
     @Test
-    public void testReturnFalseWhenJWTisExpired() throws Exception {
+    void testReturnFalseWhenJWTisExpired() throws Exception {
         expectUnauthorized(createExpiredToken(jwtKey));
     }
 <%_ if (reactive) { %>

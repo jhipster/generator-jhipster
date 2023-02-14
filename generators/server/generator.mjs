@@ -22,12 +22,17 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+
 import {
   getDBTypeFromDBValue,
   buildJavaGet as javaGetCall,
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
+  formatDocAsApiDescription,
+  formatDocAsJavaDoc,
+  getJavaValueGeneratorForType as getJavaValueForType,
+  getPrimaryKeyValue as getPKValue,
 } from './support/index.mjs';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -88,16 +93,9 @@ import {
   messageBrokerTypes,
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
-import { stringify } from '../../utils/index.mjs';
-import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import { stringifyApplicationData } from '../base-application/support/index.mjs';
+import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
 import checkJava from './support/checks/check-java.mjs';
-import { normalizePathEnd } from '../base/utils.mjs';
-import {
-  getApiDescription,
-  javadoc,
-  getJavaValueGeneratorForType as getJavaValueForType,
-  getPrimaryKeyValue as getPKValue,
-} from './support/index.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 
 const dbTypes = fieldTypes;
@@ -143,7 +141,7 @@ const { NO: NO_SERVICE } = ServiceTypes;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
@@ -152,7 +150,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   projectVersion;
 
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {
@@ -167,9 +165,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-
-    // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-    this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
   async beforeQueue() {
@@ -206,12 +201,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-
       validateJava() {
         if (!this.options.skipChecks) {
           this.checkJava();
@@ -524,11 +513,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           if (field.fieldType === BYTE_BUFFER) {
             this.logger.warn(
-              `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
+              `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(
                 field
               )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
             );
-            field.validation = false;
+            field.fieldValidate = false;
             field.fieldValidateRules = [];
           }
         });
@@ -544,9 +533,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = relationship.otherEntityName;
             this.logger.warn(
-              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
-                relationship.otherEntityName
-              } as fallback`
+              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
+                relationship
+              )}, using ${relationship.otherEntityName} as fallback`
             );
           }
           if (relationship.useJPADerivedIdentifier) {
@@ -788,7 +777,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = createBase64Secret.call(this, null, 64);
+      config.jwtSecretKey = createBase64Secret(64, this.options.reproducibleTests);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === SESSION && !config.rememberMeKey) {
@@ -883,63 +872,77 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   _validateField(entityName, field) {
     if (field.fieldName === undefined) {
-      throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
     }
 
     if (field.fieldType === undefined) {
-      throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
     }
 
     if (field.fieldValidateRules !== undefined) {
       if (!Array.isArray(field.fieldValidateRules)) {
-        throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
       }
       field.fieldValidateRules.forEach(fieldValidateRule => {
         if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
           throw new Error(
-            `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+            `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringifyApplicationData(
               field
             )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
           );
         }
       });
       if (field.fieldValidateRules.includes(MAX) && field.fieldValidateRulesMax === undefined) {
-        throw new Error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
       }
       if (field.fieldValidateRules.includes(MIN) && field.fieldValidateRulesMin === undefined) {
-        throw new Error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
       }
       if (field.fieldValidateRules.includes(MAXLENGTH) && field.fieldValidateRulesMaxlength === undefined) {
-        throw new Error(`fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(
+          `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+        );
       }
       if (field.fieldValidateRules.includes(MINLENGTH) && field.fieldValidateRulesMinlength === undefined) {
-        throw new Error(`fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(
+          `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+        );
       }
       if (field.fieldValidateRules.includes(MAXBYTES) && field.fieldValidateRulesMaxbytes === undefined) {
-        throw new Error(`fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(
+          `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+        );
       }
       if (field.fieldValidateRules.includes(MINBYTES) && field.fieldValidateRulesMinbytes === undefined) {
-        throw new Error(`fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(
+          `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+        );
       }
       if (field.fieldValidateRules.includes(PATTERN) && field.fieldValidateRulesPattern === undefined) {
-        throw new Error(`fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        throw new Error(
+          `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+        );
       }
     }
   }
 
   _validateRelationship(entityName, relationship) {
     if (relationship.otherEntityName === undefined) {
-      throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+      throw new Error(
+        `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+      );
     }
     if (relationship.relationshipType === undefined) {
-      throw new Error(`relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+      throw new Error(
+        `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+      );
     }
 
     if (
       relationship.ownerSide === undefined &&
       (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
     ) {
-      throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+      throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`);
     }
   }
 
@@ -958,7 +961,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return javadoc(text, 4);
+    return formatDocAsJavaDoc(text, 4);
   }
 
   /**
@@ -969,7 +972,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * @returns formatted api description
    */
   formatAsApiDescription(text) {
-    return getApiDescription(text);
+    return formatDocAsApiDescription(text);
   }
 
   /**
@@ -980,7 +983,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return javadoc(text, 0);
+    return formatDocAsJavaDoc(text, 0);
   }
 
   /**

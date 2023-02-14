@@ -1,5 +1,5 @@
-import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
-<% if (fieldsContainBlob) { %>
+import { Component,<% if (!anyFieldIsBlobDerived) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
+<% if (anyFieldIsBlobDerived) { %>
   import { mixins } from 'vue-class-component';
   import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
@@ -128,7 +128,7 @@ _%>
 @Component({
   validations
 })
-export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+export default class <%= entityAngularName %>Update extends <% if (anyFieldIsBlobDerived) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   @Inject('alertService') private alertService: () => AlertService;
 
@@ -292,7 +292,7 @@ _%>
     this.$router.go(-1);
   }
 
-  <%_ if (fieldsContainBlob && fieldsContainImageBlob) { _%>
+  <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
   public clearInputImage(field, fieldContentType, idInput) : void {
     if (this.<%= entityInstance %> && field && fieldContentType) {
       if (Object.prototype.hasOwnProperty.call(this.<%= entityInstance %>, field)) {

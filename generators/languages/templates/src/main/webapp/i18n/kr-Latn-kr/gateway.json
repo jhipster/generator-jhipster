@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Shlyuz",
+        "routes": {
+            "title": "Tómendegi jónelisler",
+            "url": "URL",
+            "service": "servis",
+            "servers": "Ámeldegi serverler",
+            "error": "Dıqqat : server tabilmadi!"
+        },
+        "refresh": {
+            "button": "Jańalaw "
+        }
+    }
+}

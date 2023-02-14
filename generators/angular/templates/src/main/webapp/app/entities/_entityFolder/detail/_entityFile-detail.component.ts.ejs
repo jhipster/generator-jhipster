@@ -22,7 +22,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 
@@ -36,7 +36,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
     constructor(
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
         protected dataUtils: DataUtils,
 <%_ } _%>
         protected activatedRoute: ActivatedRoute
@@ -48,7 +48,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
         });
     }
 
-<%_ if (fieldsContainBlob) { _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
     }

@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import helpers from 'yeoman-test';
 import sinon from 'sinon';
+import { basicHelpers as helpers } from '../support/index.mjs';
 
 import AppGenerator from '../../generators/app/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
@@ -117,7 +117,7 @@ describe('generator - app - blueprints', () => {
           [createMockBlueprint(CommonGenerator, spyCommon1), 'jhipster-my-blueprint:common'],
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
         ])
-        .withPrompts(prompts);
+        .withAnswers(prompts);
     });
 
     it('every sub-generator must be called once', () => {
@@ -165,7 +165,7 @@ describe('generator - app - blueprints', () => {
           [createMockBlueprint(CommonGenerator, spyCommon2), 'jhipster-my-blueprint-2:common'],
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
         ])
-        .withPrompts(prompts);
+        .withAnswers(prompts);
     });
 
     it('every sub-generator must be called once', () => {
@@ -219,7 +219,7 @@ describe('generator - app - blueprints', () => {
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint-3:app'],
         ])
-        .withPrompts(prompts);
+        .withAnswers(prompts);
     });
 
     it('every sub-generator must be called once', () => {

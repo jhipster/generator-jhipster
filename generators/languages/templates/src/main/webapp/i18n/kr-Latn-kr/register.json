@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Dizimen ótiw",
+        "form": {
+            "button": "Dizimen ótiw"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Login kiritilsin.",
+                    "minlength": "Login keminde 1 háripten ibarat bolsın",
+                    "maxlength": "Login kóbi menen 50 háripten ibarat bolsın",
+                    "pattern": "Sizdiń username tuwrı kelmedi."
+                }
+            },
+            "success": "<strong>Dizimnen o'tildi!</strong> Ótinish, aktivlestiriw ushın emailińizdi tekseriń.",
+            "error": {
+                "fail": "<strong>Dizimnen ótiwde qátelik!</strong> Ótinish, qayta urınıp kóriń.",
+                "userexists": "<strong>Bunday login bánt!</strong>Ótinish, basqasın kiritiń.",
+                "emailexists": "<strong>Email bánt!</strong> Ótinish, basqasın kiritiń."
+            }
+        }
+    }
+}

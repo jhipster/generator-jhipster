@@ -1,5 +1,5 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
@@ -49,7 +49,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         clientFramework: 'no',
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         packageName: 'com.mycompany.myapp',
         packageFolder: 'com/mycompany/myapp',

@@ -1,5 +1,5 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 import {
   applicationTypes,
   databaseTypes,
@@ -32,7 +32,7 @@ describe('generator - app - prompts', () => {
             skipInstall: true,
             skipChecks: true,
           })
-          .withPrompts({
+          .withAnswers({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',
             applicationType: MONOLITH,

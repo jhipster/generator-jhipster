@@ -23,8 +23,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { BASE_NAME } from './constants.mjs';
-
-const { startCase } = _;
+import { getHipster } from '../base/support/index.mjs';
+import command from './command.mjs';
 
 /**
  * @class
@@ -50,6 +50,18 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     if (this.sharedData.getControl().existingProject && !this.jhipsterConfig.baseName) {
       this.jhipsterConfig.baseName = getDefaultAppName(this);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -97,7 +109,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
         _.defaults(application, {
           humanizedBaseName,
           camelizedBaseName: _.camelCase(baseName),
-          hipster: this.getHipster(baseName),
+          hipster: getHipster(baseName),
           capitalizedBaseName: _.upperFirst(baseName),
           dasherizedBaseName: _.kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),

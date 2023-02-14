@@ -22,8 +22,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
-import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
-import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
+import cleanupOldFilesTask from './cleanup.mjs';
+import { writeFiles, writeEntitiesFiles } from './files-vue.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
@@ -89,7 +89,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return {
-      cleanup,
+      cleanupOldFilesTask,
       writeFiles,
     };
   }
@@ -135,7 +135,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     entityTranslationKeyMenu = _.camelCase(routerName),
     entityTranslationValue = _.startCase(routerName)
   ) {
-    addVueEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+    this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }
 
   /**

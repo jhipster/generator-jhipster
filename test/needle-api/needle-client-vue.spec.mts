@@ -1,4 +1,4 @@
-import helpers from 'yeoman-test';
+import { basicHelpers as helpers } from '../support/index.mjs';
 
 import ClientGenerator from '../../generators/client/index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -33,7 +33,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       })
       .withMockedGenerators(['jhipster:languages'])
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .withPrompts({
+      .withAnswers({
         baseName: 'jhipster',
         clientFramework: VUE,
         enableTranslation: false,
