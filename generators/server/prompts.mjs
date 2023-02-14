@@ -289,7 +289,7 @@ export async function askForServerSideOpts({ control }) {
       default: this.jhipsterConfigWithDefaults.buildTool,
     },
     {
-      when: answers => answers.buildTool === GRADLE && this.options.experimental,
+      when: answers => answers.buildTool === GRADLE && this.experimental,
       type: 'confirm',
       name: 'enableGradleEnterprise',
       message: 'Do you want to enable Gradle Enterprise integration?',

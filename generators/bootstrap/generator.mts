@@ -65,9 +65,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     this.upgradeCommand = commandName === GENERATOR_UPGRADE;
   }
 
-  _postConstruct() {
-    if (this.options.help) return;
-
+  beforeQueue() {
     this.loadStoredAppOptions();
 
     // Load common runtime options.

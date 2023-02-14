@@ -88,6 +88,10 @@ export default class BaseGenerator extends YeomanGenerator {
 
   static END = asPriority(END);
 
+  useVersionPlaceholders?: boolean;
+  skipChecks?: boolean;
+  experimental?: boolean;
+
   readonly sharedData!: SharedData<BaseApplication>;
   declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
@@ -104,13 +108,6 @@ export default class BaseGenerator extends YeomanGenerator {
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-
-    // This adds support for a `--from-cli` flag
-    this.option('from-cli', {
-      description: 'Indicates the command is run from JHipster CLI',
-      type: Boolean,
-      hide: true,
-    });
 
     this.option('with-generated-flag', {
       description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
@@ -134,12 +131,8 @@ export default class BaseGenerator extends YeomanGenerator {
       hide: true,
     });
 
-    /*
-     * When building help, this.jhipsterConfig is not available.
-     * At current state jhipsterOptions registers options and parses it.
-     * TODO split register/parse options process, register should alway be executed.
-     * When building the help, parse can be skipped.
-     */
+    this.parseJHipsterOptions(command.options);
+
     let jhipsterOldVersion = null;
     if (!this.options.help) {
       // JHipster runtime config that should not be stored to .yo-rc.json.
@@ -246,45 +239,6 @@ export default class BaseGenerator extends YeomanGenerator {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
     }
     return priorities;
-  }
-
-  /**
-   * Load options from an object.
-   * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param options - Object containing options.
-   * @param common - skip generator scoped options.
-   */
-  jhipsterOptions(options: JHipsterOptions, common = false) {
-    options = _.cloneDeep(options);
-    Object.entries(options).forEach(([optionName, optionDesc]) => {
-      this.option(kebabCase(optionName), optionDesc);
-      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
-      let optionValue;
-      // Hidden options are test options, which doesn't rely on commoander for options parsing.
-      // We must parse environment variables manually
-      if (optionDesc.hide && optionDesc.env && process.env[optionDesc.env]) {
-        optionValue = process.env[optionDesc.env];
-      } else {
-        optionValue = this.options[optionName];
-      }
-      if (optionValue !== undefined) {
-        if (optionDesc.scope === 'storage') {
-          this.config.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'blueprint') {
-          this.blueprintStorage!.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'control') {
-          this.sharedData.getControl()[optionName] = optionValue;
-        } else if (optionDesc.scope === 'generator') {
-          this[optionName] = optionValue;
-        } else {
-          throw new Error(`Scope ${optionDesc.scope} not supported`);
-        }
-        if (optionDesc.scope !== 'generator') {
-          // generator scoped options may be duplicated
-          delete this.options[optionName];
-        }
-      }
-    });
   }
 
   /**
@@ -505,7 +459,7 @@ export default class BaseGenerator extends YeomanGenerator {
     map: Record<string, string>,
     valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
   ): Record<string, string> {
-    if (this.sharedData.getControl().useVersionPlaceholders) {
+    if (this.useVersionPlaceholders) {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
     }
     return {

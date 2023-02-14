@@ -106,4 +106,5 @@ export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
   options: JHipsterOptions;
   import?: string[];
+  loadGeneratorOptions?: boolean;
 };

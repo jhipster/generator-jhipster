@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
 
@@ -40,6 +40,11 @@ describe(`generator - ${generator}`, () => {
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
+  });
+  describe('help', () => {
+    it('should print expected information', async () => {
+      expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
+    });
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {

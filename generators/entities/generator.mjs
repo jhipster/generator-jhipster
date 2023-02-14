@@ -75,7 +75,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
     });
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
 

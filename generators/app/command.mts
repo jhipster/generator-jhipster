@@ -17,28 +17,12 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_SERVER } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
-  options: {
-    useVersionPlaceholders: {
-      description: 'replace mutable versions with placeholders',
-      type: Boolean,
-      env: 'VERSION_PLACEHOLDERS',
-      scope: 'generator',
-      hide: true,
-    },
-    skipChecks: {
-      description: 'Check the status of the required tools',
-      type: Boolean,
-      scope: 'generator',
-    },
-    experimental: {
-      description:
-        'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
-      scope: 'generator',
-    },
-  },
+  options: {},
+  loadGeneratorOptions: true,
+  import: [GENERATOR_SERVER, GENERATOR_COMMON, GENERATOR_GIT],
 };
 
 export default command;
