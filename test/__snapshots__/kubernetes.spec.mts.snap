@@ -5016,19 +5016,20 @@ spec:
     - name: https
       port: 9443
       targetPort: 8443
+  clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: keycloak
-  type: NodePort
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: keycloak
   namespace: default
-  labels:
-    app: keycloak
 spec:
-  replicas: 1
+  volumeClaimTemplates: []
+  replicas: 2
+  serviceName: keycloak
   selector:
     matchLabels:
       app: keycloak
@@ -5065,6 +5066,10 @@ spec:
               value: https://keycloak.default.example.com
             - name: KC_HOSTNAME_ADMIN_URL
               value: https://keycloak.default.example.com
+            - name: KC_CACHE_STACK
+              value: "kubernetes"
+            - name: JAVA_OPTS_APPEND
+              value: "-Djgroups.dns.query=keycloak.default.svc.cluster.local"
           ports:
             - name: http
               containerPort: 8080
