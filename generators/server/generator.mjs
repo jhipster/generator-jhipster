@@ -216,8 +216,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    const shouldSkipPrompting = this.delegateToBlueprint || this.options.defaults;
-    return this.asPromptingTaskGroup(shouldSkipPrompting ? {} : this.prompting);
+    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
   }
 
   get configuring() {

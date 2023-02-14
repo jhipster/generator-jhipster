@@ -92,7 +92,6 @@ describe('generator - app - --incremental-changelog', function () {
   const options = {
     creationTimestamp: '2020-01-01',
     incrementalChangelog: true,
-    defaults: true,
     skipClient: true,
     force: true,
     withEntities: true,
@@ -100,7 +99,7 @@ describe('generator - app - --incremental-changelog', function () {
   context('when creating a new application', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withOptions(options).withMockedGenerators(mockedGenerators);
+      runResult = await helpers.run(generatorPath).withJHipsterConfig().withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
     after(() => runResult.cleanup());

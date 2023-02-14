@@ -81,10 +81,9 @@ describe(`generator - ${generator}`, () => {
     describe('some entities', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withArguments(['Foo', 'Bar']).withOptions({
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withArguments(['Foo', 'Bar']).withOptions({
           regenerate: true,
           force: true,
-          defaults: true,
           ignoreNeedlesError: true,
           applicationWithEntities,
         });
@@ -112,11 +111,10 @@ describe(`generator - ${generator}`, () => {
     describe('selected entities with writeEveryEntity', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withArguments(['Foo', 'Bar']).withOptions({
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withArguments(['Foo', 'Bar']).withOptions({
           regenerate: true,
           force: true,
           writeEveryEntity: true,
-          defaults: true,
           ignoreNeedlesError: true,
           applicationWithEntities,
         });
@@ -144,10 +142,9 @@ describe(`generator - ${generator}`, () => {
     describe('all entities', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withOptions({
           regenerate: true,
           force: true,
-          defaults: true,
           ignoreNeedlesError: true,
           applicationWithEntities,
         });

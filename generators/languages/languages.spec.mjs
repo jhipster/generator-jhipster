@@ -13,10 +13,12 @@ const __dirname = dirname(__filename);
 const generatorPath = join(__dirname, 'index.mjs');
 
 const createClientProject = options =>
-  basicHelpers.run('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv }).withOptions({
-    defaults: true,
-    ...options,
-  });
+  basicHelpers
+    .runJHipster('app')
+    .withJHipsterConfig()
+    .withOptions({
+      ...options,
+    });
 
 const containsLanguageFiles = languageValue => {
   it(`creates expected files for ${languageValue}`, () => {

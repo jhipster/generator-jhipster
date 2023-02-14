@@ -30,11 +30,10 @@ describe('generator - app - with blueprint', () => {
           fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
+        .withJHipsterConfig()
         .withOptions({
           skipChecks: false,
           blueprint: 'myblueprint',
-          baseName: 'jhipster',
-          defaults: true,
         })
         .run();
     });
@@ -72,10 +71,10 @@ describe('generator - app - with blueprint', () => {
             fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
+          .withJHipsterConfig()
           .withOptions({
             skipChecks: false,
             blueprint: 'myblueprint',
-            defaults: true,
           })
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
@@ -98,8 +97,8 @@ describe('generator - app - with blueprint', () => {
           fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
+        .withJHipsterConfig()
         .withOptions({
-          defaults: true,
           skipChecks: false,
           blueprint: 'myblueprint',
         }));
@@ -124,11 +123,10 @@ describe('generator - app - with blueprint', () => {
           fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
+        .withJHipsterConfig()
         .withOptions({
           skipChecks: false,
           blueprint: 'myblueprint',
-          baseName: 'jhipster',
-          defaults: true,
         })
         .run();
     });
@@ -166,10 +164,10 @@ describe('generator - app - with blueprint', () => {
             fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
+          .withJHipsterConfig()
           .withOptions({
             skipChecks: false,
             blueprint: 'myblueprint',
-            defaults: true,
           })
       ).rejects.toThrow(/targets JHipster 1.1.1 and is not compatible with this JHipster version/));
   });

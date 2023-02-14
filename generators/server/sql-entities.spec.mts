@@ -79,6 +79,7 @@ describe(`generator - ${databaseType} - entities`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
+          .withJHipsterConfig()
           .withOptions(sample)
           .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });

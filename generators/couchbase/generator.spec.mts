@@ -89,7 +89,7 @@ describe(`generator - ${databaseType}`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig().withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());

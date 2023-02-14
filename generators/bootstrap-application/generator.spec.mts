@@ -95,27 +95,29 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          creationTimestamp: '2000-01-01',
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
-            },
-            entities: [
-              {
-                name: 'EntityA',
-                changelogDate: '20220129025419',
-                fields: [
-                  {
-                    fieldName: 'id',
-                    fieldType: UUID,
-                  },
-                ],
+        runResult = await helpers
+          .run(generatorPath)
+          .withJHipsterConfig()
+          .withOptions({
+            creationTimestamp: '2000-01-01',
+            applicationWithEntities: {
+              config: {
+                baseName: 'jhipster',
               },
-            ],
-          },
-        });
+              entities: [
+                {
+                  name: 'EntityA',
+                  changelogDate: '20220129025419',
+                  fields: [
+                    {
+                      fieldName: 'id',
+                      fieldType: UUID,
+                    },
+                  ],
+                },
+              ],
+            },
+          });
       });
 
       it('should write files', () => {
@@ -884,27 +886,29 @@ describe(`generator - ${generator}`, () => {
     describe('skipUserManagement', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
-              skipUserManagement: true,
-            },
-            entities: [
-              {
-                name: 'EntityA',
-                changelogDate: '20220129025419',
-                fields: [
-                  {
-                    fieldName: 'id',
-                    fieldType: UUID,
-                  },
-                ],
+        runResult = await helpers
+          .run(generatorPath)
+          .withJHipsterConfig()
+          .withOptions({
+            applicationWithEntities: {
+              config: {
+                baseName: 'jhipster',
+                skipUserManagement: true,
               },
-            ],
-          },
-        });
+              entities: [
+                {
+                  name: 'EntityA',
+                  changelogDate: '20220129025419',
+                  fields: [
+                    {
+                      fieldName: 'id',
+                      fieldType: UUID,
+                    },
+                  ],
+                },
+              ],
+            },
+          });
       });
 
       it('should write files', () => {

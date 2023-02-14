@@ -30,13 +30,7 @@ describe('generator - app - composing', () => {
       let runResult;
       before(async () => {
         runContext = helpers.createJHipster(GENERATOR_APP);
-        runResult = await runContext
-          .withOptions({
-            baseName: 'jhipster',
-            defaults: true,
-          })
-          .withMockedGenerators(allMockedComposedGenerators)
-          .run();
+        runResult = await runContext.withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators).run();
       });
 
       after(() => runContext.cleanup());
@@ -80,9 +74,8 @@ describe('generator - app - composing', () => {
       before(async () => {
         runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
+          .withJHipsterConfig()
           .withOptions({
-            baseName: 'jhipster',
-            defaults: true,
             skipClient: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
@@ -131,9 +124,8 @@ describe('generator - app - composing', () => {
       before(async () => {
         runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
+          .withJHipsterConfig()
           .withOptions({
-            baseName: 'jhipster',
-            defaults: true,
             skipServer: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
@@ -178,9 +170,8 @@ describe('generator - app - composing', () => {
         before(async () => {
           runContext = helpers.createJHipster(GENERATOR_APP);
           runResult = await runContext
+            .withJHipsterConfig()
             .withOptions({
-              baseName: 'jhipster',
-              defaults: true,
               withEntities: true,
             })
             .doInDir(dir => {
@@ -233,9 +224,8 @@ describe('generator - app - composing', () => {
         before(async () => {
           runContext = helpers.createJHipster(GENERATOR_APP);
           runResult = await runContext
+            .withJHipsterConfig()
             .withOptions({
-              baseName: 'jhipster',
-              defaults: true,
               withEntities: true,
             })
             .doInDir(dir => {

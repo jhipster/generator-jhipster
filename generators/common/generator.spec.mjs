@@ -51,9 +51,9 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
+          .withJHipsterConfig()
           .withMockedGenerators(mockedGenerators)
           .withOptions({
-            defaults: true,
             creationTimestamp: '2000-01-01',
             applicationWithEntities: {
               config: {
@@ -74,10 +74,10 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await basicHelpers
           .run(generatorFile)
+          .withJHipsterConfig()
           .withMockedGenerators(mockedGenerators)
           .withOptions({
             prettierTabWidth: 10,
-            defaults: true,
             applicationWithEntities: {
               config: {
                 baseName: 'jhipster',
