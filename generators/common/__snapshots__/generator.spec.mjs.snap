@@ -83,7 +83,6 @@ overrides:
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "creationTimestamp": 946684800000,
     "entities": []
   }
 }

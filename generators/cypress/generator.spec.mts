@@ -55,27 +55,21 @@ const e2eMatrix = extendMatrix(
   }
 );
 
-const testSamples = () =>
+const e2eSamples = Object.fromEntries(
   Object.entries(e2eMatrix).map(([name, sample]) => [
     name,
     {
-      applicationWithEntities: {
-        config: {
-          ...sample,
-          baseName: 'jhipster',
-          testFrameworks: [CYPRESS],
-        },
-        entities: [
-          {
-            name: 'EntityA',
-            changelogDate: '20220129025419',
-          },
-        ],
-      },
+      ...sample,
+      testFrameworks: [CYPRESS],
     },
-  ]);
-
-const e2eSamples = testSamples();
+  ])
+);
+const entities = [
+  {
+    name: 'EntityA',
+    changelogDate: '20220129025419',
+  },
+];
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -88,17 +82,15 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(e2eSamples)).toMatchSnapshot();
+    expect(e2eSamples).toMatchSnapshot();
   });
 
-  e2eSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
-
+  Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.create(generatorPath).withOptions(sample).run();
+        runResult = await helpers.run(generatorPath).withJHipsterConfig(sampleConfig, entities);
       });
 
       after(() => runResult.cleanup());

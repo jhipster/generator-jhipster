@@ -82,14 +82,14 @@ describe(`generator - ${generator}`, () => {
     expect(instance.features.bar).toBe(true);
   });
 
-  Object.entries(testSamples).forEach(([name, applicationWithEntities]) => {
-    const { searchEngine, serviceDiscoveryType } = applicationWithEntities.config;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
+    const { searchEngine, serviceDiscoveryType } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions({ applicationWithEntities });
+        runResult = await helpers.run(generatorFile).withJHipsterConfig(sampleConfig);
       });
 
       after(() => runResult.cleanup());

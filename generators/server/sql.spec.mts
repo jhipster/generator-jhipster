@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
+import { buildServerMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
@@ -55,21 +55,7 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
   cacheProvider: [NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
 });
 
-const samplesBuilder = (): [string, any][] =>
-  Object.entries(sqlSamples).map(([name, sample]) => [
-    name,
-    {
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-        // entities,
-      },
-    },
-  ]);
-
-const testSamples = samplesBuilder();
+const testSamples = buildSamplesFromMatrix(sqlSamples, { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -82,18 +68,17 @@ describe(`generator - ${databaseType}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { authenticationType, enableTranslation } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig().withOptions(sample).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig(sampleConfig).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -116,8 +101,8 @@ describe(`generator - ${databaseType}`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-      shouldComposeWithKafka(sample, () => runResult);
-      shouldComposeWithLiquibase(sample, () => runResult);
+      shouldComposeWithKafka(sampleConfig, () => runResult);
+      shouldComposeWithLiquibase(sampleConfig, () => runResult);
     });
   });
 });

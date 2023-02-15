@@ -5,15 +5,37 @@ import { YeomanTest, RunContext, RunContextSettings } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import { BaseEntity } from '../../generators/base-application/index.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
 import getGenerator from './get-generator.mjs';
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
+const createFiles = (workspace: boolean, configuration: Record<string, unknown>, entities: BaseEntity[] = []) => {
+  if (!configuration.baseName) {
+    throw new Error('baseName is required');
+  }
+  const workspaceFolder = workspace ? `${configuration.baseName}/` : '';
+  const entityFiles = Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity]));
+  configuration = { entities: entities.map(e => e.name), ...configuration };
+  return {
+    [`${workspaceFolder}.yo-rc.json`]: { 'generator-jhipster': configuration },
+    ...entityFiles,
+  };
+};
+
 class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunContext<GeneratorType> {
-  withJHipsterConfig(content?: Record<string, unknown>): this {
-    return this.withYoRcConfig('generator-jhipster', { baseName: 'jhipster', ...content });
+  workspaceApplications: string[] = [];
+
+  withJHipsterConfig(configuration?: Record<string, unknown>, entities: BaseEntity[] = []): this {
+    return this.withFiles(createFiles(false, { baseName: 'jhipster', ...configuration }, entities));
+  }
+
+  withWorkspaceApplication(configuration: Record<string, unknown> = {}, entities?: BaseEntity[]): this {
+    this.workspaceApplications.push(configuration.baseName as string);
+    return this.withFiles(createFiles(true, configuration, entities));
   }
 }
 
