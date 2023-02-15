@@ -139,7 +139,7 @@ export default class BaseGenerator extends YeomanGenerator {
       this.configOptions = this.options.configOptions || {};
 
       /* Force config to use 'generator-jhipster' namespace. */
-      this._config = this._getStorage('generator-jhipster', { sorted: true });
+      this._config = this._getStorage('generator-jhipster');
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
