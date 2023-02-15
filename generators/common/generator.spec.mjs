@@ -62,12 +62,10 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await basicHelpers
           .run(generatorFile)
-          .withJHipsterConfig()
-          .withMockedGenerators(mockedGenerators)
-          .withJHipsterConfig()
-          .withOptions({
+          .withJHipsterConfig({
             prettierTabWidth: 10,
-          });
+          })
+          .withMockedGenerators(mockedGenerators);
       });
 
       it('writes custom .prettierrc', () => {

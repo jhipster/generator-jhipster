@@ -33,6 +33,10 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunConte
     return this.withFiles(createFiles(false, { baseName: 'jhipster', ...configuration }, entities));
   }
 
+  withSkipWritingPriorities(): this {
+    return this.withOptions({ skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'] });
+  }
+
   withWorkspaceApplication(configuration: Record<string, unknown> = {}, entities?: BaseEntity[]): this {
     this.workspaceApplications.push(configuration.baseName as string);
     return this.withFiles(createFiles(true, configuration, entities));
