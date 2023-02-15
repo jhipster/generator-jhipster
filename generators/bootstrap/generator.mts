@@ -25,7 +25,7 @@ import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import BaseGenerator from '../base/index.mjs';
 import MultiStepTransform from './multi-step-transform/index.mjs';
-import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
+import { prettierTransform } from './transforms.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
@@ -163,7 +163,7 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
     const { skipYoResolve } = this.options;
-    const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
+    const { autoCrlf } = this.jhipsterConfig;
     const env: any = this.env;
 
     const { ignoreErrors } = this.options;
@@ -226,7 +226,6 @@ export default class BootstrapGenerator extends BaseGenerator {
       createForceYoRcTransform(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFiles(),
-      ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
       ...(this.skipPrettier ? [] : [createApplyPrettierTransform()]),
       ...(autoCrlf ? [convertToCRLF()] : []),
       createConflicterCheckTransform(env.conflicter, conflicterStatus),

@@ -109,11 +109,6 @@ export default class BaseGenerator extends YeomanGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
 
-    this.option('with-generated-flag', {
-      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-      type: Boolean,
-    });
-
     this.option('skip-prompts', {
       description: 'Skip prompts',
       type: Boolean,

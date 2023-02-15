@@ -1268,9 +1268,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     this.configOptions.optionsParsed = true;
 
     // Load stored options
-    if (options.withGeneratedFlag !== undefined) {
-      this.jhipsterConfig.withGeneratedFlag = options.withGeneratedFlag;
-    }
     if (options.skipJhipsterDependencies !== undefined) {
       this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
     }
