@@ -53,7 +53,7 @@ describe(`generator - ${generator}`, () => {
   describe('with empty configuration', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorFile).withOptions({ baseName: 'jhipster' });
+      runResult = await helpers.run(generatorFile).withJHipsterConfig();
     });
     it('should generate only gradle files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();

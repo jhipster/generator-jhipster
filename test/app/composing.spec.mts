@@ -74,8 +74,7 @@ describe('generator - app - composing', () => {
       before(async () => {
         runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
-          .withJHipsterConfig()
-          .withOptions({
+          .withJHipsterConfig({
             skipClient: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
@@ -124,8 +123,7 @@ describe('generator - app - composing', () => {
       before(async () => {
         runContext = helpers.createJHipster(GENERATOR_APP);
         runResult = await runContext
-          .withJHipsterConfig()
-          .withOptions({
+          .withJHipsterConfig({
             skipServer: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
@@ -170,15 +168,9 @@ describe('generator - app - composing', () => {
         before(async () => {
           runContext = helpers.createJHipster(GENERATOR_APP);
           runResult = await runContext
-            .withJHipsterConfig()
+            .withJHipsterConfig({}, [{ name: 'Foo' }])
             .withOptions({
               withEntities: true,
-            })
-            .doInDir(dir => {
-              const entitiesPath = path.join(dir, JHIPSTER_CONFIG_DIR);
-              fse.ensureDirSync(entitiesPath);
-              const entityPath = path.join(entitiesPath, 'Foo.json');
-              fse.writeFileSync(entityPath, '{}');
             })
             .withMockedGenerators(allMockedComposedGenerators)
             .run();
@@ -224,16 +216,13 @@ describe('generator - app - composing', () => {
         before(async () => {
           runContext = helpers.createJHipster(GENERATOR_APP);
           runResult = await runContext
-            .withJHipsterConfig()
+            .withJHipsterConfig({}, [
+              { name: 'One', changelogDate: '12345678901234' },
+              { name: 'Two', changelogDate: '12345678901235' },
+              { name: 'Three', changelogDate: '12345678901236' },
+            ])
             .withOptions({
               withEntities: true,
-            })
-            .doInDir(dir => {
-              const entitiesPath = path.join(dir, JHIPSTER_CONFIG_DIR);
-              fse.ensureDirSync(entitiesPath);
-              fse.writeFileSync(path.join(entitiesPath, 'One.json'), '{"changelogDate": "12345678901234"}');
-              fse.writeFileSync(path.join(entitiesPath, 'Two.json'), '{"changelogDate": "12345678901235"}');
-              fse.writeFileSync(path.join(entitiesPath, 'Three.json'), '{"changelogDate": "12345678901236"}');
             })
             .withMockedGenerators(allMockedComposedGenerators)
             .run();

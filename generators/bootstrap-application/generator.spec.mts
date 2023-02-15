@@ -95,29 +95,18 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
-          .withJHipsterConfig()
-          .withOptions({
-            creationTimestamp: '2000-01-01',
-            applicationWithEntities: {
-              config: {
-                baseName: 'jhipster',
+        runResult = await helpers.run(generatorPath).withJHipsterConfig({}, [
+          {
+            name: 'EntityA',
+            changelogDate: '20220129025419',
+            fields: [
+              {
+                fieldName: 'id',
+                fieldType: UUID,
               },
-              entities: [
-                {
-                  name: 'EntityA',
-                  changelogDate: '20220129025419',
-                  fields: [
-                    {
-                      fieldName: 'id',
-                      fieldType: UUID,
-                    },
-                  ],
-                },
-              ],
-            },
-          });
+            ],
+          },
+        ]);
       });
 
       it('should write files', () => {
@@ -886,29 +875,23 @@ describe(`generator - ${generator}`, () => {
     describe('skipUserManagement', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
-          .withJHipsterConfig()
-          .withOptions({
-            applicationWithEntities: {
-              config: {
-                baseName: 'jhipster',
-                skipUserManagement: true,
-              },
-              entities: [
+        runResult = await helpers.run(generatorPath).withJHipsterConfig(
+          {
+            skipUserManagement: true,
+          },
+          [
+            {
+              name: 'EntityA',
+              changelogDate: '20220129025419',
+              fields: [
                 {
-                  name: 'EntityA',
-                  changelogDate: '20220129025419',
-                  fields: [
-                    {
-                      fieldName: 'id',
-                      fieldType: UUID,
-                    },
-                  ],
+                  fieldName: 'id',
+                  fieldType: UUID,
                 },
               ],
             },
-          });
+          ]
+        );
       });
 
       it('should write files', () => {
