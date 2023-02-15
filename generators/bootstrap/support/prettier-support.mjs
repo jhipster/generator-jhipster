@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 import memFsEditor from 'mem-fs-editor';
-import path from 'path';
-import { passthrough } from 'p-transform';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
+import { Minimatch } from 'minimatch';
 // eslint-disable-next-line import/no-unresolved
 import environmentTransform from 'yeoman-environment/transform';
 
@@ -30,7 +29,10 @@ const { patternSpy } = environmentTransform;
 
 const { isFileStateDeleted } = State;
 
-export const prettierTransform = function (options, generator, transformOptions = {}) {
+const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
+export const isPrettierConfigFile = file => minimatch.match(file.path);
+
+export const createPrettierTransform = function (options, generator, transformOptions = {}) {
   if (typeof transformOptions === 'boolean') {
     transformOptions = { ignoreErrors: transformOptions };
   }
@@ -86,27 +88,4 @@ At: ${fileContent
     `**/*.{${extensions}}`,
     { dot: true }
   ).name('jhipster:prettier');
-};
-
-export const generatedAnnotationTransform = generator => {
-  return passthrough(file => {
-    if (
-      !file.path.endsWith('package-info.java') &&
-      path.extname(file.path) === '.java' &&
-      !isFileStateDeleted(file) &&
-      !file.path.endsWith('GeneratedByJHipster.java')
-    ) {
-      const packageName = generator.jhipsterConfig.packageName;
-      const content = file.contents.toString('utf8');
-
-      if (!new RegExp(`import ${packageName.replace('.', '\\.')}.GeneratedByJHipster;`).test(content)) {
-        const newContent = content
-          // add the import statement just after the package statement, prettier will arrange it correctly
-          .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
-          // add the annotation before class or interface
-          .replace(/\n([a-w ]*(class|interface|enum) )/g, '\n@GeneratedByJHipster\n$1');
-        file.contents = Buffer.from(newContent);
-      }
-    }
-  }, 'jhipster:generated-by-annotation');
 };
