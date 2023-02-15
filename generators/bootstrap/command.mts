@@ -29,6 +29,7 @@ const command: JHipsterCommandDefinition = {
       description: 'Skip prettier',
       type: Boolean,
       hide: true,
+      scope: 'generator',
     },
   },
   import: ['base'],
