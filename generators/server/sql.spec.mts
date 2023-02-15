@@ -59,7 +59,6 @@ const samplesBuilder = (): [string, any][] =>
   Object.entries(sqlSamples).map(([name, sample]) => [
     name,
     {
-      defaults: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,
@@ -94,7 +93,7 @@ describe(`generator - ${databaseType}`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig().withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());

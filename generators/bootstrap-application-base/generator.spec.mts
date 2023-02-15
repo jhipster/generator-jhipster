@@ -48,16 +48,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          creationTimestamp: '2000-01-01',
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
-            },
-            entities: [],
-          },
-        });
+        runResult = await helpers.run(generatorPath).withJHipsterConfig();
       });
 
       it('should succeed', () => {
@@ -67,7 +58,6 @@ describe(`generator - ${generator}`, () => {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "creationTimestamp": 946684800000,
     "entities": []
   }
 }

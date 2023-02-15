@@ -47,7 +47,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('default-microservice/'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .withAnswers({
             herokuAppName,
             herokuRegion: 'us',
@@ -91,7 +91,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('default'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .withAnswers({
             herokuAppName,
             herokuRegion: 'us',
@@ -154,7 +154,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('default/'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .withAnswers({
             herokuAppName,
             herokuRegion: 'us',
@@ -185,7 +185,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('default/'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .withAnswers({
             herokuAppName,
             herokuRegion: 'eu',
@@ -213,7 +213,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('default-psql/'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .withAnswers({
             herokuAppName,
             herokuRegion: 'eu',
@@ -246,7 +246,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('heroku/'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .run();
       });
       it('should match files snapshot', function () {
@@ -270,7 +270,7 @@ describe('generator - Heroku', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('default-elasticsearch/'), dir);
           })
-          .withOptions({ skipBuild: true, reproducibleTests: true })
+          .withOptions({ skipBuild: true })
           .withAnswers({
             herokuAppName,
             herokuRegion: 'us',

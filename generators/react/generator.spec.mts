@@ -27,7 +27,6 @@ const samplesBuilder = () =>
   Object.entries(buildClientSamples()).map(([name, sample]) => [
     name,
     {
-      skipInstall: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,

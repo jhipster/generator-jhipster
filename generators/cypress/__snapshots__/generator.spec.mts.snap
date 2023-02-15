@@ -284,7 +284,6 @@ exports[`generator - cypress samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "jwt-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true)-src/": {
     "applicationWithEntities": {
@@ -308,7 +307,6 @@ exports[`generator - cypress samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "oauth2-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false)": {
     "applicationWithEntities": {
@@ -331,7 +329,6 @@ exports[`generator - cypress samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "oauth2-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true)-src/main/webapp2/": {
     "applicationWithEntities": {
@@ -355,7 +352,6 @@ exports[`generator - cypress samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "session-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false)-src/main/webapp2/": {
     "applicationWithEntities": {
@@ -379,7 +375,6 @@ exports[`generator - cypress samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "session-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true)": {
     "applicationWithEntities": {
@@ -402,7 +397,6 @@ exports[`generator - cypress samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
 }
 `;

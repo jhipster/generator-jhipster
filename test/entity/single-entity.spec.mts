@@ -8,8 +8,6 @@ import { getTemplatePath, getEntityTemplatePath } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/generator.mjs';
 import { GENERATOR_ENTITY } from '../../generators/generator-list.mjs';
 
-const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
-
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   get [BaseApplicationGenerator.PREPARING]() {
     return {
@@ -34,7 +32,7 @@ describe('generator - entity --single-entity', () => {
             fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
           })
           .withArguments(['Foo'])
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
+          .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
       });
 
       after(() => runResult.cleanup());
@@ -68,7 +66,7 @@ describe('generator - entity --single-entity', () => {
             fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
           })
           .withArguments(['Foo'])
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
+          .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
       });
 
       after(() => runResult.cleanup());

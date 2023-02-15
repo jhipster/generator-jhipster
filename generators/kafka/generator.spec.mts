@@ -46,7 +46,6 @@ const samplesBuilder = (): [string, any][] =>
   Object.entries(samples).map(([name, sample]) => [
     name,
     {
-      defaults: true,
       applicationWithEntities: {
         config: {
           ...commonConfig,
@@ -73,7 +72,7 @@ describe(`generator - ${generator}`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig().withOptions(sample);
       });
 
       after(() => runResult.cleanup());

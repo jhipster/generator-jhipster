@@ -17,8 +17,6 @@ const incrementalFiles = [
   `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
 ];
 
-const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
-
 const baseName = 'JhipsterApp';
 
 const jdlApplication = `
@@ -92,11 +90,8 @@ const mockedGenerators = ['jhipster:common', 'jhipster:gradle', 'jhipster:maven'
 describe('generator - app - --incremental-changelog', function () {
   this.timeout(45000);
   const options = {
-    ...DEFAULT_TEST_OPTIONS,
-    noInsight: true,
     creationTimestamp: '2020-01-01',
     incrementalChangelog: true,
-    defaults: true,
     skipClient: true,
     force: true,
     withEntities: true,
@@ -104,7 +99,7 @@ describe('generator - app - --incremental-changelog', function () {
   context('when creating a new application', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withOptions(options).withMockedGenerators(mockedGenerators);
+      runResult = await helpers.run(generatorPath).withJHipsterConfig().withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
     after(() => runResult.cleanup());

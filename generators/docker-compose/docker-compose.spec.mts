@@ -29,8 +29,6 @@ const getTestApplicationWithEntitiesWithConfig = (additionalConfig, ...appNames)
 const getTestApplicationWithEntities = (...appNames) => getTestApplicationWithEntitiesWithConfig({}, ...appNames);
 
 const workspacesOptions = {
-  skipChecks: true,
-  reproducibleTests: true,
   generateApplications: true,
   generateWorkspaces: true,
   generateWith: 'docker',
@@ -55,7 +53,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -98,7 +95,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -141,7 +137,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: '.',
@@ -179,7 +174,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -222,7 +216,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -267,7 +260,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -312,7 +304,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -358,7 +349,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -400,7 +390,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -442,7 +431,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -484,7 +472,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
@@ -523,7 +510,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -570,7 +556,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -612,7 +597,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
@@ -654,7 +638,6 @@ describe('generator - Docker Compose', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',

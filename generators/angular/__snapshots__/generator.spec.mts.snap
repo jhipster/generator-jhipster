@@ -5242,7 +5242,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true)": {
     "applicationWithEntities": {
@@ -5312,7 +5311,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false)": {
     "applicationWithEntities": {
@@ -5383,7 +5381,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false)": {
     "applicationWithEntities": {
@@ -5453,7 +5450,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true)": {
     "applicationWithEntities": {
@@ -5524,7 +5520,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false)": {
     "applicationWithEntities": {
@@ -5593,7 +5588,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
   "monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true)": {
     "applicationWithEntities": {
@@ -5663,7 +5657,6 @@ exports[`generator - angular samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "skipInstall": true,
   },
 }
 `;

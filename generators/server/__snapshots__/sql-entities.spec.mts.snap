@@ -1626,7 +1626,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -1717,7 +1716,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -1808,7 +1806,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -1897,7 +1894,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -1989,7 +1985,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2077,7 +2072,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2168,7 +2162,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2257,7 +2250,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2345,7 +2337,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2435,7 +2426,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2526,7 +2516,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",
@@ -2617,7 +2606,6 @@ exports[`generator - sql - entities samples matrix should match snapshot 1`] = `
         },
       ],
     },
-    "defaults": true,
     "skipPriorities": [
       "writing",
       "postWriting",

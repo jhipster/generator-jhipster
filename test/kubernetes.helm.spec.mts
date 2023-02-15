@@ -82,7 +82,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -122,7 +121,6 @@ describe('generator - Kubernetes Helm', () => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -163,7 +161,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -204,7 +201,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -251,7 +247,6 @@ describe('generator - Kubernetes Helm', () => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -301,7 +296,6 @@ describe('generator - Kubernetes Helm', () => {
           createMockedConfig('04-mongo', dir);
           createMockedConfig('07-mariadb', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -356,7 +350,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -393,7 +386,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('09-kafka', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -429,7 +421,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -473,7 +464,6 @@ describe('generator - Kubernetes Helm', () => {
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',

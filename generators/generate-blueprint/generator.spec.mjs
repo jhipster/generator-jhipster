@@ -50,7 +50,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ defaults: true }).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
         expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(true);

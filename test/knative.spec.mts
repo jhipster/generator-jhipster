@@ -108,7 +108,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -149,7 +148,6 @@ describe('generator - Knative', () => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -189,7 +187,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -229,7 +226,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -268,7 +264,6 @@ describe('generator - Knative', () => {
             createMockedConfig('02-mysql', dir);
             createMockedConfig('03-psql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -316,7 +311,6 @@ describe('generator - Knative', () => {
             createMockedConfig('07-mariadb', dir);
             createMockedConfig('11-mssql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -368,7 +362,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -410,7 +403,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -452,7 +444,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -493,7 +484,6 @@ describe('generator - Knative', () => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -535,7 +525,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -577,7 +566,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -623,7 +611,6 @@ describe('generator - Knative', () => {
             createMockedConfig('02-mysql', dir);
             createMockedConfig('03-psql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -674,7 +661,6 @@ describe('generator - Knative', () => {
             createMockedConfig('04-mongo', dir);
             createMockedConfig('07-mariadb', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -730,7 +716,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -775,7 +760,6 @@ describe('generator - Knative', () => {
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',

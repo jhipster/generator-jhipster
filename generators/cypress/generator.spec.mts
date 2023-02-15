@@ -59,7 +59,6 @@ const testSamples = () =>
   Object.entries(e2eMatrix).map(([name, sample]) => [
     name,
     {
-      skipInstall: true,
       applicationWithEntities: {
         config: {
           ...sample,

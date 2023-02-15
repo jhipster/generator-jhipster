@@ -28,7 +28,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'jenkins',
             insideDocker: false,
@@ -57,7 +56,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'jenkins',
             insideDocker: false,
@@ -86,7 +84,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'jenkins',
             insideDocker: false,
@@ -123,7 +120,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'jenkins',
             insideDocker: true,
@@ -164,7 +160,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'gitlab',
             insideDocker: false,
@@ -193,7 +188,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'gitlab',
             cicdIntegrations: [],
@@ -221,7 +215,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/npm-skip-server'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'gitlab',
             insideDocker: true,
@@ -247,7 +240,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'gitlab',
             insideDocker: false,
@@ -284,7 +276,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'gitlab',
             insideDocker: true,
@@ -351,7 +342,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'travis',
             cicdIntegrations: [],
@@ -377,7 +367,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'travis',
             cicdIntegrations: [],
@@ -407,7 +396,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'travis',
             cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk', 'cypressDashboard'],
@@ -452,7 +440,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'azure',
             cicdIntegrations: ['cypressDashboard'],
@@ -480,7 +467,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'azure',
             cicdIntegrations: [],
@@ -506,7 +492,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'azure',
             cicdIntegrations: ['snyk'],
@@ -531,7 +516,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'azure',
             cicdIntegrations: ['snyk'],
@@ -580,7 +564,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'github',
             cicdIntegrations: [],
@@ -602,7 +585,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'github',
             cicdIntegrations: [],
@@ -624,7 +606,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'github',
             cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk', 'cypressDashboard'],
@@ -667,7 +648,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'github',
             cicdIntegrations: ['sonar', 'publishDocker', 'heroku', 'snyk'],
@@ -727,7 +707,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'circle',
             cicdIntegrations: ['cypressDashboard'],
@@ -756,7 +735,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'circle',
             cicdIntegrations: [],
@@ -785,7 +763,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'circle',
             cicdIntegrations: ['snyk'],
@@ -810,7 +787,6 @@ describe('generator - CI-CD', () => {
           .inTmpDir(dir => {
             fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
-          .withOptions({ skipChecks: true })
           .withAnswers({
             pipeline: 'circle',
             cicdIntegrations: ['snyk'],

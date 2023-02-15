@@ -31,7 +31,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = `${__dirname}/index.mts`;
-const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -82,17 +81,12 @@ describe(`generator - ${generator}`, () => {
     describe('some entities', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
-          .withArguments(['Foo', 'Bar'])
-          .withOptions({
-            ...DEFAULT_TEST_OPTIONS,
-            regenerate: true,
-            force: true,
-            defaults: true,
-            ignoreNeedlesError: true,
-            applicationWithEntities,
-          });
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withArguments(['Foo', 'Bar']).withOptions({
+          regenerate: true,
+          force: true,
+          ignoreNeedlesError: true,
+          applicationWithEntities,
+        });
       });
 
       after(() => runResult.cleanup());
@@ -117,18 +111,13 @@ describe(`generator - ${generator}`, () => {
     describe('selected entities with writeEveryEntity', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
-          .withArguments(['Foo', 'Bar'])
-          .withOptions({
-            ...DEFAULT_TEST_OPTIONS,
-            regenerate: true,
-            force: true,
-            writeEveryEntity: true,
-            defaults: true,
-            ignoreNeedlesError: true,
-            applicationWithEntities,
-          });
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withArguments(['Foo', 'Bar']).withOptions({
+          regenerate: true,
+          force: true,
+          writeEveryEntity: true,
+          ignoreNeedlesError: true,
+          applicationWithEntities,
+        });
       });
 
       after(() => runResult.cleanup());
@@ -153,11 +142,9 @@ describe(`generator - ${generator}`, () => {
     describe('all entities', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          ...DEFAULT_TEST_OPTIONS,
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withOptions({
           regenerate: true,
           force: true,
-          defaults: true,
           ignoreNeedlesError: true,
           applicationWithEntities,
         });

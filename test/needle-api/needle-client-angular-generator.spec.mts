@@ -50,9 +50,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
     runResult = await runContext
       .withOptions({
         defaults: true,
-        skipInstall: true,
         blueprint: 'myblueprint2',
-        skipChecks: true,
         skipServer: true,
       })
       .withGenerators([[mockAngularBlueprintSubGen, 'jhipster-myblueprint2:angular']])
@@ -83,8 +81,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
     await runResult
       .create('jhipster-myblueprint2:angular')
       .withGenerators([[mockAngularBlueprintSubGen, 'jhipster-myblueprint2:angular']])
-      .withOptions({ force: false, skipChecks: true, skipInstall: true })
-      // .withOptions({ force: false, bail: true, skipChecks: true, skipInstall: true })
+      .withOptions({ force: false })
       .run();
   });
   it('admin menu contains the admin element added by needle api', () => {

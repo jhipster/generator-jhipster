@@ -58,10 +58,7 @@ describe(`generator - ${generator}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(options)
-          .withOptions({
-            skipInstall: true,
-            skipPriorities,
-          })
+          .withOptions({ skipPriorities })
           .withMockedGenerators(mockedComposedGenerators);
       });
 
@@ -82,10 +79,7 @@ describe(`generator - ${generator}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(options)
-          .withOptions({
-            skipInstall: true,
-            skipPriorities,
-          })
+          .withOptions({ skipPriorities })
           .withMockedGenerators(mockedComposedGenerators);
       });
 
@@ -106,10 +100,7 @@ describe(`generator - ${generator}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(options)
-          .withOptions({
-            skipInstall: true,
-            skipPriorities,
-          })
+          .withOptions({ skipPriorities })
           .withMockedGenerators(mockedComposedGenerators);
       });
 
@@ -133,10 +124,7 @@ describe(`generator - ${generator}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(options)
-          .withOptions({
-            skipInstall: true,
-            skipPriorities,
-          })
+          .withOptions({ skipPriorities })
           .withMockedGenerators(mockedComposedGenerators);
       });
 

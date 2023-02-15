@@ -36,9 +36,7 @@ describe('generator - base - local blueprint', () => {
           mkdirSync(applicationDir, { recursive: true });
           writeFileSync(path.join(applicationDir, 'index.mjs'), BLUEPRINT_CONTENTS);
         })
-        .withOptions({
-          defaults: true,
-        });
+        .withJHipsterConfig();
     });
 
     it('creates expected default files', () => {
