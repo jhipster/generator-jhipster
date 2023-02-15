@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { buildServerMatrix } from '../../test/support/index.mjs';
+import { buildSamplesFromMatrix, buildServerMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
@@ -40,22 +40,7 @@ const generatorFile = join(__dirname, 'index.mts');
 
 const commonConfig = { messageBroker: KAFKA };
 
-const samples = buildServerMatrix();
-
-const samplesBuilder = (): [string, any][] =>
-  Object.entries(samples).map(([name, sample]) => [
-    name,
-    {
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-      },
-    },
-  ]);
-
-const testSamples = samplesBuilder();
+const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -67,12 +52,12 @@ describe(`generator - ${generator}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples.forEach(([name, sample]) => {
+  Object.entries(testSamples).forEach(([name, config]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig().withOptions(sample);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig(config);
       });
 
       after(() => runResult.cleanup());

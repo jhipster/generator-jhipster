@@ -22,19 +22,7 @@ const generatorFile = join(__dirname, 'index.mts');
 const { VUE: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const samplesBuilder = () =>
-  Object.entries(buildClientSamples()).map(([name, sample]) => [
-    name,
-    {
-      applicationWithEntities: {
-        config: {
-          ...sample,
-          ...commonConfig,
-        },
-        entities,
-      },
-    },
-  ]);
+const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = (clientSrcDir, clientTestDir) => [
   `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
@@ -68,8 +56,6 @@ const clientAdminFiles = (clientSrcDir, clientTestDir) => [
   `${clientTestDir}spec/app/admin/health/health.service.spec.ts`,
 ];
 
-const testSamples = samplesBuilder();
-
 describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -81,17 +67,18 @@ describe(`generator - ${clientFramework}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
-
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+        runResult = await helpers
+          .run(generatorFile)
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
       after(() => runResult.cleanup());

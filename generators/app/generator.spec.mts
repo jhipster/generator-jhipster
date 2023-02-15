@@ -51,12 +51,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
-          .withJHipsterConfig()
-          .withOptions({
-            skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'],
-          });
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities();
       });
 
       it('should match snapshot', () => {
@@ -72,11 +67,10 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorPath)
-          .withJHipsterConfig()
-          .withOptions({
+          .withJHipsterConfig({
             applicationType: 'gateway',
-            skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'],
-          });
+          })
+          .withSkipWritingPriorities();
       });
 
       it('should match snapshot', () => {
@@ -93,11 +87,10 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorPath)
-          .withJHipsterConfig()
-          .withOptions({
+          .withJHipsterConfig({
             applicationType: 'microservice',
-            skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'],
-          });
+          })
+          .withSkipWritingPriorities();
       });
 
       it('should match snapshot', () => {

@@ -3071,489 +3071,118 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
 exports[`generator - react samples matrix should match snapshot 1`] = `
 {
   "gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "gateway",
-        "authenticationType": "jwt",
-        "clientFramework": "react",
-        "clientSrcDir": "src/",
-        "clientTestDir": "test/",
-        "enableTranslation": false,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": false,
-        "skipUserManagement": true,
-        "websocket": true,
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "gateway",
+    "authenticationType": "jwt",
+    "clientFramework": "react",
+    "clientSrcDir": "src/",
+    "clientTestDir": "test/",
+    "enableTranslation": false,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": false,
+    "skipUserManagement": true,
+    "websocket": true,
+    "withAdminUi": false,
   },
   "gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "gateway",
-        "authenticationType": "oauth2",
-        "clientFramework": "react",
-        "clientSrcDir": "src/",
-        "clientTestDir": "test/",
-        "enableTranslation": true,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": true,
-        "websocket": true,
-        "withAdminUi": true,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "clientFramework": "react",
+    "clientSrcDir": "src/",
+    "clientTestDir": "test/",
+    "enableTranslation": true,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": true,
+    "websocket": true,
+    "withAdminUi": true,
   },
   "microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "microservice",
-        "authenticationType": "jwt",
-        "clientFramework": "react",
-        "clientSrcDir": "src/",
-        "clientTestDir": "test/",
-        "enableTranslation": false,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": false,
-        "skipUserManagement": false,
-        "websocket": false,
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "clientFramework": "react",
+    "clientSrcDir": "src/",
+    "clientTestDir": "test/",
+    "enableTranslation": false,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": false,
+    "skipUserManagement": false,
+    "websocket": false,
+    "withAdminUi": false,
   },
   "microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "microservice",
-        "authenticationType": "oauth2",
-        "clientFramework": "react",
-        "clientSrcDir": "src/main/webapp2/",
-        "clientTestDir": "src/test/javascript2/",
-        "enableTranslation": true,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": true,
-        "websocket": false,
-        "withAdminUi": true,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "microservice",
+    "authenticationType": "oauth2",
+    "clientFramework": "react",
+    "clientSrcDir": "src/main/webapp2/",
+    "clientTestDir": "src/test/javascript2/",
+    "enableTranslation": true,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": true,
+    "websocket": false,
+    "withAdminUi": true,
   },
   "monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "monolith",
-        "authenticationType": "jwt",
-        "clientFramework": "react",
-        "clientSrcDir": "src/main/webapp2/",
-        "clientTestDir": "src/test/javascript2/",
-        "enableTranslation": true,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": true,
-        "skipUserManagement": false,
-        "websocket": true,
-        "withAdminUi": true,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "clientFramework": "react",
+    "clientSrcDir": "src/main/webapp2/",
+    "clientTestDir": "src/test/javascript2/",
+    "enableTranslation": true,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": true,
+    "skipUserManagement": false,
+    "websocket": true,
+    "withAdminUi": true,
   },
   "monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "monolith",
-        "authenticationType": "oauth2",
-        "clientFramework": "react",
-        "clientSrcDir": undefined,
-        "enableTranslation": false,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": false,
-        "websocket": false,
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "clientFramework": "react",
+    "clientSrcDir": undefined,
+    "enableTranslation": false,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": false,
+    "websocket": false,
+    "withAdminUi": false,
   },
   "monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true)": {
-    "applicationWithEntities": {
-      "config": {
-        "applicationType": "monolith",
-        "authenticationType": "session",
-        "clientFramework": "react",
-        "clientSrcDir": undefined,
-        "enableTranslation": false,
-        "languages": [
-          "fr",
-          "en",
-        ],
-        "nativeLanguage": "en",
-        "skipJhipsterDependencies": false,
-        "skipUserManagement": true,
-        "websocket": true,
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129000100",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "jpaMetamodelFiltering": true,
-          "name": "Simple",
-        },
-        {
-          "changelogDate": "20220129002000",
-          "entityPackage": "custom",
-          "fields": [
-            {
-              "fieldName": "id",
-              "fieldType": "UUID",
-            },
-          ],
-          "name": "EntityWithCustomId",
-        },
-        {
-          "changelogDate": "20220129000300",
-          "fields": [
-            {
-              "fieldName": "simpleName",
-              "fieldType": "String",
-            },
-          ],
-          "microserviceName": "microservice1",
-          "name": "Microservice",
-          "pagination": "infiniscroll",
-          "service": "service",
-          "skipFakeData": true,
-        },
-        {
-          "changelogDate": "20220129000400",
-          "fields": [
-            {
-              "fieldName": "skipClientName",
-              "fieldType": "String",
-            },
-          ],
-          "name": "SkipClient",
-          "skipClient": true,
-        },
-      ],
-    },
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "clientFramework": "react",
+    "clientSrcDir": undefined,
+    "enableTranslation": false,
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "skipJhipsterDependencies": false,
+    "skipUserManagement": true,
+    "websocket": true,
+    "withAdminUi": false,
   },
 }
 `;

@@ -9,14 +9,10 @@ const pageName = 'MyTestPage';
 const pageFolderName = 'my-test-page';
 const pageInstance = 'myTestPage';
 
-const createClientProject = (options?: any) =>
-  helpers
-    .runJHipster('app')
-    .withJHipsterConfig()
-    .withOptions({
-      skipServer: true, // We don't need server for this test
-      ...options,
-    });
+const createClientProject = () =>
+  helpers.runJHipster('app').withJHipsterConfig({
+    skipServer: true, // We don't need server for this test
+  });
 
 const createPage = runResult =>
   runResult
