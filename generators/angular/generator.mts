@@ -18,6 +18,7 @@
  */
 import _ from 'lodash';
 import chalk from 'chalk';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
@@ -26,7 +27,13 @@ import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from
 import { writeFiles } from './files-angular.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { buildAngularFormPath as angularFormPath, addEntitiesRoute, addToEntitiesMenu } from './support/index.mjs';
+import {
+  buildAngularFormPath as angularFormPath,
+  addEntitiesRoute,
+  addToEntitiesMenu,
+  translateAngularFilesTransform,
+  isTranslatedAngularFile,
+} from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
@@ -121,6 +128,14 @@ export default class AngularGenerator extends BaseApplicationGenerator<Generator
     return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
+      queueTranslateTransform({ control, application }) {
+        if (!application.enableTranslation) {
+          (this as any).queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation), {
+            name: 'translating webapp',
+            streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
+          });
+        }
+      },
     });
   }
 

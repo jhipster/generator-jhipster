@@ -472,7 +472,6 @@ export async function writeFiles({ application, control }) {
 
   await this.writeFiles({
     sections: files,
-    transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
     context: {
       ...application,
       getWebappTranslation: control.getWebappTranslation,
