@@ -1,9 +1,6 @@
-import path from 'path';
-import fse from 'fs-extra';
-
 import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
-import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
+import { getGenerator } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/generator.mjs';
 
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
@@ -16,6 +13,8 @@ class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   }
 }
 
+const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
+
 describe('generator - entity database changelogs', () => {
   context('when regenerating the entity', () => {
     describe('with cassandra database', () => {
@@ -24,10 +23,7 @@ describe('generator - entity database changelogs', () => {
         runResult = await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
-          .withJHipsterConfig({ databaseType: 'cassandra' })
-          .doInDir(dir => {
-            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
-          })
+          .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });
@@ -44,16 +40,9 @@ describe('generator - entity database changelogs', () => {
         runResult = await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
-          .withJHipsterConfig({ applicationType: 'gateway' })
-          .doInDir(dir => {
-            const jsonFile = path.join(dir, '.jhipster/Foo.json');
-            fse.copySync(getEntityTemplatePath('Simple'), jsonFile);
-            fse.writeJsonSync(jsonFile, {
-              ...fse.readJsonSync(jsonFile),
-              microservicePath: 'microservice1',
-              microserviceName: 'microservice1',
-            });
-          })
+          .withJHipsterConfig({ applicationType: 'gateway' }, [
+            { ...entityFoo, microservicePath: 'microservice1', microserviceName: 'microservice1' },
+          ])
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });

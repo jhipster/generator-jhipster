@@ -1,9 +1,9 @@
-import path from 'path';
-import fse from 'fs-extra';
 import { basicHelpers as helpers } from '../support/index.mjs';
 
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
-import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
+import { getGenerator } from '../support/index.mjs';
+
+const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 
 describe('generator - app - database changelogs', () => {
   context('when regenerating the application', () => {
@@ -12,10 +12,7 @@ describe('generator - app - database changelogs', () => {
       before(() =>
         helpers
           .create(getGenerator('app'))
-          .withJHipsterConfig({ databaseType: 'cassandra' })
-          .doInDir(dir => {
-            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
-          })
+          .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
           .withOptions({ withEntities: true, force: true, skipClient: true })
           .run()
           .then(result => {
