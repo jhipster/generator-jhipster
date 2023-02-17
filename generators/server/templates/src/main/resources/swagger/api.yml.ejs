@@ -35,7 +35,8 @@ components:
       content:
         "application/problem+json":
           schema:
-            $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+            $ref: 'https://tools.ietf.org/html/rfc7807'
+
 <% if (authenticationTypeJwt) { %>
   securitySchemes:
     jwt:
