@@ -79,7 +79,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -121,7 +121,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['01-gateway', '02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -165,7 +165,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -209,7 +209,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -258,7 +258,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['02-mysql', '03-psql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -307,7 +307,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -444,7 +444,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -491,7 +491,7 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
