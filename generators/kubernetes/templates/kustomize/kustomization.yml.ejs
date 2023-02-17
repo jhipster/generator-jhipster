@@ -48,6 +48,7 @@ const appOut = appName.concat('-', suffix); _%>
 - cert-manager/letsencrypt-staging-issuer.yml
 # keycloak
 - keycloak-<%= suffix %>/keycloak-configmap.yml
+- keycloak-<%= suffix %>/keycloak-postgresql.yml
 - keycloak-<%= suffix %>/keycloak.yml
 <%_ } _%>  
 <%_ if (useKafka) { _%>

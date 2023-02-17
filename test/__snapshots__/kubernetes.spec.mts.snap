@@ -5168,6 +5168,7 @@ resources:
   - cert-manager/letsencrypt-staging-issuer.yml
   # keycloak
   - keycloak-k8s/keycloak-configmap.yml
+  - keycloak-k8s/keycloak-postgresql.yml
   - keycloak-k8s/keycloak.yml
   # service discovery eureka/consul
   - registry-k8s/jhipster-registry.yml
