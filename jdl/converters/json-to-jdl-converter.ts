@@ -41,7 +41,7 @@ export default {
  * @param directory the directory to find JHipster files.
  * @param output the file where the JDL will be written
  */
-export function convertToJDL(directory = '.', output = 'app.jdl') {
+export function convertToJDL(directory = '.', output: string | false = 'app.jdl') {
   let jdlObject: JDLObject;
   if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
     const yoRcFileContent = readJSONFile(path.join(directory, '.yo-rc.json'));
@@ -54,10 +54,13 @@ export function convertToJDL(directory = '.', output = 'app.jdl') {
     try {
       jdlObject = getJDLObjectFromMultipleApplications(directory);
     } catch (error) {
-      return;
+      return undefined;
     }
   }
-  exportJDLObject(jdlObject, path.join(directory, output));
+  if (output) {
+    exportJDLObject(jdlObject, path.join(directory, output));
+  }
+  return jdlObject;
 }
 
 export function convertSingleContentToJDL(yoRcFileContent, entities?: Map<string, Entity>) {
