@@ -84,7 +84,7 @@ export const createBlueprintFiles = (
   };
 };
 
-class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunContext<GeneratorType> {
+class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> extends RunContext<GeneratorType> {
   public sharedSource: Record<string, Mock>;
   private sharedApplication: Record<string, any>;
   private sharedControl: Record<string, any>;
@@ -133,7 +133,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunConte
 
   withGenerateWorkspaceApplications(): this {
     this.generateApplicationsSet = true;
-    return this.withOptions({ generateApplications: this.workspaceApplications });
+    return this.withOptions({ generateApplications: true, workspacesFolders: this.workspaceApplications });
   }
 
   withFakeTestBlueprint(blueprintPackage: string, { packageJson, generator = 'test-blueprint' }: FakeBlueprintOptions = {}): this {

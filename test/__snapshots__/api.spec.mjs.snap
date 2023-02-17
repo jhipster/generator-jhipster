@@ -38,6 +38,7 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_INFO": "info",
   "GENERATOR_INIT": "init",
   "GENERATOR_JAVA": "java",
+  "GENERATOR_JDL": "jdl",
   "GENERATOR_KAFKA": "kafka",
   "GENERATOR_KUBERNETES": "kubernetes",
   "GENERATOR_KUBERNETES_HELM": "kubernetes-helm",

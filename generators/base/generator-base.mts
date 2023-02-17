@@ -261,7 +261,7 @@ export default class CoreGenerator extends YeomanGenerator {
         optionValue = this.options[optionDesc.name ?? optionName];
       }
       if (optionValue !== undefined) {
-        optionValue = optionDesc.type(optionValue);
+        optionValue = optionDesc.type !== Array && optionDesc.type !== Function ? optionDesc.type(optionValue) : optionValue;
         if (optionDesc.scope === 'storage') {
           this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'blueprint') {

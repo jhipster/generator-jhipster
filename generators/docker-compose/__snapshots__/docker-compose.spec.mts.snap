@@ -684,8 +684,8 @@ exports[`generator - Docker Compose gateway and multi microservices using oauth2
       "01-gateway",
       "02-mysql",
       "03-psql",
-      "07-mariadb",
-      "10-couchbase"
+      "10-couchbase",
+      "07-mariadb"
     ],
     "serviceDiscoveryType": "consul"
   }
@@ -1320,8 +1320,8 @@ exports[`generator - Docker Compose gateway and multi microservices, with couchb
       "01-gateway",
       "02-mysql",
       "03-psql",
-      "07-mariadb",
-      "10-couchbase"
+      "10-couchbase",
+      "07-mariadb"
     ],
     "serviceDiscoveryType": "consul"
   }

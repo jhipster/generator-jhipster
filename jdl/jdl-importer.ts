@@ -87,9 +87,11 @@ export function createImporterFromContent(jdlString, configuration?: any) {
   return makeJDLImporter(content, configuration || {});
 }
 
+export type ApplicationWithEntities = { config: any; entities: any[] };
+
 export type ImportState = {
   exportedApplications: any[];
-  exportedApplicationsWithEntities: any;
+  exportedApplicationsWithEntities: Record<string, ApplicationWithEntities>;
   exportedEntities: any[];
   exportedDeployments: any[];
 };

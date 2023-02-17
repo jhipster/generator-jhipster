@@ -182,11 +182,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       type: Boolean,
     });
 
-    this.option('skip-jhipster-dependencies', {
-      desc: "Don't write jhipster dependencies.",
-      type: Boolean,
-    });
-
     this.option('legacy-db-names', {
       desc: 'Generate database names with jhipster 6 compatibility.',
       type: Boolean,

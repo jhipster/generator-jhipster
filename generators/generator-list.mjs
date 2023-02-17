@@ -53,6 +53,7 @@ export const GENERATOR_HEROKU = 'heroku';
 export const GENERATOR_INFO = 'info';
 export const GENERATOR_INIT = 'init';
 export const GENERATOR_JAVA = 'java';
+export const GENERATOR_JDL = 'jdl';
 export const GENERATOR_KAFKA = 'kafka';
 export const GENERATOR_KUBERNETES = 'kubernetes';
 export const GENERATOR_KUBERNETES_HELM = 'kubernetes-helm';
