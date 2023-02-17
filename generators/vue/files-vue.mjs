@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { replaceVueTranslations } from './transform-vue.mjs';
 
 import { clientApplicationBlock, clientTestBlock, clientSrcBlock } from '../client/utils.mjs';
 
@@ -326,7 +325,6 @@ export const entitiesFiles = {
 export async function writeFiles({ application }) {
   await this.writeFiles({
     sections: vueFiles,
-    transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,
     context: application,
   });
 }
@@ -335,7 +333,6 @@ export async function writeEntitiesFiles({ application, entities }) {
   entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
   await this.writeFiles({
     sections: entitiesFiles,
-    transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,
     context: {
       ...application,
       entities,

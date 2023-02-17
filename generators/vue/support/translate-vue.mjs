@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from 'p-transform';
+import { Minimatch } from 'minimatch';
 
 const TRANSLATIONS_ATTRIBUTES = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
   .map(s => `(?:${s}="\\$t\\(.*?\\)")`)
@@ -27,10 +29,20 @@ const TRANSLATIONS_ATTRIBUTES = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bi
  * @type {import('../generator-base.js').EditFileCallback}
  * @this {import('../generator-base.js')}
  */
-// eslint-disable-next-line import/prefer-default-export
 export function replaceVueTranslations(body, filePath) {
   if (/\.vue$/.test(filePath)) {
     body = body.replace(new RegExp(`[\\s\\n]*(?:${TRANSLATIONS_ATTRIBUTES})`, 'g'), '');
   }
   return body;
 }
+
+const minimatch = new Minimatch('**/*.vue');
+export const isTranslatedVueFile = file => minimatch.match(file.path);
+
+const translateVueFilesTransform = () => {
+  return passthrough(file => {
+    file.contents = Buffer.from(replaceVueTranslations(file.contents.toString(), file.path));
+  }, 'jhipster:translate-vue-files');
+};
+
+export default translateVueFilesTransform;

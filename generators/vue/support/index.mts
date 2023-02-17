@@ -17,4 +17,6 @@
  * limitations under the License.
  */
 export * from './needles.mjs';
+export * from './translate-vue.mjs';
+export { default as translateVueFilesTransform } from './translate-vue.mjs';
 export { default as updateLanguagesTask } from './update-languages.mjs';
