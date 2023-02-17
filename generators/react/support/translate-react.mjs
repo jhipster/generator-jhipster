@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from 'p-transform';
+import { Minimatch } from 'minimatch';
+
 const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
 const TRANSLATE_IMPORT_2 = / *[T|t]ranslate,|, ?[T|t]ranslate/.source; // Translate import
 const TRANSLATE_IMPORT = [TRANSLATE_IMPORT_1, TRANSLATE_IMPORT_2].join('|');
@@ -103,9 +106,8 @@ const replaceTranslationKeysWithText = (
 /**
  * Replace and cleanup translations.
  *
- * @return {import('../base/api.mjs').EditFileCallback}
+ * @return {import('../../base/api.mjs').EditFileCallback}
  */
-// eslint-disable-next-line import/prefer-default-export
 export const createTranslationReplacer = getWebappTranslation =>
   function replaceReactTranslations(body, filePath) {
     if (/\.tsx$/.test(filePath)) {
@@ -120,3 +122,15 @@ export const createTranslationReplacer = getWebappTranslation =>
     }
     return body;
   };
+
+const minimatch = new Minimatch('**/*.tsx');
+export const isTranslatedReactFile = file => minimatch.match(file.path);
+
+const translateReactFilesTransform = getWebappTranslation => {
+  const translate = createTranslationReplacer(getWebappTranslation);
+  return passthrough(file => {
+    file.contents = Buffer.from(translate(file.contents.toString(), file.path));
+  }, 'jhipster:translate-react-files');
+};
+
+export default translateReactFilesTransform;

@@ -17,4 +17,6 @@
  * limitations under the License.
  */
 export * from './needles.mjs';
+export * from './translate-react.mjs';
+export { default as translateReactFilesTransform } from './translate-react.mjs';
 export { default as updateLanguagesTask } from './update-languages.mjs';

@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from 'p-transform';
+import { Minimatch } from 'minimatch';
+
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 
 const JHI_TRANSLATE_REGEX = /(\n?\s*[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/.source;
@@ -109,3 +112,15 @@ export const createTranslationReplacer = getWebappTranslation =>
     }
     return content;
   };
+
+const minimatch = new Minimatch('**/*{.html,.route.ts,.module.ts}');
+export const isTranslatedAngularFile = file => minimatch.match(file.path);
+
+const translateAngularFilesTransform = getWebappTranslation => {
+  const translate = createTranslationReplacer(getWebappTranslation);
+  return passthrough(file => {
+    file.contents = Buffer.from(translate(file.contents.toString(), file.path));
+  }, 'jhipster:translate-angular-files');
+};
+
+export default translateAngularFilesTransform;
