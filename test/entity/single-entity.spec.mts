@@ -1,10 +1,5 @@
-import path from 'path';
-import fse from 'fs-extra';
-
 import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
-import createMockedConfig from '../support/mock-config.mjs';
-import { getTemplatePath, getEntityTemplatePath } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/generator.mjs';
 import { GENERATOR_ENTITY } from '../../generators/generator-list.mjs';
 
@@ -18,6 +13,9 @@ class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   }
 }
 
+const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
+const entityBar = { name: 'Bar', changelogDate: '20160926101211' };
+
 describe('generator - entity --single-entity', () => {
   context('when regenerating', () => {
     describe('with default configuration', () => {
@@ -26,11 +24,7 @@ describe('generator - entity --single-entity', () => {
         runResult = await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
-          .doInDir(dir => {
-            fse.copySync(getTemplatePath('default'), dir);
-            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
-            fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
-          })
+          .withJHipsterConfig({}, [entityFoo, entityBar])
           .withArguments(['Foo'])
           .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
       });
@@ -60,11 +54,7 @@ describe('generator - entity --single-entity', () => {
         runResult = await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
-          .doInDir(dir => {
-            createMockedConfig('05-cassandra', dir, { appDir: '' });
-            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
-            fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
-          })
+          .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo, entityBar])
           .withArguments(['Foo'])
           .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
       });

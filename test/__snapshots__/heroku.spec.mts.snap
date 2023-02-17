@@ -6,36 +6,10 @@ exports[`generator - Heroku microservice application with JAR deployment should 
     "contents": "{
   "generator-jhipster": {
     "applicationType": "microservice",
-    "authenticationType": "jwt",
-    "baseName": "sampleMicroservice",
-    "buildTool": "maven",
-    "cacheProvider": "hazelcast",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": false,
-    "enableSwaggerCodegen": false,
-    "enableTranslation": false,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
-    "herokuJavaVersion": "17",
-    "jhiPrefix": "jhi",
-    "jhipsterVersion": "4.14.0",
-    "jwtSecretKey": "SECRET--50",
-    "messageBroker": "no",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "promptValues": {
-      "packageName": "com.mycompany.myapp"
-    },
-    "searchEngine": "no",
-    "serverPort": "8081",
-    "serviceDiscoveryType": "eureka",
-    "skipClient": true,
-    "skipUserManagement": true,
-    "testFrameworks": [],
-    "websocket": "no"
+    "herokuJavaVersion": "17"
   }
 }
 ",
@@ -106,26 +80,10 @@ exports[`generator - Heroku monolith application in the EU should match files sn
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
-    "herokuJavaVersion": "11",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "11"
   }
 }
 ",
@@ -188,26 +146,10 @@ exports[`generator - Heroku monolith application in the US should match files sn
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
-    "herokuJavaVersion": "11",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "11"
   }
 }
 ",
@@ -270,26 +212,10 @@ exports[`generator - Heroku monolith application with Git deployment should matc
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "git",
-    "herokuJavaVersion": "11",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "11"
   }
 }
 ",
@@ -352,26 +278,10 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
-    "herokuJavaVersion": "11",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "postgresql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "11"
   }
 }
 ",
@@ -434,26 +344,10 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-new-name",
     "herokuDeployType": "jar",
-    "herokuJavaVersion": "11",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "11"
   }
 }
 ",
@@ -516,26 +410,11 @@ exports[`generator - Heroku monolith application with elasticsearch should match
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "samplePsql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "postgresql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "elasticsearch",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "searchEngine": "elasticsearch"
   }
 }
 ",
@@ -600,26 +479,10 @@ exports[`generator - Heroku monolith application with existing app should match 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableTranslation": true,
+    "baseName": "jhipster",
     "herokuAppName": "jhipster-existing",
     "herokuDeployType": "git",
-    "herokuJavaVersion": "17",
-    "languages": ["en", "fr"],
-    "nativeLanguage": "en",
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "herokuJavaVersion": "17"
   }
 }
 ",
