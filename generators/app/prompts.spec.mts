@@ -1,5 +1,5 @@
 import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 import {
   applicationTypes,
   databaseTypes,
@@ -9,7 +9,7 @@ import {
   clientFrameworkTypes,
   buildToolTypes,
 } from '../../jdl/jhipster/index.mjs';
-import { getGenerator } from '../support/index.mjs';
+import { GENERATOR_APP } from '../generator-list.mjs';
 
 const { MONOLITH } = applicationTypes;
 const { H2_DISK, MYSQL, SQL } = databaseTypes;
@@ -25,9 +25,9 @@ describe('generator - app - prompts', () => {
   describe('testFrameworks prompt', () => {
     describe('with cypress value', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(getGenerator('app'))
+      before(async () => {
+        runResult = await helpers
+          .runJHipster(GENERATOR_APP)
           .withAnswers({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',
@@ -45,14 +45,8 @@ describe('generator - app - prompts', () => {
             clientFramework: ANGULAR,
             clientTheme: 'none',
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should write testFrameworks with cypress value to .yo-rc.json', () => {
         assert.jsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [CYPRESS] } });

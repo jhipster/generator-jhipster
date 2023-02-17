@@ -87,10 +87,3 @@ export function copyBlueprint(sourceDir: string, destDir: string, ...blueprintNa
 export function copyFakeBlueprint(destDir: string, ...blueprintName: string[]) {
   copyBlueprint(getTemplatePath('blueprints/fake-blueprint'), destDir, ...blueprintName);
 }
-
-export function lnYeoman(packagePath: string) {
-  const nodeModulesPath = `${packagePath}/node_modules`;
-  fse.ensureDirSync(nodeModulesPath);
-  fs.symlinkSync(getPackageFilePath('node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
-  fs.symlinkSync(getPackageFilePath('node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
-}
