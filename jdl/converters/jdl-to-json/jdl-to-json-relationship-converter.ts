@@ -51,7 +51,6 @@ export function convert(jdlRelationships: JDLRelationship[] = [], entityNames: s
   convertedRelationships = new Map(entityNames.map(entityName => [entityName, []]));
   const relatedRelationships = getRelatedRelationships(jdlRelationships, entityNames);
   relatedRelationships.forEach((relatedRelationship, currentEntityName) => {
-    console.log(convertedRelationships);
     setRelationshipsFromEntity(relatedRelationship, currentEntityName, conversionOptions);
     setRelationshipsToEntity(relatedRelationship, currentEntityName, conversionOptions);
   });
