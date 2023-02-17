@@ -13,7 +13,6 @@ Options:
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
-  --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --skip-prompts                           Skip prompts
   --defaults                               Execute jhipster with default config (default: false)
   --base-name <value>                      Application base name
@@ -58,6 +57,7 @@ Options:
   --enable-hibernate-cache                 Enable hibernate cache
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
+  --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --prettier-tab-width                     Default tab width for prettier
   --skip-git                               Skip git repository initialization
   -h, --help                               display help for command
