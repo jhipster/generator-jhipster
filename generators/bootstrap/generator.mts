@@ -17,21 +17,20 @@
  * limitations under the License.
  */
 import environmentTransfrom from 'yeoman-environment/transform';
-import { transform } from 'p-transform';
-import { stat } from 'fs/promises';
-import { isBinaryFile } from 'isbinaryfile';
-import { Minimatch } from 'minimatch';
 import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import BaseGenerator from '../base/index.mjs';
-import MultiStepTransform from './multi-step-transform/index.mjs';
-import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
+import {
+  MultiStepTransform,
+  createPrettierTransform,
+  createForceWriteConfigFilesTransform,
+  autoCrlfTransform,
+  isPrettierConfigFile,
+} from './support/index.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
-import { detectCrLf } from './utils.mjs';
-import { normalizeLineEndings } from '../base/support/index.mjs';
 import command from './command.mjs';
 import { createSortConfigFilesTransform } from './support/index.mjs';
 
@@ -42,7 +41,6 @@ const {
   createConflicterStatusTransform,
   createYoRcTransform: createForceYoRcTransform,
   createYoResolveTransform: createApplyYoResolveTransform,
-  patternSpy,
 } = environmentTransfrom;
 
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
@@ -99,8 +97,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
       async commitPrettierConfig() {
-        const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
-        const filter = file => isFilePending(file) && minimatch.match(file.path);
+        const filter = file => isFilePending(file) && isPrettierConfigFile(file);
         await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
       },
       async commitFiles() {
@@ -163,7 +160,6 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
     const { skipYoResolve } = this.options;
-    const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
     const env: any = this.env;
 
     const { ignoreErrors } = this.options;
@@ -182,53 +178,16 @@ export default class BootstrapGenerator extends BaseGenerator {
       ],
     };
 
-    const createApplyPrettierTransform = () => {
-      const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
-      // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      const transformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
-      return prettierTransform(prettierOptions, this, transformOptions);
-    };
-
-    const createForceWriteConfigFiles = () =>
-      patternSpy((file: any) => {
-        file.conflicter = 'force';
-      }, '**/.jhipster/*.json').name('jhipster:config-files:force');
-
-    const convertToCRLF = () =>
-      transform(async (file: any) => {
-        if (!file.contents) {
-          return file;
-        }
-        if (await isBinaryFile(file.contents)) {
-          return file;
-        }
-        const fstat = await stat(file.path);
-        if (!fstat.isFile()) {
-          return file;
-        }
-        const attributes = Object.fromEntries(
-          (await this.createGit().raw('check-attr', 'binary', 'eol', '--', file.path))
-            .split(/\r\n|\r|\n/)
-            .map(attr => attr.split(':'))
-            .map(([_file, attr, value]) => [attr, value])
-        );
-        if (attributes.binary === 'set' || attributes.eol === 'lf') {
-          return file;
-        }
-        if (attributes.eol === 'crlf' || (await detectCrLf(file.path))) {
-          file.contents = Buffer.from(normalizeLineEndings(file.contents.toString(), '\r\n'));
-        }
-        return file;
-      }, 'jhipster:crlf');
+    const prettierOptions = { packageJson: true, java: !this.jhipsterConfig.skipServer };
+    const prettierTransformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
 
     const transformStreams = [
       ...(skipYoResolve ? [] : [createApplyYoResolveTransform(env.conflicter)]),
       createForceYoRcTransform(),
       createSortConfigFilesTransform(),
-      createForceWriteConfigFiles(),
-      ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
-      ...(this.skipPrettier ? [] : [createApplyPrettierTransform()]),
-      ...(autoCrlf ? [convertToCRLF()] : []),
+      createForceWriteConfigFilesTransform(),
+      ...(this.skipPrettier ? [] : [createPrettierTransform(prettierOptions, this, prettierTransformOptions)]),
+      ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
       createConflicterCheckTransform(env.conflicter, conflicterStatus),
       createConflicterStatusTransform(),
     ];

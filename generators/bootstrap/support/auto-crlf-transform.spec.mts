@@ -1,8 +1,8 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { writeFileSync } from 'fs';
-import { prepareTempDir } from '../../test/support/temp-dir.mjs';
+import { prepareTempDir } from '../../../test/support/temp-dir.mjs';
 
-import { detectCrLf } from './utils.mjs';
+import { detectCrLf } from './auto-crlf-transform.mjs';
 
 describe('generator - bootstrap - utils', () => {
   describe('::detectCrLf', () => {

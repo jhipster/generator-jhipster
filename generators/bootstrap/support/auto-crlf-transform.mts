@@ -16,17 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { transform } from 'p-transform';
+import { stat } from 'fs/promises';
 import { createReadStream } from 'fs';
+import { isBinaryFile } from 'isbinaryfile';
+import { type SimpleGit } from 'simple-git';
+import { normalizeLineEndings } from '../../base/support/index.mjs';
 
 /**
  * Detect the file first line endings
- *
- * @param {string} filePath
- * @returns {boolean|undefined} true in case of crlf, false in case of lf, undefined for a single line file
  */
-// eslint-disable-next-line import/prefer-default-export
-export function detectCrLf(filePath) {
-  return new Promise((resolve, reject) => {
+export function detectCrLf(filePath: string): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) => {
     let isCrlf;
     const rs = createReadStream(filePath, { encoding: 'utf8' });
     rs.on('data', function (chunk) {
@@ -45,3 +46,32 @@ export function detectCrLf(filePath) {
       });
   });
 }
+
+const autoCrlfTransform = (git: SimpleGit) =>
+  transform(async (file: any) => {
+    if (!file.contents) {
+      return file;
+    }
+    if (await isBinaryFile(file.contents)) {
+      return file;
+    }
+    const fstat = await stat(file.path);
+    if (!fstat.isFile()) {
+      return file;
+    }
+    const attributes = Object.fromEntries(
+      (await git.raw('check-attr', 'binary', 'eol', '--', file.path))
+        .split(/\r\n|\r|\n/)
+        .map(attr => attr.split(':'))
+        .map(([_file, attr, value]) => [attr, value])
+    );
+    if (attributes.binary === 'set' || attributes.eol === 'lf') {
+      return file;
+    }
+    if (attributes.eol === 'crlf' || (await detectCrLf(file.path))) {
+      file.contents = Buffer.from(normalizeLineEndings(file.contents.toString(), '\r\n'));
+    }
+    return file;
+  }, 'jhipster:crlf');
+
+export default autoCrlfTransform;

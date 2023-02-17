@@ -22,6 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import {
   getDBTypeFromDBValue,
@@ -33,6 +34,7 @@ import {
   formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
+  generatedAnnotationTransform,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
@@ -291,6 +293,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      generatedAnnotation({ application }) {
+        if (this.jhipsterConfig.withGeneratedFlag) {
+          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
+            name: 'adding @GeneratedByJHipster annotations',
+            streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
+          });
+        }
+      },
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {

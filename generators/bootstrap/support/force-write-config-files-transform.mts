@@ -16,8 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as autoCrlfTransform } from './auto-crlf-transform.mjs';
-export { default as createForceWriteConfigFilesTransform } from './force-write-config-files-transform.mjs';
-export { default as MultiStepTransform } from './multi-step-transform/index.mjs';
-export * from './prettier-support.mjs';
-export { default as createSortConfigFilesTransform } from './sort-config-files-transform.mjs';
+import environmentTransform from 'yeoman-environment/transform';
+
+const { patternSpy } = environmentTransform;
+
+const createForceWriteConfigFilesTransform = () =>
+  patternSpy((file: any) => {
+    file.conflicter = 'force';
+  }, '**/.jhipster/*.json').name('jhipster:config-files:force');
+
+export default createForceWriteConfigFilesTransform;
