@@ -48,6 +48,7 @@ import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
 import command from './command.mjs';
+import { loadApplicationConfig, prepareApplication } from './internal/index.mjs';
 
 const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -268,6 +269,14 @@ export default class BaseGenerator extends YeomanGenerator {
         }
       }
     });
+  }
+
+  async loadGeneratorConfiguration(application, ...generator: string[]) {
+    await loadApplicationConfig(generator, application, this.jhipsterConfigWithDefaults, { env: this.env });
+  }
+
+  async prepareGeneratorApplication(application, ...generator: string[]) {
+    await prepareApplication(generator, application, { env: this.env });
   }
 
   /**

@@ -61,6 +61,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
+import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -82,8 +83,6 @@ const { ELASTICSEARCH } = searchEngineTypes;
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
 
@@ -1624,34 +1623,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    dest.packageName = config.packageName;
-    dest.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
-    dest.serverPort = config.serverPort;
-
-    dest.srcMainJava = SERVER_MAIN_SRC_DIR;
-    dest.srcMainResources = SERVER_MAIN_RES_DIR;
-    dest.srcMainWebapp = CLIENT_MAIN_SRC_DIR;
-    dest.srcTestJava = SERVER_TEST_SRC_DIR;
-    dest.srcTestResources = SERVER_TEST_RES_DIR;
-    dest.srcTestJavascript = CLIENT_TEST_SRC_DIR;
-
-    dest.buildTool = config.buildTool;
-
-    dest.databaseType = config.databaseType;
-    dest.devDatabaseType = config.devDatabaseType;
-    dest.prodDatabaseType = config.prodDatabaseType;
-    dest.incrementalChangelog = config.incrementalChangelog;
-    dest.reactive = config.reactive;
-    dest.searchEngine = config.searchEngine;
-    dest.cacheProvider = config.cacheProvider;
-    dest.enableHibernateCache = config.enableHibernateCache;
-    dest.serviceDiscoveryType = config.serviceDiscoveryType;
-
-    dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
-    dest.messageBroker = config.messageBroker;
-    dest.websocket = config.websocket;
-    dest.embeddableLaunchScript = config.embeddableLaunchScript;
+  async loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+    await this.loadGeneratorConfiguration(dest, GENERATOR_SERVER);
 
     dest.enableGradleEnterprise = config.enableGradleEnterprise;
 
@@ -1676,30 +1649,19 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadDerivedServerConfig(dest = this) {
-    if (!dest.packageFolder) {
-      dest.packageFolder = `${dest.packageName.replace(/\./g, '/')}/`;
-    }
+  async loadDerivedServerConfig(dest = this) {
+    await this.prepareGeneratorApplication(dest, GENERATOR_SERVER);
 
     dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
     dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
-    if (!dest.websocket) {
-      dest.websocket = NO_WEBSOCKET;
-    }
     dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
 
-    if (!dest.searchEngine) {
-      dest.searchEngine = NO_SEARCH_ENGINE;
-    }
     dest.searchEngineNo = dest.searchEngine === NO_SEARCH_ENGINE;
     dest.searchEngineAny = !dest.searchEngineNo;
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
 
-    if (!dest.messageBroker) {
-      dest.messageBroker = NO_MESSAGE_BROKER;
-    }
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;

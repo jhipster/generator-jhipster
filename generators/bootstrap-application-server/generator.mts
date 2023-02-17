@@ -40,7 +40,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       async loadApplication({ application, control }) {
-        this.loadServerConfig(undefined, application);
+        await this.loadServerConfig(undefined, application);
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
@@ -73,8 +73,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
-        this.loadDerivedServerConfig(application);
+      async prepareApplication({ application }) {
+        await this.loadDerivedServerConfig(application);
       },
     });
   }

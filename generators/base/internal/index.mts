@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export * from './blueprint.mjs';
+export * from './meta.mjs';

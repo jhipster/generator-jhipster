@@ -102,9 +102,21 @@ export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
+export type JHipsterApplicationConfig = {
+  option?: true | Partial<JHipsterOption>;
+  defaultValue?: string | number;
+};
+
+export type JHipsterApplicationConfigs = Record<string, JHipsterApplicationConfig>;
+
 export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
   options: JHipsterOptions;
   import?: string[];
   loadGeneratorOptions?: boolean;
+};
+
+export type JHipsterApplicationDefinition = {
+  config: JHipsterApplicationConfigs;
+  prepareApplication?: (unknown) => void;
 };

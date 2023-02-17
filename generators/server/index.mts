@@ -23,6 +23,7 @@ import { SpringBootApplication } from './types.mjs';
 
 export { default } from './generator.mjs';
 export { default as command } from './command.mjs';
+export { default as application } from './application.mjs';
 export { serverFiles as files } from './files.mjs';
 
 // TODO move to ./generator.mts

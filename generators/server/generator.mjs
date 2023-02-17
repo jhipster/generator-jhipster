@@ -126,7 +126,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE
 const NO_WEBSOCKET = websocketTypes.NO;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, NO: NO_MESSAGE_BROKER } = messageBrokerTypes;
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -223,6 +223,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      migrateConfig() {
+        if (this.jhipsterConfig.websocket === false) {
+          this.jhipsterConfig.websocket = NO_WEBSOCKET;
+        }
+        if (this.jhipsterConfig.searchEngine === false) {
+          this.jhipsterConfig.searchEngine = NO_SEARCH_ENGINE;
+        }
+        if (this.jhipsterConfig.messageBroker === false) {
+          this.jhipsterConfig.messageBroker = NO_MESSAGE_BROKER;
+        }
+      },
       configServerPort() {
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;

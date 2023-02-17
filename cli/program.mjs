@@ -33,6 +33,7 @@ import JHipsterCommand from './jhipster-command.mjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
 import { packageNameToNamespace } from '../generators/base/support/index.mjs';
+import { getAllDependenciesMetaForGenerators } from '../generators/base/internal/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,29 +48,6 @@ export const printJHipsterLogo = () => {
   console.log();
   // eslint-disable-next-line no-console
   console.log(logo);
-};
-
-const buildAllDependencies = async (generatorNames, { env }) => {
-  const allDependencies = {};
-  const buildGeneratorDependencies = async dependencyName => {
-    const meta = await env.getGeneratorMeta(dependencyName.includes(':') ? dependencyName : `${JHIPSTER_NS}:${dependencyName}`);
-    if (!meta) {
-      return;
-    }
-    allDependencies[dependencyName] = meta;
-    const generatorModule = await meta.importModule();
-    if (generatorModule.command) {
-      for (const dependency of generatorModule.command.import ?? []) {
-        if (!allDependencies[dependency]) {
-          await buildGeneratorDependencies(dependency);
-        }
-      }
-    }
-  };
-  for (const generatorName of generatorNames) {
-    await buildGeneratorDependencies(generatorName);
-  }
-  return allDependencies;
 };
 
 const addCommandGeneratorOptions = async (command, generatorMeta, { root, blueprintOptionDescription, info } = {}) => {
@@ -224,7 +202,7 @@ export const buildCommands = async ({
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
           const boostrapGen = [...(jdlCommand ? ['workspaces'] : []), 'bootstrap', generator];
-          const allDependencies = await buildAllDependencies(boostrapGen, { env });
+          const allDependencies = await getAllDependenciesMetaForGenerators(boostrapGen, { env, followDependencies: true });
           for (const [metaName, generatorMeta] of Object.entries(allDependencies)) {
             await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
           }
