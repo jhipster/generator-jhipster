@@ -19,7 +19,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { createTranslationReplacer } from './transform-react.mjs';
+import { createTranslationReplacer } from './translate-react.mjs';
 
 describe('generator - react - transform', () => {
   describe('replaceReactTranslations', () => {
