@@ -111,6 +111,11 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
             this.useKafka = true;
           }
         });
+
+        // added useKeycloak parameter(default: false)  @craxkumar
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.useKeycloak = false;
+
       },
       saveConfig,
     };

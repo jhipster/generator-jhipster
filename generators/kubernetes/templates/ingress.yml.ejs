@@ -21,8 +21,17 @@ kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
+  <%_ if (useKeycloak) { _%>
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+  <%_ } _%>
 spec:
-  ingressClassName: <%= ingressType || "nginx" %>
+  <%_ if (ingressType === "nginx") { _%>
+  ingressClassName: nginx
+  <%_ } _%>
   rules:
   <%_ if (ingressDomain) { _%>
   - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
@@ -32,12 +41,12 @@ spec:
   <%_ } _%>
       paths:
       - path: /<%= ingressTypeNginx ? "" : "*" %>
-        pathType: Prefix
+        pathType: <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
         backend:
           service:
             name: <%= app.baseName.toLowerCase() %>
             port:
-              name: http
+              number: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryAny) { _%>
         <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressTypeNginx ? "" : "*" %>
@@ -49,3 +58,15 @@ spec:
               name: http
         <%_ }); _%>
       <%_ } _%>
+<%_ if (useKeycloak) { _%>
+  - host: keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+    http:
+      paths:
+        - path: /<%= ingressTypeNginx ? "" : "*" %>
+          pathType: <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
+          backend:
+            service:
+              name: keycloak
+              port:
+                number: 9080
+<%_ } _%>    

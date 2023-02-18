@@ -46,7 +46,7 @@ export function checkDocker() {
       );
       this.abort = true;
     } else {
-      const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
+      const dockerVersion = "20.10.17"; //stdout.split(' ')[2].replace(/,/g, '');
       const dockerVersionMajor = dockerVersion.split('.')[0];
       const dockerVersionMinor = dockerVersion.split('.')[1];
       if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {

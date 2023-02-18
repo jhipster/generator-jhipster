@@ -36,6 +36,7 @@ import {
   setupKubernetesConstants,
   derivedKubernetesPlatformProperties,
 } from './kubernetes-base.mjs';
+import jdlToJsonFieldConverter from '../../jdl/converters/jdl-to-json/jdl-to-json-field-converter.js';
 
 const { KAFKA } = messageBrokerTypes;
 const { MAVEN } = buildToolTypes;
@@ -111,6 +112,14 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
             this.useKafka = true;
           }
         });
+
+       /*  added parameters
+        1) usesIngress (default: nginx)
+        2) useKeycloak (default: depends on usesIngress) @craxkumar */
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.usesIngress = this.kubernetesServiceType === 'Ingress'  && this.ingressType === 'nginx';
+        this.useKeycloak = this.usesOauth2 && this.usesIngress;
+
       },
       saveConfig,
     };
