@@ -43,8 +43,6 @@ const createEnvironment = (args, options = {}, adapter) => {
   // Remove after migration to environment 3.
   const configOptions = {};
   const sharedOptions = {
-    fromCli: true,
-    localConfigOnly: true,
     ...options.sharedOptions,
     configOptions,
   };

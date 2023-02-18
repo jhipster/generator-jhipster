@@ -26,6 +26,7 @@ import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
 import { ClientApplication } from './types.mjs';
 
 export { default } from './generator.mjs';
+export { default as command } from './command.mjs';
 export { files as commonFiles } from './files-common.mjs';
 
 export type ApplicationDefinition = GenericApplicationDefinition<ClientApplication> & GenericSourceTypeDefinition<never>;

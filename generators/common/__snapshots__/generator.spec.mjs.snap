@@ -83,7 +83,6 @@ overrides:
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "creationTimestamp": 946684800000,
     "entities": []
   }
 }
@@ -266,7 +265,7 @@ To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\
   },
   "devDependencies": {
     "husky": "7.0.4",
-    "lint-staged": "13.1.0"
+    "lint-staged": "13.1.1"
   }
 }
 ",

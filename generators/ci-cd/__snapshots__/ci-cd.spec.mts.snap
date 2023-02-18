@@ -5,26 +5,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -135,26 +119,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -277,26 +245,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -407,26 +359,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -549,26 +485,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -739,26 +659,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -843,26 +747,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -936,26 +824,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1040,26 +912,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1128,26 +984,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1256,26 +1096,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1381,26 +1205,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1503,26 +1311,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1650,26 +1442,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1774,26 +1550,10 @@ gradle-package:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -1926,26 +1686,10 @@ deploy-to-production:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -2065,26 +1809,10 @@ maven-package:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -2207,26 +1935,10 @@ deploy-to-production:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -2356,26 +2068,10 @@ maven-package:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -2507,29 +2203,10 @@ webapp-prod:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "jwt",
     "baseName": "jhipster",
-    "blueprints": [],
-    "cacheProvider": "no",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "clientTheme": "none",
-    "clientThemeVariant": "",
-    "creationTimestamp": 1583434912169,
-    "databaseType": "sql",
-    "dtoSuffix": "DTO",
-    "enableTranslation": true,
+    "buildTool": "maven",
     "entities": [],
-    "entitySuffix": "",
-    "jhiPrefix": "jhi",
-    "languages": ["en"],
-    "nativeLanguage": "en",
-    "promptValues": {
-      "nativeLanguage": "en"
-    },
-    "skipServer": true,
-    "testFrameworks": []
+    "skipServer": true
   }
 }
 ",
@@ -2543,26 +2220,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Gradle Angular NPM should matc
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -2741,26 +2402,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM inside Docke
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -3034,26 +2679,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM should match
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -3235,26 +2864,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM with full op
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -3580,26 +3193,10 @@ notifications:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -3669,26 +3266,10 @@ notifications:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",
@@ -3764,26 +3345,10 @@ notifications:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angular",
-    "clientPackageManager": "npm",
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "enableHibernateCache": true,
-    "enableTranslation": true,
     "entities": [],
-    "languages": ["en"],
-    "packageFolder": "com/mycompany/myapp",
-    "packageName": "com.mycompany.myapp",
-    "prodDatabaseType": "mysql",
-    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "searchEngine": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["cypress"]
   }
 }
 ",

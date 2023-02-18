@@ -42,7 +42,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
       async loadApplication({ application, control }) {
         this.loadServerConfig(undefined, application);
 
-        (application as any).gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
+        (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));

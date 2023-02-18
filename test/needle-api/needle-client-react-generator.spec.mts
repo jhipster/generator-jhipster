@@ -49,9 +49,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        skipInstall: true,
         blueprint: 'myblueprint',
-        skipChecks: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, 'jhipster-myblueprint:react']])
       .withAnswers({

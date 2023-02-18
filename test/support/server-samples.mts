@@ -1,8 +1,10 @@
+import sortKeys from 'sort-keys';
+
 import { MatrixMonolith, MatrixMicroservice, MatrixGateway } from './application-samples.mjs';
-import { fromMatrix, extendMatrix, extendFilteredMatrix } from './matrix-utils.mjs';
+import { fromMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from './matrix-utils.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
-export const buildServerMatrix = (matrix = {}) => {
+export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
   let serverMatrix = {
     ...fromMatrix({
       ...MatrixMonolith,
@@ -49,4 +51,8 @@ export const buildServerMatrix = (matrix = {}) => {
   });
 
   return serverMatrix;
+};
+
+export const buildServerSamples = (commonConfig?: Record<string, unknown>, matrix?: Record<string, unknown>) => {
+  return buildSamplesFromMatrix(buildServerMatrix(matrix), { commonConfig });
 };

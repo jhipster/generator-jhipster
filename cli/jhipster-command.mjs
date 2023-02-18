@@ -19,6 +19,9 @@
 
 import chalk from 'chalk';
 import { Command, Option } from 'commander';
+import lodash from 'lodash';
+
+const { kebabCase } = lodash;
 
 export default class JHipsterCommand extends Command {
   createCommand(name) {
@@ -151,9 +154,25 @@ export default class JHipsterCommand extends Command {
    * @param {string} blueprintOptionDescription - description of the blueprint that adds the option
    * @return {JHipsterCommand} this;
    */
-  addGeneratorOptions(options = {}, blueprintOptionDescription) {
-    Object.entries(options).forEach(([key, value]) => {
+  addGeneratorOptions(options, blueprintOptionDescription) {
+    Object.entries(options ?? {}).forEach(([key, value]) => {
       this._addGeneratorOption(key, value, blueprintOptionDescription);
+    });
+    return this;
+  }
+
+  addJHipsterArguments(jhipsterArguments) {
+    Object.entries(jhipsterArguments ?? {}).forEach(([key, value]) => {
+      let argName = value.type === Array ? `${key}...` : key;
+      argName = value.required ? `<${argName}>` : `[${argName}]`;
+      this.argument(argName, value.description);
+    });
+    return this;
+  }
+
+  addJHipsterOptions(options, blueprintOptionDescription) {
+    Object.entries(options).forEach(([key, value]) => {
+      this._addGeneratorOption(kebabCase(key), value, blueprintOptionDescription);
     });
     return this;
   }
@@ -180,7 +199,7 @@ export default class JHipsterCommand extends Command {
     }
     const option = new Option(cmdString, optionDefinition.description + additionalDescription)
       .default(optionDefinition.default)
-      .hideHelp(optionDefinition.hide);
+      .hideHelp(optionDefinition.hide ?? false);
     if (optionDefinition.env) {
       option.env(optionDefinition.env);
     }

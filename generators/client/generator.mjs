@@ -41,36 +41,10 @@ const { CYPRESS } = testFrameworkTypes;
  * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    // This adds support for a `--auth` flag
-    this.option('auth', {
-      desc: 'Provide authentication type for the application',
-      type: String,
-    });
-
-    // This adds support for a `--skip-commit-hook` flag
-    this.option('skip-commit-hook', {
-      desc: 'Skip adding husky commit hooks',
-      type: Boolean,
-    });
-
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
-    });
-
-    if (this.options.help) {
-      return;
-    }
-
+  async beforeQueue() {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-  }
 
-  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {

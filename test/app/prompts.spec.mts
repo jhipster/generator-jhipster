@@ -28,10 +28,6 @@ describe('generator - app - prompts', () => {
       before(() => {
         return helpers
           .create(getGenerator('app'))
-          .withOptions({
-            skipInstall: true,
-            skipChecks: true,
-          })
           .withAnswers({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',

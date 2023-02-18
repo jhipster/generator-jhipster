@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - export-jdl exports entities to a JDL file with file argument should match snapshot 1`] = `
+{
+  "custom-app.jdl": {
+    "contents": "application {
+  config {
+    applicationType monolith
+    authenticationType session
+    baseName standard
+    buildTool gradle
+    cacheProvider ehcache
+    clientFramework no
+    clientPackageManager npm
+    databaseType sql
+    devDatabaseType h2Memory
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation true
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "3.7.1"
+    languages [en]
+    messageBroker no
+    nativeLanguage en
+    packageName com.mycompany.myapp
+    prodDatabaseType postgresql
+    reactive false
+    rememberMeKey "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8"
+    searchEngine no
+    serverPort 8080
+    serviceDiscoveryType no
+    skipClient true
+    skipServer true
+    skipUserManagement false
+    testFrameworks []
+    websocket no
+    withAdminUi true
+  }
+
+  entities Country, Department, Employee, Job, JobHistory, Region, Task
+}
+
+entity Country {
+  /**
+   * The country Id
+   */
+  countryId Long
+  countryName String
+}
+entity Department {
+  departmentId Long
+  departmentName String required
+}
+/**
+ * The Employee entity.
+ */
+entity Employee (emp) {
+  employeeId Long
+  employeeUuid UUID
+  /**
+   * The firstname attribute.
+   */
+  firstName String
+  lastName String
+  email String
+  phoneNumber String
+  hireDate ZonedDateTime
+  salary Long min(10000) max(1000000)
+  commissionPct Long
+}
+entity Job {
+  jobId Long
+  jobTitle String
+  minSalary Long
+  maxSalary Long
+}
+entity JobHistory {
+  startDate ZonedDateTime
+  endDate ZonedDateTime
+  language Language
+}
+entity Region {
+  regionId Long
+  regionName String
+}
+entity Task {
+  taskId Long
+  title String
+  description String
+}
+enum Language {
+  FRENCH,
+  ENGLISH,
+  SPANISH
+}
+
+relationship OneToOne {
+  Country{region} to Region{country}
+  JobHistory{job} to Job
+  JobHistory{department} to Department
+  JobHistory{employee} to Employee
+}
+relationship OneToMany {
+  Department{employee required} to Employee{department(foo)}
+  Employee{job} to Job{employee}
+}
+relationship ManyToOne {
+  Employee{manager} to Employee
+}
+relationship ManyToMany {
+  Job{task(title)} to Task{job required}
+}
+
+noFluentMethod Department, Employee
+dto Employee with mapstruct
+paginate Employee, JobHistory with infinite-scroll
+paginate Job with pagination
+service Employee with serviceClass
+search Employee with elasticsearch
+angularSuffix Employee with myentities
+microservice Employee with mymicroservice
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - export-jdl exports entities to a JDL file without argument should match snapshot 1`] = `
+{
+  "standard.jdl": {
+    "contents": "application {
+  config {
+    applicationType monolith
+    authenticationType session
+    baseName standard
+    buildTool gradle
+    cacheProvider ehcache
+    clientFramework no
+    clientPackageManager npm
+    databaseType sql
+    devDatabaseType h2Memory
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation true
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "3.7.1"
+    languages [en]
+    messageBroker no
+    nativeLanguage en
+    packageName com.mycompany.myapp
+    prodDatabaseType postgresql
+    reactive false
+    rememberMeKey "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8"
+    searchEngine no
+    serverPort 8080
+    serviceDiscoveryType no
+    skipClient true
+    skipServer true
+    skipUserManagement false
+    testFrameworks []
+    websocket no
+    withAdminUi true
+  }
+
+  entities Country, Department, Employee, Job, JobHistory, Region, Task
+}
+
+entity Country {
+  /**
+   * The country Id
+   */
+  countryId Long
+  countryName String
+}
+entity Department {
+  departmentId Long
+  departmentName String required
+}
+/**
+ * The Employee entity.
+ */
+entity Employee (emp) {
+  employeeId Long
+  employeeUuid UUID
+  /**
+   * The firstname attribute.
+   */
+  firstName String
+  lastName String
+  email String
+  phoneNumber String
+  hireDate ZonedDateTime
+  salary Long min(10000) max(1000000)
+  commissionPct Long
+}
+entity Job {
+  jobId Long
+  jobTitle String
+  minSalary Long
+  maxSalary Long
+}
+entity JobHistory {
+  startDate ZonedDateTime
+  endDate ZonedDateTime
+  language Language
+}
+entity Region {
+  regionId Long
+  regionName String
+}
+entity Task {
+  taskId Long
+  title String
+  description String
+}
+enum Language {
+  FRENCH,
+  ENGLISH,
+  SPANISH
+}
+
+relationship OneToOne {
+  Country{region} to Region{country}
+  JobHistory{job} to Job
+  JobHistory{department} to Department
+  JobHistory{employee} to Employee
+}
+relationship OneToMany {
+  Department{employee required} to Employee{department(foo)}
+  Employee{job} to Job{employee}
+}
+relationship ManyToOne {
+  Employee{manager} to Employee
+}
+relationship ManyToMany {
+  Job{task(title)} to Task{job required}
+}
+
+noFluentMethod Department, Employee
+dto Employee with mapstruct
+paginate Employee, JobHistory with infinite-scroll
+paginate Job with pagination
+service Employee with serviceClass
+search Employee with elasticsearch
+angularSuffix Employee with myentities
+microservice Employee with mymicroservice
+",
+    "stateCleared": "modified",
+  },
+}
+`;

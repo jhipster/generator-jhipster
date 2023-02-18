@@ -23,7 +23,6 @@ import BaseGenerator from '../base/index.mjs';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.mjs';
 
 import {
-  options,
   requiredConfig,
   defaultConfig,
   defaultSubGeneratorConfig,
@@ -46,45 +45,30 @@ import * as GENERATOR_LIST from '../generator-list.mjs';
 import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
+import command from './command.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
 export default class extends BaseGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
-
-    // Register options available to cli.
-    if (!this.fromBlueprint) {
-      this.registerCommonOptions();
-    }
-
-    this.jhipsterOptions(options());
-
-    if (this.options.help) return;
-
-    if (this[ALL_GENERATORS]) {
-      this.config.set(allGeneratorsConfig());
-    }
-    if (this.options.defaults) {
-      this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
-    }
-  }
-
-  /** @inheritdoc */
-  async getPossibleDependencies() {
-    return [GENERATOR_PROJECT_NAME, GENERATOR_INIT];
-  }
-
   async _beforeQueue() {
+    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
       await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
     }
   }
 
   get initializing() {
     return {
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+        if (this[ALL_GENERATORS]) {
+          this.config.set(allGeneratorsConfig());
+        }
+        if (this.options.defaults) {
+          this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
+        }
+      },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },

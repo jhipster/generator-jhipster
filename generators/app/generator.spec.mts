@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
 
@@ -38,19 +38,20 @@ describe(`generator - ${generator}`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
+  });
+  describe('help', () => {
+    it('should print expected information', async () => {
+      expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
+    });
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          baseName: 'jhipster',
-          skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'],
-        });
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities();
       });
 
       it('should match snapshot', () => {
@@ -64,12 +65,12 @@ describe(`generator - ${generator}`, () => {
     describe('gateway', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          baseName: 'jhipster',
-          applicationType: 'gateway',
-          skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'],
-        });
+        runResult = await helpers
+          .run(generatorPath)
+          .withJHipsterConfig({
+            applicationType: 'gateway',
+          })
+          .withSkipWritingPriorities();
       });
 
       it('should match snapshot', () => {
@@ -84,12 +85,12 @@ describe(`generator - ${generator}`, () => {
     describe('microservice', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          baseName: 'jhipster',
-          applicationType: 'microservice',
-          skipPriorities: ['writing', 'postWriting', 'writingEntities', 'postWritingEntities'],
-        });
+        runResult = await helpers
+          .run(generatorPath)
+          .withJHipsterConfig({
+            applicationType: 'microservice',
+          })
+          .withSkipWritingPriorities();
       });
 
       it('should match snapshot', () => {

@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 /* eslint-disable camelcase */
-import { faker } from '@faker-js/faker/locale/en';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { createDockerComposeFile, createDockerExtendedServices } from '../base-docker/utils.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
-import { stringHashCode } from '../base/support/index.mjs';
+import { stringHashCode, createFaker } from '../base/support/index.mjs';
 
 /**
  * @class
@@ -80,6 +79,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       async writeDockerFiles({ application }) {
         if (application.authenticationTypeOauth2) {
+          const faker = await createFaker();
           faker.seed(stringHashCode(application.baseName));
           application.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
         }

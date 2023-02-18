@@ -31,7 +31,6 @@ describe('generator - OpenShift', () => {
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -69,7 +68,6 @@ describe('generator - OpenShift', () => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -107,7 +105,6 @@ describe('generator - OpenShift', () => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -152,7 +149,6 @@ describe('generator - OpenShift', () => {
           createMockedConfig('05-cassandra', dir);
           createMockedConfig('07-mariadb', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -200,7 +196,6 @@ describe('generator - OpenShift', () => {
         .inTmpDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',

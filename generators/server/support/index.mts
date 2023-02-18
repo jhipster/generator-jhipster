@@ -20,6 +20,7 @@ export * from './doc.mjs';
 export * from './database.mjs';
 export * from './dependabot-maven.mjs';
 export * from './files.mjs';
+export { default as generatedAnnotationTransform } from './generated-annotation-transform.mjs';
 export * from './java-formatting.mjs';
 export * from './needles.mjs';
 export { default as prepareEntity } from './prepare-entity.mjs';

@@ -144,8 +144,6 @@ describe('generator - with multiple blueprints', () => {
         runResult = await helpers
           .run(getGenerator('app'))
           .withOptions({
-            skipInstall: true,
-            skipChecks: true,
             baseName: 'jhipster',
             blueprints,
           })

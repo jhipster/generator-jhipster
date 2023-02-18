@@ -22,6 +22,7 @@ import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
 import { SpringBootApplication } from './types.mjs';
 
 export { default } from './generator.mjs';
+export { default as command } from './command.mjs';
 export { serverFiles as files } from './files.mjs';
 
 // TODO move to ./generator.mts

@@ -31,7 +31,6 @@ import { fileURLToPath } from 'url';
 import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import PrivateBase from './generator-base-definitions.mjs';
-import commonOptions from './options.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
 import {
@@ -98,17 +97,6 @@ const isWin32 = os.platform() === 'win32';
 export default class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
   dependabotPackageJson;
-
-  /**
-   * @private
-   * Get generator dependencies for building help
-   * This is a stub and should be overwritten by the generator.
-   *
-   * @returns {string[]}
-   */
-  getPossibleDependencies() {
-    return [];
-  }
 
   /**
    * @private
@@ -1248,14 +1236,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
-    if (options.skipChecks !== undefined) {
-      dest.skipChecks = options.skipChecks;
-    }
     if (options.debug !== undefined) {
       dest.isDebugEnabled = options.debug;
-    }
-    if (options.experimental !== undefined) {
-      dest.experimental = options.experimental;
     }
     if (options.skipPrompts !== undefined) {
       dest.skipPrompts = options.skipPrompts;
@@ -1286,9 +1268,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     this.configOptions.optionsParsed = true;
 
     // Load stored options
-    if (options.withGeneratedFlag !== undefined) {
-      this.jhipsterConfig.withGeneratedFlag = options.withGeneratedFlag;
-    }
     if (options.skipJhipsterDependencies !== undefined) {
       this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
     }
@@ -1374,9 +1353,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.enableTranslation !== undefined) {
       this.jhipsterConfig.enableTranslation = options.enableTranslation;
     }
-    if (options.autoCrlf !== undefined) {
-      this.jhipsterConfig.autoCrlf = options.autoCrlf;
-    }
     if (options.language) {
       // workaround double options parsing, remove once generator supports skipping parse options
       const languages = options.language.flat();
@@ -1454,9 +1430,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   loadRuntimeOptions(config = this.configOptions, dest = this) {
     dest.withEntities = config.withEntities;
-    dest.skipChecks = config.skipChecks;
     dest.isDebugEnabled = config.isDebugEnabled;
-    dest.experimental = config.experimental;
     dest.logo = config.logo;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
@@ -1474,13 +1448,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Register and parse common options.
-   */
-  registerCommonOptions() {
-    this.jhipsterOptions(commonOptions);
-  }
-
-  /**
    * Load app configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
@@ -1488,7 +1455,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    if (this.sharedData.getControl().useVersionPlaceholders) {
+    if (this.useVersionPlaceholders) {
       dest.nodeVersion = 'NODE_VERSION';
     } else {
       dest.nodeVersion = NODE_VERSION;

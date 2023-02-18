@@ -19,11 +19,10 @@
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
 
-import { JHipsterOptions } from '../base/api.mjs';
 import BaseGenerator from '../base/index.mjs';
 import { GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { files } from './files.mjs';
-import generatorOptions from './options.mjs';
+import command from './command.mjs';
 
 /**
  * @class
@@ -34,12 +33,6 @@ export default class InitGenerator extends BaseGenerator {
   gitInitialized;
   skipGit;
 
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    this.jhipsterOptions(generatorOptions as JHipsterOptions);
-  }
-
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
@@ -49,6 +42,9 @@ export default class InitGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      parseOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
       async checkGit() {
         if (!this.skipGit) {
           this.gitInstalled = (await this.createGit().version()).installed;
