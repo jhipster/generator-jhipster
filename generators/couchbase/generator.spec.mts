@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { buildServerMatrix, extendMatrix, entitiesSimple as entities, buildSamplesFromMatrix } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
@@ -51,46 +51,30 @@ const couchbaseSamples = extendMatrix(buildServerMatrix(), {
 
 const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:couchbase');
 
-const samplesBuilder = () =>
-  Object.entries(couchbaseSamples).map(([name, sample]) => [
-    name,
-    {
-      defaults: true,
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-        entities,
-      },
-    },
-  ]);
-
-const testSamples = samplesBuilder();
+const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { authenticationType } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -104,7 +88,7 @@ describe(`generator - ${databaseType}`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithKafka(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

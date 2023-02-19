@@ -289,7 +289,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
             .filter(gen => gen !== generatorName)
             .map(gen => `jhipster:${gen}`),
         ])
-        .withOptions({ blueprint: 'foo', skipChecks: true, baseName: 'jhipster' })
+        .withOptions({ blueprint: 'foo', baseName: 'jhipster' })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });
@@ -311,7 +311,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       if (skipSbsBlueprint) {
         this.skip();
       }
-      let options = { blueprint: 'foo-sbs', skipChecks: true, baseName: 'jhipster' };
+      let options = { blueprint: 'foo-sbs', baseName: 'jhipster' };
       if (entity) {
         options = {
           ...options,

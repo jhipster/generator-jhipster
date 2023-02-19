@@ -109,7 +109,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
         let clientPackageManager;
         if (applications.length > 0) {
           clientPackageManager = applications[0][1].config.clientPackageManager;
-          const { generateWith = GENERATOR_APP, generateApplications } = this.options;
+          const { generateWith = GENERATOR_APP } = this.options;
           if (this.options.generateApplications) {
             for (const [appName, applicationWithEntities] of applications) {
               await this.composeWithJHipster(generateWith, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
@@ -147,6 +147,18 @@ export default class WorkspacesGenerator extends BaseGenerator {
         }
         dir.closeSync();
 
+        const generateApplications = this.options.generateApplications;
+        if (generateApplications && Array.isArray(generateApplications)) {
+          const { generateWith = GENERATOR_APP } = this.options;
+          for (const appName of generateApplications) {
+            if (!packages.includes(appName)) {
+              packages.push(appName);
+            }
+            await this.composeWithJHipster(generateWith, { destinationRoot: this.destinationPath(appName) });
+          }
+        }
+
+        packages.sort();
         this.workspacesConfig.dockerCompose = dockerCompose;
         this.workspacesConfig.packages = packages;
       },

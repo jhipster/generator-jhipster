@@ -56,7 +56,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
     });
 
     this.regenerate = this.options.skipPrompts;
-    this.skipChecks = this.options.skipChecks;
   }
 
   get initializing() {

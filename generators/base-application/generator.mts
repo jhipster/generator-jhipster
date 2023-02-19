@@ -134,7 +134,7 @@ export default class BaseApplicationGenerator<
   getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
     if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { sorted: true } as any);
+    return this.createStorage(entityPath);
   }
 
   /**

@@ -21,6 +21,7 @@ import { type Entity } from '../base-application/index.mjs';
 import { ClientServerApplication } from './types.mjs';
 
 export { default } from './generator.mjs';
+export { default as command } from './command.mjs';
 export { commonFiles as files } from './files.mjs';
 
 // TODO move to ./generator.mts

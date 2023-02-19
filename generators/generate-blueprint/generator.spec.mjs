@@ -41,8 +41,8 @@ describe(`generator - ${generator}`, () => {
     await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
@@ -50,7 +50,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ defaults: true }).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
         expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(true);

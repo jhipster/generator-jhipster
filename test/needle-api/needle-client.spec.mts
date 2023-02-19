@@ -29,19 +29,17 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 };
 
 describe('needle API Client: JHipster client generator with blueprint', () => {
-  before(done => {
-    helpers
+  before(async () => {
+    await helpers
       .run(getGenerator('client'))
+      .withJHipsterConfig()
       .withOptions({
-        defaults: true,
         skipServer: true,
         db: 'postgresql',
         auth: 'jwt',
         blueprint: 'myblueprint',
-        skipChecks: true,
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .on('end', done);
+      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']]);
   });
 
   it('Assert index.html contain the comment and the resource added', () => {

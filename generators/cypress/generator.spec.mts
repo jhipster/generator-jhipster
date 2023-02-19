@@ -55,51 +55,42 @@ const e2eMatrix = extendMatrix(
   }
 );
 
-const testSamples = () =>
+const e2eSamples = Object.fromEntries(
   Object.entries(e2eMatrix).map(([name, sample]) => [
     name,
     {
-      skipInstall: true,
-      applicationWithEntities: {
-        config: {
-          ...sample,
-          baseName: 'jhipster',
-          testFrameworks: [CYPRESS],
-        },
-        entities: [
-          {
-            name: 'EntityA',
-            changelogDate: '20220129025419',
-          },
-        ],
-      },
+      ...sample,
+      testFrameworks: [CYPRESS],
     },
-  ]);
-
-const e2eSamples = testSamples();
+  ])
+);
+const entities = [
+  {
+    name: 'EntityA',
+    changelogDate: '20220129025419',
+  },
+];
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(e2eSamples)).toMatchSnapshot();
+    expect(e2eSamples).toMatchSnapshot();
   });
 
-  e2eSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
-
+  Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.create(generatorPath).withOptions(sample).run();
+        runResult = await helpers.run(generatorPath).withJHipsterConfig(sampleConfig, entities);
       });
 
       after(() => runResult.cleanup());

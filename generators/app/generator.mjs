@@ -22,8 +22,6 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode } from './support/index.mjs';
-import gitOptions from '../git/command.mjs';
-import serverOptions from '../server/options.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.mjs';
@@ -168,12 +166,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       type: String,
     });
 
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
-    });
-
     // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
     this.option('creation-timestamp', {
       desc: 'Project creation timestamp (used for reproducible builds)',
@@ -278,25 +270,12 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       desc: 'Enable hibernate cache',
       type: Boolean,
     });
-
-    this.jhipsterOptions(
-      {
-        ...gitOptions,
-        ...serverOptions,
-      },
-      true
-    );
-
-    // Just constructing help, stop here
-    if (this.options.help) {
-      return;
-    }
-
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
   }
 
   async beforeQueue() {
+    this.loadStoredAppOptions();
+    this.loadRuntimeOptions();
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
@@ -306,7 +285,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   get initializing() {
     return {
       validateBlueprint() {
-        if (this.jhipsterConfig.blueprints && !this.options.skipChecks) {
+        if (this.jhipsterConfig.blueprints && !this.skipChecks) {
           this.jhipsterConfig.blueprints.forEach(blueprint => {
             this._checkJHipsterBlueprintVersion(blueprint.name);
             this._checkBlueprint(blueprint.name);
@@ -322,7 +301,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       },
 
       checkForNewJHVersion() {
-        if (!this.options.skipChecks) {
+        if (!this.skipChecks) {
           this.checkForNewVersion();
         }
       },

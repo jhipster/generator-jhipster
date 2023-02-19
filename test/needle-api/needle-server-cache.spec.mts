@@ -6,7 +6,6 @@ import { getGenerator } from '../support/index.mjs';
 import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ServerGenerator {
@@ -93,7 +92,6 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .run(getGenerator('server'))
         .withOptions({
-          ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
           clientFramework: 'no',
         })
@@ -143,7 +141,6 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .run(getGenerator('server'))
         .withOptions({
-          ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
           clientFramework: 'no',
         })
@@ -193,7 +190,6 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .run(getGenerator('server'))
         .withOptions({
-          ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
           clientFramework: 'no',
         })
@@ -224,7 +220,6 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .run(getGenerator('server'))
         .withOptions({
-          ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
           clientFramework: 'no',
         })

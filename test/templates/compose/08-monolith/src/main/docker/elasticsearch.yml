@@ -1,9 +1,0 @@
-name: 'samplemysql'
-services:
-    elasticsearch:
-        image: <%- dockerContainers.elasticsearch %>
-        # volumes:
-        #     - ~/volumes/jhipster/sampleMysql/elasticsearch/:/usr/share/elasticsearch/data/
-        ports:
-            - 9200:9200
-            - 9300:9300
