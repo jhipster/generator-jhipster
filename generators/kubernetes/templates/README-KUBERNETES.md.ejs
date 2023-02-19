@@ -118,7 +118,7 @@ $ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespac
 <%_ if (useKeycloak) { _%>
 ## Keycloak
 
-Keycloak deployment in production mode requires the installation of [cert-manager](https://cert-manager.io/docs/installation/) for the TLS certificate generation.
+Keycloak deployment in production mode requires the installation of [cert-manager](https://cert-manager.io/docs/installation/) Kubernetes add-on for the TLS certificate generation.
 
 ```
 $ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.yaml
@@ -143,3 +143,14 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the `i
 > my applications are starting very slow, despite I have a cluster with many resources
 
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
+
+<%_ if (useKeycloak) { _%>
+> my applications don't start, because of 'Remote host terminated the handshake' or 'PKIX path building failed'
+
+The k8s subgenerator configures Let's Encrypt staging environment, which is not trusted by browsers and java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
+
+```
+$ kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+```
+
+<%_ } _%>
