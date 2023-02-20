@@ -351,7 +351,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
       end() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
 
-        this.logger.info(`${chalk.bold.green('##### USAGE #####')}
+        this.logger.log(`${chalk.bold.green('##### USAGE #####')}
 To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}

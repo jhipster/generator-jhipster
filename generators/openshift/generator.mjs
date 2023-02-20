@@ -65,8 +65,8 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.info(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
-        this.logger.info(
+        this.logger.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
+        this.logger.log(
           chalk.white(
             `Files will be generated in folder: ${chalk.yellow(
               this.destinationRoot()
@@ -207,7 +207,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     return {
       displayOpenshiftDeploymentProcedure() {
         if (this.hasWarning) {
-          this.logger.warn('\nOpenShift configuration generated, but no Jib cache found');
+          this.logger.warn('OpenShift configuration generated, but no Jib cache found');
           this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
           this.logger.warn(this.warningMessage);
         } else {
@@ -226,7 +226,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
           this.logger.info(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.logger.info('\nYou can deploy all your apps by running: ');
+        this.logger.log('\nYou can deploy all your apps by running: ');
         this.logger.info(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
         this.logger.info('OR');
         this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);

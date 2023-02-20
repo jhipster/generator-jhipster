@@ -744,7 +744,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       end({ application }) {
-        this.logger.info(chalk.green.bold('\nServer application generated successfully.\n'));
+        this.logger.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
         let executable = 'mvnw';
         if (application.buildTool === GRADLE) {
@@ -754,7 +754,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (os.platform() === 'win32') {
           logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.logger.info(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.logger.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
     });
   }

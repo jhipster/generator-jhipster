@@ -452,7 +452,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   get end() {
     return {
       afterRunHook() {
-        this.logger.info(
+        this.logger.log(
           chalk.green(
             `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
           )

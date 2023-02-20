@@ -64,7 +64,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.info(chalk.bold('Azure Spring Cloud configuration is starting'));
+        this.logger.log(chalk.bold('Azure Spring Cloud configuration is starting'));
       },
       getSharedConfig() {
         this.loadAppConfig();
@@ -290,7 +290,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
 --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName}`,
           (err, stdout) => {
             if (err) {
-              this.logger.info(chalk.bold('Application does not exist yet, creating it...'));
+              this.logger.log(chalk.bold('Application does not exist yet, creating it...'));
               exec(
                 `az spring-cloud app create --resource-group ${this.azureSpringCloudResourceGroupName} \
             --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName}`,
@@ -299,13 +299,13 @@ ${chalk.red('az extension add --name spring-cloud')}`
                     this.abort = true;
                     this.logger.error(`Application creation failed! Here is the error: ${err}`);
                   } else {
-                    this.logger.info(`${chalk.green(chalk.bold('Success!'))} Your application has been created.`);
+                    this.logger.log(`${chalk.green(chalk.bold('Success!'))} Your application has been created.`);
                   }
                   done();
                 }
               );
             } else {
-              this.logger.info(chalk.bold('Application already exists, using it.'));
+              this.logger.log(chalk.bold('Application already exists, using it.'));
               done();
             }
           }
@@ -337,7 +337,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     return {
       copyAzureSpringCloudFiles() {
         if (this.abort) return;
-        this.logger.info(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
+        this.logger.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
         this.writeFile('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
         this.writeFile('bootstrap-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
         if (this.azureSpringCloudDeploymentType === 'github-action') {
@@ -368,7 +368,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
         try {
           this.logger.info('Test if Git is configured on your project...');
           fs.lstatSync('.git');
-          this.logger.info(chalk.bold('\nUsing existing Git repository'));
+          this.logger.log(chalk.bold('\nUsing existing Git repository'));
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
           this.logger.error(
@@ -379,8 +379,8 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
           return;
         }
         const gitAddCmd = 'git add .';
-        this.logger.info(chalk.bold('\nAdding Azure Spring Cloud files to the Git repository'));
-        this.logger.info(chalk.cyan(gitAddCmd));
+        this.logger.log(chalk.bold('\nAdding Azure Spring Cloud files to the Git repository'));
+        this.logger.log(chalk.cyan(gitAddCmd));
         exec(gitAddCmd, (err, stdout, stderr) => {
           if (err) {
             this.abort = true;
@@ -388,10 +388,10 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
           } else {
             const line = stderr.toString().trimRight();
             if (line.trim().length !== 0) this.logger.info(line);
-            this.logger.info(chalk.bold('\nCommitting Azure Spring Cloud files'));
+            this.logger.log(chalk.bold('\nCommitting Azure Spring Cloud files'));
             const gitCommitCmd = 'git commit -m "Add Azure Spring Cloud files with automated GitHub Action deployment" --allow-empty';
 
-            this.logger.info(chalk.cyan(gitCommitCmd));
+            this.logger.log(chalk.cyan(gitCommitCmd));
             exec(gitCommitCmd, (err, stdout, stderr) => {
               if (err) {
                 this.abort = true;
@@ -399,9 +399,9 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
               } else {
                 const line = stderr.toString().trimRight();
                 if (line.trim().length !== 0) this.logger.info(line);
-                this.logger.info(chalk.bold('\nPushing Azure Spring Cloud files'));
+                this.logger.log(chalk.bold('\nPushing Azure Spring Cloud files'));
                 const gitPushCmd = 'git push';
-                this.logger.info(chalk.cyan(gitPushCmd));
+                this.logger.log(chalk.cyan(gitPushCmd));
                 exec(gitPushCmd, (err, stdout, stderr) => {
                   if (err) {
                     this.abort = true;
@@ -409,7 +409,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                   } else {
                     const line = stderr.toString().trimRight();
                     if (line.trim().length !== 0) this.logger.info(line);
-                    this.logger.info(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
+                    this.logger.log(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
                     this.logger.info(
                       `For the deployment to succeed, you will need to configure a ${chalk.bold('AZURE_CREDENTIALS')} secret in GitHub.
 Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/blob/master/11-configure-ci-cd/README.md
@@ -430,7 +430,7 @@ for more detailed information.`
         if (this.azureSpringCloudSkipBuild) return;
 
         const done = this.async();
-        this.logger.info(chalk.bold('\nBuilding application'));
+        this.logger.log(chalk.bold('\nBuilding application'));
 
         const child = this.buildApplication(this.buildTool, 'prod,azure', false, err => {
           if (err) {
@@ -453,7 +453,7 @@ for more detailed information.`
         if (this.azureSpringCloudSkipDeploy) return;
 
         const done = this.async();
-        this.logger.info(chalk.bold('\nDeploying application...'));
+        this.logger.log(chalk.bold('\nDeploying application...'));
         let buildDir = 'target';
         if (this.buildTool === 'gradle') {
           buildDir = 'build/libs';
@@ -468,7 +468,7 @@ for more detailed information.`
               this.logger.error(`Deployment failed!\n ${err}`);
             } else {
               const json = JSON.parse(stdout);
-              this.logger.info(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
+              this.logger.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
               this.logger.info(`Provisioning state: ${chalk.bold(json.properties.provisioningState)}`);
               this.logger.info(`Application status  : ${chalk.bold(json.properties.status)}`);
             }

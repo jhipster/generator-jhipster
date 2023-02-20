@@ -836,7 +836,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           if (code !== 0) {
             this.logger.warn("\nFailed to create a KeyStore with 'keytool'", code);
           } else {
-            this.logger.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+            this.logger.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
           done();
         }
@@ -864,8 +864,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.logger.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.logger.warn(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logger.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logger.log(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }
