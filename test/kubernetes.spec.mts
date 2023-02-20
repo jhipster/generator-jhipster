@@ -111,7 +111,7 @@ describe('generator - Kubernetes', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
-          kubernetesStorageClassName: ''
+          kubernetesStorageClassName: '',
         })
         .run();
     });
