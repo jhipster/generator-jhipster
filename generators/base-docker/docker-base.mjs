@@ -18,145 +18,158 @@
  */
 import { existsSync } from 'fs';
 import chalk from 'chalk';
+
 import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../base/support/index.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
+
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+
 export { checkDocker } from './docker-utils.mjs';
+
 /**
  * Check Images
  */
 export function checkImages() {
-    this.logger.info('\nChecking Docker images in applications directories...');
-    let imagePath = '';
-    let runCommand = '';
-    this.hasWarning = false;
-    this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
-    this.appsFolders.forEach((appsFolder, index) => {
-        const appConfig = this.appConfigs[index];
-        if (appConfig.buildTool === MAVEN) {
-            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
-            runCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
-        }
-        else {
-            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
-            runCommand = './gradlew bootJar -Pprod jibDockerBuild';
-        }
-        if (!existsSync(imagePath)) {
-            this.hasWarning = true;
-            this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
-        }
-    });
+  this.logger.info('\nChecking Docker images in applications directories...');
+
+  let imagePath = '';
+  let runCommand = '';
+  this.hasWarning = false;
+  this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
+  this.appsFolders.forEach((appsFolder, index) => {
+    const appConfig = this.appConfigs[index];
+    if (appConfig.buildTool === MAVEN) {
+      imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
+      runCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
+    } else {
+      imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
+      runCommand = './gradlew bootJar -Pprod jibDockerBuild';
+    }
+    if (!existsSync(imagePath)) {
+      this.hasWarning = true;
+      this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
+    }
+  });
 }
+
 /**
  * Generate Jwt Secret
  */
 export function generateJwtSecret() {
-    if (this.jwtSecretKey === undefined) {
-        this.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
-    }
+  if (this.jwtSecretKey === undefined) {
+    this.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
+  }
 }
+
 /**
  * Configure Image Names
  */
 export function configureImageNames() {
-    for (let i = 0; i < this.appsFolders.length; i++) {
-        const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-        const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
-        this.appConfigs[i].targetImageName = targetImageName;
-    }
+  for (let i = 0; i < this.appsFolders.length; i++) {
+    const originalImageName = this.appConfigs[i].baseName.toLowerCase();
+    const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
+    this.appConfigs[i].targetImageName = targetImageName;
+  }
 }
+
 /**
  * Set Apps Folder Paths
  */
 export function setAppsFolderPaths() {
-    if (this.applicationType)
-        return;
-    this.appsFolderPaths = [];
-    for (let i = 0; i < this.appsFolders.length; i++) {
-        const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-        this.appsFolderPaths.push(path);
-    }
+  if (this.applicationType) return;
+  this.appsFolderPaths = [];
+  for (let i = 0; i < this.appsFolders.length; i++) {
+    const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+    this.appsFolderPaths.push(path);
+  }
 }
+
 /**
  * Load config from this.appFolders
  */
 export function loadConfigs() {
-    this.appConfigs = [];
-    this.gatewayNb = 0;
-    this.monolithicNb = 0;
-    this.microserviceNb = 0;
-    const serverPort = 8080;
-    // Loading configs
+  this.appConfigs = [];
+  this.gatewayNb = 0;
+  this.monolithicNb = 0;
+  this.microserviceNb = 0;
+  const serverPort = 8080;
 
+  // Loading configs
+  this.logger.debug(`Apps folders: ${this.appsFolders}`);
+  this.appsFolders.forEach((appFolder, index) => {
+    const path = this.destinationPath(`${this.directoryPath + appFolder}`);
+    
     // added log @cmi-tic-craxkumar
     this.logger.debug(`Apps folders: ${this.appsFolders}`);
-    
-    this.appsFolders.forEach((appFolder, index) => {
-        const path = this.destinationPath(`${this.directoryPath + appFolder}`);
-        this.logger.debug(chalk.red.bold(`App folder ${path}`));
-        if (this.fs.exists(`${path}/.yo-rc.json`)) {
-            const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
-            config.composePort = serverPort + index;
-            
-            // added log @cmi-tic-craxkumar
-            this.logger.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
-            
-            this.loadAppConfig(config, config);
-            this.loadServerConfig(config, config);
-            this.loadPlatformConfig(config, config);
-            this.loadDerivedAppConfig(config);
-            this.loadDerivedPlatformConfig(config);
-            this.loadDerivedServerConfig(config);
-            if (config.applicationType === MONOLITH) {
-                this.monolithicNb++;
-            }
-            else if (config.applicationType === GATEWAY) {
-                this.gatewayNb++;
-            }
-            else if (config.applicationType === MICROSERVICE) {
-                this.microserviceNb++;
-            }
-            this.portsToBind = this.monolithicNb + this.gatewayNb;
-            config.appFolder = appFolder;
-            this.appConfigs.push(config);
-        }
-        else {
-            throw new Error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
-        }
-    });
+
+    if (this.fs.exists(`${path}/.yo-rc.json`)) {
+      const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
+      config.composePort = serverPort + index;
+
+      // added log @cmi-tic-craxkumar
+      this.logger.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
+
+      this.loadAppConfig(config, config);
+      this.loadServerConfig(config, config);
+      this.loadPlatformConfig(config, config);
+
+      this.loadDerivedAppConfig(config);
+      this.loadDerivedPlatformConfig(config);
+      this.loadDerivedServerConfig(config);
+
+      if (config.applicationType === MONOLITH) {
+        this.monolithicNb++;
+      } else if (config.applicationType === GATEWAY) {
+        this.gatewayNb++;
+      } else if (config.applicationType === MICROSERVICE) {
+        this.microserviceNb++;
+      }
+
+      this.portsToBind = this.monolithicNb + this.gatewayNb;
+      config.appFolder = appFolder;
+      this.appConfigs.push(config);
+    } else {
+      throw new Error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
+    }
+  });
 }
+
 export function setClusteredApps() {
-    for (let i = 0; i < this.appsFolders.length; i++) {
-        for (let j = 0; j < this.clusteredDbApps.length; j++) {
-            this.appConfigs[i].clusteredDb = this.appsFolders[i] === this.clusteredDbApps[j];
-        }
+  for (let i = 0; i < this.appsFolders.length; i++) {
+    for (let j = 0; j < this.clusteredDbApps.length; j++) {
+      this.appConfigs[i].clusteredDb = this.appsFolders[i] === this.clusteredDbApps[j];
     }
+  }
 }
+
 export function loadFromYoRc() {
-    this.loadDeploymentConfig();
-    this.useKafka = false;
-    this.useMemcached = false;
-    this.useRedis = false;
-    // Current implementation loads appsFolders into defaultAppsFolders
-    this.defaultAppsFolders = this.appsFolders;
-    delete this.appsFolders;
-    if (this.defaultAppsFolders !== undefined) {
-        this.logger.info('\nFound .yo-rc.json config file...');
+  this.loadDeploymentConfig();
+
+  this.useKafka = false;
+  this.useMemcached = false;
+  this.useRedis = false;
+
+  // Current implementation loads appsFolders into defaultAppsFolders
+  this.defaultAppsFolders = this.appsFolders;
+  delete this.appsFolders;
+
+  if (this.defaultAppsFolders !== undefined) {
+    this.logger.info('\nFound .yo-rc.json config file...');
+  }
+
+  if (this.regenerate) {
+    this.appsFolders = this.defaultAppsFolders;
+    loadConfigs.call(this);
+    if (this.microserviceNb > 0 || this.gatewayNb > 0) {
+      this.deploymentApplicationType = MICROSERVICE;
+    } else {
+      this.deploymentApplicationType = MONOLITH;
     }
-    if (this.regenerate) {
-        this.appsFolders = this.defaultAppsFolders;
-        loadConfigs.call(this);
-        if (this.microserviceNb > 0 || this.gatewayNb > 0) {
-            this.deploymentApplicationType = MICROSERVICE;
-        }
-        else {
-            this.deploymentApplicationType = MONOLITH;
-        }
-        setClusteredApps.call(this);
-        if (!this.adminPassword) {
-            this.adminPassword = 'admin'; // TODO find a better way to do this
-            this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
-        }
+    setClusteredApps.call(this);
+    if (!this.adminPassword) {
+      this.adminPassword = 'admin'; // TODO find a better way to do this
+      this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
     }
+  }
 }
