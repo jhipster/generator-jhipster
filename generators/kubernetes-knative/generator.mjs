@@ -242,4 +242,5 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
   get [BaseDockerGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
+  
 }

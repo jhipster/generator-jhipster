@@ -187,4 +187,5 @@ export function writeFiles() {
       this.writeFile('skaffold/skaffold.yml.ejs', 'skaffold.yml');
     },
   };
+  
 }

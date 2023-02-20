@@ -194,4 +194,5 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
   get [BaseDockerGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
+  
 }
