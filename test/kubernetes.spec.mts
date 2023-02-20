@@ -49,14 +49,14 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: 'gateway',
           directoryPath: './',
           chosenApps,
           adminPassword: 'meetup',
@@ -91,16 +91,18 @@ describe('generator - Kubernetes', () => {
   describe('only gateway with eureka', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['13-gateway-eureka'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('13-gateway-eureka', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
-          deploymentApplicationType: 'microservice',
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
+        .withAnswers({
           directoryPath: './',
-          chosenApps: ['13-gateway-eureka'],
+          chosenApps,
           adminPassword: 'meetup',
           dockerRepositoryName: 'jhipsterrepository',
           dockerPushCommand: 'docker push',
@@ -109,7 +111,7 @@ describe('generator - Kubernetes', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
-          kubernetesStorageClassName: '',
+          kubernetesStorageClassName: ''
         })
         .run();
     });
@@ -136,7 +138,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway', '02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -180,7 +182,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -224,7 +226,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -265,7 +267,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['02-mysql', '03-psql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -312,7 +314,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -452,7 +454,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -498,7 +500,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -542,7 +544,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 

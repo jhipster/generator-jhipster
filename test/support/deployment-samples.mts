@@ -76,6 +76,12 @@ const deploymentTestSamples = {
     serverPort: 8080,
     skipClient: true,
   },
+  '13-gateway-eureka': {
+    applicationType: 'gateway',
+    baseName: 'jhgate',
+    serviceDiscoveryType: 'eureka',
+    prodDatabaseType: 'mysql',
+  },
 };
 
 export default deploymentTestSamples;

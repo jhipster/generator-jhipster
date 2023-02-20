@@ -709,7 +709,7 @@ JDLDeployment {
   "dockerRepositoryName": "test",
   "gatewayType": "SpringCloudGateway",
   "monitoring": "no",
-  "serviceDiscoveryType": "eureka",
+  "serviceDiscoveryType": "consul",
 }
 `);
         });

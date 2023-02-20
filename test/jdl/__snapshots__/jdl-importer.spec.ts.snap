@@ -1406,7 +1406,7 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
       "dockerRepositoryName": "test",
       "gatewayType": "SpringCloudGateway",
       "monitoring": "no",
-      "serviceDiscoveryType": "eureka",
+      "serviceDiscoveryType": "consul",
     },
   },
   {
@@ -1427,7 +1427,7 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
       "kubernetesStorageClassName": "KubernetesStorageClassName",
       "kubernetesUseDynamicStorage": false,
       "monitoring": "no",
-      "serviceDiscoveryType": "eureka",
+      "serviceDiscoveryType": "consul",
     },
   },
   {
@@ -1444,7 +1444,7 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
       "monitoring": "no",
       "openshiftNamespace": "default",
       "registryReplicas": 2,
-      "serviceDiscoveryType": "eureka",
+      "serviceDiscoveryType": "consul",
       "storageType": "ephemeral",
     },
   },
