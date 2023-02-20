@@ -91,10 +91,10 @@ describe('generator - Kubernetes', () => {
   describe('only gateway with eureka', () => {
     let runResult;
     before(async () => {
-      const chosenApps = ['13-gateway-eureka'];
+      const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscovery: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
