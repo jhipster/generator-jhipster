@@ -51,7 +51,7 @@ const kubernetesRelatedOptions = {
     ingress: INGRESS,
   },
   kubernetesStorageClassName: '',
-  kubernetesStorageProvisioner: '', // added new const kubernetesStorageProvisioner @craxkumar
+  kubernetesStorageProvisioner: '', // added new const kubernetesStorageProvisioner @cmi-tic-craxkumar
   kubernetesUseDynamicStorage: {
     false: false,
     true: true,
@@ -126,7 +126,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
       kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
       kubernetesUseDynamicStorage: Options.kubernetesUseDynamicStorage.false,
       kubernetesStorageClassName: Options.kubernetesStorageClassName,
-      kubernetesStorageProvisioner: Options.kubernetesStorageProvisioner, // added new options kubernetesStorageProvisioner @craxkumar
+      kubernetesStorageProvisioner: Options.kubernetesStorageProvisioner, // added new options kubernetesStorageProvisioner @cmi-tic-craxkumar
       ingressDomain: Options.ingressDomain,
       monitoring: Options.monitoring.no,
       istio: Options.istio.false,

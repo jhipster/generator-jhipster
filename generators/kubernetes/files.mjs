@@ -89,7 +89,7 @@ export function writeFiles() {
       }
     },
 
-    // write's storage class file  @craxkumar
+    // write's storage class file  @cmi-tic-craxkumar
     writeStorageClass() {
       if (this.kubernetesStorageClassName !== '') {
         this.writeFile('storage-class.yml.ejs', 'storage-class.yml');
@@ -101,7 +101,7 @@ export function writeFiles() {
       this.writeFile('messagebroker/kafka.yml.ejs', `messagebroker-${suffix}/kafka.yml`);
     },
 
-    // write's keycloak files if useKeycloak is true @craxkumar
+    // write's keycloak files if useKeycloak is true @cmi-tic-craxkumar
     writeKeycloak() {
       if (!this.useKeycloak) return;
       const keycloakOut = 'keycloak'.concat('-', suffix);

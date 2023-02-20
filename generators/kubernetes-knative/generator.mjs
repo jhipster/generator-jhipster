@@ -135,7 +135,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
           }
         });
 
-        // added useKeycloak parameter(default: false)  @craxkumar
+        // added useKeycloak parameter(default: false)  @cmi-tic-craxkumar
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKeycloak = false;
 

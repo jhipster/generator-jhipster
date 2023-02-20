@@ -292,7 +292,7 @@ const deploymentConfigPropsValidations = {
     msg: 'kubernetesStorageClassName property',
   },
   
-  // added new parameter kubernetesStorageProvisioner @craxkumar 
+  // added new parameter kubernetesStorageProvisioner @cmi-tic-craxkumar 
   KUBERNETES_STORAGE_PROVISIONER: { 
     type: 'STRING',
     pattern: KUBERNETES_STORAGE_PROVISIONER,

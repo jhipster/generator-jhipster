@@ -89,7 +89,7 @@ export function loadConfigs() {
     const serverPort = 8080;
     // Loading configs
 
-    // added log @craxkumar
+    // added log @cmi-tic-craxkumar
     this.logger.debug(`Apps folders: ${this.appsFolders}`);
     
     this.appsFolders.forEach((appFolder, index) => {
@@ -99,7 +99,7 @@ export function loadConfigs() {
             const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
             config.composePort = serverPort + index;
             
-            // added log @craxkumar
+            // added log @cmi-tic-craxkumar
             this.logger.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
             
             this.loadAppConfig(config, config);
