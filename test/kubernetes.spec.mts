@@ -94,7 +94,7 @@ describe('generator - Kubernetes', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscovery: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 

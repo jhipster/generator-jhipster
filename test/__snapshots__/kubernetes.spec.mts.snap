@@ -13161,7 +13161,7 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "appsFolders": ["13-gateway-eureka"],
+    "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
     "clientPackageManager": "npm",
     "clusteredDbApps": {},
@@ -13176,7 +13176,7 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["13-gateway-eureka"],
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -13705,7 +13705,7 @@ kind: Config
 build:
   artifacts:
     - image: jhipsterrepository/jhgate
-      context: ./13-gateway-eureka
+      context: ./01-gateway
       jib: {}
   tagPolicy:
     envTemplate:
