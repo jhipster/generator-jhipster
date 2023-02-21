@@ -106,7 +106,7 @@ export default class InitGenerator extends BaseGenerator {
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         const result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
-          this.logger.info(
+          this.log.info(
             `Found commits in Git from ${repositoryRoot}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
           );
           return;
@@ -139,8 +139,10 @@ export default class InitGenerator extends BaseGenerator {
   async initializeGitRepository() {
     try {
       const git = this.createGit();
-      if (await git.checkIsRepo()) {
-        this.log.ok('Using existing git repository.');
+      if (await git.checkIsRepo('root' as any)) {
+        this.log.info('Using existing git repository.');
+      } else if (await git.checkIsRepo()) {
+        this.log.info('Using existing git repository at parent folder.');
       } else if (await git.init()) {
         this.log.ok('Git repository initialized.');
       }

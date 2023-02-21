@@ -157,6 +157,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    await this.dependsOnJHipster(GENERATOR_COMMON);
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
@@ -248,10 +250,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
-      async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON);
-      },
-
       async composing() {
         const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
@@ -744,7 +742,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       end({ application }) {
-        this.logger.log(chalk.green.bold('\nServer application generated successfully.\n'));
+        this.log.ok('Spring Boot application generated successfully.');
 
         let executable = 'mvnw';
         if (application.buildTool === GRADLE) {
@@ -754,7 +752,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (os.platform() === 'win32') {
           logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.logger.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.logger.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
     });
   }
