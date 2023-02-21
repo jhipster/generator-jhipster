@@ -1,8 +1,7 @@
 import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import createMockedConfig from './support/mock-config.mjs';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
 import { GENERATOR_KUBERNETES_HELM } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
@@ -77,15 +76,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           adminPassword: 'meetup',
           dockerRepositoryName: 'jhipsterrepository',
           dockerPushCommand: 'docker push',
@@ -115,16 +118,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('gateway and mysql microservice', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -156,15 +162,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('mysql microservice with custom namespace', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'mynamespace',
@@ -196,15 +206,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('gateway and ingress', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -241,16 +255,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('MySQL and PostgreSQL microservices without gateway', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql', '03-psql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql', '03-psql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -287,19 +304,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('04-mongo', dir);
-          createMockedConfig('07-mariadb', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -345,15 +362,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('monolith application', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['08-monolith'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('08-monolith', dir);
-        })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
-          chosenApps: ['08-monolith'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -381,15 +402,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('Kafka application', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['09-kafka'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('09-kafka', dir);
-        })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
-          chosenApps: ['09-kafka'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -416,15 +441,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'mynamespace',
@@ -459,15 +488,19 @@ describe('generator - Kubernetes Helm', () => {
   describe('gateway with istio', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES_HELM)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',

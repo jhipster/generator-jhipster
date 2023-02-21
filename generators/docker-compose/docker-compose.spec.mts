@@ -22,7 +22,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -58,7 +58,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -94,7 +94,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -125,7 +125,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -161,7 +161,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -199,7 +199,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -237,7 +237,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -276,7 +276,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -311,7 +311,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -346,7 +346,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '05-cassandra'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -453,7 +453,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -488,7 +488,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '10-couchbase'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces()
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 

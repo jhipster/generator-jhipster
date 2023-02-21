@@ -6,6 +6,8 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["09-kafka"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -16,6 +18,7 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["09-kafka"],
     "serviceDiscoveryType": false
   }
 }
@@ -392,6 +395,8 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -402,6 +407,7 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["02-mysql", "03-psql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -1152,6 +1158,8 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1163,6 +1171,7 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -1670,6 +1679,8 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1680,6 +1691,7 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway", "02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -2355,6 +2367,8 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -2365,6 +2379,7 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -3104,6 +3119,8 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
       "04-mongo",
       "07-mariadb"
     ],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3114,6 +3131,7 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway", "02-mysql", "03-psql", "04-mongo", "07-mariadb"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -4438,6 +4456,8 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -4448,6 +4468,7 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["08-monolith"],
     "serviceDiscoveryType": false
   }
 }
@@ -4809,6 +4830,8 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -4819,6 +4842,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
+    "packages": ["02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -7657,6 +7681,8 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -7667,6 +7693,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["02-mysql"],
     "serviceDiscoveryType": "eureka"
   }
 }
@@ -8158,6 +8185,8 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
     "contents": "{
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
+    "baseName": "workspaces",
+    "clientPackageManager": "npm",
     "clusteredDbApps": {},
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -8168,6 +8197,7 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
+    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }
