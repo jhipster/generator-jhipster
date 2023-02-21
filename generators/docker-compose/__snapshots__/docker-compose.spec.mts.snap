@@ -54,7 +54,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -224,7 +224,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -412,7 +412,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -727,7 +727,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -1090,7 +1090,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -1362,7 +1362,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -1665,7 +1665,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -1835,7 +1835,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -2025,7 +2025,7 @@ receivers:
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -2289,7 +2289,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -2564,7 +2564,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -2688,7 +2688,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
@@ -2814,7 +2814,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
+  name: Service Registry
   status: Connected to Consul running in Docker
 
 jhipster:
