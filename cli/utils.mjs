@@ -23,8 +23,9 @@ import _ from 'lodash';
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';
 
-const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
-const SPONSOR_MESSAGE = 'Sponsored with ❤️  by @oktadev.';
+const SUCCESS_MESSAGE = `Congratulations, JHipster execution is complete!
+If you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
+const SPONSOR_MESSAGE = 'Sponsored with ❤️ by @oktadev.';
 
 const debug = function (msg) {
   if (this.debugEnabled) {
@@ -107,9 +108,10 @@ export const doneFactory = (successMsg, sponsorMsg) => {
 export const printSuccess = () => {
   if (process.exitCode === undefined || process.exitCode === 0) {
     logger.log(chalk.green.bold(SUCCESS_MESSAGE));
+    logger.log();
     logger.log(chalk.cyan.bold(SPONSOR_MESSAGE));
   } else {
-    logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
+    logger.error(`JHipster finished with code ${process.exitCode}`);
   }
 };
 
