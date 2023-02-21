@@ -49,7 +49,7 @@ public class SpaWebFilterIT {
             .uri("/v3/api-docs")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON);
+            .expectHeader().contentType("application/json;charset=UTF-8");
     }
 
     @Test
