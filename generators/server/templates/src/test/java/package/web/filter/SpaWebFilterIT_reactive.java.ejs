@@ -2,6 +2,7 @@ package <%= packageName %>.web.filter;
 
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
+import org.assertj.core.api.Assertions;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ public class SpaWebFilterIT {
             .uri("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON);
+            .expectBody(String.class).value(c -> Assertions.assertThat(c).isEqualTo("user"));
     }
 <%_ } _%>
 
