@@ -124,7 +124,7 @@ export default class InitGenerator extends BaseGenerator {
             commitMsg += ` with blueprints ${bpInfo}`;
           }
           await git.commit(commitMsg);
-          this.logger.log(chalk.green.bold(`Application successfully committed to Git from ${repositoryRoot}.`));
+          this.log.ok(`Application successfully committed to Git from ${repositoryRoot}.`);
         } catch (e) {
           this.logger.error(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
         }
@@ -139,8 +139,12 @@ export default class InitGenerator extends BaseGenerator {
   async initializeGitRepository() {
     try {
       const git = this.createGit();
-      this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
-      this.logger.log(chalk.green.bold('Git repository initialized.'));
+      if (await git.checkIsRepo()) {
+        this.log.ok('Using existing git repository.');
+      } else if (await git.init()) {
+        this.log.ok('Git repository initialized.');
+      }
+      this.gitInitialized = true;
     } catch (error) {
       this.logger.warn(`Failed to initialize Git repository.\n ${error}`);
     }
