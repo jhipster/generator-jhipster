@@ -18,27 +18,27 @@
  */
 import chalk from 'chalk';
 import { execaCommandSync } from 'execa';
-import { type CheckResult } from '../../../base/api.mjs';
+import { type ValidationResult } from '../../../base/api.mjs';
 
 /**
  * Check if installed java version is compatible
  * @param javaCompatibleVersions
  */
-export default (javaCompatibleVersions: string[]): CheckResult & { javaVersion?: string } => {
+export default (javaCompatibleVersions: string[]): ValidationResult & { javaVersion?: string } => {
   try {
     const { exitCode, stderr } = execaCommandSync('java -version', { stdio: 'pipe' });
     if (exitCode === 0 && stderr) {
       const matchResult = stderr.match(/(?:java|openjdk)(?: version)? "?(.*)"? /s);
       if (matchResult && matchResult.length > 0) {
         const javaVersion = matchResult[1];
-        const info = `Detected java version ${javaVersion}`;
+        const debug = `Detected java version ${javaVersion}`;
         if (javaCompatibleVersions && !javaVersion.match(new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`))) {
           const [latest, ...others] = javaCompatibleVersions.concat().reverse();
           const humanizedVersions = `${others.reverse().join(', ')} or ${latest}`;
           const warning = `Java ${humanizedVersions} are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`;
-          return { info, warning, javaVersion };
+          return { debug, warning, javaVersion };
         }
-        return { info, javaVersion };
+        return { debug, javaVersion };
       }
     }
     return { error: `Error parsing Java version. Output: ${stderr}` };

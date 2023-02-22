@@ -90,10 +90,11 @@ export type JHipsterOption = OptionConfig & {
   env?: string;
 };
 
-export type CheckResult = {
-  info?: string;
-  warning?: string;
-  error?: string;
+export type ValidationResult = {
+  debug?: unknown;
+  info?: string | string[];
+  warning?: string | string[];
+  error?: string | string[];
 };
 
 export type JHipsterArgumentConfig = ArgumentConfig;

@@ -829,7 +829,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * }
    */
   checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
-    this.validateCheckResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
+    this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   _generateSqlSafeName(name) {
