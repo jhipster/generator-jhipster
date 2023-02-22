@@ -304,13 +304,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
-          this.logger.info(`Using ${application.defaultPackaging} as default packaging`);
+          this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
 
         const JHI_PROFILE = process.env.JHI_PROFILE;
         application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
         if (JHI_PROFILE) {
-          this.logger.info(`Using ${application.defaultEnvironment} as default profile`);
+          this.log.info(`Using ${application.defaultEnvironment} as default profile`);
         }
       },
 
@@ -329,7 +329,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.logger.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
@@ -339,7 +339,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.logger.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+          this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
