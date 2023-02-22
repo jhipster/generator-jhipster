@@ -40,24 +40,15 @@ describe(`generator - ${generator}`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
 
   describe('with', () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          creationTimestamp: '2000-01-01',
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
-            },
-            entities: [],
-          },
-        });
+        runResult = await helpers.run(generatorPath).withJHipsterConfig();
       });
 
       it('should succeed', () => {
@@ -67,7 +58,6 @@ describe(`generator - ${generator}`, () => {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "creationTimestamp": 946684800000,
     "entities": []
   }
 }

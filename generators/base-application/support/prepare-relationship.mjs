@@ -19,7 +19,13 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 
-import { databaseTypes, entityOptions, reservedKeywords, validations } from '../../../jdl/jhipster/index.mjs';
+import {
+  databaseTypes,
+  entityOptions,
+  reservedKeywords,
+  validations,
+  checkAndReturnRelationshipOnValue,
+} from '../../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from './debug.mjs';
 
 const { isReservedTableName } = reservedKeywords;
@@ -39,6 +45,11 @@ function _derivedProperties(relationship) {
     relationshipManyToMany: relationship.relationshipType === 'many-to-many',
     otherEntityUser: relationship.otherEntityName === 'user',
   });
+}
+
+function _defineOnUpdateAndOnDelete(relationship, generator) {
+  relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
+  relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);
 }
 
 export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
@@ -78,11 +89,19 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
         return otherSideRelationship.relationshipName === relationship.otherEntityRelationshipName;
       });
       if (!otherRelationship) {
-        // TODO throw error at v8.
-        generator.logger.warn(
-          `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
-        );
+        if (!relationship.otherEntity.builtIn) {
+          // TODO throw error at v8.
+          generator.logger.warn(
+            `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
+          );
+        } else {
+          generator.logger.info(
+            `Ignoring '${entityName}' definitions as it is using a built-in Entity '${otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`
+          );
+        }
       } else if (
+        // renaming a relationship could cause trouble here - old relationship needs to be removed
+        !ignoreMissingRequiredRelationship &&
         otherRelationship &&
         otherRelationship.otherEntityRelationshipName &&
         otherRelationship.otherEntityRelationshipName !== relationship.relationshipName
@@ -273,7 +292,11 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   }
 
   relationship.reference = relationshipToReference(entityWithConfig, relationship);
+
+  _defineOnUpdateAndOnDelete(relationship, generator);
+
   _derivedProperties(relationship);
+
   return relationship;
 }
 

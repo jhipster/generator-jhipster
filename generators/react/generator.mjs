@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.mjs';
@@ -32,6 +33,7 @@ import {
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.mjs';
+import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -106,6 +108,14 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return {
       cleanupOldFilesTask,
       writeFiles,
+      queueTranslateTransform({ control, application }) {
+        if (!application.enableTranslation) {
+          this.queueTransformStream(translateReactFilesTransform(control.getWebappTranslation), {
+            name: 'translating webapp',
+            streamOptions: { filter: file => isFilePending(file) && isTranslatedReactFile(file) },
+          });
+        }
+      },
     };
   }
 

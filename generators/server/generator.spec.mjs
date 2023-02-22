@@ -35,15 +35,13 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.mjs');
 
-const skipPriorities = ['prompting', 'writing', 'postWriting', 'writingEntities', 'postWritingEntities'];
-
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
@@ -55,12 +53,9 @@ describe(`generator - ${generator}`, () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              baseName: 'jhipster',
               buildTool: 'maven',
             })
-            .withOptions({
-              skipPriorities,
-            })
+            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
 
@@ -77,12 +72,9 @@ describe(`generator - ${generator}`, () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              baseName: 'jhipster',
               buildTool: 'gradle',
             })
-            .withOptions({
-              skipPriorities,
-            })
+            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
 
@@ -102,12 +94,9 @@ describe(`generator - ${generator}`, () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              baseName: 'jhipster',
               messageBroker: 'no',
             })
-            .withOptions({
-              skipPriorities,
-            })
+            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
 
@@ -119,12 +108,9 @@ describe(`generator - ${generator}`, () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              baseName: 'jhipster',
               messageBroker: 'kafka',
             })
-            .withOptions({
-              skipPriorities,
-            })
+            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
         shouldComposeWithKafka(true, () => runResult);
@@ -138,12 +124,9 @@ describe(`generator - ${generator}`, () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              baseName: 'jhipster',
               databaseType: 'no',
             })
-            .withOptions({
-              skipPriorities,
-            })
+            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
 
@@ -155,12 +138,9 @@ describe(`generator - ${generator}`, () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              baseName: 'jhipster',
               databaseType: 'couchbase',
             })
-            .withOptions({
-              skipPriorities,
-            })
+            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
         shouldComposeWithCouchbase(true, () => runResult);

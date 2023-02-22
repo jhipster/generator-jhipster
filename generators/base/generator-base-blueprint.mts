@@ -51,7 +51,7 @@ export default class JHipsterBaseBlueprintGenerator<
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
     if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage({ sorted: true });
+      this.blueprintStorage = this._getStorage();
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator
@@ -471,7 +471,7 @@ export default class JHipsterBaseBlueprintGenerator<
       this.jhipsterConfig.blueprints = blueprints;
     }
 
-    if (!this.options.skipChecks) {
+    if (!this.skipChecks) {
       const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
       // Verify if the blueprints hava been registered.
       const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
@@ -491,7 +491,7 @@ export default class JHipsterBaseBlueprintGenerator<
    */
   private async _composeBlueprint(blueprint, subGen, extraOptions = {}) {
     blueprint = normalizeBlueprintName(blueprint);
-    if (!this.configOptions.skipChecks && !this.options.skipChecks) {
+    if (!this.skipChecks) {
       this._checkBlueprint(blueprint);
     }
 

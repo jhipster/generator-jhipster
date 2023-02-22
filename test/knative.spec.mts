@@ -1,8 +1,7 @@
 import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import createMockedConfig from './support/mock-config.mjs';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
@@ -103,16 +102,19 @@ describe('generator - Knative', () => {
     describe('only gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             adminPassword: 'meetup',
             dockerRepositoryName: 'jhipsterrepository',
             dockerPushCommand: 'docker push',
@@ -128,8 +130,8 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(expectedFiles.eurekaregistry);
-        assert.fileContent('./registry-knative/jhipster-registry.yml', /# base64 encoded "meetup"/);
+        assert.file(expectedFiles.consulregistry);
+        assert.fileContent('./registry-knative/consul.yml', /a 24 chars base64 encoded string/);
       });
       it('creates expected gateway files and content', () => {
         assert.file(expectedFiles.jhgate);
@@ -143,17 +145,19 @@ describe('generator - Knative', () => {
     describe('gateway and mysql microservice', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -168,7 +172,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -184,16 +188,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -208,7 +215,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(expectedFiles.msmysql);
@@ -224,16 +231,19 @@ describe('generator - Knative', () => {
     describe('gateway and ingress', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -249,7 +259,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -262,17 +272,19 @@ describe('generator - Knative', () => {
     describe('MySQL and PostgreSQL microservices without gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql', '03-psql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql', '03-psql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -287,7 +299,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it("doesn't creates gateway files", () => {
         assert.noFile(expectedFiles.jhgate);
@@ -306,21 +318,19 @@ describe('generator - Knative', () => {
     describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-            createMockedConfig('04-mongo', dir);
-            createMockedConfig('07-mariadb', dir);
-            createMockedConfig('11-mssql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -335,7 +345,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -363,16 +373,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -386,7 +399,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(expectedFiles.msmysql);
@@ -405,16 +418,19 @@ describe('generator - Knative', () => {
     describe('gateway with istio routing files', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -429,7 +445,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected service gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -447,16 +463,19 @@ describe('generator - Knative', () => {
     describe('only gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             adminPassword: 'meetup',
             dockerRepositoryName: 'jhipsterrepository',
             dockerPushCommand: 'docker push',
@@ -472,7 +491,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files and content', () => {
@@ -487,17 +506,19 @@ describe('generator - Knative', () => {
     describe('gateway and mysql microservice', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -512,7 +533,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -530,16 +551,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -554,7 +578,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected mysql files', () => {
@@ -572,16 +596,19 @@ describe('generator - Knative', () => {
     describe('gateway and ingress', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -597,7 +624,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -617,17 +644,19 @@ describe('generator - Knative', () => {
     describe('MySQL and PostgreSQL microservices without gateway', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql', '03-psql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql', '03-psql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -642,7 +671,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it("doesn't creates gateway files", () => {
@@ -665,20 +694,19 @@ describe('generator - Knative', () => {
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-            createMockedConfig('02-mysql', dir);
-            createMockedConfig('03-psql', dir);
-            createMockedConfig('04-mongo', dir);
-            createMockedConfig('07-mariadb', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -694,7 +722,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -725,16 +753,19 @@ describe('generator - Knative', () => {
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['02-mysql'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('02-mysql', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['02-mysql'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'mynamespace',
@@ -748,7 +779,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(helmExpectedFiles.msmysql);
@@ -770,16 +801,19 @@ describe('generator - Knative', () => {
     describe('gateway with istio routing files', () => {
       let runResult;
       before(async () => {
+        const chosenApps = ['01-gateway'];
+
         runResult = await helpers
-          .createJHipster(GENERATOR_KUBERNETES_KNATIVE)
-          .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
-          })
-          .withOptions({ skipChecks: true, reproducibleTests: true })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        runResult = await runResult
+          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
-            chosenApps: ['01-gateway'],
+            chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
             kubernetesNamespace: 'default',
@@ -794,7 +828,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected service gateway files', () => {

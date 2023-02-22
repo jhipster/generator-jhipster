@@ -279,19 +279,19 @@ async function askForServiceDiscovery() {
         message: 'Which Service Discovery registry and Configuration server would you like to use ?',
         choices: [
           {
-            value: EUREKA,
-            name: 'JHipster Registry',
-          },
-          {
             value: CONSUL,
             name: 'Consul',
+          },
+          {
+            value: EUREKA,
+            name: 'JHipster Registry',
           },
           {
             value: NO_SERVICE_DISCOVERY,
             name: 'No Service Discovery and Configuration',
           },
         ],
-        default: EUREKA,
+        default: CONSUL,
       },
     ];
 

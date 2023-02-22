@@ -2,7 +2,13 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, extendFilteredMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
+import {
+  buildServerMatrix,
+  extendMatrix,
+  extendFilteredMatrix,
+  entitiesServerSamples as entities,
+  buildSamplesFromMatrix,
+} from '../../test/support/index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
@@ -47,31 +53,15 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
   cacheProvider: [NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
 });
 
-const samplesBuilder = (): [string, any][] =>
-  Object.entries(sqlSamples).map(([name, sample]) => [
-    name,
-    {
-      defaults: true,
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-        entities,
-      },
-      skipPriorities: ['writing', 'postWriting'],
-    },
-  ]);
-
-const testSamples = samplesBuilder();
+const testSamples = buildSamplesFromMatrix(sqlSamples, { commonConfig });
+const skipPriorities = ['writing', 'postWriting'];
 
 describe(`generator - ${databaseType} - entities`, () => {
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { enableTranslation } = sampleConfig;
 
     describe(name, () => {
@@ -80,7 +70,8 @@ describe(`generator - ${databaseType} - entities`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
-          .withOptions(sample)
+          .withJHipsterConfig(sampleConfig, entities)
+          .withOptions({ skipPriorities })
           .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });
 

@@ -27,7 +27,7 @@ import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
-const { EUREKA } = serviceDiscoveryTypes;
+const { CONSUL } = serviceDiscoveryTypes;
 const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, H2_DISK, POSTGRESQL } = databaseTypes;
 const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
@@ -231,7 +231,7 @@ export function getServerConfigForGatewayApplication(customOptions: any = {}): a
     ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: EUREKA,
+    [SERVICE_DISCOVERY_TYPE]: CONSUL,
     [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
@@ -262,7 +262,7 @@ export function getServerConfigForMicroserviceApplication(customOptions: any = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: HAZELCAST,
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
-    [SERVICE_DISCOVERY_TYPE]: EUREKA,
+    [SERVICE_DISCOVERY_TYPE]: CONSUL,
     [SKIP_USER_MANAGEMENT]: true,
     ...customOptions,
   };

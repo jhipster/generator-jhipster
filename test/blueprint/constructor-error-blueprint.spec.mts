@@ -22,12 +22,9 @@ describe('generator - app - with blueprint with constructor error', () => {
             fakeBlueprintModuleDir
           );
         })
+        .withJHipsterConfig()
         .withOptions({
-          skipInstall: true,
-          skipChecks: true,
           blueprints: 'generator-jhipster-throwing-constructor',
-          baseName: 'jhipster',
-          defaults: true,
         })
         .run()
         .then(

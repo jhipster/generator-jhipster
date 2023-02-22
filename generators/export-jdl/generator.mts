@@ -34,6 +34,7 @@ export default class extends BaseGenerator {
   baseName!: string;
 
   jdlFile!: string;
+  jdlContent?: string;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
@@ -55,10 +56,23 @@ export default class extends BaseGenerator {
 
       convertToJDL() {
         try {
-          JSONToJDLConverter.convertToJDL('.', this.jdlFile);
+          const jdlObject = JSONToJDLConverter.convertToJDL(this.destinationPath(), false);
+          if (jdlObject) {
+            this.jdlContent = jdlObject.toString();
+          }
         } catch (error: unknown) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           throw new Error(`An error occurred while exporting to JDL: ${(error as any).message}\n${error}`);
+        }
+      },
+    });
+  }
+
+  get [BaseGenerator.WRITING]() {
+    return this.asDefaultTaskGroup({
+      writeJdl() {
+        if (this.jdlContent) {
+          this.writeDestination(this.jdlFile, this.jdlContent);
         }
       },
     });

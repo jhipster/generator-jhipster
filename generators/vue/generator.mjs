@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -31,6 +32,7 @@ import {
   generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
+import { isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -102,6 +104,14 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return {
       writeEntitiesFiles,
       writeEntityFiles,
+      queueTranslateTransform({ control, application }) {
+        if (!application.enableTranslation) {
+          this.queueTransformStream(translateVueFilesTransform(control.getWebappTranslation), {
+            name: 'translating webapp',
+            streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
+          });
+        }
+      },
     };
   }
 

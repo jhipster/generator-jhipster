@@ -9,7 +9,7 @@ import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import BaseApplicationGenerator from '../base-application/index.mjs';
+import BaseApplicationGenerator, { BaseEntity } from '../base-application/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -22,20 +22,7 @@ const generatorFile = join(__dirname, 'index.mts');
 const { ANGULAR: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const samplesBuilder = () =>
-  Object.entries(buildClientSamples()).map(([name, sample]) => [
-    name,
-    {
-      skipInstall: true,
-      applicationWithEntities: {
-        config: {
-          ...sample,
-          ...commonConfig,
-        },
-        entities,
-      },
-    },
-  ]);
+const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/admin/configuration/configuration.component.html`,
@@ -85,8 +72,6 @@ const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/admin/metrics/metrics.service.spec.ts`,
 ];
 
-const testSamples = samplesBuilder();
-
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   get [BaseApplicationGenerator.PREPARING]() {
     return {
@@ -102,25 +87,23 @@ describe(`generator - ${clientFramework}`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'foo' });
+    expect(instance.features.unique).toBe('foo');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
-
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
-          .withOptions(sample)
+          .withJHipsterConfig(sampleConfig, entities)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
           .withMockedGenerators(['jhipster:common']);
       });

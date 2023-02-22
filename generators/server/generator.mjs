@@ -22,6 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import {
   getDBTypeFromDBValue,
@@ -33,8 +34,8 @@ import {
   formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
+  generatedAnnotationTransform,
 } from './support/index.mjs';
-import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
 import {
@@ -97,6 +98,7 @@ import { stringifyApplicationData } from '../base-application/support/index.mjs'
 import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
 import checkJava from './support/checks/check-java.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
+import command from './command.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -149,25 +151,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   projectVersion;
 
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
-    });
-    this.jhipsterOptions(serverOptions);
-
-    if (this.options.help) {
-      return;
-    }
-
+  async beforeQueue() {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-  }
 
-  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -201,8 +188,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      loadConfig() {
+        this.parseJHipsterOptions(command.options);
+      },
+
       validateJava() {
-        if (!this.options.skipChecks) {
+        if (!this.skipChecks) {
           this.checkJava();
         }
       },
@@ -227,8 +218,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    const shouldSkipPrompting = this.delegateToBlueprint || this.options.defaults;
-    return this.asPromptingTaskGroup(shouldSkipPrompting ? {} : this.prompting);
+    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
   }
 
   get configuring() {
@@ -303,6 +293,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      generatedAnnotation({ application }) {
+        if (this.jhipsterConfig.withGeneratedFlag) {
+          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
+            name: 'adding @GeneratedByJHipster annotations',
+            streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
+          });
+        }
+      },
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
@@ -327,7 +325,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
-        application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
@@ -337,7 +335,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.projectVersion = '0.0.1-SNAPSHOT';
         }
 
-        if (control.useVersionPlaceholders) {
+        if (this.useVersionPlaceholders) {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
@@ -345,14 +343,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
-        application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
-        application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
-        application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
-        application.CASSANDRA_DRIVER_VERSION = control.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
-        application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
+        application.SPRING_BOOT_VERSION = this.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
+        application.SPRING_CLOUD_VERSION = this.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
+        application.HIBERNATE_VERSION = this.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
+        application.CASSANDRA_DRIVER_VERSION = this.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
+        application.JACKSON_DATABIND_NULLABLE_VERSION = this.useVersionPlaceholders
           ? 'JACKSON_DATABIND_NULLABLE_VERSION'
           : JACKSON_DATABIND_NULLABLE_VERSION;
-        application.JACOCO_VERSION = control.useVersionPlaceholders ? 'JACOCO_VERSION' : JACOCO_VERSION;
+        application.JACOCO_VERSION = this.useVersionPlaceholders ? 'JACOCO_VERSION' : JACOCO_VERSION;
 
         application.ANGULAR = ANGULAR;
         application.VUE = VUE;

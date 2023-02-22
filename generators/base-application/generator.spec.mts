@@ -40,8 +40,8 @@ describe(`generator - ${generator}`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
 
   // TODO test is broken due to @esbuild-kit/esm-loader
@@ -159,34 +159,27 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator).withOptions({
-        applicationWithEntities: {
-          config: {
-            baseName: 'jhipster',
-          },
-          entities: [
-            {
-              name: 'One',
-              fields: [{ fieldName: 'id', fieldType: 'Long' }],
-              relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-            },
-            {
-              name: 'Two',
-              fields: [
-                { fieldName: 'id', fieldType: 'Long' },
-                { fieldName: 'name', fieldType: 'String' },
-              ],
-              relationships: [
-                { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
-                { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
-              ],
-            },
-            {
-              name: 'Three',
-            },
+      await helpers.run(CustomGenerator).withJHipsterConfig({}, [
+        {
+          name: 'One',
+          fields: [{ fieldName: 'id', fieldType: 'Long' }],
+          relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
+        },
+        {
+          name: 'Two',
+          fields: [
+            { fieldName: 'id', fieldType: 'Long' },
+            { fieldName: 'name', fieldType: 'String' },
+          ],
+          relationships: [
+            { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
+            { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
           ],
         },
-      });
+        {
+          name: 'Three',
+        },
+      ]);
     });
 
     it('should call priorities with correct arguments', async () => {
@@ -390,35 +383,32 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator).withOptions({
-        entities: ['One', 'Two'],
-        applicationWithEntities: {
-          config: {
-            baseName: 'jhipster',
+      await helpers
+        .run(CustomGenerator)
+        .withJHipsterConfig({}, [
+          {
+            name: 'One',
+            fields: [{ fieldName: 'id', fieldType: 'Long' }],
+            relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
           },
-          entities: [
-            {
-              name: 'One',
-              fields: [{ fieldName: 'id', fieldType: 'Long' }],
-              relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-            },
-            {
-              name: 'Two',
-              fields: [
-                { fieldName: 'id', fieldType: 'Long' },
-                { fieldName: 'name', fieldType: 'String' },
-              ],
-              relationships: [
-                { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
-                { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
-              ],
-            },
-            {
-              name: 'Three',
-            },
-          ],
-        },
-      });
+          {
+            name: 'Two',
+            fields: [
+              { fieldName: 'id', fieldType: 'Long' },
+              { fieldName: 'name', fieldType: 'String' },
+            ],
+            relationships: [
+              { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
+              { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
+            ],
+          },
+          {
+            name: 'Three',
+          },
+        ])
+        .withOptions({
+          entities: ['One', 'Two'],
+        });
     });
 
     it('should call writingEntities and postWriting priorities with filtered entities', async () => {

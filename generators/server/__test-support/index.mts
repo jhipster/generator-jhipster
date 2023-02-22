@@ -20,7 +20,7 @@ export const mockedGenerators = [
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
-  const liquibaseEnabled = typeof testSample === 'boolean' ? testSample : testSample?.applicationWithEntities?.config?.databaseType === SQL;
+  const liquibaseEnabled = typeof testSample === 'boolean' ? testSample : testSample?.databaseType === SQL;
   if (liquibaseEnabled) {
     it('should compose with liquibase generator', () => {
       assert(runResultSupplier().mockedGenerators['jhipster:liquibase'].calledOnce);
@@ -32,8 +32,8 @@ export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
   }
 };
 
-export const shouldComposeWithKafka = (testSample, runResultSupplier) => {
-  const kafkaEnabled = typeof testSample === 'boolean' ? testSample : testSample?.applicationWithEntities?.config?.messageBroker === KAFKA;
+export const shouldComposeWithKafka = (sampleConfig, runResultSupplier) => {
+  const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
   if (kafkaEnabled) {
     it(`should compose with ${KAFKA} generator`, () => {
       assert(runResultSupplier().mockedGenerators['jhipster:kafka'].calledOnce);

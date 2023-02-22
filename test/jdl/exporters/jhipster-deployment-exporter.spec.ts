@@ -102,7 +102,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
   "dockerRepositoryName": "test",
   "gatewayType": "SpringCloudGateway",
   "monitoring": "no",
-  "serviceDiscoveryType": "eureka",
+  "serviceDiscoveryType": "consul",
 }
 `);
           });
@@ -150,7 +150,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
   "kubernetesStorageClassName": "",
   "kubernetesUseDynamicStorage": false,
   "monitoring": "no",
-  "serviceDiscoveryType": "eureka",
+  "serviceDiscoveryType": "consul",
 }
 `);
           });

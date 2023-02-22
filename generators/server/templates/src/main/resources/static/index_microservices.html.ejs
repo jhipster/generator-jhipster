@@ -84,12 +84,21 @@
     <li>It does not have a front-end. The front-end should be generated on a JHipster gateway.</li>
 <%_ } %>
     <li>It is serving REST APIs, under the '/api' URLs.</li>
+    <%_ if (serviceDiscoveryEureka) { _%>
     <li>To manage this microservice, you will probably want to use the <a href="https://www.jhipster.tech/jhipster-registry/">JHipster Registry</a>:
       <ul>
         <li>To run the JHipster Registry locally, you can use Docker:<br><code><small>docker compose -f src/main/docker/jhipster-registry.yml up --wait</small></code></li>
         <li>Its default URL is <a href="http://localhost:8761/">http://localhost:8761/</a> and its default login/password is <code>admin/admin</code></li>
       </ul>
     </li>
+    <%_ } else { _%>
+    <li>To manage this microservice, you will probably want to use <a href="https://www.consul.io/">Consul</a>:
+      <ul>
+        <li>To run Consul locally, you can use Docker:<br><code><small>docker compose -f src/main/docker/consul.yml up --wait</small></code></li>
+        <li>Its default URL is <a href="http://localhost:8500/">http://localhost:8500/</a></li>
+      </ul>
+    </li>
+    <%_ } _%>
     <li>OpenAPI documentation endpoint for those APIs is at <a href="./v3/api-docs">/v3/api-docs</a>, but if you want access to the full Swagger UI, you should use a JHipster gateway or a JHipster Registry, which will serve as API developer portals.</li>
   </ul>
 

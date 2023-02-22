@@ -1236,14 +1236,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
-    if (options.skipChecks !== undefined) {
-      dest.skipChecks = options.skipChecks;
-    }
     if (options.debug !== undefined) {
       dest.isDebugEnabled = options.debug;
-    }
-    if (options.experimental !== undefined) {
-      dest.experimental = options.experimental;
     }
     if (options.skipPrompts !== undefined) {
       dest.skipPrompts = options.skipPrompts;
@@ -1274,9 +1268,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     this.configOptions.optionsParsed = true;
 
     // Load stored options
-    if (options.withGeneratedFlag !== undefined) {
-      this.jhipsterConfig.withGeneratedFlag = options.withGeneratedFlag;
-    }
     if (options.skipJhipsterDependencies !== undefined) {
       this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
     }
@@ -1439,9 +1430,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   loadRuntimeOptions(config = this.configOptions, dest = this) {
     dest.withEntities = config.withEntities;
-    dest.skipChecks = config.skipChecks;
     dest.isDebugEnabled = config.isDebugEnabled;
-    dest.experimental = config.experimental;
     dest.logo = config.logo;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
@@ -1466,7 +1455,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    if (this.sharedData.getControl().useVersionPlaceholders) {
+    if (this.useVersionPlaceholders) {
       dest.nodeVersion = 'NODE_VERSION';
     } else {
       dest.nodeVersion = NODE_VERSION;

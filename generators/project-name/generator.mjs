@@ -36,6 +36,12 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
 
     if (this.options.help) return;
 
+    if (this.options.defaults) {
+      if (!this.jhipsterConfig.baseName) {
+        this.jhipsterConfig.baseName = getDefaultAppName(this);
+      }
+    }
+
     this.sharedData.getControl().existingProject =
       this.options.defaults ||
       this.options.withEntities ||

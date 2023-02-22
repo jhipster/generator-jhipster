@@ -263,146 +263,74 @@ exports[`generator - cypress oauth2-cypressAudit(true)-vue-withAdminUi(true)-cyp
 exports[`generator - cypress samples matrix should match snapshot 1`] = `
 {
   "jwt-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false)-src/": {
-    "applicationWithEntities": {
-      "config": {
-        "authenticationType": "jwt",
-        "baseName": "jhipster",
-        "clientFramework": "angular",
-        "clientSrcDir": "src/",
-        "clientTestDir": "test/",
-        "cypressAudit": false,
-        "cypressCoverage": false,
-        "testFrameworks": [
-          "cypress",
-        ],
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129025419",
-          "name": "EntityA",
-        },
-      ],
-    },
-    "skipInstall": true,
+    "authenticationType": "jwt",
+    "clientFramework": "angular",
+    "clientSrcDir": "src/",
+    "clientTestDir": "test/",
+    "cypressAudit": false,
+    "cypressCoverage": false,
+    "testFrameworks": [
+      "cypress",
+    ],
+    "withAdminUi": false,
   },
   "jwt-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true)-src/": {
-    "applicationWithEntities": {
-      "config": {
-        "authenticationType": "jwt",
-        "baseName": "jhipster",
-        "clientFramework": "vue",
-        "clientSrcDir": "src/",
-        "clientTestDir": "test/",
-        "cypressAudit": true,
-        "cypressCoverage": true,
-        "testFrameworks": [
-          "cypress",
-        ],
-        "withAdminUi": true,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129025419",
-          "name": "EntityA",
-        },
-      ],
-    },
-    "skipInstall": true,
+    "authenticationType": "jwt",
+    "clientFramework": "vue",
+    "clientSrcDir": "src/",
+    "clientTestDir": "test/",
+    "cypressAudit": true,
+    "cypressCoverage": true,
+    "testFrameworks": [
+      "cypress",
+    ],
+    "withAdminUi": true,
   },
   "oauth2-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false)": {
-    "applicationWithEntities": {
-      "config": {
-        "authenticationType": "oauth2",
-        "baseName": "jhipster",
-        "clientFramework": "angular",
-        "clientSrcDir": undefined,
-        "cypressAudit": false,
-        "cypressCoverage": false,
-        "testFrameworks": [
-          "cypress",
-        ],
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129025419",
-          "name": "EntityA",
-        },
-      ],
-    },
-    "skipInstall": true,
+    "authenticationType": "oauth2",
+    "clientFramework": "angular",
+    "clientSrcDir": undefined,
+    "cypressAudit": false,
+    "cypressCoverage": false,
+    "testFrameworks": [
+      "cypress",
+    ],
+    "withAdminUi": false,
   },
   "oauth2-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true)-src/main/webapp2/": {
-    "applicationWithEntities": {
-      "config": {
-        "authenticationType": "oauth2",
-        "baseName": "jhipster",
-        "clientFramework": "vue",
-        "clientSrcDir": "src/main/webapp2/",
-        "clientTestDir": "src/test/javascript2/",
-        "cypressAudit": true,
-        "cypressCoverage": true,
-        "testFrameworks": [
-          "cypress",
-        ],
-        "withAdminUi": true,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129025419",
-          "name": "EntityA",
-        },
-      ],
-    },
-    "skipInstall": true,
+    "authenticationType": "oauth2",
+    "clientFramework": "vue",
+    "clientSrcDir": "src/main/webapp2/",
+    "clientTestDir": "src/test/javascript2/",
+    "cypressAudit": true,
+    "cypressCoverage": true,
+    "testFrameworks": [
+      "cypress",
+    ],
+    "withAdminUi": true,
   },
   "session-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false)-src/main/webapp2/": {
-    "applicationWithEntities": {
-      "config": {
-        "authenticationType": "session",
-        "baseName": "jhipster",
-        "clientFramework": "angular",
-        "clientSrcDir": "src/main/webapp2/",
-        "clientTestDir": "src/test/javascript2/",
-        "cypressAudit": false,
-        "cypressCoverage": false,
-        "testFrameworks": [
-          "cypress",
-        ],
-        "withAdminUi": false,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129025419",
-          "name": "EntityA",
-        },
-      ],
-    },
-    "skipInstall": true,
+    "authenticationType": "session",
+    "clientFramework": "angular",
+    "clientSrcDir": "src/main/webapp2/",
+    "clientTestDir": "src/test/javascript2/",
+    "cypressAudit": false,
+    "cypressCoverage": false,
+    "testFrameworks": [
+      "cypress",
+    ],
+    "withAdminUi": false,
   },
   "session-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true)": {
-    "applicationWithEntities": {
-      "config": {
-        "authenticationType": "session",
-        "baseName": "jhipster",
-        "clientFramework": "vue",
-        "clientSrcDir": undefined,
-        "cypressAudit": true,
-        "cypressCoverage": true,
-        "testFrameworks": [
-          "cypress",
-        ],
-        "withAdminUi": true,
-      },
-      "entities": [
-        {
-          "changelogDate": "20220129025419",
-          "name": "EntityA",
-        },
-      ],
-    },
-    "skipInstall": true,
+    "authenticationType": "session",
+    "clientFramework": "vue",
+    "clientSrcDir": undefined,
+    "cypressAudit": true,
+    "cypressCoverage": true,
+    "testFrameworks": [
+      "cypress",
+    ],
+    "withAdminUi": true,
   },
 }
 `;

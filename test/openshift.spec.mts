@@ -1,8 +1,7 @@
 import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import createMockedConfig from './support/mock-config.mjs';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
 import { GENERATOR_OPENSHIFT } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
@@ -26,16 +25,19 @@ describe('generator - OpenShift', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_OPENSHIFT)
-        .inTmpDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_OPENSHIFT))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           adminPassword: 'openshiftpaas',
           dockerRepositoryName: 'ocrepo',
           dockerPushCommand: 'docker push',
@@ -48,8 +50,8 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.eurekaregistry);
-      assert.fileContent('./ocp/registry/jhipster-registry.yml', /# base64 encoded "openshiftpaas"/);
+      assert.file(expectedFiles.consulregistry);
+      assert.fileContent('./ocp/registry/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -63,17 +65,19 @@ describe('generator - OpenShift', () => {
   describe('gateway and one microservice with mysql', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_OPENSHIFT)
-        .inTmpDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_OPENSHIFT))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'ocrepo',
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
@@ -85,7 +89,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -101,17 +105,19 @@ describe('generator - OpenShift', () => {
   describe('two microservices backed by mysql and postgres without gateway', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql', '03-psql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_OPENSHIFT)
-        .inTmpDir(dir => {
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_OPENSHIFT))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql', '03-psql'],
+          chosenApps,
           dockerRepositoryName: 'ocrepo',
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
@@ -123,7 +129,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -142,21 +148,19 @@ describe('generator - OpenShift', () => {
   describe('gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_OPENSHIFT)
-        .inTmpDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('04-mongo', dir);
-          createMockedConfig('05-cassandra', dir);
-          createMockedConfig('07-mariadb', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_OPENSHIFT))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'],
+          chosenApps,
           dockerRepositoryName: 'ocrepo',
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
@@ -167,7 +171,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -195,16 +199,19 @@ describe('generator - OpenShift', () => {
   describe('monolith application', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['08-monolith'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_OPENSHIFT)
-        .inTmpDir(dir => {
-          createMockedConfig('08-monolith', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_OPENSHIFT))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
-          chosenApps: ['08-monolith'],
+          chosenApps,
           dockerRepositoryName: 'ocrepo',
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',

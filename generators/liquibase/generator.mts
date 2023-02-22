@@ -24,7 +24,7 @@ import type { LiquibaseApplication, SpringBootApplication } from '../server/type
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
-import { postPrepareEntity } from './support/index.mjs';
+import { postPrepareEntity, relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from './support/index.mjs';
 
 export type LiquibaseEntity = Entity & {
   anyRelationshipIsOwnerSide: boolean;
@@ -45,6 +45,7 @@ const BASE_CHANGELOG = {
   removedFields: [],
   addedRelationships: [],
   removedRelationships: [],
+  relationshipsToRecreateForeignKeysOnly: [],
 };
 export default class LiquibaseGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
   recreateInitialChangelog: boolean;
@@ -89,6 +90,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
         const entitiesToWrite =
           this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         const diffs = this._generateChangelogFromFiles(application);
+
         for (const [fieldChanges] of diffs) {
           if (fieldChanges.type === 'entity-new') {
             await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
@@ -191,24 +193,47 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
       const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName));
 
-      const newRelationshipNames = newRelationships.map(relationship => relationship.relationshipName);
       const oldRelationships: any[] = oldConfig.relationships || [];
-      const oldRelationshipNames = oldRelationships.map(relationship => relationship.relationshipName);
 
-      // Calculate new relationships
-      const addedRelationshipNames = newRelationshipNames.filter(relationshipName => !oldRelationshipNames.includes(relationshipName));
-      const addedRelationships = addedRelationshipNames.map(relationshipName =>
-        newRelationships.find(relationship => relationshipName === relationship.relationshipName)
+      // Calculate changed/newly added relationships
+      const addedRelationships = newRelationships.filter(
+        newRelationship =>
+          // check if the same relationship wasn't already part of the old config
+          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship))
       );
-      // Calculate removed relationships
-      const removedRelationshipNames = oldRelationshipNames.filter(relationshipName => !newRelationshipNames.includes(relationshipName));
-      const removedRelationships = removedRelationshipNames.map(relationshipName =>
-        oldRelationships.find(relationship => relationshipName === relationship.relationshipName)
+
+      // Calculate to be removed relationships
+      const removedRelationships = oldRelationships.filter(
+        oldRelationship =>
+          // check if there are relationships not anymore in the new config
+          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship))
       );
+
+      // calcualte relationships that only need a foreign key recreation from the ones that are added
+      // we need both the added and the removed ones here
+      const relationshipsToRecreateForeignKeysOnly = addedRelationships
+        .filter(addedRelationship =>
+          removedRelationships.some(removedRelationship =>
+            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship)
+          )
+        )
+        .concat(
+          removedRelationships.filter(removedRelationship =>
+            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship))
+          )
+        );
 
       return [
         { ...BASE_CHANGELOG, incremental: true, type: 'entity-update', entityName, addedFields, removedFields },
-        { ...BASE_CHANGELOG, incremental: true, type: 'entity-update', entityName, addedRelationships, removedRelationships },
+        {
+          ...BASE_CHANGELOG,
+          incremental: true,
+          type: 'entity-update',
+          entityName,
+          addedRelationships,
+          removedRelationships,
+          relationshipsToRecreateForeignKeysOnly,
+        },
       ];
     });
   }

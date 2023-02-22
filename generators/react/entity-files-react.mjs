@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createTranslationReplacer } from './transform-react.mjs';
 import { clientApplicationBlock } from '../client/utils.mjs';
 
 export const reactFiles = {
@@ -59,7 +58,6 @@ export async function writeEntitiesFiles({ application, entities, control }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: reactFiles,
-      transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
       context: { ...application, ...entity },
     });
   }

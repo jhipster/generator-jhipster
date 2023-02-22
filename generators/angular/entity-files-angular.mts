@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createTranslationReplacer } from './support/index.mjs';
 import { clientApplicationBlock } from '../client/utils.mjs';
 import AngularGenerator, { type GeneratorDefinition } from './generator.mjs';
 
@@ -69,7 +68,6 @@ export async function writeEntitiesFiles(
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: angularFiles,
-      transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
       context: { ...application, ...entity, getWebappTranslation: control.getWebappTranslation },
     });
   }

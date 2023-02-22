@@ -8,15 +8,9 @@ import { getTemplatePath } from './support/index.mjs';
 describe('generator - service', () => {
   describe('creates service without interface', () => {
     before(async () => {
-      await helpers
-        .runJHipster(GENERATOR_SPRING_SERVICE)
-        .inTmpDir(dir => {
-          fse.copySync(getTemplatePath('default'), dir);
-        })
-        .withArguments(['foo'])
-        .withAnswers({
-          useInterface: false,
-        });
+      await helpers.runJHipster(GENERATOR_SPRING_SERVICE).withJHipsterConfig().withArguments(['foo']).withAnswers({
+        useInterface: false,
+      });
     });
 
     it('creates service file', () => {
@@ -30,15 +24,9 @@ describe('generator - service', () => {
 
   describe('creates service with interface', () => {
     before(async () => {
-      await helpers
-        .runJHipster(GENERATOR_SPRING_SERVICE)
-        .onTargetDirectory(dir => {
-          fse.copySync(getTemplatePath('default'), dir);
-        })
-        .withArguments(['foo'])
-        .withAnswers({
-          useInterface: true,
-        });
+      await helpers.runJHipster(GENERATOR_SPRING_SERVICE).withJHipsterConfig().withArguments(['foo']).withAnswers({
+        useInterface: true,
+      });
     });
 
     it('creates service file', () => {
@@ -51,13 +39,7 @@ describe('generator - service', () => {
 
   describe('creates service with --default flag', () => {
     before(async () => {
-      await helpers
-        .runJHipster(GENERATOR_SPRING_SERVICE)
-        .inTmpDir(dir => {
-          fse.copySync(getTemplatePath('default'), dir);
-        })
-        .withArguments(['foo'])
-        .withOptions({ default: true });
+      await helpers.runJHipster(GENERATOR_SPRING_SERVICE).withJHipsterConfig().withArguments(['foo']).withOptions({ default: true });
     });
 
     it('creates service file', () => {

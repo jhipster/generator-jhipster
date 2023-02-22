@@ -60,11 +60,17 @@
 <%_ if (addedRelationships && addedRelationships.length > 0) {
     let hasRelationShips = false;
     let hasJoinRelationShips = false;
+    let hasRelationshipWithFieldUpdates = false;
     for (relationship of addedRelationships) {
         if (relationship.shouldWriteRelationship) {
             hasRelationShips = true;
         } else if (relationship.shouldWriteJoinTable) {
             hasJoinRelationShips = true;
+        }
+
+        // at least one relationship must update fields
+        if (!relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
+            hasRelationshipWithFieldUpdates = true;
         }
     }
     if (hasRelationShips || hasJoinRelationShips) {
@@ -74,11 +80,11 @@
         Added relationships to the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1-add-relationships" author="jhipster">
-        <%_ if (hasRelationShips) { _%>
+        <%_ if (hasRelationShips && hasRelationshipWithFieldUpdates) { _%>
         <addColumn tableName="<%= entity.entityTableName %>">
             <%_
             for (relationship of addedRelationships) {
-                if (relationship.shouldWriteRelationship) { 
+                if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) { 
                     for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
                 <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>" type="<%= otherEntityPkField.columnType %>"/>
                     <%_ } _%>
@@ -86,7 +92,9 @@
             <%_ } _%>
         </addColumn>
         <% } %>
-        <%_ const joinTableRelations = addedRelationships.filter(rel => rel.shouldWriteJoinTable);
+        <%_ const joinTableRelations = addedRelationships
+                .filter(rel => rel.shouldWriteJoinTable)
+                .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));
             if(joinTableRelations.length > 0) {
         _%>
             <%_ for (relationship of joinTableRelations) { _%>
@@ -115,11 +123,17 @@
 if (removedRelationships && removedRelationships.length) {
     let hasRelationShips = false;
     let hasJoinRelationShips = false;
+    let hasRelationshipWithFieldUpdates = false;
     for (relationship of removedRelationships) {
         if (relationship.shouldWriteRelationship) {
             hasRelationShips = true;
         } else if (relationship.shouldWriteJoinTable) {
             hasJoinRelationShips = true;
+        }
+
+        // at least one relationship must update fields
+        if (!relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
+            hasRelationshipWithFieldUpdates = true;
         }
     }
     /* ======== Start removed relationships should be written ======== */
@@ -140,12 +154,14 @@ if (removedRelationships && removedRelationships.length) {
         <dropForeignKeyConstraint baseTableName="<%= entity.entityTableName %>" constraintName="<%= this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
         <%_     }
             }
+
+            if (hasRelationshipWithFieldUpdates) {
             /* ======== End dropForeignKeyConstraint ======== */ _%>
         <dropColumn tableName="<%= entity.entityTableName %>">
         <%_
             /* ======== Start drop relationship columns ======== */
             for (relationship of removedRelationships) {
-                if (relationship.shouldWriteRelationship) {
+                if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
                     for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>"/>
                     <%_ } _%>
@@ -154,6 +170,7 @@ if (removedRelationships && removedRelationships.length) {
             /* ======== End drop relationship column ======== */ _%>
         </dropColumn>
         <%_
+            }
         }
         /* ======== End hasRelationShips ======== */ _%>
         <%_

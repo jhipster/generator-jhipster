@@ -115,7 +115,6 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
     this.skipInstall = this.options.skipInstall;
     this.silent = this.options.silent;
-    this.skipChecks = this.options.skipChecks;
 
     if (!this.config.existed) {
       throw new Error(
