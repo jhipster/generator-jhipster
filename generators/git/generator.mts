@@ -78,23 +78,14 @@ export default class InitGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get install() {
-    return this.asInstallTaskGroup({
+  get end() {
+    return this.asEndTaskGroup({
+      /** Initial commit to git repository after package manager install for package-lock.json */
       async initGitRepo() {
         if (!this.skipGit && !this.options.monorepository) {
           await this.initializeGitRepository();
         }
       },
-    });
-  }
-
-  get [BaseGenerator.INSTALL]() {
-    return this.delegateTasksToBlueprint(() => this.install);
-  }
-
-  get end() {
-    return this.asEndTaskGroup({
-      /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
         if (this.skipGit) return;
         if (!this.gitInitialized) {
