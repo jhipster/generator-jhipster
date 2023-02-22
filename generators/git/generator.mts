@@ -125,7 +125,7 @@ export default class InitGenerator extends BaseGenerator {
           await git.add(['.']).commit(commitMsg);
           this.logger.info(chalk.green.bold(`Application successfully committed to Git from ${repositoryRoot}.`));
         } catch (e) {
-          this.logger.error(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
+          this.logger.warn(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
         }
       },
     });
