@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "gateway",
-    "authenticationType": "oauth2",
+    "authenticationType": "jwt",
     "baseName": "sampleGateway",
     "blueprints": [],
     "buildTool": "maven",
@@ -29,7 +29,7 @@
     "reactive": true,
     "searchEngine": "no",
     "serverPort": "8080",
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": "consul",
     "testFrameworks": ["gatling", "cypress"],
     "websocket": "no"
   }

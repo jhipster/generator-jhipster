@@ -22,7 +22,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -43,8 +43,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -58,7 +58,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -79,8 +79,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -94,7 +94,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -125,7 +125,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -146,8 +146,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -161,7 +161,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -181,8 +181,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('no prometheus files', () => {
       runResult.assertNoFile(expectedFiles.prometheus);
@@ -199,7 +199,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -219,8 +219,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('no prometheus files', () => {
       runResult.assertNoFile(expectedFiles.prometheus);
@@ -237,7 +237,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -261,8 +261,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected prometheus files', () => {
       runResult.assertFile(expectedFiles.prometheus);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -276,7 +276,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -296,8 +296,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -311,7 +311,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -331,8 +331,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -346,7 +346,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '05-cassandra'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -366,8 +366,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -438,8 +438,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -453,7 +453,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -473,8 +473,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
@@ -488,7 +488,7 @@ describe('generator - Docker Compose', () => {
     const chosenApps = ['01-gateway', '10-couchbase'];
     before(async () => {
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -508,8 +508,8 @@ describe('generator - Docker Compose', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
     });
-    it('creates jhipster-registry content', () => {
-      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+    it('creates consul content', () => {
+      runResult.assertFileContent('docker-compose.yml', /SPRING_CLOUD_CONSUL_HOST=consul/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);

@@ -38,9 +38,6 @@ eureka:
     hostname: jhipster-test.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
-  client:
-    service-url:
-      defaultZone: \${JHIPSTER_REGISTRY_URL}/eureka/
 
 spring:
   datasource:
@@ -60,11 +57,6 @@ server:
 # Spring Cloud Config bootstrap configuration for the "heroku" profile
 # ===================================================================
 
-spring:
-  cloud:
-    config:
-      fail-fast: true
-      uri: \${JHIPSTER_REGISTRY_URL}/config
 ",
     "stateCleared": "modified",
   },
