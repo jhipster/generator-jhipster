@@ -11,7 +11,7 @@
     "path-browserify": "1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "7.43.1",
+    "react-hook-form": "7.43.2",
     "react-jhipster": "jhipster/react-jhipster",
     "react-loadable": "5.5.0",
     "react-redux": "8.0.5",
