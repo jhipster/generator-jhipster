@@ -1,0 +1,56 @@
+
+application {
+  config {
+    baseName fe,
+    applicationType gateway,
+    packageName com.cmi.tic,
+    authenticationType oauth2,
+    databaseType sql,
+    prodDatabaseType postgresql,
+    clientFramework react,
+    serviceDiscoveryType eureka,
+    serverPort 9000
+  }
+  entities *
+}
+
+application {
+  config {
+    baseName be1,
+    applicationType microservice,
+    packageName com.cmi.tic,
+    authenticationType oauth2,
+    databaseType sql,
+    prodDatabaseType postgresql,
+    serviceDiscoveryType eureka,
+    serverPort 9001
+  }
+  entities Reminder
+}
+
+entity Reminder {
+    name String required,
+    event String required,
+    date LocalDate required,
+    createdBy Integer required,
+    updatedBy Integer
+}
+
+entity Summary {
+    userId Integer,
+    reminders Integer
+}
+
+deployment {
+  deploymentType kubernetes
+  appsFolders [fe, be1]
+  dockerRepositoryName "raxkumar"
+  kubernetesNamespace k8s
+  kubernetesServiceType Ingress
+  ingressDomain "cdkdemo.tk"
+  istio true
+  kubernetesUseDynamicStorage true
+  kubernetesStorageClassName "demosc"
+  kubernetesStorageProvisioner "ebs.csi.aws.com"
+
+}

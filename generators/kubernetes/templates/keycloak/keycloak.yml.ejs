@@ -38,7 +38,7 @@ spec:
       containers:
       - name: keycloak
         image: <%- dockerContainers.keycloak %>
-        args: ["start --import-realm"]
+        args: ["start-dev --import-realm"]
         env:
         - name: KEYCLOAK_ADMIN
           value: "admin"
@@ -57,8 +57,8 @@ spec:
               key: postgresql-password
         - name: KC_FEATURES
           value: scripts
-        - name: KC_PROXY
-          value: "edge"
+        # - name: KC_PROXY
+        #   value: "edge"
         - name: KC_HOSTNAME_URL
           value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
         - name: KC_HOSTNAME_ADMIN_URL

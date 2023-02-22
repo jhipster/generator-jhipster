@@ -35,7 +35,7 @@ Link the updated version of the jhipster to generator-jhipster
 npm link
 ```
 
-# Example
+# Example with nginx enabled
 
 Run the example jdl file to generate the microservices.
 
@@ -46,3 +46,13 @@ Copy the jdl file example/jdl/reminder.jdl to the project directory.
 jhipster jdl reminder.jdl    
 ```
 
+# Example with istio enabled
+
+Run the example jdl file to generate the microservices.
+
+Copy the jdl file example/jdl/reminder-istio.jdl to the project directory.
+
+> Run cmd:-
+```
+jhipster jdl reminder-istio.jdl    
+```

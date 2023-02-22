@@ -101,6 +101,15 @@ export function writeFiles() {
       this.writeFile('messagebroker/kafka.yml.ejs', `messagebroker-${suffix}/kafka.yml`);
     },
 
+    // write's keycloak files with istio if istio is true  @cmi-tic-craxkumar
+    writeKeycloakWithIstio() {
+      if (!this.istio) return;
+      const keycloakOut = 'keycloak'.concat('-', suffix);
+      this.writeFile('keycloak/keycloak-destination-rule.yml.ejs', `${keycloakOut}/keycloak-destination-rule.yml`);
+      this.writeFile('keycloak/keycloak-virtual-service.yml.ejs' , `${keycloakOut}/keycloak-virtual-service.yml`);
+      this.writeFile('keycloak/keycloak-gateway.yml.ejs', `${keycloakOut}/keycloak-gateway.yml`);
+    },
+
     // write's keycloak files if useKeycloak is true @cmi-tic-craxkumar
     writeKeycloak() {
       if (!this.useKeycloak) return;
@@ -164,6 +173,11 @@ export function writeFiles() {
 
     writeConfigRunFile() {
       this.writeFile('kubectl-apply.sh.ejs', 'kubectl-apply.sh');
+    },
+
+    // generating kubectl-delete.sh to delete the created resources @cmi-tic-craxkumar
+    writeConfigDestroyFile() {
+      this.writeFile('kubectl-delete.sh.ejs', 'kubectl-delete.sh');
     },
 
     writeObservabilityGatewayFiles() {

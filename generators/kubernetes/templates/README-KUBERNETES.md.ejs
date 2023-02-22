@@ -33,6 +33,20 @@ If you want to deploy using skaffold binary, then run
 skaffold run [or] skaffold deploy
 ```
 
+## Destroy
+
+You can delete all your apps by running the below bash command:
+
+```
+./kubectl-delete.sh -f (default option)  [or] ./kubectl-apply.sh -k (kustomize option)
+```
+
+If you want to delete kustomize manifest directly using kubectl, then run
+
+```
+kubectl delete -k ./
+```
+
 ## Exploring your services
 
 
