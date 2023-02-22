@@ -137,7 +137,7 @@ describe('generator - app - with blueprint', () => {
     });
 
     it('creates expected default files for server and angular', () => {
-      // jestExpect(runResult.getStateSnapshot()).toMatchSnapshot();
+      jestExpect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
