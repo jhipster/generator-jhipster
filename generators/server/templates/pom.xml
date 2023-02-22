@@ -13,7 +13,7 @@
         <blockhound-junit-platform.version>1.0.7.RELEASE</blockhound-junit-platform.version>
         <caffeine.version>3.1.4</caffeine.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <gatling.version>3.9.1</gatling.version>
+        <gatling.version>3.9.2</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.2</hazelcast-spring.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
