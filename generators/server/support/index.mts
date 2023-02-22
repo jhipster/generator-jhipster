@@ -22,6 +22,7 @@ export * from './dependabot-maven.mjs';
 export * from './files.mjs';
 export { default as generatedAnnotationTransform } from './generated-annotation-transform.mjs';
 export * from './java-formatting.mjs';
+export * from './key-store.mjs';
 export * from './needles.mjs';
 export { default as prepareEntity } from './prepare-entity.mjs';
 export * from './prepare-entity.mjs';

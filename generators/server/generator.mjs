@@ -35,6 +35,7 @@ import {
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generatedAnnotationTransform,
+  generateKeyStore,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
@@ -150,6 +151,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
+  fakeKeytool;
 
   async beforeQueue() {
     this.loadStoredAppOptions();
@@ -592,6 +594,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         this.resetEntitiesFakeData('server');
       },
       ...writeFiles.call(this),
+      async generateKeyStore({ application }) {
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+        if (this.fakeKeytool) {
+          this.writeDestination(keyStoreFile, 'fake key-tool');
+        } else {
+          this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName }));
+        }
+      },
     });
   }
 
