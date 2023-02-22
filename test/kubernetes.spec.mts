@@ -218,7 +218,7 @@ describe('generator - Kubernetes', () => {
       runResult = await helpers
         .createJHipster(GENERATOR_KUBERNETES)
         .doInDir(dir => {
-          createMockedConfig('01-gateway', dir, { config: { authenticationType: 'oauth2' } });
+          createMockedConfig('01-gateway', dir, { appDir: '01-gateway', config: { authenticationType: 'oauth2' } });
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withAnswers({
