@@ -31,8 +31,6 @@ import statistics from '../generators/statistics.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.mjs';
 
-const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), 'cli.mjs');
-
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
 /**

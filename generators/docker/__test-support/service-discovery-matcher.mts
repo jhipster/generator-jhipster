@@ -21,7 +21,7 @@ const expectedConsulFiles = () => {
   return [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`];
 };
 
-const desiredConsultConfig = {
+const desiredConsulConfig = {
   'generator-jhipster': {
     serviceDiscoveryType: 'consul',
   },
@@ -34,5 +34,5 @@ export const matchEureka = (resultGetter: () => RunResult, shouldMatch: boolean)
 
 export const matchConsul = (resultGetter: () => RunResult, shouldMatch: boolean) => {
   matchWrittenFiles('consul', resultGetter, expectedConsulFiles, shouldMatch);
-  matchWrittenConfig('consul', resultGetter, desiredConsultConfig, shouldMatch);
+  matchWrittenConfig('consul', resultGetter, desiredConsulConfig, shouldMatch);
 };

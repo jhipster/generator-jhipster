@@ -115,19 +115,19 @@ export async function askForServerSideOpts({ control }) {
       message: 'Which service discovery server do you want to use?',
       choices: [
         {
-          value: EUREKA,
-          name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)',
+          value: CONSUL,
+          name: 'Consul (recommended)',
         },
         {
-          value: CONSUL,
-          name: 'Consul',
+          value: EUREKA,
+          name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)',
         },
         {
           value: NO_SERVICE_DISCOVERY,
           name: 'No service discovery',
         },
       ],
-      default: EUREKA,
+      default: CONSUL,
     },
     {
       when: answers =>
@@ -301,23 +301,6 @@ export async function askForServerSideOpts({ control }) {
       name: 'gradleEnterpriseHost',
       message: 'Enter your Gradle Enterprise host',
       validate: input => (input.length === 0 ? 'Please enter your Gradle Enterprise host' : true),
-    },
-    {
-      when: applicationType === MONOLITH,
-      type: 'list',
-      name: SERVICE_DISCOVERY_TYPE,
-      message: 'Do you want to use the JHipster Registry to configure, monitor and scale your application?',
-      choices: [
-        {
-          value: NO_SERVICE_DISCOVERY,
-          name: 'No',
-        },
-        {
-          value: EUREKA,
-          name: 'Yes',
-        },
-      ],
-      default: this.jhipsterConfigWithDefaults.serviceDiscoveryType,
     },
   ];
 

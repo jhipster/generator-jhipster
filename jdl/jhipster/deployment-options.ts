@@ -118,7 +118,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
       appsFolders: new Set(),
       directoryPath: Options.directoryPath,
       clusteredDbApps: new Set(),
-      serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+      serviceDiscoveryType: Options.serviceDiscoveryType.consul,
       dockerRepositoryName: Options.dockerRepositoryName,
       dockerPushCommand: Options.dockerPushCommand,
       kubernetesNamespace: Options.kubernetesNamespace,
@@ -138,7 +138,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
       gatewayType: Options.gatewayType.springCloudGateway,
       clusteredDbApps: new Set(),
       monitoring: Options.monitoring.no,
-      serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+      serviceDiscoveryType: Options.serviceDiscoveryType.consul,
     };
   }
 
@@ -146,7 +146,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
     appsFolders: new Set(),
     directoryPath: Options.directoryPath,
     clusteredDbApps: new Set(),
-    serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+    serviceDiscoveryType: Options.serviceDiscoveryType.consul,
     monitoring: Options.monitoring.no,
     dockerRepositoryName: Options.dockerRepositoryName,
     dockerPushCommand: Options.dockerPushCommand,
