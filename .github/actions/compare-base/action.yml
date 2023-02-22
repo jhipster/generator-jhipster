@@ -45,9 +45,11 @@ runs:
         git clone "${{ github.workspace }}/$JHI_CLI_PACKAGE" .
         git checkout @~1
         git log
+        rm -f "$JHI_BIN_FOLDER/jhipster"
         npm uninstall -g $JHI_CLI_PACKAGE
         npm install
         npm install -g .
+        jhipster --install-path
       shell: bash
     - name: 'MERGE: merge base config'
       id: base-config

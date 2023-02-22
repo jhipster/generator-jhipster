@@ -10,7 +10,6 @@ app.jdl
 test/temp/
 /docs
 *debug.log*
-.bin
 .vscode
 .vscode-test
 .DS_Store
