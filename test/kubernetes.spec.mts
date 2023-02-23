@@ -269,16 +269,19 @@ describe('generator - Kubernetes', () => {
   describe('gateway and ingressType gke', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir, { appDir: '01-gateway', config: { authenticationType: 'oauth2' } });
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -295,7 +298,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);

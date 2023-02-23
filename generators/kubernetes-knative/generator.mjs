@@ -134,7 +134,6 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
             this.useKafka = true;
           }
         });
-        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKeycloak = false;
       },
       saveConfig,
