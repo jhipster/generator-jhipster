@@ -1,8 +1,8 @@
 import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
-import { GENERATOR_OPENSHIFT } from '../generators/generator-list.mjs';
+import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';
 
 const expectedFiles = {
   sccconfig: ['./ocp/registry/scc-config.yml'],
