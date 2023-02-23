@@ -7,8 +7,6 @@ Init project (alpha)
 
 Options:
   --auto-crlf          Detect line endings
-  --skip-checks        Check the status of the required tools
-  --experimental       Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   --skip-commit-hook   Skip adding husky commit hooks
   --skip-cache         Do not remember prompt answers (default: false)
   --skip-install       Do not automatically install dependencies (default: false)

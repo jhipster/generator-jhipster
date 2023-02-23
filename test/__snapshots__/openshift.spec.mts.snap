@@ -17,7 +17,7 @@ exports[`generator - OpenShift gateway and one microservice with mysql should ma
     "openshiftNamespace": "default",
     "packages": ["01-gateway", "02-mysql"],
     "registryReplicas": 2,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
   }
 }
@@ -113,15 +113,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
@@ -436,15 +431,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
@@ -677,7 +667,7 @@ objects:
 # 'oc apply' to create those resources in OpenShift namespace
 oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
 oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
-oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/registry/consul.yml | oc apply -f -
 oc process -f ./ocp/jhgate/jhgate-mysql.yml | oc apply -f -
 oc process -f ./ocp/jhgate/jhgate-deployment.yml | oc apply -f -
 oc process -f ./ocp/msmysql/msmysql-mysql.yml | oc apply -f -
@@ -720,137 +710,198 @@ objects:
     data:
       application.yml: |-
         configserver:
-          name:  JHipster Registry
-          status: Connected to the JHipster Registry running in OpenShift
-        eureka:
-          client:
-            initial-instance-info-replication-interval-seconds: 15
-            instance-info-replication-interval-seconds: 15
-            registry-fetch-interval-seconds: 15
-            fetch-registry: true
-            register-with-eureka: true
-            eureka-service-url-poll-interval-seconds: 15
-          instance:
-            lease-renewal-interval-in-seconds: 10
-            registry-default-open-for-traffic-count: 0
+          name: Consul
+          status: Connected to Consul running in OpenShift
         jhipster:
           security:
             authentication:
               jwt:
                 base64-secret: SECRET--50
       # app specific configuration
-      jhipster-registry.yml: |-
-        eureka:
-          client:
-            service-url:
-              # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "ocp/registry/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
+  "ocp/registry/consul.yml": {
+    "contents": "# JHipster Consul HA cluster
 #
 # As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
 # It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
 #
-# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Consul service. This
 # template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
 # note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+# Though Openshift offers its own service discovery, this is been supported as jHipster relies on this.
 #
 apiVersion: v1
 kind: Template
 metadata:
-  name: jhipster-registry-template
+  name: msmysql-consul-template
   namespace: default
   annotations:
-    description: This template defines objects that are required to spin up an jhipster-registry pod
-    tags: jhipster-registry, eureka, spring-cloud
-    openshift.io/display-name: jhipster-registry-template
-    openshift.io/long-description: "This template provides objects that are required to spin up a jhipster-registry pod."
-    openshift.io/provider-display-name: JHipster
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: "db, consul, key/value"
+    openshift.io/display-name: msmysql-consul-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a consul pod."
+    openshift.io/provider-display-name: JHipster-OpenShift
 labels:
-  app: jhipster-registry
+  app: msmysql-consul
   createdBy: JHipster-Team
 parameters:
   - name: APPLICATION_NAME
-    value: jhipster-registry
+    value: msmysql-consul
     description: Name of the application
     required: true
     displayName: Application Name
-  - name: SECRET_REF
-    value: reg-secret-ref
-    description: Name of the application
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: \${SECRET_REF}
+      name: gossip-key
     type: Opaque
     data:
-      registry-admin-password: YWRtaW4= # base64 encoded "admin"
+      gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
       name: \${APPLICATION_NAME}
     spec:
-      selector:
-        matchLabels:
-          app: \${APPLICATION_NAME}
       serviceName: \${APPLICATION_NAME}
-      replicas: 2
+      replicas: 3
       template:
         metadata:
+          name: \${APPLICATION_NAME}
           labels:
             app: \${APPLICATION_NAME}
         spec:
-          terminationGracePeriodSeconds: 10
+          securityContext:
+            fsGroup: 1000
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster-registry-placeholder
+              image: consul-placeholder
+              imagePullPolicy: IfNotPresent
               ports:
                 - name: http
-                  containerPort: 8761
+                  containerPort: 8500
+                - name: rpc
+                  containerPort: 8400
+                - name: serflan-tcp
+                  protocol: TCP
+                  containerPort: 8301
+                - name: serflan-udp
+                  protocol: UDP
+                  containerPort: 8301
+                - name: serfwan-tcp
+                  protocol: TCP
+                  containerPort: 8302
+                - name: serfwan-udp
+                  protocol: UDP
+                  containerPort: 8302
+                - name: server
+                  containerPort: 8300
+                - name: consuldns
+                  containerPort: 8600
+              resources:
               env:
-                # Registry configuration
-                - name: SPRING_PROFILES_ACTIVE
-                  value: prod,k8s
-                - name: SPRING_SECURITY_USER_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${SECRET_REF}
-                      key: registry-admin-password
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-                  value: native
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-                  value: file:./central-config
-                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-                  value: "15"
-                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-                  value: "30"
-                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                - name: INITIAL_CLUSTER_SIZE
                   value: "3"
-                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-                  value: "false"
-                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-                  value: "2000"
-                - name: EUREKA_CLIENT_FETCH_REGISTRY
-                  value: "true"
-                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-                  value: "true"
-                - name: K8S_CONFIG_PATH
-                  value: "/central-config/"
+                - name: PETSET_NAME
+                  value: \${APPLICATION_NAME}
+                - name: PETSET_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/consul
+                - name: gossip-key
+                  mountPath: /etc/consul/secrets
+                  readOnly: true
+              command:
+                - "/bin/sh"
+                - "-ec"
+                - |
+                  IP=$(hostname -i)
+
+                  if [ -e /etc/consul/secrets/gossip-key ]; then
+                    echo "{\\"encrypt\\": \\"$(base64 /etc/consul/secrets/gossip-key)\\"}" > /etc/consul/encrypt.json
+                    GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
+                  fi
+
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      while true; do
+                          echo "Waiting for \${PETSET_NAME}-\${i}.\${PETSET_NAME} to come up"
+                          ping -W 1 -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} > /dev/null && break
+                          sleep 1s
+                      done
+                  done
+
+                  PEERS=""
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      PEERS="\${PEERS}\${PEERS:+ } -retry-join $(ping -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} | awk -F'[()]' '/PING/{print $2}')"
+                  done
+
+                  exec /bin/consul agent \\
+                    -data-dir=/var/lib/consul \\
+                    -server \\
+                    -ui \\
+                    -bootstrap-expect=\${INITIAL_CLUSTER_SIZE} \\
+                    -bind=0.0.0.0 \\
+                    -advertise=\${IP} \\
+                    \${PEERS} \\
+                    \${GOSSIP_KEY} \\
+                    -client=0.0.0.0
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          volumes:
+            - name: gossip-key
+              secret:
+                secretName: gossip-key
+      volumeClaimTemplates:
+        - metadata:
+            name: \${APPLICATION_NAME}-data
+            annotations:
+              volume.alpha.kubernetes.io/storage-class: anything
+          spec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: \${VOLUME_CAPACITY}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}-consul-config-loader
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}-consul-config-loader
+        spec:
+          containers:
+            - name: \${APPLICATION_NAME}-consul-config-loader
+              image: consul-config-loader-placeholder
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INIT_SLEEP_SECONDS
+                  value: "5"
+                - name: CONSUL_URL
+                  value: \${APPLICATION_NAME}
+                - name: CONSUL_PORT
+                  value: "8500"
               volumeMounts:
                 - name: config-volume
-                  mountPath: /central-config
+                  mountPath: /config
           volumes:
             - name: config-volume
               configMap:
@@ -863,12 +914,26 @@ objects:
         app: \${APPLICATION_NAME}
     spec:
       ports:
-        - name: http-bc
-          port: 8761
-          targetPort: 8761
         - name: http
-          port: 80
-          targetPort: 8761
+          port: 8500
+        - name: rpc
+          port: 8400
+        - name: serflan-tcp
+          protocol: TCP
+          port: 8301
+        - name: serflan-udp
+          protocol: UDP
+          port: 8301
+        - name: serfwan-tcp
+          protocol: TCP
+          port: 8302
+        - name: serfwan-udp
+          protocol: UDP
+          port: 8302
+        - name: server
+          port: 8300
+        - name: consuldns
+          port: 8600
       clusterIP: None
       publishNotReadyAddresses: true
       selector:
@@ -983,7 +1048,7 @@ exports[`generator - OpenShift gateway with multiple microservices backed by mys
       "07-mariadb"
     ],
     "registryReplicas": 2,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
   }
 }
@@ -1079,15 +1144,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
@@ -1544,15 +1604,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_CASSANDRA_CONTACTPOINTS
                   value: \${APPLICATION_NAME}-cassandra
               ports:
@@ -1678,15 +1733,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mariadb://\${APPLICATION_NAME}-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
                 - name: SPRING_DATASOURCE_USERNAME
@@ -2000,15 +2050,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATA_MONGODB_URI
                   value: mongodb://\${APPLICATION_NAME}-mongodb
                 - name: SPRING_DATA_MONGODB_DATABASE
@@ -2323,15 +2368,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
@@ -2646,15 +2686,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:postgresql://\${APPLICATION_NAME}-postgresqldb:5432/\${APPLICATION_NAME}
                 - name: SPRING_DATASOURCE_USERNAME
@@ -2976,7 +3011,7 @@ objects:
 # 'oc apply' to create those resources in OpenShift namespace
 oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
 oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
-oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/registry/consul.yml | oc apply -f -
 oc process -f ./ocp/jhgate/jhgate-mysql.yml | oc apply -f -
 oc process -f ./ocp/jhgate/jhgate-deployment.yml | oc apply -f -
 oc process -f ./ocp/msmysql/msmysql-mysql.yml | oc apply -f -
@@ -3028,137 +3063,198 @@ objects:
     data:
       application.yml: |-
         configserver:
-          name:  JHipster Registry
-          status: Connected to the JHipster Registry running in OpenShift
-        eureka:
-          client:
-            initial-instance-info-replication-interval-seconds: 15
-            instance-info-replication-interval-seconds: 15
-            registry-fetch-interval-seconds: 15
-            fetch-registry: true
-            register-with-eureka: true
-            eureka-service-url-poll-interval-seconds: 15
-          instance:
-            lease-renewal-interval-in-seconds: 10
-            registry-default-open-for-traffic-count: 0
+          name: Consul
+          status: Connected to Consul running in OpenShift
         jhipster:
           security:
             authentication:
               jwt:
                 base64-secret: SECRET--50
       # app specific configuration
-      jhipster-registry.yml: |-
-        eureka:
-          client:
-            service-url:
-              # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "ocp/registry/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
+  "ocp/registry/consul.yml": {
+    "contents": "# JHipster Consul HA cluster
 #
 # As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
 # It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
 #
-# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Consul service. This
 # template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
 # note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+# Though Openshift offers its own service discovery, this is been supported as jHipster relies on this.
 #
 apiVersion: v1
 kind: Template
 metadata:
-  name: jhipster-registry-template
+  name: msmariadb-consul-template
   namespace: default
   annotations:
-    description: This template defines objects that are required to spin up an jhipster-registry pod
-    tags: jhipster-registry, eureka, spring-cloud
-    openshift.io/display-name: jhipster-registry-template
-    openshift.io/long-description: "This template provides objects that are required to spin up a jhipster-registry pod."
-    openshift.io/provider-display-name: JHipster
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: "db, consul, key/value"
+    openshift.io/display-name: msmariadb-consul-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a consul pod."
+    openshift.io/provider-display-name: JHipster-OpenShift
 labels:
-  app: jhipster-registry
+  app: msmariadb-consul
   createdBy: JHipster-Team
 parameters:
   - name: APPLICATION_NAME
-    value: jhipster-registry
+    value: msmariadb-consul
     description: Name of the application
     required: true
     displayName: Application Name
-  - name: SECRET_REF
-    value: reg-secret-ref
-    description: Name of the application
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: \${SECRET_REF}
+      name: gossip-key
     type: Opaque
     data:
-      registry-admin-password: YWRtaW4= # base64 encoded "admin"
+      gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
       name: \${APPLICATION_NAME}
     spec:
-      selector:
-        matchLabels:
-          app: \${APPLICATION_NAME}
       serviceName: \${APPLICATION_NAME}
-      replicas: 2
+      replicas: 3
       template:
         metadata:
+          name: \${APPLICATION_NAME}
           labels:
             app: \${APPLICATION_NAME}
         spec:
-          terminationGracePeriodSeconds: 10
+          securityContext:
+            fsGroup: 1000
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster-registry-placeholder
+              image: consul-placeholder
+              imagePullPolicy: IfNotPresent
               ports:
                 - name: http
-                  containerPort: 8761
+                  containerPort: 8500
+                - name: rpc
+                  containerPort: 8400
+                - name: serflan-tcp
+                  protocol: TCP
+                  containerPort: 8301
+                - name: serflan-udp
+                  protocol: UDP
+                  containerPort: 8301
+                - name: serfwan-tcp
+                  protocol: TCP
+                  containerPort: 8302
+                - name: serfwan-udp
+                  protocol: UDP
+                  containerPort: 8302
+                - name: server
+                  containerPort: 8300
+                - name: consuldns
+                  containerPort: 8600
+              resources:
               env:
-                # Registry configuration
-                - name: SPRING_PROFILES_ACTIVE
-                  value: prod,k8s
-                - name: SPRING_SECURITY_USER_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${SECRET_REF}
-                      key: registry-admin-password
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-                  value: native
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-                  value: file:./central-config
-                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-                  value: "15"
-                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-                  value: "30"
-                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                - name: INITIAL_CLUSTER_SIZE
                   value: "3"
-                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-                  value: "false"
-                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-                  value: "2000"
-                - name: EUREKA_CLIENT_FETCH_REGISTRY
-                  value: "true"
-                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-                  value: "true"
-                - name: K8S_CONFIG_PATH
-                  value: "/central-config/"
+                - name: PETSET_NAME
+                  value: \${APPLICATION_NAME}
+                - name: PETSET_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/consul
+                - name: gossip-key
+                  mountPath: /etc/consul/secrets
+                  readOnly: true
+              command:
+                - "/bin/sh"
+                - "-ec"
+                - |
+                  IP=$(hostname -i)
+
+                  if [ -e /etc/consul/secrets/gossip-key ]; then
+                    echo "{\\"encrypt\\": \\"$(base64 /etc/consul/secrets/gossip-key)\\"}" > /etc/consul/encrypt.json
+                    GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
+                  fi
+
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      while true; do
+                          echo "Waiting for \${PETSET_NAME}-\${i}.\${PETSET_NAME} to come up"
+                          ping -W 1 -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} > /dev/null && break
+                          sleep 1s
+                      done
+                  done
+
+                  PEERS=""
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      PEERS="\${PEERS}\${PEERS:+ } -retry-join $(ping -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} | awk -F'[()]' '/PING/{print $2}')"
+                  done
+
+                  exec /bin/consul agent \\
+                    -data-dir=/var/lib/consul \\
+                    -server \\
+                    -ui \\
+                    -bootstrap-expect=\${INITIAL_CLUSTER_SIZE} \\
+                    -bind=0.0.0.0 \\
+                    -advertise=\${IP} \\
+                    \${PEERS} \\
+                    \${GOSSIP_KEY} \\
+                    -client=0.0.0.0
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          volumes:
+            - name: gossip-key
+              secret:
+                secretName: gossip-key
+      volumeClaimTemplates:
+        - metadata:
+            name: \${APPLICATION_NAME}-data
+            annotations:
+              volume.alpha.kubernetes.io/storage-class: anything
+          spec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: \${VOLUME_CAPACITY}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}-consul-config-loader
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}-consul-config-loader
+        spec:
+          containers:
+            - name: \${APPLICATION_NAME}-consul-config-loader
+              image: consul-config-loader-placeholder
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INIT_SLEEP_SECONDS
+                  value: "5"
+                - name: CONSUL_URL
+                  value: \${APPLICATION_NAME}
+                - name: CONSUL_PORT
+                  value: "8500"
               volumeMounts:
                 - name: config-volume
-                  mountPath: /central-config
+                  mountPath: /config
           volumes:
             - name: config-volume
               configMap:
@@ -3171,12 +3267,26 @@ objects:
         app: \${APPLICATION_NAME}
     spec:
       ports:
-        - name: http-bc
-          port: 8761
-          targetPort: 8761
         - name: http
-          port: 80
-          targetPort: 8761
+          port: 8500
+        - name: rpc
+          port: 8400
+        - name: serflan-tcp
+          protocol: TCP
+          port: 8301
+        - name: serflan-udp
+          protocol: UDP
+          port: 8301
+        - name: serfwan-tcp
+          protocol: TCP
+          port: 8302
+        - name: serfwan-udp
+          protocol: UDP
+          port: 8302
+        - name: server
+          port: 8300
+        - name: consuldns
+          port: 8600
       clusterIP: None
       publishNotReadyAddresses: true
       selector:
@@ -3799,7 +3909,7 @@ exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
     "openshiftNamespace": "default",
     "packages": ["01-gateway"],
     "registryReplicas": 2,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
   }
 }
@@ -3895,15 +4005,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
@@ -4136,7 +4241,7 @@ objects:
 # 'oc apply' to create those resources in OpenShift namespace
 oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
 oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
-oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/registry/consul.yml | oc apply -f -
 oc process -f ./ocp/jhgate/jhgate-mysql.yml | oc apply -f -
 oc process -f ./ocp/jhgate/jhgate-deployment.yml | oc apply -f -
 ",
@@ -4177,137 +4282,198 @@ objects:
     data:
       application.yml: |-
         configserver:
-          name:  JHipster Registry
-          status: Connected to the JHipster Registry running in OpenShift
-        eureka:
-          client:
-            initial-instance-info-replication-interval-seconds: 15
-            instance-info-replication-interval-seconds: 15
-            registry-fetch-interval-seconds: 15
-            fetch-registry: true
-            register-with-eureka: true
-            eureka-service-url-poll-interval-seconds: 15
-          instance:
-            lease-renewal-interval-in-seconds: 10
-            registry-default-open-for-traffic-count: 0
+          name: Consul
+          status: Connected to Consul running in OpenShift
         jhipster:
           security:
             authentication:
               jwt:
                 base64-secret: SECRET--50
       # app specific configuration
-      jhipster-registry.yml: |-
-        eureka:
-          client:
-            service-url:
-              # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "ocp/registry/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
+  "ocp/registry/consul.yml": {
+    "contents": "# JHipster Consul HA cluster
 #
 # As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
 # It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
 #
-# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Consul service. This
 # template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
 # note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+# Though Openshift offers its own service discovery, this is been supported as jHipster relies on this.
 #
 apiVersion: v1
 kind: Template
 metadata:
-  name: jhipster-registry-template
+  name: jhgate-consul-template
   namespace: default
   annotations:
-    description: This template defines objects that are required to spin up an jhipster-registry pod
-    tags: jhipster-registry, eureka, spring-cloud
-    openshift.io/display-name: jhipster-registry-template
-    openshift.io/long-description: "This template provides objects that are required to spin up a jhipster-registry pod."
-    openshift.io/provider-display-name: JHipster
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: "db, consul, key/value"
+    openshift.io/display-name: jhgate-consul-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a consul pod."
+    openshift.io/provider-display-name: JHipster-OpenShift
 labels:
-  app: jhipster-registry
+  app: jhgate-consul
   createdBy: JHipster-Team
 parameters:
   - name: APPLICATION_NAME
-    value: jhipster-registry
+    value: jhgate-consul
     description: Name of the application
     required: true
     displayName: Application Name
-  - name: SECRET_REF
-    value: reg-secret-ref
-    description: Name of the application
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: \${SECRET_REF}
+      name: gossip-key
     type: Opaque
     data:
-      registry-admin-password: b3BlbnNoaWZ0cGFhcw== # base64 encoded "openshiftpaas"
+      gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
       name: \${APPLICATION_NAME}
     spec:
-      selector:
-        matchLabels:
-          app: \${APPLICATION_NAME}
       serviceName: \${APPLICATION_NAME}
-      replicas: 2
+      replicas: 3
       template:
         metadata:
+          name: \${APPLICATION_NAME}
           labels:
             app: \${APPLICATION_NAME}
         spec:
-          terminationGracePeriodSeconds: 10
+          securityContext:
+            fsGroup: 1000
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster-registry-placeholder
+              image: consul-placeholder
+              imagePullPolicy: IfNotPresent
               ports:
                 - name: http
-                  containerPort: 8761
+                  containerPort: 8500
+                - name: rpc
+                  containerPort: 8400
+                - name: serflan-tcp
+                  protocol: TCP
+                  containerPort: 8301
+                - name: serflan-udp
+                  protocol: UDP
+                  containerPort: 8301
+                - name: serfwan-tcp
+                  protocol: TCP
+                  containerPort: 8302
+                - name: serfwan-udp
+                  protocol: UDP
+                  containerPort: 8302
+                - name: server
+                  containerPort: 8300
+                - name: consuldns
+                  containerPort: 8600
+              resources:
               env:
-                # Registry configuration
-                - name: SPRING_PROFILES_ACTIVE
-                  value: prod,k8s
-                - name: SPRING_SECURITY_USER_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${SECRET_REF}
-                      key: registry-admin-password
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-                  value: native
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-                  value: file:./central-config
-                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-                  value: "15"
-                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-                  value: "30"
-                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                - name: INITIAL_CLUSTER_SIZE
                   value: "3"
-                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-                  value: "false"
-                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-                  value: "2000"
-                - name: EUREKA_CLIENT_FETCH_REGISTRY
-                  value: "true"
-                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-                  value: "true"
-                - name: K8S_CONFIG_PATH
-                  value: "/central-config/"
+                - name: PETSET_NAME
+                  value: \${APPLICATION_NAME}
+                - name: PETSET_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/consul
+                - name: gossip-key
+                  mountPath: /etc/consul/secrets
+                  readOnly: true
+              command:
+                - "/bin/sh"
+                - "-ec"
+                - |
+                  IP=$(hostname -i)
+
+                  if [ -e /etc/consul/secrets/gossip-key ]; then
+                    echo "{\\"encrypt\\": \\"$(base64 /etc/consul/secrets/gossip-key)\\"}" > /etc/consul/encrypt.json
+                    GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
+                  fi
+
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      while true; do
+                          echo "Waiting for \${PETSET_NAME}-\${i}.\${PETSET_NAME} to come up"
+                          ping -W 1 -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} > /dev/null && break
+                          sleep 1s
+                      done
+                  done
+
+                  PEERS=""
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      PEERS="\${PEERS}\${PEERS:+ } -retry-join $(ping -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} | awk -F'[()]' '/PING/{print $2}')"
+                  done
+
+                  exec /bin/consul agent \\
+                    -data-dir=/var/lib/consul \\
+                    -server \\
+                    -ui \\
+                    -bootstrap-expect=\${INITIAL_CLUSTER_SIZE} \\
+                    -bind=0.0.0.0 \\
+                    -advertise=\${IP} \\
+                    \${PEERS} \\
+                    \${GOSSIP_KEY} \\
+                    -client=0.0.0.0
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          volumes:
+            - name: gossip-key
+              secret:
+                secretName: gossip-key
+      volumeClaimTemplates:
+        - metadata:
+            name: \${APPLICATION_NAME}-data
+            annotations:
+              volume.alpha.kubernetes.io/storage-class: anything
+          spec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: \${VOLUME_CAPACITY}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}-consul-config-loader
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}-consul-config-loader
+        spec:
+          containers:
+            - name: \${APPLICATION_NAME}-consul-config-loader
+              image: consul-config-loader-placeholder
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INIT_SLEEP_SECONDS
+                  value: "5"
+                - name: CONSUL_URL
+                  value: \${APPLICATION_NAME}
+                - name: CONSUL_PORT
+                  value: "8500"
               volumeMounts:
                 - name: config-volume
-                  mountPath: /central-config
+                  mountPath: /config
           volumes:
             - name: config-volume
               configMap:
@@ -4320,12 +4486,26 @@ objects:
         app: \${APPLICATION_NAME}
     spec:
       ports:
-        - name: http-bc
-          port: 8761
-          targetPort: 8761
         - name: http
-          port: 80
-          targetPort: 8761
+          port: 8500
+        - name: rpc
+          port: 8400
+        - name: serflan-tcp
+          protocol: TCP
+          port: 8301
+        - name: serflan-udp
+          protocol: UDP
+          port: 8301
+        - name: serfwan-tcp
+          protocol: TCP
+          port: 8302
+        - name: serfwan-udp
+          protocol: UDP
+          port: 8302
+        - name: server
+          port: 8300
+        - name: consuldns
+          port: 8600
       clusterIP: None
       publishNotReadyAddresses: true
       selector:
@@ -4426,7 +4606,7 @@ exports[`generator - OpenShift two microservices backed by mysql and postgres wi
     "openshiftNamespace": "default",
     "packages": ["02-mysql", "03-psql"],
     "registryReplicas": 2,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
   }
 }
@@ -4522,15 +4702,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
@@ -4845,15 +5020,10 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: SPRING_CLOUD_CONFIG_URI
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
-                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
-                - name: JHIPSTER_REGISTRY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${REG_SECRET_REF}
-                      key: registry-admin-password
+                - name: SPRING_CLOUD_CONSUL_HOST
+                  value: \${APPLICATION_NAME}-consul
+                - name: SPRING_CLOUD_CONSUL_PORT
+                  value: 8500
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:postgresql://\${APPLICATION_NAME}-postgresqldb:5432/\${APPLICATION_NAME}
                 - name: SPRING_DATASOURCE_USERNAME
@@ -5175,7 +5345,7 @@ objects:
 # 'oc apply' to create those resources in OpenShift namespace
 oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
 oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
-oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/registry/consul.yml | oc apply -f -
 oc process -f ./ocp/msmysql/msmysql-mysql.yml | oc apply -f -
 oc process -f ./ocp/msmysql/msmysql-deployment.yml | oc apply -f -
 oc process -f ./ocp/mspsql/mspsql-postgresql.yml | oc apply -f -
@@ -5219,137 +5389,198 @@ objects:
     data:
       application.yml: |-
         configserver:
-          name:  JHipster Registry
-          status: Connected to the JHipster Registry running in OpenShift
-        eureka:
-          client:
-            initial-instance-info-replication-interval-seconds: 15
-            instance-info-replication-interval-seconds: 15
-            registry-fetch-interval-seconds: 15
-            fetch-registry: true
-            register-with-eureka: true
-            eureka-service-url-poll-interval-seconds: 15
-          instance:
-            lease-renewal-interval-in-seconds: 10
-            registry-default-open-for-traffic-count: 0
+          name: Consul
+          status: Connected to Consul running in OpenShift
         jhipster:
           security:
             authentication:
               jwt:
                 base64-secret: SECRET--50
       # app specific configuration
-      jhipster-registry.yml: |-
-        eureka:
-          client:
-            service-url:
-              # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "ocp/registry/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
+  "ocp/registry/consul.yml": {
+    "contents": "# JHipster Consul HA cluster
 #
 # As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
 # It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
 #
-# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Consul service. This
 # template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
 # note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+# Though Openshift offers its own service discovery, this is been supported as jHipster relies on this.
 #
 apiVersion: v1
 kind: Template
 metadata:
-  name: jhipster-registry-template
+  name: mspsql-consul-template
   namespace: default
   annotations:
-    description: This template defines objects that are required to spin up an jhipster-registry pod
-    tags: jhipster-registry, eureka, spring-cloud
-    openshift.io/display-name: jhipster-registry-template
-    openshift.io/long-description: "This template provides objects that are required to spin up a jhipster-registry pod."
-    openshift.io/provider-display-name: JHipster
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: "db, consul, key/value"
+    openshift.io/display-name: mspsql-consul-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a consul pod."
+    openshift.io/provider-display-name: JHipster-OpenShift
 labels:
-  app: jhipster-registry
+  app: mspsql-consul
   createdBy: JHipster-Team
 parameters:
   - name: APPLICATION_NAME
-    value: jhipster-registry
+    value: mspsql-consul
     description: Name of the application
     required: true
     displayName: Application Name
-  - name: SECRET_REF
-    value: reg-secret-ref
-    description: Name of the application
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: \${SECRET_REF}
+      name: gossip-key
     type: Opaque
     data:
-      registry-admin-password: YWRtaW4= # base64 encoded "admin"
+      gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
       name: \${APPLICATION_NAME}
     spec:
-      selector:
-        matchLabels:
-          app: \${APPLICATION_NAME}
       serviceName: \${APPLICATION_NAME}
-      replicas: 2
+      replicas: 3
       template:
         metadata:
+          name: \${APPLICATION_NAME}
           labels:
             app: \${APPLICATION_NAME}
         spec:
-          terminationGracePeriodSeconds: 10
+          securityContext:
+            fsGroup: 1000
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster-registry-placeholder
+              image: consul-placeholder
+              imagePullPolicy: IfNotPresent
               ports:
                 - name: http
-                  containerPort: 8761
+                  containerPort: 8500
+                - name: rpc
+                  containerPort: 8400
+                - name: serflan-tcp
+                  protocol: TCP
+                  containerPort: 8301
+                - name: serflan-udp
+                  protocol: UDP
+                  containerPort: 8301
+                - name: serfwan-tcp
+                  protocol: TCP
+                  containerPort: 8302
+                - name: serfwan-udp
+                  protocol: UDP
+                  containerPort: 8302
+                - name: server
+                  containerPort: 8300
+                - name: consuldns
+                  containerPort: 8600
+              resources:
               env:
-                # Registry configuration
-                - name: SPRING_PROFILES_ACTIVE
-                  value: prod,k8s
-                - name: SPRING_SECURITY_USER_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: \${SECRET_REF}
-                      key: registry-admin-password
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-                  value: native
-                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-                  value: file:./central-config
-                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-                  value: "15"
-                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-                  value: "30"
-                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-                  value: "15000"
-                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                - name: INITIAL_CLUSTER_SIZE
                   value: "3"
-                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-                  value: "false"
-                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-                  value: "2000"
-                - name: EUREKA_CLIENT_FETCH_REGISTRY
-                  value: "true"
-                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-                  value: "true"
-                - name: K8S_CONFIG_PATH
-                  value: "/central-config/"
+                - name: PETSET_NAME
+                  value: \${APPLICATION_NAME}
+                - name: PETSET_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/consul
+                - name: gossip-key
+                  mountPath: /etc/consul/secrets
+                  readOnly: true
+              command:
+                - "/bin/sh"
+                - "-ec"
+                - |
+                  IP=$(hostname -i)
+
+                  if [ -e /etc/consul/secrets/gossip-key ]; then
+                    echo "{\\"encrypt\\": \\"$(base64 /etc/consul/secrets/gossip-key)\\"}" > /etc/consul/encrypt.json
+                    GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
+                  fi
+
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      while true; do
+                          echo "Waiting for \${PETSET_NAME}-\${i}.\${PETSET_NAME} to come up"
+                          ping -W 1 -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} > /dev/null && break
+                          sleep 1s
+                      done
+                  done
+
+                  PEERS=""
+                  for i in $(seq 0 $((\${INITIAL_CLUSTER_SIZE} - 1))); do
+                      PEERS="\${PEERS}\${PEERS:+ } -retry-join $(ping -c 1 \${PETSET_NAME}-\${i}.\${PETSET_NAME} | awk -F'[()]' '/PING/{print $2}')"
+                  done
+
+                  exec /bin/consul agent \\
+                    -data-dir=/var/lib/consul \\
+                    -server \\
+                    -ui \\
+                    -bootstrap-expect=\${INITIAL_CLUSTER_SIZE} \\
+                    -bind=0.0.0.0 \\
+                    -advertise=\${IP} \\
+                    \${PEERS} \\
+                    \${GOSSIP_KEY} \\
+                    -client=0.0.0.0
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          volumes:
+            - name: gossip-key
+              secret:
+                secretName: gossip-key
+      volumeClaimTemplates:
+        - metadata:
+            name: \${APPLICATION_NAME}-data
+            annotations:
+              volume.alpha.kubernetes.io/storage-class: anything
+          spec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: \${VOLUME_CAPACITY}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}-consul-config-loader
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}-consul-config-loader
+        spec:
+          containers:
+            - name: \${APPLICATION_NAME}-consul-config-loader
+              image: consul-config-loader-placeholder
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INIT_SLEEP_SECONDS
+                  value: "5"
+                - name: CONSUL_URL
+                  value: \${APPLICATION_NAME}
+                - name: CONSUL_PORT
+                  value: "8500"
               volumeMounts:
                 - name: config-volume
-                  mountPath: /central-config
+                  mountPath: /config
           volumes:
             - name: config-volume
               configMap:
@@ -5362,12 +5593,26 @@ objects:
         app: \${APPLICATION_NAME}
     spec:
       ports:
-        - name: http-bc
-          port: 8761
-          targetPort: 8761
         - name: http
-          port: 80
-          targetPort: 8761
+          port: 8500
+        - name: rpc
+          port: 8400
+        - name: serflan-tcp
+          protocol: TCP
+          port: 8301
+        - name: serflan-udp
+          protocol: UDP
+          port: 8301
+        - name: serfwan-tcp
+          protocol: TCP
+          port: 8302
+        - name: serfwan-udp
+          protocol: UDP
+          port: 8302
+        - name: server
+          port: 8300
+        - name: consuldns
+          port: 8600
       clusterIP: None
       publishNotReadyAddresses: true
       selector:

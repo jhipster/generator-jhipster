@@ -68,11 +68,12 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejslint",
     "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
+    "mocha-test": "mocha test --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java,xml}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java,xml}\"",
     "pretest": "npm run lint",
-    "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
+    "test": "npm run mocha-test generators",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
     "update-snapshots": "mocha test generators --require test/mocha-update-snapshots.config.cjs --no-insight --forbid-only",
     "watch": "concurrently \"tsc --watch\" \"node ./watch.mjs\""
@@ -125,7 +126,8 @@
   },
   "devDependencies": {
     "@node-loaders/auto": "0.7.0",
-    "@node-loaders/esbuild": "0.7.1",
+    "@node-loaders/esbuild": "0.8.0",
+    "@node-loaders/esbuildx": "0.3.1",
     "@node-loaders/jest-mock": "0.2.1",
     "@node-loaders/mock": "0.10.1",
     "@types/chai": "4.3.4",

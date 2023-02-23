@@ -22,7 +22,7 @@ exports[`generator - Docker Compose gateway and 1 microservice, with 1 couchbase
       "01-gateway",
       "10-couchbase"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -38,7 +38,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -54,18 +54,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -79,11 +75,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -97,8 +92,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -124,12 +117,11 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
       - JHIPSTER_SLEEP=20
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -141,8 +133,6 @@ eureka:
       retries: 40
     depends_on:
       mscouchbase-couchbase:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mscouchbase-couchbase-node:
     build:
@@ -161,31 +151,21 @@ eureka:
       - TYPE=MASTER
       - BUCKET=mscouchbase
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -212,7 +192,7 @@ exports[`generator - Docker Compose gateway and 1 microservice, with Cassandra s
       "01-gateway",
       "05-cassandra"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -228,7 +208,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -244,18 +224,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -269,11 +245,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -287,8 +262,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -314,11 +287,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
       - JHIPSTER_SLEEP=10
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -333,8 +305,6 @@ eureka:
         condition: service_healthy
       mscassandra-cassandra-migration:
         condition: service_completed_successfully
-      jhipster-registry:
-        condition: service_healthy
   mscassandra-cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
@@ -356,31 +326,21 @@ eureka:
       timeout: 25s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -413,7 +373,7 @@ exports[`generator - Docker Compose gateway and multi microservices should match
       "04-mongo",
       "07-mariadb"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -429,7 +389,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -452,18 +412,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -477,11 +433,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -495,8 +450,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -522,11 +475,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -538,8 +490,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -565,12 +515,11 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -584,8 +533,6 @@ eureka:
       mspsql-postgresql:
         condition: service_healthy
       mspsql-elasticsearch:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
     image: postgresql-placeholder
@@ -622,11 +569,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -638,8 +584,6 @@ eureka:
       retries: 40
     depends_on:
       msmongodb-mongodb:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmongodb-mongodb:
     image: mongodb-placeholder
@@ -662,11 +606,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -678,8 +621,6 @@ eureka:
       retries: 40
     depends_on:
       msmariadb-mariadb:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmariadb-mariadb:
     image: mariadb-placeholder
@@ -699,31 +640,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -756,7 +687,7 @@ exports[`generator - Docker Compose gateway and multi microservices using oauth2
       "07-mariadb",
       "10-couchbase"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -772,7 +703,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -796,18 +727,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -821,14 +748,13 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -844,8 +770,6 @@ eureka:
       jhgate-mysql:
         condition: service_healthy
       keycloak:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -871,14 +795,13 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -892,8 +815,6 @@ eureka:
       msmysql-mysql:
         condition: service_healthy
       keycloak:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -919,15 +840,14 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -943,8 +863,6 @@ eureka:
       mspsql-elasticsearch:
         condition: service_healthy
       keycloak:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
     image: postgresql-placeholder
@@ -981,15 +899,14 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
       - JHIPSTER_SLEEP=20
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1003,8 +920,6 @@ eureka:
       mscouchbase-couchbase:
         condition: service_healthy
       keycloak:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mscouchbase-couchbase:
     build:
@@ -1028,14 +943,13 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1049,8 +963,6 @@ eureka:
       msmariadb-mariadb:
         condition: service_healthy
       keycloak:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmariadb-mariadb:
     image: mariadb-placeholder
@@ -1070,38 +982,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,oauth2
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-      # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-    depends_on:
-      keycloak:
-        condition: 'service_healthy'
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
   keycloak:
     image: keycloak-placeholder
     command: ['start-dev --import-realm']
@@ -1158,7 +1053,7 @@ exports[`generator - Docker Compose gateway and multi microservices, with 1 mong
       "03-psql",
       "04-mongo"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1174,7 +1069,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -1195,18 +1090,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -1220,11 +1111,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -1238,8 +1128,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -1265,11 +1153,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1281,8 +1168,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -1308,12 +1193,11 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1327,8 +1211,6 @@ eureka:
       mspsql-postgresql:
         condition: service_healthy
       mspsql-elasticsearch:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
     image: postgresql-placeholder
@@ -1365,11 +1247,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1381,8 +1262,6 @@ eureka:
       retries: 40
     depends_on:
       msmongodb-mongodb:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmongodb-mongodb-node:
     build:
@@ -1397,31 +1276,21 @@ eureka:
     image: mongodb-placeholder
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -1454,7 +1323,7 @@ exports[`generator - Docker Compose gateway and multi microservices, with couchb
       "07-mariadb",
       "10-couchbase"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1470,7 +1339,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -1493,18 +1362,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -1518,11 +1383,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -1536,8 +1400,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -1563,11 +1425,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1579,8 +1440,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -1606,12 +1465,11 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1625,8 +1483,6 @@ eureka:
       mspsql-postgresql:
         condition: service_healthy
       mspsql-elasticsearch:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
     image: postgresql-placeholder
@@ -1663,12 +1519,11 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
       - JHIPSTER_SLEEP=20
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1680,8 +1535,6 @@ eureka:
       retries: 40
     depends_on:
       mscouchbase-couchbase:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   mscouchbase-couchbase:
     build:
@@ -1705,11 +1558,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1721,8 +1573,6 @@ eureka:
       retries: 40
     depends_on:
       msmariadb-mariadb:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmariadb-mariadb:
     image: mariadb-placeholder
@@ -1742,31 +1592,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -1793,7 +1633,7 @@ exports[`generator - Docker Compose gateway and one microservice should match fi
       "01-gateway",
       "02-mysql"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1809,7 +1649,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -1825,18 +1665,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -1850,11 +1686,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -1868,8 +1703,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -1895,11 +1728,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -1911,8 +1743,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -1932,31 +1762,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -1983,7 +1803,7 @@ exports[`generator - Docker Compose gateway and one microservice, with curator s
       "01-gateway",
       "02-mysql"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1999,7 +1819,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -2015,18 +1835,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -2040,11 +1856,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -2058,8 +1873,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -2085,11 +1898,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -2101,8 +1913,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -2122,31 +1932,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -2173,7 +1973,7 @@ exports[`generator - Docker Compose gateway and one microservice, with prometheu
       "01-gateway",
       "02-mysql"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -2189,7 +1989,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -2225,8 +2025,8 @@ receivers:
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
@@ -2238,10 +2038,6 @@ management:
     metrics:
       export:
         enabled: true
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -2255,11 +2051,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -2273,8 +2068,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -2300,11 +2093,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -2316,8 +2108,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -2337,32 +2127,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 
   prometheus:
     image: prometheus-placeholder
@@ -2478,7 +2257,7 @@ exports[`generator - Docker Compose gateway and one microservice, without monito
       "01-gateway",
       "02-mysql"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -2494,7 +2273,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -2510,18 +2289,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -2535,11 +2310,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -2553,8 +2327,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -2580,11 +2352,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -2596,8 +2367,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -2617,31 +2386,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -2775,7 +2534,7 @@ exports[`generator - Docker Compose one microservice and a directory path withou
     "packages": [
       "02-mysql"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -2791,7 +2550,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - msmysql (microservice application)
@@ -2805,18 +2564,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -2830,11 +2585,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -2846,8 +2600,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -2867,31 +2619,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -2916,7 +2658,7 @@ exports[`generator - Docker Compose only gateway should match files snapshot 1`]
     "packages": [
       "01-gateway"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -2932,7 +2674,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - jhgate (gateway application)
@@ -2946,18 +2688,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -2971,11 +2709,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - '8080:8080'
     healthcheck:
@@ -2989,8 +2726,6 @@ eureka:
       retries: 40
     depends_on:
       jhgate-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
     image: mysql-placeholder
@@ -3010,31 +2745,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },
@@ -3059,7 +2784,7 @@ exports[`generator - Docker Compose only one microservice should match files sna
     "packages": [
       "02-mysql"
     ],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -3075,7 +2800,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-- [JHipster Registry](http://localhost:8761)
+- [Consul](http://localhost:8500)
 
 ### Applications and dependencies:
 - msmysql (microservice application)
@@ -3089,18 +2814,14 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   "central-server-config/application.yml": {
     "contents": "#common configuration shared between all applications
 configserver:
-  name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  name: Service Registry
+  status: Connected to Consul running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: SECRET--50
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
 
 
 ",
@@ -3114,11 +2835,10 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
         - CMD
@@ -3130,8 +2850,6 @@ eureka:
       retries: 40
     depends_on:
       msmysql-mysql:
-        condition: service_healthy
-      jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
     image: mysql-placeholder
@@ -3151,31 +2869,21 @@ eureka:
       timeout: 5s
       retries: 10
   
-  jhipster-registry:
-    image: jhipster-registry-placeholder
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the "dev" and "native"
-    # Spring profiles.
-    # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  consul:
+    image: consul-placeholder
     ports:
-      - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: consul-config-loader-placeholder
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 ",
     "stateCleared": "modified",
   },

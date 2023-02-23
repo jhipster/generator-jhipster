@@ -105,7 +105,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -130,8 +130,8 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(expectedFiles.eurekaregistry);
-        assert.fileContent('./registry-knative/jhipster-registry.yml', /# base64 encoded "meetup"/);
+        assert.file(expectedFiles.consulregistry);
+        assert.fileContent('./registry-knative/consul.yml', /a 24 chars base64 encoded string/);
       });
       it('creates expected gateway files and content', () => {
         assert.file(expectedFiles.jhgate);
@@ -148,7 +148,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway', '02-mysql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -172,7 +172,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -191,7 +191,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['02-mysql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -215,7 +215,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(expectedFiles.msmysql);
@@ -234,7 +234,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -259,7 +259,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -275,7 +275,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['02-mysql', '03-psql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -299,7 +299,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it("doesn't creates gateway files", () => {
         assert.noFile(expectedFiles.jhgate);
@@ -321,7 +321,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -345,7 +345,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -376,7 +376,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['02-mysql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -399,7 +399,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(expectedFiles.msmysql);
@@ -421,7 +421,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -445,7 +445,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected service gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -466,7 +466,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -491,7 +491,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files and content', () => {
@@ -509,7 +509,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway', '02-mysql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -533,7 +533,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -554,7 +554,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['02-mysql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -578,7 +578,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected mysql files', () => {
@@ -599,7 +599,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -624,7 +624,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -647,7 +647,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['02-mysql', '03-psql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -671,7 +671,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it("doesn't creates gateway files", () => {
@@ -697,7 +697,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -722,7 +722,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -756,7 +756,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['02-mysql'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -779,7 +779,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(helmExpectedFiles.msmysql);
@@ -804,7 +804,7 @@ describe('generator - Knative', () => {
         const chosenApps = ['01-gateway'];
 
         runResult = await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
@@ -828,7 +828,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected service gateway files', () => {

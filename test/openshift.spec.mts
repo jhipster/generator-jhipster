@@ -28,7 +28,7 @@ describe('generator - OpenShift', () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -50,8 +50,8 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.eurekaregistry);
-      assert.fileContent('./ocp/registry/jhipster-registry.yml', /# base64 encoded "openshiftpaas"/);
+      assert.file(expectedFiles.consulregistry);
+      assert.fileContent('./ocp/registry/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -68,7 +68,7 @@ describe('generator - OpenShift', () => {
       const chosenApps = ['01-gateway', '02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -89,7 +89,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -108,7 +108,7 @@ describe('generator - OpenShift', () => {
       const chosenApps = ['02-mysql', '03-psql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -129,7 +129,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -151,7 +151,7 @@ describe('generator - OpenShift', () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
@@ -171,7 +171,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);

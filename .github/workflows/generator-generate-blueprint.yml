@@ -83,6 +83,8 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'GENERATION: install JHipster'
         run: $JHI_SCRIPTS/10-install-jhipster.sh
+        env:
+          JHI_INSTALL_GLOBALLY: 'true'
       - name: 'GENERATION: generate blueprint'
         run: |
           cd ..
