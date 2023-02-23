@@ -1,11 +1,8 @@
-import fse from 'fs-extra';
-import path from 'path';
 import assert from 'yeoman-assert';
 import Environment from 'yeoman-environment';
 
-import { dryRunHelpers as helpers } from '../support/helpers.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
-import { GENERATOR_APP } from '../../generators/generator-list.mjs';
+import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
+import { GENERATOR_APP } from '../generator-list.mjs';
 
 const { createEnv } = Environment;
 
@@ -26,14 +23,10 @@ const allMockedComposedGenerators = [
 describe('generator - app - composing', () => {
   describe('when mocking all generators', () => {
     describe('with default options', () => {
-      let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.createJHipster(GENERATOR_APP);
-        runResult = await runContext.withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators).run();
+        runResult = await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators);
       });
-
-      after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
         assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
@@ -69,19 +62,15 @@ describe('generator - app - composing', () => {
     });
 
     describe('with --skip-client', () => {
-      let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.createJHipster(GENERATOR_APP);
-        runResult = await runContext
+        runResult = await helpers
+          .runJHipster(GENERATOR_APP)
           .withJHipsterConfig({
             skipClient: true,
           })
-          .withMockedGenerators(allMockedComposedGenerators)
-          .run();
+          .withMockedGenerators(allMockedComposedGenerators);
       });
-
-      after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
         const BootstrapGenerator = runResult.mockedGenerators['jhipster:bootstrap'];
@@ -118,19 +107,15 @@ describe('generator - app - composing', () => {
     });
 
     describe('with --skip-server', () => {
-      let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.createJHipster(GENERATOR_APP);
-        runResult = await runContext
+        runResult = await helpers
+          .runJHipster(GENERATOR_APP)
           .withJHipsterConfig({
             skipServer: true,
           })
-          .withMockedGenerators(allMockedComposedGenerators)
-          .run();
+          .withMockedGenerators(allMockedComposedGenerators);
       });
-
-      after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
         assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
@@ -163,20 +148,16 @@ describe('generator - app - composing', () => {
 
     describe('with --with-entities', () => {
       describe('and 1 entity file', () => {
-        let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.createJHipster(GENERATOR_APP);
-          runResult = await runContext
+          runResult = await helpers
+            .runJHipster(GENERATOR_APP)
             .withJHipsterConfig({}, [{ name: 'Foo' }])
             .withOptions({
               withEntities: true,
             })
-            .withMockedGenerators(allMockedComposedGenerators)
-            .run();
+            .withMockedGenerators(allMockedComposedGenerators);
         });
-
-        after(() => runContext.cleanup());
 
         it('should compose with bootstrap generator', () => {
           assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
@@ -211,11 +192,10 @@ describe('generator - app - composing', () => {
       });
 
       describe('and more than 1 entity file', () => {
-        let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.createJHipster(GENERATOR_APP);
-          runResult = await runContext
+          runResult = await helpers
+            .runJHipster(GENERATOR_APP)
             .withJHipsterConfig({}, [
               { name: 'One', changelogDate: '12345678901234' },
               { name: 'Two', changelogDate: '12345678901235' },
@@ -224,11 +204,8 @@ describe('generator - app - composing', () => {
             .withOptions({
               withEntities: true,
             })
-            .withMockedGenerators(allMockedComposedGenerators)
-            .run();
+            .withMockedGenerators(allMockedComposedGenerators);
         });
-
-        after(() => runContext.cleanup());
 
         it('should compose with bootstrap generator', () => {
           assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
