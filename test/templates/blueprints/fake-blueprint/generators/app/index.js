@@ -1,70 +1,61 @@
-const createGenerator = async env =>
-  class extends (await env.requireGenerator('jhipster:app')) {
+export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:app');
+  return class extends BaseGenerator {
     constructor(args, opts, features) {
-      super(args, opts, { taskPrefix: '>', ...features });
+      super(args, opts, features);
 
       this.option('foo-bar', {
         desc: 'Sample option',
         type: Boolean,
       });
-
-      if (this.options.help) {
-        return;
-      }
-
-      const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-      if (!jhContext) {
-        throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint");
-      }
     }
 
-    get ['>initializing']() {
+    get [BaseGenerator.INITIALIZING]() {
       return super.initializing;
     }
 
-    get ['>prompting']() {
+    get [BaseGenerator.PROMPTING]() {
       return super.prompting;
     }
 
-    get ['>configuring']() {
+    get [BaseGenerator.CONFIGURING]() {
       return super.configuring;
     }
 
-    get ['>composing']() {
+    get [BaseGenerator.COMPOSING]() {
       return super.composing;
     }
 
-    get ['>loading']() {
+    get [BaseGenerator.LOADING]() {
       return super.loading;
     }
 
-    get ['>preparing']() {
+    get [BaseGenerator.PREPARING]() {
       return super.preparing;
     }
 
-    get ['>default']() {
+    get [BaseGenerator.DEFAULT]() {
       return super.default;
     }
 
-    get ['>writing']() {
+    get [BaseGenerator.WRITING]() {
       return super.writing;
     }
 
-    get ['>postWriting']() {
+    get [BaseGenerator.POST_WRITING]() {
       return super.postWriting;
     }
 
-    get ['>install']() {
+    get [BaseGenerator.INSTALL]() {
       return super.install;
     }
 
-    get ['>postInstall']() {
+    get [BaseGenerator.POST_INSTALL]() {
       return super.postInstall;
     }
 
-    get ['>end']() {
+    get [BaseGenerator.END]() {
       return super.end;
     }
   };
-
-module.exports = { createGenerator };
+};

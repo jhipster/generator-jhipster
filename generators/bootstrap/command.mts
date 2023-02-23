@@ -32,7 +32,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
     },
   },
-  import: ['base'],
 };
 
 export default command;

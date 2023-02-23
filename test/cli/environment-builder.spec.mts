@@ -26,7 +26,7 @@ import { basicHelpers as helpers } from '../support/index.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
-import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } from '../support/index.mjs';
+import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint } from '../support/index.mjs';
 
 describe('cli - EnvironmentBuilder', () => {
   let cleanup: () => void;
@@ -234,7 +234,6 @@ describe('cli - EnvironmentBuilder', () => {
       before(() => {
         oldArgv = process.argv;
         oldCwd = testInTempDir(tmpdir => {
-          lnYeoman(tmpdir);
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
         });
@@ -272,7 +271,6 @@ describe('cli - EnvironmentBuilder', () => {
       before(() => {
         oldArgv = process.argv;
         oldCwd = testInTempDir(tmpdir => {
-          lnYeoman(tmpdir);
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
         });

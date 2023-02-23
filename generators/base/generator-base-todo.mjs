@@ -807,8 +807,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.logger.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.logger.warn(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logger.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logger.log(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }

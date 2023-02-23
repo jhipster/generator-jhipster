@@ -18,6 +18,7 @@
  */
 import _ from 'lodash';
 import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.mjs';
@@ -142,6 +143,23 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  get end() {
+    return this.asEndTaskGroup({
+      end({ application }) {
+        this.log.ok('React application generated successfully.');
+        this.logger.log(
+          chalk.green(`  Start your Webpack development server with:
+  ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
+`)
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.END]() {
+    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
   /**

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname } from 'path';
+import { basename, join as joinPath, dirname, relative } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -32,7 +32,7 @@ import type Storage from 'yeoman-generator/lib/util/storage.js';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { joinCallbacks } from './support/index.mjs';
+import { joinCallbacks, Logger } from './support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -91,8 +91,10 @@ export default class BaseGenerator extends YeomanGenerator {
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
   experimental?: boolean;
+  debugEnabled?: boolean;
 
   readonly sharedData!: SharedData<BaseApplication>;
+  readonly logger: Logger;
   declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -147,6 +149,8 @@ export default class BaseGenerator extends YeomanGenerator {
     }
 
     this.sharedData = this.createSharedData(jhipsterOldVersion);
+
+    this.logger = new Logger({ adapter: this.env.adapter, namespace: this.options.namespace, debugEnabled: this.debugEnabled });
 
     if (this.options.help) {
       return;
@@ -248,10 +252,10 @@ export default class BaseGenerator extends YeomanGenerator {
       let optionValue;
       // Hidden options are test options, which doesn't rely on commoander for options parsing.
       // We must parse environment variables manually
-      if (this.options[optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
+      if (this.options[optionDesc.name ?? optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
         optionValue = process.env[optionDesc.env];
       } else {
-        optionValue = this.options[optionName];
+        optionValue = this.options[optionDesc.name ?? optionName];
       }
       if (optionValue !== undefined) {
         optionValue = optionDesc.type(optionValue);
@@ -295,13 +299,14 @@ export default class BaseGenerator extends YeomanGenerator {
    */
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
+    const relativePath = relative((this.env as any).conflicter.cwd, destinationFile);
     try {
       if (destinationFile && statSync(destinationFile).isFile()) {
-        this.logger.log(`Removing the file - ${destinationFile}`);
+        this.log.info(`Removing legacy file ${relativePath}`);
         rmSync(destinationFile, { force: true });
       }
     } catch {
-      this.logger.log(`Could not remove file ${destinationFile}`);
+      this.log.info(`Could not remove legacy file ${relativePath}`);
     }
     return destinationFile;
   }

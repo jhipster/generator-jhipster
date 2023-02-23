@@ -73,7 +73,7 @@ export function customizeFiles() {
 
           additionalParameters.push('-p dateLibrary=java8');
         }
-        this.logger.info(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
+        this.logger.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
 
         openApiCmd.push(
           `-g ${openApiGeneratorName}`,

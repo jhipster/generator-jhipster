@@ -10,7 +10,7 @@ import { basicHelpers as helpers } from '../support/index.mjs';
 
 import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
 import { createProgram } from '../../cli/program.mjs';
-import { prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from '../support/index.mjs';
+import { prepareTempDir, copyFakeBlueprint, copyBlueprint } from '../support/index.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
 const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
@@ -366,7 +366,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout!.read().toString();
@@ -388,7 +387,6 @@ describe('cli', () => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -410,7 +408,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -432,7 +429,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -454,7 +450,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -502,7 +497,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
@@ -528,7 +522,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;

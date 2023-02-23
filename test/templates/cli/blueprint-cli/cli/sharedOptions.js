@@ -1,3 +1,3 @@
-module.exports = {
-    fooBar: 'barValue'
+export default {
+  fooBar: 'barValue',
 };

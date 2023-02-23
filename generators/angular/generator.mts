@@ -164,6 +164,23 @@ export default class AngularGenerator extends BaseApplicationGenerator<Generator
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
+  get end() {
+    return this.asEndTaskGroup({
+      end({ application }) {
+        this.log.ok('Angular application generated successfully.');
+        this.logger.log(
+          chalk.green(`  Start your Webpack development server with:
+  ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
+`)
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.END]() {
+    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
+  }
+
   /**
    * @private
    * Add new scss style to the angular application in "vendor.scss".

@@ -95,7 +95,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
             `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
           );
         } else {
-          generator.logger.info(
+          generator.logger.debug(
             `Ignoring '${entityName}' definitions as it is using a built-in Entity '${otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`
           );
         }

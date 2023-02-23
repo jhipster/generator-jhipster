@@ -1,6 +1,7 @@
 {
   "name": "generator-jhipster-foo",
   "version": "9.9.9",
+  "type": "module",
   "dependencies": {
     "yeoman-generator": "*"
   },
