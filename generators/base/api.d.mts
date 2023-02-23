@@ -86,6 +86,7 @@ export type WriteFileOptions<Generator, DataType> = {
 );
 
 export type JHipsterOption = OptionConfig & {
+  name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
 };

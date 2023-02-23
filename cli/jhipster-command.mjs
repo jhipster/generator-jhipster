@@ -172,7 +172,7 @@ export default class JHipsterCommand extends Command {
 
   addJHipsterOptions(options, blueprintOptionDescription) {
     Object.entries(options).forEach(([key, value]) => {
-      this._addGeneratorOption(kebabCase(key), value, blueprintOptionDescription);
+      this._addGeneratorOption(kebabCase(value.name ?? key), value, blueprintOptionDescription);
     });
     return this;
   }
