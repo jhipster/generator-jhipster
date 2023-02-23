@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname } from 'path';
+import { basename, join as joinPath, dirname, relative } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -299,13 +299,14 @@ export default class BaseGenerator extends YeomanGenerator {
    */
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
+    const relativePath = relative((this.env as any).conflicter.cwd, destinationFile);
     try {
       if (destinationFile && statSync(destinationFile).isFile()) {
-        this.logger.log(`Removing the file - ${destinationFile}`);
+        this.log.info(`Removing legacy file ${relativePath}`);
         rmSync(destinationFile, { force: true });
       }
     } catch {
-      this.logger.log(`Could not remove file ${destinationFile}`);
+      this.log.info(`Could not remove legacy file ${relativePath}`);
     }
     return destinationFile;
   }

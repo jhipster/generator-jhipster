@@ -50,7 +50,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
       ...super.initializing,
       sayHello() {
         // Have Yeoman greet the user.
-        this.logger.info(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
+        this.logger.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
       },
       getConfig() {
         this.openApiClients = this.config.get('openApiClients') || {};
@@ -138,7 +138,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
           this.logger.error(`Something went wrong while running npm install: ${stdout} ${stderr}`);
         }
         Object.keys(this.clientsToGenerate).forEach(cliName => {
-          this.logger.info(chalk.green(`\nGenerating client for ${cliName}`));
+          this.logger.log(chalk.green(`\nGenerating client for ${cliName}`));
           const generatorName = this.clientsToGenerate[cliName].generatorName;
           const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
           if (!stderr) {

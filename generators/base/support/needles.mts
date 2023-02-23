@@ -215,7 +215,7 @@ export const createNeedleCallback = <Generator extends BaseGenerator = any>({
     }
     const message = `Missing ${optional ? 'optional' : 'required'} jhipster-needle ${needle} not found at '${filePath}'`;
     if (optional) {
-      this.logger.warn(chalk.yellow(message));
+      this.logger.warn(message);
       return content;
     }
     throw new Error(message);

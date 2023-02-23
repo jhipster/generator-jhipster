@@ -78,23 +78,14 @@ export default class InitGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get install() {
-    return this.asInstallTaskGroup({
+  get end() {
+    return this.asEndTaskGroup({
+      /** Initial commit to git repository after package manager install for package-lock.json */
       async initGitRepo() {
         if (!this.skipGit && !this.options.monorepository) {
           await this.initializeGitRepository();
         }
       },
-    });
-  }
-
-  get [BaseGenerator.INSTALL]() {
-    return this.delegateTasksToBlueprint(() => this.install);
-  }
-
-  get end() {
-    return this.asEndTaskGroup({
-      /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
         if (this.skipGit) return;
         if (!this.gitInitialized) {
@@ -106,7 +97,7 @@ export default class InitGenerator extends BaseGenerator {
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         const result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
-          this.logger.info(
+          this.log.info(
             `Found commits in Git from ${repositoryRoot}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
           );
           return;
@@ -123,7 +114,7 @@ export default class InitGenerator extends BaseGenerator {
             commitMsg += ` with blueprints ${bpInfo}`;
           }
           await git.add(['.']).commit(commitMsg);
-          this.logger.info(chalk.green.bold(`Application successfully committed to Git from ${repositoryRoot}.`));
+          this.log.ok(`Application successfully committed to Git from ${repositoryRoot}.`);
         } catch (e) {
           this.logger.warn(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
         }
@@ -138,8 +129,14 @@ export default class InitGenerator extends BaseGenerator {
   async initializeGitRepository() {
     try {
       const git = this.createGit();
-      this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
-      this.logger.info(chalk.green.bold('Git repository initialized.'));
+      if (await git.checkIsRepo('root' as any)) {
+        this.log.info('Using existing git repository.');
+      } else if (await git.checkIsRepo()) {
+        this.log.info('Using existing git repository at parent folder.');
+      } else if (await git.init()) {
+        this.log.ok('Git repository initialized.');
+      }
+      this.gitInitialized = true;
     } catch (error) {
       this.logger.warn(`Failed to initialize Git repository.\n ${error}`);
     }

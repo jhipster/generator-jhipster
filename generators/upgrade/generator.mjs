@@ -126,8 +126,8 @@ export default class UpgradeGenerator extends BaseGenerator {
   get [BaseGenerator.INITIALIZING]() {
     return {
       displayLogo() {
-        this.logger.info(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
-        this.logger.info(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
+        this.logger.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
+        this.logger.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
       },
 
       parseBlueprints() {
@@ -287,7 +287,7 @@ export default class UpgradeGenerator extends BaseGenerator {
                   this.success(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
                 } else if (this.force) {
                   this.newBlueprintVersionFound = true;
-                  this.logger.warn(chalk.yellow('Forced re-generation'));
+                  this.logger.log(chalk.yellow('Forced re-generation'));
                 } else {
                   if (this.newBlueprintVersionFound === undefined) {
                     this.newBlueprintVersionFound = false;
@@ -322,7 +322,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
           this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
         } else if (this.force) {
-          this.logger.warn(chalk.yellow('Forced re-generation'));
+          this.logger.log(chalk.yellow('Forced re-generation'));
         } else if (!this.newBlueprintVersionFound) {
           throw new Error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
         }

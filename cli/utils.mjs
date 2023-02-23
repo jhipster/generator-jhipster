@@ -26,7 +26,8 @@ import { Logger, CLI_LOGGER } from '../generators/base/support/index.mjs';
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';
 
-const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
+const SUCCESS_MESSAGE = `Congratulations, JHipster execution is complete!
+If you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`;
 const SPONSOR_MESSAGE = 'Sponsored with ❤️  by @oktadev.';
 
 export const logger = new Logger({ adapter: new TerminalAdapter(), namespace: CLI_LOGGER });
@@ -52,7 +53,9 @@ export const doneFactory = (successMsg, sponsorMsg) => {
     } else if (errorOrMsg) {
       logger.error(`ERROR! ${errorOrMsg}`);
     } else if (successMsg) {
+      logger.log('');
       logger.log(chalk.green.bold(successMsg));
+      logger.log('');
       logger.log(chalk.cyan.bold(sponsorMsg));
     }
   };
@@ -60,10 +63,12 @@ export const doneFactory = (successMsg, sponsorMsg) => {
 
 export const printSuccess = () => {
   if (process.exitCode === undefined || process.exitCode === 0) {
+    logger.log('');
     logger.log(chalk.green.bold(SUCCESS_MESSAGE));
+    logger.log('');
     logger.log(chalk.cyan.bold(SPONSOR_MESSAGE));
   } else {
-    logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
+    logger.error(`JHipster finished with code ${process.exitCode}`);
   }
 };
 
