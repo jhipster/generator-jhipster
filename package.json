@@ -128,7 +128,7 @@
     "@node-loaders/auto": "0.7.0",
     "@node-loaders/esbuild": "0.8.0",
     "@node-loaders/esbuildx": "0.3.1",
-    "@node-loaders/jest-mock": "0.2.1",
+    "@node-loaders/jest-mock": "0.2.3",
     "@node-loaders/mock": "0.10.3",
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
