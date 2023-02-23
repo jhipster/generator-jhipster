@@ -41,7 +41,7 @@ import type {
   EditFileOptions,
   CascatedEditFileCallback,
   JHipsterOptions,
-  CheckResult,
+  ValidationResult,
 } from './api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
@@ -468,18 +468,46 @@ export default class BaseGenerator extends YeomanGenerator {
   }
 
   /**
-   * Print CheckResult info/warnings or throw result Error.
+   * Print ValidationResult info/warnings or throw result Error.
    */
-  validateCheckResult(result: CheckResult, { printInfo = false, throwOnError = true } = {}) {
+  validateResult(result: ValidationResult, { throwOnError = true } = {}) {
     // Don't print check info by default for cleaner outputs.
-    if (printInfo && result.info) {
-      this.logger.info(result.info);
+    if (result.debug) {
+      if (Array.isArray(result.debug)) {
+        for (const debug of result.debug) {
+          this.logger.debug(debug);
+        }
+      } else {
+        this.logger.debug(result.debug);
+      }
+    }
+    if (result.info) {
+      if (Array.isArray(result.info)) {
+        for (const info of result.info) {
+          this.log.info(info);
+        }
+      } else {
+        this.log.info(result.info);
+      }
     }
     if (result.warning) {
-      this.logger.warn(result.warning);
+      if (Array.isArray(result.warning)) {
+        for (const warning of result.warning) {
+          this.logger.warn(warning);
+        }
+      } else {
+        this.logger.warn(result.warning);
+      }
     }
     if (result.error) {
-      if (throwOnError) {
+      if (Array.isArray(result.error)) {
+        if (throwOnError && result.error.length > 0) {
+          throw new Error(result.error[0]);
+        }
+        for (const error of result.error) {
+          this.logger.warn(error);
+        }
+      } else if (throwOnError) {
         throw new Error(result.error);
       } else {
         this.logger.warn(result.error);
