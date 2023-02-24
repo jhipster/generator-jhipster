@@ -1,7 +1,7 @@
-import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
-import BaseApplicationGenerator from '../../generators/base-application/generator.mjs';
-import { GENERATOR_ENTITY } from '../../generators/generator-list.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import BaseApplicationGenerator from '../base-application/generator.mjs';
+import { GENERATOR_ENTITY } from '../generator-list.mjs';
 
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   get [BaseApplicationGenerator.PREPARING]() {
