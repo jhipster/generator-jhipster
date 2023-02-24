@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
     "autoprefixer": "10.4.13",
-    "browser-sync": "2.27.11",
+    "browser-sync": "2.27.12",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "11.0.0",
     "core-js": "3.28.0",
