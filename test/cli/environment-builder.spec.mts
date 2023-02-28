@@ -21,23 +21,88 @@ import assert from 'assert';
 import { expect } from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, createBlueprintFiles } from '../support/index.mjs';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { getTemplatePath } from '../support/index.mjs';
 
-import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint } from '../support/index.mjs';
+const cliBlueprintFiles = {
+  'cli/commands.js': `export default {
+  foo: {
+    blueprint: 'generator-jhipster-cli',
+    desc: 'Create a new foo.',
+    options: [
+      {
+        option: '--foo',
+        desc: 'foo description',
+      },
+    ],
+  },
+};
+`,
+  'cli/sharedOptions.js': `export default {
+  fooBar: 'barValue',
+};
+`,
+  'generators/foo/index.js': `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    constructor(args, opts, features) {
+      super(args, opts, features);
+
+      this.option('foo-bar', {
+        desc: 'Sample option',
+        type: Boolean,
+      });
+    }
+
+    get [BaseGenerator.INITIALIZING]() {
+      /* eslint-disable no-console */
+      console.log('Running foo');
+      if (this.options.fooBar) {
+        /* eslint-disable no-console */
+        console.log('Running bar');
+        console.log(this.options.fooBar);
+      }
+    }
+  };
+};
+`,
+};
+
+const cliSharedBlueprintFiles = {
+  'cli/commands.js': `export default {
+  bar: {
+    blueprint: 'generator-jhipster-cli-shared',
+    desc: 'Create a new bar.',
+  },
+};
+`,
+  'cli/sharedOptions.js': `export default {
+  fooBar: 'fooValue',
+  single: true,
+};
+`,
+  'generators/bar/index.js': `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    constructor(args, options) {
+      super(args, options);
+      this.option('foo', {
+        desc: 'foo description',
+        type: Boolean,
+      });
+    }
+    get [BaseGenerator.INITIALIZING]() {}
+  };
+};
+`,
+};
 
 describe('cli - EnvironmentBuilder', () => {
-  let cleanup: () => void;
-  before(() => {
-    cleanup = prepareTempDir();
-  });
-  after(() => cleanup());
-
   describe('create', () => {
     let envBuilder;
-    before(() => {
+    before(async () => {
+      await helpers.prepareTemporaryDir();
       envBuilder = EnvironmentBuilder.create();
     });
     it('should return an EnvironmentBuilder', () => {
@@ -49,7 +114,8 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('createDefaultBuilder', () => {
-    before(() => {
+    before(async () => {
+      await helpers.prepareTemporaryDir();
       sinon.spy(EnvironmentBuilder, 'create');
       sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
       sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
@@ -77,15 +143,11 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = EnvironmentBuilder.create([])._loadBlueprints();
     });
     describe('when there is no .yo-rc.json', () => {
-      let oldCwd: string;
       let blueprintsWithVersion;
 
       before(async () => {
-        oldCwd = await testInTempDir(() => {});
+        await helpers.prepareTemporaryDir();
         assert(!fs.existsSync('.yo-rc.json'));
-      });
-      after(() => {
-        revertTempDir(oldCwd);
       });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
@@ -97,19 +159,17 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when blueprints were passed by command', () => {
-      let oldCwd;
       let oldArgv;
       let blueprintsWithVersion;
 
-      before(() => {
-        oldCwd = testInTempDir(() => {});
+      before(async () => {
+        await helpers.prepareTemporaryDir();
         oldArgv = process.argv;
         process.argv = ['--blueprints', 'vuejs,dotnet'];
         assert(!fs.existsSync('.yo-rc.json'));
       });
       after(() => {
         process.argv = oldArgv;
-        revertTempDir(oldCwd);
       });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
@@ -124,11 +184,10 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when there are no blueprints on .yo-rc.json', () => {
-      let oldCwd;
       let blueprintsWithVersion;
 
-      before(() => {
-        oldCwd = testInTempDir(() => {});
+      before(async () => {
+        await helpers.prepareTemporaryDir();
         const yoRcContent = {
           'generator-jhipster': {
             blueprints: [],
@@ -138,7 +197,6 @@ describe('cli - EnvironmentBuilder', () => {
       });
       after(() => {
         fs.unlinkSync('.yo-rc.json');
-        revertTempDir(oldCwd);
       });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
@@ -150,11 +208,10 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when there are blueprints on .yo-rc.json', () => {
-      let oldCwd;
       let blueprintsWithVersion;
 
-      before(() => {
-        oldCwd = testInTempDir(() => {});
+      before(async () => {
+        await helpers.prepareTemporaryDir();
         const yoRcContent = {
           'generator-jhipster': {
             blueprints: [
@@ -167,7 +224,6 @@ describe('cli - EnvironmentBuilder', () => {
       });
       after(() => {
         fs.unlinkSync('.yo-rc.json');
-        revertTempDir(oldCwd);
       });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
@@ -182,12 +238,11 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when blueprints are defined in both command and .yo-rc.json', () => {
-      let oldCwd;
       let oldArgv;
       let blueprintsWithVersion;
 
-      before(() => {
-        oldCwd = testInTempDir(() => {});
+      before(async () => {
+        await helpers.prepareTemporaryDir();
         oldArgv = process.argv;
 
         assert(!fs.existsSync('.yo-rc.json'));
@@ -205,7 +260,6 @@ describe('cli - EnvironmentBuilder', () => {
       after(() => {
         fs.unlinkSync('.yo-rc.json');
         process.argv = oldArgv;
-        revertTempDir(oldCwd);
       });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
@@ -228,21 +282,20 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
     });
     describe('with multiple blueprints', () => {
-      let oldCwd;
       let oldArgv;
 
-      before(() => {
+      before(async () => {
+        const result = await helpers
+          .prepareTemporaryDir()
+          .withFiles(createBlueprintFiles('generator-jhipster-cli', { generator: ['foo'] }))
+          .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: ['foo', 'bar'] }))
+          .commitFiles();
         oldArgv = process.argv;
-        oldCwd = testInTempDir(tmpdir => {
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-        });
 
         process.argv = ['--blueprints', 'cli,cli-shared'];
       });
       after(() => {
         process.argv = oldArgv;
-        revertTempDir(oldCwd);
       });
 
       it('should load all blueprints', () => {
@@ -265,21 +318,20 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true })._loadSharedOptions();
     });
     describe('with multiple blueprints', () => {
-      let oldCwd;
       let oldArgv;
 
-      before(() => {
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
+          .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { files: cliSharedBlueprintFiles }))
+          .commitFiles();
         oldArgv = process.argv;
-        oldCwd = testInTempDir(tmpdir => {
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-        });
 
         process.argv = ['--blueprints', 'cli,cli-shared'];
       });
       after(() => {
         process.argv = oldArgv;
-        revertTempDir(oldCwd);
       });
 
       it('should load sharedOptions', () => {
@@ -295,7 +347,8 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('yeoman-test integration', () => {
-    before(() => {
+    before(async () => {
+      await helpers.prepareTemporaryDir();
       sinon.spy(EnvironmentBuilder.prototype, 'getEnvironment');
     });
     after(() => {
