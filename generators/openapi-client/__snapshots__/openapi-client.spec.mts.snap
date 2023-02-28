@@ -186,7 +186,8 @@ components:
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/client/petstore/api/PetsApiClientOld.java": {
-    "contents": "",
+    "contents": null,
+    "state": "deleted",
     "stateCleared": "modified",
   },
 }
