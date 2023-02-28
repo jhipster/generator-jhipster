@@ -18,7 +18,7 @@
  */
 import { v4 as uuid } from 'uuid';
 import Conf from 'conf';
-import osLocale from 'os-locale';
+import { osLocaleSync } from 'os-locale';
 import axios from 'axios';
 import os from 'os';
 import Insight from 'insight';
@@ -187,7 +187,7 @@ class Statistics {
         cpu: os.cpus()[0].model,
         cores: os.cpus().length,
         memory: os.totalmem(),
-        'user-language': osLocale.sync(),
+        'user-language': osLocaleSync(),
         isARegeneration,
       },
       this.forceInsight

@@ -250,7 +250,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
-          this.logger.info(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+          this.logger.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
         }
 
         // Structure for prompts.
@@ -313,7 +313,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   get end() {
     return {
       end() {
-        this.logger.info(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+        this.logger.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
       },
     };
   }

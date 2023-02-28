@@ -18,20 +18,38 @@
  */
 import fs from 'fs';
 
-import BaseApplication from '../base-application/index.mjs';
-import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
+import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
+import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
+import { postPrepareEntity, relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from './support/index.mjs';
+
+export type LiquibaseEntity = Entity & {
+  anyRelationshipIsOwnerSide: boolean;
+  liquibaseFakeData: Record<string, any>[];
+  fakeDataCount: number;
+};
+
+export type ApplicationDefinition = {
+  applicationType: SpringBootApplication & LiquibaseApplication;
+  entityType: LiquibaseEntity;
+  sourceType: Record<string, (...args: any[]) => void>;
+};
+
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
 
 const BASE_CHANGELOG = {
   addedFields: [],
   removedFields: [],
   addedRelationships: [],
   removedRelationships: [],
+  relationshipsToRecreateForeignKeysOnly: [],
 };
-export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication & LiquibaseApplication> {
+export default class LiquibaseGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+  recreateInitialChangelog: boolean;
+
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -41,11 +59,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       required: false,
     });
 
-    if (this.options.help) {
-      return;
-    }
-    this.logger.info(`Creating changelog for entities ${this.options.entities}`);
-    this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
   }
 
   async beforeQueue() {
@@ -55,22 +69,34 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
     }
   }
 
-  override get default(): DefaultTaskGroup<this, SpringBootApplication> {
-    return {
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareUser({ application, entity }) {
+        postPrepareEntity({ application, entity });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
       async calculateChangelogs({ application, entities }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog) {
           return;
         }
-        if (!this.options.entities) {
-          this.options.entities = entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
-        }
+        const entitiesToWrite =
+          this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         const diffs = this._generateChangelogFromFiles(application);
+
         for (const [fieldChanges] of diffs) {
           if (fieldChanges.type === 'entity-new') {
-            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
           }
           if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
-            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
           }
         }
         // eslint-disable-next-line no-unused-vars
@@ -80,14 +106,14 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
             relationshipChanges.incremental &&
             (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
           ) {
-            await this._composeWithIncrementalChangelogProvider(relationshipChanges);
+            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, relationshipChanges);
           }
         }
       },
-    };
+    });
   }
 
-  get [BaseApplication.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -98,14 +124,14 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
           sections: liquibaseFiles,
           context: {
             ...application,
-            recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+            recreateInitialChangelog: this.recreateInitialChangelog,
           },
         });
       },
     });
   }
 
-  get [BaseApplication.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -113,8 +139,8 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
   /* private methods use within generator                                     */
   /* ======================================================================== */
 
-  _composeWithIncrementalChangelogProvider(databaseChangelog: any) {
-    const skipWriting = this.options.entities.length !== 0 && !this.options.entities.includes(databaseChangelog.entityName);
+  _composeWithIncrementalChangelogProvider(entities: any[], databaseChangelog: any) {
+    const skipWriting = entities!.length !== 0 && !entities!.includes(databaseChangelog.entityName);
     return this.composeWithJHipster(GENERATOR_LIQUIBASE_CHANGELOGS, {
       databaseChangelog,
       skipWriting,
@@ -135,7 +161,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       const newRelationships: any[] = newConfig.relationships || [];
 
       if (
-        this.configOptions.recreateInitialChangelog ||
+        this.recreateInitialChangelog ||
         !application.incrementalChangelog ||
         !fs.existsSync(filename) ||
         !fs.existsSync(
@@ -155,8 +181,6 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       (this as any)._debug(`Calculating diffs for ${entityName}`);
 
       const oldConfig: any = JSON.parse(fs.readFileSync(filename) as any);
-      // Share old entity
-      this.configOptions.oldSharedEntities[entityName] = oldConfig;
 
       const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
       const oldFieldNames: string[] = oldFields.map(field => field.fieldName);
@@ -169,24 +193,47 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
       const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
       const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName));
 
-      const newRelationshipNames = newRelationships.map(relationship => relationship.relationshipName);
       const oldRelationships: any[] = oldConfig.relationships || [];
-      const oldRelationshipNames = oldRelationships.map(relationship => relationship.relationshipName);
 
-      // Calculate new relationships
-      const addedRelationshipNames = newRelationshipNames.filter(relationshipName => !oldRelationshipNames.includes(relationshipName));
-      const addedRelationships = addedRelationshipNames.map(relationshipName =>
-        newRelationships.find(relationship => relationshipName === relationship.relationshipName)
+      // Calculate changed/newly added relationships
+      const addedRelationships = newRelationships.filter(
+        newRelationship =>
+          // check if the same relationship wasn't already part of the old config
+          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship))
       );
-      // Calculate removed relationships
-      const removedRelationshipNames = oldRelationshipNames.filter(relationshipName => !newRelationshipNames.includes(relationshipName));
-      const removedRelationships = removedRelationshipNames.map(relationshipName =>
-        oldRelationships.find(relationship => relationshipName === relationship.relationshipName)
+
+      // Calculate to be removed relationships
+      const removedRelationships = oldRelationships.filter(
+        oldRelationship =>
+          // check if there are relationships not anymore in the new config
+          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship))
       );
+
+      // calcualte relationships that only need a foreign key recreation from the ones that are added
+      // we need both the added and the removed ones here
+      const relationshipsToRecreateForeignKeysOnly = addedRelationships
+        .filter(addedRelationship =>
+          removedRelationships.some(removedRelationship =>
+            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship)
+          )
+        )
+        .concat(
+          removedRelationships.filter(removedRelationship =>
+            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship))
+          )
+        );
 
       return [
         { ...BASE_CHANGELOG, incremental: true, type: 'entity-update', entityName, addedFields, removedFields },
-        { ...BASE_CHANGELOG, incremental: true, type: 'entity-update', entityName, addedRelationships, removedRelationships },
+        {
+          ...BASE_CHANGELOG,
+          incremental: true,
+          type: 'entity-update',
+          entityName,
+          addedRelationships,
+          removedRelationships,
+          relationshipsToRecreateForeignKeysOnly,
+        },
       ];
     });
   }

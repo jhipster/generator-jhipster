@@ -17,4 +17,5 @@
  * limitations under the License.
  */
 export { default } from './generator.mjs';
+export { default as command } from './command.mjs';
 export { files, generatorFiles } from './files.mjs';

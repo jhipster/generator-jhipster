@@ -10,13 +10,14 @@ import { basicHelpers as helpers } from '../support/index.mjs';
 
 import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
 import { createProgram } from '../../cli/program.mjs';
-import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from '../support/index.mjs';
+import { prepareTempDir, copyFakeBlueprint, copyBlueprint } from '../support/index.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
 const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
 const { buildJHipster } = await import('../../cli/program.mjs');
 
-const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'dist', 'cli', 'cli.mjs');
+const __filename = fileURLToPath(import.meta.url);
+const jhipsterCli = join(dirname(__filename), '..', '..', 'bin', 'jhipster.mjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -35,28 +36,22 @@ describe('cli', () => {
   });
   afterEach(() => cleanup());
 
-  const cmd = getJHipsterCli();
-
-  it('verify correct cmd format', () => {
-    expect(cmd).toMatch(/node (.*)\/cli\/jhipster/g);
-  });
-
   it('--help should run without errors', done => {
-    exec(`${cmd} --help`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --help`, (error, stdout, stderr) => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('--version should run without errors', done => {
-    exec(`${cmd} --version`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --version`, (error, stdout, stderr) => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('should return error on unknown command', function (done) {
-    exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} junkcmd`, (error, stdout, stderr) => {
       expect(error).not.toBeNull();
       expect(error?.code).toBe(1);
       expect(stderr).toMatch('is not a known command');
@@ -111,7 +106,17 @@ describe('cli', () => {
         return Promise.resolve();
       });
       env.composeWith = fn<typeof env.composeWith>();
-      env.create = fn<typeof env.create>().mockReturnValue(generator) as any;
+      const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
+      env.getGeneratorMeta = fn<typeof env.create>().mockImplementation((namespace, args, options) => {
+        if (namespace === 'jhipster:mocked') {
+          return {
+            importModule: () => ({}),
+            resolved: __filename,
+            instantiateHelp: () => generator,
+          };
+        }
+        return originalGetGeneratorMeta(namespace, args, options);
+      });
     });
 
     const commonTests = () => {
@@ -314,7 +319,7 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar');
-          exec(`${cmd} foo --blueprints bar`, (...args) => {
+          exec(`${jhipsterCli} foo --blueprints bar`, (...args) => {
             cbArgs = args;
             done();
           });
@@ -326,8 +331,8 @@ describe('cli', () => {
         });
         it('should print warnings', () => {
           /* eslint-disable prettier/prettier */
-          expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-bar')).toBe(true);
-          expect(cbArgs[2].includes('foo is not a known command')).toBe(true);
+          expect(cbArgs[1]).toMatch('No custom commands found within blueprint: generator-jhipster-bar');
+          expect(cbArgs[2]).toMatch('foo is not a known command');
         });
       });
 
@@ -336,7 +341,7 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar', 'baz');
-          exec(`${cmd} foo --blueprints bar,baz`, (...args) => {
+          exec(`${jhipsterCli} foo --blueprints bar,baz`, (...args) => {
             cbArgs = args;
             done();
           });
@@ -361,7 +366,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout!.read().toString();
@@ -371,9 +375,9 @@ describe('cli', () => {
 
         it('should print sharedOptions info', () => {
           expect(stdout).toMatch('Running foo');
-          expect(stdout.includes('Running bar')).toBe(true);
-          expect(stdout.includes('barValue')).toBe(true);
-          expect(stdout.includes('fooValue')).toBe(false);
+          expect(stdout).toMatch('Running bar');
+          expect(stdout).toMatch('barValue');
+          expect(stdout).not.toMatch('fooValue');
         });
       });
 
@@ -383,7 +387,6 @@ describe('cli', () => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -392,10 +395,10 @@ describe('cli', () => {
         });
 
         it('should print sharedOptions info', () => {
-          expect(stdout.includes('Running foo')).toBe(true);
-          expect(stdout.includes('Running bar')).toBe(true);
-          expect(stdout.includes('barValue')).toBe(true);
-          expect(stdout.includes('fooValue')).toBe(false);
+          expect(stdout).toMatch('Running foo');
+          expect(stdout).toMatch('Running bar');
+          expect(stdout).toMatch('barValue');
+          expect(stdout).not.toMatch('fooValue');
         });
       });
     });
@@ -405,7 +408,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -414,11 +416,11 @@ describe('cli', () => {
         });
 
         it('should print foo command', () => {
-          expect(stdout.includes('Create a new foo. (blueprint: generator-jhipster-cli)')).toBe(true);
+          expect(stdout).toMatch('Create a new foo. (blueprint: generator-jhipster-cli)');
         });
 
         it('should print foo options', () => {
-          expect(stdout.includes('--foo')).toBe(true);
+          expect(stdout).toMatch('--foo');
         });
       });
 
@@ -427,7 +429,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -436,11 +437,11 @@ describe('cli', () => {
         });
 
         it('should print bar command help', () => {
-          expect(stdout.includes('Create a new bar. (blueprint: generator-jhipster-cli-shared)')).toBe(true);
+          expect(stdout).toMatch('Create a new bar. (blueprint: generator-jhipster-cli-shared)');
         });
         it('should print foo option', () => {
-          expect(stdout.includes('--foo')).toBe(true);
-          expect(stdout.includes('foo description')).toBe(true);
+          expect(stdout).toMatch('--foo');
+          expect(stdout).toMatch('foo description');
         });
       });
 
@@ -449,7 +450,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -497,7 +497,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
@@ -507,11 +506,11 @@ describe('cli', () => {
         });
 
         it('should print usage', () => {
-          expect(stdout.includes('Usage: jhipster run cli:foo [options]')).toBe(true);
+          expect(stdout).toMatch('Usage: jhipster run cli:foo [options]');
         });
         it('should print options', () => {
-          expect(stdout.includes('--foo-bar')).toBe(true);
-          expect(stdout.includes('Sample option')).toBe(true);
+          expect(stdout).toMatch('--foo-bar');
+          expect(stdout).toMatch('Sample option');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);
@@ -523,7 +522,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
@@ -533,8 +531,8 @@ describe('cli', () => {
         });
 
         it('should print runtime log', () => {
-          expect(stdout.includes('Running foo')).toBe(true);
-          expect(stdout.includes('Running bar')).toBe(true);
+          expect(stdout).toMatch('Running foo');
+          expect(stdout).toMatch('Running bar');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);

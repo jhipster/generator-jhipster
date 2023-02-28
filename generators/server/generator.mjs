@@ -22,6 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import {
   getDBTypeFromDBValue,
@@ -33,8 +34,9 @@ import {
   formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
+  generatedAnnotationTransform,
+  generateKeyStore,
 } from './support/index.mjs';
-import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
 import {
@@ -97,6 +99,7 @@ import { stringifyApplicationData } from '../base-application/support/index.mjs'
 import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
 import checkJava from './support/checks/check-java.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
+import command from './command.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -141,35 +144,23 @@ const { NO: NO_SERVICE } = ServiceTypes;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
-
-  constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
-
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
-    });
-    this.jhipsterOptions(serverOptions);
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
-  }
+  fakeKeytool;
 
   async beforeQueue() {
+    this.loadStoredAppOptions();
+    this.loadRuntimeOptions();
+
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    await this.dependsOnJHipster(GENERATOR_COMMON);
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
@@ -201,14 +192,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
+      loadConfig() {
+        this.parseJHipsterOptions(command.options);
       },
 
       validateJava() {
-        if (!this.options.skipChecks) {
+        if (!this.skipChecks) {
           this.checkJava();
         }
       },
@@ -233,8 +222,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    const shouldSkipPrompting = this.delegateToBlueprint || this.options.defaults;
-    return this.asPromptingTaskGroup(shouldSkipPrompting ? {} : this.prompting);
+    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
   }
 
   get configuring() {
@@ -264,10 +252,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
-      async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON);
-      },
-
       async composing() {
         const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
@@ -309,16 +293,24 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      generatedAnnotation({ application }) {
+        if (this.jhipsterConfig.withGeneratedFlag) {
+          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
+            name: 'adding @GeneratedByJHipster annotations',
+            streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
+          });
+        }
+      },
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
-          this.logger.info(`Using ${application.defaultPackaging} as default packaging`);
+          this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
 
         const JHI_PROFILE = process.env.JHI_PROFILE;
         application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
         if (JHI_PROFILE) {
-          this.logger.info(`Using ${application.defaultEnvironment} as default profile`);
+          this.log.info(`Using ${application.defaultEnvironment} as default profile`);
         }
       },
 
@@ -333,32 +325,32 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
-        application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.logger.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
         }
 
-        if (control.useVersionPlaceholders) {
+        if (this.useVersionPlaceholders) {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.logger.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+          this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
-        application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
-        application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
-        application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
-        application.CASSANDRA_DRIVER_VERSION = control.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
-        application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
+        application.SPRING_BOOT_VERSION = this.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
+        application.SPRING_CLOUD_VERSION = this.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
+        application.HIBERNATE_VERSION = this.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
+        application.CASSANDRA_DRIVER_VERSION = this.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
+        application.JACKSON_DATABIND_NULLABLE_VERSION = this.useVersionPlaceholders
           ? 'JACKSON_DATABIND_NULLABLE_VERSION'
           : JACKSON_DATABIND_NULLABLE_VERSION;
-        application.JACOCO_VERSION = control.useVersionPlaceholders ? 'JACOCO_VERSION' : JACOCO_VERSION;
+        application.JACOCO_VERSION = this.useVersionPlaceholders ? 'JACOCO_VERSION' : JACOCO_VERSION;
 
         application.ANGULAR = ANGULAR;
         application.VUE = VUE;
@@ -523,7 +515,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
                 field
               )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
             );
-            field.validation = false;
+            field.fieldValidate = false;
             field.fieldValidateRules = [];
           }
         });
@@ -600,6 +592,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         this.resetEntitiesFakeData('server');
       },
       ...writeFiles.call(this),
+      async generateKeyStore({ application }) {
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+        if (this.fakeKeytool) {
+          this.writeDestination(keyStoreFile, 'fake key-tool');
+        } else {
+          this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName }));
+        }
+      },
     });
   }
 
@@ -752,7 +752,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       end({ application }) {
-        this.logger.info(chalk.green.bold('\nServer application generated successfully.\n'));
+        this.log.ok('Spring Boot application generated successfully.');
 
         let executable = 'mvnw';
         if (application.buildTool === GRADLE) {
@@ -762,7 +762,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (os.platform() === 'win32') {
           logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.logger.info(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.logger.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
     });
   }
@@ -837,7 +837,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * }
    */
   checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
-    this.validateCheckResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
+    this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   _generateSqlSafeName(name) {

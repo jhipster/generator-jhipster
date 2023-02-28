@@ -23,7 +23,6 @@ import BaseGenerator from '../base/index.mjs';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.mjs';
 
 import {
-  options,
   requiredConfig,
   defaultConfig,
   defaultSubGeneratorConfig,
@@ -46,45 +45,30 @@ import * as GENERATOR_LIST from '../generator-list.mjs';
 import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
+import command from './command.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
 export default class extends BaseGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
-
-    // Register options available to cli.
-    if (!this.fromBlueprint) {
-      this.registerCommonOptions();
-    }
-
-    this.jhipsterOptions(options());
-
-    if (this.options.help) return;
-
-    if (this[ALL_GENERATORS]) {
-      this.config.set(allGeneratorsConfig());
-    }
-    if (this.options.defaults) {
-      this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
-    }
-  }
-
-  /** @inheritdoc */
-  async getPossibleDependencies() {
-    return [GENERATOR_PROJECT_NAME, GENERATOR_INIT];
-  }
-
   async _beforeQueue() {
+    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
       await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
     }
   }
 
   get initializing() {
     return {
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+        if (this[ALL_GENERATORS]) {
+          this.config.set(allGeneratorsConfig());
+        }
+        if (this.options.defaults) {
+          this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
+        }
+      },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
@@ -262,8 +246,7 @@ export default class extends BaseGenerator {
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
             mocha: 'mocha generators --no-insight --forbid-only',
-            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,js,cjs,mjs,ts,tsx,css,scss,vue,java}"',
-            pretest: 'npm run prettier-check && npm run lint',
+            pretest: 'npm run prettier:check && npm run lint',
             test: 'npm run mocha --',
             'update-snapshot': 'npm run mocha -- --no-parallel --updateSnapshot',
           },
@@ -368,7 +351,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
       end() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
 
-        this.logger.info(`${chalk.bold.green('##### USAGE #####')}
+        this.logger.log(`${chalk.bold.green('##### USAGE #####')}
 To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}

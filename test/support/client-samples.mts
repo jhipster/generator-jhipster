@@ -1,5 +1,7 @@
+import sortKeys from 'sort-keys';
+
 import { MatrixMonolith, MatrixMicroserviceGateway } from './application-samples.mjs';
-import { extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.mjs';
+import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.mjs';
 
 const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   withAdminUi: [false, true],
@@ -13,7 +15,7 @@ const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   websocket: [false, true],
 };
 
-export const buildClientSamples = () => {
+export const buildClientSamples = (commonConfig?: Record<string, unknown>): Record<string, Record<string, unknown>> => {
   let clientMatrix = {
     ...fromMatrix(MatrixMonolith),
     ...fromMatrix(MatrixMicroserviceGateway),
@@ -25,7 +27,7 @@ export const buildClientSamples = () => {
 
   clientMatrix = extendMatrix(clientMatrix, CLIENT_ADDITIONAL_CONFIG_MATRIX);
 
-  return clientMatrix;
+  return buildSamplesFromMatrix(clientMatrix, { commonConfig });
 };
 
 // eslint-disable-next-line import/prefer-default-export

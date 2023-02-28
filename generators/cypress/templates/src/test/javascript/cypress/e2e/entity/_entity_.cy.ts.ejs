@@ -337,7 +337,7 @@ describe('<%= entityClass %> e2e test', () => {
        cy.get(`[data-cy="<%= relationship.relationshipFieldName %>"]`).select(<%= relationship.collection ? '[0]' : '1' %>);
   <%_ } _%>
 
-  <%_ if (fieldsContainBlobOrImage) { _%>
+  <%_ if (anyFieldHasFileBasedContentType) { _%>
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
   <%_ } _%>

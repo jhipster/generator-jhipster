@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR, clientAppTestBlock } from '../client/utils.mjs';
-import { replaceVueTranslations } from './transform-vue.mjs';
 
 export const entityFiles = {
   client: [
@@ -65,7 +64,6 @@ export async function writeEntityFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: entityFiles,
-      transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,
       context: { ...application, ...entity },
     });
   }

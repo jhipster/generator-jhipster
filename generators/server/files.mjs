@@ -944,20 +944,14 @@ export function writeFiles() {
     setUp({ application }) {
       application.javaDir = `${application.packageFolder}/`;
       application.testDir = `${application.packageFolder}/`;
-
-      this.generateKeyStore();
     },
 
     cleanupOldServerFiles,
 
     async writeFiles({ application }) {
-      const recreateInitialChangelog = this.configOptions.recreateInitialChangelog;
       return this.writeFiles({
         sections: serverFiles,
-        context: {
-          ...application,
-          recreateInitialChangelog,
-        },
+        context: application,
       });
     },
     ...writeSqlFiles.call(this),

@@ -138,7 +138,7 @@ async function askForPath() {
   this.directoryPath = props.directoryPath;
   // Patch the path if there is no trailing "/"
   if (!this.directoryPath.endsWith('/')) {
-    this.logger.warn(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
+    this.logger.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
     this.directoryPath += '/';
   }
 
@@ -151,7 +151,7 @@ async function askForPath() {
     }
   }
 
-  this.logger.info(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
+  this.logger.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
 }
 
 /**
@@ -259,10 +259,10 @@ async function askForServiceDiscovery() {
 
   if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === CONSUL)) {
     this.serviceDiscoveryType = CONSUL;
-    this.logger.info(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
+    this.logger.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
   } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === EUREKA)) {
     this.serviceDiscoveryType = EUREKA;
-    this.logger.info(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
+    this.logger.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
     this.logger.warn(
       chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.')
@@ -279,19 +279,19 @@ async function askForServiceDiscovery() {
         message: 'Which Service Discovery registry and Configuration server would you like to use ?',
         choices: [
           {
-            value: EUREKA,
-            name: 'JHipster Registry',
-          },
-          {
             value: CONSUL,
             name: 'Consul',
+          },
+          {
+            value: EUREKA,
+            name: 'JHipster Registry',
           },
           {
             value: NO_SERVICE_DISCOVERY,
             name: 'No Service Discovery and Configuration',
           },
         ],
-        default: EUREKA,
+        default: CONSUL,
       },
     ];
 

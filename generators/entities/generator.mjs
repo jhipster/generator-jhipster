@@ -23,7 +23,7 @@ import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     // This makes `name` a required argument.
     this.argument('entities', {
@@ -75,7 +75,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
     });
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
 
@@ -98,12 +98,6 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
 
     if (this.options.baseName !== undefined) {
       this.jhipsterConfig.baseName = this.options.baseName;
-    }
-
-    if (this.options.defaults) {
-      if (!this.jhipsterConfig.baseName) {
-        this.jhipsterConfig.baseName = getDefaultAppName(this);
-      }
     }
 
     if (!this.options.entities || this.options.entities.length === 0 || this.options.writeEveryEntity) {

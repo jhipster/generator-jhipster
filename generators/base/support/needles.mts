@@ -26,7 +26,7 @@ import { joinCallbacks } from './write-files.mjs';
 
 const { kebabCase } = _;
 
-type NeedleInsertion = {
+export type NeedleInsertion = {
   needle: string;
   /**
    * Content to add.
@@ -172,16 +172,19 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 /**
  * Create an callback to insert the new content into existing content.
  *
+ * A `contentToAdd` of string type will remove leading `\n`.
+ * Leading `\n` allows a prettier template formatting.
+ *
  * @param options
  */
-export const createNeedleCallback = ({
+export const createNeedleCallback = <Generator extends BaseGenerator = any>({
   needle,
   contentToAdd,
   contentToCheck,
   optional = false,
   ignoreWhitespaces = true,
   autoIndent,
-}: NeedleInsertion): EditFileCallback<BaseGenerator> => {
+}: NeedleInsertion): EditFileCallback<Generator> => {
   assert(needle, 'needle is required');
   assert(contentToAdd, 'contentToAdd is required');
 
@@ -190,6 +193,9 @@ export const createNeedleCallback = ({
       return content;
     }
     if (typeof contentToAdd !== 'function') {
+      if (typeof contentToAdd === 'string' && contentToAdd.startsWith('\n')) {
+        contentToAdd = contentToAdd.slice(1);
+      }
       contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).filter(
         eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces)
       );
@@ -209,7 +215,7 @@ export const createNeedleCallback = ({
     }
     const message = `Missing ${optional ? 'optional' : 'required'} jhipster-needle ${needle} not found at '${filePath}'`;
     if (optional) {
-      this.logger.warn(chalk.yellow(message));
+      this.logger.warn(message);
       return content;
     }
     throw new Error(message);
@@ -221,11 +227,11 @@ export const createNeedleCallback = ({
  *
  * @param this - generator if provided, editFile will be executed
  */
-export function createBaseNeedle(
-  this: BaseGenerator | void,
+export function createBaseNeedle<Generator extends BaseGenerator = BaseGenerator>(
+  this: Generator | void,
   options: NeedleFileInsertion | Record<string, string>,
   needles?: Record<string, string>
-): EditFileCallback<BaseGenerator> | CascatedEditFileCallback<BaseGenerator> {
+): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
   const actualNeedles = needles === undefined ? (options as Record<string, string>) : needles;
   const actualOptions: NeedleFileInsertion | undefined = needles === undefined ? undefined : (options as NeedleFileInsertion);
 

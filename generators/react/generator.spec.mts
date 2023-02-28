@@ -23,20 +23,7 @@ const generatorFile = join(__dirname, 'index.mts');
 const { REACT: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const samplesBuilder = () =>
-  Object.entries(buildClientSamples()).map(([name, sample]) => [
-    name,
-    {
-      skipInstall: true,
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-        entities,
-      },
-    },
-  ]);
+const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/modules/administration/configuration/configuration.tsx`,
@@ -45,8 +32,6 @@ const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/modules/administration/metrics/metrics.tsx`,
   `${clientSrcDir}app/modules/administration/logs/logs.tsx`,
 ];
-
-const testSamples = samplesBuilder();
 
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   get [BaseApplicationGenerator.PREPARING]() {
@@ -63,25 +48,23 @@ describe(`generator - ${clientFramework}`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
-
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
-          .withOptions(sample)
+          .withJHipsterConfig(sampleConfig, entities)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
           .withMockedGenerators(['jhipster:common']);
       });

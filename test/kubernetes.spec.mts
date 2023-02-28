@@ -1,8 +1,7 @@
 import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import createMockedConfig from './support/mock-config.mjs';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
 import { GENERATOR_KUBERNETES } from '../generators/generator-list.mjs';
 
 const expectedFiles = {
@@ -47,16 +46,63 @@ describe('generator - Kubernetes', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: 'gateway',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files and content', () => {
+      assert.file(expectedFiles.consulregistry);
+      assert.fileContent('./registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+    });
+    it('creates expected gateway files and content', () => {
+      assert.file(expectedFiles.jhgate);
+      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+    });
+    it('create the apply script', () => {
+      assert.file(expectedFiles.applyScript);
+    });
+  });
+
+  describe('only gateway with eureka', () => {
+    let runResult;
+    before(async () => {
+      const chosenApps = ['01-gateway'];
+
+      runResult = await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
+        .withAnswers({
+          directoryPath: './',
+          chosenApps,
           adminPassword: 'meetup',
           dockerRepositoryName: 'jhipsterrepository',
           dockerPushCommand: 'docker push',
@@ -89,17 +135,19 @@ describe('generator - Kubernetes', () => {
   describe('gateway and mysql microservice', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -115,7 +163,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -131,16 +179,19 @@ describe('generator - Kubernetes', () => {
   describe('mysql microservice with custom namespace', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'mynamespace',
@@ -156,7 +207,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
       assert.file(expectedFiles.msmysql);
@@ -172,16 +223,19 @@ describe('generator - Kubernetes', () => {
   describe('gateway and ingress', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -197,7 +251,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -210,17 +264,19 @@ describe('generator - Kubernetes', () => {
   describe('MySQL and PostgreSQL microservices without gateway', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql', '03-psql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql', '03-psql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -236,7 +292,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it("doesn't creates gateway files", () => {
       assert.noFile(expectedFiles.jhgate);
@@ -255,21 +311,19 @@ describe('generator - Kubernetes', () => {
   describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('04-mongo', dir);
-          createMockedConfig('07-mariadb', dir);
-          createMockedConfig('11-mssql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -285,7 +339,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -313,16 +367,19 @@ describe('generator - Kubernetes', () => {
   describe('monolith application', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['08-monolith'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('08-monolith', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
-          chosenApps: ['08-monolith'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -339,6 +396,7 @@ describe('generator - Kubernetes', () => {
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
+      assert.noFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.monolith);
@@ -351,16 +409,19 @@ describe('generator - Kubernetes', () => {
   describe('Kafka application', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['09-kafka'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('09-kafka', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
-          chosenApps: ['09-kafka'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -377,6 +438,7 @@ describe('generator - Kubernetes', () => {
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
+      assert.noFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.kafka);
@@ -389,16 +451,19 @@ describe('generator - Kubernetes', () => {
   describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['02-mysql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['02-mysql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'mynamespace',
@@ -413,7 +478,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
       assert.file(expectedFiles.msmysql);
@@ -432,16 +497,19 @@ describe('generator - Kubernetes', () => {
   describe('gateway with istio routing', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -457,7 +525,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected service gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -473,21 +541,19 @@ describe('generator - Kubernetes', () => {
   describe('mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning', () => {
     let runResult;
     before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
+
       runResult = await helpers
-        .createJHipster(GENERATOR_KUBERNETES)
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('04-mongo', dir);
-          createMockedConfig('07-mariadb', dir);
-          createMockedConfig('11-mssql', dir);
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
+          chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
@@ -503,7 +569,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);

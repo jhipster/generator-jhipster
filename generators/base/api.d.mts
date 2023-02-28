@@ -1,4 +1,4 @@
-import type { OptionConfig, GeneratorOptions, GeneratorFeatures } from 'yeoman-generator';
+import type { OptionConfig, GeneratorOptions, GeneratorFeatures, ArgumentConfig } from 'yeoman-generator';
 
 export type ApplicationWithConfig = {
   config: {
@@ -13,7 +13,6 @@ export interface JHipsterGeneratorOptions extends GeneratorOptions {
 
 export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
   priorityArgs?: boolean;
-  jhipsterModular?: boolean;
 }
 
 // eslint-disable-next-line no-use-before-define
@@ -87,14 +86,27 @@ export type WriteFileOptions<Generator, DataType> = {
 );
 
 export type JHipsterOption = OptionConfig & {
+  name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
 };
 
-export type CheckResult = {
-  info?: string;
-  warning?: string;
-  error?: string;
+export type ValidationResult = {
+  debug?: unknown;
+  info?: string | string[];
+  warning?: string | string[];
+  error?: string | string[];
 };
 
+export type JHipsterArgumentConfig = ArgumentConfig;
+
+export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
+
 export type JHipsterOptions = Record<string, JHipsterOption>;
+
+export type JHipsterCommandDefinition = {
+  arguments?: JHipsterArguments;
+  options: JHipsterOptions;
+  import?: string[];
+  loadGeneratorOptions?: boolean;
+};

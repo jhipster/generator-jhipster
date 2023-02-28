@@ -66,7 +66,6 @@ const expectedEntity = entity => ({
   resetFakerSeed: expect.any(Function),
 
   allReferences: expect.any(Array),
-  blobFields: expect.any(Array),
   otherEntities: expect.any(Array),
   regularEagerRelations: expect.any(Array),
   reactiveEagerRelations: expect.any(Array),
@@ -88,35 +87,26 @@ describe(`generator - ${generator}`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
 
   describe('with', () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          creationTimestamp: '2000-01-01',
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
-            },
-            entities: [
+        runResult = await helpers.run(generatorPath).withJHipsterConfig({}, [
+          {
+            name: 'EntityA',
+            changelogDate: '20220129025419',
+            fields: [
               {
-                name: 'EntityA',
-                changelogDate: '20220129025419',
-                fields: [
-                  {
-                    fieldName: 'id',
-                    fieldType: UUID,
-                  },
-                ],
+                fieldName: 'id',
+                fieldType: UUID,
               },
             ],
           },
-        });
+        ]);
       });
 
       it('should write files', () => {
@@ -159,10 +149,23 @@ describe(`generator - ${generator}`, () => {
 {
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
+  "anyFieldHasDocumentation": false,
+  "anyFieldHasFileBasedContentType": false,
+  "anyFieldHasImageContentType": false,
+  "anyFieldHasTextContentType": false,
+  "anyFieldIsBigDecimal": false,
+  "anyFieldIsBlobDerived": false,
+  "anyFieldIsDateDerived": false,
+  "anyFieldIsDuration": false,
+  "anyFieldIsInstant": false,
+  "anyFieldIsLocalDate": false,
+  "anyFieldIsTimeDerived": false,
+  "anyFieldIsUUID": false,
+  "anyFieldIsZonedDateTime": false,
+  "anyPropertyHasValidation": false,
   "applicationType": "monolith",
   "authenticationType": "jwt",
   "baseName": "jhipster",
-  "blobFields": Any<Array>,
   "builtIn": true,
   "builtInUser": true,
   "clientFramework": "angular",
@@ -171,7 +174,6 @@ describe(`generator - ${generator}`, () => {
   "cypressBootstrapEntities": true,
   "databaseType": "sql",
   "differentRelationships": {},
-  "differentTypes": [],
   "dto": true,
   "dtoClass": "UserDTO",
   "dtoInstance": "userDTO",
@@ -218,7 +220,6 @@ describe(`generator - ${generator}`, () => {
   "entityUrl": "user",
   "enums": [],
   "existingEnum": false,
-  "fakeDataCount": 2,
   "faker": Any<Object>,
   "fieldNameChoices": [],
   "fields": [
@@ -516,45 +517,17 @@ describe(`generator - ${generator}`, () => {
       "uniqueValue": [],
     },
   ],
-  "fieldsContainBigDecimal": false,
-  "fieldsContainBlob": false,
-  "fieldsContainBlobOrImage": false,
-  "fieldsContainDate": false,
-  "fieldsContainDuration": false,
-  "fieldsContainEmbedded": false,
-  "fieldsContainImageBlob": false,
-  "fieldsContainInstant": false,
-  "fieldsContainLocalDate": false,
-  "fieldsContainManyToOne": false,
   "fieldsContainNoOwnerOneToOne": false,
-  "fieldsContainOneToMany": false,
-  "fieldsContainOwnerManyToMany": false,
-  "fieldsContainOwnerOneToOne": false,
-  "fieldsContainTextBlob": false,
-  "fieldsContainTimed": false,
-  "fieldsContainUUID": false,
-  "fieldsContainZonedDateTime": false,
-  "fieldsIsReactAvField": false,
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
-  "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.user",
   "i18nKeyPrefix": "jhipsterApp.user",
-  "i18nToLoad": [],
   "implementsEagerLoadApis": false,
   "importApiModelProperty": false,
   "isUsingMapsId": false,
   "jhiPrefix": "jhi",
   "jpaMetamodelFiltering": false,
-  "liquibaseFakeData": [
-    {
-      "id": 1,
-    },
-    {
-      "id": 2,
-    },
-  ],
   "mapsIdAssoc": null,
   "microfrontend": false,
   "microserviceAppName": "",
@@ -633,7 +606,6 @@ describe(`generator - ${generator}`, () => {
   "uniqueEnums": {},
   "updatableEntity": true,
   "useMicroserviceJson": false,
-  "validation": false,
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
@@ -647,10 +619,23 @@ describe(`generator - ${generator}`, () => {
           `
 {
   "allReferences": Any<Array>,
+  "anyFieldHasDocumentation": false,
+  "anyFieldHasFileBasedContentType": false,
+  "anyFieldHasImageContentType": false,
+  "anyFieldHasTextContentType": false,
+  "anyFieldIsBigDecimal": false,
+  "anyFieldIsBlobDerived": false,
+  "anyFieldIsDateDerived": false,
+  "anyFieldIsDuration": false,
+  "anyFieldIsInstant": false,
+  "anyFieldIsLocalDate": false,
+  "anyFieldIsTimeDerived": false,
+  "anyFieldIsUUID": true,
+  "anyFieldIsZonedDateTime": false,
+  "anyPropertyHasValidation": false,
   "applicationType": "monolith",
   "authenticationType": "jwt",
   "baseName": "jhipster",
-  "blobFields": Any<Array>,
   "changelogDate": "20220129025419",
   "changelogDateForRecent": 2022-01-29T02:54:19.000Z,
   "clientFramework": "angular",
@@ -659,7 +644,6 @@ describe(`generator - ${generator}`, () => {
   "cypressBootstrapEntities": true,
   "databaseType": "sql",
   "differentRelationships": {},
-  "differentTypes": [],
   "dto": "no",
   "dtoMapstruct": false,
   "dtoReferences": Any<Array>,
@@ -786,32 +770,12 @@ describe(`generator - ${generator}`, () => {
       "uniqueValue": [],
     },
   ],
-  "fieldsContainBigDecimal": false,
-  "fieldsContainBlob": false,
-  "fieldsContainBlobOrImage": false,
-  "fieldsContainDate": false,
-  "fieldsContainDuration": false,
-  "fieldsContainEmbedded": false,
-  "fieldsContainImageBlob": false,
-  "fieldsContainInstant": false,
-  "fieldsContainLocalDate": false,
-  "fieldsContainManyToOne": false,
   "fieldsContainNoOwnerOneToOne": false,
-  "fieldsContainOneToMany": false,
-  "fieldsContainOwnerManyToMany": false,
-  "fieldsContainOwnerOneToOne": false,
-  "fieldsContainTextBlob": false,
-  "fieldsContainTimed": false,
-  "fieldsContainUUID": true,
-  "fieldsContainZonedDateTime": false,
-  "fieldsIsReactAvField": false,
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
-  "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
   "i18nKeyPrefix": "jhipsterApp.entityA",
-  "i18nToLoad": [],
   "implementsEagerLoadApis": false,
   "importApiModelProperty": false,
   "isUsingMapsId": false,
@@ -900,7 +864,6 @@ describe(`generator - ${generator}`, () => {
   "uniqueEnums": {},
   "updatableEntity": false,
   "useMicroserviceJson": false,
-  "validation": false,
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
@@ -912,27 +875,23 @@ describe(`generator - ${generator}`, () => {
     describe('skipUserManagement', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({
-          defaults: true,
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
-              skipUserManagement: true,
-            },
-            entities: [
-              {
-                name: 'EntityA',
-                changelogDate: '20220129025419',
-                fields: [
-                  {
-                    fieldName: 'id',
-                    fieldType: UUID,
-                  },
-                ],
-              },
-            ],
+        runResult = await helpers.run(generatorPath).withJHipsterConfig(
+          {
+            skipUserManagement: true,
           },
-        });
+          [
+            {
+              name: 'EntityA',
+              changelogDate: '20220129025419',
+              fields: [
+                {
+                  fieldName: 'id',
+                  fieldType: UUID,
+                },
+              ],
+            },
+          ]
+        );
       });
 
       it('should write files', () => {
@@ -970,10 +929,23 @@ describe(`generator - ${generator}`, () => {
           `
 {
   "allReferences": Any<Array>,
+  "anyFieldHasDocumentation": false,
+  "anyFieldHasFileBasedContentType": false,
+  "anyFieldHasImageContentType": false,
+  "anyFieldHasTextContentType": false,
+  "anyFieldIsBigDecimal": false,
+  "anyFieldIsBlobDerived": false,
+  "anyFieldIsDateDerived": false,
+  "anyFieldIsDuration": false,
+  "anyFieldIsInstant": false,
+  "anyFieldIsLocalDate": false,
+  "anyFieldIsTimeDerived": false,
+  "anyFieldIsUUID": true,
+  "anyFieldIsZonedDateTime": false,
+  "anyPropertyHasValidation": false,
   "applicationType": "monolith",
   "authenticationType": "jwt",
   "baseName": "jhipster",
-  "blobFields": Any<Array>,
   "changelogDate": "20220129025419",
   "changelogDateForRecent": 2022-01-29T02:54:19.000Z,
   "clientFramework": "angular",
@@ -982,7 +954,6 @@ describe(`generator - ${generator}`, () => {
   "cypressBootstrapEntities": true,
   "databaseType": "sql",
   "differentRelationships": {},
-  "differentTypes": [],
   "dto": "no",
   "dtoMapstruct": false,
   "dtoReferences": Any<Array>,
@@ -1109,32 +1080,12 @@ describe(`generator - ${generator}`, () => {
       "uniqueValue": [],
     },
   ],
-  "fieldsContainBigDecimal": false,
-  "fieldsContainBlob": false,
-  "fieldsContainBlobOrImage": false,
-  "fieldsContainDate": false,
-  "fieldsContainDuration": false,
-  "fieldsContainEmbedded": false,
-  "fieldsContainImageBlob": false,
-  "fieldsContainInstant": false,
-  "fieldsContainLocalDate": false,
-  "fieldsContainManyToOne": false,
   "fieldsContainNoOwnerOneToOne": false,
-  "fieldsContainOneToMany": false,
-  "fieldsContainOwnerManyToMany": false,
-  "fieldsContainOwnerOneToOne": false,
-  "fieldsContainTextBlob": false,
-  "fieldsContainTimed": false,
-  "fieldsContainUUID": true,
-  "fieldsContainZonedDateTime": false,
-  "fieldsIsReactAvField": false,
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
-  "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
   "i18nKeyPrefix": "jhipsterApp.entityA",
-  "i18nToLoad": [],
   "implementsEagerLoadApis": false,
   "importApiModelProperty": false,
   "isUsingMapsId": false,
@@ -1223,7 +1174,6 @@ describe(`generator - ${generator}`, () => {
   "uniqueEnums": {},
   "updatableEntity": false,
   "useMicroserviceJson": false,
-  "validation": false,
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }

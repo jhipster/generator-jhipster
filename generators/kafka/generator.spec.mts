@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { buildServerMatrix } from '../../test/support/index.mjs';
+import { buildSamplesFromMatrix, buildServerMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
@@ -40,40 +40,24 @@ const generatorFile = join(__dirname, 'index.mts');
 
 const commonConfig = { messageBroker: KAFKA };
 
-const samples = buildServerMatrix();
-
-const samplesBuilder = (): [string, any][] =>
-  Object.entries(samples).map(([name, sample]) => [
-    name,
-    {
-      defaults: true,
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-      },
-    },
-  ]);
-
-const testSamples = samplesBuilder();
+const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples.forEach(([name, sample]) => {
+  Object.entries(testSamples).forEach(([name, config]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig(config);
       });
 
       after(() => runResult.cleanup());

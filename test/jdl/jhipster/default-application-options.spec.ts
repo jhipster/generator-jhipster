@@ -144,8 +144,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the withAdminUi option to true', () => {
         expect(options.withAdminUi).to.be.true;
       });
-      it('should set the service discovery type to eureka', () => {
-        expect(options.serviceDiscoveryType).to.equal('eureka');
+      it('should set the service discovery type to consul', () => {
+        expect(options.serviceDiscoveryType).to.equal('consul');
       });
       it('should set the reactive to true', () => {
         expect(options.reactive).to.be.true;
@@ -227,8 +227,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the user management skipping option to true', () => {
         expect(options.skipUserManagement).to.be.true;
       });
-      it('should set the service discovery type option to eureka', () => {
-        expect(options.serviceDiscoveryType).to.equal('eureka');
+      it('should set the service discovery type option to consul', () => {
+        expect(options.serviceDiscoveryType).to.equal('consul');
       });
       it('should set the client skipping option to true', () => {
         expect(options.skipClient).to.be.true;

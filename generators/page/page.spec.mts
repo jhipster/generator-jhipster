@@ -9,20 +9,14 @@ const pageName = 'MyTestPage';
 const pageFolderName = 'my-test-page';
 const pageInstance = 'myTestPage';
 
-const createClientProject = (options?: any) =>
-  helpers.run('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv }).withOptions({
-    skipInstall: true,
-    defaults: true,
+const createClientProject = () =>
+  helpers.runJHipster('app').withJHipsterConfig({
     skipServer: true, // We don't need server for this test
-    ...options,
   });
 
 const createPage = runResult =>
   runResult
     .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
-    .withOptions({
-      skipInstall: true,
-    })
     .withAnswers({
       pageName,
     })

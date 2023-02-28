@@ -3,13 +3,13 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import assert from 'yeoman-assert';
 import Environment from 'yeoman-environment';
+import { TestAdapter } from 'yeoman-test';
 import { basicHelpers as helpers } from './support/index.mjs';
 
 import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
-import { parseChangelog } from '../generators/base/support/index.mjs';
+import { parseChangelog, Logger } from '../generators/base/support/index.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
-import { Logger } from '../generators/base/support/logging.mjs';
 
 const { POSTGRESQL } = databaseTypes;
 
@@ -20,7 +20,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-BaseGenerator.logger = new Logger(BaseGenerator.log);
+BaseGenerator.logger = new Logger({ adapter: new TestAdapter() });
 
 describe('generator - base', () => {
   describe('getTableName', () => {
@@ -163,13 +163,6 @@ describe('generator - base', () => {
             true
           )
         ).to.equal('ux_entityLongerNameWithPaginatio__columnLongerNameWithPagina_8b');
-      });
-    });
-  });
-  describe('printJHipsterLogo', () => {
-    describe('when called', () => {
-      it('prints the logo', () => {
-        expect(BaseGenerator.printJHipsterLogo()).to.equal(undefined);
       });
     });
   });

@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - OpenAPI Client Spring: microservice petstore custom endpoint  should match files snapshot 1`] = `
+{
+  ".openapi-generator-ignore": {
+    "contents": "pom.xml
+README.md
+package.json
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "sampleOpenApiClient",
+    "enableSwaggerCodegen": true
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "contents": "{
+  "scripts": {
+    "openapi-client:petstore": "openapi-generator-cli generate -g spring -i petstore-openapi-3.yml -p library=spring-cloud -p apiPackage=com.mycompany.myapp.client.petstore.api -p modelPackage=com.mycompany.myapp.client.petstore.model -p basePackage=com.mycompany.myapp.client -p configPackage=com.mycompany.myapp.client.petstore -p title=petstore -p artifactId=petstore -p supportingFiles=ApiKeyRequestInterceptor.java --skip-validate-spec"
+  },
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "2.5.1"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - OpenAPI Client Spring: microservice petstore regenerate  should match files snapshot 1`] = `
+{
+  ".openapi-generator-ignore": {
+    "contents": "pom.xml
+README.md
+package.json
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "baseName": "sampleOpenApiClient",
+    "applicationType": "microservice",
+    "enableSwaggerCodegen": true,
+    "openApiClients": {
+      "petstore": {
+        "spec": "petstore-openapi-3.yml",
+        "generatorName": "spring"
+      }
+    }
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "contents": "{
+  "scripts": {
+    "openapi-client:petstore": "openapi-generator-cli generate -g spring -i petstore-openapi-3.yml -p library=spring-cloud -p apiPackage=com.mycompany.myapp.client.petstore.api -p modelPackage=com.mycompany.myapp.client.petstore.model -p basePackage=com.mycompany.myapp.client -p configPackage=com.mycompany.myapp.client.petstore -p title=petstore -p artifactId=petstore -p supportingFiles=ApiKeyRequestInterceptor.java --skip-validate-spec"
+  },
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "2.5.1"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "petstore-openapi-3.yml": {
+    "contents": "openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  license:
+    name: MIT
+servers:
+  - url: http://petstore.swagger.io/v1
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Pets"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a pet
+      operationId: createPets
+      tags:
+        - pets
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pets"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Pet:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Pets:
+      type: array
+      items:
+        $ref: "#/components/schemas/Pet"
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string",
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/client/petstore/api/PetsApiClientOld.java": {
+    "contents": "",
+    "stateCleared": "modified",
+  },
+}
+`;

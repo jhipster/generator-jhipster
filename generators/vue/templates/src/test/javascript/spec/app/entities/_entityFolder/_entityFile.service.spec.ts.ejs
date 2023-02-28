@@ -23,12 +23,12 @@ _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
 import sinon from 'sinon'
-<%_ if (fieldsContainDate) { _%>
+<%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
-<%_ if (fieldsContainLocalDate || fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/date/filters';
+<%_ if (anyFieldIsLocalDate || anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
+import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/date/filters';
 <%_ } _%>
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
@@ -57,13 +57,13 @@ describe('Service Tests', () => {
   describe('<%= entityAngularName %> Service', () => {
     let service: <%= entityAngularName %>Service;
     let elemDefault;
-<%_ if (fieldsContainDate) { _%>
+<%_ if (anyFieldIsDateDerived) { _%>
     let currentDate: Date;
 <%_ } _%>
 
     beforeEach(() => {
       service = new <%= entityAngularName %>Service();
-<%_ if (fieldsContainDate) { _%>
+<%_ if (anyFieldIsDateDerived) { _%>
       currentDate = new Date();
 <%_ } _%>
       elemDefault = new <%= entityAngularName %>(

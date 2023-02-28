@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import _ from 'lodash';
+import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -31,6 +33,7 @@ import {
   generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
+import { isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -102,6 +105,14 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return {
       writeEntitiesFiles,
       writeEntityFiles,
+      queueTranslateTransform({ control, application }) {
+        if (!application.enableTranslation) {
+          this.queueTransformStream(translateVueFilesTransform(control.getWebappTranslation), {
+            name: 'translating webapp',
+            streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
+          });
+        }
+      },
     };
   }
 
@@ -117,6 +128,23 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  get end() {
+    return this.asEndTaskGroup({
+      end({ application }) {
+        this.log.ok('Vue application generated successfully.');
+        this.logger.log(
+          chalk.green(`  Start your Webpack development server with:
+  ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
+`)
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.END]() {
+    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
   /**

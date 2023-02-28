@@ -104,7 +104,7 @@ spec:
 <%_ } _%>
 <%_ if (app.serviceDiscoveryConsul) { _%>
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul.<%= kubernetesNamespace %>.svc.cluster.local
+          value: consul-headless.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
   <%_ if (istio) { _%>

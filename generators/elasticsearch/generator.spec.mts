@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
+import { buildServerMatrix, extendMatrix, entitiesServerSamples as entities, buildSamplesFromMatrix } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
@@ -51,46 +51,33 @@ samples = extendMatrix(samples, {
   searchEngine: [ELASTICSEARCH],
 });
 
-const samplesBuilder = (): [string, any][] =>
-  Object.entries(samples).map(([name, sample]) => [
-    name,
-    {
-      defaults: true,
-      applicationWithEntities: {
-        config: {
-          ...commonConfig,
-          ...sample,
-        },
-        entities,
-      },
-    },
-  ]);
-
-const testSamples = samplesBuilder();
+const testSamples = buildSamplesFromMatrix(samples, { commonConfig });
 
 describe('generator - elasticsearch', () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
-    expect(instance.features.bar).toBe(true);
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
+    expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   it('samples matrix should match snapshot', () => {
-    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+    expect(testSamples).toMatchSnapshot();
   });
 
-  testSamples.forEach(([name, sample]) => {
-    const sampleConfig = sample.applicationWithEntities.config;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { enableTranslation } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(serverGeneratorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
+        runResult = await helpers
+          .run(serverGeneratorFile)
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -113,8 +100,8 @@ describe('generator - elasticsearch', () => {
           elasticsearch && (sampleConfig.authenticationType === OAUTH2 || !sampleConfig.skipUserManagement)
         );
       });
-      shouldComposeWithKafka(sample, () => runResult);
-      shouldComposeWithLiquibase(sample, () => runResult);
+      shouldComposeWithKafka(sampleConfig, () => runResult);
+      shouldComposeWithLiquibase(sampleConfig, () => runResult);
     });
   });
 });

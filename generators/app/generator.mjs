@@ -20,13 +20,10 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import BaseGenerator from '../base-application/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode } from './support/index.mjs';
-import gitOptions from '../git/options.mjs';
-import serverOptions from '../server/options.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
 import prompts from './prompts.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
@@ -44,9 +41,9 @@ const { MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
-export default class JHipsterAppGenerator extends BaseGenerator {
+export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, features);
 
     this.option('defaults', {
       desc: 'Execute jhipster with default config',
@@ -110,12 +107,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       type: Boolean,
     });
 
-    // This adds support for a `--skip-checks` flag
-    this.option('skip-checks', {
-      desc: 'Check the status of the required tools',
-      type: Boolean,
-    });
-
     // This adds support for a `--jhi-prefix` flag
     this.option('jhi-prefix', {
       desc: 'Add prefix before services, controllers and states name',
@@ -173,12 +164,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.option('blueprints', {
       desc: 'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
       type: String,
-    });
-
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
     });
 
     // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
@@ -285,30 +270,12 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       desc: 'Enable hibernate cache',
       type: Boolean,
     });
-
-    this.option('auto-crlf', {
-      desc: 'Detect line endings',
-      type: Boolean,
-    });
-
-    this.jhipsterOptions(
-      {
-        ...gitOptions,
-        ...serverOptions,
-      },
-      true
-    );
-
-    // Just constructing help, stop here
-    if (this.options.help) {
-      return;
-    }
-
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
   }
 
   async beforeQueue() {
+    this.loadStoredAppOptions();
+    this.loadRuntimeOptions();
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
@@ -317,12 +284,8 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      displayLogo() {
-        this.printJHipsterLogo();
-      },
-
       validateBlueprint() {
-        if (this.jhipsterConfig.blueprints && !this.options.skipChecks) {
+        if (this.jhipsterConfig.blueprints && !this.skipChecks) {
           this.jhipsterConfig.blueprints.forEach(blueprint => {
             this._checkJHipsterBlueprintVersion(blueprint.name);
             this._checkBlueprint(blueprint.name);
@@ -338,7 +301,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       },
 
       checkForNewJHVersion() {
-        if (!this.options.skipChecks) {
+        if (!this.skipChecks) {
           this.checkForNewVersion();
         }
       },
@@ -351,7 +314,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -362,14 +325,13 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.PROMPTING]() {
+  get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
     return {
       setup() {
-        this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient =
             this.jhipsterConfig.skipClient ||
@@ -393,7 +355,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.CONFIGURING]() {
+  get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -444,8 +406,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       },
 
       async composePages() {
-        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
-        this.configOptions.skipComposePage = true;
+        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
         await Promise.all(
           this.jhipsterConfig.pages.map(page => {
             return this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
@@ -458,7 +419,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.COMPOSING]() {
+  get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -474,7 +435,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -484,24 +445,8 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get end() {
-    return {
-      afterRunHook() {
-        this.logger.info(
-          chalk.green(
-            `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
-          )
-        );
-      },
-    };
-  }
-
-  get [BaseGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   _validateAppConfiguration(config = this.jhipsterConfig) {

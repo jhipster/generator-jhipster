@@ -17,4 +17,6 @@
  * limitations under the License.
  */
 // eslint-disable-next-line import/prefer-default-export
+export { default as postPrepareEntity } from './post-prepare-entity.mjs';
 export { default as prepareField } from './prepare-field.mjs';
+export { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from './relationship.mjs';

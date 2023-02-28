@@ -33,7 +33,7 @@ describe('generator - server - checkJava', () => {
 
     it('should return info and javaVersion', async () => {
       expect(result).toMatchObject({
-        info: 'Detected java version 17.0.1',
+        debug: 'Detected java version 17.0.1',
         javaVersion: '17.0.1',
       });
     });

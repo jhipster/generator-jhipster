@@ -26,18 +26,10 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
-import { type BaseApplication } from '../base-application/types.mjs';
 
-export default class InfoGenerator extends BaseApplicationGenerator<BaseApplication> {
+export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { unique: 'namespace', ...features });
-
-    this.option('skipCommit', {
-      description: 'Skip commit',
-      type: Boolean,
-      hide: true,
-      default: true,
-    });
+    super(args, options, features);
 
     if (this.options.help) return;
 
@@ -47,7 +39,7 @@ export default class InfoGenerator extends BaseApplicationGenerator<BaseApplicat
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
-        this.logger.info(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+        this.logger.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
 
       async checkJHipster() {

@@ -43,9 +43,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
     await helpers
       .run(getGenerator('server'))
       .withOptions({
-        skipInstall: true,
         blueprint: 'myblueprint',
-        skipChecks: true,
         clientFramework: 'no',
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])

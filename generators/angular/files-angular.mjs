@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createTranslationReplacer } from './transform-angular.mjs';
+import { createTranslationReplacer } from './support/index.mjs';
 
 import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
 
@@ -472,7 +472,6 @@ export async function writeFiles({ application, control }) {
 
   await this.writeFiles({
     sections: files,
-    transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
     context: {
       ...application,
       getWebappTranslation: control.getWebappTranslation,

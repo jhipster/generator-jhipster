@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
-import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -41,55 +39,17 @@ const { CYPRESS } = testFrameworkTypes;
  * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
-
-    // This adds support for a `--auth` flag
-    this.option('auth', {
-      desc: 'Provide authentication type for the application',
-      type: String,
-    });
-
-    // This adds support for a `--skip-commit-hook` flag
-    this.option('skip-commit-hook', {
-      desc: 'Skip adding husky commit hooks',
-      type: Boolean,
-    });
-
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
-    });
-
-    if (this.options.help) {
-      return;
-    }
-
+  async beforeQueue() {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-  }
 
-  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    await this.dependsOnJHipster(GENERATOR_COMMON);
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
     }
-  }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
@@ -114,7 +74,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       configureDevServerPort() {
-        if (this.jhipsterConfig.devServerPort !== undefined) return undefined;
+        if (this.jhipsterConfig.devServerPort !== undefined) return;
 
         const { clientFramework, applicationIndex } = this.jhipsterConfigWithDefaults;
         const devServerBasePort = clientFramework === ANGULAR ? 4200 : 9060;
@@ -137,9 +97,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
-      async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON);
-      },
       async composing() {
         const { clientFramework, testFrameworks, enableTranslation } = this.jhipsterConfigWithDefaults;
         if ([ANGULAR, VUE, REACT].includes(clientFramework)) {
@@ -281,22 +238,5 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get end() {
-    return this.asEndTaskGroup({
-      end({ application }) {
-        this.logger.info(chalk.green.bold('\nClient application generated successfully.\n'));
-
-        const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${application.clientPackageManager} start`)}\n`;
-
-        this.logger.info(chalk.green(logMsg));
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 }

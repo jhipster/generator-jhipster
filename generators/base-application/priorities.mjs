@@ -19,7 +19,7 @@
 
 import { QUEUE_PREFIX, PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUES as QUEUES_BASE } from '../base/priorities.mjs';
 
-const { DEFAULT, TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES_BASE;
+const { DEFAULT, TRANSFORM, MULTISTEP_TRANSFORM } = PRIORITY_NAMES_BASE;
 
 const CONFIGURING_EACH_ENTITY = 'configuringEachEntity';
 const CONFIGURING_EACH_ENTITY_QUEUE = `${QUEUE_PREFIX}${CONFIGURING_EACH_ENTITY}`;
@@ -85,13 +85,13 @@ export const CUSTOM_PRIORITIES = [
   {
     priorityName: WRITING_ENTITIES,
     queueName: WRITING_ENTITIES_QUEUE,
-    before: TRANSFORM,
+    before: MULTISTEP_TRANSFORM,
     skip: true,
   },
   {
     priorityName: POST_WRITING_ENTITIES,
     queueName: POST_WRITING_ENTITIES_QUEUE,
-    before: PRE_CONFLICTS,
+    before: TRANSFORM,
     skip: true,
   },
 ].reverse();

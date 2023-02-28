@@ -5,8 +5,9 @@ import fse from 'fs-extra';
 import { jestExpect } from 'mocha-expect-snapshot';
 import { basicHelpers as helpers } from '../support/index.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { getGenerator, getTemplatePath } from '../support/index.mjs';
+import { getTemplatePath } from '../support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
+import { GENERATOR_APP } from '../../generators/generator-list.mjs';
 
 const jhipsterVersion = packageJson.version;
 
@@ -21,6 +22,7 @@ describe('generator - app - with blueprint', () => {
           const packagejs = {
             name: 'generator-jhipster-myblueprint',
             version: '9.9.9',
+            type: 'module',
             dependencies: {
               'generator-jhipster': jhipsterVersion,
             },
@@ -30,12 +32,10 @@ describe('generator - app - with blueprint', () => {
           fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
+        .withJHipsterConfig()
         .withOptions({
-          skipInstall: true,
           skipChecks: false,
           blueprint: 'myblueprint',
-          baseName: 'jhipster',
-          defaults: true,
         })
         .run();
     });
@@ -58,12 +58,13 @@ describe('generator - app - with blueprint', () => {
     it('throws an error', () =>
       jestExpect(() =>
         helpers
-          .run(getGenerator('app'))
+          .runJHipster(GENERATOR_APP)
           .inTmpDir(dir => {
             // Fake the presence of the blueprint in node_modules
             const packagejs = {
               name: 'generator-jhipster-myblueprint',
               version: '9.9.9',
+              type: 'module',
               dependencies: {
                 'generator-jhipster': '1.1.1',
               },
@@ -73,11 +74,10 @@ describe('generator - app - with blueprint', () => {
             fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
+          .withJHipsterConfig()
           .withOptions({
-            skipInstall: true,
             skipChecks: false,
             blueprint: 'myblueprint',
-            defaults: true,
           })
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
@@ -85,12 +85,13 @@ describe('generator - app - with blueprint', () => {
   describe('generating application with a git blueprint', () => {
     it('should succeed', () =>
       helpers
-        .run(getGenerator('app'))
+        .runJHipster(GENERATOR_APP)
         .inTmpDir(dir => {
           // Fake the presence of the blueprint in node_modules
           const packagejs = {
             name: 'generator-jhipster-myblueprint',
             version: '9.9.9',
+            type: 'module',
             dependencies: {
               'generator-jhipster': 'gitlab:jhipster/generator-jhipster#main',
             },
@@ -100,9 +101,8 @@ describe('generator - app - with blueprint', () => {
           fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
+        .withJHipsterConfig()
         .withOptions({
-          defaults: true,
-          skipInstall: true,
           skipChecks: false,
           blueprint: 'myblueprint',
         }));
@@ -112,29 +112,28 @@ describe('generator - app - with blueprint', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
-        .inTmpDir(dir => {
-          // Fake the presence of the blueprint in node_modules
-          const packagejs = {
+        .runJHipster(GENERATOR_APP)
+        .withJHipsterConfig()
+        .withFiles({
+          'node_modules/generator-jhipster-myblueprint/package.json': {
             name: 'generator-jhipster-myblueprint',
             version: '9.9.9',
+            type: 'module',
             peerDependencies: {
               'generator-jhipster': '^7.0.0-beta.0',
             },
-          };
-          const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
-          fse.ensureDirSync(fakeBlueprintModuleDir);
-          fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
-          fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
+          },
         })
+        .inTmpDir(dir => {
+          // Fake the presence of the blueprint in node_modules
+          const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
+          fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
+        })
+        .commitFiles()
         .withOptions({
-          skipInstall: true,
           skipChecks: false,
           blueprint: 'myblueprint',
-          baseName: 'jhipster',
-          defaults: true,
-        })
-        .run();
+        });
     });
 
     it('creates expected default files for server and angular', () => {
@@ -155,12 +154,13 @@ describe('generator - app - with blueprint', () => {
     it('throws an error', () =>
       jestExpect(() =>
         helpers
-          .run(getGenerator('app'))
+          .runJHipster(GENERATOR_APP)
           .inTmpDir(dir => {
             // Fake the presence of the blueprint in node_modules
             const packagejs = {
               name: 'generator-jhipster-myblueprint',
               version: '9.9.9',
+              type: 'module',
               peerDependencies: {
                 'generator-jhipster': '1.1.1',
               },
@@ -170,11 +170,10 @@ describe('generator - app - with blueprint', () => {
             fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
+          .withJHipsterConfig()
           .withOptions({
-            skipInstall: true,
             skipChecks: false,
             blueprint: 'myblueprint',
-            defaults: true,
           })
       ).rejects.toThrow(/targets JHipster 1.1.1 and is not compatible with this JHipster version/));
   });

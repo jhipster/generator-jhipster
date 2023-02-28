@@ -10,7 +10,7 @@ LABEL ALIAS=jhipster-control-center
 FROM jhipster/consul-config-loader:v0.4.1
 LABEL ALIAS=consul-config-loader
 
-FROM postgres:15.1
+FROM postgres:15.2
 LABEL ALIAS=postgresql
 
 FROM quay.io/keycloak/keycloak:20.0.1
@@ -18,7 +18,7 @@ LABEL ALIAS=keycloak
 
 FROM mysql:8.0.32
 
-FROM mariadb:10.10.3
+FROM mariadb:10.11.2
 
 FROM mongo:6.0.4
 LABEL ALIAS=mongodb
@@ -31,7 +31,7 @@ FROM cassandra:3.11.14
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.4.0
+FROM neo4j:5.5.0
 
 FROM hazelcast/management-center:5.2.1
 LABEL ALIAS=hazelcast
@@ -40,16 +40,17 @@ FROM memcached:1.6.18-alpine
 
 FROM redis:7.0.8
 
-FROM confluentinc/cp-kafka:7.3.1
+FROM confluentinc/cp-kafka:7.3.2
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.3.1
+FROM confluentinc/cp-zookeeper:7.3.2
 LABEL ALIAS=zookeeper
 
 FROM sonarqube:9.9.0-community
 LABEL ALIAS=sonar
 
-FROM consul:1.14.4
+FROM docker.io/bitnami/consul:1.14.4-debian-11-r5
+LABEL ALIAS=consul
 
 FROM prom/prometheus:v2.42.0
 LABEL ALIAS=prometheus

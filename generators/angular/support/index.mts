@@ -17,4 +17,7 @@
  * limitations under the License.
  */
 export * from './path-utils.mjs';
+export * from './needles.mjs';
+export * from './translate-angular.mjs';
+export { default as translateAngularFilesTransform } from './translate-angular.mjs';
 export { default as updateLanguagesTask } from './update-languages.mjs';
