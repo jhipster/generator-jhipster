@@ -103,7 +103,7 @@
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
     "mem-fs-editor": "9.6.0",
-    "minimatch": "7.1.0",
+    "minimatch": "7.3.0",
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
     "p-queue": "7.3.4",
