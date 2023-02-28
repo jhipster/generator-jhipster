@@ -13,7 +13,7 @@
         <blockhound-junit-platform.version>1.0.7.RELEASE</blockhound-junit-platform.version>
         <caffeine.version>3.1.4</caffeine.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <gatling.version>3.9.1</gatling.version>
+        <gatling.version>3.9.2</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.2</hazelcast-spring.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
@@ -24,7 +24,7 @@
         <validation-api.version>3.0.2.Final</validation-api.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>10.7.0</checkstyle.version>
+        <checkstyle.version>10.8.0</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.3.0</gatling-maven-plugin.version>
@@ -34,7 +34,7 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.2.1</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M9</maven-failsafe-plugin.version>

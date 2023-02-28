@@ -57,7 +57,7 @@ describe('jdl - DeploymentOptions', () => {
             directoryPath: '../',
             gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
-            serviceDiscoveryType: 'eureka',
+            serviceDiscoveryType: 'consul',
           });
         });
       });
@@ -72,7 +72,7 @@ describe('jdl - DeploymentOptions', () => {
             kubernetesUseDynamicStorage: false,
             kubernetesStorageClassName: '',
             monitoring: 'no',
-            serviceDiscoveryType: 'eureka',
+            serviceDiscoveryType: 'consul',
             ingressDomain: '',
             istio: false,
             kubernetesNamespace: 'default',
@@ -89,7 +89,7 @@ describe('jdl - DeploymentOptions', () => {
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
             monitoring: 'no',
-            serviceDiscoveryType: 'eureka',
+            serviceDiscoveryType: 'consul',
             openshiftNamespace: 'default',
             storageType: 'ephemeral',
             registryReplicas: 2,

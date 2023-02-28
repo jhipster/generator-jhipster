@@ -12,16 +12,6 @@ const __dirname = dirname(__filename);
 
 const getPackageFilePath = (...filePath: string[]) => path.resolve(__dirname, '../..', ...filePath);
 
-export function getJHipsterCli() {
-  const cmdPath = getPackageFilePath('dist/cli/jhipster.mjs');
-  let cmd = `node ${cmdPath} `;
-  if (os.platform() === 'win32') {
-    // corrected test for windows user
-    cmd = cmd.replace(/\\/g, '/');
-  }
-  return cmd;
-}
-
 function _prepareTempEnv() {
   const cwd = process.cwd();
   const tempDir = path.join(os.tmpdir(), crypto.randomBytes(20).toString('hex'));
@@ -86,11 +76,4 @@ export function copyBlueprint(sourceDir: string, destDir: string, ...blueprintNa
 
 export function copyFakeBlueprint(destDir: string, ...blueprintName: string[]) {
   copyBlueprint(getTemplatePath('blueprints/fake-blueprint'), destDir, ...blueprintName);
-}
-
-export function lnYeoman(packagePath: string) {
-  const nodeModulesPath = `${packagePath}/node_modules`;
-  fse.ensureDirSync(nodeModulesPath);
-  fs.symlinkSync(getPackageFilePath('node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
-  fs.symlinkSync(getPackageFilePath('node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
 }

@@ -104,8 +104,14 @@ runs:
       run: |
         JHI_HOME="${{ inputs.generator-jhipster-directory }}"
         JHI_WORKSPACE="${{ github.workspace }}"
+
         JHI_CLI_PACKAGE="${{inputs.package-with-executable}}"
         source "$JHI_HOME/test-integration/scripts/00-init-env.sh"
+
+        JHI_BIN_FOLDER="${HOME}/.bin"
+        mkdir -p "$JHI_BIN_FOLDER"
+        echo "$JHI_BIN_FOLDER" >> $GITHUB_PATH
+        echo "JHI_BIN_FOLDER=$JHI_BIN_FOLDER" >> $GITHUB_ENV
 
         echo "JHI_INTEG=$JHI_INTEG" >> $GITHUB_ENV
         echo "JHI_HOME=$JHI_HOME" >> $GITHUB_ENV

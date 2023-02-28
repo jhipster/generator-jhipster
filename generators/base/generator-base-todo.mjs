@@ -789,63 +789,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Generate a KeyStore.
-   */
-  generateKeyStore() {
-    let keystoreFolder = `${SERVER_MAIN_RES_DIR}config/tls/`;
-    if (this.destinationPath) {
-      keystoreFolder = this.destinationPath(keystoreFolder);
-    }
-    const keyStoreFile = `${keystoreFolder}/keystore.p12`;
-
-    if (this.fs.exists(keyStoreFile)) {
-      this.logger.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
-    } else {
-      try {
-        shelljs.mkdir('-p', keystoreFolder);
-      } catch (error) {
-        // noticed that on windows the shelljs.mkdir tends to sometimes fail
-        fs.mkdir(keystoreFolder, { recursive: true }, err => {
-          if (err) throw err;
-        });
-      }
-      const javaHome = shelljs.env.JAVA_HOME;
-      let keytoolPath = '';
-      if (javaHome) {
-        keytoolPath = `${javaHome}/bin/`;
-      }
-      if (process.env.FAKE_KEYTOOL === 'true') {
-        this.writeDestination(keyStoreFile, 'fake key-tool');
-        return;
-      }
-      const done = this.async();
-      // Generate the PKCS#12 keystore
-      shelljs.exec(
-        // prettier-ignore
-        `"${keytoolPath}keytool" -genkey -noprompt `
-                + '-storetype PKCS12 '
-                + '-keyalg RSA '
-                + '-alias selfsigned '
-                + `-keystore "${keyStoreFile}" `
-                + '-storepass password '
-                + '-keypass password '
-                + '-keysize 2048 '
-                + '-validity 99999 '
-                + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
-        code => {
-          if (code !== 0) {
-            this.logger.warn("\nFailed to create a KeyStore with 'keytool'", code);
-          } else {
-            this.logger.info(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
-          }
-          done();
-        }
-      );
-    }
-  }
-
-  /**
-   * @private
    * Checks if there is a newer JHipster version available.
    */
   checkForNewVersion() {
@@ -864,8 +807,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
-            this.logger.warn(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.logger.warn(chalk.yellow(' ______________________________________________________________________________\n'));
+            this.logger.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            this.logger.log(chalk.yellow(' ______________________________________________________________________________\n'));
           }
           done();
         }

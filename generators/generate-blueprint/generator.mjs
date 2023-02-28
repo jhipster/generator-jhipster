@@ -246,8 +246,7 @@ export default class extends BaseGenerator {
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
             mocha: 'mocha generators --no-insight --forbid-only',
-            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,js,cjs,mjs,ts,tsx,css,scss,vue,java}"',
-            pretest: 'npm run prettier-check && npm run lint',
+            pretest: 'npm run prettier:check && npm run lint',
             test: 'npm run mocha --',
             'update-snapshot': 'npm run mocha -- --no-parallel --updateSnapshot',
           },
@@ -352,7 +351,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
       end() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
 
-        this.logger.info(`${chalk.bold.green('##### USAGE #####')}
+        this.logger.log(`${chalk.bold.green('##### USAGE #####')}
 To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}

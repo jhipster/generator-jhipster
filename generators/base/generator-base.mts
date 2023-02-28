@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname } from 'path';
+import { basename, join as joinPath, dirname, relative } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -32,7 +32,7 @@ import type Storage from 'yeoman-generator/lib/util/storage.js';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { joinCallbacks } from './support/index.mjs';
+import { joinCallbacks, Logger } from './support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -41,7 +41,7 @@ import type {
   EditFileOptions,
   CascatedEditFileCallback,
   JHipsterOptions,
-  CheckResult,
+  ValidationResult,
 } from './api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
@@ -91,8 +91,10 @@ export default class BaseGenerator extends YeomanGenerator {
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
   experimental?: boolean;
+  debugEnabled?: boolean;
 
   readonly sharedData!: SharedData<BaseApplication>;
+  readonly logger: Logger;
   declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -147,6 +149,8 @@ export default class BaseGenerator extends YeomanGenerator {
     }
 
     this.sharedData = this.createSharedData(jhipsterOldVersion);
+
+    this.logger = new Logger({ adapter: this.env.adapter, namespace: this.options.namespace, debugEnabled: this.debugEnabled });
 
     if (this.options.help) {
       return;
@@ -248,10 +252,10 @@ export default class BaseGenerator extends YeomanGenerator {
       let optionValue;
       // Hidden options are test options, which doesn't rely on commoander for options parsing.
       // We must parse environment variables manually
-      if (this.options[optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
+      if (this.options[optionDesc.name ?? optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
         optionValue = process.env[optionDesc.env];
       } else {
-        optionValue = this.options[optionName];
+        optionValue = this.options[optionDesc.name ?? optionName];
       }
       if (optionValue !== undefined) {
         optionValue = optionDesc.type(optionValue);
@@ -295,13 +299,14 @@ export default class BaseGenerator extends YeomanGenerator {
    */
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
+    const relativePath = relative((this.env as any).conflicter.cwd, destinationFile);
     try {
       if (destinationFile && statSync(destinationFile).isFile()) {
-        this.logger.log(`Removing the file - ${destinationFile}`);
+        this.log.info(`Removing legacy file ${relativePath}`);
         rmSync(destinationFile, { force: true });
       }
     } catch {
-      this.logger.log(`Could not remove file ${destinationFile}`);
+      this.log.info(`Could not remove legacy file ${relativePath}`);
     }
     return destinationFile;
   }
@@ -463,18 +468,46 @@ export default class BaseGenerator extends YeomanGenerator {
   }
 
   /**
-   * Print CheckResult info/warnings or throw result Error.
+   * Print ValidationResult info/warnings or throw result Error.
    */
-  validateCheckResult(result: CheckResult, { printInfo = false, throwOnError = true } = {}) {
+  validateResult(result: ValidationResult, { throwOnError = true } = {}) {
     // Don't print check info by default for cleaner outputs.
-    if (printInfo && result.info) {
-      this.logger.info(result.info);
+    if (result.debug) {
+      if (Array.isArray(result.debug)) {
+        for (const debug of result.debug) {
+          this.logger.debug(debug);
+        }
+      } else {
+        this.logger.debug(result.debug);
+      }
+    }
+    if (result.info) {
+      if (Array.isArray(result.info)) {
+        for (const info of result.info) {
+          this.log.info(info);
+        }
+      } else {
+        this.log.info(result.info);
+      }
     }
     if (result.warning) {
-      this.logger.warn(result.warning);
+      if (Array.isArray(result.warning)) {
+        for (const warning of result.warning) {
+          this.logger.warn(warning);
+        }
+      } else {
+        this.logger.warn(result.warning);
+      }
     }
     if (result.error) {
-      if (throwOnError) {
+      if (Array.isArray(result.error)) {
+        if (throwOnError && result.error.length > 0) {
+          throw new Error(result.error[0]);
+        }
+        for (const error of result.error) {
+          this.logger.warn(error);
+        }
+      } else if (throwOnError) {
         throw new Error(result.error);
       } else {
         this.logger.warn(result.error);

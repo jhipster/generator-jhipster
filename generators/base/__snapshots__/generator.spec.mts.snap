@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - base help should print expected information 1`] = `
+"Usage: jhipster [options] [command]
+
+Options:
+  -V, --version                           output the version number
+  --blueprints <value>                    A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
+  --force-insight                         Force insight
+  --no-insight                            Disable insight
+  --force                                 Override every file (default: false)
+  --dry-run                               Print conflicts (default: false)
+  --whitespace                            Whitespace changes will not trigger conflicts (default: false)
+  --bail                                  Fail on first conflict (default: false)
+  --install-path                          Show jhipster install path (default: false)
+  --skip-regenerate                       Don't regenerate identical files (default: false)
+  --skip-yo-resolve                       Ignore .yo-resolve files (default: false)
+  --skip-checks                           Check the status of the required tools
+  --experimental                          Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
+  -d, --debug                             Enable debugger
+  --bundled                               Use JHipster generators bundled with current cli
+  -h, --help                              display help for command
+
+Commands:
+  add                                     Add a feature to current project
+  app                                     [Default] Create a new JHipster application based on the selected options
+  aws                                     Deploy the current application to Amazon Web Services
+  azure-app-service                       Deploy the current application to Azure App Service
+  azure-spring-cloud                      Deploy the current application to Azure Spring Cloud
+  ci-cd                                   Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools
+  cloudfoundry                            Generate a \`deploy/cloudfoundry\` folder with a specific manifest.yml to deploy to Cloud Foundry
+  docker-compose                          Create all required Docker deployment configuration for the selected applications
+  download <jdlFiles...>                  Download jdl file from template repository
+  entity                                  Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components
+  entities                                Regenerate entities
+  export-jdl                              Create a JDL file from the existing entities
+  gae                                     Deploy the current application to Google App Engine
+  generate-blueprint                      Generate a blueprint
+  gradle                                  Create Gradle project (alpha)
+  heroku                                  Deploy the current application to Heroku
+  info                                    Display information about your current project and system
+  init                                    Init project (alpha)
+  java                                    Run java generator (alpha)
+  jdl|import-jdl [options] [jdlFiles...]  Create entities from the JDL file/URL/content passed in argument.
+      Use the '--interactive' flag to generate multiple applications in series.
+  kubernetes|k8s                          Deploy the current application to Kubernetes
+  kubernetes-helm|helm                    Deploy the current application to Kubernetes using Helm package manager
+  kubernetes-knative|knative              Deploy the current application to Kubernetes using knative constructs
+  languages                               Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder
+  maven                                   Create Maven project (alpha)
+  openshift                               Deploy the current application to OpenShift
+  page                                    Create a new page. (Supports vue clients)
+  project-name                            Configure project name (alpha)
+  run [generator]                         Run a module or custom generator
+  spring-boot                             Create a Spring Boot application (alpha)
+  spring-service|service                  Create a new Spring service bean
+  spring-controller                       Create a new Spring controller
+  openapi-client                          Generates java client code from an OpenAPI/Swagger definition
+  upgrade                                 Upgrade the JHipster version, and upgrade the generated application
+  workspaces                              Add workspaces configuration
+  help [command]                          display help for command
+"
+`;

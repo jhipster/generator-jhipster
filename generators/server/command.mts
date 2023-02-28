@@ -32,6 +32,13 @@ const command: JHipsterCommandDefinition = {
       env: 'JHI_PROJECT_VERSION',
       scope: 'generator',
     },
+    fakeKeytool: {
+      description: 'Add a fake certificate store file for test purposes',
+      type: Boolean,
+      env: 'FAKE_KEYTOOL',
+      scope: 'generator',
+      hide: true,
+    },
     withGeneratedFlag: {
       description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
       type: Boolean,

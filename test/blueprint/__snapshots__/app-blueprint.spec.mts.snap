@@ -68,6 +68,9 @@ exports[`generator - app - with blueprint generate application with a peer versi
   "ngsw-config.json": {
     "stateCleared": "modified",
   },
+  "node_modules/generator-jhipster-myblueprint/package.json": {
+    "stateCleared": "modified",
+  },
   "npmw": {
     "stateCleared": "modified",
   },

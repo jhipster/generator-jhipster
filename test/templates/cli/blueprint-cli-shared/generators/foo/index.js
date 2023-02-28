@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Generator = require('yeoman-generator');
-
-module.exports = class extends Generator {
-    initializing() {}
+export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    get [BaseGenerator.INITIALIZING]() {}
+  };
 };

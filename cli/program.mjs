@@ -33,6 +33,7 @@ import JHipsterCommand from './jhipster-command.mjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
 import { packageNameToNamespace } from '../generators/base/support/index.mjs';
+import command from '../generators/base/command.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -129,6 +130,7 @@ export const createProgram = ({ executableName = CLI_NAME, executableVersion } =
       .option('--install-path', 'Show jhipster install path', false)
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
+      .addJHipsterOptions(command.options)
       .addOption(new Option('--bundled', 'Use JHipster generators bundled with current cli'))
       .addOption(new Option('--prefer-global', 'Alias for --blundled').hideHelp())
       .addOption(new Option('--prefer-local', 'Prefer JHipster generators installed in current folder node repository.').hideHelp())
@@ -314,8 +316,6 @@ export const buildJHipster = async ({
   envBuilder = envBuilder ?? (await createEnvBuilder());
   env = env ?? envBuilder.getEnvironment();
   commands = commands ?? { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()) };
-  /* setup debugging */
-  logger.init(program);
 
   await buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printLogo, printBlueprintLogo, createEnvBuilder });
 
@@ -328,4 +328,4 @@ export const runJHipster = async (args = {}) => {
   return jhipsterProgram.parseAsync(argv);
 };
 
-export { done, logger };
+export { done };

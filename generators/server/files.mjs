@@ -938,8 +938,6 @@ export function writeFiles() {
     setUp({ application }) {
       application.javaDir = `${application.packageFolder}/`;
       application.testDir = `${application.packageFolder}/`;
-
-      this.generateKeyStore();
     },
 
     cleanupOldServerFiles,
