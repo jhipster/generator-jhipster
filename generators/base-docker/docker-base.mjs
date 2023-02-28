@@ -35,24 +35,21 @@ export function checkImages() {
 
   let imagePath = '';
   let runCommand = '';
-  let arm64Command = '';
   this.hasWarning = false;
   this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
   this.appsFolders.forEach((appsFolder, index) => {
     const appConfig = this.appConfigs[index];
     if (appConfig.buildTool === MAVEN) {
       imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
-      runCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
-      arm64Command = '-Djib-maven-plugin.architecture=arm64';
+      runCommand = './mvnw -ntp -Pprod verify jib:dockerBuild' + (process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : '');
     } else {
       imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
-      runCommand = './gradlew bootJar -Pprod jibDockerBuild';
-      arm64Command = '-PjibArchitecture=arm64';
+      runCommand = './gradlew bootJar -Pprod jibDockerBuild' + (process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : '');
     }
     if (!existsSync(imagePath)) {
       this.hasWarning = true;
       this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
-      this.warningMessage += `  ${chalk.yellow('TIP:')} If you're on an ARM64 machine, append ${chalk.cyan(arm64Command)} to this command.\n`;
+      //this.warningMessage += `  ${chalk.yellow('TIP:')} If you're on an ARM64 machine, append ${chalk.cyan(arm64Command)} to this command.\n`;
     }
   });
 }
