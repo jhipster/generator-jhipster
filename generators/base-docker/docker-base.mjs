@@ -49,7 +49,6 @@ export function checkImages() {
     if (!existsSync(imagePath)) {
       this.hasWarning = true;
       this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
-      //this.warningMessage += `  ${chalk.yellow('TIP:')} If you're on an ARM64 machine, append ${chalk.cyan(arm64Command)} to this command.\n`;
     }
   });
 }
