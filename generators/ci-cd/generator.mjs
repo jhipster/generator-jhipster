@@ -92,7 +92,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.info(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
+        this.logger.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
 
       getSharedConfig() {

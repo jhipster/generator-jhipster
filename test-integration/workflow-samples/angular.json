@@ -94,8 +94,8 @@
       "entity": "couchbase"
     },
     {
-      "name": "ms-ng-eureka-oauth2-mongodb-caffeine",
-      "jdl-samples": "ms-ng-eureka-oauth2-mongodb-caffeine",
+      "name": "ms-ng-consul-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ng-consul-oauth2-mongodb-caffeine",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"
     },

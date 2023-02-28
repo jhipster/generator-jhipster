@@ -241,7 +241,14 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   }
 
   printDestinationInfo(cwd = this.destinationPath()) {
-    this.logger.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(cwd)}`));
+    this.logger.log(
+      chalk.green(' _______________________________________________________________________________________________________________\n')
+    );
+    this.logger.log(
+      chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}
+
+  Application files will be generated in folder: ${chalk.yellow(cwd)}`)
+    );
     if (process.cwd() === this.getUserHome()) {
       this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
       this.logger.log(
@@ -249,17 +256,6 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       );
       this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.logger.log(
-      chalk.green(' _______________________________________________________________________________________________________________\n')
-    );
-    this.logger.log(
-      chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
-    );
-    this.logger.log(
-      chalk.white(
-        `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`
-      )
-    );
     this.logger.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );

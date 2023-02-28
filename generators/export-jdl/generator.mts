@@ -81,7 +81,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.END]() {
     return this.asEndTaskGroup({
       end() {
-        this.logger.info(chalk.green.bold('\nThe JDL export is complete!\n'));
+        this.logger.log(chalk.green.bold('\nThe JDL export is complete!\n'));
       },
     });
   }

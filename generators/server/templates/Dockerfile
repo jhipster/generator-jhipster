@@ -40,16 +40,17 @@ FROM memcached:1.6.18-alpine
 
 FROM redis:7.0.8
 
-FROM confluentinc/cp-kafka:7.3.1
+FROM confluentinc/cp-kafka:7.3.2
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.3.1
+FROM confluentinc/cp-zookeeper:7.3.2
 LABEL ALIAS=zookeeper
 
 FROM sonarqube:9.9.0-community
 LABEL ALIAS=sonar
 
-FROM consul:1.14.4
+FROM docker.io/bitnami/consul:1.14.4-debian-11-r5
+LABEL ALIAS=consul
 
 FROM prom/prometheus:v2.42.0
 LABEL ALIAS=prometheus

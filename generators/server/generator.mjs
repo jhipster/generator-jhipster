@@ -35,6 +35,7 @@ import {
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generatedAnnotationTransform,
+  generateKeyStore,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
@@ -150,6 +151,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
+  fakeKeytool;
 
   async beforeQueue() {
     this.loadStoredAppOptions();
@@ -157,6 +159,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    await this.dependsOnJHipster(GENERATOR_COMMON);
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
@@ -248,10 +252,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
-      async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON);
-      },
-
       async composing() {
         const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
@@ -304,13 +304,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
-          this.logger.info(`Using ${application.defaultPackaging} as default packaging`);
+          this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
 
         const JHI_PROFILE = process.env.JHI_PROFILE;
         application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
         if (JHI_PROFILE) {
-          this.logger.info(`Using ${application.defaultEnvironment} as default profile`);
+          this.log.info(`Using ${application.defaultEnvironment} as default profile`);
         }
       },
 
@@ -329,7 +329,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.logger.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
@@ -339,7 +339,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.logger.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+          this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
@@ -592,6 +592,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         this.resetEntitiesFakeData('server');
       },
       ...writeFiles.call(this),
+      async generateKeyStore({ application }) {
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+        if (this.fakeKeytool) {
+          this.writeDestination(keyStoreFile, 'fake key-tool');
+        } else {
+          this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName }));
+        }
+      },
     });
   }
 
@@ -744,7 +752,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       end({ application }) {
-        this.logger.info(chalk.green.bold('\nServer application generated successfully.\n'));
+        this.log.ok('Spring Boot application generated successfully.');
 
         let executable = 'mvnw';
         if (application.buildTool === GRADLE) {
@@ -754,7 +762,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (os.platform() === 'win32') {
           logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.logger.info(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.logger.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
     });
   }
@@ -829,7 +837,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    * }
    */
   checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
-    this.validateCheckResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
+    this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   _generateSqlSafeName(name) {

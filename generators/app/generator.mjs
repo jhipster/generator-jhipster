@@ -449,22 +449,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get end() {
-    return {
-      afterRunHook() {
-        this.logger.info(
-          chalk.green(
-            `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
-          )
-        );
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
-  }
-
   _validateAppConfiguration(config = this.jhipsterConfig) {
     if (config.entitySuffix === config.dtoSuffix) {
       throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');

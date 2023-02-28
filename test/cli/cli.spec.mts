@@ -10,14 +10,14 @@ import { basicHelpers as helpers } from '../support/index.mjs';
 
 import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
 import { createProgram } from '../../cli/program.mjs';
-import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from '../support/index.mjs';
+import { prepareTempDir, copyFakeBlueprint, copyBlueprint } from '../support/index.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
 const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
 const { buildJHipster } = await import('../../cli/program.mjs');
 
 const __filename = fileURLToPath(import.meta.url);
-const jhipsterCli = join(dirname(__filename), '..', '..', 'dist', 'cli', 'cli.mjs');
+const jhipsterCli = join(dirname(__filename), '..', '..', 'bin', 'jhipster.mjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -36,28 +36,22 @@ describe('cli', () => {
   });
   afterEach(() => cleanup());
 
-  const cmd = getJHipsterCli();
-
-  it('verify correct cmd format', () => {
-    expect(cmd).toMatch(/node (.*)\/cli\/jhipster/g);
-  });
-
   it('--help should run without errors', done => {
-    exec(`${cmd} --help`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --help`, (error, stdout, stderr) => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('--version should run without errors', done => {
-    exec(`${cmd} --version`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --version`, (error, stdout, stderr) => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('should return error on unknown command', function (done) {
-    exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} junkcmd`, (error, stdout, stderr) => {
       expect(error).not.toBeNull();
       expect(error?.code).toBe(1);
       expect(stderr).toMatch('is not a known command');
@@ -325,7 +319,7 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar');
-          exec(`${cmd} foo --blueprints bar`, (...args) => {
+          exec(`${jhipsterCli} foo --blueprints bar`, (...args) => {
             cbArgs = args;
             done();
           });
@@ -347,7 +341,7 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar', 'baz');
-          exec(`${cmd} foo --blueprints bar,baz`, (...args) => {
+          exec(`${jhipsterCli} foo --blueprints bar,baz`, (...args) => {
             cbArgs = args;
             done();
           });
@@ -372,7 +366,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout!.read().toString();
@@ -394,7 +387,6 @@ describe('cli', () => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -416,7 +408,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -438,7 +429,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -460,7 +450,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyFakeBlueprint(tmpdir, 'bar');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -508,7 +497,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
@@ -534,7 +522,6 @@ describe('cli', () => {
         beforeEach(done => {
           const tmpdir = process.cwd();
           copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;

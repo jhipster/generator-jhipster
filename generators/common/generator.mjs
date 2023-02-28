@@ -45,6 +45,8 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     this.loadRuntimeOptions();
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    await this.dependsOnJHipster(GENERATOR_GIT);
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
     }
@@ -83,18 +85,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get composing() {
-    return {
-      async composing() {
-        await this.composeWithJHipster(GENERATOR_GIT);
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   // Public API method used by the getter and also by Blueprints

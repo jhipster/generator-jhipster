@@ -18,21 +18,21 @@
 -%>
 # Consul HA cluster
 #
-# Based on https://github.com/kubernetes/charts/tree/14bee1e456c1789d1ebdfc2dc7e3ae2b9ea930ce/incubator/consul
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
 # Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
-#   kubectl port-forward consul-0 8500
+#   kubectl port-forward consul-0 8500 -n yourNamespace
 #
 # To check the state of your Consul cluster :
-#   kubectl exec consul-0 -- sh -c 'consul members'
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
 #
 # To scale your Consul cluster :
-#   kubectl patch statefulset/consul -p '{"spec":{"replicas": 5}}'
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
 #
 # To check the state of every node
-#   for i in {0..4}; do kubectl exec consul-$i -- sh -c 'consul members'; done
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
@@ -45,35 +45,55 @@ data:
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
-  name: consul
+  name: consul-headless
   namespace: <%= kubernetesNamespace %>
   labels:
+    app.kubernetes.io/name: consul
     app: consul
 spec:
-  ports:
-  - name: http
-    port: 8500
-  - name: rpc
-    port: 8400
-  - name: tcp-serflan
-    protocol: "TCP"
-    port: 8301
-  - name: udp-serflan
-    protocol: "UDP"
-    port: 8301
-  - name: tcp-serfwan
-    protocol: "TCP"
-    port: 8302
-  - name: udp-serfwan
-    protocol: "UDP"
-    port: 8302
-  - name: server
-    port: 8300
-  - name: consuldns
-    port: 8600
   clusterIP: None
   publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
   selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
     app: consul
 ---
 apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
@@ -81,121 +101,144 @@ kind: StatefulSet
 metadata:
   name: consul
   namespace: <%= kubernetesNamespace %>
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
 spec:
-  serviceName: consul
-  replicas: 3
   selector:
     matchLabels:
+      app.kubernetes.io/name: consul
       app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
-      name: consul
       labels:
+        app.kubernetes.io/name: consul
         app: consul
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
 <%_ } _%>
     spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - <%= kubernetesNamespace %>
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
       securityContext:
-        fsGroup: 1000
+        fsGroup: 1001
       containers:
-      - name: "consul"
-        image: <%- dockerContainers.consul %>
-        imagePullPolicy: "Always"
-        ports:
-        - name: http
-          containerPort: 8500
-        - name: rpc
-          containerPort: 8400
-        - name: tcp-serflan
-          protocol: "TCP"
-          containerPort: 8301
-        - name: udp-serflan
-          protocol: "UDP"
-          containerPort: 8301
-        - name: tcp-serfwan
-          protocol: "TCP"
-          containerPort: 8302
-        - name: udp-serfwan
-          protocol: "UDP"
-          containerPort: 8302
-        - name: server
-          containerPort: 8300
-        - name: consuldns
-          containerPort: 8600
+        - name: consul
+          image: <%= dockerContainers.consul %>
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.<%= kubernetesNamespace %>.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
         resources:
           requests:
-            cpu: "100m"
-            memory: "512Mi"
-        env:
-        - name: INITIAL_CLUSTER_SIZE
-          value: "3"
-        - name: PETSET_NAME
-          value: "consul"
-        - name: PETSET_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        volumeMounts:
-        - name: datadir
-          mountPath: /var/lib/consul
-        - name: gossip-key
-          mountPath: /etc/consul/secrets
-          readOnly: true
-        command:
-          - "/bin/sh"
-          - "-ec"
-          - |
-            IP=$(hostname -i)
-
-            if [ -e /etc/consul/secrets/gossip-key ]; then
-              echo "{\"encrypt\": \"$(base64 /etc/consul/secrets/gossip-key)\"}" > /etc/consul/encrypt.json
-              GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
-            fi
-
-            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
-                while true; do
-                    echo "Waiting for ${PETSET_NAME}-${i}.${PETSET_NAME} to come up"
-                    ping -W 1 -c 1 ${PETSET_NAME}-${i}.${PETSET_NAME}.${PETSET_NAMESPACE}.svc.cluster.local > /dev/null && break
-                    sleep 1s
-                done
-            done
-
-            PEERS=""
-            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
-                PEERS="${PEERS}${PEERS:+ } -retry-join $(ping -c 1 ${PETSET_NAME}-${i}.${PETSET_NAME}.${PETSET_NAMESPACE}.svc.cluster.local | awk -F'[()]' '/PING/{print $2}')"
-            done
-
-            exec /bin/consul agent \
-              -data-dir=/var/lib/consul \
-              -server \
-              -ui \
-              -bootstrap-expect=${INITIAL_CLUSTER_SIZE} \
-              -bind=0.0.0.0 \
-              -advertise=${IP} \
-              ${PEERS} \
-              ${GOSSIP_KEY} \
-              -client=0.0.0.0
-      volumes:
-      - name: gossip-key
-        secret:
-          secretName: gossip-key
-      #readinessProbe:
-      #  httpGet:
-      #    path: /v1/health/service/consul
-      #    port: 8500
-      #  initialDelaySeconds: 10
-      #  timeoutSeconds: 1
-  volumeClaimTemplates:
-  - metadata:
-      name: datadir
-      annotations:
-        volume.alpha.kubernetes.io/storage-class: anything
-    spec:
-      accessModes:
-        - "ReadWriteOnce"
-      resources:
-        requests:
-          # upstream recommended max is 700M
-          storage: "700M"
+            storage: "8Gi"

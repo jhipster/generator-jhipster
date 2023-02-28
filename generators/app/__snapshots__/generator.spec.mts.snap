@@ -7,8 +7,6 @@ exports[`generator - app help should print expected information 1`] = `
 
 Options:
   --auto-crlf                              Detect line endings
-  --skip-checks                            Check the status of the required tools
-  --experimental                           Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   --skip-cache                             Do not remember prompt answers (default: false)
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
@@ -184,6 +182,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "couchbase/server": "couchbase-server-placeholder",
     "couchbaseImage": "couchbase-image-placeholder",
     "couchbaseTag": "couchbase-tag-placeholder",
+    "docker.io/bitnami/consul": "docker-io-bitnami-consul-placeholder",
     "eclipse-temurin": "eclipse-temurin-placeholder",
     "eclipseTemurin": "eclipse-temurin-placeholder",
     "eclipseTemurinImage": "eclipse-temurin-image-placeholder",
@@ -610,6 +609,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "couchbase/server": "couchbase-server-placeholder",
     "couchbaseImage": "couchbase-image-placeholder",
     "couchbaseTag": "couchbase-tag-placeholder",
+    "docker.io/bitnami/consul": "docker-io-bitnami-consul-placeholder",
     "eclipse-temurin": "eclipse-temurin-placeholder",
     "eclipseTemurin": "eclipse-temurin-placeholder",
     "eclipseTemurinImage": "eclipse-temurin-image-placeholder",
@@ -884,9 +884,9 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "searchEngineNo": true,
   "serverPort": 8080,
   "serviceDiscoveryAny": true,
-  "serviceDiscoveryConsul": false,
-  "serviceDiscoveryEureka": true,
-  "serviceDiscoveryType": "eureka",
+  "serviceDiscoveryConsul": true,
+  "serviceDiscoveryEureka": false,
+  "serviceDiscoveryType": "consul",
   "skipCheckLengthOfIdentifier": false,
   "skipClient": false,
   "skipCommitHook": undefined,
@@ -1035,6 +1035,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "couchbase/server": "couchbase-server-placeholder",
     "couchbaseImage": "couchbase-image-placeholder",
     "couchbaseTag": "couchbase-tag-placeholder",
+    "docker.io/bitnami/consul": "docker-io-bitnami-consul-placeholder",
     "eclipse-temurin": "eclipse-temurin-placeholder",
     "eclipseTemurin": "eclipse-temurin-placeholder",
     "eclipseTemurinImage": "eclipse-temurin-image-placeholder",
@@ -1308,9 +1309,9 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "searchEngineNo": true,
   "serverPort": 8081,
   "serviceDiscoveryAny": true,
-  "serviceDiscoveryConsul": false,
-  "serviceDiscoveryEureka": true,
-  "serviceDiscoveryType": "eureka",
+  "serviceDiscoveryConsul": true,
+  "serviceDiscoveryEureka": false,
+  "serviceDiscoveryType": "consul",
   "skipCheckLengthOfIdentifier": false,
   "skipClient": true,
   "skipCommitHook": undefined,

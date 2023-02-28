@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
-import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -47,6 +45,8 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    await this.dependsOnJHipster(GENERATOR_COMMON);
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
     }
@@ -74,7 +74,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       configureDevServerPort() {
-        if (this.jhipsterConfig.devServerPort !== undefined) return undefined;
+        if (this.jhipsterConfig.devServerPort !== undefined) return;
 
         const { clientFramework, applicationIndex } = this.jhipsterConfigWithDefaults;
         const devServerBasePort = clientFramework === ANGULAR ? 4200 : 9060;
@@ -97,9 +97,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
-      async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON);
-      },
       async composing() {
         const { clientFramework, testFrameworks, enableTranslation } = this.jhipsterConfigWithDefaults;
         if ([ANGULAR, VUE, REACT].includes(clientFramework)) {
@@ -241,22 +238,5 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get end() {
-    return this.asEndTaskGroup({
-      end({ application }) {
-        this.logger.info(chalk.green.bold('\nClient application generated successfully.\n'));
-
-        const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${application.clientPackageManager} start`)}\n`;
-
-        this.logger.info(chalk.green(logMsg));
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 }

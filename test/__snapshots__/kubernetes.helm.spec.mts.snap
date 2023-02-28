@@ -408,7 +408,7 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["02-mysql", "03-psql"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -512,142 +512,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: default
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: default
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: default
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.default.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: default
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - default
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.default.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -824,15 +959,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -999,15 +1129,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_DATASOURCE_USERNAME
@@ -1172,7 +1297,7 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
     "kubernetesServiceType": "Ingress",
     "monitoring": "no",
     "packages": ["01-gateway"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1274,142 +1399,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: default
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: default
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: default
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.default.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: default
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - default
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.default.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -1573,15 +1833,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -1692,7 +1947,7 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway", "02-mysql"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1796,142 +2051,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: default
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: default
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: default
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.default.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: default
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - default
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.default.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -2108,15 +2498,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -2286,15 +2671,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -2380,7 +2760,7 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -2482,30 +2862,279 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul-config-loader
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul-config-loader
+  template:
+    metadata:
+      labels:
+        app: consul-config-loader
+    spec:
+      containers:
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.default.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: default
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - default
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.default.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -2552,122 +3181,6 @@ spec:
       route:
         - destination:
             host: grafana
-",
-    "stateCleared": "modified",
-  },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
-metadata:
-  name: registry-secret
-  namespace: default
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: default
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
-  namespace: default
-spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
-  selector:
-    matchLabels:
-      app: jhipster-registry
-      version: "1.0"
-  template:
-    metadata:
-      labels:
-        app: jhipster-registry
-        version: "1.0"
-      annotations:
-        sidecar.istio.io/inject: "false"
-    spec:
-      terminationGracePeriodSeconds: 10
-      containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
-          env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
-              value: "false"
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
-          volumeMounts:
-            - name: config-volume
-              mountPath: /central-config
-      volumes:
-        - name: config-volume
-          configMap:
-            name: application-config
 ",
     "stateCleared": "modified",
   },
@@ -2923,18 +3436,15 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
-            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
-            - name: EUREKA_INSTANCE_HOSTNAME
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+              value: jhgate
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -3132,7 +3642,7 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway", "02-mysql", "03-psql", "04-mongo", "07-mariadb"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -3242,142 +3752,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: default
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: default
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: default
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.default.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: default
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - default
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.default.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -3593,15 +4238,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -3771,15 +4411,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
             - name: SPRING_LIQUIBASE_URL
@@ -3950,15 +4585,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATA_MONGODB_DATABASE
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
@@ -4122,15 +4752,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -4297,15 +4922,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_DATASOURCE_USERNAME
@@ -4843,7 +5463,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
     "packages": ["02-mysql"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -4995,142 +5615,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: mynamespace
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: mynamespace
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: mynamespace
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.mynamespace.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: mynamespace
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - mynamespace
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.mynamespace.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -7590,15 +8345,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -7694,7 +8444,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["02-mysql"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -7796,142 +8546,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: mynamespace
-type: Opaque
-data:
-  registry-admin-password: YWRtaW4= # base64 encoded "admin"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: mynamespace
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: mynamespace
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.mynamespace.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: mynamespace
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - mynamespace
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.mynamespace.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -8096,15 +8981,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -8198,7 +9078,7 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway"],
-    "serviceDiscoveryType": "eureka"
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -8300,142 +9180,277 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
-  "csvc-helm/templates/jhipster-registry.yml": {
-    "contents": "# JHipster Registry HA cluster
-#
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
-#
-# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
-# You can setup temporary access to it on localhost:8761 by running :
-#   kubectl port-forward jhipster-registry-0 8761
-#
-# To scale your JHipster Registry cluster :
-#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
-#   Apply the descriptor again : \`kubectl apply -f jhipster-registry.yml\`
-#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
-#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
-#   \`kubectl delete pod jhipster-registry-0\`, \`kubectl delete pod jhipster-registry-1\`
-apiVersion: v1
-kind: Secret
+  "csvc-helm/templates/consul-config-loader.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: registry-secret
-  namespace: jhipsternamespace
-type: Opaque
-data:
-  registry-admin-password: bWVldHVw # base64 encoded "meetup"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-registry
-  namespace: jhipsternamespace
-  labels:
-    app: jhipster-registry
-spec:
-  ports:
-    - port: 8761
-      name: http
-  clusterIP: None
-  publishNotReadyAddresses: true
-  selector:
-    app: jhipster-registry
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: jhipster-registry
+  name: consul-config-loader
   namespace: jhipsternamespace
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: jhipster-registry
-      version: "1.0"
+      app: consul-config-loader
   template:
     metadata:
       labels:
-        app: jhipster-registry
-        version: "1.0"
+        app: consul-config-loader
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-        - name: jhipster-registry
-          image: jhipster-registry-placeholder
-          ports:
-            - containerPort: 8761
+        - name: consul-config-loader
+          image: consul-config-loader-placeholder
+          imagePullPolicy: IfNotPresent
           env:
-            # StatefulSet specific configuration
-            # Registry configuration
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod,k8s
-            - name: SPRING_SECURITY_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
-              value: native
-            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
-              value: file:./central-config
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: "15"
-            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: "30"
-            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: "15000"
-            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
-              value: "3"
-            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
-              value: "false"
-            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
-              value: "2000"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: K8S_CONFIG_PATH
-              value: "/central-config/"
+            - name: INIT_SLEEP_SECONDS
+              value: "5"
+            - name: CONSUL_URL
+              value: consul-headless.jhipsternamespace.svc.cluster.local
+            - name: CONSUL_PORT
+              value: "8500"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
             name: application-config
+",
+    "stateCleared": "modified",
+  },
+  "csvc-helm/templates/consul.yml": {
+    "contents": "# Consul HA cluster
+#
+# Based on https://artifacthub.io/packages/helm/bitnami/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500 -n yourNamespace
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -n yourNamespace -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+  namespace: jhipsternamespace
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-headless
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan-tcp
+      protocol: TCP
+      port: 8301
+    - name: serflan-udp
+      protocol: UDP
+      port: 8301
+    - name: rpc-server
+      port: 8300
+    - name: dns-tcp
+      port: 8600
+    - name: dns-udp
+      protocol: UDP
+      port: 8600
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul
+      app: consul
+  replicas: 3
+  serviceName: consul-headless
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul
+        app: consul
+    spec:
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: consul
+                    app: consul
+                namespaces:
+                  - jhipsternamespace
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: consul
+          image: consul-placeholder
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          ports:
+            - name: http
+              containerPort: 8500
+            - name: rpc
+              containerPort: 8400
+            - name: serflan-tcp
+              protocol: "TCP"
+              containerPort: 8301
+            - name: serflan-udp
+              containerPort: 8301
+              protocol: "UDP"
+            - name: rpc-server
+              containerPort: 8300
+            - name: dns-tcp
+              containerPort: 8600
+            - name: dns-udp
+              containerPort: 8600
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CONSUL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CONSUL_RETRY_JOIN
+              value: "consul-headless.jhipsternamespace.svc.cluster.local"
+            - name: CONSUL_DISABLE_KEYRING_FILE
+              value: "true"
+            - name: CONSUL_BOOTSTRAP_EXPECT
+              value: "3"
+            - name: CONSUL_RAFT_MULTIPLIER
+              value: "1"
+            - name: CONSUL_DOMAIN
+              value: "consul"
+            - name: CONSUL_DATACENTER
+              value: "dc1"
+            - name: CONSUL_UI
+              value: "true"
+            - name: CONSUL_HTTP_PORT_NUMBER
+              value: "8500"
+            - name: CONSUL_DNS_PORT_NUMBER
+              value: "8600"
+            - name: CONSUL_RPC_PORT_NUMBER
+              value: "8400"
+            - name: CONSUL_SERF_LAN_PORT_NUMBER
+              value: "8301"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - consul
+                - operator
+                - raft
+                - list-peers
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - consul
+                - members
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - consul
+                  - leave
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/consul
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 ",
     "stateCleared": "modified",
   },
@@ -8600,15 +9615,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.jhipsternamespace.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.jhipsternamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL

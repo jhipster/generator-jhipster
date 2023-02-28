@@ -31,7 +31,7 @@ export { checkDocker } from './docker-utils.mjs';
  * Check Images
  */
 export function checkImages() {
-  this.logger.info('\nChecking Docker images in applications directories...');
+  this.logger.log('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
   let runCommand = '';
@@ -155,7 +155,7 @@ export function loadFromYoRc() {
   delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
-    this.logger.info('\nFound .yo-rc.json config file...');
+    this.logger.log('\nFound .yo-rc.json config file...');
   }
 
   if (this.regenerate) {

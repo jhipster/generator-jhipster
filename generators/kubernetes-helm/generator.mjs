@@ -54,8 +54,8 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.info(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
-        this.logger.info(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.logger.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
+        this.logger.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
       ...super.initializing,
       checkKubernetes,
@@ -157,7 +157,7 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
     return {
       deploy() {
         if (this.hasWarning) {
-          this.logger.warn('\nHelm configuration generated, but no Jib cache found');
+          this.logger.warn('Helm configuration generated, but no Jib cache found');
           this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
           this.logger.warn(this.warningMessage);
         } else {
@@ -174,9 +174,9 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
           }
           this.logger.info(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
-        this.logger.info('\nYou can deploy all your apps by running the following script:');
+        this.logger.log('\nYou can deploy all your apps by running the following script:');
         this.logger.info(`  ${chalk.cyan('bash helm-apply.sh')}`);
-        this.logger.info('\nYou can upgrade (after any changes) all your apps by running the following script:');
+        this.logger.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
         this.logger.info(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
         // Make the apply script executable
         try {

@@ -111,8 +111,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   get configuring() {
     return {
       sayHello() {
-        this.logger.info(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-        this.logger.info(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.logger.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+        this.logger.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
       ...super.configuring,
@@ -317,15 +317,15 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return {
       end() {
         if (this.hasWarning) {
-          this.logger.warn('\nDocker Compose configuration generated, but no Jib cache found');
+          this.logger.warn('Docker Compose configuration generated, but no Jib cache found');
           this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.logger.warn(chalk.red(this.warningMessage));
+          this.logger.log(chalk.red(this.warningMessage));
         } else {
-          this.logger.info(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+          this.logger.info(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
         this.logger.info(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
         if (this.gatewayNb + this.monolithicNb > 1) {
-          this.logger.info('\nYour applications will be accessible on these URLs:');
+          this.logger.log('\nYour applications will be accessible on these URLs:');
           this.appConfigs.forEach(appConfig => {
             if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
               this.logger.info(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
