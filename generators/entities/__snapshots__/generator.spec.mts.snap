@@ -1,0 +1,772 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - entities regenerating all entities should match snapshot 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Skip.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Bar.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Foo.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Skip.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/BarRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/FooRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/SkipRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/BarResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/FooResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/SkipResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101210_added_entity_Foo.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101211_added_entity_Bar.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101212_added_entity_Skip.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/bar.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/foo.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/skip.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/service/bar.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/service/bar.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/detail/skip-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/detail/skip-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/detail/skip-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/list/skip.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/list/skip.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/list/skip.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/service/skip.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/service/skip.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/skip.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/skip.json": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/SkipResourceIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - entities regenerating selected entities with writeEveryEntity should match snapshot 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Skip.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Bar.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Foo.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Skip.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/BarRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/FooRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/SkipRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/BarResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/FooResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/SkipResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101210_added_entity_Foo.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101211_added_entity_Bar.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101212_added_entity_Skip.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/bar.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/foo.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/skip.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/service/bar.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/service/bar.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/detail/skip-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/detail/skip-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/detail/skip-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/list/skip.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/list/skip.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/list/skip.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/service/skip.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/service/skip.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/update/skip-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/skip.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/skip.json": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/SkipResourceIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - entities regenerating some entities should match snapshot 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Skip.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Bar.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Foo.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/BarRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/FooRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/BarResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/FooResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101210_added_entity_Foo.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101211_added_entity_Bar.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/bar.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/foo.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/detail/bar-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/list/bar.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/service/bar.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/service/bar.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/update/bar-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
