@@ -12,6 +12,8 @@ import getGenerator from './get-generator.mjs';
 import deploymentTestSamples from './deployment-samples.mjs';
 import { normalizePathEnd } from '../../generators/base/support/index.mjs';
 
+export { result, result as runResult } from 'yeoman-test';
+
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };

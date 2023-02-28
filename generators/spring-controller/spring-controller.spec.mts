@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import { getGenerator } from '../../test/support/index.mjs';
 
@@ -14,9 +13,9 @@ describe('generator - spring-controller', () => {
     });
 
     it('creates controller files', () => {
-      assert.file([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`]);
+      runResult.assertFile([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`]);
 
-      assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
+      runResult.assertFile([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
     });
   });
 
@@ -26,9 +25,9 @@ describe('generator - spring-controller', () => {
     });
 
     it('creates controller files', () => {
-      assert.file([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`]);
+      runResult.assertFile([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`]);
 
-      assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
+      runResult.assertFile([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
     });
   });
 

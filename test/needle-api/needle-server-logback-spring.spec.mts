@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
@@ -62,6 +61,6 @@ describe('needle API server log: JHipster server generator with blueprint', () =
   });
 
   it('Assert log is added to logback-spring.xml', () => {
-    assert.fileContent(filePath, '<logger name="org.test.logTest" level="OFF"/>');
+    runResult.assertFileContent(filePath, '<logger name="org.test.logTest" level="OFF"/>');
   });
 });

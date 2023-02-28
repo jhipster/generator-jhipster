@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { skipPrettierHelpers as helpers } from '../../test/support/index.mjs';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 
@@ -12,11 +11,11 @@ describe('generator - service', () => {
     });
 
     it('creates service file', () => {
-      assert.file([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`]);
+      runResult.assertFile([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`]);
     });
 
     it('doesnt create interface', () => {
-      assert.noFile([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`]);
+      runResult.assertNoFile([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`]);
     });
   });
 
@@ -28,7 +27,7 @@ describe('generator - service', () => {
     });
 
     it('creates service file', () => {
-      assert.file([
+      runResult.assertFile([
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
       ]);
@@ -41,7 +40,7 @@ describe('generator - service', () => {
     });
 
     it('creates service file', () => {
-      assert.file([
+      runResult.assertFile([
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
       ]);
