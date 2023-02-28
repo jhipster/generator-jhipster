@@ -1,6 +1,6 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { RunResult } from 'yeoman-test';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import BaseGenerator from './index.mjs';
 

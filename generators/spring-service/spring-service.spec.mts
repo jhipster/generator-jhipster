@@ -1,4 +1,4 @@
-import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 

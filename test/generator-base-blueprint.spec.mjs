@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions, max-classes-per-file */
 import sinon from 'sinon';
 import assert from 'assert';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { defaultHelpers as helpers } from './support/index.mjs';
 
 import BaseBlueprint from '../generators/base/index.mjs';
 

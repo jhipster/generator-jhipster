@@ -1,6 +1,6 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { dryRunHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.mjs';
 
 const expectedFiles = {

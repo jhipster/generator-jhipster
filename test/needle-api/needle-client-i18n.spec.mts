@@ -1,4 +1,4 @@
-import { skipPrettierHelpers as helpers, result as runResult } from '../support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../support/helpers.mjs';
 
 import LanguagesGenerator from '../../generators/languages/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
