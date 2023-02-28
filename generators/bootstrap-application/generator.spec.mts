@@ -127,9 +127,6 @@ describe(`generator - ${generator}`, () => {
 ",
     "stateCleared": "modified",
   },
-  ".jhipster/User.json": {
-    "contents": null,
-  },
 }
 `);
       });
