@@ -32,6 +32,7 @@ updates:
       - 'theme: dependencies'
       - 'skip-changelog'
       # Should match supported node major version.
+    ignore:
       - dependency-name: '@types/node'
         versions: ['>=17']
 
