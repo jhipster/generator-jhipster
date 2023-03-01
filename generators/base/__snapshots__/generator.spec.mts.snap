@@ -18,7 +18,6 @@ Options:
   --skip-checks                           Check the status of the required tools
   --experimental                          Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   -d, --debug                             Enable debugger
-  --bundled                               Use JHipster generators bundled with current cli
   -h, --help                              display help for command
 
 Commands:

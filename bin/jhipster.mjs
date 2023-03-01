@@ -6,4 +6,4 @@ import { join } from 'path';
 import { fileURLToPath } from 'url';
 import esbuildx from '@node-loaders/esbuildx';
 
-esbuildx(join(fileURLToPath(import.meta.url), '../../cli/cli.mjs'));
+esbuildx(join(fileURLToPath(import.meta.url), '../../cli/jhipster.mjs'));

@@ -18,8 +18,9 @@
  * limitations under the License.
  */
 import semver from 'semver';
-import path, { dirname } from 'path';
+import { dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
+import chalk from 'chalk';
 
 import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
@@ -30,53 +31,15 @@ const __dirname = dirname(__filename);
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
 
-const BUNDLED_VERSION_MESSAGE = 'Using bundled JHipster';
-const LOCAL_VERSION_MESSAGE = "Switching to JHipster installed locally in current project's node repository (node_modules)";
-
 if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
   logger.fatal(
     `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`
   );
 }
 
-const preferLocalArg = process.argv.includes('--prefer-local');
-const preferGlobalArg = process.argv.includes('--prefer-global') || process.argv.includes('--bundled');
-
-if (preferLocalArg && preferGlobalArg) {
-  throw new Error('--prefer-local and --prefer-bundled cannot be used together');
+if (relative(__dirname, process.cwd()).startsWith('..')) {
+  logger.warn(`Since JHipster v8, the jhipster command will not use the locally installed generator-jhipster.
+    If you want to execute the locally installed generator-jhipster, run: ${chalk.yellow('npx jhipster')}`);
 }
 
-// Don't use commander for parsing command line to avoid polluting it in cli.js
-// --prefer-local: Always resolve node modules locally (useful when using linked module)
-const preferLocal = preferLocalArg || (!preferGlobalArg && !process.argv.includes('upgrade'));
-
-await requireCLI(preferLocal);
-
-/*
- * Require cli.js giving priority to local version over bundled one if it exists.
- */
-async function requireCLI(preferLocal) {
-  let message = BUNDLED_VERSION_MESSAGE;
-  /* eslint-disable global-require */
-  if (preferLocal) {
-    try {
-      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'dist', 'cli', 'cli.mjs'));
-      if (__dirname === path.dirname(localCLI)) {
-        message = LOCAL_VERSION_MESSAGE;
-      } else {
-        // load local version
-        /* eslint-disable import/no-dynamic-require */
-        logger.info(LOCAL_VERSION_MESSAGE);
-        await import(localCLI);
-        // await import(pathToFileURL(localCLI).href);
-        return;
-      }
-    } catch (e) {
-      // Unable to find local version, so bundled one will be loaded anyway
-    }
-  }
-  // load current jhipster
-  logger.info(message);
-  await import('./cli.mjs');
-  /* eslint-enable  */
-}
+await import('./cli.mjs');
