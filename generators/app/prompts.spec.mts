@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import {
   applicationTypes,
   databaseTypes,
@@ -49,7 +48,7 @@ describe('generator - app - prompts', () => {
       });
 
       it('should write testFrameworks with cypress value to .yo-rc.json', () => {
-        assert.jsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [CYPRESS] } });
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [CYPRESS] } });
       });
     });
   });

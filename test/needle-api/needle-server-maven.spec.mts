@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
@@ -121,7 +120,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the dependency management added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '            <dependency>\n' +
         '                <groupId>dependencyManagementGroupId</groupId>\n' +
@@ -141,7 +140,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the repository added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '        <repository>\n' +
         '            <id>repoId</id>\n' +
@@ -153,7 +152,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the plugin repository added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '        <pluginRepository>\n' +
         '            <id>pluginRepoId</id>\n' +
@@ -164,7 +163,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the distributionManagement added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '    <distributionManagement>\n' +
         '        <snapshotRepository>\n' +
@@ -181,11 +180,11 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the property added', () => {
-    assert.fileContent('pom.xml', '<propertyName>propertyValue</propertyName>');
+    runResult.assertFileContent('pom.xml', '<propertyName>propertyValue</propertyName>');
   });
 
   it('Assert pom.xml has the dependency added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '        <dependency>\n' +
         '            <groupId>dependencyGroupId</groupId>\n' +
@@ -206,7 +205,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the dependency in directory added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '        <dependency>\n' +
         '            <groupId>directoryDependencyGroupId</groupId>\n' +
@@ -224,7 +223,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the maven plugin added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '            <plugin>\n' +
         '                <groupId>mavenPluginGroupId</groupId>\n' +
@@ -242,7 +241,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the maven plugin management added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '                <plugin>\n' +
         '                    <groupId>mavenPluginManagementGroupId</groupId>\n' +
@@ -260,7 +259,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the annotation processor added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '                            <path>\n' +
         '                                <groupId>annotationProcessorGroupId</groupId>\n' +
@@ -272,7 +271,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
   });
 
   it('Assert pom.xml has the profile added', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       'pom.xml',
       '        <profile>\n' +
         '            <id>profileId</id>\n' +

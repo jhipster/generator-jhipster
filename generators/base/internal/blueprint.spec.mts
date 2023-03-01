@@ -1,4 +1,5 @@
-import assert from 'yeoman-assert';
+import assert from 'assert';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { mergeBlueprints, normalizeBlueprintName, parseBluePrints, removeBlueprintDuplicates } from './blueprint.mjs';
 
 describe('generator - base - internal - blueprint', () => {
@@ -127,15 +128,15 @@ describe('generator - base - internal - blueprint', () => {
   describe('::normalizeBlueprintName', () => {
     it('adds generator-jhipster prefix if it is absent', () => {
       const generatorName = normalizeBlueprintName('foo');
-      assert.textEqual(generatorName, 'generator-jhipster-foo');
+      expect(generatorName).toBe('generator-jhipster-foo');
     });
     it('keeps generator-jhipster prefix if it is present', () => {
       const generatorName = normalizeBlueprintName('generator-jhipster-foo');
-      assert.textEqual(generatorName, 'generator-jhipster-foo');
+      expect(generatorName).toBe('generator-jhipster-foo');
     });
     it('adds generator-jhipster prefix for scoped package', () => {
       const generatorName = normalizeBlueprintName('@corp/foo');
-      assert.textEqual(generatorName, '@corp/generator-jhipster-foo');
+      expect(generatorName).toBe('@corp/generator-jhipster-foo');
     });
   });
 });

@@ -1,4 +1,4 @@
-import assert from 'yeoman-assert';
+import assert from 'assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
@@ -50,15 +50,15 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.consulregistry);
-      assert.fileContent('./ocp/registry/consul.yml', /a 24 chars base64 encoded string/);
+      runResult.assertFile(expectedFiles.consulregistry);
+      runResult.assertFileContent('./ocp/registry/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected scc files', () => {
-      assert.file(expectedFiles.sccconfig);
+      runResult.assertFile(expectedFiles.sccconfig);
     });
     it('creates expected gateway files and content', () => {
-      assert.file(expectedFiles.applcgw);
-      assert.fileContent('./ocp/jhgate/jhgate-deployment.yml', /image: ocrepo\/jhgate/);
+      runResult.assertFile(expectedFiles.applcgw);
+      runResult.assertFileContent('./ocp/jhgate/jhgate-deployment.yml', /image: ocrepo\/jhgate/);
     });
   });
 
@@ -89,16 +89,16 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
-      assert.file(expectedFiles.sccconfig);
+      runResult.assertFile(expectedFiles.sccconfig);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.applcgw);
+      runResult.assertFile(expectedFiles.applcgw);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
   });
 
@@ -129,19 +129,19 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
-      assert.file(expectedFiles.sccconfig);
+      runResult.assertFile(expectedFiles.sccconfig);
     });
     it("doesn't creates gateway files", () => {
-      assert.noFile(expectedFiles.applcgw);
+      runResult.assertNoFile(expectedFiles.applcgw);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('creates expected psql files', () => {
-      assert.file(expectedFiles.mspsql);
+      runResult.assertFile(expectedFiles.mspsql);
     });
   });
 
@@ -171,28 +171,28 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
-      assert.file(expectedFiles.sccconfig);
+      runResult.assertFile(expectedFiles.sccconfig);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.applcgw);
+      runResult.assertFile(expectedFiles.applcgw);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('creates expected psql files', () => {
-      assert.file(expectedFiles.mspsql);
+      runResult.assertFile(expectedFiles.mspsql);
     });
     it('creates expected mongodb files', () => {
-      assert.file(expectedFiles.msmongodb);
+      runResult.assertFile(expectedFiles.msmongodb);
     });
     it('creates expected cassandra files', () => {
-      assert.file(expectedFiles.mscassandra);
+      runResult.assertFile(expectedFiles.mscassandra);
     });
     it('creates expected mariadb files', () => {
-      assert.file(expectedFiles.msmariadb);
+      runResult.assertFile(expectedFiles.msmariadb);
     });
   });
 
@@ -222,10 +222,10 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected monolith files', () => {
-      assert.file(expectedFiles.monolith);
+      runResult.assertFile(expectedFiles.monolith);
     });
     it('creates expected scc files', () => {
-      assert.file(expectedFiles.sccconfig);
+      runResult.assertFile(expectedFiles.sccconfig);
     });
   });
 });

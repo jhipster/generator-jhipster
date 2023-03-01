@@ -1,4 +1,3 @@
-import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
@@ -130,15 +129,15 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(expectedFiles.consulregistry);
-        assert.fileContent('./registry-knative/consul.yml', /a 24 chars base64 encoded string/);
+        runResult.assertFile(expectedFiles.consulregistry);
+        runResult.assertFileContent('./registry-knative/consul.yml', /a 24 chars base64 encoded string/);
       });
       it('creates expected gateway files and content', () => {
-        assert.file(expectedFiles.jhgate);
-        // assert.fileContent('./jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
+        runResult.assertFile(expectedFiles.jhgate);
+        // runResult.assertFileContent('./jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -172,16 +171,16 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
-        assert.file(expectedFiles.jhgate);
+        runResult.assertFile(expectedFiles.jhgate);
       });
       it('creates expected mysql files', () => {
-        assert.file(expectedFiles.msmysql);
+        runResult.assertFile(expectedFiles.msmysql);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -215,16 +214,16 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
-        assert.file(expectedFiles.msmysql);
+        runResult.assertFile(expectedFiles.msmysql);
       });
       it('creates expected namespace file', () => {
-        assert.file(expectedFiles.customnamespace);
+        runResult.assertFile(expectedFiles.customnamespace);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -259,13 +258,13 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
-        assert.file(expectedFiles.jhgate);
+        runResult.assertFile(expectedFiles.jhgate);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -299,19 +298,19 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it("doesn't creates gateway files", () => {
-        assert.noFile(expectedFiles.jhgate);
+        runResult.assertNoFile(expectedFiles.jhgate);
       });
       it('creates expected mysql files', () => {
-        assert.file(expectedFiles.msmysql);
+        runResult.assertFile(expectedFiles.msmysql);
       });
       it('creates expected psql files', () => {
-        assert.file(expectedFiles.mspsql);
+        runResult.assertFile(expectedFiles.mspsql);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -345,28 +344,28 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
-        assert.file(expectedFiles.jhgate);
+        runResult.assertFile(expectedFiles.jhgate);
       });
       it('creates expected mysql files', () => {
-        assert.file(expectedFiles.msmysql);
+        runResult.assertFile(expectedFiles.msmysql);
       });
       it('creates expected psql files', () => {
-        assert.file(expectedFiles.mspsql);
+        runResult.assertFile(expectedFiles.mspsql);
       });
       it('creates expected mongodb files', () => {
-        assert.file(expectedFiles.msmongodb);
+        runResult.assertFile(expectedFiles.msmongodb);
       });
       it('creates expected mariadb files', () => {
-        assert.file(expectedFiles.msmariadb);
+        runResult.assertFile(expectedFiles.msmariadb);
       });
       it('creates expected mssql files', () => {
-        assert.file(expectedFiles.msmssqldb);
+        runResult.assertFile(expectedFiles.msmssqldb);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -399,19 +398,19 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
-        assert.file(expectedFiles.msmysql);
+        runResult.assertFile(expectedFiles.msmysql);
       });
       it('creates expected prometheus files', () => {
-        assert.file(expectedFiles.prometheusmonit);
+        runResult.assertFile(expectedFiles.prometheusmonit);
       });
       it('creates expected namespace file', () => {
-        assert.file(expectedFiles.customnamespace);
+        runResult.assertFile(expectedFiles.customnamespace);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
 
@@ -445,16 +444,16 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.consulregistry);
+        runResult.assertFile(expectedFiles.consulregistry);
       });
       it('creates expected service gateway files', () => {
-        assert.file(expectedFiles.jhgate);
+        runResult.assertFile(expectedFiles.jhgate);
       });
       it('creates expected routing gateway and istio files', () => {
-        assert.file(expectedFiles.jhgategateway);
+        runResult.assertFile(expectedFiles.jhgategateway);
       });
       it('create the apply script', () => {
-        assert.file(expectedFiles.applyScript);
+        runResult.assertFile(expectedFiles.applyScript);
       });
     });
   });
@@ -491,15 +490,15 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files and content', () => {
-        assert.file(helmExpectedFiles.jhgate);
-        assert.fileContent('./jhgate-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.jhgate);
+        runResult.assertFileContent('./jhgate-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -533,18 +532,18 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
-        assert.file(helmExpectedFiles.jhgate);
+        runResult.assertFile(helmExpectedFiles.jhgate);
       });
       it('creates expected mysql files', () => {
-        assert.file(helmExpectedFiles.msmysql);
-        assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.msmysql);
+        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -578,18 +577,18 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected mysql files', () => {
-        assert.file(helmExpectedFiles.msmysql);
-        assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.msmysql);
+        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected namespace file', () => {
-        assert.file(helmExpectedFiles.customnamespace);
+        runResult.assertFile(helmExpectedFiles.customnamespace);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -624,20 +623,20 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
-        assert.file(helmExpectedFiles.jhgate);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.jhgate);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected ingress files', () => {
-        assert.file(helmExpectedFiles.jhgate);
-        assert.file(helmExpectedFiles.csvcfiles);
-        assert.fileContent('./jhgate-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.jhgate);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
+        runResult.assertFileContent('./jhgate-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -671,23 +670,23 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it("doesn't creates gateway files", () => {
-        assert.noFile(helmExpectedFiles.jhgate);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertNoFile(helmExpectedFiles.jhgate);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected mysql files', () => {
-        assert.file(helmExpectedFiles.msmysql);
-        assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.msmysql);
+        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected psql files', () => {
-        assert.file(helmExpectedFiles.mspsql);
-        assert.fileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
+        runResult.assertFile(helmExpectedFiles.mspsql);
+        runResult.assertFileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -722,31 +721,31 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
-        assert.file(helmExpectedFiles.jhgate);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.jhgate);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected mysql files', () => {
-        assert.file(helmExpectedFiles.msmysql);
-        assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.msmysql);
+        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected psql files', () => {
-        assert.file(helmExpectedFiles.mspsql);
-        assert.fileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
+        runResult.assertFile(helmExpectedFiles.mspsql);
+        runResult.assertFileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
       });
       it('creates expected mongodb files', () => {
-        assert.file(helmExpectedFiles.msmongodb);
-        assert.fileContent('./msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
+        runResult.assertFile(helmExpectedFiles.msmongodb);
+        runResult.assertFileContent('./msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
       });
       it('creates expected mariadb files', () => {
-        assert.file(helmExpectedFiles.msmariadb);
-        assert.fileContent('./msmariadb-knative/requirements.yml', /name: mariadb/);
+        runResult.assertFile(helmExpectedFiles.msmariadb);
+        runResult.assertFileContent('./msmariadb-knative/requirements.yml', /name: mariadb/);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -779,22 +778,22 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
-        assert.file(helmExpectedFiles.msmysql);
-        assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFile(helmExpectedFiles.msmysql);
+        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected prometheus files', () => {
-        assert.file(helmExpectedFiles.csvcfiles);
-        assert.fileContent('./csvc-knative/requirements.yml', /name: prometheus/);
-        assert.fileContent('./csvc-knative/requirements.yml', /name: grafana/);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
+        runResult.assertFileContent('./csvc-knative/requirements.yml', /name: prometheus/);
+        runResult.assertFileContent('./csvc-knative/requirements.yml', /name: grafana/);
       });
       it('creates expected namespace file', () => {
-        assert.file(helmExpectedFiles.customnamespace);
+        runResult.assertFile(helmExpectedFiles.customnamespace);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
 
@@ -828,18 +827,18 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.consulregistry);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.consulregistry);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected service gateway files', () => {
-        assert.file(helmExpectedFiles.jhgate);
-        assert.file(helmExpectedFiles.csvcfiles);
+        runResult.assertFile(helmExpectedFiles.jhgate);
+        runResult.assertFile(helmExpectedFiles.csvcfiles);
       });
       it('creates expected routing gateway and istio files', () => {
-        assert.file(helmExpectedFiles.jhgategateway);
+        runResult.assertFile(helmExpectedFiles.jhgategateway);
       });
       it('create the apply script', () => {
-        assert.file(helmExpectedFiles.applyScript);
+        runResult.assertFile(helmExpectedFiles.applyScript);
       });
     });
   });

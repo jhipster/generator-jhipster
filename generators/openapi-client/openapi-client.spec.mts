@@ -1,4 +1,3 @@
-import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { basicHelpers as helpers } from '../../test/support/index.mjs';
@@ -141,7 +140,7 @@ describe('generator - OpenAPI Client', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates .openapi-generator-ignore-file', () => {
-      assert.file('.openapi-generator-ignore');
+      runResult.assertFile('.openapi-generator-ignore');
     });
   });
 
@@ -173,7 +172,7 @@ describe('generator - OpenAPI Client', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('has removed old client file', () => {
-      assert.noFile(`${basePackage}/client/petstore/api/PetsApiClientOld.java`);
+      runResult.assertNoFile(`${basePackage}/client/petstore/api/PetsApiClientOld.java`);
     });
   });
 });
