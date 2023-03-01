@@ -6,35 +6,104 @@ import Environment from 'yeoman-environment';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { mock, resetAllMocks, fn } from '@node-loaders/jest-mock';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
-import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
-import { createProgram } from '../../cli/program.mjs';
-import { prepareTempDir, copyFakeBlueprint, copyBlueprint } from '../support/index.mjs';
-import { getTemplatePath } from '../support/index.mjs';
+import { getCommand as actualGetCommonand } from './utils.mjs';
+import { createProgram } from './program.mjs';
 
-const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
-const { buildJHipster } = await import('../../cli/program.mjs');
+const { logger, getCommand } = await mock<typeof import('./utils.mjs')>('./utils.mjs');
+const { buildJHipster } = await import('./program.mjs');
 
 const __filename = fileURLToPath(import.meta.url);
-const jhipsterCli = join(dirname(__filename), '..', '..', 'bin', 'jhipster.mjs');
+const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.mjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
   return program.parseAsync(argv);
 };
 
+const cliBlueprintFiles = {
+  'cli/commands.js': `export default {
+  foo: {
+    blueprint: 'generator-jhipster-cli',
+    desc: 'Create a new foo.',
+    options: [
+      {
+        option: '--foo',
+        desc: 'foo description',
+      },
+    ],
+  },
+};
+`,
+  'cli/sharedOptions.js': `export default {
+  fooBar: 'barValue',
+};
+`,
+  'generators/foo/index.js': `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    constructor(args, opts, features) {
+      super(args, opts, features);
+
+      this.option('foo-bar', {
+        desc: 'Sample option',
+        type: Boolean,
+      });
+    }
+
+    get [BaseGenerator.INITIALIZING]() {
+      /* eslint-disable no-console */
+      console.log('Running foo');
+      if (this.options.fooBar) {
+        /* eslint-disable no-console */
+        console.log('Running bar');
+        console.log(this.options.fooBar);
+      }
+    }
+  };
+};
+`,
+};
+
+const cliSharedBlueprintFiles = {
+  'cli/commands.js': `export default {
+  bar: {
+    blueprint: 'generator-jhipster-cli-shared',
+    desc: 'Create a new bar.',
+  },
+};
+`,
+  'cli/sharedOptions.js': `export default {
+  fooBar: 'fooValue',
+  single: true,
+};
+`,
+  'generators/bar/index.js': `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    constructor(args, options) {
+      super(args, options);
+      this.option('foo', {
+        desc: 'foo description',
+        type: Boolean,
+      });
+    }
+    get [BaseGenerator.INITIALIZING]() {}
+  };
+};
+`,
+};
+
 describe('cli', () => {
   let argv;
-  let cleanup;
-  beforeEach(() => {
-    cleanup = prepareTempDir();
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
   });
   afterEach(() => {
     argv = undefined;
     resetAllMocks();
   });
-  afterEach(() => cleanup());
 
   it('--help should run without errors', done => {
     exec(`${jhipsterCli} --help`, (error, stdout, stderr) => {
@@ -90,7 +159,7 @@ describe('cli', () => {
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand);
 
-      const BaseGenerator = (await import('../../generators/base/index.mjs')).default;
+      const BaseGenerator = (await import('../generators/base/index.mjs')).default;
       env = Environment.createEnv();
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, namespace: 'jhipster:foo' });
       generator._options = {
@@ -316,9 +385,13 @@ describe('cli', () => {
     describe('delegating commands', () => {
       describe('to blueprint without commands', () => {
         let cbArgs;
+        beforeEach(async () => {
+          await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-bar', { generator: ['app', 'server'] }))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyFakeBlueprint(tmpdir, 'bar');
           exec(`${jhipsterCli} foo --blueprints bar`, (...args) => {
             cbArgs = args;
             done();
@@ -338,9 +411,14 @@ describe('cli', () => {
 
       describe('to multiple blueprints without commands', () => {
         let cbArgs;
+        beforeEach(async () => {
+          await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-bar'))
+            .withFiles(createBlueprintFiles('generator-jhipster-baz'))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyFakeBlueprint(tmpdir, 'bar', 'baz');
           exec(`${jhipsterCli} foo --blueprints bar,baz`, (...args) => {
             cbArgs = args;
             done();
@@ -363,10 +441,14 @@ describe('cli', () => {
     describe('loading sharedOptions', () => {
       describe('using blueprint with sharedOptions', () => {
         let stdout;
+        beforeEach(async () => {
+          const result = await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
+          const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout!.read().toString();
             done();
@@ -383,10 +465,15 @@ describe('cli', () => {
 
       describe('using multiple blueprints with sharedOptions', () => {
         let stdout;
+        beforeEach(async () => {
+          await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
+            .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: 'foo', files: cliSharedBlueprintFiles }))
+            .commitFiles();
+        });
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -405,9 +492,13 @@ describe('cli', () => {
     describe('loading options', () => {
       describe('using blueprint with cli option', () => {
         let stdout;
+        beforeEach(async () => {
+          const result = await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -426,10 +517,14 @@ describe('cli', () => {
 
       describe('using blueprint with custom generator option', () => {
         let stdout;
+        beforeEach(async () => {
+          await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: 'foo', files: cliSharedBlueprintFiles }))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
-          const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
+          const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
             done();
@@ -447,10 +542,36 @@ describe('cli', () => {
 
       describe('using blueprint with blueprinted generator option', () => {
         let stdout;
+        beforeEach(async () => {
+          await helpers
+            .prepareTemporaryDir()
+            .withFiles(
+              createBlueprintFiles('generator-jhipster-bar', {
+                generator: ['app'],
+                generatorContent: `export const createGenerator = async env => {
+    const BaseGenerator = await env.requireGenerator('jhipster:base');
+    return class extends BaseGenerator {
+      constructor(args, opts, features) {
+        super(args, opts, features);
+  
+        this.option('foo-bar', {
+          desc: 'Sample option',
+          type: Boolean,
+        });
+      }
+  
+      get [BaseGenerator.INITIALIZING]() {
+        return {};
+      }  
+    };
+  };
+  `,
+              })
+            )
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyFakeBlueprint(tmpdir, 'bar');
-          const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe', cwd: tmpdir });
+          const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
             done();
@@ -494,10 +615,14 @@ describe('cli', () => {
       describe('--help', () => {
         let stdout;
         let exitCode;
+        beforeEach(async () => {
+          const result = await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
+          const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;
             stdout = forked.stdout?.read().toString();
@@ -519,10 +644,14 @@ describe('cli', () => {
       describe('running it', () => {
         let stdout;
         let exitCode;
+        beforeEach(async () => {
+          const result = await helpers
+            .prepareTemporaryDir()
+            .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
+            .commitFiles();
+        });
         beforeEach(done => {
-          const tmpdir = process.cwd();
-          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
-          const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
+          const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;
             stdout = forked.stdout?.read().toString();

@@ -2,15 +2,13 @@
 
 import { expect } from 'chai';
 
-import { createProgram } from '../../cli/program.mjs';
-import { prepareTempDir } from '../support/index.mjs';
+import { createProgram } from './program.mjs';
+import { defaultHelpers as helpers } from '../test/support/index.mjs';
 
 describe('cli - program', () => {
-  let cleanup;
-  beforeEach(() => {
-    cleanup = prepareTempDir();
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
   });
-  afterEach(() => cleanup());
 
   describe('adding a negative option', () => {
     it('when executing should not set insight', () => {

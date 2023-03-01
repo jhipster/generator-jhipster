@@ -1,8 +1,0 @@
-{
-  "name": "generator-jhipster-myblueprint",
-  "version": "9.9.9",
-  "type": "module",
-  "peerDependencies": {
-    "generator-jhipster": "1.1.1"
-  }
-}
