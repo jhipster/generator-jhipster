@@ -38,7 +38,7 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
 }
 
 if (relative(__dirname, process.cwd()).startsWith('..')) {
-  logger.warn(`Since generator-jhipster v8, jhipster command will not redirect to the locally installed generator-jhipster.
+  logger.warn(`Since JHipster v8, the jhipster command will not use the locally installed generator-jhipster.
     If you want to execute the locally installed generator-jhipster run: ${chalk.yellow('npx jhipster')}`);
 }
 
