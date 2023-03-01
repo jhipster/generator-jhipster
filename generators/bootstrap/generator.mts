@@ -75,6 +75,14 @@ export default class BootstrapGenerator extends BaseGenerator {
       loadOptions() {
         this.parseJHipsterOptions(command.options);
       },
+      validateBlueprint() {
+        if (this.jhipsterConfig.blueprints && !this.skipChecks) {
+          this.jhipsterConfig.blueprints.forEach(blueprint => {
+            this._checkJHipsterBlueprintVersion(blueprint.name);
+            this._checkBlueprint(blueprint.name);
+          });
+        }
+      },
     });
   }
 

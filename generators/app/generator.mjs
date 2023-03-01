@@ -284,15 +284,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return {
-      validateBlueprint() {
-        if (this.jhipsterConfig.blueprints && !this.skipChecks) {
-          this.jhipsterConfig.blueprints.forEach(blueprint => {
-            this._checkJHipsterBlueprintVersion(blueprint.name);
-            this._checkBlueprint(blueprint.name);
-          });
-        }
-      },
-
       validateNode() {
         if (this.skipChecks) {
           return;
@@ -396,13 +387,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         this.setConfigDefaults();
 
         this._validateAppConfiguration();
-      },
-
-      saveBlueprintConfig() {
-        const config = {};
-        this.blueprints && (config.blueprints = this.blueprints);
-        this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
-        this.config.set(config);
       },
 
       async composePages() {
