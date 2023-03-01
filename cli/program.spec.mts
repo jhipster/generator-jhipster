@@ -2,8 +2,8 @@
 
 import { expect } from 'chai';
 
-import { createProgram } from '../../cli/program.mjs';
-import { defaultHelpers as helpers } from '../support/index.mjs';
+import { createProgram } from './program.mjs';
+import { defaultHelpers as helpers } from '../test/support/index.mjs';
 
 describe('cli - program', () => {
   beforeEach(async () => {

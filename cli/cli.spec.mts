@@ -6,16 +6,16 @@ import Environment from 'yeoman-environment';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { mock, resetAllMocks, fn } from '@node-loaders/jest-mock';
-import { basicHelpers as helpers, createBlueprintFiles } from '../support/index.mjs';
+import { basicHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
-import { getCommand as actualGetCommonand } from '../../cli/utils.mjs';
-import { createProgram } from '../../cli/program.mjs';
+import { getCommand as actualGetCommonand } from './utils.mjs';
+import { createProgram } from './program.mjs';
 
-const { logger, getCommand } = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
-const { buildJHipster } = await import('../../cli/program.mjs');
+const { logger, getCommand } = await mock<typeof import('./utils.mjs')>('./utils.mjs');
+const { buildJHipster } = await import('./program.mjs');
 
 const __filename = fileURLToPath(import.meta.url);
-const jhipsterCli = join(dirname(__filename), '..', '..', 'bin', 'jhipster.mjs');
+const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.mjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -159,7 +159,7 @@ describe('cli', () => {
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand);
 
-      const BaseGenerator = (await import('../../generators/base/index.mjs')).default;
+      const BaseGenerator = (await import('../generators/base/index.mjs')).default;
       env = Environment.createEnv();
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, namespace: 'jhipster:foo' });
       generator._options = {

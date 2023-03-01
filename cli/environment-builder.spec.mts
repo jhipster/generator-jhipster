@@ -21,9 +21,9 @@ import assert from 'assert';
 import { expect } from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
-import { basicHelpers as helpers, createBlueprintFiles } from '../support/index.mjs';
+import { basicHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import EnvironmentBuilder from './environment-builder.mjs';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
