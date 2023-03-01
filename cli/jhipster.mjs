@@ -39,7 +39,7 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
 
 if (relative(__dirname, process.cwd()).startsWith('..')) {
   logger.warn(`Since JHipster v8, the jhipster command will not use the locally installed generator-jhipster.
-    If you want to execute the locally installed generator-jhipster run: ${chalk.yellow('npx jhipster')}`);
+    If you want to execute the locally installed generator-jhipster, run: ${chalk.yellow('npx jhipster')}`);
 }
 
 await import('./cli.mjs');
