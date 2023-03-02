@@ -196,25 +196,27 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      loadPackageJson() {
-        // Load common client package.json into dependabotPackageJson
-        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'package.json')));
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('client', 'templates', 'package.json')
+        );
       },
 
-      configure() {
+      configure({ application }) {
         this.packageJson.merge({
           devDependencies: {
-            'eslint-plugin-cypress': this.dependabotPackageJson.devDependencies['eslint-plugin-cypress'],
+            'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
         });
       },
 
-      configureAudits({ application: { cypressAudit } }) {
-        if (!cypressAudit) return;
+      configureAudits({ application }) {
+        if (!application.cypressAudit) return;
         this.packageJson.merge({
           devDependencies: {
-            lighthouse: this.dependabotPackageJson.devDependencies.lighthouse,
-            'cypress-audit': this.dependabotPackageJson.devDependencies['cypress-audit'],
+            lighthouse: application.nodeDependencies.lighthouse,
+            'cypress-audit': application.nodeDependencies['cypress-audit'],
           },
           scripts: {
             'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.js',
@@ -225,14 +227,15 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
           },
         });
       },
-      configureCoverage({ application: { cypressCoverage, clientFramework, clientFrameworkAngular, dasherizedBaseName } }) {
+      configureCoverage({ application }) {
+        const { cypressCoverage, clientFramework, clientFrameworkAngular, dasherizedBaseName } = application;
         if (!cypressCoverage) return;
         this.packageJson.merge({
           devDependencies: {
-            '@cypress/code-coverage': this.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
-            'babel-loader': this.dependabotPackageJson.devDependencies['babel-loader'],
-            'babel-plugin-istanbul': this.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
-            nyc: this.dependabotPackageJson.devDependencies.nyc,
+            '@cypress/code-coverage': application.nodeDependencies['@cypress/code-coverage'],
+            'babel-loader': application.nodeDependencies['babel-loader'],
+            'babel-plugin-istanbul': application.nodeDependencies['babel-plugin-istanbul'],
+            nyc: application.nodeDependencies.nyc,
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',

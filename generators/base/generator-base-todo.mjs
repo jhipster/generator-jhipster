@@ -95,9 +95,6 @@ const isWin32 = os.platform() === 'win32';
  * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
-  /** @type {Record<string, any>} */
-  dependabotPackageJson;
-
   /**
    * @private
    * Add external resources to root file(index.html).
@@ -1377,17 +1374,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.logo = config.logo;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
-
-    config.nodeDependencies = config.nodeDependencies || {
-      prettier: packageJson.dependencies.prettier,
-      'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-      'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-    };
-    dest.nodeDependencies = config.nodeDependencies;
-
-    // Deprecated use nodeDependencies instead
-    config.dependabotPackageJson = config.dependabotPackageJson || {};
-    dest.dependabotPackageJson = config.dependabotPackageJson;
   }
 
   /**
@@ -1794,16 +1780,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   getR2DBCUrl(databaseType, options = {}) {
     return getR2dbcUrl(databaseType, options);
-  }
-
-  /**
-   * @experimental
-   * Load dependabot package.json into shared dependabot dependencies.
-   * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
-   * @param {string} packageJson - package.json path
-   */
-  loadDependabotDependencies(packageJson) {
-    const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
-    _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
   }
 }

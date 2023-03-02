@@ -85,15 +85,16 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         loadLanguagesConfig(application, this.jhipsterConfigWithDefaults, control);
       },
       loadNodeDependencies({ application }) {
-        const commonDependencies = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')) as any;
-        application.nodeDependencies = this.prepareDependencies({
-          ...(application.nodeDependencies ?? {}),
+        this.loadNodeDependencies(application.nodeDependencies, {
           prettier: packageJson.dependencies.prettier,
           'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
           'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-          ...(commonDependencies.dependencies ?? {}),
-          ...(commonDependencies.devDependencies ?? {}),
         });
+
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')
+        );
       },
     });
   }

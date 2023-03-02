@@ -473,6 +473,15 @@ export default class BaseGenerator extends YeomanGenerator {
     };
   }
 
+  loadNodeDependencies(destination: Record<string, string>, source: Record<string, string>): void {
+    Object.assign(destination, this.prepareDependencies(source));
+  }
+
+  loadNodeDependenciesFromPackageJson(destination: Record<string, string>, packageJsonFile: string): void {
+    const { devDependencies, dependencies } = this.fs.readJSON(packageJsonFile, {}) as any;
+    this.loadNodeDependencies(destination, { ...devDependencies, ...dependencies });
+  }
+
   /**
    * Print ValidationResult info/warnings or throw result Error.
    */

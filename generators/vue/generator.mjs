@@ -68,8 +68,11 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadPackageJson() {
-        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('vue', 'templates', 'package.json')));
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster(GENERATOR_VUE, 'templates', 'package.json')
+        );
       },
     });
   }
