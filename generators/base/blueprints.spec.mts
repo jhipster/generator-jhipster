@@ -1,9 +1,14 @@
+/* eslint-disable max-classes-per-file */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { fn, Mock } from 'jest-mock';
 import { RunResult } from 'yeoman-test';
-import { defaultHelpers as helpers } from '../../test/support/index.mjs';
+import { toHaveBeenCalledAfter } from 'jest-extended';
+
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import BaseGenerator from './index.mjs';
 
+expect.extend({ toHaveBeenCalledAfter });
 const jhipsterVersion = packageJson.version;
 
 describe('generator - base - with blueprint', () => {
@@ -242,6 +247,249 @@ describe('generator - base - local blueprint', () => {
     });
     it('blueprint module and version are in package.json', () => {
       runResult.assertFileContent('local-blueprint.txt', /This is a local blueprint/);
+    });
+  });
+});
+
+describe('generator - base-blueprint', () => {
+  const priorities = [
+    'initializing',
+    'prompting',
+    'configuring',
+    'composing',
+    'loading',
+    'preparing',
+    'default',
+    'writing',
+    'postWriting',
+    'install',
+    'end',
+  ];
+
+  const createPrioritiesFakes = (): Record<string, Mock> => {
+    const mockedPriorities: Record<string, Mock> = {};
+    priorities.forEach(priority => {
+      mockedPriorities[priority] = fn();
+    });
+    return mockedPriorities;
+  };
+
+  const createAllBlueprint = mockedPriorities => {
+    /**
+     * @class
+     * @extends {BaseGenerator}
+     */
+    return class extends BaseGenerator {
+      get initializing() {
+        return {
+          mockedInitializing() {
+            mockedPriorities.initializing();
+          },
+        };
+      }
+
+      get [BaseGenerator.INITIALIZING]() {
+        return this.initializing;
+      }
+
+      get prompting() {
+        return {
+          mockedPrompting() {
+            mockedPriorities.prompting();
+          },
+        };
+      }
+
+      get [BaseGenerator.PROMPTING]() {
+        return this.prompting;
+      }
+
+      get configuring() {
+        return {
+          mockedConfiguring() {
+            mockedPriorities.configuring();
+          },
+        };
+      }
+
+      get [BaseGenerator.CONFIGURING]() {
+        return this.configuring;
+      }
+
+      get composing() {
+        return {
+          mockedComposing() {
+            mockedPriorities.composing();
+          },
+        };
+      }
+
+      get [BaseGenerator.COMPOSING]() {
+        return this.composing;
+      }
+
+      get loading() {
+        return {
+          mockedLoading() {
+            mockedPriorities.loading();
+          },
+        };
+      }
+
+      get [BaseGenerator.LOADING]() {
+        return this.loading;
+      }
+
+      get preparing() {
+        return {
+          mockedPreparing() {
+            mockedPriorities.preparing();
+          },
+        };
+      }
+
+      get [BaseGenerator.PREPARING]() {
+        return this.preparing;
+      }
+
+      get default() {
+        return {
+          mockedDefault() {
+            mockedPriorities.default();
+          },
+        };
+      }
+
+      get [BaseGenerator.DEFAULT]() {
+        return this.default;
+      }
+
+      get writing() {
+        return {
+          mockedWriting() {
+            mockedPriorities.writing();
+          },
+        };
+      }
+
+      get [BaseGenerator.WRITING]() {
+        return this.writing;
+      }
+
+      get postWriting() {
+        return {
+          mockedPostWriting() {
+            mockedPriorities.postWriting();
+          },
+        };
+      }
+
+      get [BaseGenerator.POST_WRITING]() {
+        return this.postWriting;
+      }
+
+      get install() {
+        return {
+          mockedInstall() {
+            mockedPriorities.install();
+          },
+        };
+      }
+
+      get [BaseGenerator.INSTALL]() {
+        return this.install;
+      }
+
+      get end() {
+        return {
+          mockedEnd() {
+            mockedPriorities.end();
+          },
+        };
+      }
+
+      get [BaseGenerator.END]() {
+        return this.end;
+      }
+    };
+  };
+
+  describe('priorities', () => {
+    describe('when every priority has been implemented', () => {
+      let mockedPriorities: Record<string, Mock>;
+      let mockBlueprintSubGen;
+      before(() => {
+        mockedPriorities = createPrioritiesFakes();
+        mockBlueprintSubGen = createAllBlueprint(mockedPriorities);
+        return helpers.run(mockBlueprintSubGen);
+      });
+
+      priorities.forEach((priority, idx) => {
+        it(`should execute ${priority} once`, () => {
+          expect(mockedPriorities[priority]).toBeCalledTimes(1);
+        });
+        if (idx > 0) {
+          const priorityBefore = priorities[idx - 1];
+          it(`should execute ${priority} after ${priorityBefore} `, () => {
+            expect(mockedPriorities[priority]).toHaveBeenCalledAfter(mockedPriorities[priorityBefore]);
+          });
+        }
+      });
+    });
+
+    describe('when custom priorities are missing and the blueprint is sbs', () => {
+      let mockedPriorities;
+      let mockBlueprintSubGen;
+      before(() => {
+        mockedPriorities = createPrioritiesFakes();
+        mockBlueprintSubGen = class extends createAllBlueprint(mockedPriorities) {
+          constructor(args, opts, features) {
+            super(args, opts, features);
+            this.sbsBlueprint = true;
+          }
+
+          get [BaseGenerator.INITIALIZING]() {
+            return super.initializing;
+          }
+
+          get [BaseGenerator.PROMPTING]() {
+            return super.prompting;
+          }
+
+          get [BaseGenerator.CONFIGURING]() {
+            return super.configuring;
+          }
+
+          get [BaseGenerator.DEFAULT]() {
+            return super.default;
+          }
+
+          get [BaseGenerator.WRITING]() {
+            return super.writing;
+          }
+
+          get [BaseGenerator.INSTALL]() {
+            return super.install;
+          }
+
+          get [BaseGenerator.END]() {
+            return super.end;
+          }
+        };
+        return helpers.create(mockBlueprintSubGen).run();
+      });
+
+      priorities.forEach(priority => {
+        if (['composing', 'loading', 'preparing', 'postWriting'].includes(priority)) {
+          it(`should not execute ${priority}`, () => {
+            expect(mockedPriorities[priority]).not.toBeCalled();
+          });
+        } else {
+          it(`should execute ${priority} once`, () => {
+            expect(mockedPriorities[priority]).toBeCalledTimes(1);
+          });
+        }
+      });
     });
   });
 });
