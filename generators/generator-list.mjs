@@ -62,6 +62,7 @@ export const GENERATOR_LIQUIBASE = 'liquibase';
 export const GENERATOR_LIQUIBASE_CHANGELOGS = 'liquibase-changelogs';
 export const GENERATOR_MAVEN = 'maven';
 export const GENERATOR_MONGODB = 'mongodb';
+export const GENERATOR_NEO4J = 'neo4j';
 export const GENERATOR_OPENAPI_CLIENT = 'openapi-client';
 export const GENERATOR_OPENSHIFT = 'openshift';
 export const GENERATOR_PAGE = 'page';

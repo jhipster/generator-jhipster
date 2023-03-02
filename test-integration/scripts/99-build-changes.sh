@@ -99,6 +99,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/kafka' \
   'generators/maven' \
   'generators/mongodb' \
+  'generators/neo4j' \
   'generators/server' \
   'generators/spring-websocket' \
   'generators/sql' \

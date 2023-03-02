@@ -59,12 +59,6 @@ export const entityFiles = {
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.jakarta_validation'],
     },
-    {
-      condition: generator => generator.databaseTypeNeo4j,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_neo4j'],
-    },
   ],
 };
 

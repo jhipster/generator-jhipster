@@ -160,11 +160,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.8.1')) {
-    if (application.databaseTypeNeo4j) {
-      this.removeFile(`${application.javaPackageSrcDir}AbstractNeo4jIT.java`);
-    }
-  }
   if (this.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${DOCKER_DIR}realm-config/jhipster-users-0.json`);
     this.removeFile(`${application.javaPackageSrcDir}NoOpMailConfiguration.java`);
