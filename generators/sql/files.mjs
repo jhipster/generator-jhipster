@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { mergeSections, addSectionsCondition } from '../base/support/index.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './support/index.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
@@ -145,16 +145,10 @@ export const serverFiles = mergeSections(
 /**
  * @this {import('./index.mjs')}
  */
-export function writeSqlFiles() {
-  return this.asWritingTaskGroup({
-    async writeSqlFiles({ application }) {
-      if (!application.databaseTypeSql) return;
-
-      await this.writeFiles({
-        sections: serverFiles,
-        rootTemplatesPath: ['sql/reactive', 'sql/common'],
-        context: application,
-      });
-    },
+export default async function writeSqlFiles({ application }) {
+  await this.writeFiles({
+    sections: serverFiles,
+    rootTemplatesPath: ['sql/reactive', 'sql/common'],
+    context: application,
   });
 }

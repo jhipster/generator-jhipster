@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import cleanupSql from './cleanup-sql.mjs';
 import cleanupCacheProvider from './cleanup-cache-provider.mjs';
 import cleanupOauth2 from './cleanup-oauth2.mjs';
 import cleanupCucumber from './cleanup-cucumber.mjs';
@@ -31,9 +30,6 @@ import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.m
  */
 export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: ServerGeneratorDefinition['writingTaskParam']) {
   const { application } = taskParam;
-  if (application.databaseTypeSql) {
-    cleanupSql.call(this, taskParam);
-  }
   cleanupCacheProvider.call(this, taskParam as any);
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);

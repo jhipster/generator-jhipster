@@ -48,56 +48,6 @@ export const modelFiles = {
   ],
 };
 
-const sqlFiles = {
-  sqlFiles: [
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && !generator.embedded && generator.containsBagRelationships,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: [
-        'repository/_EntityClass_RepositoryWithBagRelationships.java',
-        'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_reactive'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_persistable'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_Callback.java'],
-    },
-  ],
-};
-
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
@@ -274,7 +224,6 @@ export const serverFiles = {
   ...serviceFiles,
   ...dtoFiles,
   ...gatlingFiles,
-  ...sqlFiles,
 };
 
 export function writeFiles() {

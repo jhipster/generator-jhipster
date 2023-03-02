@@ -49,10 +49,10 @@ import {
   GENERATOR_GRADLE,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
-  GENERATOR_LIQUIBASE,
   GENERATOR_MAVEN,
   GENERATOR_MONGODB,
   GENERATOR_SERVER,
+  GENERATOR_SQL,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -269,7 +269,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
         if (databaseType === SQL) {
-          await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+          await this.composeWithJHipster(GENERATOR_SQL);
         } else if (databaseType === CASSANDRA) {
           await this.composeWithJHipster(GENERATOR_CASSANDRA);
         } else if (databaseType === COUCHBASE) {
