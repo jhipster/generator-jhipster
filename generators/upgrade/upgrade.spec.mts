@@ -5,8 +5,10 @@ import _ from 'lodash';
 import { fileURLToPath } from 'url';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
+import { RunResult } from 'yeoman-test';
 import { packageJson } from '../../lib/index.mjs';
-import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
+import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.mjs';
+import { basicHelpers as helpers, getGenerator, result as runResult } from '../../test/support/index.mjs';
 
 const { escapeRegExp } = _;
 
@@ -15,22 +17,27 @@ const __dirname = dirname(__filename);
 
 describe('generator - upgrade', function () {
   describe('default application', () => {
-    let runResult;
+    let runResult: RunResult;
 
     before(async () => {
-      runResult = await helpers.run(path.join(__dirname, '../app/index.mjs')).withJHipsterConfig({
+      const VERSION_PLACEHOLDERS = process.env.VERSION_PLACEHOLDERS;
+      delete process.env.VERSION_PLACEHOLDERS;
+
+      runResult = await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig({
         skipClient: true,
         skipServer: true,
         baseName: 'upgradeTest',
       });
       runResult = await runResult
-        .create(path.join(__dirname, './index.mjs'))
+        .create(getGenerator(GENERATOR_UPGRADE))
         .withOptions({
           force: true,
           silent: false,
           targetVersion: packageJson.version,
         })
         .run();
+
+      process.env.VERSION_PLACEHOLDERS = VERSION_PLACEHOLDERS;
     });
 
     it('generated git commits to match snapshot', () => {
