@@ -261,7 +261,7 @@ _%>
 <%_
 fields.forEach((field) => {
   if (field.id || field.transient) return;
-  if (this.isFilterableType(field.fieldType)) { _%>
+  if (field.filterableField) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
                 builder.buildFilterConditionForField(criteria.get<%= field.fieldInJavaBeanMethod %>(), entityTable.column("<%= field.columnName %>"));
             }

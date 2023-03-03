@@ -21,6 +21,9 @@ import _ from 'lodash';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
 
+const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
+const TYPE_BYTE_BUFFER = fieldTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
+
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
 const { MYSQL, SQL } = databaseTypes;
@@ -136,4 +139,6 @@ export default function prepareField(entityWithConfig, field, generator) {
   } else {
     field.javaFieldType = field.fieldType;
   }
+
+  field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType);
 }
