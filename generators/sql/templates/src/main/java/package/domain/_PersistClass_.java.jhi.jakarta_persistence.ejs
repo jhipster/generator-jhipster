@@ -80,14 +80,14 @@ import org.hibernate.type.SqlTypes;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "<%= relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>
     @ManyToOne(<% if (relationship.relationshipRequired) { %>optional = false<% } else { %>fetch = FetchType.LAZY<% } %>)
-      <%_ if (relationship.relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationship }); -%>
+      <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
+    @NotNull
       <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { -%>
     @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>"<% } %>)
       <%_ if (relationship.ownerSide) { _%>
-        <%_ if (relationship.relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationship }); -%>
+        <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
+    @NotNull
         <%_ } _%>
     @JoinTable(name = "<%= relationship.joinTable.name %>",
                joinColumns = <%= primaryKey.fields.length > 1 ? '{' : '' %>
@@ -111,8 +111,8 @@ import org.hibernate.type.SqlTypes;
       <%_ } _%>
       <%_ if (relationship.ownerSide) { -%>
     @OneToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
-        <%_ if (relationship.relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationship }); -%>
+        <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
+    @NotNull
         <%_ } _%>
         <%_ if (relationship.id) { %>
     @MapsId

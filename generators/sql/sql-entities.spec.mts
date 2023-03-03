@@ -1,33 +1,25 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import lodash from 'lodash';
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from '../../test/support/index.mjs';
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import Generator from './index.mjs';
+import {
+  buildServerMatrix,
+  extendMatrix,
+  extendFilteredMatrix,
+  entitiesServerSamples as entities,
+  buildSamplesFromMatrix,
+} from '../../test/support/index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
-
-const { snakeCase } = lodash;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.mjs');
+import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 
-let sqlSamples = buildServerMatrix({
-  prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
-});
+let sqlSamples = buildServerMatrix();
 
 sqlSamples = extendMatrix(sqlSamples, {
+  prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
   enableHibernateCache: [false, true],
 });
 
@@ -56,29 +48,25 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
 });
 
 const testSamples = buildSamplesFromMatrix(sqlSamples, { commonConfig });
+const skipPriorities = ['writing', 'postWriting'];
 
-describe(`generator - ${databaseType}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
-  describe('blueprint support', () => testBlueprintSupport(generator));
-
+describe(`generator - ${databaseType} - entities`, () => {
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
   });
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
-    const { authenticationType, enableTranslation } = sampleConfig;
+    const { enableTranslation } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig(sampleConfig).withMockedGenerators(mockedGenerators);
+        runResult = await helpers
+          .runJHipster(GENERATOR_SERVER)
+          .withJHipsterConfig(sampleConfig, entities)
+          .withOptions({ skipPriorities })
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });
 
       after(() => runResult.cleanup());
@@ -95,14 +83,6 @@ describe(`generator - ${databaseType}`, () => {
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
-      it('contains correct authenticationType', () => {
-        runResult.assertFileContent('.yo-rc.json', new RegExp(`"authenticationType": "${authenticationType}"`));
-      });
-      it('contains correct databaseType', () => {
-        runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
-      });
-      shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithLiquibase(sampleConfig, () => runResult);
     });
   });
 });

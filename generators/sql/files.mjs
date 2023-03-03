@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { mergeSections, addSectionsCondition } from '../base/support/index.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './support/index.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
@@ -33,13 +33,7 @@ export const sqlFiles = {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/UserSqlHelper.java'],
-    },
-    {
-      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/rowmapper/UserRowMapper.java'],
+      templates: ['repository/UserSqlHelper_reactive.java', 'repository/rowmapper/UserRowMapper_reactive.java'],
     },
   ],
   reactiveCommon: [
@@ -47,7 +41,7 @@ export const sqlFiles = {
       condition: generator => generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/rowmapper/ColumnConverter.java', 'repository/EntityManager.java'],
+      templates: ['repository/rowmapper/ColumnConverter_reactive.java', 'repository/EntityManager_reactive.java'],
     },
   ],
   hibernate: [
@@ -145,16 +139,9 @@ export const serverFiles = mergeSections(
 /**
  * @this {import('./index.mjs')}
  */
-export function writeSqlFiles() {
-  return this.asWritingTaskGroup({
-    async writeSqlFiles({ application }) {
-      if (!application.databaseTypeSql) return;
-
-      await this.writeFiles({
-        sections: serverFiles,
-        rootTemplatesPath: ['sql/reactive', 'sql/common'],
-        context: application,
-      });
-    },
+export default async function writeSqlFiles({ application }) {
+  await this.writeFiles({
+    sections: serverFiles,
+    context: application,
   });
 }
