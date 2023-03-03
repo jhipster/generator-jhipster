@@ -44,6 +44,7 @@ import {
   GENERATOR_CASSANDRA,
   GENERATOR_COMMON,
   GENERATOR_COUCHBASE,
+  GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
   GENERATOR_ELASTICSEARCH,
   GENERATOR_GRADLE,
@@ -94,6 +95,7 @@ import {
   searchEngineTypes,
   messageBrokerTypes,
   clientFrameworkTypes,
+  testFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
 import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
@@ -114,6 +116,7 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
+const { CUCUMBER } = testFrameworkTypes;
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
@@ -253,7 +256,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -282,6 +285,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);
+        }
+        if (testFrameworks?.includes(CUCUMBER)) {
+          await this.composeWithJHipster(GENERATOR_CUCUMBER);
         }
       },
     });

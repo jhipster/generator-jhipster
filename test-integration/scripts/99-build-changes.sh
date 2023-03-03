@@ -92,6 +92,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
   'generators/cassandra' \
   'generators/couchbase' \
+  'generators/cucumber' \
   'generators/elasticsearch' \
   'generators/gradle' \
   'generators/kafka' \

@@ -248,6 +248,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/couchbase/templates/template-file-couchbase.ejs": {
     "stateCleared": "modified",
   },
+  "generators/cucumber/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cucumber/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cucumber/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cucumber/templates/template-file-cucumber.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/cypress/generator.mjs": {
     "stateCleared": "modified",
   },

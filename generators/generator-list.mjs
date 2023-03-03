@@ -36,6 +36,7 @@ export const GENERATOR_CLIENT = 'client';
 export const GENERATOR_CLOUDFOUNDRY = 'cloudfoundry';
 export const GENERATOR_COMMON = 'common';
 export const GENERATOR_COUCHBASE = 'couchbase';
+export const GENERATOR_CUCUMBER = 'cucumber';
 export const GENERATOR_CYPRESS = 'cypress';
 export const GENERATOR_DOCKER = 'docker';
 export const GENERATOR_DOCKER_COMPOSE = 'docker-compose';

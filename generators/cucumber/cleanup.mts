@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../base/index.mjs';
+import type Generator from './generator.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: BaseGenerator, application: any) {
+export default function cleanupTask(this: Generator, { application }: any) {
   if (this.isJhipsterVersionLessThan('7.4.2')) {
     this.removeFile(`${application.javaPackageTestDir}cucumber.properties`);
     this.removeFile(`${application.srcTestJava}features/gitkeep`);
