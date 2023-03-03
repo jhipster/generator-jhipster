@@ -434,12 +434,6 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/EmbeddedRedis.java', 'config/RedisTestContainer.java'],
     },
-    {
-      condition: generator => generator.communicationSpringWebsocket,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/WebsocketConfiguration.java', 'config/WebsocketSecurityConfiguration.java'],
-    },
   ],
   serverJavaDomain: [
     {
@@ -521,19 +515,6 @@ export const baseServerFiles = {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/filter/SpaWebFilterIT.java'],
-    },
-  ],
-  serverJavaWebsocket: [
-    {
-      condition: generator => generator.communicationSpringWebsocket,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'web/websocket/package-info.java',
-        'web/websocket/ActivityService.java',
-        'web/websocket/dto/package-info.java',
-        'web/websocket/dto/ActivityDTO.java',
-      ],
     },
   ],
   serverTestReactive: [

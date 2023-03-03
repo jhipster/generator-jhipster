@@ -69,6 +69,7 @@ export const GENERATOR_REACT = 'react';
 export const GENERATOR_SERVER = 'server';
 export const GENERATOR_SPRING_CONTROLLER = 'spring-controller';
 export const GENERATOR_SPRING_SERVICE = 'spring-service';
+export const GENERATOR_SPRING_WEBSOCKET = 'spring-websocket';
 export const GENERATOR_SQL = 'sql';
 export const GENERATOR_UPGRADE = 'upgrade';
 export const GENERATOR_VUE = 'vue';

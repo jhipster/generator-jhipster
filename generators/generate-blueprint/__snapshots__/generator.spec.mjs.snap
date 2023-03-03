@@ -641,6 +641,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-service/templates/template-file-spring-service.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-websocket/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/templates/template-file-spring-websocket.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/sql/generator.mjs": {
     "stateCleared": "modified",
   },

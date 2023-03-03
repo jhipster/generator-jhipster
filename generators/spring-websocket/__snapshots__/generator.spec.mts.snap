@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - spring-websocket with default config should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebsocketConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebsocketSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/websocket/ActivityService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/websocket/dto/ActivityDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/websocket/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/websocket/package-info.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
