@@ -9,16 +9,21 @@ import Generator from '../server/index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from '../server/__test-support/index.mjs';
-import { GENERATOR_SERVER } from '../generator-list.mjs';
+import {
+  mockedGenerators as serverGenerators,
+  shouldComposeWithKafka,
+  shouldComposeWithLiquibase,
+} from '../server/__test-support/index.mjs';
+import { GENERATOR_SERVER, GENERATOR_SQL } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
+
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SQL}`);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.mjs');
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

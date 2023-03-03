@@ -66,7 +66,7 @@ describe(`generator - ${databaseType} - entities`, () => {
           .runJHipster(GENERATOR_SERVER)
           .withJHipsterConfig(sampleConfig, entities)
           .withOptions({ skipPriorities })
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:cucumber', 'jhipster:liquibase']);
       });
 
       after(() => runResult.cleanup());

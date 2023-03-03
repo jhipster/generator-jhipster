@@ -18,7 +18,6 @@
  */
 import cleanupCacheProvider from './cleanup-cache-provider.mjs';
 import cleanupOauth2 from './cleanup-oauth2.mjs';
-import cleanupCucumber from './cleanup-cucumber.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
 import type BaseGenerator from '../base/index.mjs';
@@ -33,9 +32,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
   cleanupCacheProvider.call(this, taskParam as any);
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);
-  }
-  if ((application as any).cucumberTests) {
-    cleanupCucumber.call(this, taskParam);
   }
 
   if (this.isJhipsterVersionLessThan('3.5.0')) {
