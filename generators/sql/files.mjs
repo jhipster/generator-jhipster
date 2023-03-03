@@ -33,13 +33,7 @@ export const sqlFiles = {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/UserSqlHelper.java'],
-    },
-    {
-      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/rowmapper/UserRowMapper.java'],
+      templates: ['repository/UserSqlHelper_reactive.java', 'repository/rowmapper/UserRowMapper_reactive.java'],
     },
   ],
   reactiveCommon: [
@@ -47,7 +41,7 @@ export const sqlFiles = {
       condition: generator => generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/rowmapper/ColumnConverter.java', 'repository/EntityManager.java'],
+      templates: ['repository/rowmapper/ColumnConverter_reactive.java', 'repository/EntityManager_reactive.java'],
     },
   ],
   hibernate: [
@@ -148,7 +142,6 @@ export const serverFiles = mergeSections(
 export default async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,
-    rootTemplatesPath: ['sql/reactive', 'sql/common'],
     context: application,
   });
 }
