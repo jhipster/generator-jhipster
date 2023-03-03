@@ -1322,9 +1322,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/package/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4699,9 +4696,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
