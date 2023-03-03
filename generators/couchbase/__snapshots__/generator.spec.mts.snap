@@ -1846,18 +1846,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(false)-maven-enableT
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -2247,12 +2235,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -2329,12 +2311,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -4321,18 +4297,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -4692,12 +4656,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -4759,12 +4717,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {

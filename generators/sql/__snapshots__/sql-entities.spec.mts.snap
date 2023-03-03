@@ -568,18 +568,6 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -751,18 +739,6 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
 }
@@ -1342,18 +1318,6 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -1525,18 +1489,6 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
 }

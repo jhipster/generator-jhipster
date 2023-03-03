@@ -1738,18 +1738,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -2115,12 +2103,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -2194,12 +2176,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -4072,18 +4048,6 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -4428,12 +4392,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -4492,12 +4450,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {

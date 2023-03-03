@@ -2,7 +2,7 @@
 import assert from 'assert';
 
 import { messageBrokerTypes, databaseTypes } from '../../../jdl/jhipster/index.mjs';
-import { GENERATOR_CUCUMBER, GENERATOR_SQL } from '../../generator-list.mjs';
+import { GENERATOR_CUCUMBER, GENERATOR_GATLING, GENERATOR_SQL } from '../../generator-list.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
@@ -13,6 +13,7 @@ export const mockedGenerators = [
   'jhipster:couchbase',
   `jhipster:${GENERATOR_CUCUMBER}`,
   'jhipster:docker',
+  `jhipster:${GENERATOR_GATLING}`,
   'jhipster:gradle',
   'jhipster:kafka',
   'jhipster:languages',
