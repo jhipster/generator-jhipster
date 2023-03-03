@@ -23,8 +23,13 @@ import { GENERATOR_SQL, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE } f
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
+import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
+import { databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
 
-export default class SqlGenerator extends BaseApplicationGenerator {
+const { SQL } = databaseTypes;
+
+export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -42,6 +47,22 @@ export default class SqlGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ application, relationship }) {
+        if (application.reactive) {
+          relationship.relationshipSqlSafeName = isReservedTableName(relationship.relationshipName, SQL)
+            ? `e_${relationship.relationshipName}`
+            : relationship.relationshipName;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
   get writing() {

@@ -844,13 +844,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
-  _generateSqlSafeName(name) {
-    if (isReservedTableName(name, SQL)) {
-      return `e_${name}`;
-    }
-    return name;
-  }
-
   /**
    * Validate the entityTableName
    * @return {true|string} true for a valid value or error message.
