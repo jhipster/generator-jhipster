@@ -2,6 +2,7 @@
 import assert from 'assert';
 
 import { messageBrokerTypes, databaseTypes } from '../../../jdl/jhipster/index.mjs';
+import { GENERATOR_CUCUMBER, GENERATOR_SQL } from '../../generator-list.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
@@ -10,6 +11,7 @@ export const mockedGenerators = [
   'jhipster:cassandra',
   'jhipster:common',
   'jhipster:couchbase',
+  `jhipster:${GENERATOR_CUCUMBER}`,
   'jhipster:docker',
   'jhipster:gradle',
   'jhipster:kafka',
@@ -17,6 +19,7 @@ export const mockedGenerators = [
   'jhipster:liquibase',
   'jhipster:maven',
   'jhipster:mongodb',
+  `jhipster:${GENERATOR_SQL}`,
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {

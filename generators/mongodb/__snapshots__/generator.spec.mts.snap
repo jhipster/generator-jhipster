@@ -742,15 +742,6 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -827,9 +818,6 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
 }
@@ -1095,15 +1083,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -1165,9 +1144,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
 }
@@ -2950,15 +2926,6 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -3017,9 +2984,6 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/package/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -3731,15 +3695,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/test/java/com/package/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -3801,9 +3756,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/package/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {

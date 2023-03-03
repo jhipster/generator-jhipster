@@ -793,15 +793,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -883,9 +874,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -952,9 +940,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
@@ -1125,9 +1110,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/resources/.h2.server.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -1176,16 +1158,7 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
@@ -1195,18 +1168,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
@@ -1225,12 +1186,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
@@ -1281,12 +1236,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testdev.yml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testprod.yml": {
-    "stateCleared": "modified",
-  },
   "src/test/resources/config/application.yml": {
     "stateCleared": "modified",
   },
@@ -1294,9 +1243,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
 }
@@ -3271,15 +3217,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
@@ -3350,9 +3287,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/package/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -3433,9 +3367,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
@@ -3651,9 +3582,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/resources/.h2.server.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -3699,16 +3627,7 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
@@ -3726,9 +3645,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -3742,12 +3658,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
@@ -3811,12 +3721,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testdev.yml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testprod.yml": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -4205,15 +4109,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/package/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
@@ -4287,9 +4182,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/package/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -4373,9 +4265,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
@@ -4612,9 +4501,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/resources/.h2.server.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -4687,16 +4573,7 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
@@ -4709,9 +4586,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
@@ -4727,12 +4601,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
@@ -4790,12 +4658,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testdev.yml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testprod.yml": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {

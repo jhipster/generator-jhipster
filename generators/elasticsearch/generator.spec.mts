@@ -28,7 +28,7 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 
 import { databaseTypes, searchEngineTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
-import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from '../server/__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka } from '../server/__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -101,7 +101,6 @@ describe('generator - elasticsearch', () => {
         );
       });
       shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithLiquibase(sampleConfig, () => runResult);
     });
   });
 });
