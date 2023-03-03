@@ -353,6 +353,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/gae/templates/template-file-gae.ejs": {
     "stateCleared": "modified",
   },
+  "generators/gatling/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/gatling/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/gatling/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/gatling/templates/template-file-gatling.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/generate-blueprint/generator.mjs": {
     "stateCleared": "modified",
   },

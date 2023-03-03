@@ -45,6 +45,7 @@ export const GENERATOR_ENTITIES = 'entities';
 export const GENERATOR_ENTITY = 'entity';
 export const GENERATOR_EXPORT_JDL = 'export-jdl';
 export const GENERATOR_GAE = 'gae';
+export const GENERATOR_GATLING = 'gatling';
 export const GENERATOR_GENERATE_BLUEPRINT = 'generate-blueprint';
 export const GENERATOR_GIT = 'git';
 export const GENERATOR_GRADLE = 'gradle';

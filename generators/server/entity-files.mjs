@@ -189,21 +189,6 @@ export const dtoFiles = {
   ],
 };
 
-export const gatlingFiles = {
-  gatlingFiles: [
-    {
-      condition: generator => generator.gatlingTests,
-      path: TEST_DIR,
-      templates: [
-        {
-          file: 'java/gatling/simulations/_EntityClass_GatlingTest.java',
-          renameTo: generator => `java/gatling/simulations/${generator.entityClass}GatlingTest.java`,
-        },
-      ],
-    },
-  ],
-};
-
 export const serverFiles = {
   ...modelFiles,
   ...entityFiles,
@@ -213,7 +198,6 @@ export const serverFiles = {
   ...respositoryFiles,
   ...serviceFiles,
   ...dtoFiles,
-  ...gatlingFiles,
 };
 
 export function writeFiles() {

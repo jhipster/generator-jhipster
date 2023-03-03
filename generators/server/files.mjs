@@ -614,15 +614,6 @@ export const baseServerFiles = {
       templates: ['web/rest/LogoutResourceIT.java'],
     },
     {
-      condition: generator => generator.gatlingTests,
-      path: TEST_DIR,
-      templates: [
-        // Create Gatling test files
-        'gatling/conf/gatling.conf',
-        'gatling/conf/logback.xml',
-      ],
-    },
-    {
       condition: generator => generator.generateUserManagement,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,

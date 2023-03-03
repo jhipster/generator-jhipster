@@ -47,6 +47,7 @@ import {
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
   GENERATOR_ELASTICSEARCH,
+  GENERATOR_GATLING,
   GENERATOR_GRADLE,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
@@ -116,7 +117,7 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
-const { CUCUMBER } = testFrameworkTypes;
+const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -286,6 +287,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (testFrameworks?.includes(CUCUMBER)) {
           await this.composeWithJHipster(GENERATOR_CUCUMBER);
+        }
+        if (testFrameworks?.includes(GATLING)) {
+          await this.composeWithJHipster(GENERATOR_GATLING);
         }
       },
     });
