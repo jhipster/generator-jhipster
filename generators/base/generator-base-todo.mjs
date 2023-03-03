@@ -1092,7 +1092,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
-            assert(typeof fileSpec === 'object' || typeof fileSpec === 'string', `File must be an object or a string for ${fileSpecPath}`);
+            assert(
+              typeof fileSpec === 'object' || typeof fileSpec === 'string' || typeof fileSpec === 'function',
+              `File must be an object, a string or a function for ${fileSpecPath}`
+            );
+            if (typeof fileSpec === 'function') {
+              fileSpec = fileSpec.call(this, context);
+            }
             let { noEjs } = fileSpec;
             let derivedTransform;
             if (typeof blockTransform === 'boolean') {
@@ -1691,6 +1697,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+
+    dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
 
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);

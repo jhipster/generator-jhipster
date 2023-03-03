@@ -85,4 +85,6 @@ export type SpringBootApplication = CommonClientServerApplication &
     prettierJava: boolean;
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
+
+    imperativeOrReactive: string;
   };

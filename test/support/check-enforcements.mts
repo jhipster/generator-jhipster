@@ -27,8 +27,10 @@ import {
   GENERATOR_COMMON,
   GENERATOR_CYPRESS,
   GENERATOR_REACT,
+  GENERATOR_SERVER,
   GENERATOR_VUE,
-} from '../generators/generator-list.mjs';
+} from '../../generators/generator-list.mjs';
+import { getGeneratorFolder } from './get-generator.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,7 +38,7 @@ const __dirname = dirname(__filename);
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 
 const readDir = dirPath => {
-  const files = [];
+  const files: string[] = [];
   const dir = fs.opendirSync(dirPath);
   let dirent = dir.readSync();
   while (dirent !== null) {
@@ -52,52 +54,51 @@ const readDir = dirPath => {
   return files;
 };
 
-describe('enforce some developments patterns', () => {
-  describe('at client/common generators', () => {
-    const filesToTest = [
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CLIENT)),
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ANGULAR)),
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_REACT)),
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_VUE)),
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_COMMON)),
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CYPRESS)),
-    ].filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file));
-    filesToTest.forEach(file => {
-      describe(`file ${path.basename(file)}`, () => {
-        let content;
-        before(() => {
-          content = fse.readFileSync(file, 'utf-8');
-        });
+export default function checkEnforcements({ client }: { client?: boolean }, ...generators: string[]) {
+  describe('enforce some developments patterns', () => {
+    for (const generator of generators) {
+      const allFiles = readDir(getGeneratorFolder(generator));
+      allFiles
+        .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
+        .forEach(file => {
+          describe(`file ${path.basename(file)}`, () => {
+            let content;
+            before(() => {
+              content = fse.readFileSync(file, 'utf-8');
+            });
 
-        [
-          ['src/main/webapp', '<%= clientSrcDir %>'],
-          ['src/test/javascript', '<%= clientTestDir %>'],
-          ['jhiTranslate', '<%= jhiPrefix %>Translate'],
-          [' Java ', ' <%= backendType %> '],
-        ].forEach(([notSpected, replacement]) => {
-          const regex = new RegExp(notSpected, 'g');
-          const regexSeparator = new RegExp(`${notSpected}/`, 'g');
-          before(() => {
-            if (!fixEnforcements || !replacement) return;
-            if (file.endsWith('.ejs')) {
-              if (regexSeparator.test(content)) {
-                fse.writeFileSync(file, content.replace(regexSeparator, replacement));
-                content = fse.readFileSync(file, 'utf-8');
-              }
-              if (regex.test(content)) {
-                fse.writeFileSync(file, content.replace(regex, replacement));
-                content = fse.readFileSync(file, 'utf-8');
-              }
-            }
-          });
-          it(`should not contain ${notSpected}`, () => {
-            assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
+            [
+              ['src/main/webapp', '<%= clientSrcDir %>'],
+              ['src/test/javascript', '<%= clientTestDir %>'],
+              ...(client
+                ? [
+                    ['jhiTranslate', '<%= jhiPrefix %>Translate'],
+                    [' Java ', ' <%= backendType %> '],
+                  ]
+                : []),
+            ].forEach(([notSpected, replacement]) => {
+              const regex = new RegExp(notSpected, 'g');
+              const regexSeparator = new RegExp(`${notSpected}/`, 'g');
+              before(() => {
+                if (!fixEnforcements || !replacement) return;
+                if (file.endsWith('.ejs')) {
+                  if (regexSeparator.test(content)) {
+                    fse.writeFileSync(file, content.replace(regexSeparator, replacement));
+                    content = fse.readFileSync(file, 'utf-8');
+                  }
+                  if (regex.test(content)) {
+                    fse.writeFileSync(file, content.replace(regex, replacement));
+                    content = fse.readFileSync(file, 'utf-8');
+                  }
+                }
+              });
+              it(`should not contain ${notSpected}`, () => {
+                assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
+              });
+            });
           });
         });
-      });
-    });
-    ['server', 'client', 'common'].forEach(generator => {
-      const templateFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+      const templateFiles = allFiles
         .filter(file => file.endsWith('.ejs'))
         .filter(file => {
           return (
@@ -106,7 +107,7 @@ describe('enforce some developments patterns', () => {
             !/OAuth2.*RefreshTokensWebFilter.java.ejs/.test(file)
           );
         });
-      const jsFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+      const jsFiles = allFiles
         .filter(file => file.endsWith('.mjs') || file.endsWith('.mts') || file.endsWith('.ejs'))
         .sort((a, b) => {
           if (a.includes('files')) return -1;
@@ -118,7 +119,7 @@ describe('enforce some developments patterns', () => {
           return 0;
         });
       templateFiles.forEach(templateFile => {
-        const reference = basename(templateFile, '.ejs');
+        const reference = basename(templateFile, '.ejs').replace('_reactive.java', '_').replace('_imperative.java', '_');
         it(`${templateFile} must have referenced with ${reference}`, () => {
           const found = jsFiles.find(jsFile => {
             const content = readFileSync(jsFile).toString();
@@ -127,6 +128,6 @@ describe('enforce some developments patterns', () => {
           if (!found) throw new Error(`File ${templateFile} is not referenced`);
         });
       });
-    });
+    }
   });
-});
+}

@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildClientSamples, entitiesClientSamples as entities } from '../../test/support/index.mjs';
+import { buildClientSamples, entitiesClientSamples as entities, checkEnforcements } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
@@ -11,6 +11,7 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
+import { GENERATOR_REACT } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -52,6 +53,7 @@ describe(`generator - ${clientFramework}`, () => {
     expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({ client: true }, GENERATOR_REACT);
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();

@@ -311,6 +311,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
   "humanizedBaseName": "JHipster",
+  "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
@@ -793,6 +794,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
   "humanizedBaseName": "JHipster",
+  "imperativeOrReactive": "reactive",
   "incrementalChangelog": undefined,
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
@@ -1274,6 +1276,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
   "humanizedBaseName": "JHipster",
+  "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
