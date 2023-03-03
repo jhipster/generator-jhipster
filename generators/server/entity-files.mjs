@@ -139,16 +139,6 @@ export const respositoryFiles = {
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/_EntityClass_Repository_reactive.java'],
     },
-    {
-      condition: generator => generator.reactive && generator.databaseType === SQL && !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: [
-        'repository/_EntityClass_RepositoryInternalImpl_reactive.java',
-        'repository/_EntityClass_SqlHelper_reactive.java',
-        'repository/rowmapper/_EntityClass_RowMapper.java',
-      ],
-    },
   ],
 };
 

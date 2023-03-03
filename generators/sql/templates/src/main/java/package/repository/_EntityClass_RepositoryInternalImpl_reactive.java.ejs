@@ -109,7 +109,7 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(rel => { _%>
-    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= this._generateSqlSafeName(rel.relationshipName) %>");
+    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= rel.relationshipSqlSafeName %>");
 <%_ }); _%>
 
 <%_ relationships.forEach(rel => {
@@ -261,7 +261,7 @@ _%>
 <%_
 fields.forEach((field) => {
   if (field.id || field.transient) return;
-  if (this.isFilterableType(field.fieldType)) { _%>
+  if (field.filterableField) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
                 builder.buildFilterConditionForField(criteria.get<%= field.fieldInJavaBeanMethod %>(), entityTable.column("<%= field.columnName %>"));
             }
