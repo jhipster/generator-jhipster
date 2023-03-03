@@ -52,6 +52,7 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_SERVER": "server",
   "GENERATOR_SPRING_CONTROLLER": "spring-controller",
   "GENERATOR_SPRING_SERVICE": "spring-service",
+  "GENERATOR_SQL": "sql",
   "GENERATOR_UPGRADE": "upgrade",
   "GENERATOR_VUE": "vue",
   "GENERATOR_WORKSPACES": "workspaces",
