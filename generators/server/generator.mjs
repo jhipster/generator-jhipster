@@ -47,12 +47,14 @@ import {
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
   GENERATOR_ELASTICSEARCH,
+  GENERATOR_GATLING,
   GENERATOR_GRADLE,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
   GENERATOR_MONGODB,
   GENERATOR_SERVER,
+  GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SQL,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -116,7 +118,7 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
-const { CUCUMBER } = testFrameworkTypes;
+const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -125,7 +127,7 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
-const NO_WEBSOCKET = websocketTypes.NO;
+const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA } = messageBrokerTypes;
@@ -254,7 +256,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks, websocket } =
+          this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -286,6 +289,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (testFrameworks?.includes(CUCUMBER)) {
           await this.composeWithJHipster(GENERATOR_CUCUMBER);
+        }
+        if (testFrameworks?.includes(GATLING)) {
+          await this.composeWithJHipster(GENERATOR_GATLING);
+        }
+        if (websocket === SPRING_WEBSOCKET) {
+          await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
         }
       },
     });
