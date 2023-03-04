@@ -557,6 +557,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/mongodb/templates/template-file-mongodb.ejs": {
     "stateCleared": "modified",
   },
+  "generators/neo4j/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/neo4j/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/neo4j/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/neo4j/templates/template-file-neo4j.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/openapi-client/generator.mjs": {
     "stateCleared": "modified",
   },
