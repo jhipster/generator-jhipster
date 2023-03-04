@@ -22,7 +22,6 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import {
   getDBTypeFromDBValue,
@@ -34,7 +33,6 @@ import {
   formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
-  generatedAnnotationTransform,
   generateKeyStore,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -49,6 +47,7 @@ import {
   GENERATOR_ELASTICSEARCH,
   GENERATOR_GATLING,
   GENERATOR_GRADLE,
+  GENERATOR_JAVA,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
@@ -101,7 +100,6 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
 import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
-import checkJava from './support/checks/check-java.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 import command from './command.mjs';
 
@@ -163,6 +161,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     await this.dependsOnJHipster(GENERATOR_COMMON);
+    await this.dependsOnJHipster(GENERATOR_JAVA, { packageInfoFile: false });
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);
@@ -197,12 +196,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       loadConfig() {
         this.parseJHipsterOptions(command.options);
-      },
-
-      validateJava() {
-        if (!this.skipChecks) {
-          this.checkJava();
-        }
       },
 
       setupRequiredConfig() {
@@ -306,14 +299,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      generatedAnnotation({ application }) {
-        if (this.jhipsterConfig.withGeneratedFlag) {
-          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
-            name: 'adding @GeneratedByJHipster annotations',
-            streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
-          });
-        }
-      },
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
@@ -834,23 +819,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       config.prodDatabaseType = databaseType;
       config.enableHibernateCache = false;
     }
-  }
-
-  /**
-   * Check if a supported Java is installed
-   *
-   * Blueprints can customize or disable java checks versions by overriding this method.
-   * @example
-   * // disable checks
-   * checkJava() {}
-   * @examples
-   * // enforce java lts versions
-   * checkJava() {
-   *   super.checkJava(['8', '11', '17'], { throwOnError: true });
-   * }
-   */
-  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
-    this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   /**

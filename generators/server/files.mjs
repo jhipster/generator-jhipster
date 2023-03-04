@@ -358,11 +358,6 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/AsyncSyncConfiguration.java', 'IntegrationTest.java', 'config/SpringBootTestClassOrderer.java'],
     },
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['GeneratedByJHipster.java'],
-    },
   ],
   serverJavaConfig: [
     {
