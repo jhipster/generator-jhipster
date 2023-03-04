@@ -34,6 +34,7 @@ import {
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generateKeyStore,
+  addSpringFactory,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
@@ -101,7 +102,6 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
 import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
-import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 import command from './command.mjs';
 
 const dbTypes = fieldTypes;
@@ -381,6 +381,29 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
       },
+      registerSpringFactory({ source, application }) {
+        // We need a flag so we can recreate the file.
+        let testSpringFactoryCreated = false;
+        source.addTestSpringFactory = ({ key, value }) => {
+          const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
+          if (!testSpringFactoryCreated) {
+            testSpringFactoryCreated = true;
+            this.writeDestination(springFactoriesFile, '');
+          }
+          this.editFile(springFactoriesFile, addSpringFactory({ key, value }));
+        };
+
+        // We need a flag so we can recreate the file.
+        let mainSpringFactoryCreated = false;
+        source.addMainSpringFactory = ({ key, value }) => {
+          const springFactoriesFile = `${application.srcMainResources}META-INF/spring.factories`;
+          if (!mainSpringFactoryCreated) {
+            mainSpringFactoryCreated = true;
+            this.writeDestination(springFactoriesFile, '');
+          }
+          this.editFile(springFactoriesFile, addSpringFactory({ key, value }));
+        };
+      },
     });
   }
 
@@ -620,6 +643,23 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        if (
+          application.messageBrokerKafka ||
+          application.cacheProviderRedis ||
+          application.databaseTypeMongodb ||
+          application.databaseTypeCassandra ||
+          application.searchEngineElasticsearch ||
+          application.databaseTypeCouchbase ||
+          application.searchEngineCouchbase ||
+          application.databaseTypeNeo4j
+        ) {
+          source.addTestSpringFactory({
+            key: 'org.springframework.test.context.ContextCustomizerFactory',
+            value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
+          });
+        }
+      },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
@@ -994,13 +1034,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       return 'buildStringSpecification';
     }
     return 'buildSpecification';
-  }
-
-  /**
-   * @private
-   */
-  getDBCExtraOption(databaseType) {
-    return getDBExtraOption(databaseType);
   }
 
   getJavaValueGeneratorForType(type) {
