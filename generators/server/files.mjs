@@ -377,30 +377,6 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/ReactorConfiguration.java', 'config/LocaleConfiguration_reactive.java'],
     },
-    {
-      condition: generator =>
-        generator.cacheProviderEhCache ||
-        generator.cacheProviderCaffeine ||
-        generator.cacheProviderHazelcast ||
-        generator.cacheProviderInfinispan ||
-        generator.cacheProviderMemcached ||
-        generator.cacheProviderRedis,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/CacheConfiguration.java'],
-    },
-    {
-      condition: generator => generator.cacheProviderInfinispan,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/CacheFactoryConfiguration.java'],
-    },
-    {
-      condition: generator => generator.cacheProviderRedis,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['config/EmbeddedRedis.java', 'config/RedisTestContainer.java'],
-    },
   ],
   serverJavaDomain: [
     {

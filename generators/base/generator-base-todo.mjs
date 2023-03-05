@@ -1652,7 +1652,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.cacheProviderInfinispan = dest.cacheProvider === INFINISPAN;
     dest.cacheProviderMemcached = dest.cacheProvider === MEMCACHED;
     dest.cacheProviderRedis = dest.cacheProvider === REDIS;
-    application.cacheProviderAny = dest.cacheProvider && dest.cacheProvider !== NO_CACHE;
+    dest.cacheProviderAny = dest.cacheProvider && dest.cacheProvider !== NO_CACHE;
 
     dest.devDatabaseTypeH2Disk = dest.devDatabaseType === H2_DISK;
     dest.devDatabaseTypeH2Memory = dest.devDatabaseType === H2_MEMORY;

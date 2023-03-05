@@ -69,6 +69,7 @@ export const GENERATOR_PAGE = 'page';
 export const GENERATOR_PROJECT_NAME = 'project-name';
 export const GENERATOR_REACT = 'react';
 export const GENERATOR_SERVER = 'server';
+export const GENERATOR_SPRING_CACHE = 'spring-cache';
 export const GENERATOR_SPRING_CONTROLLER = 'spring-controller';
 export const GENERATOR_SPRING_SERVICE = 'spring-service';
 export const GENERATOR_SPRING_WEBSOCKET = 'spring-websocket';

@@ -55,6 +55,7 @@ import {
   GENERATOR_MONGODB,
   GENERATOR_NEO4J,
   GENERATOR_SERVER,
+  GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SQL,
 } from '../generator-list.mjs';
@@ -250,7 +251,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks, websocket } =
+        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks, websocket, cacheProvider } =
           this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
@@ -291,6 +292,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
+        }
+        if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider)) {
+          await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
         }
       },
     });
