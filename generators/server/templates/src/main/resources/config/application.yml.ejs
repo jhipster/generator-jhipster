@@ -110,7 +110,7 @@ management:
           - loggers
           - prometheus
           - threaddump
-<% if (cacheManagerIsAvailable) { -%>
+<% if (cacheProviderAny) { -%>
           - caches
 <% } -%>
 <% if (databaseTypeSql) { -%>

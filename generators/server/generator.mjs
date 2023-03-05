@@ -365,9 +365,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         // Application name modified, using each technology's conventions
         application.frontendAppName = this.getFrontendAppName(application.baseName);
         application.mainClass = this.getMainClassName(application.baseName);
-        application.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(
-          application.cacheProvider
-        );
         application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
 
         application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
