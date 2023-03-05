@@ -180,5 +180,20 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
       this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
     }
+    if (
+      application.databaseTypeSql ||
+      (application as any).messageBrokerKafka ||
+      (application as any).cacheProviderRedis ||
+      application.databaseTypeMongodb ||
+      application.databaseTypeCassandra ||
+      (application as any).searchEngineElasticsearch ||
+      application.databaseTypeCouchbase ||
+      (application as any).searchEngineCouchbase ||
+      application.databaseTypeNeo4j
+    ) {
+      // The condition is too complated, delete and recreate.
+      this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
+      this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
+    }
   }
 }

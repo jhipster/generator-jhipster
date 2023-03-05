@@ -60,7 +60,7 @@ export const sqlFiles = {
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java'],
+      templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java', 'config/SqlTestContainersSpringContextCustomizerFactory.java'],
     },
     {
       path: SERVER_TEST_RES_DIR,
