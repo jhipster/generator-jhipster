@@ -4121,9 +4121,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -4680,9 +4677,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -4842,16 +4836,10 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedRedis.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/RedisTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -5255,9 +5243,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -5805,9 +5790,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -6370,9 +6352,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -7018,9 +6997,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -7644,9 +7620,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -8275,12 +8248,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheFactoryConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -8914,9 +8881,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(false)-maven-en
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -9088,16 +9052,10 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(false)-maven-en
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedRedis.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/RedisTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -9546,9 +9504,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -10242,9 +10197,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -10470,16 +10422,10 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedRedis.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/RedisTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -11630,9 +11576,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -12310,12 +12253,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheFactoryConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -13012,9 +12949,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -13201,16 +13135,10 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedRedis.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/RedisTestContainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -13710,9 +13638,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -14398,9 +14323,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -15095,9 +15017,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -16461,9 +16380,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -17104,9 +17020,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -17739,12 +17652,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheFactoryConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -19007,9 +18914,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
