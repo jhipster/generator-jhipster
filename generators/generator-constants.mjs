@@ -48,7 +48,7 @@ export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 // Libraries version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-export const SPRING_BOOT_VERSION = '3.0.2';
+export const SPRING_BOOT_VERSION = '3.0.';
 // The spring-cloud version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 export const SPRING_CLOUD_VERSION = '2022.0.0';
 // The hibernate driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
