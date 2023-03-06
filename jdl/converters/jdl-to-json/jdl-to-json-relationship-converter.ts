@@ -120,7 +120,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName, conversion
             otherEntityName: camelCase(relationshipToConvert.from),
             relationshipType: _.kebabCase(MANY_TO_MANY),
             otherEntityRelationshipName: lowerFirst(relationshipToConvert.to),
-            ownerSide: true
+            ownerSide: true,
           };
           if (otherSplitField.otherEntityField) {
             otherSideRelationship.otherEntityField = lowerFirst(otherSplitField.otherEntityField);
