@@ -80,5 +80,8 @@ exports[`generator - spring-cache redis should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/config/RedisTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/RedisTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
 }
 `;

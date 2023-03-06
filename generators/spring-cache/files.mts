@@ -45,7 +45,11 @@ const files: WriteFileSection<Generator, any> = {
       condition: data => data.cacheProviderRedis,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/EmbeddedRedis.java', 'config/RedisTestContainer.java'],
+      templates: [
+        'config/EmbeddedRedis.java',
+        'config/RedisTestContainer.java',
+        'config/RedisTestContainersSpringContextCustomizerFactory.java',
+      ],
     },
   ],
 };

@@ -47,4 +47,21 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        if (application.cacheProviderRedis) {
+          source.addTestSpringFactory?.({
+            key: 'org.springframework.test.context.ContextCustomizerFactory',
+            value: `${application.packageName}.config.RedisTestContainersSpringContextCustomizerFactory`,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
 }
