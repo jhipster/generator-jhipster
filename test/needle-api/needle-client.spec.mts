@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
@@ -43,7 +42,7 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
   });
 
   it('Assert index.html contain the comment and the resource added', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css" />');
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css" />');
   });
 });

@@ -120,11 +120,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         application.clientPackageManager = 'npm';
       },
 
-      loadPackageJson() {
+      loadPackageJson({ application }) {
         // Load common client package.json into packageJson
-        _.merge(
-          this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json'))
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json')
         );
       },
     });
@@ -208,8 +208,8 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         }
 
         const devDependencies = packageJsonStorage.createStorage('devDependencies');
-        devDependencies.set('wait-on', this.dependabotPackageJson.devDependencies['wait-on']);
-        devDependencies.set('concurrently', this.dependabotPackageJson.devDependencies.concurrently);
+        devDependencies.set('wait-on', application.nodeDependencies['wait-on']);
+        devDependencies.set('concurrently', application.nodeDependencies.concurrently);
 
         if (application.clientFrameworkReact) {
           scriptsStorage.set('ci:frontend:test', 'npm run webapp:build:$npm_package_config_default_environment && npm run test-ci');

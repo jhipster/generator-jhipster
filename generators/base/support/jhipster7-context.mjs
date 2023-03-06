@@ -118,6 +118,10 @@ const deprecatedProperties = {
     replacement: 'anyPropertyHasValidation',
     get: ({ data }) => data.anyPropertyHasValidation,
   },
+  dependabotPackageJson: {
+    replacement: 'nodeDependencies',
+    get: ({ data }) => data.nodeDependencies,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

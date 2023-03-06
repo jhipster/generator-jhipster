@@ -1,4 +1,3 @@
-import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { GENERATOR_CI_CD } from '../generator-list.mjs';
@@ -50,13 +49,13 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.jenkins);
+        runResult.assertFile(expectedFiles.jenkins);
       });
       it("doesn't contain Docker, Sonar, Heroku", () => {
-        assert.noFileContent('Jenkinsfile', /docker/);
-        assert.noFileContent('Jenkinsfile', /sonar/);
-        assert.noFileContent('Jenkinsfile', /heroku/);
-        assert.noFileContent('Jenkinsfile', /snyk/);
+        runResult.assertNoFileContent('Jenkinsfile', /docker/);
+        runResult.assertNoFileContent('Jenkinsfile', /sonar/);
+        runResult.assertNoFileContent('Jenkinsfile', /heroku/);
+        runResult.assertNoFileContent('Jenkinsfile', /snyk/);
       });
     });
     describe('Jenkins: Gradle Angular NPM', () => {
@@ -76,13 +75,13 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.jenkins);
+        runResult.assertFile(expectedFiles.jenkins);
       });
       it("doesn't contain Docker, Sonar, Heroku", () => {
-        assert.noFileContent('Jenkinsfile', /docker/);
-        assert.noFileContent('Jenkinsfile', /sonar/);
-        assert.noFileContent('Jenkinsfile', /heroku/);
-        assert.noFileContent('Jenkinsfile', /snyk/);
+        runResult.assertNoFileContent('Jenkinsfile', /docker/);
+        runResult.assertNoFileContent('Jenkinsfile', /sonar/);
+        runResult.assertNoFileContent('Jenkinsfile', /heroku/);
+        runResult.assertNoFileContent('Jenkinsfile', /snyk/);
       });
     });
     describe('Jenkins: Maven Angular NPM with full options', () => {
@@ -108,16 +107,16 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.jenkins);
+        runResult.assertFile(expectedFiles.jenkins);
       });
       it('contains Docker, Sonar, Heroku', () => {
-        assert.fileContent('Jenkinsfile', /sonar/);
-        assert.fileContent('Jenkinsfile', /heroku/);
-        assert.fileContent('Jenkinsfile', /def dockerImage/);
-        assert.fileContent('Jenkinsfile', /snyk/);
+        runResult.assertFileContent('Jenkinsfile', /sonar/);
+        runResult.assertFileContent('Jenkinsfile', /heroku/);
+        runResult.assertFileContent('Jenkinsfile', /def dockerImage/);
+        runResult.assertFileContent('Jenkinsfile', /snyk/);
       });
       it('contains distributionManagement in pom.xml', () => {
-        assert.fileContent('pom.xml', /distributionManagement/);
+        runResult.assertFileContent('pom.xml', /distributionManagement/);
       });
     });
     describe('Jenkins: Maven Angular NPM inside Docker', () => {
@@ -143,14 +142,14 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.jenkins);
+        runResult.assertFile(expectedFiles.jenkins);
       });
       it('contains Docker, Sonar, Heroku, dockerImage', () => {
-        assert.fileContent('Jenkinsfile', /docker/);
-        assert.fileContent('Jenkinsfile', /sonar/);
-        assert.fileContent('Jenkinsfile', /heroku/);
-        assert.fileContent('Jenkinsfile', /def dockerImage/);
-        assert.fileContent('Jenkinsfile', /snyk/);
+        runResult.assertFileContent('Jenkinsfile', /docker/);
+        runResult.assertFileContent('Jenkinsfile', /sonar/);
+        runResult.assertFileContent('Jenkinsfile', /heroku/);
+        runResult.assertFileContent('Jenkinsfile', /def dockerImage/);
+        runResult.assertFileContent('Jenkinsfile', /snyk/);
       });
     });
   });
@@ -176,13 +175,13 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.gitlab);
       });
       it("doesn't contain image: jhipster, Sonar, Heroku", () => {
-        assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
-        assert.noFileContent('.gitlab-ci.yml', /sonar/);
-        assert.noFileContent('.gitlab-ci.yml', /heroku/);
-        assert.noFileContent('.gitlab-ci.yml', /snyk/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /sonar/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /heroku/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /snyk/);
       });
     });
     describe('GitLab CI: Gradle Angular NPM', () => {
@@ -201,13 +200,13 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.gitlab);
       });
       it("doesn't contain jhipster/jhipster, Sonar, Heroku", () => {
-        assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
-        assert.noFileContent('.gitlab-ci.yml', /sonar/);
-        assert.noFileContent('.gitlab-ci.yml', /heroku/);
-        assert.noFileContent('.gitlab-ci.yml', /snyk/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /sonar/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /heroku/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /snyk/);
       });
     });
     describe('GitLab CI: npm skip server', () => {
@@ -227,10 +226,10 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.gitlab);
       });
       it('contains image: jhipster', () => {
-        assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertFileContent('.gitlab-ci.yml', /image: jhipster/);
       });
     });
     describe('GitLab CI: Maven Angular NPM with full options', () => {
@@ -256,16 +255,16 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.gitlab);
       });
       it('contains Sonar, Heroku', () => {
-        assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
-        assert.fileContent('.gitlab-ci.yml', /sonar/);
-        assert.fileContent('.gitlab-ci.yml', /heroku/);
-        assert.fileContent('.gitlab-ci.yml', /snyk/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertFileContent('.gitlab-ci.yml', /sonar/);
+        runResult.assertFileContent('.gitlab-ci.yml', /heroku/);
+        runResult.assertFileContent('.gitlab-ci.yml', /snyk/);
       });
       it('contains distributionManagement in pom.xml', () => {
-        assert.fileContent('pom.xml', /distributionManagement/);
+        runResult.assertFileContent('pom.xml', /distributionManagement/);
       });
     });
     describe('GitLab CI: Maven Angular NPM inside Docker', () => {
@@ -291,16 +290,16 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.gitlab);
       });
       it('contains image: jhipster, Sonar, Heroku', () => {
-        assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
-        assert.fileContent('.gitlab-ci.yml', /sonar/);
-        assert.fileContent('.gitlab-ci.yml', /heroku/);
-        assert.fileContent('.gitlab-ci.yml', /snyk/);
+        runResult.assertFileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertFileContent('.gitlab-ci.yml', /sonar/);
+        runResult.assertFileContent('.gitlab-ci.yml', /heroku/);
+        runResult.assertFileContent('.gitlab-ci.yml', /snyk/);
       });
       it('contains distributionManagement in pom.xml', () => {
-        assert.fileContent('pom.xml', /distributionManagement/);
+        runResult.assertFileContent('pom.xml', /distributionManagement/);
       });
     });
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
@@ -316,13 +315,13 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.gitlab);
       });
       it('contains image: jhipster, Sonar, Heroku', () => {
-        assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
-        assert.noFileContent('.gitlab-ci.yml', /sonar/);
-        assert.noFileContent('.gitlab-ci.yml', /heroku/);
-        assert.noFileContent('.gitlab-ci.yml', /snyk/);
+        runResult.assertFileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /sonar/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /heroku/);
+        runResult.assertNoFileContent('.gitlab-ci.yml', /snyk/);
       });
     });
   });
@@ -347,11 +346,11 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.travis);
+        runResult.assertFile(expectedFiles.travis);
       });
       it("doesn't contain Sonar, Heroku", () => {
-        assert.noFileContent('.travis.yml', /sonar/);
-        assert.noFileContent('.travis.yml', /heroku/);
+        runResult.assertNoFileContent('.travis.yml', /sonar/);
+        runResult.assertNoFileContent('.travis.yml', /heroku/);
       });
     });
     describe('Travis CI: Gradle Angular NPM', () => {
@@ -370,15 +369,15 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.travis);
+        runResult.assertFile(expectedFiles.travis);
       });
       it("doesn't contain Sonar, Heroku", () => {
-        assert.noFileContent('.travis.yml', /sonar/);
-        assert.noFileContent('.travis.yml', /heroku/);
+        runResult.assertNoFileContent('.travis.yml', /sonar/);
+        runResult.assertNoFileContent('.travis.yml', /heroku/);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.travis.yml', /run ci:e2e:package/);
-        assert.fileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: false/);
+        runResult.assertFileContent('.travis.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: false/);
       });
     });
     describe('Travis CI: Maven Angular NPM with full options', () => {
@@ -403,19 +402,19 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.travis);
+        runResult.assertFile(expectedFiles.travis);
       });
       it('contains Sonar, Heroku, Snyk', () => {
-        assert.fileContent('.travis.yml', /sonar/);
-        assert.fileContent('.travis.yml', /heroku/);
-        assert.fileContent('.travis.yml', /snyk/);
+        runResult.assertFileContent('.travis.yml', /sonar/);
+        runResult.assertFileContent('.travis.yml', /heroku/);
+        runResult.assertFileContent('.travis.yml', /snyk/);
       });
       it('contains distributionManagement in pom.xml', () => {
-        assert.fileContent('pom.xml', /distributionManagement/);
+        runResult.assertFileContent('pom.xml', /distributionManagement/);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.travis.yml', /run ci:e2e:package/);
-        assert.fileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: true/);
+        runResult.assertFileContent('.travis.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: true/);
       });
     });
   });
@@ -440,13 +439,13 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.azure);
+        runResult.assertFile(expectedFiles.azure);
       });
       it('contains Cypress', () => {
-        assert.fileContent('azure-pipelines.yml', /run ci:e2e:package/);
-        assert.fileContent('azure-pipelines.yml', /CYPRESS_ENABLE_RECORD: true/);
-        assert.fileContent('azure-pipelines.yml', /CYPRESS_PROJECT_ID/);
-        assert.fileContent('azure-pipelines.yml', /CYPRESS_RECORD_KEY/);
+        runResult.assertFileContent('azure-pipelines.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('azure-pipelines.yml', /CYPRESS_ENABLE_RECORD: true/);
+        runResult.assertFileContent('azure-pipelines.yml', /CYPRESS_PROJECT_ID/);
+        runResult.assertFileContent('azure-pipelines.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM', () => {
@@ -465,11 +464,11 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.azure);
+        runResult.assertFile(expectedFiles.azure);
       });
       it('contains Cypress', () => {
-        assert.fileContent('azure-pipelines.yml', /run ci:e2e:package/);
-        assert.fileContent('azure-pipelines.yml', /CYPRESS_ENABLE_RECORD: false/);
+        runResult.assertFileContent('azure-pipelines.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('azure-pipelines.yml', /CYPRESS_ENABLE_RECORD: false/);
       });
     });
     describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
@@ -488,10 +487,10 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.azure);
+        runResult.assertFile(expectedFiles.azure);
       });
       it('contains Snyk', () => {
-        assert.fileContent('azure-pipelines.yml', /snyk/);
+        runResult.assertFileContent('azure-pipelines.yml', /snyk/);
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
@@ -510,10 +509,10 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.azure);
+        runResult.assertFile(expectedFiles.azure);
       });
       it('contains Snyk', () => {
-        assert.fileContent('azure-pipelines.yml', /snyk/);
+        runResult.assertFileContent('azure-pipelines.yml', /snyk/);
       });
     });
     describe('Azure Pipelines: autoconfigure', () => {
@@ -529,7 +528,7 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.azure);
+        runResult.assertFile(expectedFiles.azure);
       });
     });
   });
@@ -554,7 +553,7 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.github);
+        runResult.assertFile(expectedFiles.github);
       });
     });
     describe('GitHub Actions: Gradle Angular NPM', () => {
@@ -573,7 +572,7 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.github);
+        runResult.assertFile(expectedFiles.github);
       });
     });
     describe('GitHub Actions: Maven Angular NPM with full options', () => {
@@ -599,22 +598,22 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.github);
+        runResult.assertFile(expectedFiles.github);
       });
       it('contains Docker, Sonar, Heroku, Snyk', () => {
-        assert.fileContent('.github/workflows/main.yml', /mvnw.*sonar.com/);
-        assert.fileContent('.github/workflows/main.yml', /mvnw.*jhipster-publish-docker/);
-        assert.fileContent('.github/workflows/main.yml', /mvnw.*sample-mysql/);
-        assert.fileContent('.github/workflows/main.yml', /snyk/);
+        runResult.assertFileContent('.github/workflows/main.yml', /mvnw.*sonar.com/);
+        runResult.assertFileContent('.github/workflows/main.yml', /mvnw.*jhipster-publish-docker/);
+        runResult.assertFileContent('.github/workflows/main.yml', /mvnw.*sample-mysql/);
+        runResult.assertFileContent('.github/workflows/main.yml', /snyk/);
       });
       it('contains distributionManagement in pom.xml', () => {
-        assert.fileContent('pom.xml', /distributionManagement/);
+        runResult.assertFileContent('pom.xml', /distributionManagement/);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.github/workflows/main.yml', /run ci:e2e:package/);
-        assert.fileContent('.github/workflows/main.yml', /CYPRESS_ENABLE_RECORD: true/);
-        assert.fileContent('.github/workflows/main.yml', /CYPRESS_PROJECT_ID/);
-        assert.fileContent('.github/workflows/main.yml', /CYPRESS_RECORD_KEY/);
+        runResult.assertFileContent('.github/workflows/main.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('.github/workflows/main.yml', /CYPRESS_ENABLE_RECORD: true/);
+        runResult.assertFileContent('.github/workflows/main.yml', /CYPRESS_PROJECT_ID/);
+        runResult.assertFileContent('.github/workflows/main.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
@@ -635,19 +634,19 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.github);
+        runResult.assertFile(expectedFiles.github);
       });
       it('contains Docker, Sonar, Heroku', () => {
-        assert.fileContent('.github/workflows/main.yml', /gradlew.*jhipster-publish-docker/);
-        assert.fileContent('.github/workflows/main.yml', /gradlew.*sonar.com/);
-        assert.fileContent('.github/workflows/main.yml', /gradlew.*deployHeroku/);
-        assert.fileContent('.github/workflows/main.yml', /snyk/);
+        runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*jhipster-publish-docker/);
+        runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*sonar.com/);
+        runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*deployHeroku/);
+        runResult.assertFileContent('.github/workflows/main.yml', /snyk/);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.github/workflows/main.yml', /run ci:e2e:package/);
-        assert.fileContent('.github/workflows/main.yml', /CYPRESS_ENABLE_RECORD: false/);
-        assert.fileContent('.github/workflows/main.yml', /CYPRESS_PROJECT_ID/);
-        assert.fileContent('.github/workflows/main.yml', /CYPRESS_RECORD_KEY/);
+        runResult.assertFileContent('.github/workflows/main.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('.github/workflows/main.yml', /CYPRESS_ENABLE_RECORD: false/);
+        runResult.assertFileContent('.github/workflows/main.yml', /CYPRESS_PROJECT_ID/);
+        runResult.assertFileContent('.github/workflows/main.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('GitHub Actions: autoconfigure', () => {
@@ -663,7 +662,7 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.github);
+        runResult.assertFile(expectedFiles.github);
       });
     });
   });
@@ -688,14 +687,14 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.circle);
-        assert.noFile(expectedFiles.jenkins);
-        assert.noFile(expectedFiles.travis);
-        assert.noFile(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.circle);
+        runResult.assertNoFile(expectedFiles.jenkins);
+        runResult.assertNoFile(expectedFiles.travis);
+        runResult.assertNoFile(expectedFiles.gitlab);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.circleci/config.yml', /run ci:e2e:package/);
-        assert.fileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: true/);
+        runResult.assertFileContent('.circleci/config.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: true/);
       });
     });
     describe('Circle CI: Gradle Angular NPM', () => {
@@ -714,14 +713,14 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.circle);
-        assert.noFile(expectedFiles.jenkins);
-        assert.noFile(expectedFiles.travis);
-        assert.noFile(expectedFiles.gitlab);
+        runResult.assertFile(expectedFiles.circle);
+        runResult.assertNoFile(expectedFiles.jenkins);
+        runResult.assertNoFile(expectedFiles.travis);
+        runResult.assertNoFile(expectedFiles.gitlab);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.circleci/config.yml', /run ci:e2e:package/);
-        assert.fileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: false/);
+        runResult.assertFileContent('.circleci/config.yml', /run ci:e2e:package/);
+        runResult.assertFileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: false/);
       });
     });
     describe('Circle CI: Maven with Snyk', () => {
@@ -740,10 +739,10 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.circle);
+        runResult.assertFile(expectedFiles.circle);
       });
       it('contains Snyk', () => {
-        assert.fileContent('.circleci/config.yml', /snyk/);
+        runResult.assertFileContent('.circleci/config.yml', /snyk/);
       });
     });
     describe('Circle CI: Gradle with Snyk', () => {
@@ -762,10 +761,10 @@ describe('generator - CI-CD', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
-        assert.file(expectedFiles.circle);
+        runResult.assertFile(expectedFiles.circle);
       });
       it('contains Snyk', () => {
-        assert.fileContent('.circleci/config.yml', /snyk/);
+        runResult.assertFileContent('.circleci/config.yml', /snyk/);
       });
     });
   });

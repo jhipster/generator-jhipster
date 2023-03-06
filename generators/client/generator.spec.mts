@@ -24,8 +24,9 @@ import assert from 'assert';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, checkEnforcements } from '../../test/support/index.mjs';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_CLIENT } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 const { CYPRESS } = testFrameworkTypes;
@@ -45,6 +46,7 @@ describe(`generator - ${generator}`, () => {
     expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({ client: true }, GENERATOR_CLIENT);
 
   describe('composing', () => {
     const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];

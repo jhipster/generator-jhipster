@@ -68,10 +68,10 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadPackageJson() {
-        _.merge(
-          this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_REACT, 'templates', 'package.json'))
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'templates', 'package.json')
         );
       },
     });

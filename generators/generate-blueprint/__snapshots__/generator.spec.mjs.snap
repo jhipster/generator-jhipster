@@ -248,6 +248,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/couchbase/templates/template-file-couchbase.ejs": {
     "stateCleared": "modified",
   },
+  "generators/cucumber/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cucumber/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cucumber/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cucumber/templates/template-file-cucumber.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/cypress/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -341,6 +353,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/gae/templates/template-file-gae.ejs": {
     "stateCleared": "modified",
   },
+  "generators/gatling/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/gatling/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/gatling/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/gatling/templates/template-file-gatling.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/generate-blueprint/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -411,6 +435,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/init/templates/template-file-init.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/templates/template-file-java.ejs": {
     "stateCleared": "modified",
   },
   "generators/kafka/generator.mjs": {
@@ -521,6 +557,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/mongodb/templates/template-file-mongodb.ejs": {
     "stateCleared": "modified",
   },
+  "generators/neo4j/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/neo4j/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/neo4j/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/neo4j/templates/template-file-neo4j.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/openapi-client/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -615,6 +663,30 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-service/templates/template-file-spring-service.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-websocket/templates/template-file-spring-websocket.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/sql/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/sql/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/sql/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/sql/templates/template-file-sql.ejs": {
     "stateCleared": "modified",
   },
   "generators/upgrade/generator.mjs": {

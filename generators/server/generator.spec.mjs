@@ -23,9 +23,10 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, checkEnforcements } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka } from './__test-support/index.mjs';
+import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -44,6 +45,7 @@ describe(`generator - ${generator}`, () => {
     expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({}, GENERATOR_SERVER);
 
   describe('composing', () => {
     describe('buildTool option', () => {

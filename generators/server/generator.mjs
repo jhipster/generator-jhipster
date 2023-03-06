@@ -22,7 +22,6 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
 
 import {
   getDBTypeFromDBValue,
@@ -34,7 +33,6 @@ import {
   formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
-  generatedAnnotationTransform,
   generateKeyStore,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -44,15 +42,20 @@ import {
   GENERATOR_CASSANDRA,
   GENERATOR_COMMON,
   GENERATOR_COUCHBASE,
+  GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
   GENERATOR_ELASTICSEARCH,
+  GENERATOR_GATLING,
   GENERATOR_GRADLE,
+  GENERATOR_JAVA,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
-  GENERATOR_LIQUIBASE,
   GENERATOR_MAVEN,
   GENERATOR_MONGODB,
+  GENERATOR_NEO4J,
   GENERATOR_SERVER,
+  GENERATOR_SPRING_WEBSOCKET,
+  GENERATOR_SQL,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -94,10 +97,10 @@ import {
   searchEngineTypes,
   messageBrokerTypes,
   clientFrameworkTypes,
+  testFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
 import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
-import checkJava from './support/checks/check-java.mjs';
 import { getDBCExtraOption as getDBExtraOption } from '../sql/support/index.mjs';
 import command from './command.mjs';
 
@@ -114,8 +117,7 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
-const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
-const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
+const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -124,7 +126,7 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
-const NO_WEBSOCKET = websocketTypes.NO;
+const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA } = messageBrokerTypes;
@@ -160,6 +162,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     await this.dependsOnJHipster(GENERATOR_COMMON);
+    await this.dependsOnJHipster(GENERATOR_JAVA, { packageInfoFile: false });
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);
@@ -194,12 +197,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       loadConfig() {
         this.parseJHipsterOptions(command.options);
-      },
-
-      validateJava() {
-        if (!this.skipChecks) {
-          this.checkJava();
-        }
       },
 
       setupRequiredConfig() {
@@ -253,7 +250,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks, websocket } =
+          this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -269,19 +267,30 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
         if (databaseType === SQL) {
-          await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+          await this.composeWithJHipster(GENERATOR_SQL);
         } else if (databaseType === CASSANDRA) {
           await this.composeWithJHipster(GENERATOR_CASSANDRA);
         } else if (databaseType === COUCHBASE) {
           await this.composeWithJHipster(GENERATOR_COUCHBASE);
         } else if (databaseType === MONGODB) {
           await this.composeWithJHipster(GENERATOR_MONGODB);
+        } else if (databaseType === NEO4J) {
+          await this.composeWithJHipster(GENERATOR_NEO4J);
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);
+        }
+        if (testFrameworks?.includes(CUCUMBER)) {
+          await this.composeWithJHipster(GENERATOR_CUCUMBER);
+        }
+        if (testFrameworks?.includes(GATLING)) {
+          await this.composeWithJHipster(GENERATOR_GATLING);
+        }
+        if (websocket === SPRING_WEBSOCKET) {
+          await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
         }
       },
     });
@@ -293,14 +302,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      generatedAnnotation({ application }) {
-        if (this.jhipsterConfig.withGeneratedFlag) {
-          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
-            name: 'adding @GeneratedByJHipster annotations',
-            streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
-          });
-        }
-      },
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
@@ -824,30 +825,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   /**
-   * Check if a supported Java is installed
-   *
-   * Blueprints can customize or disable java checks versions by overriding this method.
-   * @example
-   * // disable checks
-   * checkJava() {}
-   * @examples
-   * // enforce java lts versions
-   * checkJava() {
-   *   super.checkJava(['8', '11', '17'], { throwOnError: true });
-   * }
-   */
-  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
-    this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
-  }
-
-  _generateSqlSafeName(name) {
-    if (isReservedTableName(name, SQL)) {
-      return `e_${name}`;
-    }
-    return name;
-  }
-
-  /**
    * Validate the entityTableName
    * @return {true|string} true for a valid value or error message.
    */
@@ -1017,15 +994,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       return 'buildStringSpecification';
     }
     return 'buildSpecification';
-  }
-
-  /**
-   * @private
-   * @param {string} fieldType
-   * @returns {boolean} true if type is filterable; false otherwise.
-   */
-  isFilterableType(fieldType) {
-    return ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType);
   }
 
   /**

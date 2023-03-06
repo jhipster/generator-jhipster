@@ -92,12 +92,16 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
   'generators/cassandra' \
   'generators/couchbase' \
+  'generators/cucumber' \
   'generators/elasticsearch' \
+  'generators/gatling' \
   'generators/gradle' \
   'generators/kafka' \
   'generators/maven' \
   'generators/mongodb' \
+  'generators/neo4j' \
   'generators/server' \
+  'generators/spring-websocket' \
   'generators/sql' \
   'generators/database-changelog' \
   'generators/database-changelog-liquibase' \

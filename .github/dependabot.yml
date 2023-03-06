@@ -31,6 +31,10 @@ updates:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
       - 'skip-changelog'
+    ignore:
+      # Should match supported node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
 
   - package-ecosystem: 'npm'
     directory: '/generators/angular/templates/'

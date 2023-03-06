@@ -1,7 +1,6 @@
-import assert from 'yeoman-assert';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { basicHelpers, skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { basicHelpers, skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
@@ -22,7 +21,7 @@ const createClientProject = options =>
 
 const containsLanguageFiles = languageValue => {
   it(`creates expected files for ${languageValue}`, () => {
-    assert.file([
+    runResult.assertFile([
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/activate.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/configuration.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/error.json`,
@@ -40,18 +39,18 @@ const containsLanguageFiles = languageValue => {
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/health.json`,
       `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue.replace(/-/g, '_').replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
     ]);
-    assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
+    runResult.assertNoFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
   });
   it('contains 3 needles in global.json', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
       '"jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)"'
     );
-    assert.fileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
       '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"'
     );
-    assert.fileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
       '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"'
     );
@@ -60,7 +59,7 @@ const containsLanguageFiles = languageValue => {
 
 const noLanguageFiles = languageValue => {
   it(`should not create files for ${languageValue}`, () => {
-    assert.noFile([
+    runResult.assertNoFile([
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/activate.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/configuration.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/error.json`,
@@ -78,18 +77,18 @@ const noLanguageFiles = languageValue => {
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/health.json`,
       `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue.replace(/-/g, '_').replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
     ]);
-    assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
+    runResult.assertNoFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
   });
   it('should not create global.json', () => {
-    assert.noFile(`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`);
+    runResult.assertNoFile(`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`);
   });
 };
 
 const containsLanguageInVueStore = languageValue => {
   it(`add language ${languageValue} into translation-store.ts, webpack.common.js`, () => {
     const langKey = languageValue.includes('-') ? `'${languageValue}'` : `${languageValue}`;
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`, `${langKey}: { name:`);
-    assert.fileContent(
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`, `${langKey}: { name:`);
+    runResult.assertFileContent(
       `${CLIENT_WEBPACK_DIR}webpack.common.js`,
       `{ pattern: './src/main/webapp/i18n/${languageValue}/*.json', fileName: './i18n/${languageValue}.json' }`
     );

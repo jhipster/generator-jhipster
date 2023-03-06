@@ -48,56 +48,6 @@ export const modelFiles = {
   ],
 };
 
-const sqlFiles = {
-  sqlFiles: [
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && !generator.embedded && generator.containsBagRelationships,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: [
-        'repository/_EntityClass_RepositoryWithBagRelationships.java',
-        'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_reactive'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_persistable'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_Callback.java'],
-    },
-  ],
-};
-
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
@@ -108,12 +58,6 @@ export const entityFiles = {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.jakarta_validation'],
-    },
-    {
-      condition: generator => generator.databaseTypeNeo4j,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_neo4j'],
     },
   ],
 };
@@ -189,16 +133,6 @@ export const respositoryFiles = {
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/_EntityClass_Repository_reactive.java'],
     },
-    {
-      condition: generator => generator.reactive && generator.databaseType === SQL && !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: [
-        'repository/_EntityClass_RepositoryInternalImpl_reactive.java',
-        'repository/_EntityClass_SqlHelper_reactive.java',
-        'repository/rowmapper/_EntityClass_RowMapper.java',
-      ],
-    },
   ],
 };
 
@@ -249,21 +183,6 @@ export const dtoFiles = {
   ],
 };
 
-export const gatlingFiles = {
-  gatlingFiles: [
-    {
-      condition: generator => generator.gatlingTests,
-      path: TEST_DIR,
-      templates: [
-        {
-          file: 'java/gatling/simulations/_EntityClass_GatlingTest.java',
-          renameTo: generator => `java/gatling/simulations/${generator.entityClass}GatlingTest.java`,
-        },
-      ],
-    },
-  ],
-};
-
 export const serverFiles = {
   ...modelFiles,
   ...entityFiles,
@@ -273,8 +192,6 @@ export const serverFiles = {
   ...respositoryFiles,
   ...serviceFiles,
   ...dtoFiles,
-  ...gatlingFiles,
-  ...sqlFiles,
 };
 
 export function writeFiles() {

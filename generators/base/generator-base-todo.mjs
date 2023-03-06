@@ -95,9 +95,6 @@ const isWin32 = os.platform() === 'win32';
  * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
-  /** @type {Record<string, any>} */
-  dependabotPackageJson;
-
   /**
    * @private
    * Add external resources to root file(index.html).
@@ -1095,7 +1092,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
-            assert(typeof fileSpec === 'object' || typeof fileSpec === 'string', `File must be an object or a string for ${fileSpecPath}`);
+            assert(
+              typeof fileSpec === 'object' || typeof fileSpec === 'string' || typeof fileSpec === 'function',
+              `File must be an object, a string or a function for ${fileSpecPath}`
+            );
+            if (typeof fileSpec === 'function') {
+              fileSpec = fileSpec.call(this, context);
+            }
             let { noEjs } = fileSpec;
             let derivedTransform;
             if (typeof blockTransform === 'boolean') {
@@ -1377,17 +1380,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.logo = config.logo;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
-
-    config.nodeDependencies = config.nodeDependencies || {
-      prettier: packageJson.dependencies.prettier,
-      'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-      'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-    };
-    dest.nodeDependencies = config.nodeDependencies;
-
-    // Deprecated use nodeDependencies instead
-    config.dependabotPackageJson = config.dependabotPackageJson || {};
-    dest.dependabotPackageJson = config.dependabotPackageJson;
   }
 
   /**
@@ -1706,6 +1698,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
 
+    dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
+
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);
     }
@@ -1794,16 +1788,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   getR2DBCUrl(databaseType, options = {}) {
     return getR2dbcUrl(databaseType, options);
-  }
-
-  /**
-   * @experimental
-   * Load dependabot package.json into shared dependabot dependencies.
-   * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
-   * @param {string} packageJson - package.json path
-   */
-  loadDependabotDependencies(packageJson) {
-    const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
-    _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
   }
 }

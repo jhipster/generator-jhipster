@@ -257,7 +257,7 @@ for (field of fieldsToTest) {
 const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
 const updatedValueName = 'UPDATED_' + field.fieldNameUnderscored.toUpperCase();
 const smallerValueName = 'SMALLER_' + field.fieldNameUnderscored.toUpperCase();
-const needsSmallerValueName = jpaMetamodelFiltering && this.isFilterableType(field.fieldType)
+const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
 
 let defaultValue = 1;
@@ -1047,7 +1047,7 @@ _%>
     }
 
   <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */_%>
-    <%_ if (this.isFilterableType(searchBy.fieldType)) { _%>
+    <%_ if (searchBy.filterableField) { _%>
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{

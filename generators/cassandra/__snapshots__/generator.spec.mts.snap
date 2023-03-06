@@ -763,15 +763,6 @@ exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tec
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -845,9 +836,6 @@ exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tec
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
 }
@@ -1113,15 +1101,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -1180,9 +1159,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
 }
@@ -1786,18 +1762,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(false)-maven-enableT
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
     "stateCleared": "modified",
   },
@@ -2166,12 +2130,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/CassandraKeyspaceIT.java": {
     "stateCleared": "modified",
   },
@@ -2245,12 +2203,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -2995,15 +2947,6 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -3059,9 +3002,6 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/package/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -3791,15 +3731,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/package/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/cucumber/CucumberIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -3858,9 +3789,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/package/cucumber/gitkeep": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -4181,18 +4109,6 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/resources/templates/mail/passwordResetEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
@@ -4548,12 +4464,6 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/CassandraKeyspaceIT.java": {
     "stateCleared": "modified",
   },
@@ -4612,12 +4522,6 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/gatling/simulations/SimpleGatlingTest.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {

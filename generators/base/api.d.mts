@@ -51,7 +51,7 @@ export type WriteFileBlock<Generator, DataType> = {
   /** generate destinationFile based on sourceFile */
   renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
   /** condition to enable to write the block */
-  condition?: (this: Generator, data: DataType) => boolean;
+  condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
   transform?: (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];

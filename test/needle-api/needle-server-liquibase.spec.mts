@@ -1,8 +1,7 @@
 import path, { dirname } from 'path';
-import assert from 'yeoman-assert';
 import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
@@ -120,39 +119,39 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
   });
 
   it('Assert changelog is added to master.xml', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
       '<include file="config/liquibase/changelog/aNewChangeLog.xml" relativeToChangelogFile="false"/>'
     );
   });
 
   it('Assert incremental changelog is added to master.xml', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
       '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>'
     );
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
       '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle2.xml" relativeToChangelogFile="false"/>'
     );
   });
 
   it('Assert constraints changelog is added to master.xml', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
       '<include file="config/liquibase/changelog/aNewConstraintsChangeLog.xml" relativeToChangelogFile="false"/>'
     );
   });
 
   it('Assert constraints with needle changelog is added to master.xml', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
       '<include file="config/liquibase/changelog/aNewChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>'
     );
   });
 
   it('Assert that column is added to an existing changelog', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
       '            <column name="test" type="varchar(255)">\n' +
         '                <constraints nullable="false" />\n' +
@@ -161,14 +160,14 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
   });
 
   it('Assert that load column is added to an existing changelog', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
       '            <column name="loadColumn" type="string" />'
     );
   });
 
   it('Assert that changeSet is added to an existing changelog', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
       '    <changeSet id="20180328000000-2" author="jhipster">\n' +
         '        <createTable tableName="test">\n' +

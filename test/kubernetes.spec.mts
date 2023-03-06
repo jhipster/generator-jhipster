@@ -1,4 +1,3 @@
-import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
@@ -75,16 +74,16 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.consulregistry);
-      assert.fileContent('./registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+      runResult.assertFile(expectedFiles.consulregistry);
+      runResult.assertFileContent('./registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected gateway files and content', () => {
-      assert.file(expectedFiles.jhgate);
-      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+      runResult.assertFile(expectedFiles.jhgate);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -119,16 +118,16 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.eurekaregistry);
-      assert.fileContent('./registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
+      runResult.assertFile(expectedFiles.eurekaregistry);
+      runResult.assertFileContent('./registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
     });
     it('creates expected gateway files and content', () => {
-      assert.file(expectedFiles.jhgate);
-      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+      runResult.assertFile(expectedFiles.jhgate);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -163,16 +162,16 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.jhgate);
+      runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -207,16 +206,16 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('creates expected namespace file', () => {
-      assert.file(expectedFiles.customnamespace);
+      runResult.assertFile(expectedFiles.customnamespace);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -251,13 +250,13 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.jhgate);
+      runResult.assertFile(expectedFiles.jhgate);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -292,19 +291,19 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it("doesn't creates gateway files", () => {
-      assert.noFile(expectedFiles.jhgate);
+      runResult.assertNoFile(expectedFiles.jhgate);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('creates expected psql files', () => {
-      assert.file(expectedFiles.mspsql);
+      runResult.assertFile(expectedFiles.mspsql);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -339,28 +338,28 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.jhgate);
+      runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('creates expected psql files', () => {
-      assert.file(expectedFiles.mspsql);
+      runResult.assertFile(expectedFiles.mspsql);
     });
     it('creates expected mongodb files', () => {
-      assert.file(expectedFiles.msmongodb);
+      runResult.assertFile(expectedFiles.msmongodb);
     });
     it('creates expected mariadb files', () => {
-      assert.file(expectedFiles.msmariadb);
+      runResult.assertFile(expectedFiles.msmariadb);
     });
     it('creates expected mssql files', () => {
-      assert.file(expectedFiles.msmssqldb);
+      runResult.assertFile(expectedFiles.msmssqldb);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -395,14 +394,14 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
-      assert.noFile(expectedFiles.eurekaregistry);
-      assert.noFile(expectedFiles.consulregistry);
+      runResult.assertNoFile(expectedFiles.eurekaregistry);
+      runResult.assertNoFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.monolith);
+      runResult.assertFile(expectedFiles.monolith);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -437,14 +436,14 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
-      assert.noFile(expectedFiles.eurekaregistry);
-      assert.noFile(expectedFiles.consulregistry);
+      runResult.assertNoFile(expectedFiles.eurekaregistry);
+      runResult.assertNoFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.kafka);
+      runResult.assertFile(expectedFiles.kafka);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -478,19 +477,19 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
+      runResult.assertFile(expectedFiles.msmysql);
     });
     it('creates expected prometheus files', () => {
-      assert.file(expectedFiles.prometheusmonit);
+      runResult.assertFile(expectedFiles.prometheusmonit);
     });
     it('creates expected namespace file', () => {
-      assert.file(expectedFiles.customnamespace);
+      runResult.assertFile(expectedFiles.customnamespace);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -525,16 +524,16 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected service gateway files', () => {
-      assert.file(expectedFiles.jhgate);
+      runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected routing gateway and istio files', () => {
-      assert.file(expectedFiles.jhgategateway);
+      runResult.assertFile(expectedFiles.jhgategateway);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -569,39 +568,39 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.jhgate);
+      runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected mysql files', () => {
-      assert.file(expectedFiles.msmysql);
-      assert.fileContent(expectedFiles.msmysql[1], /PersistentVolumeClaim/);
-      assert.fileContent(expectedFiles.msmysql[1], /claimName:/);
+      runResult.assertFile(expectedFiles.msmysql);
+      runResult.assertFileContent(expectedFiles.msmysql[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.msmysql[1], /claimName:/);
     });
 
     it('creates expected psql files', () => {
-      assert.file(expectedFiles.mspsql);
-      assert.fileContent(expectedFiles.mspsql[1], /PersistentVolumeClaim/);
-      assert.fileContent(expectedFiles.mspsql[1], /claimName:/);
+      runResult.assertFile(expectedFiles.mspsql);
+      runResult.assertFileContent(expectedFiles.mspsql[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.mspsql[1], /claimName:/);
     });
     it('creates expected mongodb files', () => {
-      assert.file(expectedFiles.msmongodb);
-      assert.fileContent(expectedFiles.msmongodb[1], /volumeClaimTemplates:/);
+      runResult.assertFile(expectedFiles.msmongodb);
+      runResult.assertFileContent(expectedFiles.msmongodb[1], /volumeClaimTemplates:/);
     });
     it('creates expected mariadb files', () => {
-      assert.file(expectedFiles.msmariadb);
-      assert.fileContent(expectedFiles.msmariadb[1], /PersistentVolumeClaim/);
-      assert.fileContent(expectedFiles.msmariadb[1], /claimName:/);
+      runResult.assertFile(expectedFiles.msmariadb);
+      runResult.assertFileContent(expectedFiles.msmariadb[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.msmariadb[1], /claimName:/);
     });
     it('creates expected mssql files', () => {
-      assert.file(expectedFiles.msmssqldb);
-      assert.fileContent(expectedFiles.msmssqldb[1], /PersistentVolumeClaim/);
-      assert.fileContent(expectedFiles.msmssqldb[1], /claimName:/);
+      runResult.assertFile(expectedFiles.msmssqldb);
+      runResult.assertFileContent(expectedFiles.msmssqldb[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.msmssqldb[1], /claimName:/);
     });
 
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 });

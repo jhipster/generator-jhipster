@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import sinon from 'sinon';
-import assert from 'yeoman-assert';
+import assert from 'assert';
 import Environment from 'yeoman-environment';
 import { TestAdapter } from 'yeoman-test';
-import { basicHelpers as helpers } from './support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from './support/index.mjs';
 
 import Base from '../generators/base/index.mjs';
-import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
 import { parseChangelog, Logger } from '../generators/base/support/index.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
 
@@ -215,20 +214,15 @@ describe('generator - base', () => {
   });
   describe('dateFormatForLiquibase', () => {
     let base;
-    let oldCwd;
     let options;
-    beforeEach(() => {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      oldCwd = testInTempDir(() => {});
+    beforeEach(async () => {
+      await helpers.prepareTemporaryDir();
       base = new Base({ ...options, sharedData: {}, env: Environment.createEnv() });
-    });
-    afterEach(() => {
-      revertTempDir(oldCwd);
     });
     describe('when there is no configured lastLiquibaseTimestamp', () => {
       let firstChangelogDate;
       beforeEach(() => {
-        assert.noFile('.yo-rc.json');
+        runResult.assertNoFile('.yo-rc.json');
         firstChangelogDate = base.dateFormatForLiquibase();
       });
       it('should return a valid changelog date', () => {

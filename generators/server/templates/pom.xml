@@ -18,7 +18,7 @@
         <hazelcast-spring.version>5.2.2</hazelcast-spring.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
-        <liquibase.version>4.19.0</liquibase.version>
+        <liquibase.version>4.19.1</liquibase.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
