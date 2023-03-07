@@ -23,10 +23,6 @@ import java.util.List;
 <%_ if (databaseTypeCassandra) { _%>
 import org.cassandraunit.CQLDataLoader;
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-import java.util.Arrays;
-import tech.jhipster.config.JHipsterConstants;
-<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,9 +46,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
 
-<%_ if (cacheProviderRedis) { _%>
-    private static RedisTestContainer redisBean;
-<%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     private static KafkaTestContainer kafkaBean;
 <%_ } _%>
@@ -106,19 +99,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
                     }
                     testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
-                }
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
-                EmbeddedRedis redisAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedRedis.class);
-                if (null != redisAnnotation) {
-                    log.debug("detected the EmbeddedRedis annotation on class {}", testClass.getName());
-                    log.info("Warming up the redis database");
-                    if (null == redisBean) {
-                        redisBean = beanFactory.createBean(RedisTestContainer.class);
-                        beanFactory.registerSingleton(RedisTestContainer.class.getName(), redisBean);
-                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(RedisTestContainer.class.getName(), redisBean);
-                    }
-                    testValues = testValues.and("jhipster.cache.redis.server=redis://" + redisBean.getRedisContainer().getContainerIpAddress() + ":" + redisBean.getRedisContainer().getMappedPort(6379));
                 }
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
