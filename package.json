@@ -135,7 +135,7 @@
     "@types/node": "16.18.14",
     "@types/sinon-chai": "3.2.9",
     "@typescript-eslint/eslint-plugin": "5.54.1",
-    "@typescript-eslint/parser": "5.54.0",
+    "@typescript-eslint/parser": "5.54.1",
     "chai": "4.3.7",
     "chokidar": "3.5.3",
     "concurrently": "7.6.0",
