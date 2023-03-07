@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.mjs';
-import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { matchElasticSearchDocker } from '../elasticsearch/__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 

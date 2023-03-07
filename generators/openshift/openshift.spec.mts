@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { dryRunHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
 import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';
 
 const expectedFiles = {

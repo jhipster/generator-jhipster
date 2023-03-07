@@ -3,7 +3,7 @@ import ChildProcess from 'child_process';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { GENERATOR_HEROKU } from '../generator-list.mjs';
 
 const expectedFiles = {

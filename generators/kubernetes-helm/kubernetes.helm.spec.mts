@@ -1,7 +1,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
-import { GENERATOR_KUBERNETES_HELM } from '../generators/generator-list.mjs';
+import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { GENERATOR_KUBERNETES_HELM } from '../generator-list.mjs';
 
 const expectedFiles = {
   csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
