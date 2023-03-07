@@ -2233,6 +2233,20 @@ The certificate will be issued automatically by Let's Encrypt staging environmen
 
 Keycloak ingress is defined with the application ingress, and requires a static IP with the name specified in the ingress annotation \`kubernetes.io/ingress.global-static-ip-name\`.
 
+You can create a global public IP with \`gcloud\` before running \`jhipster k8s\` with the following command:
+
+\`\`\`
+$ gcloud compute addresses create <ip-name> --global
+\`\`\`
+
+You can find out the assigned IP address with the following command:
+
+\`\`\`
+$ gcloud compute addresses describe <ip-name> --global --format='value(address)'
+\`\`\`
+
+When running the \`jhipster k8s\` generator, it will prompt for a root FQDN (Fully qualified domain name). You can use \`nip.io\` as the DNS provider and set \`<ip-address>.nip.io\`.
+
 ## Troubleshooting
 
 > my apps doesn't get pulled, because of 'imagePullBackof'
