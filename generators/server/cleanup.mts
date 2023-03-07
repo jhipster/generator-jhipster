@@ -16,10 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import cleanupSql from './cleanup-sql.mjs';
-import cleanupCacheProvider from './cleanup-cache-provider.mjs';
 import cleanupOauth2 from './cleanup-oauth2.mjs';
-import cleanupCucumber from './cleanup-cucumber.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
 import type BaseGenerator from '../base/index.mjs';
@@ -31,15 +28,8 @@ import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.m
  */
 export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: ServerGeneratorDefinition['writingTaskParam']) {
   const { application } = taskParam;
-  if (application.databaseTypeSql) {
-    cleanupSql.call(this, taskParam);
-  }
-  cleanupCacheProvider.call(this, taskParam as any);
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);
-  }
-  if ((application as any).cucumberTests) {
-    cleanupCucumber.call(this, taskParam);
   }
 
   if (this.isJhipsterVersionLessThan('3.5.0')) {
@@ -168,11 +158,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.8.1')) {
-    if (application.databaseTypeNeo4j) {
-      this.removeFile(`${application.javaPackageSrcDir}AbstractNeo4jIT.java`);
-    }
-  }
   if (this.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${DOCKER_DIR}realm-config/jhipster-users-0.json`);
     this.removeFile(`${application.javaPackageSrcDir}NoOpMailConfiguration.java`);
@@ -192,6 +177,21 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     if (!application.skipClient && !application.reactive) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
       this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
+    }
+    if (
+      application.databaseTypeSql ||
+      (application as any).messageBrokerKafka ||
+      (application as any).cacheProviderRedis ||
+      application.databaseTypeMongodb ||
+      application.databaseTypeCassandra ||
+      (application as any).searchEngineElasticsearch ||
+      application.databaseTypeCouchbase ||
+      (application as any).searchEngineCouchbase ||
+      application.databaseTypeNeo4j
+    ) {
+      // The condition is too complated, delete and recreate.
+      this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
+      this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }
   }
 }

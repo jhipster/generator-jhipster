@@ -24,6 +24,8 @@ import { fileURLToPath } from 'url';
 import { defaultHelpers as helpers, basicHelpers } from '../../test/support/helpers.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
+import { checkEnforcements } from '../../test/support/index.mjs';
+import { GENERATOR_COMMON } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -44,6 +46,7 @@ describe(`generator - ${generator}`, () => {
     expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({ client: true }, GENERATOR_COMMON);
 
   describe('with', () => {
     describe('default config', () => {

@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_WEBPACK_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -60,11 +59,11 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
     });
 
     it('Assert external asset is added to webpack.custom.js', async () => {
-      assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
+      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
     });
 
     it('should add webpack config to webpack.custom.js', async () => {
-      assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, '{ devServer: {} }');
+      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, '{ devServer: {} }');
     });
   });
 
@@ -74,10 +73,10 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
     });
 
     it('Assert external asset is added to webpack.common.js', async () => {
-      assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
+      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
     });
     it('should add webpack config to webpack.common.js', async () => {
-      assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
+      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
     });
   });
 
@@ -87,10 +86,10 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
     });
 
     it('Assert external asset is added to webpack.common.js', async () => {
-      assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
+      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
     });
     it('should add webpack config to webpack.common.js', async () => {
-      assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
+      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
     });
   });
 });

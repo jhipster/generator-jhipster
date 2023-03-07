@@ -15,7 +15,7 @@ var filterVariables = [];
 var extraFilters = {};
 fields.filter(field => !field.transient).forEach((field) => {
   const fieldType = field.fieldType;
-  if (this.isFilterableType(fieldType)) {
+  if (field.filterableField) {
     var filterType;
     if (field.fieldIsEnum) {
       filterType = fieldType + 'Filter';

@@ -21,11 +21,12 @@ import lodash from 'lodash';
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
+import { fromMatrix, extendMatrix, AuthenticationTypeMatrix, checkEnforcements } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
+import { GENERATOR_CYPRESS } from '../generator-list.mjs';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -80,6 +81,7 @@ describe(`generator - ${generator}`, () => {
     expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({ client: true }, GENERATOR_CYPRESS);
 
   it('samples matrix should match snapshot', () => {
     expect(e2eSamples).toMatchSnapshot();

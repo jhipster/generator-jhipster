@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - cucumber with default config should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "baseName": "jhipster",
+    "entities": [],
+    "testFrameworks": [
+      "cucumber"
+    ]
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/cucumber/CucumberIT.java": {
+    "contents": "package com.mycompany.myapp.cucumber;
+
+import com.mycompany.myapp.IntegrationTest;
+import io.cucumber.junit.platform.engine.Cucumber;
+
+@Cucumber
+@IntegrationTest
+class CucumberIT {
+
+}
+",
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/cucumber/CucumberTestContextConfiguration.java": {
+    "contents": "package com.mycompany.myapp.cucumber;
+
+import com.mycompany.myapp.IntegrationTest;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+@CucumberContextConfiguration
+@IntegrationTest
+@WebAppConfiguration
+public class CucumberTestContextConfiguration {
+
+}
+",
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/cucumber/stepdefs/StepDefs.java": {
+    "contents": "package com.mycompany.myapp.cucumber.stepdefs;
+
+import org.springframework.test.web.servlet.ResultActions;
+
+public abstract class StepDefs {
+
+    protected ResultActions actions;
+
+}
+",
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java": {
+    "contents": "package com.mycompany.myapp.cucumber.stepdefs;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+
+import com.mycompany.myapp.web.rest.UserResource;
+import com.mycompany.myapp.security.AuthoritiesConstants;
+
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+public class UserStepDefs extends StepDefs {
+
+    @Autowired
+    private UserResource userResource;
+
+    private MockMvc userResourceMock;
+
+    @Before
+    public void setup() {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
+        User principal = new User("username", "", true, true, true, true, grantedAuthorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            principal,
+            principal.getPassword(),
+            principal.getAuthorities()
+        );
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
+    }
+
+    @When("I search user {string}")
+    public void i_search_user(String userId) throws Throwable {
+        actions = userResourceMock.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
+    }
+
+    @Then("the user is found")
+    public void the_user_is_found() throws Throwable {
+        actions
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Then("his last name is {string}")
+    public void his_last_name_is(String lastName) throws Throwable {
+        actions.andExpect(jsonPath("$.lastName").value(lastName));
+    }
+
+}
+",
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/mycompany/myapp/cucumber/gitkeep": {
+    "contents": "",
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/mycompany/myapp/cucumber/user.feature": {
+    "contents": "Feature: User management
+
+    Scenario: Retrieve administrator user
+        When I search user 'admin'
+        Then the user is found
+        And his last name is 'Administrator'
+",
+    "stateCleared": "modified",
+  },
+}
+`;

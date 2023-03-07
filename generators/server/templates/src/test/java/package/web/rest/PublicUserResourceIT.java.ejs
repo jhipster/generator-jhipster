@@ -42,7 +42,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
@@ -130,7 +130,7 @@ class PublicUserResourceIT {
     @Autowired
     private EntityManager em;
 <%_ } _%>
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
 
     @Autowired
     private CacheManager cacheManager;
@@ -145,7 +145,7 @@ class PublicUserResourceIT {
 
     private <%= user.persistClass %> user;
 
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
     @BeforeEach
     public void setup() {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();

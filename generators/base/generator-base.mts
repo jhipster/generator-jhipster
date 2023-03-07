@@ -300,6 +300,8 @@ export default class BaseGenerator extends YeomanGenerator {
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
     const relativePath = relative((this.env as any).conflicter.cwd, destinationFile);
+    // Delete from memory fs to keep updated.
+    this.fs.delete(destinationFile);
     try {
       if (destinationFile && statSync(destinationFile).isFile()) {
         this.log.info(`Removing legacy file ${relativePath}`);
@@ -317,8 +319,12 @@ export default class BaseGenerator extends YeomanGenerator {
    */
   removeFolder(...path: string[]) {
     const destinationFolder = this.destinationPath(...path);
+    const relativePath = relative((this.env as any).conflicter.cwd, destinationFolder);
+    // Delete from memory fs to keep updated.
+    this.fs.delete(`${destinationFolder}/**`);
     try {
       if (statSync(destinationFolder).isDirectory()) {
+        this.log.info(`Removing legacy folder ${relativePath}`);
         rmSync(destinationFolder, { recursive: true });
       }
     } catch (error) {
@@ -465,6 +471,15 @@ export default class BaseGenerator extends YeomanGenerator {
     return {
       ...map,
     };
+  }
+
+  loadNodeDependencies(destination: Record<string, string>, source: Record<string, string>): void {
+    Object.assign(destination, this.prepareDependencies(source));
+  }
+
+  loadNodeDependenciesFromPackageJson(destination: Record<string, string>, packageJsonFile: string): void {
+    const { devDependencies, dependencies } = this.fs.readJSON(packageJsonFile, {}) as any;
+    this.loadNodeDependencies(destination, { ...devDependencies, ...dependencies });
   }
 
   /**

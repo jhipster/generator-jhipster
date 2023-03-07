@@ -1,11 +1,8 @@
 import crypto from 'crypto';
 import path, { dirname } from 'path';
 import os from 'os';
-import fse from 'fs-extra';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-
-import { getTemplatePath } from './get-template-path.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,17 +19,6 @@ function _prepareTempEnv() {
   fs.mkdirSync(tempDir, { recursive: true });
   process.chdir(tempDir);
   return { cwd, tempDir: process.cwd() };
-}
-
-/**
- * Creates a temporary dir.
- * @return {function} callback to cleanup the test dir.
- */
-export function prepareTempDir(): () => void {
-  const testEnv = _prepareTempEnv();
-  return () => {
-    revertTempDir(testEnv.cwd, testEnv.tempDir);
-  };
 }
 
 export function testInTempDir(cb: (tempDir: string) => any): string | Promise<string> {
@@ -58,22 +44,4 @@ export function revertTempDir(dest: string = getPackageFilePath(), tempDir?: str
   if (tempDir && dest !== tempDir) {
     fs.rmSync(tempDir, { recursive: true });
   }
-}
-
-export function copyTemplateBlueprints(destDir: string, ...blueprintNames: string[]) {
-  blueprintNames.forEach(blueprintName =>
-    copyBlueprint(getTemplatePath(`blueprints/generator-jhipster-${blueprintName}`), destDir, blueprintName)
-  );
-}
-
-export function copyBlueprint(sourceDir: string, destDir: string, ...blueprintNames: string[]) {
-  const nodeModulesPath = `${destDir}/node_modules`;
-  fse.ensureDirSync(nodeModulesPath);
-  blueprintNames.forEach(blueprintName => {
-    fse.copySync(sourceDir, `${nodeModulesPath}/generator-jhipster-${blueprintName}`);
-  });
-}
-
-export function copyFakeBlueprint(destDir: string, ...blueprintName: string[]) {
-  copyBlueprint(getTemplatePath('blueprints/fake-blueprint'), destDir, ...blueprintName);
 }

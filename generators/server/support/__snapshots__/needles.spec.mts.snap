@@ -344,10 +344,10 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {

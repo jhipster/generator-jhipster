@@ -11,14 +11,14 @@
         <archunit-junit5.version>1.0.1</archunit-junit5.version>
         <awaitility.version>4.2.0</awaitility.version>
         <blockhound-junit-platform.version>1.0.7.RELEASE</blockhound-junit-platform.version>
-        <caffeine.version>3.1.4</caffeine.version>
+        <caffeine.version>3.1.5</caffeine.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.2</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.2</hazelcast-spring.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
-        <liquibase.version>4.19.0</liquibase.version>
+        <liquibase.version>4.19.1</liquibase.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>

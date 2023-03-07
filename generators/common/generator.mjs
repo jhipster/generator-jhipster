@@ -90,18 +90,11 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return {
-      loadPackageJson() {
-        // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
-        _.merge(this.dependabotPackageJson, {
-          devDependencies: {
-            prettier: packageJson.dependencies.prettier,
-            'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-            'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-          },
-        });
-
-        // Load common package.json into packageJson
-        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')
+        );
       },
 
       loadConfig({ application }) {
@@ -175,8 +168,8 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             prepare: 'husky install',
           },
           devDependencies: {
-            husky: this.dependabotPackageJson.devDependencies.husky,
-            'lint-staged': this.dependabotPackageJson.devDependencies['lint-staged'],
+            husky: application.nodeDependencies.husky,
+            'lint-staged': application.nodeDependencies['lint-staged'],
           },
         });
       },

@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - spring-cache caffeine should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cache ehcache should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cache hazelcast should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cache infinispan should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheFactoryConfiguration.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cache memcached should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cache no should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cache redis should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/RedisTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/RedisTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+}
+`;

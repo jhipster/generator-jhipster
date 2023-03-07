@@ -131,9 +131,6 @@ export const createProgram = ({ executableName = CLI_NAME, executableVersion } =
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addJHipsterOptions(command.options)
-      .addOption(new Option('--bundled', 'Use JHipster generators bundled with current cli'))
-      .addOption(new Option('--prefer-global', 'Alias for --blundled').hideHelp())
-      .addOption(new Option('--prefer-local', 'Prefer JHipster generators installed in current folder node repository.').hideHelp())
   );
 };
 
