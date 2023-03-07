@@ -26,6 +26,7 @@ import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
 import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
+import { getDBCExtraOption } from './support/database-data.mjs';
 
 const { SQL } = databaseTypes;
 
@@ -46,7 +47,21 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async preparing({ application }) {
+        const anyApp = application as any;
+        anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
+        anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntityRelationship() {
@@ -85,5 +100,20 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        source.addTestSpringFactory?.({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }

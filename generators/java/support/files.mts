@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-export const replaceFilePathVariables = (data: any, filePath: string) => filePath?.replace(/_package_/, data.package)?.replace(/_\w*/, '');
+export const replaceFilePathVariables = (data: any, filePath: string) =>
+  filePath?.replace(/_package_/, data.packageName)?.replace(/_\w*/, '');
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
   filePath = filePath

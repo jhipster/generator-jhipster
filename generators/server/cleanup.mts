@@ -160,11 +160,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.8.1')) {
-    if (application.databaseTypeNeo4j) {
-      this.removeFile(`${application.javaPackageSrcDir}AbstractNeo4jIT.java`);
-    }
-  }
   if (this.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${DOCKER_DIR}realm-config/jhipster-users-0.json`);
     this.removeFile(`${application.javaPackageSrcDir}NoOpMailConfiguration.java`);
@@ -184,6 +179,21 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     if (!application.skipClient && !application.reactive) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
       this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
+    }
+    if (
+      application.databaseTypeSql ||
+      (application as any).messageBrokerKafka ||
+      (application as any).cacheProviderRedis ||
+      application.databaseTypeMongodb ||
+      application.databaseTypeCassandra ||
+      (application as any).searchEngineElasticsearch ||
+      application.databaseTypeCouchbase ||
+      (application as any).searchEngineCouchbase ||
+      application.databaseTypeNeo4j
+    ) {
+      // The condition is too complated, delete and recreate.
+      this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
+      this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }
   }
 }

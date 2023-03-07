@@ -16,18 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './doc.mjs';
-export * from './database.mjs';
-export * from './dependabot-maven.mjs';
-export * from '../../java/support/files.mjs';
-export * from './java-formatting.mjs';
-export * from './key-store.mjs';
-export * from './needles.mjs';
-export { default as prepareEntity } from './prepare-entity.mjs';
-export * from './prepare-entity.mjs';
-export { default as prepareField } from './prepare-field.mjs';
-export * from './spring-factories.mjs';
-export * from './string.mjs';
-export * from './templates/field-values.mjs';
-export { default as updateLanguagesTask } from './update-languages.mjs';
-export * from './update-languages.mjs';
+import Generator from './generator.mjs';
+import { WriteFileSection } from '../base/api.mjs';
+import { JavaApplication } from './types.mjs';
+import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import { moveToJavaPackageSrcDir } from './support/index.mjs';
+
+const files: WriteFileSection<Generator, JavaApplication> = {
+  baseFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}_package_`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['GeneratedByJHipster.java'],
+    },
+  ],
+};
+
+export default async function writeTask(this: Generator, { application }) {
+  await this.writeFiles({
+    sections: files,
+    context: application,
+  });
+}

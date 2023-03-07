@@ -21,34 +21,6 @@ import { TEST_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR
 import { addSectionsCondition, mergeSections } from '../base/support/index.mjs';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './support/index.mjs';
 
-export const neo4jFiles = {
-  serverResource: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/DatabaseConfiguration.java_neo4j'],
-    },
-    {
-      condition: generator => generator.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/neo4j/Neo4jMigrations.java', 'config/neo4j/package-info.java'],
-    },
-    {
-      condition: generator => generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/neo4j/migrations/user__admin.json', 'config/neo4j/migrations/user__user.json'],
-    },
-  ],
-  serverTestFw: [
-    {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['config/Neo4jTestContainer.java', 'config/EmbeddedNeo4j.java'],
-    },
-  ],
-};
-
 const jwtFiles = {
   jwtBaseFiles: [
     {
@@ -357,11 +329,6 @@ export const baseServerFiles = {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/AsyncSyncConfiguration.java', 'IntegrationTest.java', 'config/SpringBootTestClassOrderer.java'],
-    },
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['GeneratedByJHipster.java'],
     },
   ],
   serverJavaConfig: [
@@ -747,21 +714,6 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.databaseTypeSql ||
-        generator.messageBrokerKafka ||
-        generator.cacheProviderRedis ||
-        generator.databaseTypeMongodb ||
-        generator.databaseTypeCassandra ||
-        generator.searchEngineElasticsearch ||
-        generator.databaseTypeCouchbase ||
-        generator.searchEngineCouchbase ||
-        generator.databaseTypeNeo4j,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['META-INF/spring.factories'],
-    },
-    {
-      condition: generator =>
-        generator.databaseTypeSql ||
         generator.messageBrokerKafka ||
         generator.cacheProviderRedis ||
         generator.databaseTypeMongodb ||
@@ -809,7 +761,6 @@ export const baseServerFiles = {
 
 export const serverFiles = mergeSections(
   baseServerFiles,
-  addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
   addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt),
   addSectionsCondition(gatewayFiles, context => context.applicationTypeGateway)
 );

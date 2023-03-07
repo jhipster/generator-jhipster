@@ -17,31 +17,21 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
-import { GENERATOR_JAVA } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    jhipsterDependenciesVersion: {
-      description: 'jhipster-dependencies version to use, this option is not persisted',
-      type: String,
-      env: 'JHIPSTER_DEPENDENCIES_VERSION',
-      scope: 'generator',
-    },
-    projectVersion: {
-      description: 'project version to use, this option is not persisted',
-      type: String,
-      env: 'JHI_PROJECT_VERSION',
-      scope: 'generator',
-    },
-    fakeKeytool: {
-      description: 'Add a fake certificate store file for test purposes',
+    withGeneratedFlag: {
+      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
       type: Boolean,
-      env: 'FAKE_KEYTOOL',
+      scope: 'storage',
+    },
+    packageInfoFile: {
+      description: 'write package-info.java file for every package',
+      type: Boolean,
       scope: 'generator',
       hide: true,
     },
   },
-  import: [GENERATOR_JAVA],
 };
 
 export default command;
