@@ -258,10 +258,10 @@ describe('generator - Kubernetes', () => {
       runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected gateway ingress files', () => {
-      assert.file(expectedFiles.jhgateingress);
+      runResult.assertFile(expectedFiles.jhgateingress);
     });
     it('create the apply script', () => {
-      assert.file(expectedFiles.applyScript);
+      runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
@@ -297,19 +297,19 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.consulregistry);
+      runResult.assertFile(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
-      assert.file(expectedFiles.jhgate);
+      runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected gateway ingress files', () => {
-      assert.file(expectedFiles.jhgateingress);
+      runResult.assertFile(expectedFiles.jhgateingress);
     });
     it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
+      runResult.assertFile(expectedFiles.certmanager);
     });
     it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
+      runResult.assertFile(expectedFiles.keycloak);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
