@@ -1,6 +1,6 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
 
 const files = {

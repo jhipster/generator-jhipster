@@ -1,5 +1,6 @@
 import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
+import { JavaApplication } from '../java/types.mjs';
 
 declare const CACHE_PROVIDER = 'cacheProvider';
 
@@ -58,31 +59,17 @@ type SearchEngine = {
 };
 
 export type SpringBootApplication = CommonClientServerApplication &
+  JavaApplication &
   (ImperativeApplication | ReactiveApplication) &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication & {
-    packageName: string;
-    packageFolder: string;
-
-    srcMainJava: string;
-    srcMainResources: string;
-    srcMainWebapp: string;
-    srcTestJava: string;
-    srcTestResources: string;
-    srcTestJavascript: string;
-
-    javaPackageSrcDir: string;
-    javaPackageTestDir: string;
-
-    temporaryDir: string;
-
-    javaDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;
 
     enableSwaggerCodegen: boolean;
     embeddableLaunchScript: boolean;
-    prettierJava: boolean;
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
+
+    imperativeOrReactive: string;
   };

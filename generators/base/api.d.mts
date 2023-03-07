@@ -51,7 +51,7 @@ export type WriteFileBlock<Generator, DataType> = {
   /** generate destinationFile based on sourceFile */
   renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
   /** condition to enable to write the block */
-  condition?: (this: Generator, data: DataType) => boolean;
+  condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
   transform?: (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];
@@ -86,14 +86,16 @@ export type WriteFileOptions<Generator, DataType> = {
 );
 
 export type JHipsterOption = OptionConfig & {
+  name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
 };
 
-export type CheckResult = {
-  info?: string;
-  warning?: string;
-  error?: string;
+export type ValidationResult = {
+  debug?: unknown;
+  info?: string | string[];
+  warning?: string | string[];
+  error?: string | string[];
 };
 
 export type JHipsterArgumentConfig = ArgumentConfig;

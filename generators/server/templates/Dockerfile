@@ -38,12 +38,12 @@ LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.18-alpine
 
-FROM redis:7.0.8
+FROM redis:7.0.9
 
-FROM confluentinc/cp-kafka:7.3.1
+FROM confluentinc/cp-kafka:7.3.2
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.3.1
+FROM confluentinc/cp-zookeeper:7.3.2
 LABEL ALIAS=zookeeper
 
 FROM sonarqube:9.9.0-community
@@ -61,7 +61,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:9.3.6
+FROM grafana/grafana:9.4.3
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

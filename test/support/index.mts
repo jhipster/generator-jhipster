@@ -1,5 +1,6 @@
 export * from './application-samples.mjs';
 export * from './client-samples.mjs';
+export { default as checkEnforcements } from './check-enforcements.mjs';
 export * from './entity-samples.mjs';
 export { default as getGenerator } from './get-generator.mjs';
 export * from './get-template-path.mjs';

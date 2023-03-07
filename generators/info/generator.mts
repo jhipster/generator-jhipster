@@ -39,7 +39,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
-        this.logger.info(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+        this.logger.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
 
       async checkJHipster() {

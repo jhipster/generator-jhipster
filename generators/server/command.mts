@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { GENERATOR_JAVA } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -32,12 +33,15 @@ const command: JHipsterCommandDefinition = {
       env: 'JHI_PROJECT_VERSION',
       scope: 'generator',
     },
-    withGeneratedFlag: {
-      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+    fakeKeytool: {
+      description: 'Add a fake certificate store file for test purposes',
       type: Boolean,
-      scope: 'storage',
+      env: 'FAKE_KEYTOOL',
+      scope: 'generator',
+      hide: true,
     },
   },
+  import: [GENERATOR_JAVA],
 };
 
 export default command;

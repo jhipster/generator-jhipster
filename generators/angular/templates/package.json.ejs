@@ -27,34 +27,34 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/compiler": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/core": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/forms": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/localize": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/platform-browser": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/platform-browser-dynamic": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/router": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@fortawesome/angular-fontawesome": "<%= this.dependabotPackageJson.dependencies['@fortawesome/angular-fontawesome'] %>",
-    "@fortawesome/fontawesome-svg-core": "<%= this.dependabotPackageJson.dependencies['@fortawesome/fontawesome-svg-core'] %>",
-    "@fortawesome/free-solid-svg-icons": "<%= this.dependabotPackageJson.dependencies['@fortawesome/free-solid-svg-icons'] %>",
-    "@ng-bootstrap/ng-bootstrap": "<%= this.dependabotPackageJson.dependencies['@ng-bootstrap/ng-bootstrap'] %>",
+    "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/compiler": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/forms": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/localize": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/platform-browser": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/platform-browser-dynamic": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/router": "<%= nodeDependencies['@angular/common'] %>",
+    "@fortawesome/angular-fontawesome": "<%= nodeDependencies['@fortawesome/angular-fontawesome'] %>",
+    "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
+    "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
+    "@ng-bootstrap/ng-bootstrap": "<%= nodeDependencies['@ng-bootstrap/ng-bootstrap'] %>",
 <%_ if (enableTranslation) { _%>
-    "@ngx-translate/core": "<%= this.dependabotPackageJson.dependencies['@ngx-translate/core'] %>",
-    "@ngx-translate/http-loader": "<%= this.dependabotPackageJson.dependencies['@ngx-translate/http-loader'] %>",
+    "@ngx-translate/core": "<%= nodeDependencies['@ngx-translate/core'] %>",
+    "@ngx-translate/http-loader": "<%= nodeDependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
-    "bootstrap": "<%= this.dependabotPackageJson.dependencies.bootstrap %>",
+    "bootstrap": "<%= nodeDependencies.bootstrap %>",
     <%_ if (!clientThemeNone) { _%>
-    "bootswatch": "<%= this.dependabotPackageJson.dependencies.bootswatch %>",
+    "bootswatch": "<%= nodeDependencies.bootswatch %>",
     <%_ } _%>
-    "dayjs": "<%= this.dependabotPackageJson.dependencies['dayjs'] %>",
+    "dayjs": "<%= nodeDependencies['dayjs'] %>",
     <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
-    "ngx-cookie-service": "<%= this.dependabotPackageJson.dependencies['ngx-cookie-service'] %>",
+    "ngx-cookie-service": "<%= nodeDependencies['ngx-cookie-service'] %>",
     <%_ } _%>
-    "ngx-infinite-scroll": "<%= this.dependabotPackageJson.dependencies['ngx-infinite-scroll'] %>",
-    "ngx-webstorage": "<%= this.dependabotPackageJson.dependencies['ngx-webstorage'] %>",
-    "@popperjs/core": "<%= this.dependabotPackageJson.dependencies['@popperjs/core'] %>",
-    "rxjs": "<%= this.dependabotPackageJson.dependencies['rxjs'] %>",
+    "ngx-infinite-scroll": "<%= nodeDependencies['ngx-infinite-scroll'] %>",
+    "ngx-webstorage": "<%= nodeDependencies['ngx-webstorage'] %>",
+    "@popperjs/core": "<%= nodeDependencies['@popperjs/core'] %>",
+    "rxjs": "<%= nodeDependencies['rxjs'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
     "sockjs-client": "1.6.1",
     "@stomp/rx-stomp": "1.2.0",
@@ -62,70 +62,70 @@
 <%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
 <%_ } _%>
-    "tslib": "<%= this.dependabotPackageJson.dependencies['tslib'] %>",
-    "zone.js": "<%= this.dependabotPackageJson.dependencies['zone.js'] %>"
+    "tslib": "<%= nodeDependencies['tslib'] %>",
+    "zone.js": "<%= nodeDependencies['zone.js'] %>"
   },
   "devDependencies": {
 <%_ if (microfrontend && applicationTypeGateway) { _%>
-    "@angular-architects/module-federation-runtime": "<%= this.dependabotPackageJson.devDependencies['@angular-architects/module-federation-runtime'] %>",
+    "@angular-architects/module-federation-runtime": "<%= nodeDependencies['@angular-architects/module-federation-runtime'] %>",
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     "@types/sockjs-client": "1.5.1",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
-    "cypress": "<%= this.dependabotPackageJson.devDependencies['cypress'] %>",
+    "cypress": "<%= nodeDependencies['cypress'] %>",
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-    "folder-hash": "<%= this.dependabotPackageJson.devDependencies['folder-hash'] %>",
-    "merge-jsons-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
+    "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
+    "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
 <%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= this.dependabotPackageJson.devDependencies['prettier-plugin-java'] %>",
+    "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
 <%_ } _%>
-    "@angular/cli": "<%= this.dependabotPackageJson.devDependencies['@angular/cli'] %>",
-    "@angular/compiler-cli": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular/service-worker": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
-    "@angular-builders/custom-webpack": "<%= this.dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
-    "@angular-builders/jest": "<%= this.dependabotPackageJson.devDependencies['@angular-builders/jest'] %>",
-    "@angular-devkit/build-angular": "<%= this.dependabotPackageJson.devDependencies['@angular/cli'] %>",
-    "@angular-eslint/eslint-plugin": "<%= this.dependabotPackageJson.devDependencies['@angular-eslint/eslint-plugin'] %>",
-    "@types/jest": "<%= this.dependabotPackageJson.devDependencies['@types/jest'] %>",
-    "@types/node": "<%= this.dependabotPackageJson.devDependencies['@types/node'] %>",
-    "@typescript-eslint/eslint-plugin": "<%= this.dependabotPackageJson.devDependencies['@typescript-eslint/eslint-plugin'] %>",
-    "@typescript-eslint/parser": "<%= this.dependabotPackageJson.devDependencies['@typescript-eslint/eslint-plugin'] %>",
-    "browser-sync": "<%= this.dependabotPackageJson.devDependencies['browser-sync'] %>",
-    "browser-sync-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
-    "copy-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['copy-webpack-plugin'] %>",
-    "eslint": "<%= this.dependabotPackageJson.devDependencies['eslint'] %>",
-    "eslint-config-prettier": "<%= this.dependabotPackageJson.devDependencies['eslint-config-prettier'] %>",
-    "eslint-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
+    "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
+    "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular-builders/custom-webpack": "<%= nodeDependencies['@angular-builders/custom-webpack'] %>",
+    "@angular-builders/jest": "<%= nodeDependencies['@angular-builders/jest'] %>",
+    "@angular-devkit/build-angular": "<%= nodeDependencies['@angular/cli'] %>",
+    "@angular-eslint/eslint-plugin": "<%= nodeDependencies['@angular-eslint/eslint-plugin'] %>",
+    "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
+    "@types/node": "<%= nodeDependencies['@types/node'] %>",
+    "@typescript-eslint/eslint-plugin": "<%= nodeDependencies['@typescript-eslint/eslint-plugin'] %>",
+    "@typescript-eslint/parser": "<%= nodeDependencies['@typescript-eslint/eslint-plugin'] %>",
+    "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
+    "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
+    "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
+    "eslint": "<%= nodeDependencies['eslint'] %>",
+    "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
+    "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
   <%_ blueprints.forEach(blueprint => { _%>
     "<%= blueprint.name %>": "<%= blueprint.version %>",
   <%_ }); _%>
 <%_ } _%>
-    "jest": "<%= this.dependabotPackageJson.devDependencies['jest'] %>",
-    "jest-environment-jsdom": "<%= this.dependabotPackageJson.devDependencies['jest'] %>",
-    "jest-preset-angular": "<%= this.dependabotPackageJson.devDependencies['jest-preset-angular'] %>",
-    "jest-date-mock": "<%= this.dependabotPackageJson.devDependencies['jest-date-mock'] %>",
-    "jest-junit": "<%= this.dependabotPackageJson.devDependencies['jest-junit'] %>",
-    "jest-sonar": "<%= this.dependabotPackageJson.devDependencies['jest-sonar'] %>",
-    "prettier": "<%= this.dependabotPackageJson.devDependencies['prettier'] %>",
-    "prettier-plugin-packagejson": "<%= this.dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
+    "jest": "<%= nodeDependencies['jest'] %>",
+    "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
+    "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
+    "jest-date-mock": "<%= nodeDependencies['jest-date-mock'] %>",
+    "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
+    "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
+    "prettier": "<%= nodeDependencies['prettier'] %>",
+    "prettier-plugin-packagejson": "<%= nodeDependencies['prettier-plugin-packagejson'] %>",
 <%_ if (enableI18nRTL) { _%>
-    "postcss-rtlcss": "<%= this.dependabotPackageJson.devDependencies['postcss-rtlcss'] %>",
+    "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
-    "rimraf": "<%= this.dependabotPackageJson.devDependencies['rimraf'] %>",
-    "swagger-ui-dist": "<%= this.dependabotPackageJson.devDependencies['swagger-ui-dist'] %>",
-    "ts-jest": "<%= this.dependabotPackageJson.devDependencies['ts-jest'] %>",
-    "typescript": "<%= this.dependabotPackageJson.devDependencies['typescript'] %>",
-    "webpack-bundle-analyzer": "<%= this.dependabotPackageJson.devDependencies['webpack-bundle-analyzer'] %>",
-    "webpack-merge": "<%= this.dependabotPackageJson.devDependencies['webpack-merge'] %>",
-    "webpack-notifier": "<%= this.dependabotPackageJson.devDependencies['webpack-notifier'] %>"
+    "rimraf": "<%= nodeDependencies['rimraf'] %>",
+    "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
+    "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
+    "typescript": "<%= nodeDependencies['typescript'] %>",
+    "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
+    "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
+    "webpack-notifier": "<%= nodeDependencies['webpack-notifier'] %>"
   },
   "overrides": {
-    "webpack": "<%= this.dependabotPackageJson.devDependencies['webpack'] %>"
+    "webpack": "<%= nodeDependencies['webpack'] %>"
   },
   "engines": {
     "node": ">=<%= nodeVersion %>"

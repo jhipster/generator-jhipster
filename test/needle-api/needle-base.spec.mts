@@ -1,4 +1,4 @@
-import assert from 'yeoman-assert';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 import NeedleApiBase from '../../generators/needle-base.mjs';
 
 describe('needle-api - base', () => {
@@ -12,9 +12,9 @@ describe('needle-api - base', () => {
       generatedModel = needleApiBase.generateFileModel('dummyFile', 'a-needle-tag', '<p>My content added</p>');
     });
     it('creates expected default files for server and angular', () => {
-      assert.textEqual(generatedModel.file, 'dummyFile');
-      assert.textEqual(generatedModel.needle, 'a-needle-tag');
-      assert.objectContent(generatedModel.splicable, new Array('<p>My content added</p>'));
+      expect(generatedModel.file).toBe('dummyFile');
+      expect(generatedModel.needle).toBe('a-needle-tag');
+      expect(generatedModel.splicable).toEqual(['<p>My content added</p>']);
     });
   });
 
@@ -25,10 +25,10 @@ describe('needle-api - base', () => {
     });
 
     it('creates expected default files for server and angular', () => {
-      assert.textEqual(generatedModel.path, 'aPath');
-      assert.textEqual(generatedModel.file, 'dummyFile');
-      assert.textEqual(generatedModel.needle, 'a-needle-tag');
-      assert.objectContent(generatedModel.splicable, new Array('<p>My content added</p>'));
+      expect(generatedModel.path).toBe('aPath');
+      expect(generatedModel.file).toBe('dummyFile');
+      expect(generatedModel.needle).toBe('a-needle-tag');
+      expect(generatedModel.splicable).toEqual(new Array('<p>My content added</p>'));
     });
   });
 });

@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
-import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 
 const {
@@ -126,9 +126,6 @@ describe(`generator - ${generator}`, () => {
 }
 ",
     "stateCleared": "modified",
-  },
-  ".jhipster/User.json": {
-    "contents": null,
   },
 }
 `);
@@ -283,6 +280,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
+      "filterableField": true,
       "generateFakeData": Any<Function>,
       "id": true,
       "javaFieldType": "Long",
@@ -358,6 +356,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
+      "filterableField": true,
       "generateFakeData": Any<Function>,
       "javaFieldType": "String",
       "loadColumnType": "string",
@@ -429,6 +428,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
+      "filterableField": true,
       "generateFakeData": Any<Function>,
       "javaFieldType": "String",
       "loadColumnType": "string",
@@ -500,6 +500,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
+      "filterableField": true,
       "generateFakeData": Any<Function>,
       "javaFieldType": "String",
       "loadColumnType": "string",
@@ -749,6 +750,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
+      "filterableField": true,
       "generateFakeData": Any<Function>,
       "id": true,
       "javaFieldType": "UUID",
@@ -1059,6 +1061,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
+      "filterableField": true,
       "generateFakeData": Any<Function>,
       "id": true,
       "javaFieldType": "UUID",

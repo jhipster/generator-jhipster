@@ -1,5 +1,4 @@
-import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
+import helpers, { runResult } from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
 
 import AngularGenerator from '../../generators/angular/index.mjs';
@@ -58,7 +57,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
   });
 
   it('entity menu contains the entity added by needle api', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
             <li>
@@ -85,7 +84,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
       .run();
   });
   it('admin menu contains the admin element added by needle api', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
             <li>
@@ -99,11 +98,11 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
   });
 
   it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName2');
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName2');
   });
 
   it('entity module contains the microservice object added by needle api', () => {
-    assert.fileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
       '      {\n' +
         "        path: 'entityUrl',\n" +

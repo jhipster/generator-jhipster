@@ -48,27 +48,33 @@ fi
 # Install JHipster Generator
 #-------------------------------------------------------------------------------
 cd "$HOME"
-if [[ "$JHI_REPO" == *"/generator-jhipster" || "$JHI_GEN_BRANCH" == "local" ]]; then
-    echo "*** generator-jhipster or executable: use local version at JHI_CLI_PACKAGE_PATH=$JHI_CLI_PACKAGE_PATH"
-
-    cd "$JHI_CLI_PACKAGE_PATH"
-    git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    npm ci
-    npm install -g "$JHI_CLI_PACKAGE_PATH"
-
-elif [[ "$JHI_GEN_BRANCH" == "release" ]]; then
+if [[ "$JHI_GEN_BRANCH" == "release" ]]; then
     echo "*** generator-jhipster: use release version"
     npm install -g generator-jhipster
 
 else
-    if [ "$JHI_GEN_BRANCH" == "latest" ]; then
-        JHI_GEN_BRANCH=$(git describe --abbrev=0)
+    if [[ "$JHI_REPO" == *"/generator-jhipster" || "$JHI_GEN_BRANCH" == "local" ]]; then
+        echo "*** generator-jhipster or executable: use local version at JHI_CLI_PACKAGE_PATH=$JHI_CLI_PACKAGE_PATH"
+        cd "$JHI_CLI_PACKAGE_PATH"
+    else
+        if [ "$JHI_GEN_BRANCH" == "latest" ]; then
+            JHI_GEN_BRANCH=$(git describe --abbrev=0)
+        fi
+        echo "*** generator-jhipster: JHI_GEN_REPO=$JHI_GEN_REPO with JHI_GEN_BRANCH=$JHI_GEN_BRANCH"
+        git clone -b "$JHI_GEN_BRANCH" --depth 5 "$JHI_GEN_REPO" generator-jhipster
+        cd generator-jhipster
     fi
-    echo "*** generator-jhipster: JHI_GEN_REPO=$JHI_GEN_REPO with JHI_GEN_BRANCH=$JHI_GEN_BRANCH"
-    git clone -b "$JHI_GEN_BRANCH" --depth 5 "$JHI_GEN_REPO" generator-jhipster
-    cd generator-jhipster
-    git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    npm ci
-    npm install -g .
+    git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    npm ci --ignore-scripts
+
+    if [[ "$JHI_INSTALL_GLOBALLY" == "true" || "$JHI_BIN_FOLDER" == "" ]]; then
+        echo "*** installing generator-jhipster globally"
+        npm install -g .
+    else
+        echo "*** adding development jhipster to path"
+        ln -s "$(pwd)/bin/jhipster.mjs" "$JHI_BIN_FOLDER/jhipster"
+        ls -la bin "$JHI_BIN_FOLDER"
+        jhipster --install-path
+    fi
 fi
