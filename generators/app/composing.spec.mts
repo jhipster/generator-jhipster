@@ -1,7 +1,7 @@
 import assert from 'assert';
 import Environment from 'yeoman-environment';
 
-import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { GENERATOR_APP } from '../generator-list.mjs';
 
 const { createEnv } = Environment;

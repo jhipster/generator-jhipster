@@ -876,9 +876,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -1529,9 +1526,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -2253,9 +2247,6 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -3030,9 +3021,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -3803,9 +3791,6 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {

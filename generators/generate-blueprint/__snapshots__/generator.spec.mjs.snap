@@ -641,6 +641,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/server/templates/template-file-server.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-cache/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cache/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cache/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cache/templates/template-file-spring-cache.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-controller/generator.mjs": {
     "stateCleared": "modified",
   },

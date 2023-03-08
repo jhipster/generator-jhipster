@@ -1,4 +1,4 @@
-import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
+import { dryRunHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';

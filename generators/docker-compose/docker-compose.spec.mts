@@ -3,7 +3,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
 import applicationTypes from '../../jdl/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { skipPrettierHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;

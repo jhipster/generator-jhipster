@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { basicHelpers, skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';

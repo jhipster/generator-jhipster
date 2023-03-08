@@ -1,6 +1,6 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { dryRunHelpers as helpers } from '../../test/support/index.mjs';
 import { GENERATOR_OPENAPI_CLIENT } from '../generator-list.mjs';
 
 const basePackage = 'src/main/java/com/mycompany/myapp';

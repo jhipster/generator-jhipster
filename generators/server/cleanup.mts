@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import cleanupCacheProvider from './cleanup-cache-provider.mjs';
 import cleanupOauth2 from './cleanup-oauth2.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
@@ -29,7 +28,6 @@ import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.m
  */
 export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: ServerGeneratorDefinition['writingTaskParam']) {
   const { application } = taskParam;
-  cleanupCacheProvider.call(this, taskParam as any);
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);
   }
@@ -179,6 +177,21 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     if (!application.skipClient && !application.reactive) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardController.java`);
       this.removeFile(`${application.javaPackageTestDir}web/rest/ClientForwardControllerTest.java`);
+    }
+    if (
+      application.databaseTypeSql ||
+      (application as any).messageBrokerKafka ||
+      (application as any).cacheProviderRedis ||
+      application.databaseTypeMongodb ||
+      application.databaseTypeCassandra ||
+      (application as any).searchEngineElasticsearch ||
+      application.databaseTypeCouchbase ||
+      (application as any).searchEngineCouchbase ||
+      application.databaseTypeNeo4j
+    ) {
+      // The condition is too complated, delete and recreate.
+      this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
+      this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }
   }
 }

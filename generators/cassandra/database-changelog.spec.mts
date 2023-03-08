@@ -1,4 +1,4 @@
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { dryRunHelpers as helpers } from '../../test/support/index.mjs';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CASSANDRA } from '../generator-list.mjs';

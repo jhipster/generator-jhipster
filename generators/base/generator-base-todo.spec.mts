@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import sinon from 'sinon';
-import assert from 'assert';
 import Environment from 'yeoman-environment';
 import { TestAdapter } from 'yeoman-test';
-import { basicHelpers as helpers, result as runResult } from './support/index.mjs';
+import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
-import Base from '../generators/base/index.mjs';
-import { parseChangelog, Logger } from '../generators/base/support/index.mjs';
-import { databaseTypes } from '../jdl/jhipster/index.mjs';
+import Base from './index.mjs';
+import { parseChangelog } from './support/timestamp.mjs';
+import Logger from './support/logger.mjs';
+import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 
 const { POSTGRESQL } = databaseTypes;
 
@@ -331,132 +330,6 @@ describe('generator - base', () => {
           );
         });
       });
-    });
-  });
-
-  describe('priorities', () => {
-    let mockedPriorities;
-    const priorities = [
-      'initializing',
-      'prompting',
-      'configuring',
-      'composing',
-      'loading',
-      'preparing',
-      'default',
-      'writing',
-      'postWriting',
-      'install',
-      'end',
-    ];
-    before(() => {
-      mockedPriorities = {};
-      priorities.forEach(priority => {
-        mockedPriorities[priority] = sinon.fake();
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mockBlueprintSubGen: any = class extends Base {
-        get [Base.INITIALIZING]() {
-          return {
-            mocked() {
-              mockedPriorities.initializing();
-            },
-          };
-        }
-
-        get [Base.PROMPTING]() {
-          return {
-            mocked() {
-              mockedPriorities.prompting();
-            },
-          };
-        }
-
-        get [Base.CONFIGURING]() {
-          return {
-            mocked() {
-              mockedPriorities.configuring();
-            },
-          };
-        }
-
-        get [Base.COMPOSING]() {
-          return {
-            mocked() {
-              mockedPriorities.composing();
-            },
-          };
-        }
-
-        get [Base.LOADING]() {
-          return {
-            mocked() {
-              mockedPriorities.loading();
-            },
-          };
-        }
-
-        get [Base.PREPARING]() {
-          return {
-            mocked() {
-              mockedPriorities.preparing();
-            },
-          };
-        }
-
-        get [Base.DEFAULT]() {
-          return {
-            mocked() {
-              mockedPriorities.default();
-            },
-          };
-        }
-
-        get [Base.WRITING]() {
-          return {
-            mocked() {
-              mockedPriorities.writing();
-            },
-          };
-        }
-
-        get [Base.POST_WRITING]() {
-          return {
-            mocked() {
-              mockedPriorities.postWriting();
-            },
-          };
-        }
-
-        get [Base.INSTALL]() {
-          return {
-            mocked() {
-              mockedPriorities.install();
-            },
-          };
-        }
-
-        get [Base.END]() {
-          return {
-            mocked() {
-              mockedPriorities.end();
-            },
-          };
-        }
-      };
-      return helpers.create(mockBlueprintSubGen).run();
-    });
-
-    priorities.forEach((priority, idx) => {
-      it(`should execute ${priority}`, () => {
-        assert(mockedPriorities[priority].calledOnce);
-      });
-      if (idx > 0) {
-        const lastPriority = priorities[idx - 1];
-        it(`should execute ${priority} after ${lastPriority} `, () => {
-          assert(mockedPriorities[priority].calledAfter(mockedPriorities[lastPriority]));
-        });
-      }
     });
   });
 });

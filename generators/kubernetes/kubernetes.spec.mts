@@ -1,7 +1,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
-import { GENERATOR_KUBERNETES } from '../generators/generator-list.mjs';
+import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 
 const expectedFiles = {
   eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],

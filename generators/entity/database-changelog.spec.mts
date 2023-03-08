@@ -1,4 +1,4 @@
-import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { getGenerator } from '../../test/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/generator.mjs';
