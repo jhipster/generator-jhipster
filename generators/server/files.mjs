@@ -469,7 +469,7 @@ export const baseServerFiles = {
       condition: generator => !generator.skipClient && generator.reactive,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['web/filter/SpaWebFilterTestController_reactive.java.ejs'],
+      templates: ['web/filter/SpaWebFilterTestController_reactive.java'],
     },
   ],
   serverTestReactive: [
