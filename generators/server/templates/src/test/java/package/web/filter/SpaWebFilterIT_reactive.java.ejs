@@ -3,7 +3,6 @@ package <%= packageName %>.web.filter;
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.assertj.core.api.Assertions;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,8 @@ public class SpaWebFilterIT {
             .uri("/")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.TEXT_HTML);
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 <%_ if (!skipUserManagement) { _%>
 
@@ -37,7 +37,8 @@ public class SpaWebFilterIT {
             .uri("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>")
             .exchange()
             .expectStatus().isOk()
-            .expectBody(String.class).value(c -> Assertions.assertThat(c).isEqualTo("user"));
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo("user);
     }
 <%_ } _%>
 
@@ -68,7 +69,8 @@ public class SpaWebFilterIT {
             .uri("/test")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.TEXT_HTML);
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -78,7 +80,8 @@ public class SpaWebFilterIT {
             .uri("/first-level")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.TEXT_HTML);
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -88,7 +91,8 @@ public class SpaWebFilterIT {
             .uri("/first-level/second-level")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.TEXT_HTML);
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -98,7 +102,8 @@ public class SpaWebFilterIT {
             .uri("/first-level/second-level/third-level")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.TEXT_HTML);
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -108,7 +113,8 @@ public class SpaWebFilterIT {
             .uri("/1/2/3/4/5/6/7/8/9/10")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.TEXT_HTML);
+            .expectHeader().contentType("text/html;charset=UTF-8")
+            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test

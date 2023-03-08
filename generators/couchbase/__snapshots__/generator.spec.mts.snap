@@ -422,6 +422,9 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -830,6 +833,9 @@ exports[`generator - couchbase gateway-oauth2-maven-enableTranslation(false)-tec
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
@@ -3106,6 +3112,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -3926,6 +3935,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -4696,6 +4708,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
