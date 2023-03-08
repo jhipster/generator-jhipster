@@ -38,7 +38,7 @@ public class SpaWebFilterIT {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo("user);
+            .expectBody(String.class).isEqualTo("user");
     }
 <%_ } _%>
 
