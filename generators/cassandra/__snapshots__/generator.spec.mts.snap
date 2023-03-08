@@ -3764,6 +3764,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
