@@ -4,14 +4,16 @@ export interface AccountStateStorable {
   logon: boolean;
   userIdentity: null | any;
   authenticated: boolean;
+  profilesLoaded: boolean;
   ribbonOnProfiles: string;
   activeProfiles: string;
-};
+}
 
 export const defaultAccountState: AccountStateStorable = {
-  logon: false,
+  logon: null,
   userIdentity: null,
   authenticated: false,
+  profilesLoaded: false,
   ribbonOnProfiles: '',
   activeProfiles: '',
 };
@@ -22,22 +24,26 @@ export const accountStore: Module<AccountStateStorable, any> = {
     logon: state => state.logon,
     account: state => state.userIdentity,
     authenticated: state => state.authenticated,
+    profilesLoaded: state => state.profilesLoaded,
     activeProfiles: state => state.activeProfiles,
     ribbonOnProfiles: state => state.ribbonOnProfiles,
   },
   mutations: {
-    authenticate(state) {
-      state.logon = true;
+    authenticate(state, promise) {
+      state.logon = promise;
     },
     authenticated(state, identity) {
       state.userIdentity = identity;
       state.authenticated = true;
-      state.logon = false;
+      state.logon = null;
     },
     logout(state) {
       state.userIdentity = null;
       state.authenticated = false;
-      state.logon = false;
+      state.logon = null;
+    },
+    profilesLoaded(state) {
+      state.profilesLoaded = true;
     },
     setActiveProfiles(state, profile) {
       state.activeProfiles = profile;

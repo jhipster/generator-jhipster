@@ -1,0 +1,5 @@
+import { defaultAccountState } from '@/shared/config/store/account-store';
+
+export const resetStore = store => {
+  store.replaceState({ accountStore: { ...defaultAccountState }, translationStore: { languages: {} } });
+};
