@@ -316,6 +316,53 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('gateway and ingressType nginx', () => {
+    let runResult;
+    before(async () => {
+      const chosenApps = ['01-gateway'];
+
+      runResult = await helpers
+        .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: './',
+          chosenApps,
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          kubernetesServiceType: 'Ingress',
+          ingressDomain: 'example.com',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files', () => {
+      runResult.assertFile(expectedFiles.consulregistry);
+    });
+    it('creates expected gateway files', () => {
+      runResult.assertFile(expectedFiles.jhgate);
+    });
+    it('creates expected gateway ingress files', () => {
+      runResult.assertFile(expectedFiles.jhgateingress);
+    });
+    it('create the expected keycloak files', () => {
+      runResult.assertFile(expectedFiles.keycloak);
+    });
+    it('create the apply script', () => {
+      runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
   describe('MySQL and PostgreSQL microservices without gateway', () => {
     let runResult;
     before(async () => {

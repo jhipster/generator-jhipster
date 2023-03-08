@@ -217,11 +217,18 @@ spec:
           value: "x-request-id,x-ot-span-context"
 <%_ } _%>
 <%_ if (useKeycloak) { _%>  
+      <%_ if (ingressTypeGke) { _%>  
         # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
-          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
+          value: " -Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+      <%_ } else { _%>  
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+      <%_ } _%>    
       <%_ if (app.applicationTypeGateway || app.applicationTypeMonolith) { _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: web_app
@@ -241,10 +248,12 @@ spec:
         - name: SERVER_SHUTDOWN
           value: graceful
     <%_ if (useKeycloak) { _%>
+        <%_ if (ingressTypeGke) { _%>  
         # Custom trustStore required when using Let's Encrypt staging
         volumeMounts:
           - name: java-truststore
             mountPath: /etc/pki/java
+        <%_ } _%>
     <%_ } _%>
         resources:
           requests:
@@ -269,6 +278,7 @@ spec:
             port: http
           initialDelaySeconds: 120
   <%_ if (useKeycloak) { _%>
+      <%_ if (ingressTypeGke) { _%>  
       volumes:
       # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
       - name: java-truststore
@@ -277,5 +287,6 @@ spec:
           items:
           - key: truststore.jks
             path: cacerts
+      <%_ } _%>
   <%_ } _%>
           
