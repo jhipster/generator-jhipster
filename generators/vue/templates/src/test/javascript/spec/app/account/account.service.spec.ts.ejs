@@ -16,7 +16,12 @@ import {
 import { defaultAccountState } from '@/shared/config/store/account-store';
 
 const resetStore = store => {
-  store.replaceState({ accountStore: { ...defaultAccountState }, translationStore: { languages: {} } });
+  store.replaceState({
+    accountStore: { ...defaultAccountState },
+<%_ if (enableTranslation) { _%>
+    translationStore: { languages: {} },
+<%_ } %>
+  });
 };
 
 const axiosStub = {
@@ -31,9 +36,9 @@ const localVue = createLocalVue();
 const store = initVueXStore(localVue);
 
 describe('Account Service test suite', () => {
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   let i18n;
-  <%_ } %>
+<%_ } %>
   let accountService: AccountService;
 
   beforeEach(() => {
