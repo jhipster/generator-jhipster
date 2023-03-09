@@ -56,7 +56,7 @@ You can scale your apps using
 $ kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-## zero-downtime deployments
+## Zero-downtime deployments
 
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using
 
