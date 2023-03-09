@@ -586,16 +586,10 @@ export const baseServerFiles = {
       templates: [data => `web/filter/SpaWebFilter_${data.imperativeOrReactive}.java`],
     },
     {
-      condition: generator => !generator.skipClient && !generator.reactive,
+      condition: generator => !generator.skipClient,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['web/filter/SpaWebFilterIT.java'],
-    },
-    {
-      condition: generator => !generator.skipClient && generator.reactive,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/filter/SpaWebFilterIT_reactive.java'],
+      templates: [data => `web/filter/SpaWebFilterIT_${data.imperativeOrReactive}.java`],
     },
     {
       condition: generator => !generator.skipClient && generator.reactive,
