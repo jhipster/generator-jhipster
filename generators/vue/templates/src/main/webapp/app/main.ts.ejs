@@ -114,7 +114,7 @@ setupAxiosInterceptors(
     if (status === 401) {
       // Store logged out state.
       store.commit('logout');
-      if (!url.endsWith('api/account') && !url.endsWith('api/authenticate')) {
+      if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
         // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
         window.location.reload();
