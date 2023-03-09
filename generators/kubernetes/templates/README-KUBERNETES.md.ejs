@@ -53,7 +53,7 @@ $ kubectl get svc <%= appConfigs[i].baseName.toLowerCase() %><%= kubernetesNames
 You can scale your apps using
 
 ```
-$ kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 ## Zero-downtime deployments
@@ -61,7 +61,7 @@ $ kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNa
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using
 
 ```
-$ kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -74,17 +74,17 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 Generator is also packaged with [Prometheus operator by CoreOS](https://github.com/coreos/prometheus-operator).
 
-**hint**: use must build your apps with `prometheus` profile active!
+**Hint**: use must build your apps with `prometheus` profile active!
 
 Application metrics can be explored in Prometheus through,
 
 ```
-$ kubectl get svc jhipster-prometheus<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc jhipster-prometheus<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 Also the visualisation can be explored in Grafana which is pre-configured with a dashboard view. You can find the service details by
 ```
-$ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 * If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain.
@@ -99,19 +99,19 @@ $ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${k
 The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
 
 ```
-$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 and explore the details using
 
 ```
-$ kubectl get svc exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 For scaling the JHipster registry, use
 
 ```
-$ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 <%_ } _%>
 
@@ -121,7 +121,7 @@ $ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespac
 Keycloak deployment in production mode requires the installation of [cert-manager](https://cert-manager.io/docs/installation/) Kubernetes add-on for the TLS certificate generation.
 
 ```
-$ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.yaml
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.yaml
 ```
 
 The certificate will be issued automatically by Let's Encrypt staging environment. You must set your email address in the issuer definition at `cert-manager/letsencrypt-staging-issuer.yml`.
@@ -129,14 +129,24 @@ The certificate will be issued automatically by Let's Encrypt staging environmen
 Keycloak ingress is defined with the application ingress, and requires a static IP with the name specified in the ingress annotation `kubernetes.io/ingress.global-static-ip-name`.
 
 You can create a global public IP with `gcloud` before running `jhipster k8s` with the following command:
+
 ```
-$ gcloud compute addresses create <ip-name> --global
+gcloud compute addresses create <ip-name> --global
 ```
+
 You can find out the assigned IP address with the following command:
+
 ```
-$ gcloud compute addresses describe <ip-name> --global --format='value(address)'
+gcloud compute addresses describe <ip-name> --global --format='value(address)'
 ```
+
 When running the `jhipster k8s` generator, it will prompt for a root FQDN (Fully qualified domain name). You can use `nip.io` as the DNS provider and set `<ip-address>.nip.io`.
+
+It might take up to 15 minutes for the Let's Encrypt certificates to be issued. Use the following command to check the status:
+
+```
+kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+```
 
 <%_ } _%>
 
