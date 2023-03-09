@@ -36,6 +36,7 @@
     "bootswatch": "<%= nodeDependencies['bootswatch'] %>",
 <%_ } _%>
     "dayjs": "<%= nodeDependencies['dayjs'] %>",
+    "numeral": "<%= nodeDependencies['numeral'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
     "sockjs-client": "1.5.2",
     "@stomp/rx-stomp": "1.1.4",
@@ -58,23 +59,27 @@
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "@types/sinon": "<%= nodeDependencies['@types/sinon'] %>",
     "@types/vuelidate": "<%= nodeDependencies['@types/vuelidate'] %>",
+    "@vue/cli-plugin-e2e-cypress": "<%= nodeDependencies['@vue/cli-service'] %>",
+    "@vue/cli-plugin-eslint": "<%= nodeDependencies['@vue/cli-service'] %>",
+    "@vue/cli-plugin-pwa": "<%= nodeDependencies['@vue/cli-service'] %>",
+    "@vue/cli-plugin-eslint": "<%= nodeDependencies['@vue/cli-service'] %>",
+    "@vue/cli-plugin-typescript": "<%= nodeDependencies['@vue/cli-service'] %>",
+    "@vue/cli-service": "<%= nodeDependencies['@vue/cli-service'] %>",
     "@vue/eslint-config-prettier": "<%= nodeDependencies['@vue/eslint-config-prettier'] %>",
     "@vue/eslint-config-typescript": "<%= nodeDependencies['@vue/eslint-config-typescript'] %>",
+    "@vue/vue2-jest": "<%= nodeDependencies['@vue/vue2-jest'] %>",
     "@vue/test-utils": "<%= nodeDependencies['@vue/test-utils'] %>",
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
     "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
     "css-loader": "<%= nodeDependencies['css-loader'] %>",
-    "css-minimizer-webpack-plugin": "<%= nodeDependencies['css-minimizer-webpack-plugin'] %>",
-    "fork-ts-checker-webpack-plugin": "<%= nodeDependencies['fork-ts-checker-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
   <%_ blueprints.forEach(blueprint => { _%>
     "<%= blueprint.name %>": "<%= blueprint.version %>",
   <%_ }); _%>
 <%_ } _%>
-    "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
     "jest": "<%= nodeDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= nodeDependencies['jest-environment-jsdom'] %>",
     "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
@@ -84,11 +89,6 @@
     "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
-    "mini-css-extract-plugin": "<%= nodeDependencies['mini-css-extract-plugin'] %>",
-    "numeral": "<%= nodeDependencies['numeral'] %>",
-    "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
-    "postcss-loader": "<%= nodeDependencies['postcss-loader'] %>",
-    "postcss-url": "<%= nodeDependencies['postcss-url'] %>",
     "prettier": "<%= nodeDependencies['prettier'] %>",
 <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
@@ -97,31 +97,21 @@
 <%_ if (cypressTests) { _%>
     "cypress": "<%= nodeDependencies['cypress'] %>",
 <%_ } _%>
+    "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
+    "postcss-url": "<%= nodeDependencies['postcss-url'] %>",
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
     "sass": "<%= nodeDependencies['sass'] %>",
     "sass-loader": "<%= nodeDependencies['sass-loader'] %>",
     "sinon": "<%= nodeDependencies['sinon'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
-    "terser-webpack-plugin": "<%= nodeDependencies['terser-webpack-plugin'] %>",
     "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
-    "ts-loader": "<%= nodeDependencies['ts-loader'] %>",
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
-<%_ if (microfrontend) { _%>
-    "@vue/vue2-jest": "<%= nodeDependencies['@vue/vue2-jest'] %>",
-<%_ } else { _%>
-    "vue-jest": "<%= nodeDependencies['vue-jest'] %>",
-<%_ } _%>
     "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
-    "vue-template-compiler": "<%= nodeDependencies['vue'] %>",
-    "webpack": "<%= nodeDependencies['webpack'] %>",
-    "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
-    "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
-    "webpack-dev-server": "<%= nodeDependencies['webpack-dev-server'] %>",
     "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
-    "workbox-webpack-plugin": "<%= nodeDependencies['workbox-webpack-plugin'] %>"
+    "webpack-notifier": "<%= nodeDependencies['webpack-notifier'] %>"
   },
   "engines": {
     "node": ">=<%= nodeVersion %>",
@@ -157,19 +147,19 @@
     "test": "<%= clientPackageManager %> run jest --",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "vue-build": "vue-cli-service build --modern",
+    "vue-serve": "vue-cli-service serve --modern",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
-    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",
-    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --mode production --env stats=minimal",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --mode development --env stats=normal",
+    "webapp:build:dev": "<%= clientPackageManager %> run vue-build -- --mode development",
+    "webapp:build:prod": "<%= clientPackageManager %> run vue-build -- --mode production",
+    "webapp:dev": "<%= clientPackageManager %> run vue-serve",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
-    "webapp:test": "<%= clientPackageManager %> run test --",
-    "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
-    "webpack": "webpack --config webpack/webpack.common.js"
+    "webapp:test": "<%= clientPackageManager %> run test --"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "vuePlugins": {
+    "service": [
+      "vue.commands.js"
+    ]
+  }
 }

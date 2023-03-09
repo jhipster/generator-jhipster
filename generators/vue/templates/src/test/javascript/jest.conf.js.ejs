@@ -9,10 +9,15 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   coverageDirectory: '<rootDir>/<%= temporaryDir %>test-results/',
-  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= clientTestDir %>', '<rootDir>/<%= clientSrcDir %>app/router', '.*.json'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/<%= clientTestDir %>',
+    '<rootDir>/<%= clientSrcDir %>app/router',
+    '.*.json',
+  ],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
-    '.*\\.(vue)$': '<%= microfrontend ? '@vue/vue2-jest' : 'vue-jest' %>',
+    '.*\\.(vue)$': '@vue/vue2-jest',
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -42,8 +47,8 @@ module.exports = {
 <%_ if (enableTranslation) { _%>
     I18N_HASH: 'generated_hash',
 <%_ } _%>
-    SERVER_API_URL: config.serverApiUrl,
-    VERSION: config.version,
+    SERVER_API_URL: '',
+    VERSION: '',
   },
   coverageThreshold: {
     global: {

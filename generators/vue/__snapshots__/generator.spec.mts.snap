@@ -179,6 +179,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "src/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
+  "src/app/externals.d.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/main.ts": {
     "stateCleared": "modified",
   },
@@ -425,19 +428,19 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -665,6 +668,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "src/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/externals.d.ts": {
     "stateCleared": "modified",
   },
   "src/app/locale/translation.service.ts": {
@@ -943,19 +949,19 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -1132,6 +1138,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/externals.d.ts": {
     "stateCleared": "modified",
   },
   "src/app/index.ts": {
@@ -1392,10 +1401,13 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
@@ -1405,9 +1417,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -1578,6 +1587,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/externals.d.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/index.ts": {
@@ -1847,10 +1859,13 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
@@ -1860,9 +1875,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -2150,6 +2162,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/externals.d.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/locale/translation.service.ts": {
@@ -2455,19 +2470,19 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -2638,6 +2653,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/externals.d.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/main.ts": {
@@ -2880,19 +2898,19 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -3066,6 +3084,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/externals.d.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/main.ts": {
@@ -3311,19 +3332,19 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "vue.commands.js": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "vue.config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.common.js": {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }

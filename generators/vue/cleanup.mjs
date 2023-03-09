@@ -48,4 +48,9 @@ export default function cleanupOldFilesTask({ application } = {}) {
   if (this.isJhipsterVersionLessThan('7.4.2')) {
     this.removeFile(`${application.clientSrcDir}app/entities/user/user.oauth2.service.ts`);
   }
+
+  if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile('webpack/webpack.prod.js');
+    this.removeFile('webpack/vue.utils.js');
+  }
 }

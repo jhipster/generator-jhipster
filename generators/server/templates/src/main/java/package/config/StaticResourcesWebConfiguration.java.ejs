@@ -33,12 +33,19 @@ import java.util.concurrent.TimeUnit;
 @Profile({JHipsterConstants.SPRING_PROFILE_PRODUCTION})
 public class StaticResourcesWebConfiguration implements WebMvcConfigurer {
 
-    protected static final String[] RESOURCE_LOCATIONS = new String[]{"classpath:/static/", "classpath:/static/content/", "classpath:/static/i18n/"};
+    protected static final String[] RESOURCE_LOCATIONS = new String[]{
+        "classpath:/static/",
+<%_ for (const webResource of webappResources.filter(res => res.indexOf('/', 1) !== -1).map(res => res.split('/')[1])) { _%>
+        "classpath:/static/<%- webResource %>/",
+<%_ } _%>
+        "classpath:/static/content/",
+        "classpath:/static/i18n/"
+    };
     protected static final String[] RESOURCE_PATHS = new String[]{
         "/*.js",
-  <%_ for (const webResource of webappResources) { _%>
+<%_ for (const webResource of webappResources) { _%>
         "<%- webResource %>",
-  <%_ } _%>
+<%_ } _%>
         "/*.css",
         "/*.svg",
         "/*.png",

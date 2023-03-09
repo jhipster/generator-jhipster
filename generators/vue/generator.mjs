@@ -73,6 +73,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
           application.nodeDependencies,
           this.fetchFromInstalledJHipster(GENERATOR_VUE, 'templates', 'package.json')
         );
+        application.nodeDependencies['@vue/cli-service'] = '5.0.8';
+        application.webappResources = ['/manifest.json', '/js/*.js', '/css/*.css'];
       },
     });
   }

@@ -1,50 +1,31 @@
-'use strict';
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
-const path = require('path');
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 <%_ if (buildToolUnknown) { _%>
 const packageJson = require('./../package.json');
-<%_ } _%>
 
+<%_ } _%>
 module.exports = {
-  serverApiUrl: '',
+  SERVER_API_URL: '/',
 <%_ if (buildToolUnknown) { _%>
   version: packageJson.version,
 <%_ } else { _%>
   // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
-  version: process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'UNKNOWN',
+  VERSION: process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'UNKNOWN',
 <%_ } _%>
-
-  dev: {
-    hotReload: <%= !microfrontend %>,
-
-    // https://webpack.js.org/configuration/devtool/#development
-    devtool: 'cheap-module-source-map',
-
-    // If you have problems debugging vue-files in devtools,
-    // set this to false - it *may* help
-    // https://vue-loader.vuejs.org/en/options.html#cachebusting
-    cacheBusting: true,
-
-    cssSourceMap: true
-  },
-
-  build: {
-    productionSourceMap: true,
-    // https://webpack.js.org/configuration/devtool/#production
-    devtool: 'source-map',
-
-    // Gzip off by default as many popular static hosts such as
-    // Surge or Netlify already gzip all static assets for you.
-    // Before setting to `true`, make sure to:
-    // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
-    productionGzipExtensions: ['js', 'css'],
-
-    // Run the build command with an extra argument to
-    // View the bundle analyzer report after build finishes:
-    // `npm run build --report`
-    // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
-  }
 };

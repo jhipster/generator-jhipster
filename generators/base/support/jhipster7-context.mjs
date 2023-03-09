@@ -126,6 +126,10 @@ const deprecatedProperties = {
     replacement: 'cacheProviderAny',
     get: ({ data }) => data.cacheProviderAny,
   },
+  buildDir: {
+    replacement: 'temporaryDir',
+    get: ({ data }) => data.temporaryDir,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
