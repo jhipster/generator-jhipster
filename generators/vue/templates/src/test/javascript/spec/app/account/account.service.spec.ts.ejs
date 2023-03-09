@@ -13,8 +13,11 @@ import {
   initI18N,
 <%_ } %>
 } from '@/shared/config/config';
+import { defaultAccountState } from '@/shared/config/store/account-store';
 
-import { resetStore } from '../reset-store';
+const resetStore = store => {
+  store.replaceState({ accountStore: { ...defaultAccountState }, translationStore: { languages: {} } });
+};
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
