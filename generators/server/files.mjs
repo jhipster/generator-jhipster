@@ -146,13 +146,13 @@ const oauth2Files = {
       templates: ['config/OAuth2Configuration.java'],
     },
     {
-      condition: generator => generator.generateLoginManagement,
+      condition: generator => generator.generateAuthenticationApi,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/AuthInfoResource.java', data => `web/rest/LogoutResource_${data.imperativeOrReactive}.java`],
     },
     {
-      condition: generator => generator.generateLoginManagement,
+      condition: generator => generator.generateAuthenticationApi,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -163,19 +163,19 @@ const oauth2Files = {
       ],
     },
     {
-      condition: generator => generator.generateLoginManagement,
+      condition: generator => generator.generateAuthenticationApi,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['test/util/OAuth2TestUtil.java', 'web/rest/LogoutResourceIT.java'],
     },
     {
-      condition: generator => !generator.reactive && generator.generateLoginManagement,
+      condition: generator => !generator.reactive && generator.generateAuthenticationApi,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['security/oauth2/CustomClaimConverter.java'],
     },
     {
-      condition: generator => !generator.reactive && generator.generateLoginManagement,
+      condition: generator => !generator.reactive && generator.generateAuthenticationApi,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['security/oauth2/CustomClaimConverterIT.java'],
@@ -279,19 +279,19 @@ const jwtFiles = {
   ],
   entrypointFiles: [
     {
-      condition: data => !data.generateLoginManagement,
+      condition: data => !data.generateAuthenticationApi,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['security/jwt/TestAuthenticationResource.java'],
     },
     {
-      condition: generator => generator.generateLoginManagement,
+      condition: generator => generator.generateAuthenticationApi,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/vm/LoginVM.java', 'web/rest/AuthenticateController.java'],
     },
     {
-      condition: generator => generator.generateLoginManagement,
+      condition: generator => generator.generateAuthenticationApi,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/AuthenticateControllerIT.java'],
@@ -643,7 +643,7 @@ export const serverFiles = mergeSections(
   addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt),
   addSectionsCondition(oauth2Files, context => context.authenticationTypeOauth2),
   addSectionsCondition(gatewayFiles, context => context.applicationTypeGateway),
-  addSectionsCondition(accountFiles, context => context.generateLoginManagement),
+  addSectionsCondition(accountFiles, context => context.generateAuthenticationApi),
   addSectionsCondition(feignFiles, context => !context.reactive && context.applicationTypeMicroservice),
   addSectionsCondition(userManagementFiles, context => context.generateUserManagement),
   addSectionsCondition(imperativeConfigFiles, context => !context.reactive),
