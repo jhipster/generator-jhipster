@@ -253,6 +253,9 @@ public class SecurityConfiguration {
 <%_ if (!skipClient) { _%>
                     .pathMatchers("/").permitAll()
                     .pathMatchers("/*.*").permitAll()
+  <%_ for (const webResource of webappResources) { _%>
+                    .pathMatchers("<%- webResource %>").permitAll()
+  <%_ } _%>
 <%_ } _%>
                     .pathMatchers("/api/authenticate").permitAll()
 <%_ if (generateUserManagement) { _%>
@@ -271,6 +274,9 @@ public class SecurityConfiguration {
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
                     .pathMatchers("/services/*/*.js").permitAll()
                     .pathMatchers("/services/*/*.js.map").permitAll()
+    <%_ for (const webResource of webappResources) { _%>
+                    .pathMatchers("/services/*<%- webResource %>").permitAll()
+    <%_ } _%>
   <%_ } _%>
                     .pathMatchers("/services/*/management/health/readiness").permitAll()
                     .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)

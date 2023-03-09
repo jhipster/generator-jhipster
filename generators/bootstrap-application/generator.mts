@@ -72,6 +72,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           prettierExtensions = `${prettierExtensions},java`;
         }
         application.prettierExtensions = prettierExtensions;
+        application.webappResources = application.webappResources ?? [];
       },
     });
   }

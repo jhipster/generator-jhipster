@@ -542,6 +542,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "user": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappResources": [],
   "websocket": "no",
   "withAdminUi": true,
 }
@@ -1029,6 +1030,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "user": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappResources": [],
   "websocket": "no",
   "withAdminUi": true,
 }
@@ -1455,6 +1457,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
   "testResourceDir": "src/test/resources/",
   "upperFirstCamelCaseBaseName": "Jhipster",
+  "webappResources": [],
   "websocket": "no",
   "withAdminUi": false,
 }

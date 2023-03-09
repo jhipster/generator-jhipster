@@ -96,6 +96,7 @@ export type CommonClientServerApplication = BaseApplication &
     clientDistDir?: string;
     devServerPort: number;
     pages: string[];
+    webappResources: string[];
 
     serverPort: number;
     backendType?: string;
