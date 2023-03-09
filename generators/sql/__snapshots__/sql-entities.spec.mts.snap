@@ -26,6 +26,9 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -35,10 +38,19 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/AnotherSimple.java": {
@@ -51,6 +63,12 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -74,10 +92,16 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/package/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/AnotherSimpleService.java": {
@@ -92,7 +116,13 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/package/service/dto/UserRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
@@ -101,16 +131,31 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
@@ -119,16 +164,28 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -160,6 +217,9 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -169,10 +229,19 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
@@ -185,6 +254,12 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
@@ -208,10 +283,16 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/rowmapper/SimpleRowMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
@@ -226,7 +307,13 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
@@ -235,16 +322,31 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
@@ -253,16 +355,28 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -288,10 +402,19 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
@@ -306,6 +429,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -318,6 +444,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
@@ -327,16 +456,31 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -348,10 +492,19 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
@@ -363,10 +516,19 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -376,6 +538,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -404,6 +569,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -413,10 +581,19 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/AnotherSimple.java": {
@@ -429,6 +606,12 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -458,6 +641,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
@@ -467,19 +653,34 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
@@ -491,10 +692,19 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
@@ -506,10 +716,19 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -519,6 +738,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -544,10 +766,19 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
@@ -562,6 +793,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -574,6 +808,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
@@ -581,6 +818,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
@@ -592,13 +832,25 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -610,10 +862,19 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
@@ -625,10 +886,19 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -638,6 +908,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-en
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -666,6 +939,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -675,10 +951,19 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/AnotherSimple.java": {
@@ -694,6 +979,12 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -726,6 +1017,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/package/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
@@ -733,6 +1027,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/AnotherSimpleService.java": {
@@ -747,13 +1044,25 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/package/service/dto/UserRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
@@ -765,10 +1074,19 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
@@ -780,10 +1098,19 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -793,6 +1120,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -818,10 +1148,19 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
@@ -836,6 +1175,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -848,6 +1190,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
@@ -855,6 +1200,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
@@ -866,13 +1214,25 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -884,10 +1244,19 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
@@ -899,10 +1268,19 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -912,6 +1290,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -940,6 +1321,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -949,10 +1333,19 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/AnotherSimple.java": {
@@ -965,6 +1358,12 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -994,6 +1393,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
@@ -1003,19 +1405,34 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
@@ -1027,10 +1444,19 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
@@ -1042,10 +1468,19 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -1055,6 +1490,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -1080,10 +1518,19 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
@@ -1098,6 +1545,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -1110,6 +1560,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
@@ -1117,6 +1570,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
@@ -1128,13 +1584,25 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -1146,10 +1614,19 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
@@ -1161,10 +1638,19 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -1174,6 +1660,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -1202,6 +1691,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -1211,10 +1703,19 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/AnotherSimple.java": {
@@ -1230,6 +1731,12 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -1262,6 +1769,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/package/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
@@ -1269,6 +1779,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/AnotherSimpleService.java": {
@@ -1283,13 +1796,25 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/package/service/dto/UserRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
@@ -1301,10 +1826,19 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
@@ -1316,10 +1850,19 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -1329,6 +1872,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -1354,10 +1900,19 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
@@ -1372,6 +1927,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -1384,6 +1942,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
@@ -1391,6 +1952,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
@@ -1402,13 +1966,25 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -1420,10 +1996,19 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
@@ -1435,10 +2020,19 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -1448,6 +2042,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -1476,6 +2073,9 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
@@ -1485,10 +2085,19 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/custom/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/AnotherSimple.java": {
@@ -1501,6 +2110,12 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -1530,6 +2145,9 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/package/repository/SimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": {
     "stateCleared": "modified",
   },
@@ -1539,19 +2157,34 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/rowmapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
@@ -1563,10 +2196,19 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/package/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
@@ -1578,10 +2220,19 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/test/java/com/package/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -1591,6 +2242,9 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
