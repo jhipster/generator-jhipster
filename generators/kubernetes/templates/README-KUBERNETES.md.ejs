@@ -157,7 +157,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 <%_ if (useKeycloak) { _%>
 > my applications don't start, because of 'Remote host terminated the handshake' or 'PKIX path building failed'
 
-The k8s subgenerator configures Let's Encrypt staging environment, which is not trusted by browsers and java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
+The k8s sub-generator configures Let's Encrypt staging environment, which is not trusted by browsers and java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
 
 ```
 $ kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
