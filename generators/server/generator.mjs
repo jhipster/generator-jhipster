@@ -370,6 +370,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.frontendAppName = this.getFrontendAppName(application.baseName);
         application.mainClass = this.getMainClassName(application.baseName);
         application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
+        application.generateAuthenticationApi = application.applicationTypeMonolith || application.applicationTypeGateway;
 
         application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
 
