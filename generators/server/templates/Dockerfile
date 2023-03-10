@@ -49,7 +49,7 @@ LABEL ALIAS=zookeeper
 FROM sonarqube:9.9.0-community
 LABEL ALIAS=sonar
 
-FROM docker.io/bitnami/consul:1.14.4-debian-11-r5
+FROM docker.io/bitnami/consul:1.15.1
 LABEL ALIAS=consul
 
 FROM prom/prometheus:v2.42.0
