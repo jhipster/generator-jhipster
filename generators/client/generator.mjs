@@ -199,38 +199,24 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
-        const packageJsonStorage = this.createStorage('package.json');
-        const scriptsStorage = packageJsonStorage.createStorage('scripts');
+        const defaultEnvironment = process.env.JHI_PROFILE?.includes('dev') ? 'dev' : 'prod';
 
-        const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
-        if (process.env.JHI_PROFILE) {
-          packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
-        }
+        this.packageJson.merge({
+          config: {
+            default_environment: defaultEnvironment,
+          },
+          devDependencies: {
+            'wait-on': application.nodeDependencies['wait-on'],
+            concurrently: application.nodeDependencies.concurrently,
+          },
+        });
 
-        const devDependencies = packageJsonStorage.createStorage('devDependencies');
-        devDependencies.set('wait-on', application.nodeDependencies['wait-on']);
-        devDependencies.set('concurrently', application.nodeDependencies.concurrently);
-
+        const scriptsStorage = this.packageJson.createStorage('scripts');
         if (application.clientFrameworkReact) {
           scriptsStorage.set('ci:frontend:test', 'npm run webapp:build:$npm_package_config_default_environment && npm run test-ci');
         } else {
           scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
-        }
-      },
-
-      microfrontend({ application }) {
-        if (!application.microfrontend) return;
-        if (application.clientFrameworkAngular) {
-          const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
-          this.addWebpackConfig(
-            `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
-            application.clientFramework
-          );
-        } else if (application.clientFrameworkVue || application.clientFrameworkReact) {
-          this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })", application.clientFramework);
-        } else {
-          throw new Error(`Client framework ${application.clientFramework} doesn't support microfrontends`);
         }
       },
     });

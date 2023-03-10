@@ -125,6 +125,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      microfrontend({ application }) {
+        if (!application.microfrontend) return;
+        this.addWebpackConfig("require('./webpack.microfrontend')(options)", application.clientFramework);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
   get postWritingEntities() {
     return {
       postWriteEntityFiles,

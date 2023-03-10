@@ -135,6 +135,19 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      microfrontend({ application }) {
+        if (!application.microfrontend) return;
+        this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })", application.clientFramework);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
   get postWritingEntities() {
     return {
       postWriteEntitiesFiles,

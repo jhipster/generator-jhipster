@@ -150,6 +150,23 @@ export default class AngularGenerator extends BaseApplicationGenerator<Generator
     });
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      microfrontend({ application }) {
+        if (!application.microfrontend) return;
+        const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
+        this.addWebpackConfig(
+          `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
+          application.clientFramework
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
