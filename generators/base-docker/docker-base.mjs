@@ -141,6 +141,7 @@ export function loadFromYoRc() {
   this.useKafka = false;
   this.useMemcached = false;
   this.useRedis = false;
+  this.useRabbitMQ = false; // cmi-tic-varun
 
   // Current implementation loads appsFolders into defaultAppsFolders
   this.defaultAppsFolders = this.appsFolders;

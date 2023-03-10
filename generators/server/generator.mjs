@@ -50,6 +50,7 @@ import {
   GENERATOR_GRADLE,
   GENERATOR_JAVA,
   GENERATOR_KAFKA,
+  GENERATOR_RABBITMQ, // cmi-tic-varun
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
   GENERATOR_MONGODB,
@@ -130,7 +131,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -280,6 +281,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
+        }
+        // cmi-tic-varun
+        if (messageBroker === RABBITMQ) {
+          await this.composeWithJHipster(GENERATOR_RABBITMQ);
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);

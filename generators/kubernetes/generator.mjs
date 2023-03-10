@@ -37,7 +37,7 @@ import {
   derivedKubernetesPlatformProperties,
 } from './kubernetes-base.mjs';
 
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { MAVEN } = buildToolTypes;
 
 /**
@@ -109,6 +109,9 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
           element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
           if (element.messageBroker === KAFKA) {
             this.useKafka = true;
+          }
+          if (element.messageBroker === RABBITMQ) {
+            this.useRabbitMQ = true;
           }
         });
       },

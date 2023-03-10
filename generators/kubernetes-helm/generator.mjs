@@ -38,7 +38,7 @@ import {
 import statistics from '../statistics.mjs';
 import { messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 
 /**
  * @class
@@ -109,6 +109,9 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
           element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
           if (element.messageBroker === KAFKA) {
             this.useKafka = true;
+          }
+          if (element.messageBroker === RABBITMQ) {
+            this.useRabbitMQ = true;
           }
         });
       },

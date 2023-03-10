@@ -43,6 +43,10 @@ FROM redis:7.0.9
 FROM confluentinc/cp-kafka:7.3.2
 LABEL ALIAS=kafka
 
+# docker image for rabbitmq cmi-tic-varun
+FROM rabbitmq:3.11.9-management
+LABEL ALIAS=rabbit
+
 FROM confluentinc/cp-zookeeper:7.3.2
 LABEL ALIAS=zookeeper
 

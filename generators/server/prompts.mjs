@@ -338,6 +338,11 @@ export async function askForOptionalItems({ control }) {
     name: 'Apache Kafka as asynchronous messages broker',
     value: 'messageBroker:kafka',
   });
+  // cmi-tic-varun
+  choices.push({
+    name: 'RabbitMQ as asynchronous messages broker',
+    value: 'messageBroker:rabbit',
+  });
   choices.push({
     name: 'API first development using OpenAPI-generator',
     value: 'enableSwaggerCodegen:true',
