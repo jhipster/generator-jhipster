@@ -61,8 +61,11 @@ export default class AccountService {
     if (this.store.getters.logon) {
       return this.store.getters.logon;
     }
-
+<%_ if (authenticationTypeJwt) { _%>
     const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
+<%_ } else { _%>
+    const token = this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN');
+<%_ } _%>
     if (this.authenticated && this.userAuthorities && token) {
       return;
     }
