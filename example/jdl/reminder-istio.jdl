@@ -44,6 +44,7 @@ entity Summary {
 deployment {
   deploymentType kubernetes
   appsFolders [fe, be1]
+  serviceDiscoveryType eureka
   dockerRepositoryName "raxkumar"
   kubernetesNamespace k8s
   kubernetesServiceType Ingress
