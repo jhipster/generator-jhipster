@@ -41,6 +41,7 @@ import {
 <%_ } _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 <%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ } _%>
@@ -306,6 +307,19 @@ export const <%= entityReactName %> = () => {
 <%_ } _%>
   };
 
+  const getSortIconByFieldName = (fieldName: string) => {
+<%_ if (paginationNo) { _%>
+    const { sort: sortFieldName, order } = sortState;
+<%_ } else { _%>
+    const { sort: sortFieldName, order } = paginationState;
+<%_ } _%>
+    return (sortFieldName !== fieldName)
+      ? faSort
+      : (order === ASC)
+        ? faSortUp
+        : faSortDown;
+  };
+
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
@@ -357,7 +371,7 @@ export const <%= entityReactName %> = () => {
               <thead>
                 <tr>
 <%_ for (field of fields) { _%>
-                  <th className="hand" onClick={sort('<%= field.fieldName %>')} ><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon="sort" /></th>
+                  <th className="hand" onClick={sort('<%= field.fieldName %>')} ><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon={getSortIconByFieldName('<%= field.fieldName %>')} /></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
     <%_ if (relationship.relationshipManyToOne
