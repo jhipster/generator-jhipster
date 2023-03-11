@@ -50,6 +50,8 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
 <%_ } _%>
 <%_ if (reactive) { _%>
         builder.allowBlockingCallsInside("org.springframework.web.reactive.result.method.InvocableHandlerMethod", "invoke");
+        builder.allowBlockingCallsInside("org.springdoc.core.service.OpenAPIService", "build");
+        builder.allowBlockingCallsInside("org.springdoc.core.service.AbstractRequestService", "build");
 <%_ } _%>
     }
 }

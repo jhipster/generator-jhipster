@@ -20,7 +20,13 @@ import _ from 'lodash';
 import chalk from 'chalk';
 import fs from 'fs';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
-import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir, replaceEntityFilePathVariables } from './support/index.mjs';
+import {
+  moveToJavaEntityPackageSrcDir,
+  moveToJavaEntityPackageTestDir,
+  moveToJavaPackageSrcDir,
+  moveToJavaPackageTestDir,
+  replaceEntityFilePathVariables,
+} from './support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { getEnumInfo } from '../base-application/support/index.mjs';
@@ -183,6 +189,28 @@ export const dtoFiles = {
   ],
 };
 
+const userFiles = {
+  userFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
+      templates: ['domain/User.java', 'repository/UserRepository.java'],
+    },
+    {
+      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
+      templates: ['service/dto/UserDTO.java'],
+    },
+    {
+      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user.adminUserDto}.java`),
+      templates: ['service/dto/AdminUserDTO.java'],
+    },
+  ],
+};
+
 export const serverFiles = {
   ...modelFiles,
   ...entityFiles,
@@ -203,12 +231,19 @@ export function writeFiles() {
     },
 
     async writeServerFiles({ application, entities }) {
-      for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
-        await this.writeFiles({
-          sections: serverFiles,
-          rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
-          context: { ...application, ...entity },
-        });
+      for (const entity of entities.filter(entity => !entity.skipServer)) {
+        if (entity.builtInUser) {
+          await this.writeFiles({
+            sections: userFiles,
+            context: { ...application, ...entity },
+          });
+        } else if (!entity.builtIn) {
+          await this.writeFiles({
+            sections: serverFiles,
+            rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
+            context: { ...application, ...entity },
+          });
+        }
       }
     },
 
