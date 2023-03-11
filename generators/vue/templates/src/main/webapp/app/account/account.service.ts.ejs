@@ -69,7 +69,7 @@ export default class AccountService {
 
     const promise = this.retrieveAccount();
     this.store.commit('authenticate', promise);
-    return promise;
+    return await promise;
   }
 
   public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
