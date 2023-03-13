@@ -371,7 +371,7 @@ public class <%= entityClass %>Resource {
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.
      */
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_JSON_VALUE)
   <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
@@ -391,7 +391,11 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= instanceName %>, or with status {@code 404 (Not Found)}.
      */
+  <%_ if (reactive) { _%>
+    @GetMapping(value = "/<%= entityApiUrl %>/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  <%_ } else { _%>
     @GetMapping("/<%= entityApiUrl %>/{id}")
+  <%_ } _%>
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
