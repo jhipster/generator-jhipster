@@ -58,7 +58,7 @@ import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.apache.commons.beanutils.BeanComparator;
 <%_ } _%>
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
@@ -160,7 +160,7 @@ _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
 public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= user.persistClass %>, <%= user.primaryKey.type %>><% } %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= user.persistClass %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= user.persistClass %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%= user.persistClass %>, String><% } %><% if (searchEngineCouchbase) { %>, CouchbaseSearchRepository<<%= user.persistClass %>, String><% } %> {
-  <%_ if (cacheManagerIsAvailable) { _%>
+  <%_ if (cacheProviderAny) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
@@ -202,7 +202,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
   <%_ if (!authenticationTypeOauth2) { _%>
     <%_ if (databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-      <%_ if (cacheManagerIsAvailable) { _%>
+      <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
       <%_ } _%>
     <%_ } _%>
@@ -218,14 +218,14 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
   <%_ } _%>
   <%_ if (databaseTypeCouchbase) { _%>
-    <%_ if (cacheManagerIsAvailable) { _%>
+    <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
     default <%= optionalOrMono %><<%= user.persistClass %>> findOneByLogin(String login) {
         return findById(login);
     }
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
-    <%_ if (cacheManagerIsAvailable) { _%>
+    <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
     <%= optionalOrMono %><<%= user.persistClass %>> findOneByLogin(String login);
@@ -240,14 +240,14 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
   <%_ if (databaseTypeSql) { _%>
     @EntityGraph(attributePaths = "authorities")
-    <%_ if (cacheManagerIsAvailable) { _%>
+    <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
     Optional<<%= user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
 
     <%_ if (!authenticationTypeOauth2) { _%>
     @EntityGraph(attributePaths = "authorities")
-      <%_ if (cacheManagerIsAvailable) { _%>
+      <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
       <%_ } _%>
     Optional<<%= user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
@@ -441,7 +441,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 <%_ } else if (databaseTypeCassandra) { _%>
 @Repository
 public class UserRepository {
-  <%_ if (cacheManagerIsAvailable) { _%>
+  <%_ if (cacheProviderAny) { _%>
 
     public static final String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
@@ -605,7 +605,7 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
-  <%_ if (cacheManagerIsAvailable) { _%>
+  <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
   <%_ } _%>
     public <%= optionalOrMono %><<%= user.persistClass %>> findOneByEmailIgnoreCase(String email) {
@@ -613,7 +613,7 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
-  <%_ if (cacheManagerIsAvailable) { _%>
+  <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
   <%_ } _%>
     public <%= optionalOrMono %><<%= user.persistClass %>> findOneByLogin(String login) {

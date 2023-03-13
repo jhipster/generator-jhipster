@@ -6,7 +6,7 @@ import Environment from 'yeoman-environment';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { mock, resetAllMocks, fn } from '@node-loaders/jest-mock';
-import { basicHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';

@@ -56,7 +56,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
@@ -183,7 +183,7 @@ class UserResourceIT {
     @Autowired
     private EntityManager em;
 <%_ } _%>
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
 
     @Autowired
     private CacheManager cacheManager;
@@ -198,7 +198,7 @@ class UserResourceIT {
 
     private <%= user.persistClass %> user;
 
-<%_ if (cacheManagerIsAvailable) { _%>
+<%_ if (cacheProviderAny) { _%>
     @BeforeEach
     public void setup() {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
@@ -558,7 +558,7 @@ class UserResourceIT {
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
   <%_ } _%>
-  <%_ if (cacheManagerIsAvailable) { _%>
+  <%_ if (cacheProviderAny) { _%>
 
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
   <%_ } _%>
@@ -601,7 +601,7 @@ class UserResourceIT {
         if (!(cacheManager instanceof NoOpCacheManager)) {
             assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         }
-  <%_ } else if (cacheManagerIsAvailable) { _%>
+  <%_ } else if (cacheProviderAny) { _%>
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
   <%_ } _%>
   <%_ if (!databaseTypeSql) {_%>
@@ -933,7 +933,7 @@ class UserResourceIT {
             .with(csrf())<% } %>)
             .andExpect(status().isNoContent());
   <%_ } _%>
-  <%_ if (cacheManagerIsAvailable) { _%>
+  <%_ if (cacheProviderAny) { _%>
 
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
   <%_ } _%>

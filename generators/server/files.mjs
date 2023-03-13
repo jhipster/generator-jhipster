@@ -17,9 +17,245 @@
  * limitations under the License.
  */
 import cleanupOldServerFiles from './cleanup.mjs';
-import { TEST_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import { addSectionsCondition, mergeSections } from '../base/support/index.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './support/index.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir, moveToSrcMainResourcesDir } from './support/index.mjs';
+
+const imperativeConfigFiles = {
+  imperativeFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['ApplicationWebXml.java'],
+    },
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/WebConfigurerTest.java', 'config/WebConfigurerTestController.java'],
+    },
+  ],
+};
+
+const reactiveConfigFiles = {
+  reactiveFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/ReactorConfiguration.java'],
+    },
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/JHipsterBlockHoundIntegration.java'],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: ['META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'],
+    },
+  ],
+};
+
+const feignFiles = {
+  microserviceFeignFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/FeignConfiguration.java'],
+    },
+    {
+      condition: generator => generator.authenticationTypeOauth2,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        'security/oauth2/AuthorizationHeaderUtil.java',
+        'client/AuthorizedFeignClient.java',
+        'client/OAuth2InterceptedFeignConfiguration.java',
+        'client/TokenRelayRequestInterceptor.java',
+      ],
+    },
+    {
+      condition: generator => generator.authenticationTypeJwt,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['client/UserFeignClientInterceptor_jwt.java'],
+    },
+    {
+      condition: generator => generator.authenticationTypeOauth2,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/oauth2/AuthorizationHeaderUtilTest.java'],
+    },
+  ],
+};
+
+const commonUserFiles = {
+  commonUserFiles: [
+    {
+      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['service/UserService.java', 'service/dto/package-info.java'],
+    },
+    {
+      condition: data =>
+        data.authenticationTypeOauth2 || data.generateUserManagement || (data.applicationTypeMicroservice && !data.skipUserManagement),
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['service/mapper/UserMapper.java', 'service/mapper/package-info.java', 'web/rest/PublicUserResource.java'],
+    },
+    {
+      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: [
+        'web/rest/UserResourceIT.java',
+        'service/mapper/UserMapperTest.java',
+        'web/rest/PublicUserResourceIT.java',
+        'service/UserServiceIT.java',
+      ],
+    },
+    {
+      condition: data => data.generateBuiltInUserEntity,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/vm/ManagedUserVM.java'],
+    },
+  ],
+};
+
+const oauth2Files = {
+  oauth2Files: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        'security/oauth2/AudienceValidator.java',
+        'security/oauth2/JwtGrantedAuthorityConverter.java',
+        'security/oauth2/OAuthIdpTokenResponseDTO.java',
+      ],
+    },
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/oauth2/AudienceValidatorTest.java', 'config/TestSecurityConfiguration.java'],
+    },
+    {
+      condition: generator => generator.applicationTypeMonolith,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/OAuth2Configuration.java'],
+    },
+    {
+      condition: generator => generator.generateAuthenticationApi,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/AuthInfoResource.java', data => `web/rest/LogoutResource_${data.imperativeOrReactive}.java`],
+    },
+    {
+      condition: generator => generator.generateAuthenticationApi,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: generator => `package/web/filter/OAuth2${generator.reactive ? 'Reactive' : ''}RefreshTokensWebFilter.java`,
+          renameTo: generator =>
+            `${generator.packageFolder}web/filter/OAuth2${generator.reactive ? 'Reactive' : ''}RefreshTokensWebFilter.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.generateAuthenticationApi,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['test/util/OAuth2TestUtil.java', 'web/rest/LogoutResourceIT.java'],
+    },
+    {
+      condition: generator => !generator.reactive && generator.generateAuthenticationApi,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/oauth2/CustomClaimConverter.java'],
+    },
+    {
+      condition: generator => !generator.reactive && generator.generateAuthenticationApi,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/oauth2/CustomClaimConverterIT.java'],
+    },
+  ],
+};
+
+const accountFiles = {
+  accountResource: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        data => {
+          if (data.authenticationTypeOauth2) return 'web/rest/AccountResource_oauth2.java';
+          if (data.generateUserManagement) return 'web/rest/AccountResource.java';
+          return 'web/rest/AccountResource_skipUserManagement.java';
+        },
+      ],
+    },
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: [
+        data => {
+          if (data.authenticationTypeOauth2) return 'web/rest/AccountResourceIT_oauth2.java';
+          if (data.generateUserManagement) return 'web/rest/AccountResourceIT.java';
+          return 'web/rest/AccountResourceIT_skipUserManagement.java';
+        },
+      ],
+    },
+  ],
+};
+
+const userManagementFiles = {
+  userManagementFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        'security/DomainUserDetailsService.java',
+        'security/UserNotActivatedException.java',
+        'service/MailService.java',
+        'service/dto/package-info.java',
+        'service/dto/PasswordChangeDTO.java',
+        'service/EmailAlreadyUsedException.java',
+        'service/InvalidPasswordException.java',
+        'service/UsernameAlreadyUsedException.java',
+        'web/rest/UserResource.java',
+        'web/rest/vm/KeyAndPasswordVM.java',
+        'web/rest/errors/EmailAlreadyUsedException.java',
+        'web/rest/errors/InvalidPasswordException.java',
+        'web/rest/errors/LoginAlreadyUsedException.java',
+      ],
+    },
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['service/MailServiceIT.java', 'security/DomainUserDetailsServiceIT.java'],
+    },
+    {
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        'templates/mail/activationEmail.html',
+        'templates/mail/creationEmail.html',
+        'templates/mail/passwordResetEmail.html',
+        'templates/mail/testEmail.html',
+      ],
+    },
+    {
+      condition: generator => !generator.enableTranslation,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['i18n/messages_en.properties'],
+    },
+  ],
+};
 
 const jwtFiles = {
   jwtBaseFiles: [
@@ -40,33 +276,25 @@ const jwtFiles = {
         'security/jwt/TokenAuthenticationIT.java',
       ],
     },
+  ],
+  entrypointFiles: [
     {
-      condition: data => data.applicationTypeMicroservice,
+      condition: data => !data.generateAuthenticationApi,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['security/jwt/TestAuthenticationResource.java'],
     },
-  ],
-  entrypointFiles: [
     {
-      condition: generator => !generator.applicationTypeMicroservice,
+      condition: generator => generator.generateAuthenticationApi,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/vm/LoginVM.java', 'web/rest/AuthenticateController.java'],
     },
     {
-      condition: generator => !generator.applicationTypeMicroservice,
+      condition: generator => generator.generateAuthenticationApi,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/AuthenticateControllerIT.java'],
-    },
-  ],
-  microservice: [
-    {
-      condition: generator => !generator.reactive && generator.applicationTypeMicroservice,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/FeignConfiguration.java', 'client/UserFeignClientInterceptor_jwt.java'],
     },
   ],
 };
@@ -90,6 +318,24 @@ const gatewayFiles = {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/filter/ModifyServersOpenApiFilterTest.java'],
+    },
+  ],
+};
+
+const swaggerFiles = {
+  swagger: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/OpenApiConfiguration.java'],
+    },
+    {
+      condition: generator => generator.buildToolGradle,
+      templates: ['gradle/swagger.gradle'],
+    },
+    {
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['swagger/api.yml'],
     },
   ],
 };
@@ -130,10 +376,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.buildToolGradle && !!generator.enableSwaggerCodegen,
-      templates: ['gradle/swagger.gradle'],
-    },
-    {
       condition: generator => generator.buildToolMaven,
       templates: ['pom.xml'],
     },
@@ -145,26 +387,10 @@ export const baseServerFiles = {
   ],
   serverResource: [
     {
-      condition: generator => generator.clientFrameworkReact || generator.clientFrameworkVue,
       path: SERVER_MAIN_RES_DIR,
+      renameTo: moveToSrcMainResourcesDir,
       transform: false,
-      templates: [
-        {
-          file: ctx => `banner-${ctx.clientFramework}.txt`,
-          renameTo: () => 'banner.txt',
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.clientFrameworkReact && !generator.clientFrameworkVue,
-      path: SERVER_MAIN_RES_DIR,
-      transform: false,
-      templates: ['banner.txt'],
-    },
-    {
-      condition: generator => !!generator.enableSwaggerCodegen,
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['swagger/api.yml'],
+      templates: [data => (data.clientFrameworkReact || data.clientFrameworkVue ? `banner_${data.clientFramework}.txt` : 'banner.txt')],
     },
     {
       path: SERVER_MAIN_RES_DIR,
@@ -216,97 +442,24 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/PersistentTokenRepository.java'],
     },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'security/oauth2/AudienceValidator.java',
-        'security/oauth2/JwtGrantedAuthorityConverter.java',
-        'security/oauth2/OAuthIdpTokenResponseDTO.java',
-      ],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['security/oauth2/AudienceValidatorTest.java', 'config/TestSecurityConfiguration.java'],
-    },
-    {
-      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && generator.applicationTypeMicroservice,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['security/oauth2/AuthorizationHeaderUtilTest.java'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['security/DomainUserDetailsService.java', 'security/UserNotActivatedException.java'],
-    },
-    {
-      condition: generator => !!generator.enableSwaggerCodegen,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/OpenApiConfiguration.java'],
-    },
-    {
-      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['security/oauth2/CustomClaimConverter.java'],
-    },
-    {
-      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['security/oauth2/CustomClaimConverterIT.java'],
-    },
-  ],
-  serverJavaGateway: [
-    {
-      condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/AuthInfoResource.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [data => `web/rest/LogoutResource_${data.imperativeOrReactive}.java`],
-    },
   ],
   serverMicroservice: [
-    {
-      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && generator.applicationTypeMicroservice,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'security/oauth2/AuthorizationHeaderUtil.java',
-        'config/FeignConfiguration.java',
-        'client/AuthorizedFeignClient.java',
-        'client/OAuth2InterceptedFeignConfiguration.java',
-        'client/TokenRelayRequestInterceptor.java',
-      ],
-    },
     {
       condition: generator => generator.applicationTypeMicroservice,
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'static/index_microservices.html', renameTo: () => 'static/index.html' }],
     },
   ],
-  serverMicroserviceAndGateway: [
+  serviceDiscovery: [
     {
       condition: generator => generator.serviceDiscoveryAny,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/bootstrap.yml', 'config/bootstrap-prod.yml'],
     },
-  ],
-  serverJavaApp: [
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.packageFolder}/${generator.mainClass}.java` }],
+      condition: generator => generator.serviceDiscoveryAny,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['config/bootstrap.yml'],
     },
     {
       condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
@@ -314,21 +467,22 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/EurekaWorkaroundConfiguration.java'],
     },
+  ],
+  serverJavaApp: [
     {
-      condition: generator => !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['ApplicationWebXml.java'],
+      path: `${SERVER_MAIN_SRC_DIR}package`,
+      renameTo: (data, filename) => moveToJavaPackageSrcDir(data, filename.replace('Application.java', `${data.mainClass}.java`)),
+      templates: ['Application.java'],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['TechnicalStructureTest.java'],
-    },
-    {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['config/AsyncSyncConfiguration.java', 'IntegrationTest.java', 'config/SpringBootTestClassOrderer.java'],
+      templates: [
+        'TechnicalStructureTest.java',
+        'config/AsyncSyncConfiguration.java',
+        'IntegrationTest.java',
+        'config/SpringBootTestClassOrderer.java',
+      ],
     },
   ],
   serverJavaConfig: [
@@ -349,57 +503,20 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipClient && !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/StaticResourcesWebConfiguration.java'],
-    },
-    {
       condition: generator =>
         generator.generateUserManagement ||
+        generator.authenticationTypeOauth2 ||
         generator.databaseTypeSql ||
         generator.databaseTypeMongodb ||
-        generator.databaseTypeCouchbase ||
-        generator.databaseTypeNeo4j,
+        generator.databaseTypeCouchbase,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/Constants.java'],
     },
     {
-      condition: generator => !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/LocaleConfiguration.java'],
-    },
-    {
-      condition: generator => generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/ReactorConfiguration.java', 'config/LocaleConfiguration_reactive.java'],
-    },
-    {
-      condition: generator =>
-        generator.cacheProviderEhCache ||
-        generator.cacheProviderCaffeine ||
-        generator.cacheProviderHazelcast ||
-        generator.cacheProviderInfinispan ||
-        generator.cacheProviderMemcached ||
-        generator.cacheProviderRedis,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/CacheConfiguration.java'],
-    },
-    {
-      condition: generator => generator.cacheProviderInfinispan,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/CacheFactoryConfiguration.java'],
-    },
-    {
-      condition: generator => generator.cacheProviderRedis,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['config/EmbeddedRedis.java', 'config/RedisTestContainer.java'],
+      templates: [data => `config/LocaleConfiguration_${data.imperativeOrReactive}.java`],
     },
   ],
   serverJavaDomain: [
@@ -423,18 +540,6 @@ export const baseServerFiles = {
       templates: ['repository/package-info.java'],
     },
   ],
-  serverJavaServiceError: [
-    {
-      condition: generator => generator.generateUserManagement,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'service/EmailAlreadyUsedException.java',
-        'service/InvalidPasswordException.java',
-        'service/UsernameAlreadyUsedException.java',
-      ],
-    },
-  ],
   serverJavaService: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
@@ -454,22 +559,25 @@ export const baseServerFiles = {
         'web/rest/errors/FieldErrorVM.java',
       ],
     },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'web/rest/errors/EmailAlreadyUsedException.java',
-        'web/rest/errors/InvalidPasswordException.java',
-        'web/rest/errors/LoginAlreadyUsedException.java',
-      ],
-    },
   ],
   serverJavaWeb: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/vm/package-info.java', 'web/rest/package-info.java'],
+    },
+    {
+      condition: generator => !generator.skipClient && !generator.reactive,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/StaticResourcesWebConfiguration.java'],
+    },
+    {
+      // TODO : add these tests to reactive
+      condition: generator => !generator.skipClient && !generator.reactive,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/StaticResourcesWebConfigurerTest.java'],
     },
     {
       condition: generator => !generator.skipClient,
@@ -483,42 +591,17 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/filter/SpaWebFilterIT.java'],
     },
-  ],
-  serverTestReactive: [
     {
-      condition: generator => generator.reactive,
+      condition: generator => !generator.skipClient && generator.reactive,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/JHipsterBlockHoundIntegration.java'],
+      templates: ['web/filter/SpaWebFilterIT_reactive.java'],
     },
     {
-      condition: generator => generator.reactive,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'],
-    },
-  ],
-  springBootOauth2: [
-    {
-      condition: generator => generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/OAuth2Configuration.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: generator => `package/web/filter/OAuth2${generator.reactive ? 'Reactive' : ''}RefreshTokensWebFilter.java`,
-          renameTo: generator => `${generator.javaDir}web/filter/OAuth2${generator.reactive ? 'Reactive' : ''}RefreshTokensWebFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
+      condition: generator => !generator.skipClient && generator.reactive,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['test/util/OAuth2TestUtil.java'],
+      templates: ['web/filter/SpaWebFilterTestController_reactive.java'],
     },
   ],
   serverTestFw: [
@@ -536,181 +619,13 @@ export const baseServerFiles = {
       path: SERVER_TEST_RES_DIR,
       templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
-    {
-      // TODO : add these tests to reactive
-      condition: generator => !generator.reactive,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['config/WebConfigurerTest.java', 'config/WebConfigurerTestController.java'],
-    },
-    {
-      // TODO : add these tests to reactive
-      condition: generator => !generator.skipClient && !generator.reactive,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['config/StaticResourcesWebConfigurerTest.java'],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['config/bootstrap.yml'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/LogoutResourceIT.java'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: [
-        // Create auth config test files
-        'security/DomainUserDetailsServiceIT.java',
-      ],
-    },
-  ],
-  accountResource: [
-    {
-      condition: data => !data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/AccountResource_skipUserManagement.java'],
-    },
-    {
-      condition: data => !data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/AccountResourceIT_skipUserManagement.java'],
-    },
-    {
-      condition: data => data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/AccountResource_oauth2.java'],
-    },
-    {
-      condition: data => data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/AccountResourceIT_oauth2.java'],
-    },
-    {
-      condition: data => data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/AccountResource.java'],
-    },
-    {
-      condition: data => data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/AccountResourceIT.java'],
-    },
   ],
   serverJavaUserManagement: [
-    {
-      condition: generator => generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/User.java',
-          renameTo: generator => `${generator.javaDir}domain/${generator.user.persistClass}.java`,
-        },
-      ],
-    },
     {
       condition: generator => generator.generateBuiltInAuthorityEntity,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['domain/Authority.java', 'repository/AuthorityRepository.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/Constants.java', 'service/UserService.java', 'service/dto/package-info.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/service/dto/AdminUserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
-        },
-        {
-          file: 'package/service/dto/UserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'service/mapper/package-info.java',
-        'service/mapper/UserMapper.java',
-        'repository/UserRepository.java',
-        'web/rest/PublicUserResource.java',
-        'web/rest/vm/ManagedUserVM.java',
-      ],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['service/UserServiceIT.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['service/mapper/UserMapperTest.java', 'web/rest/PublicUserResourceIT.java', 'web/rest/UserResourceIT.java'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/service/dto/AdminUserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
-        },
-        {
-          file: 'package/service/dto/UserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        /* User management java service files */
-        'service/UserService.java',
-        'service/MailService.java',
-
-        /* User management java web files */
-        'service/dto/package-info.java',
-        'service/dto/PasswordChangeDTO.java',
-        'web/rest/AccountResource.java',
-        'web/rest/UserResource.java',
-        'web/rest/vm/KeyAndPasswordVM.java',
-        'service/mapper/package-info.java',
-      ],
     },
     {
       condition: generator =>
@@ -727,42 +642,25 @@ export const baseServerFiles = {
       templates: ['config/TestContainersSpringContextCustomizerFactory.java'],
     },
     {
-      condition: generator => generator.generateUserManagement,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        /* User management java test files */
-        'templates/mail/testEmail.html',
-      ],
-    },
-    {
-      condition: generator => generator.generateUserManagement && !generator.enableTranslation,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['i18n/messages_en.properties'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: [
-        'service/MailServiceIT.java',
-        'service/UserServiceIT.java',
-        'service/mapper/UserMapperTest.java',
-        'web/rest/PublicUserResourceIT.java',
-        'web/rest/UserResourceIT.java',
-      ],
-    },
-    {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/WithUnauthenticatedMockUser.java'],
     },
   ],
+  ...commonUserFiles,
 };
 
 export const serverFiles = mergeSections(
   baseServerFiles,
   addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt),
-  addSectionsCondition(gatewayFiles, context => context.applicationTypeGateway)
+  addSectionsCondition(oauth2Files, context => context.authenticationTypeOauth2),
+  addSectionsCondition(gatewayFiles, context => context.applicationTypeGateway),
+  addSectionsCondition(accountFiles, context => context.generateAuthenticationApi),
+  addSectionsCondition(feignFiles, context => !context.reactive && context.applicationTypeMicroservice),
+  addSectionsCondition(userManagementFiles, context => context.generateUserManagement),
+  addSectionsCondition(imperativeConfigFiles, context => !context.reactive),
+  addSectionsCondition(reactiveConfigFiles, context => context.reactive),
+  addSectionsCondition(swaggerFiles, context => context.enableSwaggerCodegen)
 );
 
 /**
@@ -770,11 +668,6 @@ export const serverFiles = mergeSections(
  */
 export function writeFiles() {
   return this.asWritingTaskGroup({
-    setUp({ application }) {
-      application.javaDir = `${application.packageFolder}/`;
-      application.testDir = `${application.packageFolder}/`;
-    },
-
     cleanupOldServerFiles,
 
     async writeFiles({ application }) {

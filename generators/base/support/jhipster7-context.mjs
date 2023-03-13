@@ -122,6 +122,10 @@ const deprecatedProperties = {
     replacement: 'nodeDependencies',
     get: ({ data }) => data.nodeDependencies,
   },
+  cacheManagerIsAvailable: {
+    replacement: 'cacheProviderAny',
+    get: ({ data }) => data.cacheProviderAny,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

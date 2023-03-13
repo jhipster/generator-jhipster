@@ -1,4 +1,4 @@
-import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
+import { dryRunHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';

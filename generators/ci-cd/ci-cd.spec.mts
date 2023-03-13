@@ -1,7 +1,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { GENERATOR_CI_CD } from '../generator-list.mjs';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { dryRunHelpers as helpers } from '../../test/support/index.mjs';
 
 const expectedFiles = {
   travis: ['.travis.yml'],

@@ -21,7 +21,7 @@ import assert from 'assert';
 import { expect } from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
-import { basicHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
 import EnvironmentBuilder from './environment-builder.mjs';
 

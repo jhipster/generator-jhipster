@@ -392,6 +392,12 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.packag
   "src/test/java/com/package/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -784,6 +790,12 @@ exports[`generator - neo4j gateway-oauth2-maven-enableTranslation(false)-tech.jh
   "src/test/java/tech/jhipster/web/filter/ModifyServersOpenApiFilterTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -886,12 +898,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
@@ -1235,9 +1241,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/package/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1541,9 +1544,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -2276,9 +2276,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -2746,9 +2743,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/package/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2953,6 +2947,12 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -3049,9 +3049,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -3728,6 +3725,12 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/test/java/com/package/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -3833,9 +3836,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
@@ -4275,9 +4275,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/package/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4459,6 +4456,12 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {

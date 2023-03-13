@@ -221,6 +221,6 @@ export const defaultHelpers = createTestHelpers({
 export const skipPrettierHelpers = createTestHelpers({ generatorOptions: { skipPrettier: true, ...commonTestOptions } });
 
 export const dryRunHelpers = createTestHelpers({
-  generatorOptions: { skipPrettier: true, ...commonTestOptions },
+  generatorOptions: { ...commonTestOptions },
   environmentOptions: { dryRun: true },
 });

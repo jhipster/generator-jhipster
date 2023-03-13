@@ -1,91 +1,63 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { basicHelpers as helpers, getGenerator } from './support/index.mjs';
-import { GENERATOR_KUBERNETES_HELM } from '../generators/generator-list.mjs';
+import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 
 const expectedFiles = {
-  csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
-  eurekaregistry: ['./csvc-helm/templates/jhipster-registry.yml', './csvc-helm/templates/application-configmap.yml'],
-  consulregistry: [
-    './csvc-helm/templates/consul.yml',
-    './csvc-helm/templates/consul-config-loader.yml',
-    './csvc-helm/templates/application-configmap.yml',
-  ],
-  jhgate: [
-    './jhgate-helm/templates/jhgate-deployment.yml',
-    './jhgate-helm/templates/jhgate-service.yml',
-    './jhgate-helm/Chart.yaml',
-    './jhgate-helm/requirements.yaml',
-    './jhgate-helm/values.yaml',
-    './jhgate-helm/templates/_helpers.tpl',
-  ],
-  jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
+  eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],
+  consulregistry: ['./registry-k8s/consul.yml', './registry-k8s/consul-config-loader.yml', './registry-k8s/application-configmap.yml'],
+  jhgate: ['./jhgate-k8s/jhgate-deployment.yml', './jhgate-k8s/jhgate-mysql.yml', './jhgate-k8s/jhgate-service.yml'],
+  jhgateingress: ['./jhgate-k8s/jhgate-ingress.yml'],
   customnamespace: ['./namespace.yml'],
-  msmysql: [
-    './msmysql-helm/Chart.yaml',
-    './msmysql-helm/requirements.yaml',
-    './msmysql-helm/values.yaml',
-    './msmysql-helm/templates/_helpers.tpl',
-    './msmysql-helm/templates/msmysql-deployment.yml',
-    './msmysql-helm/templates/msmysql-service.yml',
-  ],
+  msmysql: ['./msmysql-k8s/msmysql-deployment.yml', './msmysql-k8s/msmysql-mysql.yml', './msmysql-k8s/msmysql-service.yml'],
   mspsql: [
-    './mspsql-helm/Chart.yaml',
-    './mspsql-helm/requirements.yaml',
-    './mspsql-helm/values.yaml',
-    './mspsql-helm/templates/_helpers.tpl',
-    './mspsql-helm/templates/mspsql-deployment.yml',
-    './mspsql-helm/templates/mspsql-service.yml',
+    './mspsql-k8s/mspsql-deployment.yml',
+    './mspsql-k8s/mspsql-postgresql.yml',
+    './mspsql-k8s/mspsql-service.yml',
+    './mspsql-k8s/mspsql-elasticsearch.yml',
   ],
-  msmongodb: [
-    './msmongodb-helm/Chart.yaml',
-    './msmongodb-helm/requirements.yaml',
-    './msmongodb-helm/values.yaml',
-    './msmongodb-helm/templates/_helpers.tpl',
-    './msmongodb-helm/templates/msmongodb-deployment.yml',
-    './msmongodb-helm/templates/msmongodb-service.yml',
-  ],
-  msmariadb: [
-    './msmariadb-helm/Chart.yaml',
-    './msmariadb-helm/requirements.yaml',
-    './msmariadb-helm/values.yaml',
-    './msmariadb-helm/templates/_helpers.tpl',
-    './msmariadb-helm/templates/msmariadb-deployment.yml',
-    './msmariadb-helm/templates/msmariadb-service.yml',
-  ],
+  msmongodb: ['./msmongodb-k8s/msmongodb-deployment.yml', './msmongodb-k8s/msmongodb-mongodb.yml', './msmongodb-k8s/msmongodb-service.yml'],
+  msmariadb: ['./msmariadb-k8s/msmariadb-deployment.yml', './msmariadb-k8s/msmariadb-mariadb.yml', './msmariadb-k8s/msmariadb-service.yml'],
+  msmssqldb: ['./msmssqldb-k8s/msmssqldb-deployment.yml', './msmssqldb-k8s/msmssqldb-mssql.yml', './msmssqldb-k8s/msmssqldb-service.yml'],
   monolith: [
-    './samplemysql-helm/Chart.yaml',
-    './samplemysql-helm/requirements.yaml',
-    './samplemysql-helm/values.yaml',
-    './samplemysql-helm/templates/_helpers.tpl',
-    './samplemysql-helm/templates/samplemysql-deployment.yml',
-    './samplemysql-helm/templates/samplemysql-service.yml',
-    './samplemysql-helm/templates/samplemysql-elasticsearch.yml',
+    './samplemysql-k8s/samplemysql-deployment.yml',
+    './samplemysql-k8s/samplemysql-mysql.yml',
+    './samplemysql-k8s/samplemysql-service.yml',
+    './samplemysql-k8s/samplemysql-elasticsearch.yml',
   ],
-  kafka: ['./samplekafka-helm/templates/samplekafka-deployment.yml', './samplekafka-helm/templates/samplekafka-service.yml'],
-  jhgategateway: [
-    './jhgate-helm/templates/jhgate-gateway.yml',
-    './jhgate-helm/templates/jhgate-destination-rule.yml',
-    './jhgate-helm/templates/jhgate-virtual-service.yml',
+  kafka: [
+    './samplekafka-k8s/samplekafka-deployment.yml',
+    './samplekafka-k8s/samplekafka-mysql.yml',
+    './samplekafka-k8s/samplekafka-service.yml',
+    './messagebroker-k8s/kafka.yml',
   ],
-  applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
+  prometheusmonit: [
+    './monitoring-k8s/jhipster-prometheus-crd.yml',
+    './monitoring-k8s/jhipster-prometheus-cr.yml',
+    './monitoring-k8s/jhipster-grafana.yml',
+    './monitoring-k8s/jhipster-grafana-dashboard.yml',
+  ],
+  jhgategateway: ['./jhgate-k8s/jhgate-gateway.yml', './jhgate-k8s/jhgate-destination-rule.yml', './jhgate-k8s/jhgate-virtual-service.yml'],
+  applyScript: ['./kubectl-apply.sh'],
+  keycloak: ['./keycloak-k8s/keycloak.yml', './keycloak-k8s/keycloak-configmap.yml', './keycloak-k8s/keycloak-postgresql.yml'],
+  certmanager: ['./cert-manager/letsencrypt-staging-ca-secret.yml', './cert-manager/letsencrypt-staging-issuer.yml'],
 };
 
-describe('generator - Kubernetes Helm', () => {
+describe('generator - Kubernetes', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: 'gateway',
           directoryPath: './',
           chosenApps,
           adminPassword: 'meetup',
@@ -95,6 +67,8 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -103,11 +77,56 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
+      runResult.assertFileContent('./registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+    });
+    it('create the apply script', () => {
+      runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
+  describe('only gateway with eureka', () => {
+    let runResult;
+    before(async () => {
+      const chosenApps = ['01-gateway'];
+
+      runResult = await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
+        .withAnswers({
+          directoryPath: './',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files and content', () => {
+      runResult.assertFile(expectedFiles.eurekaregistry);
+      runResult.assertFileContent('./registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
+    });
+    it('creates expected gateway files and content', () => {
+      runResult.assertFile(expectedFiles.jhgate);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -125,7 +144,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -136,6 +155,8 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -144,14 +165,12 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files', () => {
       runResult.assertFile(expectedFiles.jhgate);
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -164,12 +183,12 @@ describe('generator - Kubernetes Helm', () => {
       const chosenApps = ['02-mysql'];
 
       runResult = await helpers
-        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -180,6 +199,8 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: true,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -188,11 +209,9 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected namespace file', () => {
       runResult.assertFile(expectedFiles.customnamespace);
@@ -213,7 +232,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -221,11 +240,11 @@ describe('generator - Kubernetes Helm', () => {
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
           kubernetesNamespace: 'default',
-          istio: false,
           kubernetesServiceType: 'Ingress',
-          ingressType: 'gke',
           ingressDomain: 'example.com',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -234,17 +253,63 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
-    it('creates expected ingress files', () => {
-      runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFile(expectedFiles.csvcfiles);
+    it('creates expected gateway ingress files', () => {
       runResult.assertFile(expectedFiles.jhgateingress);
-      runResult.assertFileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
+    });
+    it('create the apply script', () => {
+      runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
+  describe('gateway and ingressType gke', () => {
+    let runResult;
+    before(async () => {
+      const chosenApps = ['01-gateway'];
+
+      runResult = await helpers
+        .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: './',
+          chosenApps,
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          kubernetesServiceType: 'Ingress',
+          ingressType: 'gke',
+          ingressDomain: 'example.com',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files', () => {
+      runResult.assertFile(expectedFiles.consulregistry);
+    });
+    it('creates expected gateway files', () => {
+      runResult.assertFile(expectedFiles.jhgate);
+    });
+    it('creates expected gateway ingress files', () => {
+      runResult.assertFile(expectedFiles.jhgateingress);
+    });
+    it('create the expected cert-manager files', () => {
+      runResult.assertFile(expectedFiles.certmanager);
+    });
+    it('create the expected keycloak files', () => {
+      runResult.assertFile(expectedFiles.keycloak);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -262,7 +327,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -273,6 +338,8 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -281,29 +348,25 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it("doesn't creates gateway files", () => {
       runResult.assertNoFile(expectedFiles.jhgate);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected psql files', () => {
       runResult.assertFile(expectedFiles.mspsql);
-      runResult.assertFileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
     });
   });
 
-  describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
+  describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
     let runResult;
     before(async () => {
-      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
+      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
       runResult = await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
@@ -311,7 +374,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -322,7 +385,8 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-          istio: false,
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -331,27 +395,24 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected psql files', () => {
       runResult.assertFile(expectedFiles.mspsql);
-      runResult.assertFileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
     });
     it('creates expected mongodb files', () => {
       runResult.assertFile(expectedFiles.msmongodb);
-      runResult.assertFileContent('./msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
     });
     it('creates expected mariadb files', () => {
       runResult.assertFile(expectedFiles.msmariadb);
-      runResult.assertFileContent('./msmariadb-helm/requirements.yaml', /name: mariadb/);
+    });
+    it('creates expected mssql files', () => {
+      runResult.assertFile(expectedFiles.msmssqldb);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -369,7 +430,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -380,6 +441,8 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -387,11 +450,11 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
+      runResult.assertNoFile(expectedFiles.eurekaregistry);
       runResult.assertNoFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.monolith);
-      runResult.assertFileContent('./samplemysql-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -409,7 +472,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -420,17 +483,20 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
+    it("doesn't creates registry files", () => {
+      runResult.assertNoFile(expectedFiles.eurekaregistry);
+      runResult.assertNoFile(expectedFiles.consulregistry);
+    });
     it('creates expected default files', () => {
-      runResult.assertFile(expectedFiles.csvcfiles);
       runResult.assertFile(expectedFiles.kafka);
-      runResult.assertFileContent('./csvc-helm/requirements.yaml', /name: kafka/);
-      runResult.assertFileContent('./samplekafka-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -448,7 +514,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -458,6 +524,8 @@ describe('generator - Kubernetes Helm', () => {
           kubernetesNamespace: 'mynamespace',
           monitoring: 'prometheus',
           kubernetesServiceType: 'LoadBalancer',
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -469,12 +537,9 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected prometheus files', () => {
-      runResult.assertFile(expectedFiles.csvcfiles);
-      runResult.assertFileContent('./csvc-helm/requirements.yaml', /name: prometheus/);
-      runResult.assertFileContent('./csvc-helm/requirements.yaml', /name: grafana/);
+      runResult.assertFile(expectedFiles.prometheusmonit);
     });
     it('creates expected namespace file', () => {
       runResult.assertFile(expectedFiles.customnamespace);
@@ -484,7 +549,7 @@ describe('generator - Kubernetes Helm', () => {
     });
   });
 
-  describe('gateway with istio', () => {
+  describe('gateway with istio routing', () => {
     let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
@@ -495,7 +560,7 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .create(getGenerator(GENERATOR_KUBERNETES))
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -506,6 +571,8 @@ describe('generator - Kubernetes Helm', () => {
           ingressDomain: 'example.com',
           clusteredDbApps: [],
           istio: true,
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
         })
         .run();
     });
@@ -514,14 +581,78 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected service gateway files', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFile(expectedFiles.csvcfiles);
     });
     it('creates expected routing gateway and istio files', () => {
       runResult.assertFile(expectedFiles.jhgategateway);
+    });
+    it('create the apply script', () => {
+      runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
+  describe('mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning', () => {
+    let runResult;
+    before(async () => {
+      const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
+
+      runResult = await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      runResult = await runResult
+        .create(getGenerator(GENERATOR_KUBERNETES))
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: './',
+          chosenApps,
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files', () => {
+      runResult.assertFile(expectedFiles.consulregistry);
+    });
+    it('creates expected gateway files', () => {
+      runResult.assertFile(expectedFiles.jhgate);
+    });
+    it('creates expected mysql files', () => {
+      runResult.assertFile(expectedFiles.msmysql);
+      runResult.assertFileContent(expectedFiles.msmysql[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.msmysql[1], /claimName:/);
+    });
+
+    it('creates expected psql files', () => {
+      runResult.assertFile(expectedFiles.mspsql);
+      runResult.assertFileContent(expectedFiles.mspsql[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.mspsql[1], /claimName:/);
+    });
+    it('creates expected mongodb files', () => {
+      runResult.assertFile(expectedFiles.msmongodb);
+      runResult.assertFileContent(expectedFiles.msmongodb[1], /volumeClaimTemplates:/);
+    });
+    it('creates expected mariadb files', () => {
+      runResult.assertFile(expectedFiles.msmariadb);
+      runResult.assertFileContent(expectedFiles.msmariadb[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.msmariadb[1], /claimName:/);
+    });
+    it('creates expected mssql files', () => {
+      runResult.assertFile(expectedFiles.msmssqldb);
+      runResult.assertFileContent(expectedFiles.msmssqldb[1], /PersistentVolumeClaim/);
+      runResult.assertFileContent(expectedFiles.msmssqldb[1], /claimName:/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
