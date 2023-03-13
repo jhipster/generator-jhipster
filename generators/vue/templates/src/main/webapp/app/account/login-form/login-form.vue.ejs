@@ -26,7 +26,6 @@
               id="password"
               type="password"
               name="password"
-              v-model.trim="name"
               v-bind:placeholder="$t('login.form[\'password.placeholder\']')"
               <% if (!enableTranslation) { %>placeholder="Your password" <% } %>
               v-model="password"
