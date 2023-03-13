@@ -68,6 +68,10 @@ module.exports = async (configuration, options) => {
         topLevelAwait: true,
       },
 <%_ } _%>
+      module: {
+        // Add swagger-ui to noParse.
+        noParse: /^(vue|vue-router|vuex|vuex-router-sync|swagger-ui)$/,
+      },
       entry: {
         // global: resolve('<%= clientSrcDir %>content/scss/global.scss'),
         app: './<%= clientSrcDir %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
