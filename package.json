@@ -93,7 +93,7 @@
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.5.0",
-    "ejs": "3.1.8",
+    "ejs": "3.1.9",
     "escape-string-regexp": "5.0.0",
     "execa": "7.0.0",
     "fast-xml-parser": "4.1.3",
