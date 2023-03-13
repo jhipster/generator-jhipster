@@ -111,6 +111,9 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
             this.useKafka = true;
           }
         });
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.usesIngress = this.kubernetesServiceType === 'Ingress' && this.ingressType === 'gke';
+        this.useKeycloak = this.usesOauth2 && this.usesIngress;
       },
       saveConfig,
     };
