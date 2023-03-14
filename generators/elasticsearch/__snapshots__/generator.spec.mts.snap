@@ -419,6 +419,12 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/test/java/com/package/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -824,6 +830,12 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/filter/ModifyServersOpenApiFilterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
@@ -1320,9 +1332,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/CRLFLogConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
@@ -3211,6 +3220,12 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -4097,6 +4112,12 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/package/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -4701,9 +4722,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/java/com/package/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4936,6 +4954,12 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": {
