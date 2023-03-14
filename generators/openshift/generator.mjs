@@ -39,7 +39,7 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { writeFiles } from './files.mjs';
 
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { PROMETHEUS } = monitoringTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;
@@ -149,6 +149,10 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
             this.useKafka = true;
             return true;
           }
+          if (element.messageBroker === RABBITMQ) {
+            this.useRabbitMQ = true;
+            return true;
+          }
           return false;
         });
       },
@@ -235,6 +239,9 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
         }
         if (this.useKafka) {
           this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
+        }
+        if (this.useRabbitMQ) {
+          this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/rabbit.yml | oc apply -f -`)}`);
         }
         for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
           const app = this.appConfigs[i];

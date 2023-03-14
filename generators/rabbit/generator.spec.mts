@@ -21,18 +21,14 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildSamplesFromMatrix, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import Generator from '../server/index.mjs';
+import { buildSamplesFromMatrix, buildServerMatrix } from '../../test/support/index.mjs';
+import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
-import { databaseTypes } from '../../jdl/jhipster/index.mjs';
-import {
-  mockedGenerators as serverGenerators,
-  shouldComposeWithKafka,
-  shouldComposeWithRabbitMQ, // cmi-tic-varun
-  shouldComposeWithLiquibase,
-} from '../server/__test-support/index.mjs';
+import { messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+
+const { RABBITMQ } = messageBrokerTypes;
 
 const { snakeCase } = lodash;
 
@@ -40,17 +36,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-// compose with server generator, many conditionals at server generator
-const generatorFile = join(__dirname, '../server/index.mjs');
+const generatorFile = join(__dirname, 'index.mts');
 
-const { MONGODB: databaseType } = databaseTypes;
-const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-
-const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:mongodb');
+const commonConfig = { messageBroker: RABBITMQ };
 
 const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
-describe(`generator - ${databaseType}`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
@@ -60,18 +52,12 @@ describe(`generator - ${databaseType}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  it('samples matrix should match snapshot', () => {
-    expect(testSamples).toMatchSnapshot();
-  });
-
-  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
-    const { authenticationType } = sampleConfig;
-
+  Object.entries(testSamples).forEach(([name, config]) => {
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
+        runResult = await helpers.run(generatorFile).withJHipsterConfig(config);
       });
 
       after(() => runResult.cleanup());
@@ -79,15 +65,9 @@ describe(`generator - ${databaseType}`, () => {
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
-      it('contains correct authenticationType', () => {
-        runResult.assertFileContent('.yo-rc.json', new RegExp(`"authenticationType": "${authenticationType}"`));
+      it('contains correct messageBroker', () => {
+        runResult.assertFileContent('.yo-rc.json', new RegExp(`"messageBroker": "${RABBITMQ}"`));
       });
-      it('contains correct databaseType', () => {
-        runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
-      });
-      shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithRabbitMQ(sampleConfig, () => runResult); // cmi-tic-varun
-      shouldComposeWithLiquibase(false, () => runResult);
     });
   });
 });

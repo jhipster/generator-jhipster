@@ -69,6 +69,7 @@ export const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
 // Helm versions
 export const HELM_KAFKA = '^0.20.1';
+export const HELM_RABBITMQ = '^7.12.5'; // cmi-tic-varun
 export const HELM_ELASTICSEARCH = '^1.32.0';
 export const HELM_PROMETHEUS = '^9.2.0';
 export const HELM_GRAFANA = '^4.0.0';

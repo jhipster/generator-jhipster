@@ -22,6 +22,7 @@ export const mockedGenerators = [
   `jhipster:${GENERATOR_GATLING}`,
   'jhipster:gradle',
   'jhipster:kafka',
+  'jhipster:rabbit', // cmi-tic-varun
   'jhipster:languages',
   'jhipster:liquibase',
   'jhipster:maven',
@@ -53,6 +54,20 @@ export const shouldComposeWithKafka = (sampleConfig, runResultSupplier) => {
   } else {
     it(`should not compose with ${KAFKA} generator`, () => {
       assert(runResultSupplier().mockedGenerators['jhipster:kafka'].notCalled);
+    });
+  }
+};
+
+// Added rabbitmq ---  cmi-tic-varun
+export const shouldComposeWithRabbitMQ = (sampleConfig, runResultSupplier) => {
+  const RabbitMQEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === RABBITMQ;
+  if (RabbitMQEnabled) {
+    it(`should compose with ${RABBITMQ} generator`, () => {
+      assert(runResultSupplier().mockedGenerators['jhipster:rabbit'].calledOnce);
+    });
+  } else {
+    it(`should not compose with ${RABBITMQ} generator`, () => {
+      assert(runResultSupplier().mockedGenerators['jhipster:rabbit'].notCalled);
     });
   }
 };

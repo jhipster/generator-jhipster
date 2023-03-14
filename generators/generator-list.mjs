@@ -54,6 +54,7 @@ export const GENERATOR_INFO = 'info';
 export const GENERATOR_INIT = 'init';
 export const GENERATOR_JAVA = 'java';
 export const GENERATOR_KAFKA = 'kafka';
+export const GENERATOR_RABBITMQ = 'rabbit'; // cmi-tic-varun
 export const GENERATOR_KUBERNETES = 'kubernetes';
 export const GENERATOR_KUBERNETES_HELM = 'kubernetes-helm';
 export const GENERATOR_KUBERNETES_KNATIVE = 'kubernetes-knative';

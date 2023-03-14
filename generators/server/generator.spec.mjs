@@ -101,7 +101,7 @@ describe(`generator - ${generator}`, () => {
             .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
-
+        shouldComposeWithRabbitMQ(false, () => runResult); // cmi-tic-varun
         shouldComposeWithKafka(false, () => runResult);
       });
       describe('kafka', () => {
@@ -116,6 +116,20 @@ describe(`generator - ${generator}`, () => {
             .withMockedGenerators(mockedGenerators);
         });
         shouldComposeWithKafka(true, () => runResult);
+      });
+      // rabbitmq -- cmi-tic-varun
+      describe('rabbit', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              messageBroker: 'rabbit',
+            })
+            .withSkipWritingPriorities()
+            .withMockedGenerators(mockedGenerators);
+        });
+        shouldComposeWithRabbitMQ(true, () => runResult);
       });
     });
 

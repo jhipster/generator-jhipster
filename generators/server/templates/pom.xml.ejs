@@ -716,6 +716,13 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
+<!-- Dependency for rabbitmq cmi-tic-varun -->
+<%_ if (messageBrokerRabbitMQ) { _%>
+    <dependency>
+        <groupId>org.springframework.amqp</groupId>
+        <artifactId>spring-rabbit</artifactId>
+    </dependency>
+<%_ } _%>
 <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>

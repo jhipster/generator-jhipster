@@ -74,7 +74,7 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -1636,6 +1636,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.messageBroker = NO_MESSAGE_BROKER;
     }
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
+    dest.messageBrokerRabbitMQ = dest.messageBroker === RABBITMQ; // added rabbitmq option cmi-tic-varun
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;

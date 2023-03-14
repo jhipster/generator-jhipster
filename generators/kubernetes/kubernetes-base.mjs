@@ -32,6 +32,7 @@ import {
   KUBERNETES_ISTIO_NETWORKING_API_VERSION,
   KUBERNETES_RBAC_API_VERSION,
   HELM_KAFKA,
+  HELM_RABBITMQ, // cmi-tic-varun
   HELM_ELASTICSEARCH,
   HELM_PROMETHEUS,
   HELM_GRAFANA,
@@ -156,6 +157,7 @@ export function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, 
 
 export function setupHelmConstants() {
   this.HELM_KAFKA = HELM_KAFKA;
+  this.HELM_RABBITMQ = HELM_RABBITMQ; // cmi-tic-varun
   this.HELM_ELASTICSEARCH = HELM_ELASTICSEARCH;
   this.HELM_PROMETHEUS = HELM_PROMETHEUS;
   this.HELM_GRAFANA = HELM_GRAFANA;

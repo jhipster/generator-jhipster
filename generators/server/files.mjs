@@ -630,6 +630,7 @@ export const baseServerFiles = {
     {
       condition: generator =>
         generator.messageBrokerKafka ||
+        generator.messageBrokerRabbitMQ || // cmi-tic-varun
         generator.cacheProviderRedis ||
         generator.databaseTypeMongodb ||
         generator.databaseTypeCassandra ||

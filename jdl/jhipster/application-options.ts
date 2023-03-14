@@ -31,7 +31,7 @@ import websocketTypes from './websocket-types.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 
 const NO_DATABASE = databaseTypes.NO;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
@@ -186,6 +186,7 @@ const optionValues: any = {
   [optionNames.LANGUAGES]: [],
   [optionNames.MESSAGE_BROKER]: {
     kafka: KAFKA,
+    rabbit: RABBITMQ, // cmi-tic-varun
     no: NO_MESSAGE_BROKER,
   },
   [optionNames.MICROFRONTEND]: false,
