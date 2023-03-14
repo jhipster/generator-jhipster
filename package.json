@@ -156,7 +156,7 @@
     "mocha-expect-snapshot": "6.2.0",
     "open-cli": "7.1.0",
     "rimraf": "4.4.0",
-    "sinon": "15.0.1",
+    "sinon": "15.0.2",
     "sinon-chai": "3.7.0",
     "sort-keys": "5.0.0",
     "typescript": "4.9.5",
