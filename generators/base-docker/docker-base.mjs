@@ -99,9 +99,14 @@ export function loadConfigs() {
   this.logger.debug(`Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
+    this.logger.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       config.composePort = serverPort + index;
+      this.logger.debug(
+        chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`)
+      );
+
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
       this.loadPlatformConfig(config, config);

@@ -137,6 +137,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
             this.useRabbitMQ = true;
           }
         });
+        this.useKeycloak = false;
       },
       saveConfig,
     };

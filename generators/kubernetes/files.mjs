@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
+
 import {
   applicationTypes,
   authenticationTypes,
@@ -90,6 +92,41 @@ export function writeFiles() {
     writeMessagingBroker() {
       if (!this.useKafka) return;
       this.writeFile('messagebroker/kafka.yml.ejs', `messagebroker-${suffix}/kafka.yml`);
+    },
+
+    writeKeycloak() {
+      if (!this.useKeycloak) return;
+      const keycloakOut = 'keycloak'.concat('-', suffix);
+      this.entryPort = '8080';
+      this.keycloakRedirectUris = '';
+      this.appConfigs.forEach(appConfig => {
+        // Add application configuration
+        if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+          this.entryPort = appConfig.composePort;
+          if (this.ingressDomain) {
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", 
+            "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
+          } else {
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", 
+            "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
+          }
+
+          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", 
+            "https://localhost:${appConfig.composePort}/*", `;
+
+          if (appConfig.devServerPort !== undefined) {
+            this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
+          }
+
+          this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${this.keycloakRedirectUris}`));
+          this.debug(chalk.red.bold(`AppConfig is ${JSON.stringify(appConfig)}`));
+        }
+      });
+      this.writeFile('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
+      this.writeFile('keycloak/keycloak-postgresql.yml.ejs', `${keycloakOut}/keycloak-postgresql.yml`);
+      this.writeFile('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
+      this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
+      this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
     },
 
     writePrometheusGrafanaFiles() {

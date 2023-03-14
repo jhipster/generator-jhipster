@@ -216,10 +216,36 @@ spec:
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
 <%_ } _%>
+<%_ if (useKeycloak) { _%>  
+        # Custom trustStore required when using Let's Encrypt staging
+        - name: JAVA_OPTS
+          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+      <%_ if (app.applicationTypeGateway || app.applicationTypeMonolith) { _%>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: web_app
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: web_app
+      <%_ } _%>
+      <%_ if (app.applicationTypeMicroservice) { _%>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: internal
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: internal
+      <%_ } _%>
+<%_ } else { _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
+<%_ } _%>
         - name: SERVER_SHUTDOWN
           value: graceful
+    <%_ if (useKeycloak) { _%>
+        # Custom trustStore required when using Let's Encrypt staging
+        volumeMounts:
+          - name: java-truststore
+            mountPath: /etc/pki/java
+    <%_ } _%>
         resources:
           requests:
             memory: "512Mi"
@@ -242,3 +268,14 @@ spec:
             path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
+  <%_ if (useKeycloak) { _%>
+      volumes:
+      # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
+      - name: java-truststore
+        secret:
+          secretName: letsencrypt-ca-secret
+          items:
+          - key: truststore.jks
+            path: cacerts
+  <%_ } _%>
+          

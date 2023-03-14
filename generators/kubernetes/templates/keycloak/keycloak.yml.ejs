@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: keycloak
+spec:
+  ports:
+  - name: http
+    port: 9080
+    targetPort: 8080
+  - name: https
+    port: 9443
+    targetPort: 8443
+  clusterIP: None
+  publishNotReadyAddresses: true  
+  selector:
+    app: keycloak
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: keycloak
+  namespace: <%= kubernetesNamespace %>
+spec:
+  volumeClaimTemplates: []
+  replicas: 2
+  serviceName: keycloak
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: <%- dockerContainers.keycloak %>
+        args: ["start --import-realm"]
+        env:
+        - name: KEYCLOAK_ADMIN
+          value: "admin"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: "admin"
+        - name: KC_DB
+          value: postgres
+        - name: KC_DB_URL_HOST
+          value: keycloak-postgresql.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: KC_DB_USERNAME
+          value: keycloak
+        - name: KC_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-postgresql
+              key: postgresql-password
+        - name: KC_FEATURES
+          value: scripts
+        - name: KC_PROXY
+          value: "edge"
+        - name: KC_HOSTNAME_URL
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        - name: KC_HOSTNAME_ADMIN_URL
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        - name: KC_CACHE_STACK
+          value: "kubernetes"
+        - name: JAVA_OPTS_APPEND
+          value: "-Djgroups.dns.query=keycloak.<%= kubernetesNamespace %>.svc.cluster.local"
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        readinessProbe:
+          httpGet:
+            path: /realms/master
+            port: 8080
+        volumeMounts:
+        - name: keycloak-volume
+          mountPath: /opt/keycloak/data/import
+      volumes:
+      - name: keycloak-volume
+        configMap:
+          name: keycloak-config

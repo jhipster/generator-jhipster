@@ -50,21 +50,21 @@ $ kubectl get svc <%= appConfigs[i].baseName.toLowerCase() %><%= kubernetesNames
 
 ## Scaling your deployments
 
-You can scale your apps using
+You can scale your apps using:
 
 ```
-$ kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-## zero-downtime deployments
+## Zero-downtime deployments
 
-The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using
+The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 ```
-$ kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
+Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 <%_ if (monitoringPrometheus) { _%>
@@ -74,17 +74,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 Generator is also packaged with [Prometheus operator by CoreOS](https://github.com/coreos/prometheus-operator).
 
-**hint**: use must build your apps with `prometheus` profile active!
+**Hint**: use must build your apps with `prometheus` profile active!
 
-Application metrics can be explored in Prometheus through,
+Application metrics can be explored in Prometheus through:
 
 ```
-$ kubectl get svc jhipster-prometheus<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc jhipster-prometheus<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-Also the visualisation can be explored in Grafana which is pre-configured with a dashboard view. You can find the service details by
+Also the visualisation can be explored in Grafana which is pre-configured with a dashboard view. You can find the service details by running:
+
 ```
-$ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 * If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain.
@@ -94,31 +95,78 @@ $ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${k
 <%_ } _%>
 
 <%_ if (app.serviceDiscoveryEureka) { _%>
-## JHipster registry
+## JHipster Registry
 
-The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
-
-```
-$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
-```
-
-and explore the details using
+The registry is deployed using a headless service in Kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
 
 ```
-$ kubectl get svc exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-For scaling the JHipster registry, use
+And explore the details using:
 
 ```
-$ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+```
+
+For scaling the JHipster registry, use:
+
+```
+kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 <%_ } _%>
 
+<%_ if (useKeycloak) { _%>
+## Keycloak
+
+Keycloak deployment in production mode requires the installation of [cert-manager](https://cert-manager.io/docs/installation/) Kubernetes add-on for the TLS certificate generation.
+
+```
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.yaml
+```
+
+The certificate will be issued automatically by Let's Encrypt staging environment. You must set your email address in the issuer definition in `cert-manager/letsencrypt-staging-issuer.yml`.
+
+Keycloak ingress is defined with the application ingress, and requires a static IP with the name specified in the ingress annotation `kubernetes.io/ingress.global-static-ip-name`.
+
+You can create a global public IP with `gcloud` before running `jhipster k8s` with the following command:
+
+```
+gcloud compute addresses create <ip-name> --global
+```
+
+You can find out the assigned IP address using:
+
+```
+gcloud compute addresses describe <ip-name> --global --format='value(address)'
+```
+
+When running the `jhipster k8s` generator, it will prompt for a root FQDN (fully qualified domain name). You can use `nip.io` as the DNS provider and set `<ip-address>.nip.io`.
+
+It might take up to 15 minutes for the Let's Encrypt certificates to be issued. Use the following command to check the status:
+
+```
+kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+```
+
+You need to look for the following two events to determine success:
+
+```text
+Events:
+  Type    Reason     Age   From                                       Message
+  ----    ------     ----  ----                                       -------
+  ...
+  Normal  Issuing    10m   cert-manager-certificates-issuing          Issued temporary certificate
+  Normal  Issuing    4m    cert-manager-certificates-issuing          The certificate has been successfully issued
+```
+
+cert-manager first creates a temporary certificate. Once you see the event "The certificate has been successfully issued", it means Let's Encrypt staging has issued the certificate. The staging certificate will be trusted by deployed applications, but not by browsers. Let's Encrypt production certificates are trusted by browsers, but the production issuer will probably not work with nip.io, and fail with "too many certificates already issued for nip.io".
+
+<%_ } _%>
 
 ## Troubleshooting
 
-> my apps doesn't get pulled, because of 'imagePullBackof'
+> my app doesn't get pulled, because of 'imagePullBackof'
 
 Check the docker registry your Kubernetes cluster is accessing. If you are using a private registry, you should add it to your namespace by `kubectl create secret docker-registry` (check the [docs](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for more info)
 
@@ -129,3 +177,13 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the `i
 > my applications are starting very slow, despite I have a cluster with many resources
 
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
+
+<%_ if (useKeycloak) { _%>
+> my applications don't start, because of 'Remote host terminated the handshake' or 'PKIX path building failed'
+
+The k8s sub-generator configures Let's Encrypt staging environment, which is not trusted by browsers and Java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the application pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
+
+```
+kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+```
+<%_ } _%>

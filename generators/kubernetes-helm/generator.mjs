@@ -114,6 +114,7 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
             this.useRabbitMQ = true;
           }
         });
+        this.useKeycloak = false;
       },
       saveConfig,
     };
