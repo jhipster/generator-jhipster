@@ -119,6 +119,10 @@ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceD
 <%_ if (useKeycloak) { _%>
 ## Keycloak
 
+  <%_ if (ingressTypeNginx) { _%>
+The following Keycloak [best practices](https://www.keycloak.org/server/configuration-production) for production are included in the generated k8s: a production grade database PostgreSQL, the `edge` deployment mode, high availability through clustered deployment, and `HOSTNAME` configuration. HTTP/TLS is not enabled for ease of deployment, but it is required for a secure exchange of credentials and other sensitive data with Keycloak, preventing several attack vectors.
+  <%_ } _%>
+
   <%_ if (ingressTypeGke) { _%>
 Keycloak deployment in production mode requires the installation of [cert-manager](https://cert-manager.io/docs/installation/) Kubernetes add-on for the TLS certificate generation.
 

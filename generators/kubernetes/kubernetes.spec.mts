@@ -358,6 +358,9 @@ describe('generator - Kubernetes', () => {
     it('create the expected keycloak files', () => {
       runResult.assertFile(expectedFiles.keycloak);
     });
+    it('create the expected cert-manager files', () => {
+      runResult.assertNoFile(expectedFiles.certmanager);
+    });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
     });

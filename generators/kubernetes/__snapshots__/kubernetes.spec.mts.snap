@@ -2231,7 +2231,9 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 
 The certificate will be issued automatically by Let's Encrypt staging environment. You must set your email address in the issuer definition in \`cert-manager/letsencrypt-staging-issuer.yml\`.
 
-Keycloak ingress is defined with the application ingress, and requires a static IP with the name specified in the ingress annotation \`kubernetes.io/ingress.global-static-ip-name\`. You can create a global public IP with \`gcloud\` before running \`jhipster k8s\` with the following command:
+Keycloak ingress is defined with the application ingress, and requires a static IP with the name specified in the ingress annotation \`kubernetes.io/ingress.global-static-ip-name\`.
+
+You can create a global public IP with \`gcloud\` before running \`jhipster k8s\` with the following command:
 
 \`\`\`
 gcloud compute addresses create <ip-name> --global
@@ -5729,28 +5731,30 @@ $ kubectl get svc jhgate
 
 ## Scaling your deployments
 
-You can scale your apps using
+You can scale your apps using:
 
 \`\`\`
-$ kubectl scale deployment <app-name> --replicas <replica-count>
+kubectl scale deployment <app-name> --replicas <replica-count>
 \`\`\`
 
-## zero-downtime deployments
+## Zero-downtime deployments
 
-The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using
+The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-$ kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image>
 \`\`\`
 
-Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
+Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 ## Keycloak
 
+The following Keycloak [best practices](https://www.keycloak.org/server/configuration-production) for production are included in the generated k8s: a production grade database PostgreSQL, the \`edge\` deployment mode, high availability through clustered deployment, and \`HOSTNAME\` configuration. HTTP/TLS is not enabled for ease of deployment, but it is required for a secure exchange of credentials and other sensitive data with Keycloak, preventing several attack vectors.
+
 ## Troubleshooting
 
-> my apps doesn't get pulled, because of 'imagePullBackof'
+> my app doesn't get pulled, because of 'imagePullBackof'
 
 Check the docker registry your Kubernetes cluster is accessing. If you are using a private registry, you should add it to your namespace by \`kubectl create secret docker-registry\` (check the [docs](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for more info)
 
