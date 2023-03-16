@@ -21,7 +21,7 @@ kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
-  <%_ if (useKeycloak) { _%>
+  <%_ if (useKeycloak && ingressTypeGke) { _%>
   annotations:
     kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/ingress.class: gce
@@ -31,7 +31,7 @@ metadata:
     cert-manager.io/issue-temporary-certificate: "true"
   <%_ } _%>
 spec:
-  <%_ if (ingressType === "nginx") { _%>
+  <%_ if (ingressTypeNginx) { _%>
   ingressClassName: nginx
   <%_ } _%>
   rules:
@@ -64,15 +64,17 @@ spec:
   - host: keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
-        - path: /*
-          pathType: ImplementationSpecific
+        - path: /<%= ingressTypeNginx ? "" : "*" %>
+          pathType:  <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
           backend:
             service:
               name: keycloak
               port:
                 number: 9080
+  <%_ if (ingressTypeGke) { _%>
   tls:
     - secretName: keycloak-ssl
       hosts:
         - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
-<%_ } _%>    
+  <%_ } _%>
+<%_ } _%>

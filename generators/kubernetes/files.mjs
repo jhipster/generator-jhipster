@@ -25,6 +25,7 @@ import {
   monitoringTypes,
   searchEngineTypes,
   serviceDiscoveryTypes,
+  ingressTypes,
 } from '../../jdl/jhipster/index.mjs';
 
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -32,6 +33,7 @@ const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { GKE, NGINX } = ingressTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
@@ -104,14 +106,14 @@ export function writeFiles() {
         if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
           this.entryPort = appConfig.composePort;
           if (this.ingressDomain) {
-            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", 
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*",
             "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
           } else {
-            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", 
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*",
             "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
           }
 
-          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", 
+          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*",
             "https://localhost:${appConfig.composePort}/*", `;
 
           if (appConfig.devServerPort !== undefined) {
@@ -125,8 +127,10 @@ export function writeFiles() {
       this.writeFile('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
       this.writeFile('keycloak/keycloak-postgresql.yml.ejs', `${keycloakOut}/keycloak-postgresql.yml`);
       this.writeFile('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
-      this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
-      this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
+      if (this.ingressType === GKE) {
+        this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
+        this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
+      }
     },
 
     writePrometheusGrafanaFiles() {
