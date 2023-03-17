@@ -39,7 +39,7 @@ const generatedAnnotationTransform = packageName => {
           // add the import statement just after the package statement, prettier will arrange it correctly
           .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
           // add the annotation before class or interface
-          .replace(/\n([a-w ]*(class|interface|enum) )/g, '\n@GeneratedByJHipster\n$1');
+          .replace(/\n([a-w ]*(class|@?interface|enum) )/g, '\n@GeneratedByJHipster\n$1');
         file.contents = Buffer.from(newContent);
       }
     }
