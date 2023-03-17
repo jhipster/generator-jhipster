@@ -3,7 +3,7 @@ import { cpSync, existsSync, mkdirSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import process from 'process';
 import { fileURLToPath } from 'url';
-import glob from 'glob';
+import { globSync } from 'glob';
 
 import { runJHipster } from '../../cli/program.mjs';
 import { done } from '../../cli/utils.mjs';
@@ -48,7 +48,7 @@ if (sample.entity && sample.entity !== 'none') {
 const jdlEntity = sample['jdl-entity'];
 if (jdlEntity && jdlEntity !== 'none') {
   if (jdlEntity === '*') {
-    const files = glob.sync('*', { cwd: jdlEntitiesSamplesFolder });
+    const files = globSync('*', { cwd: jdlEntitiesSamplesFolder });
     copyJdlEntitySamples(destSampleFolder, ...files);
   } else {
     copyJdlEntitySamples(destSampleFolder, jdlEntity.split(','));
@@ -60,7 +60,7 @@ if (sample['app-sample']) {
 
   if (jdlEntity) {
     // Generate jdl entities
-    const files = glob.sync('*.jdl');
+    const files = globSync('*.jdl');
     await runJHipster({ argv: ['jhipster', 'jhipster', 'jdl', ...files, '--json-only', '--no-insight'] }).catch(done);
   }
 
@@ -86,7 +86,7 @@ if (sample['app-sample']) {
     }
   }
 
-  const files = glob.sync('*.jdl');
+  const files = globSync('*.jdl');
   // Generate the application using every jdl file
   await runJHipster({
     argv: [
