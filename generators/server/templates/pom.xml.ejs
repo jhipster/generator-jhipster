@@ -1391,8 +1391,9 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
-                        <!-- Force alphabetical order to have a reproducible build -->
-                        <runOrder>alphabetical</runOrder>
+                        <!-- Force random order. A fixed order hides potential problems with your tests -->
+			<!-- If you really need a specific order for some tests, use @TestMethodOrder -->
+                        <runOrder>random</runOrder>
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
