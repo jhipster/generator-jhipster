@@ -127,11 +127,9 @@ setupAxiosInterceptors(
         return;
       }
     }
-    console.log('Unauthorized!');
     return Promise.reject(error);
   },
   error => {
-    console.log('Server error!');
     return Promise.reject(error);
   }
 );
