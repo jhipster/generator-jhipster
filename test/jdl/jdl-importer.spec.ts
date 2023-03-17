@@ -830,7 +830,6 @@ relationship ManyToMany {
 
         before(() => {
           importer = createImporterFromContent(entities, {
-            unidirectionalRelationships: true,
             applicationName: 'jhipter',
             databaseType: 'postgresql',
           });
@@ -856,10 +855,7 @@ application {
   }
   entities A, B
 }
-${entities}`,
-            {
-              unidirectionalRelationships: true,
-            }
+${entities}`
           );
           returned = importer.import();
         });
