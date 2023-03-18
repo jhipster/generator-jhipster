@@ -67,8 +67,8 @@ export function prepareRelationshipForLiquibase(entity, relationship) {
     const joinTableName = relationship.joinTable.name;
     const prodDatabaseType = entity.prodDatabaseType;
     _.defaults(relationship.joinTable, {
-      constraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }),
-      otherConstraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }),
+      constraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }).value,
+      otherConstraintName: getFKConstraintName(joinTableName, relationship.columnName, { prodDatabaseType }).value,
     });
   }
 
