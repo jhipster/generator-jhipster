@@ -25,8 +25,7 @@ import generated.by.package.GeneratedByJHipster;
 @GeneratedByJHipster
 interface Foo {
 }"
-`
-    );
+`);
   });
 
   it('should add GeneratedByJHipster to @interface', async () => {
@@ -50,7 +49,6 @@ import generated.by.package.GeneratedByJHipster;
 @GeneratedByJHipster
 @interface Foo {
 }"
-`
-    );
+`);
   });
 });
