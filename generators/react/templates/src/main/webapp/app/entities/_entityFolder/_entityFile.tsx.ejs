@@ -313,11 +313,11 @@ export const <%= entityReactName %> = () => {
 <%_ } else { _%>
     const { sort: sortFieldName, order } = paginationState;
 <%_ } _%>
-    return (sortFieldName !== fieldName)
-      ? faSort
-      : (order === ASC)
-        ? faSortUp
-        : faSortDown;
+    if (sortFieldName !== fieldName) {
+      return faSort;
+    } else {
+      return (order === ASC) ? faSortUp : faSortDown;
+    }
   };
 
   return (
