@@ -309,9 +309,11 @@ export const <%= entityReactName %> = () => {
 
   const getSortIconByFieldName = (fieldName: string) => {
 <%_ if (paginationNo) { _%>
-    const { sort: sortFieldName, order } = sortState;
+    const sortFieldName = sortState.sort;
+    const order = sortState.order;
 <%_ } else { _%>
-    const { sort: sortFieldName, order } = paginationState;
+    const sortFieldName = paginationState.sort;
+    const order = paginationState.order;
 <%_ } _%>
     if (sortFieldName !== fieldName) {
       return faSort;
