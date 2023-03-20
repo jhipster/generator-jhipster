@@ -77,6 +77,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
               )
             );
           } else {
+            // update composeVersion version manually @cmi-tic-craxkumar
             const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
             const composeVersionMajor = composeVersion.split('.')[0];
             const composeVersionMinor = composeVersion.split('.')[1];

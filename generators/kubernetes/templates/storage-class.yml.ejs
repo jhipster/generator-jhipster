@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: <%= kubernetesStorageClassName %>
+provisioner: <%= kubernetesStorageProvisioner %>
+parameters:
+  type: gp2
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate

@@ -89,11 +89,28 @@ export function writeFiles() {
       }
     },
 
+    // write's storage class file  @cmi-tic-craxkumar
+    writeStorageClass() {
+      if (this.kubernetesStorageClassName !== '') {
+        this.writeFile('storage-class.yml.ejs', 'storage-class.yml');
+      }
+    },
+
     writeMessagingBroker() {
       if (!this.useKafka) return;
       this.writeFile('messagebroker/kafka.yml.ejs', `messagebroker-${suffix}/kafka.yml`);
     },
 
+    // write's keycloak files with istio if istio is true  @cmi-tic-craxkumar
+    writeKeycloakWithIstio() {
+      if (!this.istio) return;
+      const keycloakOut = 'keycloak'.concat('-', suffix);
+      this.writeFile('keycloak/keycloak-destination-rule.yml.ejs', `${keycloakOut}/keycloak-destination-rule.yml`);
+      this.writeFile('keycloak/keycloak-virtual-service.yml.ejs' , `${keycloakOut}/keycloak-virtual-service.yml`);
+      this.writeFile('keycloak/keycloak-gateway.yml.ejs', `${keycloakOut}/keycloak-gateway.yml`);
+    },
+
+    // write's keycloak files if useKeycloak is true @cmi-tic-craxkumar
     writeKeycloak() {
       if (!this.useKeycloak) return;
       const keycloakOut = 'keycloak'.concat('-', suffix);
@@ -125,8 +142,8 @@ export function writeFiles() {
       this.writeFile('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
       this.writeFile('keycloak/keycloak-postgresql.yml.ejs', `${keycloakOut}/keycloak-postgresql.yml`);
       this.writeFile('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
-      this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
-      this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
+      // this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
+      // this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
     },
 
     writePrometheusGrafanaFiles() {
@@ -158,6 +175,11 @@ export function writeFiles() {
       this.writeFile('kubectl-apply.sh.ejs', 'kubectl-apply.sh');
     },
 
+    // generating kubectl-delete.sh to delete the created resources @cmi-tic-craxkumar
+    writeConfigDestroyFile() {
+      this.writeFile('kubectl-delete.sh.ejs', 'kubectl-delete.sh');
+    },
+
     writeObservabilityGatewayFiles() {
       if (!this.istio) return;
       const istioOut = 'istio'.concat('-', suffix);
@@ -179,4 +201,5 @@ export function writeFiles() {
       this.writeFile('skaffold/skaffold.yml.ejs', 'skaffold.yml');
     },
   };
+  
 }

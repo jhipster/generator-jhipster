@@ -23,12 +23,10 @@ metadata:
   namespace: <%= kubernetesNamespace %>
   <%_ if (useKeycloak) { _%>
   annotations:
-    kubernetes.io/ingress.allow-http: "true"
-    kubernetes.io/ingress.class: gce
-    kubernetes.io/ingress.global-static-ip-name: <%= app.baseName.toLowerCase()%>-ip
-    cert-manager.io/issuer: letsencrypt-staging
-    acme.cert-manager.io/http01-edit-in-place: "true"
-    cert-manager.io/issue-temporary-certificate: "true"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
   <%_ } _%>
 spec:
   <%_ if (ingressType === "nginx") { _%>
@@ -48,7 +46,7 @@ spec:
           service:
             name: <%= app.baseName.toLowerCase() %>
             port:
-              name: http
+              number: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryAny) { _%>
         <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressTypeNginx ? "" : "*" %>
@@ -64,15 +62,11 @@ spec:
   - host: keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
-        - path: /*
-          pathType: ImplementationSpecific
+        - path: /<%= ingressTypeNginx ? "" : "*" %>
+          pathType: <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
           backend:
             service:
               name: keycloak
               port:
                 number: 9080
-  tls:
-    - secretName: keycloak-ssl
-      hosts:
-        - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
 <%_ } _%>    

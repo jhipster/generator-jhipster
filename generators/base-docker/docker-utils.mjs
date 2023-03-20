@@ -46,6 +46,7 @@ export function checkDocker() {
       );
       this.abort = true;
     } else {
+      // update docker version manually @cmi-tic-craxkumar
       const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
       const dockerVersionMajor = dockerVersion.split('.')[0];
       const dockerVersionMinor = dockerVersion.split('.')[1];

@@ -114,7 +114,11 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
             this.useRabbitMQ = true;
           }
         });
+
+        // added useKeycloak parameter(default: false)  @cmi-tic-craxkumar
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKeycloak = false;
+
       },
       saveConfig,
     };
@@ -193,4 +197,5 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
   get [BaseDockerGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
+  
 }

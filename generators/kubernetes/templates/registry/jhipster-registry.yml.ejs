@@ -62,7 +62,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   # added to circumvent kustomize bug
-  volumeClaimTemplates: []
+  # volumeClaimTemplates: []
   serviceName: jhipster-registry
   replicas: 2
   selector:
@@ -127,7 +127,7 @@ spec:
           value: '/central-config/'
   <%_ if (useKeycloak) { _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
         # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
           value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456"

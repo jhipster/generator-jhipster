@@ -24,7 +24,7 @@ metadata:
   name: keycloak
   namespace: <%= kubernetesNamespace %>
 spec:
-  volumeClaimTemplates: []
+  # volumeClaimTemplates: []
   replicas: 2
   serviceName: keycloak
   selector:
@@ -38,7 +38,7 @@ spec:
       containers:
       - name: keycloak
         image: <%- dockerContainers.keycloak %>
-        args: ["start --import-realm"]
+        args: ["start-dev --import-realm"]
         env:
         - name: KEYCLOAK_ADMIN
           value: "admin"
@@ -57,12 +57,12 @@ spec:
               key: postgresql-password
         - name: KC_FEATURES
           value: scripts
-        - name: KC_PROXY
-          value: "edge"
+        # - name: KC_PROXY
+        #   value: "edge"
         - name: KC_HOSTNAME_URL
-          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
         - name: KC_HOSTNAME_ADMIN_URL
-          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
         - name: KC_CACHE_STACK
           value: "kubernetes"
         - name: JAVA_OPTS_APPEND

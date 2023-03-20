@@ -39,6 +39,7 @@ const deploymentTokens = [
   { name: 'KUBERNETES_NAMESPACE', pattern: 'kubernetesNamespace' },
   { name: 'KUBERNETES_SERVICE_TYPE', pattern: 'kubernetesServiceType' },
   { name: 'KUBERNETES_STORAGE_CLASS_NAME', pattern: 'kubernetesStorageClassName' },
+  { name :'KUBERNETES_STORAGE_PROVISIONER', pattern: 'kubernetesStorageProvisioner' }, // added new parameter kubernetesStorageProvisioner @cmi-tic-craxkumar 
   { name: 'KUBERNETES_USE_DYNAMIC_STORAGE', pattern: 'kubernetesUseDynamicStorage' },
   { name: 'MONITORING', pattern: 'monitoring' },
   { name: 'OPENSHIFT_NAMESPACE', pattern: 'openshiftNamespace' },

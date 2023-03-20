@@ -105,6 +105,7 @@ export function loadConfig() {
   this.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
   this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
   this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
+  this.kubernetesStorageProvisioner = this.config.get('kubernetesStorageProvisioner'); // load new config kubernetesStorageProvisioner @cmi-tic-craxkumar
   this.generatorType = this.config.get('generatorType');
 }
 
@@ -123,6 +124,7 @@ export function saveConfig() {
         kubernetesServiceType: this.kubernetesServiceType,
         kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
         kubernetesStorageClassName: this.kubernetesStorageClassName,
+        kubernetesStorageProvisioner: this.kubernetesStorageProvisioner, // save new config kubernetesStorageProvisioner @cmi-tic-craxkumar
         generatorType: this.generatorType,
         ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
