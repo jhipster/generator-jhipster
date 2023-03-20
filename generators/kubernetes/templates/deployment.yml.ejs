@@ -240,6 +240,12 @@ spec:
 <%_ } _%>
         - name: SERVER_SHUTDOWN
           value: graceful
+    <%_ if (useKeycloak) { _%>
+        # Custom trustStore required when using Let's Encrypt staging
+        volumeMounts:
+          - name: java-truststore
+            mountPath: /etc/pki/java
+    <%_ } _%>
         resources:
           requests:
             memory: "512Mi"
@@ -262,4 +268,17 @@ spec:
             path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
+<<<<<<< HEAD
+=======
+  <%_ if (useKeycloak) { _%>
+      volumes:
+      # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
+      - name: java-truststore
+        secret:
+          secretName: letsencrypt-ca-secret
+          items:
+          - key: truststore.jks
+            path: cacerts
+  <%_ } _%>
+>>>>>>> 8186c2131a0175cb17f6e0aacaddfaa410c6b1f8
           

@@ -37,6 +37,17 @@ services:
       #ports:
       # - 9092:9092 # Uncomment to make Kafka available externally
 <%_ } _%>
+<!-- Condition to generate container for rabbitmq -- cmi-tic-varun -->
+<%_ if (useRabbitMQ) { _%>
+  rabbit:
+    image: <%- dockerContainers.rabbit %>
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+     - 5672:5672
+     - 15672:15672
+<%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
   jhipster-registry:
     image: <%- dockerContainers.jhipsterRegistry %>

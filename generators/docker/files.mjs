@@ -129,6 +129,12 @@ export const dockerFiles = {
       path: DOCKER_DIR,
       templates: ['kafka.yml'],
     },
+    // generator condition for rabbit.yml file - cmi-tic-varun
+    {
+      condition: generator => generator.messageBrokerRabbitMQ,
+      path: DOCKER_DIR,
+      templates: ['rabbit.yml'],
+    },
     {
       condition: generator => !!generator.enableSwaggerCodegen,
       path: DOCKER_DIR,

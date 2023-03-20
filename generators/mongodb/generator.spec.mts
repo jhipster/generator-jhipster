@@ -30,6 +30,7 @@ import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {
   mockedGenerators as serverGenerators,
   shouldComposeWithKafka,
+  shouldComposeWithRabbitMQ, // cmi-tic-varun
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
 
@@ -85,6 +86,7 @@ describe(`generator - ${databaseType}`, () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
       shouldComposeWithKafka(sampleConfig, () => runResult);
+      shouldComposeWithRabbitMQ(sampleConfig, () => runResult); // cmi-tic-varun
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

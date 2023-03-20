@@ -62,11 +62,24 @@ spec:
   - host: keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
+<<<<<<< HEAD
         - path: /<%= ingressTypeNginx ? "" : "*" %>
           pathType: <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
+=======
+        - path: /*
+          pathType: ImplementationSpecific
+>>>>>>> 8186c2131a0175cb17f6e0aacaddfaa410c6b1f8
           backend:
             service:
               name: keycloak
               port:
                 number: 9080
+<<<<<<< HEAD
 <%_ } _%>    
+=======
+  tls:
+    - secretName: keycloak-ssl
+      hosts:
+        - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+<%_ } _%>    
+>>>>>>> 8186c2131a0175cb17f6e0aacaddfaa410c6b1f8

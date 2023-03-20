@@ -59,6 +59,9 @@ logSummary() {
         echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
     <%_ } _%>
   <%_ } _%>
+  <%_ if (useKeycloak) { _%>
+        echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+  <%_ } _%>
         echo "#####################################################"
 <%_ } _%>
 }
@@ -82,7 +85,14 @@ default() {
     kubectl apply -f registry-${suffix}/
 <%_ } _%> <%_ if (istio) { _%>
     kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ } _%> 
+<%_ if (useKeycloak) { _%>    
+    kubectl apply -f cert-manager/
+    kubectl apply -f keycloak-${suffix}/
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
+    kubectl apply -f registry-${suffix}/
+    <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
     kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
 <%_ }) _%>
 <%_ if (useKafka) { _%>

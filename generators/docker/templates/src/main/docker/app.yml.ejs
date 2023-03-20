@@ -86,6 +86,11 @@ _%>
 <%_ if (messageBrokerKafka) { _%>
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
 <%_ } _%>
+<%#  rabbitmq-cmi-tic-varun  -%>
+<%_ if (messageBrokerRabbitMQ) { _%>
+      - SPRING_RABBITMQ_HOST=rabbit
+      - SPRING_RABBITMQ_PORT=5672
+<%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
       - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
 <%_ } _%>

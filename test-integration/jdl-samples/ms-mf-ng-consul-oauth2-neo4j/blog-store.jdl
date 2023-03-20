@@ -26,16 +26,14 @@ application {
     buildTool maven
     clientFramework angular
     creationTimestamp 1617901618886
-    // TODO enable databaseType
-    // databaseType neo4j
+    databaseType neo4j
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
     serviceDiscoveryType consul
     testFrameworks [cypress]
     microfrontends [blog, notification]
   }
-  // TODO Add UserData
-  entities Product
+  entities UserData, Product
 }
 
 /* microfrontend, imperative, maven */
@@ -128,7 +126,7 @@ entity Product {
   image ImageBlob
 }
 
-/*
+/* TODO relationships at Neo4J cascades, changing the user entity.
 relationship OneToOne {
   @Id UserData{user(login)} to User
 }
