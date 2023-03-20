@@ -77,8 +77,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
               )
             );
           } else {
-            // updating docker-compose version manually @cmi-tic-craxkumar
-            const composeVersion = "1.29.2"; //stdout.split(' ')[2].replace(/,/g, '');
+            // update composeVersion version manually @cmi-tic-craxkumar
+            const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
             const composeVersionMajor = composeVersion.split('.')[0];
             const composeVersionMinor = composeVersion.split('.')[1];
             if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {

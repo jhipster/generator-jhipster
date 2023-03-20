@@ -25,6 +25,24 @@ file:///${PATH_TO_JHIPSTER_DIR}/generator-jhipster/dist/generators/base-docker/d
 TypeError: Cannot read properties of undefined (reading 'replace')
     at file:///${PATH_TO_JHIPSTER_DIR}/generator-jhipster/dist/generators/base-docker/docker-utils.mjs:45:55
 
+Change the docker Version in the following file before linking:-
+> Change directory
+```
+cd generators/base-compose
+```
+
+open generator.mjs  and change the line 
+
+> const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
+
+to 
+
+> const composeVersion = [ComposeVersion]; 
+
+for example 
+
+> const composeVersion = "1.29.2";
+
 
 
 # Link Jhipster
