@@ -268,17 +268,4 @@ spec:
             path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
-<<<<<<< HEAD
-=======
-  <%_ if (useKeycloak) { _%>
-      volumes:
-      # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
-      - name: java-truststore
-        secret:
-          secretName: letsencrypt-ca-secret
-          items:
-          - key: truststore.jks
-            path: cacerts
-  <%_ } _%>
->>>>>>> 8186c2131a0175cb17f6e0aacaddfaa410c6b1f8
           
