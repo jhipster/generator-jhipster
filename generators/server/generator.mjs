@@ -814,11 +814,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
-  _configureServer(config = this.jhipsterConfig) {
+  _configureServer(config = this.jhipsterConfigWithDefaults, dest = this.jhipsterConfig) {
     // JWT authentication is mandatory with Eureka, so the JHipster Registry
     // can control the applications
     if (config.serviceDiscoveryType === EUREKA && config.authenticationType !== OAUTH2) {
-      config.authenticationType = JWT;
+      dest.authenticationType = JWT;
     }
 
     // Generate JWT secret key if key does not already exist in config
@@ -826,43 +826,43 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = createBase64Secret(64, this.options.reproducibleTests);
+      dest.jwtSecretKey = createBase64Secret(64, this.options.reproducibleTests);
     }
     // Generate remember me key if key does not already exist in config
-    if (config.authenticationType === SESSION && !config.rememberMeKey) {
-      config.rememberMeKey = createSecret();
+    if (config.authenticationType === SESSION && !dest.rememberMeKey) {
+      dest.rememberMeKey = createSecret();
     }
 
     if (config.authenticationType === OAUTH2) {
-      config.skipUserManagement = true;
+      dest.skipUserManagement = true;
     }
 
     if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
       this.logger.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
-      config.enableHibernateCache = false;
+      dest.enableHibernateCache = false;
     }
 
     if (!config.databaseType && config.prodDatabaseType) {
-      config.databaseType = getDBTypeFromDBValue(config.prodDatabaseType);
+      dest.databaseType = getDBTypeFromDBValue(config.prodDatabaseType);
     }
     if (!config.devDatabaseType && config.prodDatabaseType) {
-      config.devDatabaseType = config.prodDatabaseType;
+      dest.devDatabaseType = config.prodDatabaseType;
     }
 
     // force variables unused by microservice applications
     if (config.applicationType === MICROSERVICE) {
-      config.websocket = NO_WEBSOCKET;
+      dest.websocket = NO_WEBSOCKET;
     }
     const databaseType = config.databaseType;
     if (databaseType === NO_DATABASE) {
-      config.devDatabaseType = NO_DATABASE;
-      config.prodDatabaseType = NO_DATABASE;
-      config.enableHibernateCache = false;
-      config.skipUserManagement = true;
+      dest.devDatabaseType = NO_DATABASE;
+      dest.prodDatabaseType = NO_DATABASE;
+      dest.enableHibernateCache = false;
+      dest.skipUserManagement = true;
     } else if ([MONGODB, NEO4J, COUCHBASE, CASSANDRA].includes(databaseType)) {
-      config.devDatabaseType = databaseType;
-      config.prodDatabaseType = databaseType;
-      config.enableHibernateCache = false;
+      dest.devDatabaseType = databaseType;
+      dest.prodDatabaseType = databaseType;
+      dest.enableHibernateCache = false;
     }
   }
 
