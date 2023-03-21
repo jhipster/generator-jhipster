@@ -109,12 +109,13 @@ export const UserManagement = () => {
   const totalItems = useAppSelector(state => state.userManagement.totalItems);
   const loading = useAppSelector(state => state.userManagement.loading);
   const getSortIconByFieldName = (fieldName: string) => {
-    const { sort: sortFieldName, order } = pagination;
-    return (sortFieldName !== fieldName)
-      ? faSort
-      : (order === ASC)
-        ? faSortUp
-        : faSortDown;
+    const sortFieldName = pagination.sort;
+    const order = pagination.order;
+    if (sortFieldName !== fieldName) {
+      return faSort;
+    } else {
+      return (order === ASC) ? faSortUp : faSortDown;
+    }
   };
 
   return (
