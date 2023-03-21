@@ -47,7 +47,7 @@
     "css-loader": "6.7.3",
     "css-minimizer-webpack-plugin": "4.2.2",
     "eslint": "8.36.0",
-    "eslint-config-prettier": "8.7.0",
+    "eslint-config-prettier": "8.8.0",
     "eslint-plugin-react": "7.32.2",
     "eslint-webpack-plugin": "4.0.0",
     "folder-hash": "4.0.4",
