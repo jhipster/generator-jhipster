@@ -86,6 +86,7 @@ if (project.hasProperty("gae")) {
     dependencyManagement {
         imports {
             mavenBom "tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}"
+            mavenBom "org.infinispan:infinispan-bom:14.0.7.Final"
         }
     }
     appengineStage.dependsOn thinResolve
