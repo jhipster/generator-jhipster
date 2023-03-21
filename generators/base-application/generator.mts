@@ -62,12 +62,8 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-export type BaseApplicationSource = Record<string, (...args: any[]) => any> & {
-  addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
-};
-
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
+  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<Record<string, (...args: any[]) => void>>
 >;
 
 /**
@@ -77,6 +73,7 @@ export default class BaseApplicationGenerator<
   Definition extends BaseApplicationGeneratorDefinition<{
     applicationType: BaseApplication;
     entityType: Entity;
+    sourceType: any;
   }> = GeneratorDefinition
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
@@ -277,6 +274,16 @@ export default class BaseApplicationGenerator<
   asWritingEntitiesTaskGroup(
     taskGroup: GenericTaskGroup<this, Definition['writingEntitiesTaskParam']>
   ): GenericTaskGroup<this, Definition['writingEntitiesTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('./tasks.mjs').PostWritingTaskGroup<this, Definition>} taskGroup
+   * @returns {import('./tasks.mjs').PostWritingTaskGroup<this, Definition>}
+   */
+  asPostWritingTaskGroup(taskGroup) {
     return taskGroup;
   }
 

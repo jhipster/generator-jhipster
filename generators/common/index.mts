@@ -28,7 +28,7 @@ export { commonFiles as files } from './files.mjs';
 type ApplicationDefinition = {
   applicationType: ClientServerApplication;
   entityType: Entity;
-  sourceType: Record<string, (...args: any[]) => any>;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 // TODO move to ./generator.mts

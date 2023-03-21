@@ -35,7 +35,7 @@ export type LiquibaseEntity = Entity & {
 export type ApplicationDefinition = {
   applicationType: SpringBootApplication & LiquibaseApplication;
   entityType: LiquibaseEntity;
-  sourceType: Record<string, (...args: any[]) => any>;
+  sourceType: Record<string, (...args: any[]) => void>;
 };
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
