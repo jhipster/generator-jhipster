@@ -24,13 +24,11 @@ import { WriteFileSection } from '../base/api.mjs';
 const files: WriteFileSection<Generator, any> = {
   cacheFiles: [
     {
-      condition: data =>
-        data.cacheProviderEhCache ||
-        data.cacheProviderCaffeine ||
-        data.cacheProviderHazelcast ||
-        data.cacheProviderInfinispan ||
-        data.cacheProviderMemcached ||
-        data.cacheProviderRedis,
+      condition: data => data.buildToolGradle,
+      templates: ['gradle/cache.gradle'],
+    },
+    {
+      condition: data => data.cacheProviderAny,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/CacheConfiguration.java'],

@@ -3,13 +3,13 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix, fromMatrix } from '../../test/support/index.mjs';
+import { fromMatrix } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers, result } from '../../test/support/helpers.mjs';
 
 import { GENERATOR_SPRING_CACHE } from '../generator-list.mjs';
-import { cacheTypes } from '../../jdl/jhipster/index.mjs';
+import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -19,9 +19,11 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
+const { MAVEN, GRADLE } = buildToolTypes;
 
 const samples = fromMatrix({
   cacheProvider: [NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
+  buildTool: [MAVEN, GRADLE],
 });
 
 describe(`generator - ${generator}`, () => {
