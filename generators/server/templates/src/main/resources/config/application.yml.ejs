@@ -178,13 +178,6 @@ spring:
 <%_ } _%>
   application:
     name: <%= baseName %>
-<%_ if (cacheProviderInfinispan) { _%>
-  cache:
-    cache-names: 
-      - usersByLogin
-      - usersByEmail
-    type: <%= cacheProvider %>
-<%_ } _%>
 <%_ if (serviceDiscoveryConsul || (applicationTypeGateway && reactive) || messageBrokerKafka) { _%>
   cloud:
   <%_ if (serviceDiscoveryConsul) { _%>
