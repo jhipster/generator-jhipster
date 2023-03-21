@@ -86,7 +86,6 @@ if (project.hasProperty("gae")) {
     dependencyManagement {
         imports {
             mavenBom "tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}"
-            mavenBom "org.infinispan:infinispan-bom:14.0.7.Final"
         }
     }
     appengineStage.dependsOn thinResolve
@@ -335,8 +334,11 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.hazelcast:hazelcast-spring:${hazelcastSpringVersion}"
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
+
+    implementation platform("org.infinispan:infinispan-bom:14.0.7.Final")
+
     implementation "org.infinispan:infinispan-hibernate-cache-v60"
-    implementation "org.infinispan:infinispan-spring-boot-starter-embedded"
+    implementation "org.infinispan:infinispan-spring-boot3-starter-embedded"
     implementation "org.infinispan:infinispan-commons-jakarta"
     implementation "org.infinispan:infinispan-core-jakarta"
     compileOnly "org.infinispan:infinispan-component-annotations"
