@@ -94,14 +94,14 @@ const commonUserFiles = {
       condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['service/UserService.java', 'service/dto/package-info.java'],
+      templates: ['service/UserService.java'],
     },
     {
       condition: data =>
         data.authenticationTypeOauth2 || data.generateUserManagement || (data.applicationTypeMicroservice && !data.skipUserManagement),
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['service/mapper/UserMapper.java', 'service/mapper/package-info.java', 'web/rest/PublicUserResource.java'],
+      templates: ['service/mapper/UserMapper.java', 'web/rest/PublicUserResource.java'],
     },
     {
       condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
@@ -219,7 +219,6 @@ const userManagementFiles = {
         'security/DomainUserDetailsService.java',
         'security/UserNotActivatedException.java',
         'service/MailService.java',
-        'service/dto/package-info.java',
         'service/dto/PasswordChangeDTO.java',
         'service/EmailAlreadyUsedException.java',
         'service/InvalidPasswordException.java',
@@ -417,7 +416,7 @@ export const baseServerFiles = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['security/SecurityUtils.java', 'security/AuthoritiesConstants.java', 'security/package-info.java'],
+      templates: ['security/SecurityUtils.java', 'security/AuthoritiesConstants.java'],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
@@ -491,7 +490,6 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: [
         'aop/logging/LoggingAspect.java',
-        'config/package-info.java',
         'config/AsyncConfiguration.java',
         'config/CRLFLogConverter.java',
         'config/DateTimeFormatConfiguration.java',
@@ -521,11 +519,6 @@ export const baseServerFiles = {
   ],
   serverJavaDomain: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['domain/package-info.java'],
-    },
-    {
       condition: generator =>
         generator.databaseTypeSql || generator.databaseTypeMongodb || generator.databaseTypeNeo4j || generator.databaseTypeCouchbase,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
@@ -533,26 +526,11 @@ export const baseServerFiles = {
       templates: ['domain/AbstractAuditingEntity.java'],
     },
   ],
-  serverJavaPackageInfo: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/package-info.java'],
-    },
-  ],
-  serverJavaService: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['service/package-info.java'],
-    },
-  ],
   serverJavaWebError: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [
-        'web/rest/errors/package-info.java',
         'web/rest/errors/BadRequestAlertException.java',
         'web/rest/errors/ErrorConstants.java',
         'web/rest/errors/ExceptionTranslator.java',
@@ -561,11 +539,6 @@ export const baseServerFiles = {
     },
   ],
   serverJavaWeb: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/vm/package-info.java', 'web/rest/package-info.java'],
-    },
     {
       condition: generator => !generator.skipClient && !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
@@ -586,16 +559,10 @@ export const baseServerFiles = {
       templates: [data => `web/filter/SpaWebFilter_${data.imperativeOrReactive}.java`],
     },
     {
-      condition: generator => !generator.skipClient && !generator.reactive,
+      condition: generator => !generator.skipClient,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['web/filter/SpaWebFilterIT.java'],
-    },
-    {
-      condition: generator => !generator.skipClient && generator.reactive,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/filter/SpaWebFilterIT_reactive.java'],
+      templates: [data => `web/filter/SpaWebFilterIT_${data.imperativeOrReactive}.java`],
     },
     {
       condition: generator => !generator.skipClient && generator.reactive,

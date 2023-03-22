@@ -163,7 +163,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     await this.dependsOnJHipster(GENERATOR_COMMON);
-    await this.dependsOnJHipster(GENERATOR_JAVA, { packageInfoFile: false });
+    await this.dependsOnJHipster(GENERATOR_JAVA);
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);

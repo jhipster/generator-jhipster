@@ -33,7 +33,8 @@ const packageInfoTransform = ({ javaRoots, editor, javadocs }: PackageInfoTransf
         const javadoc = packageJavadoc
           ? `/**
  * ${packageJavadoc}
- */`
+ */
+`
           : '';
         if (!editor.exists(packageInfoFile)) {
           editor.write(
