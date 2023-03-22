@@ -207,6 +207,7 @@
                 <scope>import</scope>
             </dependency>
 <%_ if (cacheProviderInfinispan) { _%>
+            <!-- TODO rework infinispan-bom dependency once spring-boot 3.0.5 is released -->
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-bom</artifactId>
