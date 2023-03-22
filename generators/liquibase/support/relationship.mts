@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import _ from 'lodash';
+import { getFKConstraintName } from '../../server/support/index.mjs';
 
 function relationshipBaseDataEquals(relationshipA, relationshipB) {
   return (
@@ -55,4 +57,21 @@ export function relationshipNeedsForeignKeyRecreationOnly(relationshipA, relatio
     (relationshipA.options?.onDelete !== relationshipB.options?.onDelete ||
       relationshipA.options?.onUpdate !== relationshipB.options?.onUpdate)
   );
+}
+
+export function prepareRelationshipForLiquibase(entity, relationship) {
+  relationship.shouldWriteRelationship =
+    relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
+
+  if (relationship.shouldWriteJoinTable) {
+    const joinTableName = relationship.joinTable.name;
+    const prodDatabaseType = entity.prodDatabaseType;
+    _.defaults(relationship.joinTable, {
+      constraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }),
+      otherConstraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }),
+    });
+  }
+
+  relationship.columnDataType = relationship.otherEntity.columnType;
+  return relationship;
 }

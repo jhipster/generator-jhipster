@@ -127,12 +127,21 @@ export default class BaseApplicationGenerator<
   }
 
   /**
+   * Get Entity configuration path
+   * @param entityName Entity name
+   * @returns
+   */
+  getEntityConfigPath(entityName: string) {
+    return this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+  }
+
+  /**
    * Get all the generator configuration from the .yo-rc.json file
    * @param entityName - Name of the entity to load.
    * @param create - Create storage if doesn't exists.
    */
   getEntityConfig(entityName: string, create = false): Storage | undefined {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+    const entityPath = this.getEntityConfigPath(entityName);
     if (!create && !this.fs.exists(entityPath)) return undefined;
     return this.createStorage(entityPath);
   }

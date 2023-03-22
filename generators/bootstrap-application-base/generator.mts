@@ -21,7 +21,7 @@ import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { addFakerToEntity } from '../base-application/support/index.mjs';
+import { addFakerToEntity, findOtherRelationshipInRelationships } from '../base-application/support/index.mjs';
 import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
@@ -184,6 +184,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
               );
             }
             relationship.otherEntity = otherEntity;
+            relationship.otherRelationship = findOtherRelationshipInRelationships(relationship, otherEntity.relationships ?? []);
 
             otherEntity.otherRelationships = otherEntity.otherRelationships || [];
             otherEntity.otherRelationships.push(relationship);

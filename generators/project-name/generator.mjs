@@ -104,7 +104,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
-        const { baseName } = application;
+        const { baseName, upperFirstCamelCaseBaseName } = application;
         const humanizedBaseName = baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(baseName);
         _.defaults(application, {
           humanizedBaseName,
@@ -113,7 +113,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
           capitalizedBaseName: _.upperFirst(baseName),
           dasherizedBaseName: _.kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),
-          upperFirstCamelCaseBaseName: this.upperFirstCamelCase(baseName),
+          upperFirstCamelCaseBaseName,
           projectDescription: `Description for ${humanizedBaseName}`,
         });
       },

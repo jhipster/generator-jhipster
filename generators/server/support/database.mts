@@ -20,6 +20,8 @@ import crypto from 'crypto';
 
 import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.mjs';
 import { hibernateSnakeCase } from './string.mjs';
+import { databaseData } from '../../sql/support/index.mjs';
+import { ValidationResult } from '../../base/api.mjs';
 
 const dbTypes = fieldTypes;
 const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
@@ -146,4 +148,98 @@ export function calculateDbNameWithLimit(
   otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
 
   return `${prefix}${formattedName}${separator}${otherFormattedName}${suffix}`;
+}
+
+type ConstraintName = {
+  prodDatabaseType?: string;
+  noSnakeCase?: boolean;
+  prefix?: string;
+  suffix?: string;
+  skipCheckLengthOfIdentifier?: boolean;
+};
+
+/**
+ * get a constraint name for tables in JHipster preferred style
+ */
+export function calculateDbName(
+  tableOrEntityName: string,
+  columnOrRelationshipName: string,
+  { prodDatabaseType, noSnakeCase = false, prefix = '', suffix = '', skipCheckLengthOfIdentifier = false }: ConstraintName = {}
+): ValidationResult & { value: string } {
+  const separator = '__';
+  const convertCase = noSnakeCase ? str => str : hibernateSnakeCase;
+  const constraintName = `${prefix}${convertCase(tableOrEntityName)}${separator}${convertCase(columnOrRelationshipName)}${suffix}`;
+  const { name, constraintNameMaxLength } = (prodDatabaseType && databaseData[prodDatabaseType]) || {};
+  if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !skipCheckLengthOfIdentifier) {
+    return {
+      warning: `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`,
+      value: `${calculateDbNameWithLimit(tableOrEntityName, columnOrRelationshipName, constraintNameMaxLength - suffix.length, {
+        separator,
+        noSnakeCase,
+        prefix,
+      })}${suffix}`,
+    };
+  }
+  return { value: constraintName };
+}
+
+type FKConstraintName = {
+  prodDatabaseType?: string;
+  noSnakeCase?: boolean;
+  skipCheckLengthOfIdentifier?: boolean;
+};
+
+/**
+ * get a foreign key constraint name for tables in JHipster preferred style.
+ */
+export function getFKConstraintName(
+  tableOrEntityName: string,
+  columnOrRelationshipName: string,
+  { prodDatabaseType, noSnakeCase, skipCheckLengthOfIdentifier }: FKConstraintName = {}
+) {
+  return calculateDbName(tableOrEntityName, columnOrRelationshipName, {
+    prodDatabaseType,
+    noSnakeCase,
+    prefix: 'fk_',
+    suffix: '_id',
+    skipCheckLengthOfIdentifier,
+  });
+}
+
+type JoinTableName = {
+  prodDatabaseType?: string;
+  skipCheckLengthOfIdentifier?: boolean;
+};
+
+/**
+ * get a table name for joined tables in JHipster preferred style.
+ */
+export function getJoinTableName(
+  entityName,
+  relationshipName,
+  { prodDatabaseType, skipCheckLengthOfIdentifier }: JoinTableName = {}
+): ValidationResult & { value: string } {
+  const separator = '__';
+  const prefix = 'rel_';
+  const joinTableName = `${prefix}${hibernateSnakeCase(entityName)}${separator}${hibernateSnakeCase(relationshipName)}`;
+  const { name, tableNameMaxLength } = (prodDatabaseType && databaseData[prodDatabaseType]) || {};
+  if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !skipCheckLengthOfIdentifier) {
+    return {
+      warning: `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`,
+      value: calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator }),
+    };
+  }
+  return { value: joinTableName };
+}
+
+type UXConstraintName = {
+  prodDatabaseType?: string;
+  noSnakeCase?: boolean;
+};
+
+/**
+ * get a unique constraint name for tables in JHipster preferred style.
+ */
+export function getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase }: UXConstraintName = {}) {
+  return calculateDbName(entityName, columnName, { prodDatabaseType, noSnakeCase, prefix: 'ux_' });
 }

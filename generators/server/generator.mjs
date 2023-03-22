@@ -35,6 +35,7 @@ import {
   getPrimaryKeyValue as getPKValue,
   generateKeyStore,
   addSpringFactory,
+  hibernateSnakeCase,
 } from './support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
@@ -372,7 +373,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
         application.generateAuthenticationApi = application.applicationTypeMonolith || application.applicationTypeGateway;
 
-        application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
+        application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
 
         application.mainJavaDir = SERVER_MAIN_SRC_DIR;
         application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
@@ -472,7 +473,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
-        entityConfig.entityTableName = entityConfig.entityTableName || this.getTableName(entityName);
+        entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
 
         const fixedEntityTableName = this._fixEntityTableName(
           entityConfig.entityTableName,

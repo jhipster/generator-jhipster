@@ -28,11 +28,17 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import PrivateBase from './generator-base-definitions.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
+import {
+  getDBTypeFromDBValue,
+  hibernateSnakeCase,
+  calculateDbName,
+  getFKConstraintName,
+  getUXConstraintName,
+} from '../server/support/index.mjs';
 import {
   databaseTypes,
   monitoringTypes,
@@ -666,44 +672,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * get a table name in JHipster preferred style.
-   *
-   * @param {string} value - table name string
-   */
-  getTableName(value) {
-    return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
    * get a table column name in JHipster preferred style.
    *
    * @param {string} value - table column name string
    */
   getColumnName(value) {
     return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
-   * get a table name for joined tables in JHipster preferred style.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} relationshipName - name of the related entity
-   * @param {string} prodDatabaseType - database type
-   */
-  getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-    const separator = '__';
-    const prefix = 'rel_';
-    const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
-    const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
-    if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logger.warn(
-        `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
-      );
-      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
-    }
-    return joinTableName;
   }
 
   /**
@@ -718,25 +692,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} suffix - constraintName suffix for the constraintName
    */
   getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
-    let constraintName;
-    const separator = '__';
-    if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
-    } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}${suffix}`;
-    }
-    const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
-    if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logger.warn(
-        `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
-      );
-      return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
-        separator,
-        noSnakeCase,
-        prefix,
-      })}${suffix}`;
-    }
-    return constraintName;
+    const result = calculateDbName(entityName, columnOrRelationName, { prodDatabaseType, noSnakeCase, prefix, suffix });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -749,7 +707,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
+    const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -762,7 +722,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
+    const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -831,7 +793,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value string to convert
    */
   upperFirstCamelCase(value) {
-    return _.upperFirst(_.camelCase(value));
+    return upperFirstCamelCase(value);
   }
 
   /**
@@ -1462,7 +1424,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
-      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
+      dest.upperFirstCamelCaseBaseName = upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
