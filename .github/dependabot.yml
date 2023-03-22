@@ -23,7 +23,7 @@ updates:
     directory: '/'
     rebase-strategy: 'auto'
     schedule:
-      interval: 'weekly'
+      interval: 'daily'
       # Before cache workflow
       time: '23:00'
     open-pull-requests-limit: 10
