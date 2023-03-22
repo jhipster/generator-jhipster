@@ -279,16 +279,6 @@ export default class BaseApplicationGenerator<
 
   /**
    * Utility method to get typed objects for autocomplete.
-   *
-   * @param {import('./tasks.mjs').PostWritingTaskGroup<this, Definition>} taskGroup
-   * @returns {import('./tasks.mjs').PostWritingTaskGroup<this, Definition>}
-   */
-  asPostWritingTaskGroup(taskGroup) {
-    return taskGroup;
-  }
-
-  /**
-   * Utility method to get typed objects for autocomplete.
    */
   asPostWritingEntitiesTaskGroup(
     taskGroup: GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']>

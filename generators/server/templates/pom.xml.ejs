@@ -206,6 +206,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+<%_ if (cacheProviderInfinispan) { _%>
+            <!-- TODO rework infinispan-bom dependency once spring-boot 3.0.5 is released -->
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>14.0.7.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+<%_ } _%>
 <%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
             <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
             <dependency>
@@ -297,7 +307,11 @@
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring-boot-starter-embedded</artifactId>
+            <artifactId>infinispan-spring-boot3-starter-embedded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-commons-jakarta</artifactId>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -305,7 +319,8 @@
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-jcache</artifactId>
+            <artifactId>infinispan-component-annotations</artifactId>
+            <scope>compile</scope>
         </dependency>
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
