@@ -1,3 +1,3 @@
 [plugins]
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.1' }
-node-gradle = { id = 'com.github.node-gradle.node', version = '3.5.0' }
+node-gradle = { id = 'com.github.node-gradle.node', version = '3.5.1' }
