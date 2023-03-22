@@ -29,4 +29,4 @@ export { serverFiles as files } from './files.mjs';
 export type ApplicationDefinition = GenericApplicationDefinition<SpringBootApplication>;
 
 // TODO move to ./generator.mts
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition>;
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition<any>>;

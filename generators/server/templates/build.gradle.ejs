@@ -61,9 +61,6 @@ sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
 assert System.properties["java.specification.version"] == <%- JAVA_COMPATIBLE_VERSIONS.map(ver => `"${ver}"`).join(' || '); %>
 
-<%_ if (cacheProviderAny) { _%>
-apply from: "gradle/cache.gradle"
-<%_ } _%>
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
 <%_ if (enableSwaggerCodegen) { _%>

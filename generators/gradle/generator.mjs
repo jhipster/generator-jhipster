@@ -54,6 +54,9 @@ export default class GradleGenerator extends BaseApplicationGenerator {
       async verify({ application }) {
         assert.equal(application.buildTool, GRADLE);
       },
+      addSourceNeddles({ source }) {
+        source.applyFromGradle = script => this.applyFromGradleScript(script);
+      },
     });
   }
 

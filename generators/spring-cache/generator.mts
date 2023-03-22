@@ -20,8 +20,9 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_SPRING_CACHE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
+import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
 
-export default class SpringCacheGenerator extends BaseApplicationGenerator {
+export default class SpringCacheGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -51,11 +52,16 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        if (application.cacheProviderRedis) {
+        if ((application as any).cacheProviderRedis) {
           source.addTestSpringFactory?.({
             key: 'org.springframework.test.context.ContextCustomizerFactory',
             value: `${application.packageName}.config.RedisTestContainersSpringContextCustomizerFactory`,
           });
+        }
+      },
+      applyGradleScript({ source, application }) {
+        if (application.buildToolGradle) {
+          source.applyFromGradle?.('gradle/cache.gradle');
         }
       },
     });
