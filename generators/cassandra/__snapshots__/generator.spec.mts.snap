@@ -344,6 +344,9 @@ exports[`generator - cassandra gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/test/java/com/package/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
@@ -754,6 +757,9 @@ exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tec
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
@@ -1095,6 +1101,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
@@ -1422,6 +1431,9 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedCassandra.java": {
@@ -1781,6 +1793,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
@@ -2149,6 +2164,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedCassandra.java": {
@@ -2558,6 +2576,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
@@ -2938,6 +2959,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/package/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
@@ -3310,6 +3334,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
@@ -3720,6 +3747,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedCassandra.java": {
@@ -4135,6 +4165,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
@@ -4486,6 +4519,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/CassandraTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedCassandra.java": {

@@ -32,4 +32,7 @@ export default function cleanupCassandraFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageTestDir}AbstractCassandraTest.java`);
   }
+  if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
+  }
 }
