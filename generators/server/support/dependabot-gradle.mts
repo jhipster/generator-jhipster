@@ -16,19 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './doc.mjs';
-export * from './database.mjs';
-export * from './dependabot-maven.mjs';
-export * from './dependabot-gradle.mjs';
-export * from '../../java/support/files.mjs';
-export * from './java-formatting.mjs';
-export * from './key-store.mjs';
-export * from './needles.mjs';
-export { default as prepareEntity } from './prepare-entity.mjs';
-export * from './prepare-entity.mjs';
-export { default as prepareField } from './prepare-field.mjs';
-export * from './spring-factories.mjs';
-export * from './string.mjs';
-export * from './templates/field-values.mjs';
-export { default as updateLanguagesTask } from './update-languages.mjs';
-export * from './update-languages.mjs';
+import { parse } from '@iarna/toml';
+
+type LibsToml = {
+  plugins: Record<string, { id: string; version: string }>;
+};
+
+// eslint-disable-next-line import/prefer-default-export
+export function getGradleLibsVersionsProperties(libsVersionsContent: string): Record<string, string> {
+  const parsed = parse(libsVersionsContent) as LibsToml;
+  return Object.fromEntries(Object.entries(parsed.plugins).map(([dependecyName, dependency]) => [dependecyName, dependency.version]));
+}

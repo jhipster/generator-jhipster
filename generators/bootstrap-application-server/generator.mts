@@ -26,6 +26,7 @@ import {
   loadRequiredConfigDerivedProperties,
   prepareEntity as prepareEntityServerForTemplates,
   getPomVersionProperties,
+  getGradleLibsVersionsProperties,
 } from '../server/support/index.mjs';
 import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
@@ -46,10 +47,12 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         application.backendType = 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
+        const gradleLibsVersions = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/gradle/libs.versions.toml'));
         application.javaDependencies = this.prepareDependencies(
           {
             ...javaDependencies,
             ...getPomVersionProperties(pomFile),
+            ...getGradleLibsVersionsProperties(gradleLibsVersions),
           },
           // Gradle doesn't allows snakeCase
           value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
