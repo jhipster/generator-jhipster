@@ -18,11 +18,11 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
+const { EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { MAVEN, GRADLE } = buildToolTypes;
 
 const samples = fromMatrix({
-  cacheProvider: [NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
+  cacheProvider: [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
   buildTool: [MAVEN, GRADLE],
 });
 

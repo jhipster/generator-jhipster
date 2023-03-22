@@ -28,7 +28,6 @@ const files: WriteFileSection<Generator, any> = {
       templates: ['gradle/cache.gradle'],
     },
     {
-      condition: data => data.cacheProviderAny,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/CacheConfiguration.java'],

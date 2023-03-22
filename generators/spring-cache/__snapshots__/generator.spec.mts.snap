@@ -131,25 +131,6 @@ exports[`generator - spring-cache memcached-maven should match files snapshot 1`
 }
 `;
 
-exports[`generator - spring-cache no-gradle should match files snapshot 1`] = `
-{
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "gradle/cache.gradle": {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`generator - spring-cache no-maven should match files snapshot 1`] = `
-{
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-}
-`;
-
 exports[`generator - spring-cache redis-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
