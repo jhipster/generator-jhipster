@@ -399,6 +399,12 @@
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
         </dependency>
+        <!-- TODO drop once spring-boot 3.0.5 is released -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-couchbase</artifactId>
+            <version><%- javaDependencies['spring-data-couchbase'] %></version>
+        </dependency>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
         <dependency>
