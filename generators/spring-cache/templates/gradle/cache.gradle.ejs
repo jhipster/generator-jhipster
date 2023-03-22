@@ -9,10 +9,8 @@ dependencies {
   implementation "org.hibernate.orm:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-  implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
-<%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
+  implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
   implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
   implementation "com.typesafe:config:${typesafeConfigVersion}"
   <%_ if (enableHibernateCache) { _%>

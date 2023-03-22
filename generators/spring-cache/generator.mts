@@ -61,7 +61,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<Sprin
       },
       applyGradleScript({ source, application }) {
         if (application.buildToolGradle) {
-          source.applyFromGradle?.('gradle/cache.gradle');
+          source.applyFromGradle?.('gradle/cache');
         }
       },
     });

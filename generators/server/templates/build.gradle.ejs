@@ -360,6 +360,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.cassandraunit:cassandra-unit-spring"
     testImplementation "org.testcontainers:cassandra"
 <%_ } _%>
+<%_ if (authenticationTypeOauth2 && !cacheProviderCaffeine && !cacheProviderInfinispan) { _%>
+  implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
+<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
     implementation "org.hibernate.orm:hibernate-core"
