@@ -71,9 +71,9 @@ cassandraDriverVersion=<%= CASSANDRA_DRIVER_VERSION %>
 
 # gradle plugin version
 jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
-gitPropertiesPluginVersion=2.4.1
+gitPropertiesPluginVersion=<%- javaDependencies['git-properties-plugin'] %>
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.5.0
+gradleNodePluginVersion=<%- javaDependencies['node-gradle'] %>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 liquibasePluginVersion=2.1.1
