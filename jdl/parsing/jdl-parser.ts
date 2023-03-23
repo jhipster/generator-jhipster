@@ -65,6 +65,12 @@ export default class JDLParser extends CstParser {
     this.deploymentDeclaration();
     this.deploymentConfigDeclaration();
     this.deploymentConfigValue();
+    /**
+     * Parsing all the communication configuration to jdl-parser   @cmi-tic-craxkumar
+     */
+    this.communicationDeclaration();
+    this.communicationConfigDeclaration();
+    this.communicationConfigValue();
     this.applicationDeclaration();
     this.applicationSubDeclaration();
     this.applicationSubConfig();
@@ -93,6 +99,7 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
           { ALT: () => this.SUBRULE(this.applicationDeclaration) },
           { ALT: () => this.SUBRULE(this.deploymentDeclaration) },
+          { ALT: () => this.SUBRULE(this.communicationDeclaration) },    // check for rules and subrules for communicationDeclaration      @cmi-tic-craxkumar
           // a constantDeclaration starts with a NAME, but any keyword is also a NAME
           // So to avoid conflicts with most of the above alternatives (which start with keywords)
           // this alternative must be last.
@@ -484,6 +491,46 @@ export default class JDLParser extends CstParser {
         { ALT: () => this.SUBRULE(this.qualifiedName) },
         { ALT: () => this.SUBRULE(this.list) },
         { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
+        { ALT: () => this.CONSUME(LexerTokens.STRING) },
+      ]);
+    });
+  }
+
+  /**
+  * Defining communicationDeclaration as part of communication to be parsed by jdl 
+  * @cmi-tic-craxkumar
+  */
+  communicationDeclaration(): any {
+    this.RULE('communicationDeclaration', () => {
+      this.CONSUME(LexerTokens.COMMUNICATION);
+      this.CONSUME(LexerTokens.LCURLY);
+      this.MANY(() => {
+        this.OR([{ ALT: () => this.CONSUME(LexerTokens.JAVADOC) }, { ALT: () => this.SUBRULE(this.communicationConfigDeclaration) }]);
+      });
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+  /**
+  * Defining communicationConfigDeclaration as part of communication to be parsed by jdl 
+  * @cmi-tic-craxkumar
+  */
+  communicationConfigDeclaration(): any {
+    this.RULE('communicationConfigDeclaration', () => {
+      this.CONSUME(LexerTokens.COMM_KEY);
+      this.SUBRULE(this.communicationConfigValue);
+      this.OPTION(() => {
+        this.CONSUME(LexerTokens.COMMA);
+      });
+    });
+  }
+
+  /**
+  * Defining communicationConfigValue as part of communication to be parsed by jdl 
+  * @cmi-tic-craxkumar
+  */
+  communicationConfigValue(): any {
+    this.RULE('communicationConfigValue', () => {
+      this.OR([
         { ALT: () => this.CONSUME(LexerTokens.STRING) },
       ]);
     });

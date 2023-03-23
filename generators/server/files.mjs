@@ -20,6 +20,7 @@ import cleanupOldServerFiles from './cleanup.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import { addSectionsCondition, mergeSections } from '../base/support/index.mjs';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir, moveToSrcMainResourcesDir } from './support/index.mjs';
+import { communications } from './server-base.mjs';
 
 const imperativeConfigFiles = {
   imperativeFiles: [
@@ -677,5 +678,52 @@ export function writeFiles() {
         context: application,
       });
     },
+    /**
+     * This function will write the files which will allow the communication
+     * between the server and the client simply saying between gateway/microservice
+     * applications.
+     * @cmi-tic-craxkumar
+     */
+    writeCommunicationFile() {
+      for (let i = 0; i < communications.length;i++){
+        if(this.jhipsterConfig.baseName === communications[i].client){
+          var capitalizeServerName = communications[i].server.charAt(0).toUpperCase() + communications[i].server.slice(1)
+          this.fs.copyTpl(
+            this.templatePath("src/main/java/package/web/rest/ClientResource.java.ejs"),
+            this.destinationPath(`${SERVER_MAIN_SRC_DIR}`.concat(this.jhipsterConfig.packageFolder).concat("/web/rest/comm/ClientResource".concat(capitalizeServerName).concat(".java"))),{
+              packageName : this.jhipsterConfig.packageName,
+              capitalizeServerName : capitalizeServerName,
+              serverName  : communications[i].server
+            }
+          );
+        }
+      }
+
+      for (let i = 0; i < communications.length;i++){
+        if(this.jhipsterConfig.baseName === communications[i].server){
+          this.fs.copyTpl(
+            this.templatePath("src/main/java/package/web/rest/ServerResource.java.ejs"),
+            this.destinationPath(`${SERVER_MAIN_SRC_DIR}`.concat(this.jhipsterConfig.packageFolder).concat("/web/rest/comm/ServerResource.java")),{
+              packageName : this.jhipsterConfig.packageName,
+              serverName  : communications[i].server
+            }
+          );
+        }
+      }
+
+      this.fs.copyTpl(
+        this.templatePath("src/main/java/package/config/webClient/AccessToken.java.ejs"),
+        this.destinationPath(`${SERVER_MAIN_SRC_DIR}`.concat(this.jhipsterConfig.packageFolder).concat("/config/webClient/AccessToken.java")),{
+          packageName : this.jhipsterConfig.packageName
+        }
+      );
+
+      this.fs.copyTpl(
+        this.templatePath("src/main/java/package/config/webClient/WebClientConfig.java.ejs"),
+        this.destinationPath(`${SERVER_MAIN_SRC_DIR}`.concat(this.jhipsterConfig.packageFolder).concat("/config/webClient/WebClientConfig.java")),{
+          packageName : this.jhipsterConfig.packageName
+        }
+      );
+    }
   });
 }

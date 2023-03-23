@@ -22,6 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+import { loadCommunicationConfigs  } from './server-base.mjs';
 
 import {
   getDBTypeFromDBValue,
@@ -206,6 +207,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.applicationType = 'monolith';
         }
       },
+      // Initialize the configuration for communication in each application  @cmi-tic-craxkumar
+      loadCommunicationConfigs
     });
   }
 
