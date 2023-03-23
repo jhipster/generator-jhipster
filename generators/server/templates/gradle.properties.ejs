@@ -38,12 +38,6 @@ caffeineVersion=<%- javaDependencies.caffeine %>
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=<%- javaDependencies.typesafe %>
 <%_ } _%>
-<%_ if (enableLiquibase && databaseTypeSql && !reactive) { _%>
-liquibaseHibernate6Version=<%- javaDependencies.liquibase %>
-<%_ } _%>
-<%_ if (enableLiquibase) { _%>
-liquibaseTaskPrefix=liquibase
-<%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
 hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
   <%_ if (enableHibernateCache) { _%>
@@ -77,9 +71,6 @@ jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
 gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=<%- javaDependencies['node-gradle'] %>
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-liquibasePluginVersion=<%- javaDependencies['gradle-liquibase'] %>
 <%_ } _%>
 sonarqubePluginVersion=<%- javaDependencies['gradle-sonarqube'] %>
 <%_ if (enableSwaggerCodegen) { _%>
