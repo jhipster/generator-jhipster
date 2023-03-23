@@ -1,7 +1,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
-import { getDBTypeFromDBValue, calculateDbName, getFKConstraintName, getJoinTableName, getUXConstraintName } from './database.mjs';
+import { getDBTypeFromDBValue, getFKConstraintName, getJoinTableName, getUXConstraintName } from './database.mjs';
 import { hibernateSnakeCase } from './string.mjs';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL, POSTGRESQL } = databaseTypes;

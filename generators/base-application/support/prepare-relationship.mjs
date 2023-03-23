@@ -82,63 +82,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   // Look for fields at the other other side of the relationship
   if (otherEntityData.relationships) {
-    let otherRelationship;
-    if (relationship.otherEntityRelationshipName) {
-      otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-        if (_.upperFirst(otherSideRelationship.otherEntityName) !== _.upperFirst(entityName)) {
-          return false;
-        }
-        return otherSideRelationship.relationshipName === relationship.otherEntityRelationshipName;
-      });
-      if (!otherRelationship) {
-        if (!relationship.otherEntity.builtIn) {
-          // TODO throw error at v8.
-          generator.logger.warn(
-            `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
-          );
-        } else {
-          generator.logger.debug(
-            `Ignoring '${entityName}' definitions as it is using a built-in Entity '${otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`
-          );
-        }
-      } else if (
-        // renaming a relationship could cause trouble here - old relationship needs to be removed
-        !ignoreMissingRequiredRelationship &&
-        otherRelationship &&
-        otherRelationship.otherEntityRelationshipName &&
-        otherRelationship.otherEntityRelationshipName !== relationship.relationshipName
-      ) {
-        throw new Error(
-          `Error at entity ${entityName}: relationship name is not synchronized ${stringifyApplicationData(
-            relationship
-          )} with ${stringifyApplicationData(otherRelationship)}`
-        );
-      }
-    } else {
-      otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-        if (_.upperFirst(otherSideRelationship.otherEntityName) !== _.upperFirst(entityName)) {
-          return false;
-        }
-        if (!otherSideRelationship.otherEntityRelationshipName) {
-          return false;
-        }
-        return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
-      });
-    }
+    const otherRelationship = relationship.otherRelationship;
     if (otherRelationship) {
       relationship.otherSideReferenceExists = true;
-      if (
-        !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
-        !(relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many') &&
-        !(relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one') &&
-        !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
-      ) {
-        throw new Error(
-          `Error at entity ${entityName}: relationship type is not synchronized ${stringifyApplicationData(
-            relationship
-          )} with ${stringifyApplicationData(otherRelationship)}`
-        );
-      }
       _.defaults(relationship, {
         otherRelationship,
         otherEntityRelationshipName: otherRelationship.relationshipName,
@@ -158,7 +104,6 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     } else {
       generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
     }
-    relationship.otherRelationship = otherRelationship;
   }
 
   relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);

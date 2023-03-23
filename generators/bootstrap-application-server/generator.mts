@@ -97,7 +97,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         }
       },
       requiredOtherSideRelationships() {
-        addEntitiesOtherRelationships(this.sharedData.getEntities());
+        this.validateResult(addEntitiesOtherRelationships(this.sharedData.getEntities().map(({ entity }) => entity)));
       },
     });
   }

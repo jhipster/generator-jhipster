@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import _ from 'lodash';
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -31,6 +32,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION
 import type { GeneratorDefinition as ServerGeneratorDefinition } from '../common/index.mjs';
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 
+const { upperFirst, lowerFirst } = _;
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
@@ -151,8 +153,9 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
             `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
           );
 
+          relationship.otherEntityName = lowerFirst(otherEntityName);
           if (relationship.relationshipName === undefined) {
-            relationship.relationshipName = otherEntityName;
+            relationship.relationshipName = relationship.otherEntityName;
             this.logger.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
                 relationship

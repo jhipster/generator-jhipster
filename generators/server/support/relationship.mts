@@ -19,9 +19,11 @@
 
 import { Entity } from '../../../jdl/converters/types.js';
 import { addOtherRelationship } from '../../base-application/support/index.mjs';
+import { ValidationResult } from '../../base/api.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
-export const addEntitiesOtherRelationships = (entities: Entity[]) => {
+export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationResult => {
+  const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
       if (
@@ -31,8 +33,15 @@ export const addEntitiesOtherRelationships = (entities: Entity[]) => {
           relationship.relationshipType === 'one-to-one' ||
           (relationship.relationshipType === 'one-to-many' && entity.databaseType !== 'neo4j' && entity.databaseType !== 'no'))
       ) {
-        relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+        if (relationship.otherEntity.builtIn) {
+          result.warning.push(
+            `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`
+          );
+        } else {
+          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+        }
       }
     }
   }
+  return result;
 };
