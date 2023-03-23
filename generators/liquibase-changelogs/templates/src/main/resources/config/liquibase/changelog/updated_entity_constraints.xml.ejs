@@ -86,12 +86,11 @@ if (hasFieldConstraint) { _%>
     <changeSet id="<%= changelogDate %>-relationship-foreign-keys" author="jhipster">
     <%_ for (idx in addedRelationships) {
         const relationship = addedRelationships[idx];
-        relationshipName = relationship.relationshipName,
         onDelete = relationship.onDelete,
         onUpdate = relationship.onUpdate;
 
         if (relationship.shouldWriteRelationship) {
-            const constraintName = this.getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
+            const constraintName = this.getFKConstraintName(entityTableName, relationship.columnName, prodDatabaseType);
             let baseColumnName = relationship.columnName + '_id';
             if (relationship.relationshipType === 'one-to-one' && relationship.id === true) {
                 baseColumnName = 'id';
