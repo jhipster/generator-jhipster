@@ -299,7 +299,9 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
+  <%_ if (!databaseMigrationLiquibase) { _%>
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+  <%_ } _%>
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>

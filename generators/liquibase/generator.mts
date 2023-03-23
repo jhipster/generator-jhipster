@@ -94,7 +94,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
   get preparing() {
     return this.asPreparingTaskGroup({
       checkDatabaseCompatibility({ application }) {
-        if (!application.databaseTypeSql) {
+        if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
         }
       },
@@ -298,12 +298,25 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
             version: '${liquibase.version}',
           });
         }
+
+        if (applicationAny.databaseTypeNeo4j) {
+          source.addMavenDependency?.([
+            { groupId: 'org.springframework', artifactId: 'spring-jdbc' },
+            {
+              groupId: 'org.liquibase.ext',
+              artifactId: 'liquibase-neo4j',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: '${liquibase.version}',
+            },
+          ]);
+        }
       },
       injectGradle({ source, application }) {
         if (!application.buildToolGradle) return;
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: application.javaDependencies['gradle-liquibase'] });
+        source.addGradleProperty?.({ property: 'liquibaseVersion', value: application.javaDependencies.liquibase });
         if (application.databaseTypeSql && !application.reactive) {
           source.addGradleProperty?.({ property: 'liquibaseHibernate6Version', value: application.javaDependencies.liquibase });
         }

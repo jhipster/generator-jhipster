@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_NEO4J } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE, GENERATOR_NEO4J } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
@@ -30,6 +30,37 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_NEO4J);
     }
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        if (this.jhipsterConfigWithDefaults.databaseMigration === 'liquibase') {
+          await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async preparing({ application }) {
+        const applicationAny = application as any;
+        applicationAny.devLiquibaseUrl = 'jdbc:neo4j:bolt://localhost:7687';
+        applicationAny.devDatabaseUsername = '';
+        applicationAny.devDatabasePassword = '';
+        applicationAny.devJdbcDriver = null;
+        applicationAny.devHibernateDialect = null;
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -65,30 +96,14 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
           source.addMavenDependency?.([
-            {
-              groupId: 'eu.michael-simons.neo4j',
-              artifactId: 'neo4j-migrations-spring-boot-starter',
-            },
-            {
-              groupId: 'org.springframework.boot',
-              artifactId: 'spring-boot-starter-data-neo4j',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'junit-jupiter',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'neo4j',
-              scope: 'test',
-            },
+            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-neo4j' },
+            { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
+            { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
+            { groupId: 'org.testcontainers', artifactId: 'neo4j', scope: 'test' },
           ]);
+          if (!application.databaseMigrationLiquibase) {
+            source.addMavenDependency?.([{ groupId: 'eu.michael-simons.neo4j', artifactId: 'neo4j-migrations-spring-boot-starter' }]);
+          }
         }
       },
     });

@@ -159,7 +159,11 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
   <%_ if (!authenticationTypeOauth2) { _%>
     @GeneratedValue(UUIDStringGenerator.class)
   <%_ } _%>
+  <%_ if (databaseMigrationLiquibase) { _%>
+    @Property("id")
+  <%_ } else { _%>
     @Property("user_id")
+  <%_ } _%>
 <%_ } else { _%>
   <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Id
@@ -203,6 +207,9 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
   <%_ } _%>
   <%_ if (databaseTypeSql && reactive) { _%>
     @Column("password_hash")
+  <%_ } _%>
+  <%_ if (databaseTypeNeo4j && databaseMigrationLiquibase) { _%>
+    @Property("password_hash")
   <%_ } _%>
     private String password;
 <%_ } _%>
