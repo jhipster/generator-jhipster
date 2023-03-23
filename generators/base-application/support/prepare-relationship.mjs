@@ -26,6 +26,8 @@ import {
   validations,
   checkAndReturnRelationshipOnValue,
 } from '../../../jdl/jhipster/index.mjs';
+import { upperFirstCamelCase } from '../../base/support/string.mjs';
+import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.mjs';
 import { stringifyApplicationData } from './debug.mjs';
 
 const { isReservedTableName } = reservedKeywords;
@@ -55,7 +57,7 @@ function _defineOnUpdateAndOnDelete(relationship, generator) {
 export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
   const entityName = entityWithConfig.name;
   const otherEntityName = relationship.otherEntityName;
-  const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
+  const jhiTablePrefix = entityWithConfig.jhiTablePrefix || hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
   if (!relationship.otherEntity) {
     throw new Error(
@@ -190,14 +192,13 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationshipFieldName: _.lowerFirst(relationshipName),
     relationshipNameCapitalized: _.upperFirst(relationshipName),
     relationshipNameHumanized: _.startCase(relationshipName),
-    columnName: generator.getColumnName(relationshipName),
-    columnNamePrefix:
-      relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${generator.getColumnName(relationshipName)}_`,
+    columnName: hibernateSnakeCase(relationshipName),
+    columnNamePrefix: relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${hibernateSnakeCase(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: _.upperFirst(otherEntityName),
     otherEntityTableName:
       otherEntityData.entityTableName ||
-      generator.getTableName(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
+      hibernateSnakeCase(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
   });
 
   _.defaults(relationship, {
@@ -233,8 +234,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       relationship.otherEntityAngularName = 'User';
     } else {
       const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-      relationship.otherEntityAngularName =
-        _.upperFirst(relationship.otherEntityName) + generator.upperFirstCamelCase(otherEntityAngularSuffix);
+      relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + upperFirstCamelCase(otherEntityAngularSuffix);
     }
   }
 
@@ -287,7 +287,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   relationship.shouldWriteJoinTable = relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
   if (relationship.shouldWriteJoinTable) {
     relationship.joinTable = {
-      name: generator.getJoinTableName(entityWithConfig.entityTableName, relationship.relationshipName, entityWithConfig.prodDatabaseType),
+      name: getJoinTableName(entityWithConfig.entityTableName, relationship.relationshipName, {
+        prodDatabaseType: entityWithConfig.prodDatabaseType,
+      }).value,
     };
   }
 

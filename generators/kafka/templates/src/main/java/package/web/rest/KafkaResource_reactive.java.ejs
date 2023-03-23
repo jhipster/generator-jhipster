@@ -39,14 +39,14 @@ import <%= packageName %>.config.KafkaSseProducer;
 
 @RestController
 @RequestMapping("/api/<%= dasherizedBaseName %>-kafka")
-public class <%= this.upperFirstCamelCase(baseName) %>KafkaResource {
+public class <%= upperFirstCamelCaseBaseName %>KafkaResource {
 
-    private final Logger log = LoggerFactory.getLogger(<%= this.upperFirstCamelCase(baseName) %>KafkaResource.class);
+    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCaseBaseName %>KafkaResource.class);
 
     private final MessageChannel output;
     private Sinks.Many<Message<String>> sink = Sinks.many().unicast().onBackpressureBuffer();
 
-    public <%= this.upperFirstCamelCase(baseName) %>KafkaResource(@Qualifier(KafkaSseProducer.CHANNELNAME) MessageChannel output) {
+    public <%= upperFirstCamelCaseBaseName %>KafkaResource(@Qualifier(KafkaSseProducer.CHANNELNAME) MessageChannel output) {
         this.output = output;
     }
 

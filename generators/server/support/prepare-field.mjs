@@ -20,6 +20,7 @@ import assert from 'assert';
 import _ from 'lodash';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
+import { hibernateSnakeCase } from './string.mjs';
 
 const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = fieldTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
@@ -87,7 +88,7 @@ export default function prepareField(entityWithConfig, field, generator) {
 
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
-    const jhiFieldNamePrefix = generator.getColumnName(entityWithConfig.jhiPrefix);
+    const jhiFieldNamePrefix = hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
     if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType)) {
       if (!jhiFieldNamePrefix) {

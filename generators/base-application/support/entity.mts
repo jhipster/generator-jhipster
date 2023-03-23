@@ -17,15 +17,11 @@
  * limitations under the License.
  */
 
-export * from './debug.mjs';
-export * from './doc.mjs';
-export * from './enum.mjs';
-export * from './entity.mjs';
-export * from './entities.mjs';
-export * from './field-utils.mjs';
-export { default as prepareEntity } from './prepare-entity.mjs';
-export * from './prepare-entity.mjs';
-export { default as prepareField } from './prepare-field.mjs';
-export * from './prepare-field.mjs';
-export { default as prepareRelationship } from './prepare-relationship.mjs';
-export * from './relationship.mjs';
+import _ from 'lodash';
+import { Entity } from '../../../jdl/converters/types.js';
+
+const { upperFirst } = _;
+
+// eslint-disable-next-line import/prefer-default-export
+export const findEntityInEntities = (entityName: string, entities: Entity[]) =>
+  entities.find(entity => upperFirst(entity.name) === upperFirst(entityName));
