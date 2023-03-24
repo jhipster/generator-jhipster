@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%= packageName %>.config;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
@@ -45,7 +46,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     private static final Integer DATABASE_REQUEST_TIMEOUT = 20;
     private static final Integer CONTAINER_STARTUP_TIMEOUT_MINUTES = 10;
 
-    private CassandraContainer cassandraContainer;
+    private CassandraContainer<?> cassandraContainer;
 
     @Override
     public void destroy() {
@@ -57,8 +58,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     @Override
     public void afterPropertiesSet() throws IOException {
         if (null == cassandraContainer) {
-            cassandraContainer =
-                (CassandraContainer) new CassandraContainer("<%- dockerContainers.cassandra %>")
+            cassandraContainer = new CassandraContainer<>("<%- dockerContainers.cassandra %>")
                     .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
                     .withLogConsumer(new Slf4jLogConsumer(log))
                     .withReuse(true);
@@ -66,17 +66,12 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
         if (!cassandraContainer.isRunning()) {
             cassandraContainer.start();
 
-            var contactPoint = new InetSocketAddress(
-                cassandraContainer.getHost(),
-                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
-            );
+            CqlSession cqlSession = new CqlSessionBuilder().addContactPoint(cassandraContainer.getContactPoint()).withLocalDatacenter(cassandraContainer.getLocalDatacenter()).build();
+            cqlSession.execute("CREATE KEYSPACE " + DEFAULT_KEYSPACE_NAME + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}");
+            cqlSession.close();
 
-            createTestKeyspace(
-                new CqlSessionBuilder().addContactPoint(contactPoint).withLocalDatacenter(cassandraContainer.getLocalDatacenter()).build()
-            );
-
-            CqlSession cqlSession = new CqlSessionBuilder()
-                .addContactPoint(contactPoint)
+            cqlSession = new CqlSessionBuilder()
+                .addContactPoint(cassandraContainer.getContactPoint())
                 .withLocalDatacenter(cassandraContainer.getLocalDatacenter())
                 .withKeyspace(DEFAULT_KEYSPACE_NAME)
                 .withConfigLoader(getConfigLoader())
@@ -89,7 +84,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
         }
     }
 
-    public CassandraContainer getCassandraContainer() {
+    public CassandraContainer<?> getCassandraContainer() {
         return cassandraContainer;
     }
 
@@ -98,11 +93,5 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
             .programmaticBuilder()
             .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(DATABASE_REQUEST_TIMEOUT))
             .build();
-    }
-
-    private void createTestKeyspace(CqlSession session) {
-        String createQuery =
-            "CREATE KEYSPACE " + DEFAULT_KEYSPACE_NAME + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
-        session.execute(createQuery);
     }
 }
