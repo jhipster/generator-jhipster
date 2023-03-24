@@ -50,7 +50,6 @@ let applicationsPerEntityName;
  * @param {String} configurationObject.databaseType - The application's database type
  * @param {String} configurationObject.generatorVersion - The generator's version
  * @param {Boolean} configurationObject.skippedUserManagement - Whether user management is skipped
- * @param {Boolean} [configurationObject.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @return the built JDL object.
  */
 export function parseFromConfigurationObject(configurationObject): JDLObject {
@@ -58,13 +57,12 @@ export function parseFromConfigurationObject(configurationObject): JDLObject {
   if (!parsedContent) {
     throw new Error('The parsed JDL content must be passed.');
   }
-  const { unidirectionalRelationships } = configurationObject;
   init(configurationObject);
   fillApplications();
   fillDeployments();
   fillEnums();
   fillClassesAndFields();
-  fillAssociations({ unidirectionalRelationships });
+  fillAssociations();
   fillOptions();
   return jdlObject;
 }
@@ -190,9 +188,8 @@ function getConstantValueFromConstantName(constantName) {
   return parsedContent.constants[constantName];
 }
 
-function fillAssociations(conversionOptions: any = {}) {
-  const { unidirectionalRelationships = configuration.databaseType === databaseTypes.NEO4J } = conversionOptions;
-  const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, { unidirectionalRelationships });
+function fillAssociations() {
+  const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions);
   jdlRelationships.forEach(jdlRelationship => {
     // TODO: addRelationship only expects one argument.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

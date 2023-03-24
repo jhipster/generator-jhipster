@@ -45,11 +45,10 @@ const { SQL } = databaseTypes;
  * @param {Object} [logger] - the logger to use, default to the console.
  * @param {Object} [options]
  */
-export default function createValidator(jdlObject: JDLObject, applicationSettings: any = {}, logger: any = console, options: any = {}) {
+export default function createValidator(jdlObject: JDLObject, applicationSettings: any = {}, logger: any = console) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
-  const { unidirectionalRelationships } = options;
 
   if (applicationSettings.blueprints && applicationSettings.blueprints.length !== 0) {
     return {
@@ -62,7 +61,7 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
   return {
     checkForErrors: () => {
       checkForEntityErrors();
-      checkForRelationshipErrors({ unidirectionalRelationships });
+      checkForRelationshipErrors();
       checkForEnumErrors();
       checkDeploymentsErrors();
       checkForOptionErrors();
@@ -120,16 +119,15 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     });
   }
 
-  function checkForRelationshipErrors(options: any = {}) {
+  function checkForRelationshipErrors() {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
-    const { unidirectionalRelationships } = options;
     const skippedUserManagement =
       applicationSettings.skippedUserManagement || jdlObject.getOptionsForName(OptionNames.SKIP_USER_MANAGEMENT)[0];
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
-      validator.validate(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
+      validator.validate(jdlRelationship, { skippedUserManagement });
       checkForAbsentEntities({
         jdlRelationship,
         doesEntityExist: entityName => !!jdlObject.getEntity(entityName),

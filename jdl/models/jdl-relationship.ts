@@ -45,18 +45,6 @@ export default class JDLRelationship {
     if (!relationshipTypes.exists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
       throw new Error('A valid type and at least one injected field must be passed to create a relationship.');
     }
-    if (
-      merged.type === relationshipTypes.ONE_TO_MANY &&
-      (!merged.injectedFieldInFrom || !merged.injectedFieldInTo) &&
-      !merged.unidirectionalRelationships
-    ) {
-      logger.warn(
-        `In the One-to-Many relationship from ${merged.from} to ${merged.to}, ` +
-          'only bidirectionality is supported for a One-to-Many association. ' +
-          'The other side will be automatically added.'
-      );
-      addMissingSide(merged);
-    }
     this.from = merged.from;
     this.to = merged.to;
     this.type = merged.type;
@@ -187,7 +175,6 @@ function defaults() {
     },
     commentInFrom: '',
     commentInTo: '',
-    unidirectionalRelationships: false,
   };
 }
 
@@ -205,12 +192,4 @@ function checkFromAndToTypesAreString(merged) {
   if (typeof merged.to !== 'string') {
     merged.to = merged.to.name;
   }
-}
-
-function addMissingSide(relationship) {
-  if (!relationship.injectedFieldInFrom) {
-    relationship.injectedFieldInFrom = lowerFirst(relationship.to);
-    return;
-  }
-  relationship.injectedFieldInTo = lowerFirst(relationship.from);
 }
