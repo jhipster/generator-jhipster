@@ -18,13 +18,29 @@
  */
 import fs from 'fs';
 
+import _ from 'lodash';
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
-import { postPrepareEntity, relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from './support/index.mjs';
+import {
+  prepareField as prepareFieldForLiquibase,
+  postPrepareEntity,
+  relationshipEquals,
+  relationshipNeedsForeignKeyRecreationOnly,
+  prepareRelationshipForLiquibase,
+} from './support/index.mjs';
+import { addEntitiesOtherRelationships, prepareEntity as prepareEntityForServer } from '../server/support/index.mjs';
+import {
+  loadEntitiesOtherSide,
+  prepareEntityPrimaryKeyForTemplates,
+  prepareRelationship,
+  prepareField,
+  prepareEntity,
+  loadRequiredConfigIntoEntity,
+  loadEntitiesAnnotations,
+} from '../base-application/support/index.mjs';
 
 export type LiquibaseEntity = Entity & {
   anyRelationshipIsOwnerSide: boolean;
@@ -69,9 +85,35 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
     }
   }
 
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareEntityField({ entity, field }) {
+        if (!field.transient) {
+          prepareFieldForLiquibase(entity, field);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareEntityRelationship({ entity, relationship }) {
+        prepareRelationshipForLiquibase(entity, relationship);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+  }
+
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
-      prepareUser({ application, entity }) {
+      postPrepareEntity({ application, entity }) {
         postPrepareEntity({ application, entity });
       },
     });
@@ -151,19 +193,54 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
   /**
    * Generate changelog from differences between the liquibase entity and current entity.
    */
-  _generateChangelogFromFiles(application: LiquibaseApplication) {
+  _generateChangelogFromFiles(application: any) {
+    const oldEntitiesConfig = Object.fromEntries(
+      this.getExistingEntityNames()
+        .filter(entityName => fs.existsSync(this.getEntityConfigPath(entityName)))
+        .map(entityName => [
+          entityName,
+          { name: entityName, ...JSON.parse(fs.readFileSync(this.getEntityConfigPath(entityName)).toString()) },
+        ])
+    );
+
+    if (application.generateBuiltInUserEntity) {
+      const user = this.sharedData.getEntity('User');
+      oldEntitiesConfig.User = user;
+    }
+
+    const entities = Object.values(oldEntitiesConfig);
+    loadEntitiesAnnotations(entities);
+    loadEntitiesOtherSide(entities);
+    addEntitiesOtherRelationships(entities);
+
+    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+      loadRequiredConfigIntoEntity(entity, this.jhipsterConfigWithDefaults);
+      prepareEntity(entity, this, application);
+      prepareEntityForServer(entity);
+      if (!entity.embedded && !entity.primaryKey) {
+        prepareEntityPrimaryKeyForTemplates(entity, this);
+      }
+      for (const field of entity.fields ?? []) {
+        prepareField(entity, field, this);
+        prepareFieldForLiquibase(entity, field);
+      }
+      for (const relationship of entity.relationships ?? []) {
+        prepareRelationship(entity, relationship, this, true);
+        prepareRelationshipForLiquibase(entity, relationship);
+      }
+      postPrepareEntity({ application, entity });
+    }
+
     // Compare entity changes and create changelogs
     return this.getExistingEntityNames().map(entityName => {
-      const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-
-      const newConfig: any = this.fs.readJSON(filename);
+      const newConfig: any = this.sharedData.getEntity(entityName);
       const newFields: any[] = (newConfig.fields || []).filter((field: any) => !field.transient);
       const newRelationships: any[] = newConfig.relationships || [];
 
       if (
         this.recreateInitialChangelog ||
         !application.incrementalChangelog ||
-        !fs.existsSync(filename) ||
+        !oldEntitiesConfig[entityName] ||
         !fs.existsSync(
           this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`)
         )
@@ -180,11 +257,11 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       }
       (this as any)._debug(`Calculating diffs for ${entityName}`);
 
-      const oldConfig: any = JSON.parse(fs.readFileSync(filename) as any);
+      const oldConfig: any = oldEntitiesConfig[entityName];
 
       const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
-      const oldFieldNames: string[] = oldFields.map(field => field.fieldName);
-      const newFieldNames: string[] = newFields.map(field => field.fieldName);
+      const oldFieldNames: string[] = oldFields.filter(field => !field.id).map(field => field.fieldName);
+      const newFieldNames: string[] = newFields.filter(field => !field.id).map(field => field.fieldName);
 
       // Calculate new fields
       const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
@@ -198,6 +275,8 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       // Calculate changed/newly added relationships
       const addedRelationships = newRelationships.filter(
         newRelationship =>
+          // id changes are not supported
+          !newRelationship.id &&
           // check if the same relationship wasn't already part of the old config
           !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship))
       );
@@ -205,6 +284,8 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       // Calculate to be removed relationships
       const removedRelationships = oldRelationships.filter(
         oldRelationship =>
+          // id changes are not supported
+          !oldRelationship.id &&
           // check if there are relationships not anymore in the new config
           !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship))
       );

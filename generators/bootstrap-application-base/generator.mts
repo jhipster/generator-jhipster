@@ -21,7 +21,7 @@ import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { addFakerToEntity, findOtherRelationshipInRelationships } from '../base-application/support/index.mjs';
+import { addFakerToEntity, loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.mjs';
 import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
@@ -160,36 +160,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           const entity = entityStorage.getAll();
           entity.name = entity.name ?? entityName;
           this.sharedData.setEntity(entityName, entity);
-
-          // Load field annotations
-          for (const field of entity.fields ?? []) {
-            if (field.options) {
-              Object.assign(field, field.options);
-            }
-          }
         }
 
-        for (const { entityName } of entitiesToLoad) {
-          const entity = this.sharedData.getEntity(entityName);
-          // Load relationships annotations
-          for (const relationship of entity.relationships ?? []) {
-            const { otherEntityName, options } = relationship;
-            if (options) {
-              Object.assign(relationship, options);
-            }
-            const otherEntity = this.sharedData.getEntity(upperFirst(otherEntityName));
-            if (!otherEntity) {
-              throw new Error(
-                `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
-              );
-            }
-            relationship.otherEntity = otherEntity;
-            relationship.otherRelationship = findOtherRelationshipInRelationships(relationship, otherEntity.relationships ?? []);
-
-            otherEntity.otherRelationships = otherEntity.otherRelationships || [];
-            otherEntity.otherRelationships.push(relationship);
-          }
-        }
+        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
+        loadEntitiesAnnotations(entities);
+        this.validateResult(loadEntitiesOtherSide(entities));
       },
     });
   }

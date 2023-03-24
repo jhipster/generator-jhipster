@@ -20,36 +20,99 @@
 import _ from 'lodash';
 
 import { Relationship, Entity } from '../../../jdl/converters/types.js';
+import { ValidationResult } from '../../base/api.mjs';
+import { stringifyApplicationData } from './debug.mjs';
 import { findEntityInEntities } from './entity.mjs';
 
-export const findOtherRelationshipInRelationships = (relationship: Relationship, inRelationships: Relationship[]) => {
+const { upperFirst, lowerFirst } = _;
+
+export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
+
+export const findOtherRelationshipInRelationships = (entityName: string, relationship: Relationship, inRelationships: Relationship[]) => {
   return inRelationships.find(otherRelationship => {
-    return relationship.relationshipName === otherRelationship.otherEntityRelationshipName;
+    if (upperFirst(otherRelationship.otherEntityName) !== entityName) {
+      return false;
+    }
+
+    if (relationship.otherEntityRelationshipName) {
+      return relationship.otherEntityRelationshipName === otherRelationship.relationshipName;
+    }
+    if (otherRelationship.otherEntityRelationshipName) {
+      return otherRelationship.otherEntityRelationshipName === relationship.relationshipName;
+    }
+
+    return false;
   });
 };
 
-export const loadEntitiesOtherSide = (entities: Entity[]) => {
+export const loadEntitiesAnnotations = (entities: Entity[]) => {
   for (const entity of entities) {
-    for (const relationship of entity.relationships ?? []) {
-      const otherEntity = findEntityInEntities(relationship.otherEntityName, entities);
-      if (!otherEntity) {
-        throw new Error(`Error at entity ${entity.name}: could not find the entity ${relationship.otherEntityName}`);
+    // Load field annotations
+    for (const field of entity.fields ?? []) {
+      if (field.options) {
+        Object.assign(field, field.options);
       }
-      relationship.otherEntity = otherEntity;
-      relationship.otherRelationship = findOtherRelationshipInRelationships(relationship, otherEntity.relationships ?? []);
+    }
+
+    // Load relationships annotations
+    for (const relationship of entity.relationships ?? []) {
+      if (relationship.options) {
+        Object.assign(relationship, relationship.options);
+      }
     }
   }
 };
 
+export const loadEntitiesOtherSide = (entities: Entity[]): ValidationResult => {
+  const result: { warning: string[] } = { warning: [] };
+  for (const entity of entities) {
+    for (const relationship of entity.relationships ?? []) {
+      const otherEntity = findEntityInEntities(upperFirst(relationship.otherEntityName), entities);
+      if (!otherEntity) {
+        throw new Error(`Error at entity ${entity.name}: could not find the entity ${relationship.otherEntityName}`);
+      }
+      otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+      otherEntity.otherRelationships.push(relationship);
+
+      relationship.otherEntity = otherEntity;
+      const otherRelationship = findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? []);
+      if (otherRelationship) {
+        relationship.otherRelationship = otherRelationship;
+        otherRelationship.otherEntityRelationshipName = otherRelationship.otherEntityRelationshipName ?? relationship.relationshipName;
+        relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? otherRelationship.relationshipName;
+        if (
+          otherRelationship.otherEntityRelationshipName !== relationship.relationshipName ||
+          relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
+        ) {
+          throw new Error(
+            `Error at entity ${entity.name}: relationship name is not synchronized ${stringifyApplicationData(
+              relationship
+            )} with ${stringifyApplicationData(relationship.otherRelationship)}`
+          );
+        }
+        if (relationship.relationshipType !== otherRelationshipType(relationship.otherRelationship.relationshipType)) {
+          throw new Error(
+            `Error at entity ${entity.name}: relationship type is not synchronized ${stringifyApplicationData(
+              relationship
+            )} with ${stringifyApplicationData(otherRelationship)}`
+          );
+        }
+      }
+    }
+  }
+  return result;
+};
+
 export const addOtherRelationship = (entity: Entity, otherEntity: Entity, relationship: Relationship) => {
-  relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? _.lowerFirst(entity.name);
+  relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
   const otherRelationship: Relationship = {
     otherEntity: entity,
-    otherEntityName: relationship.otherEntityRelationshipName as string,
+    otherEntityName: lowerFirst(entity.name),
     ownerSide: !relationship.ownerSide,
     otherEntityRelationshipName: relationship.relationshipName,
     relationshipName: relationship.otherEntityRelationshipName as string,
-    relationshipType: relationship.relationshipType.split('-').reverse().join('-'),
+    relationshipType: otherRelationshipType(relationship.relationshipType),
+    otherRelationship: relationship,
   };
   otherEntity.relationships = otherEntity.relationships ?? [];
   otherEntity.relationships.push(otherRelationship);
