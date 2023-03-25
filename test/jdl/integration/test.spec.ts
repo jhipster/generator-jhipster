@@ -28,17 +28,22 @@ import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 import { parseFromFiles } from '../../../jdl/readers/jdl-reader.js';
 import DocumentParser from '../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('jdl - integration tests', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
+
   context('when parsing and exporting a JDL', () => {
     let originalContent;
     let writtenContent;
 
-    before(() => {
+    beforeEach(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
         parsedContent: parseFromFiles([path.join(__dirname, '..', 'test-files', 'big_sample.jdl')]),
         applicationType: MONOLITH,
@@ -48,10 +53,6 @@ describe('jdl - integration tests', () => {
         parsedContent: parseFromFiles(['exported.jdl']),
         applicationType: MONOLITH,
       });
-    });
-
-    after(() => {
-      fs.unlinkSync('exported.jdl');
     });
 
     it('should keep the same JDL content', () => {
