@@ -787,14 +787,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get end() {
     return this.asEndTaskGroup({
-      checkLocaleValue({ application }) {
-        if (application.languages && application.languages.includes('in')) {
-          this.logger.warn(
-            "For jdk 17 compatibility 'in' locale value should set 'java.locale.useOldISOCodes=true' environment variable. Refer to https://bugs.openjdk.java.net/browse/JDK-8267069"
-          );
-        }
-      },
-
       end({ application }) {
         this.log.ok('Spring Boot application generated successfully.');
 

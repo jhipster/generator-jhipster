@@ -166,7 +166,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       defaults() {
         const { nativeLanguage, languages, enableTranslation } = this.jhipsterConfigWithDefaults;
         if (!enableTranslation) {
@@ -192,7 +192,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages, ...this.languagesToApply])];
         }
       },
-    };
+      migrateLanguages() {
+        if (this.isJhipsterVersionLessThan('7.10.0')) {
+          const { languages } = this.jhipsterConfig;
+          if (languages.includes('in')) {
+            this.jhipsterConfig.languages = languages.map(lang => (lang === 'in' ? 'id' : lang));
+          }
+        }
+      },
+    });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
