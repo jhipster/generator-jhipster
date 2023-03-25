@@ -67,7 +67,8 @@
       "uz-Cyrl-uz",
       "uz-Latn-uz",
       "kr-Latn-kr",
-      "vi"
+      "vi",
+      "az-Latn-az"
     ],
     "messageBroker": "no",
     "nativeLanguage": "en",

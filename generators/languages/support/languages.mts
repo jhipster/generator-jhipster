@@ -254,6 +254,13 @@ const partialLanguages: PartialLanguage[] = [
     angularLocale: 'en',
     dayjsLocale: 'en',
   },
+  {
+    name: 'Azerbaijani (Latin)',
+    displayName: 'Azərbaycan dili',
+    languageTag: 'az-Latn-AZ',
+    angularLocale: 'az-Latn',
+    dayjsLocale: 'az-Latn',
+  },
 ];
 
 export const supportedLanguages: ReadonlyArray<Language> = partialLanguages.map(language => ({

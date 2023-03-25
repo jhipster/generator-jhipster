@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Sistem gündəlikləri",
+        "nbloggers": "Cəmi {{ total }} qeyd var.",
+        "filter": "Filter",
+        "table": {
+            "name": "Adı",
+            "level": "Səviyyə"
+        }
+    }
+}
