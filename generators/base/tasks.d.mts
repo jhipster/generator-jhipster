@@ -14,9 +14,7 @@ export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) =
 
 export type GenericTaskGroup<ThisType, Arg1Type = ControlTaskParam> = Record<string, GenericTask<ThisType, Arg1Type>>;
 
-export type BaseGeneratorDefinition<
-  Definition extends GenericSourceTypeDefinition = { sourceType: Record<string, (...args: any[]) => void> }
-> = Record<
+export type BaseGeneratorDefinition<Definition extends GenericSourceTypeDefinition = GenericSourceTypeDefinition> = Record<
   | 'initializingTaskParam'
   | 'promptingTaskParam'
   | 'configuringTaskParam'
