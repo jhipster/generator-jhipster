@@ -48,7 +48,6 @@ let applicationsPerEntityName;
  * @param {String} configurationObject.applicationType - The application's type
  * @param {String} configurationObject.applicationName - The application's name
  * @param {String} configurationObject.databaseType - The application's database type
- * @param {String} configurationObject.generatorVersion - The generator's version
  * @param {Boolean} configurationObject.skippedUserManagement - Whether user management is skipped
  * @return the built JDL object.
  */

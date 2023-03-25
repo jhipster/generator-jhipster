@@ -273,7 +273,6 @@ class JDLProcessor {
       applicationType: this.options.applicationType,
       skipUserManagement: this.options.skipUserManagement,
       forceNoFiltering: this.options.forceNoFiltering,
-      generatorVersion: packageJson.version,
       skipFileGeneration: true,
     };
 

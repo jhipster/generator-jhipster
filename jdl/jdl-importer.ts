@@ -48,7 +48,6 @@ const { uniqBy } = _;
  * @param {String} configuration.applicationName - deprecated, the application's name, optional if parsing applications
  * @param {String} configuration.applicationType - deprecated, the application type, optional if parsing applications
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
- * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
  * @returns {Object} a JDL importer.
@@ -74,7 +73,6 @@ export function createImporterFromFiles(files, configuration?: any) {
  * @param {String} configuration.applicationName - deprecated, the application's name, optional if parsing applications
  * @param {String} configuration.applicationType - deprecated, the application type, optional if parsing applications
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
- * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
  * @param {Array} configuration.blueprints - the blueprints used.
@@ -138,14 +136,12 @@ function parseFiles(files) {
 function getJDLObject(parsedJDLContent, configuration) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
-  let generatorVersion = configuration.generatorVersion;
   let databaseType = configuration.databaseType;
   let skippedUserManagement = false;
 
   if (configuration.application) {
     baseName = configuration.application['generator-jhipster'].baseName;
     applicationType = configuration.application['generator-jhipster'].applicationType;
-    generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
     skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
     databaseType = configuration.application['generator-jhipster'].databaseType;
   }
@@ -154,7 +150,6 @@ function getJDLObject(parsedJDLContent, configuration) {
     parsedContent: parsedJDLContent,
     applicationType,
     applicationName: baseName,
-    generatorVersion,
     skippedUserManagement,
     databaseType,
   });

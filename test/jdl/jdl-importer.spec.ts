@@ -580,7 +580,6 @@ relationship OneToOne {
           applicationName: 'toto',
           applicationType: 'monolith',
           databaseType: 'sql',
-          generatorVersion: '6.4.1',
         });
         importer.import();
         exported = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Environment.json'), 'utf-8'));
@@ -631,10 +630,7 @@ entity E
 entity F
 
 paginate * with infinite-scroll
-`,
-          {
-            generatorVersion: '7.0.0',
-          }
+`
         );
         importer.import();
         entityA = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'A.json'), 'utf-8'));
@@ -788,7 +784,6 @@ entity A
 paginate * with infinite-scroll
 `,
           {
-            generatorVersion: '7.0.0',
             skipFileGeneration: true,
           }
         );
