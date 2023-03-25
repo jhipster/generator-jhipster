@@ -21,8 +21,13 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import fs from 'fs';
 import { expect } from 'chai';
 import { readFile, readFiles } from '../../../jdl/readers/file-reader.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 describe('jdl - FileReader', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
+
   describe('readFile', () => {
     context('when passing a nil path', () => {
       it('should fail', () => {
@@ -42,13 +47,9 @@ describe('jdl - FileReader', () => {
     context('when passing a valid text file', () => {
       let content: string;
 
-      before(() => {
+      beforeEach(() => {
         fs.writeFileSync('./myFile.txt', 'Hello World');
         content = readFile('./myFile.txt');
-      });
-
-      after(() => {
-        fs.unlinkSync('./myFile.txt');
       });
 
       it('should read it', () => {
@@ -75,15 +76,10 @@ describe('jdl - FileReader', () => {
     context('when passing valid text files', () => {
       let content: string[];
 
-      before(() => {
+      beforeEach(() => {
         fs.writeFileSync('./myFile1.txt', 'Hello...');
         fs.writeFileSync('./myFile2.txt', ' World!');
         content = readFiles(['./myFile1.txt', './myFile2.txt']);
-      });
-
-      after(() => {
-        fs.unlinkSync('./myFile1.txt');
-        fs.unlinkSync('./myFile2.txt');
       });
 
       it('should read them', () => {

@@ -26,12 +26,17 @@ import path from 'path';
 import exportDeployments from '../../../jdl/exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
 import { deploymentOptions } from '../../../jdl/jhipster/index.mjs';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
 } = deploymentOptions;
 
 describe('jdl - JHipsterDeploymentExporter', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
+
   describe('exportDeployments', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
@@ -47,7 +52,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
       context('when exporting deployments to JSON', () => {
         let returned;
 
-        before('common setup for both deployments', () => {
+        beforeEach('common setup for both deployments', () => {
           returned = exportDeployments({
             'docker-compose': new JDLDeployment({
               deploymentType: DOCKERCOMPOSE,
@@ -68,7 +73,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         context('for the first deployment', () => {
           let content;
 
-          before('setup for the first deployment', done => {
+          beforeEach('setup for the first deployment', done => {
             fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
               if (err) {
                 return done(err);
@@ -76,11 +81,6 @@ describe('jdl - JHipsterDeploymentExporter', () => {
               content = JSON.parse(data);
               return done();
             });
-          });
-
-          after('cleanup for the fist deployment', () => {
-            fs.unlinkSync(path.join('docker-compose', '.yo-rc.json'));
-            fs.rmSync('docker-compose', { recursive: true });
           });
 
           it('should exports it', done => {
@@ -110,7 +110,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         context('for the second deployment', () => {
           let content;
 
-          before('setup for the first deployment', done => {
+          beforeEach('setup for the first deployment', done => {
             fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
               if (err) {
                 return done(err);
@@ -118,11 +118,6 @@ describe('jdl - JHipsterDeploymentExporter', () => {
               content = JSON.parse(data);
               return done();
             });
-          });
-
-          after('cleanup for the fist deployment', () => {
-            fs.unlinkSync(path.join('kubernetes', '.yo-rc.json'));
-            fs.rmSync('kubernetes', { recursive: true });
           });
 
           it('should exports it', done => {

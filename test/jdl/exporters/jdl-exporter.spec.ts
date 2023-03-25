@@ -27,6 +27,7 @@ import { JDLEntity } from '../../../jdl/models/index.mjs';
 import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
 import JDLApplication from '../../../jdl/models/jdl-application.js';
 import { applicationOptions, clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {
@@ -34,6 +35,9 @@ const {
 } = applicationOptions;
 
 describe('jdl - JDLExporter', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
   describe('exportToJDL', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
@@ -51,7 +55,7 @@ describe('jdl - JDLExporter', () => {
         let fileExistence;
         let jdlContent = '';
 
-        before(() => {
+        beforeEach(() => {
           const jdlObject = new JDLObject();
           jdlObject.addEntity(
             new JDLEntity({
@@ -61,10 +65,6 @@ describe('jdl - JDLExporter', () => {
           exportToJDL(jdlObject, PATH);
           fileExistence = fs.statSync(PATH).isFile();
           jdlContent = fs.readFileSync(PATH, 'utf-8').toString();
-        });
-
-        after(() => {
-          fs.unlinkSync(PATH);
         });
 
         it('should export the JDL to the passed path', () => {
@@ -80,7 +80,7 @@ describe('jdl - JDLExporter', () => {
           let fileExistence;
           let jdlContent = '';
 
-          before(() => {
+          beforeEach(() => {
             const jdlObject = new JDLObject();
             jdlObject.addEntity(
               new JDLEntity({
@@ -90,10 +90,6 @@ describe('jdl - JDLExporter', () => {
             exportToJDL(jdlObject);
             fileExistence = fs.statSync(DEFAULT_PATH).isFile();
             jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
-          });
-
-          after(() => {
-            fs.unlinkSync(DEFAULT_PATH);
           });
 
           it('should export the JDL to the default one', () => {
@@ -106,7 +102,7 @@ describe('jdl - JDLExporter', () => {
         context('exports application', () => {
           context('with clientFramework no', () => {
             let jdlObject;
-            before(() => {
+            beforeEach(() => {
               jdlObject = new JDLObject();
               jdlObject.addApplication(new JDLApplication({ config: { [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK } }));
             });
