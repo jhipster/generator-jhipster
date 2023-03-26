@@ -29,7 +29,7 @@
             "error": "Памылка"
         },
         "indicator": {
-<%_ if (messageBrokerKafka) { _%>
+<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
             "binders": "Прокер паведамленняў",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

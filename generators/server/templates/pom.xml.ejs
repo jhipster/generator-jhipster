@@ -135,6 +135,9 @@
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
+<%_ if (messageBrokerPulsar) { _%>
+        <spring-pulsar.version><%- javaDependencies['spring-pulsar'] %></spring-pulsar.version>
+<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
@@ -349,7 +352,7 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka) { _%>
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || messageBrokerPulsar) { _%>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -728,6 +731,22 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>kafka</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
+<%_ if (messageBrokerPulsar) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.pulsar</groupId>
+            <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
+            <version>${spring-pulsar.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>pulsar</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>

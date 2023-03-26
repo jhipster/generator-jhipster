@@ -144,6 +144,7 @@ export function loadFromYoRc() {
   this.loadDeploymentConfig();
 
   this.useKafka = false;
+  this.usePulsar = false;
   this.useMemcached = false;
   this.useRedis = false;
 

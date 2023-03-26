@@ -35,7 +35,7 @@ const { snakeCase } = lodash;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { NO: NO_SERVICE_DISCOVERY, EUREKA, CONSUL } = serviceDiscoveryTypes;
-const { NO: NO_MESSAGE_BROKER, KAFKA } = messageBrokerTypes;
+const { NO: NO_MESSAGE_BROKER, KAFKA, PULSAR } = messageBrokerTypes;
 const { NO: NO_CACHE, REDIS, MEMCACHED, HAZELCAST } = cacheTypes;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -64,7 +64,7 @@ matrix = extendMatrix(matrix, {
   searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
   serviceDiscoveryType: [NO_SERVICE_DISCOVERY, EUREKA, CONSUL],
   enableSwaggerCodegen: [false, true],
-  messageBroker: [NO_MESSAGE_BROKER, KAFKA],
+  messageBroker: [NO_MESSAGE_BROKER, KAFKA, PULSAR],
 });
 
 matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {

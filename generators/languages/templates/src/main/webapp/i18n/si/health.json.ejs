@@ -29,7 +29,7 @@
             "error": "දෝෂයකි"
         },
         "indicator": {
-<%_ if (messageBrokerKafka) { _%>
+<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
             "binders": "Message broker",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
