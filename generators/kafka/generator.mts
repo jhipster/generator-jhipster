@@ -20,17 +20,11 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_KAFKA, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import { GeneratorDefinition } from '../server/index.mjs';
 import cleanupKafkaFilesTask from './cleanup.mjs';
 import writeKafkaFilesTask from './files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
-export default class KafkaGenerator extends BaseApplicationGenerator {
+export default class KafkaGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
@@ -39,13 +33,38 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       cleanupKafkaFilesTask,
       writeKafkaFilesTask,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      customizeApplication({ source, application }) {
+        source.addLogbackMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
+        source.addLogbackTestLog?.({ name: 'kafka', level: 'WARN' });
+        source.addLogbackTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
+        source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedKafka' });
+
+        source.addTestSpringFactory?.({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.KafkaTestContainersSpringContextCustomizerFactory`,
+        });
+      },
+      applyGradleScript({ source, application }) {
+        if (application.buildToolGradle) {
+          source.applyFromGradle?.({ script: 'gradle/kafka.gradle' });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

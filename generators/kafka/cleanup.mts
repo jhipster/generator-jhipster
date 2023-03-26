@@ -16,28 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @typedef {import('./generator.mjs')} KafkaGenerator
- */
-/**
- * @typedef {import('../base-application/tasks.mjs').ApplicationTaskParam<SpringBootApplication>} CleanupTaskParam
- */
-/**
- * Removes server files that where generated in previous JHipster versions and therefore
- * need to be removed.
- *
- * @this {this} - KafkaGenerator
- * @param {CleanupTaskParam} - args
- */
-export default function cleanupKafkaFilesTask({ application }) {
+import type KafkaGenerator from './generator.mjs';
+
+export default function cleanupKafkaFilesTask(this: KafkaGenerator, { application }) {
   if (this.isJhipsterVersionLessThan('6.5.2')) {
     this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaConsumer.java`);
     this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaProducer.java`);
   }
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaProperties.java`);
+  }
+  if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseConsumer.java`);
+    this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseProducer.java`);
+
+    // make sure those files are removed and reacreated
+    this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
+    this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
 }

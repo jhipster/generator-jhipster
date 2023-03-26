@@ -16,8 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addJavaAnnotation } from './add-java-annotation.mjs';
-export * from './checks/index.mjs';
-export * from './files.mjs';
-export { default as generatedAnnotationTransform } from './generated-annotation-transform.mjs';
-export { default as packageInfoTransform } from './package-info-transform.mjs';
+
+export default function addJavaAnnotation(content: string, { package: packageName, annotation }: { package?: string; annotation: string }) {
+  if (packageName) {
+    if (!new RegExp(`import ${packageName.replace('.', '\\.')}.${annotation};`).test(content)) {
+      // add the import statement just after the package statement, prettier will arrange it correctly
+      content = content.replace(/(package [\w.]+;\n)/, `$1import ${packageName}.${annotation};\n`);
+    }
+  }
+  if (!new RegExp(`\n@${annotation}\n`).test(content)) {
+    // add the annotation before class or interface
+    content = content.replace(/\n([a-w ]*(class|@?interface|enum) )/g, `\n@${annotation}\n$1`);
+  }
+  return content;
+}

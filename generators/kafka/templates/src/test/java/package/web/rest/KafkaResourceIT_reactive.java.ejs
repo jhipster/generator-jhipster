@@ -18,30 +18,27 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.EmbeddedKafka;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.cloud.stream.test.binder.MessageCollector;
+import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MimeTypeUtils;
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.config.EmbeddedKafka;
-import <%= packageName %>.config.KafkaSseConsumer;
-import <%= packageName %>.config.KafkaSseProducer;
 
 @IntegrationTest
 @AutoConfigureMockMvc
@@ -53,26 +50,20 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
     private WebTestClient client;
 
     @Autowired
-    @Qualifier(KafkaSseProducer.CHANNELNAME)
-    private MessageChannel output;
+    private InputDestination input;
 
     @Autowired
-    @Qualifier(KafkaSseConsumer.CHANNELNAME)
-    private MessageChannel input;
-
-    @Autowired
-    private MessageCollector collector;
+    private OutputDestination output;
 
     @Test
     void producesMessages() throws InterruptedException {
-        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce")
-            .exchange()
-            .expectStatus()
-            .isNoContent();
+        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce").exchange().expectStatus().isNoContent();
+        assertThat(output.receive(1000, "binding-out-0").getPayload()).isEqualTo("value-produce".getBytes());
+    }
 
-        BlockingQueue<Message<?>> messages = collector.forChannel(output);
-        GenericMessage<String> payload = (GenericMessage<String>) messages.take();
-        assertThat(payload.getPayload()).isEqualTo("value-produce");
+    @Test
+    void producesPooledMessages() throws Exception {
+        assertThat(output.receive(1500, "kafkaProducer-out-0").getPayload()).isEqualTo("kakfa_producer".getBytes());
     }
 
     @Test

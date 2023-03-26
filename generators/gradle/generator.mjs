@@ -24,8 +24,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_GRADLE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import files from './files.mjs';
 import { GRADLE } from './constants.mjs';
-import { GRADLE_VERSION } from './constants.mjs';
 import cleanupOldServerFilesTask from './cleanup.mjs';
+import { createNeedleCallback } from '../base/support/index.mjs';
 
 /**
  * @class
@@ -55,7 +55,14 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         assert.equal(application.buildTool, GRADLE);
       },
       addSourceNeddles({ source }) {
-        source.applyFromGradle = script => this.applyFromGradleScript(script);
+        source.applyFromGradle = ({ script }) =>
+          this.editFile(
+            this.destinationPath('build.gradle'),
+            createNeedleCallback({
+              needle: 'gradle-apply-from',
+              contentToAdd: `apply from: "${script}"`,
+            })
+          );
       },
     });
   }

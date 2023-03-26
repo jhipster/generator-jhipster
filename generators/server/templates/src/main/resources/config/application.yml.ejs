@@ -212,6 +212,8 @@ spring:
           max-connections: 1000
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>
+    function:
+      definition: kafkaConsumer;kafkaProducer
     stream:
       kafka:
         binder:
@@ -219,12 +221,14 @@ spring:
           auto-create-topics: true
           brokers: localhost:9092
       bindings:
-        binding-in-sse:
+        binding-out-0:
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
+        kafkaConsumer-in-0:
           destination: sse-topic
           content-type: text/plain
           group: <%= dasherizedBaseName %>
-        binding-out-sse:
-          destination: sse-topic
+        kafkaProducer-out-0:
           content-type: text/plain
           group: <%= dasherizedBaseName %>
   <%_ } _%>

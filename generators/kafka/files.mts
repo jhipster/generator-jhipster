@@ -16,20 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { WriteFileSection } from '../base/api.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.mjs';
+import KafkaGenerator from './generator.mjs';
 
-/**
- * @type {import('../base/api.mjs').WriteFileSection}
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-export const kafkaFiles = {
+export const kafkaFiles: WriteFileSection<any, any> = {
   config: [
+    {
+      condition: data => data.buildToolGradle,
+      templates: ['gradle/kafka.gradle'],
+    },
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/KafkaSseConsumer.java', 'config/KafkaSseProducer.java'],
+      templates: [data => `broker/KafkaConsumer_${data.imperativeOrReactive}.java`, 'broker/KafkaProducer.java'],
     },
   ],
   resources: [
@@ -38,7 +39,7 @@ export const kafkaFiles = {
       to: moveToJavaPackageSrcDir,
       templates: [
         {
-          sourceFile: data => `web/rest/KafkaResource${data.reactive ? '_reactive' : ''}.java`,
+          sourceFile: data => `web/rest/KafkaResource_${data.imperativeOrReactive}.java`,
           destinationFile: data => `web/rest/${data.upperFirstCamelCaseBaseName}KafkaResource.java`,
         },
       ],
@@ -48,14 +49,18 @@ export const kafkaFiles = {
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/KafkaTestContainer.java', 'config/EmbeddedKafka.java'],
+      templates: [
+        'config/KafkaTestContainer.java',
+        'config/EmbeddedKafka.java',
+        'config/KafkaTestContainersSpringContextCustomizerFactory.java',
+      ],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       to: moveToJavaPackageTestDir,
       templates: [
         {
-          sourceFile: data => `web/rest/KafkaResourceIT${data.reactive ? '_reactive' : ''}.java`,
+          sourceFile: data => `web/rest/KafkaResourceIT_${data.imperativeOrReactive}.java`,
           destinationFile: data => `web/rest/${data.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
         },
       ],
@@ -63,7 +68,7 @@ export const kafkaFiles = {
   ],
 };
 
-export default function writeKafkaFilesTask({ application }) {
+export default function writeKafkaFilesTask(this: KafkaGenerator, { application }) {
   return this.writeFiles({
     sections: kafkaFiles,
     context: application,

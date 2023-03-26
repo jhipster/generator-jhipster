@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import chalk from 'chalk';
 import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
 import BaseGenerator from '../index.mjs';

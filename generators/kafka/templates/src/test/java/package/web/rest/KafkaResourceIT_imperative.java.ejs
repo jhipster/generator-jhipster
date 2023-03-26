@@ -18,6 +18,9 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.EmbeddedKafka;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,54 +29,46 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.cloud.stream.test.binder.MessageCollector;
+import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.cloud.stream.binder.test.OutputDestination;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.MimeTypeUtils;
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.config.EmbeddedKafka;
-import <%= packageName %>.config.KafkaSseConsumer;
-import <%= packageName %>.config.KafkaSseProducer;
 
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
 @EmbeddedKafka
+@ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
-
-    @Autowired
-    private MessageCollector collector;
 
     @Autowired
     private MockMvc restMockMvc;
 
     @Autowired
-    @Qualifier(KafkaSseProducer.CHANNELNAME)
-    private MessageChannel output;
+    private InputDestination input;
 
     @Autowired
-    @Qualifier(KafkaSseConsumer.CHANNELNAME)
-    private MessageChannel input;
+    private OutputDestination output;
 
     @Test
     void producesMessages() throws Exception {
-        restMockMvc
-            .perform(post("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce"))
-            .andExpect(status().isOk());
-        BlockingQueue<Message<?>> messages = collector.forChannel(output);
-        GenericMessage<String> payload = (GenericMessage<String>) messages.take();
-        assertThat(payload.getPayload()).isEqualTo("value-produce");
+        restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce")).andExpect(status().isOk());
+        assertThat(output.receive(1000, "binding-out-0").getPayload()).isEqualTo("value-produce".getBytes());
+    }
+
+    @Test
+    void producesPooledMessages() throws Exception {
+        assertThat(output.receive(1500, "kafkaProducer-out-0").getPayload()).isEqualTo("kakfa_producer".getBytes());
     }
 
     @Test
@@ -92,8 +87,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
             Thread.sleep(100);
             String content = mvcResult.getResponse().getContentAsString();
             if (content.contains("data:value-consume")) {
-                restMockMvc
-                    .perform(get("/api/<%= dasherizedBaseName %>-kafka/unregister"));
+                restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/unregister"));
                 return;
             }
         }
