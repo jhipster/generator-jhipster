@@ -18,10 +18,16 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.EmbeddedKafka;
+<%_ if (authenticationUsesCsrf) { _%>
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+
+import org.junit.jupiter.api.BeforeEach;
+<%_ } _%>
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -40,10 +46,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MimeTypeUtils;
 
-@IntegrationTest
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser
 @EmbeddedKafka
+@IntegrationTest
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
     private static String KAFKA_API = "/api/<%= dasherizedBaseName %>-kafka/{command}";
 
@@ -55,10 +61,22 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Autowired
     private OutputDestination output;
+<%_ if (authenticationUsesCsrf) { _%>
+
+    @BeforeEach
+    public void setupCsrf() {
+        client = client.mutateWith(csrf());
+    }
+<%_ } _%>
 
     @Test
     void producesMessages() throws InterruptedException {
-        client.post().uri(KAFKA_API, "publish?message=value-produce").exchange().expectStatus().isNoContent();
+        client
+            .post()
+            .uri(uriBuilder -> uriBuilder.path(KAFKA_API).queryParam("message", "value-produce").build("publish"))
+            .exchange()
+            .expectStatus()
+            .isNoContent();
         assertThat(output.receive(1000, "binding-out-0").getPayload()).isEqualTo("value-produce".getBytes());
     }
 
