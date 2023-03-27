@@ -140,11 +140,10 @@ export default class BaseGenerator extends YeomanGenerator {
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      if (!this.options.reproducible) {
-        jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
-        if (!this.jhipsterConfig.jhipsterVersion) {
-          this.jhipsterConfig.jhipsterVersion = packageJson.version;
-        }
+      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
+      // Don't write jhipsterVersion to .yo-rc.json when reproducible
+      if (!this.options.reproducible && !this.jhipsterConfig.jhipsterVersion) {
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
       }
     }
 
