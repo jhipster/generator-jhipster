@@ -374,9 +374,6 @@ exports[`generator - cassandra gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/package-info.java": {
     "stateCleared": "modified",
   },
@@ -838,9 +835,6 @@ exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tec
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1233,9 +1227,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
     "stateCleared": "modified",
   },
@@ -1608,9 +1599,6 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/package-info.java": {
@@ -2009,9 +1997,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
@@ -2425,9 +2410,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/TestSecurityConfiguration.java": {
@@ -2882,9 +2864,6 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
     "stateCleared": "modified",
   },
@@ -3322,9 +3301,6 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/package-info.java": {
     "stateCleared": "modified",
   },
@@ -3742,9 +3718,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
@@ -4208,9 +4181,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4672,9 +4642,6 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
     "stateCleared": "modified",
   },
@@ -5071,9 +5038,6 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/package-info.java": {

@@ -596,10 +596,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.messageBrokerKafka ||
-        generator.cacheProviderRedis ||
         generator.databaseTypeMongodb ||
-        generator.databaseTypeCassandra ||
         generator.searchEngineElasticsearch ||
         generator.databaseTypeCouchbase ||
         generator.searchEngineCouchbase ||

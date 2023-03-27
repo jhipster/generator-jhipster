@@ -103,8 +103,9 @@ import {
   testFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
-import { createBase64Secret, createSecret, normalizePathEnd } from '../base/support/index.mjs';
+import { createBase64Secret, createSecret, normalizePathEnd, createNeedleCallback } from '../base/support/index.mjs';
 import command from './command.mjs';
+import { addJavaAnnotation } from '../java/support/index.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -370,8 +371,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         // Application name modified, using each technology's conventions
         application.frontendAppName = this.getFrontendAppName(application.baseName);
         application.mainClass = this.getMainClassName(application.baseName);
-        application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
-        application.generateAuthenticationApi = application.applicationTypeMonolith || application.applicationTypeGateway;
 
         application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
 
@@ -406,6 +405,28 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           }
           this.editFile(springFactoriesFile, addSpringFactory({ key, value }));
         };
+      },
+      addLogNeedles({ source, application }) {
+        source.addIntegrationTestAnnotation = ({ package: packageName, annotation }) =>
+          this.editFile(this.destinationPath(`${application.javaPackageTestDir}IntegrationTest.java`), content =>
+            addJavaAnnotation(content, { package: packageName, annotation })
+          );
+        source.addLogbackMainLog = ({ name, level }) =>
+          this.editFile(
+            this.destinationPath('src/main/resources/logback-spring.xml'),
+            createNeedleCallback({
+              needle: 'logback-add-log',
+              contentToAdd: `<logger name="${name}" level="${level}"/>`,
+            })
+          );
+        source.addLogbackTestLog = ({ name, level }) =>
+          this.editFile(
+            this.destinationPath('src/test/resources/logback.xml'),
+            createNeedleCallback({
+              needle: 'logback-add-log',
+              contentToAdd: `<logger name="${name}" level="${level}"/>`,
+            })
+          );
       },
     });
   }
@@ -648,10 +669,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
         if (
-          application.messageBrokerKafka ||
-          application.cacheProviderRedis ||
           application.databaseTypeMongodb ||
-          application.databaseTypeCassandra ||
           application.searchEngineElasticsearch ||
           application.databaseTypeCouchbase ||
           application.searchEngineCouchbase ||

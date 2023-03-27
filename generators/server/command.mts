@@ -40,6 +40,11 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
       hide: true,
     },
+    messageBroker: {
+      description: 'message brooker',
+      type: String,
+      scope: 'storage',
+    },
   },
   import: [GENERATOR_JAVA],
 };

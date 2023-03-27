@@ -31,17 +31,11 @@ import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
-<%_ if (messageBrokerKafka) { _%>
-import org.testcontainers.containers.KafkaContainer;
-<%_ } _%>
 
 public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
 
-<%_ if (messageBrokerKafka) { _%>
-    private static KafkaTestContainer kafkaBean;
-<%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     private static MongoDbTestContainer mongoDbBean;
 <%_ } _%>
@@ -105,19 +99,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                     testValues.and(
                         "spring.neo4j.uri=" + neo4jBean.getNeo4jContainer().getBoltUrl()
                     );
-            }
-<%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-            EmbeddedKafka kafkaAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedKafka.class);
-            if (null != kafkaAnnotation) {
-                log.debug("detected the EmbeddedKafka annotation on class {}", testClass.getName());
-                log.info("Warming up the kafka broker");
-                if (null == kafkaBean) {
-                    kafkaBean = beanFactory.createBean(KafkaTestContainer.class);
-                    beanFactory.registerSingleton(KafkaTestContainer.class.getName(), kafkaBean);
-                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName(), kafkaBean);
-                }
-                testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getMappedPort(KafkaContainer.KAFKA_PORT));
             }
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>

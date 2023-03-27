@@ -16,15 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%= packageName %>.broker;
 
-import org.springframework.cloud.stream.annotation.Input;
-import org.springframework.messaging.MessageChannel;
+import java.util.function.Supplier;
+import org.springframework.stereotype.Component;
 
-public interface KafkaSseConsumer {
+@Component
+public class KafkaProducer implements Supplier<String> {
 
-    String CHANNELNAME = "binding-in-sse";
-
-    @Input(CHANNELNAME)
-    MessageChannel input();
+    @Override
+    public String get() {
+        return "kakfa_producer";
+    }
 }

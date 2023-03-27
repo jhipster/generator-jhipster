@@ -5487,9 +5487,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
     "stateCleared": "modified",
   },
@@ -10198,9 +10195,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(false)-maven-en
   "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -11737,9 +11731,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
@@ -14810,9 +14801,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": {
