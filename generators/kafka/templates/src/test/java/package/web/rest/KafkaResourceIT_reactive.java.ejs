@@ -29,7 +29,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.http.MediaType;
@@ -41,10 +41,11 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MimeTypeUtils;
 
 @IntegrationTest
-@AutoConfigureMockMvc
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser
 @EmbeddedKafka
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
+    private static String KAFKA_API = "/api/<%= dasherizedBaseName %>-kafka/{command}";
 
     @Autowired
     private WebTestClient client;
@@ -57,7 +58,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Test
     void producesMessages() throws InterruptedException {
-        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce").exchange().expectStatus().isNoContent();
+        client.post().uri(KAFKA_API, "publish?message=value-produce").exchange().expectStatus().isNoContent();
         assertThat(output.receive(1000, "binding-out-0").getPayload()).isEqualTo("value-produce".getBytes());
     }
 
@@ -75,7 +76,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
         input.send(testMessage);
         String value = client
             .get()
-            .uri("/api/<%= dasherizedBaseName %>-kafka/consume")
+            .uri(KAFKA_API, "consume")
             .accept(MediaType.TEXT_EVENT_STREAM)
             .exchange()
             .expectStatus()
