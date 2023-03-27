@@ -1663,6 +1663,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
 
+    dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
+    dest.generateAuthenticationApi = dest.applicationTypeMonolith || dest.applicationTypeGateway;
+
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);
     }
