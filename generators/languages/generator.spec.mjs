@@ -21,8 +21,10 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
+import { GENERATOR_LANGUAGES } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -40,4 +42,28 @@ describe(`generator - ${generator}`, () => {
     expect(instance.features.unique).toBe('bar');
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('languages migration', () => {
+    describe('indonesian language', () => {
+      before(() =>
+        helpers
+          .runJHipster(GENERATOR_LANGUAGES)
+          .withSkipWritingPriorities()
+          .withJHipsterConfig({
+            jhipsterVersion: '7.9.3',
+            enableTranslation: true,
+            nativeLanguage: 'in',
+            languages: ['in'],
+            baseName: 'jhipster',
+          })
+      );
+      it('should migrate in language to id', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            nativeLanguage: 'id',
+            languages: ['id'],
+          },
+        });
+      });
+    });
+  });
 });
