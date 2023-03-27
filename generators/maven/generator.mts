@@ -25,12 +25,12 @@ import { GENERATOR_MAVEN, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../gene
 import files from './files.mjs';
 import { MAVEN } from './constants.mjs';
 import cleanupOldServerFilesTask from './cleanup.mjs';
+import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
+import { createPomStorage, type PomStorage } from './support/index.mjs';
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
- */
-export default class MavenGenerator extends BaseApplicationGenerator {
+export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+  pomStorage!: PomStorage;
+
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -42,6 +42,8 @@ export default class MavenGenerator extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
+    this.pomStorage = createPomStorage(this);
+
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
       await this.composeWithBlueprints(GENERATOR_MAVEN);
@@ -53,6 +55,11 @@ export default class MavenGenerator extends BaseApplicationGenerator {
       async verify({ application }) {
         assert.equal(application.buildTool, MAVEN);
       },
+      addSourceNeddles({ source }) {
+        source.addMavenProperty = property => this.pomStorage.addProperty(property);
+        source.addMavenProfile = profile => this.pomStorage.addProfile(profile);
+        source.addMavenDependency = dependency => this.pomStorage.addDependency(dependency);
+      },
     });
   }
 
@@ -63,13 +70,25 @@ export default class MavenGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       cleanupOldServerFilesTask,
-      async writeFiles() {
-        await this.writeFiles({ sections: files, context: this.application });
+      async writeFiles({ application }) {
+        await this.writeFiles({ sections: files, context: application });
       },
     });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      sortPom() {
+        this.pomStorage.save();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
