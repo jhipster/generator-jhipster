@@ -80,7 +80,7 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { KAFKA, PULSAR } = messageBrokerTypes;
+const { KAFKA, PULSAR, NO: NO_MESSAGE_BROKER } = messageBrokerTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -1599,6 +1599,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
     dest.messageBrokerPulsar = dest.messageBroker === PULSAR;
+    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== NO_MESSAGE_BROKER;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
