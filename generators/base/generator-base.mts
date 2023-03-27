@@ -61,7 +61,7 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 /**
  * This is the base class for a generator for every generator.
  */
-export default class BaseGenerator extends YeomanGenerator {
+export default class CoreGenerator extends YeomanGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);

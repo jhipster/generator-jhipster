@@ -19,7 +19,7 @@
 import assert from 'assert';
 import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
-import BaseGenerator from '../index.mjs';
+import CoreGenerator from '../generator-base.mjs';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.mjs';
 import { joinCallbacks } from './write-files.mjs';
 
@@ -176,7 +176,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
  *
  * @param options
  */
-export const createNeedleCallback = <Generator extends BaseGenerator = any>({
+export const createNeedleCallback = <Generator extends CoreGenerator = CoreGenerator>({
   needle,
   contentToAdd,
   contentToCheck,
@@ -226,7 +226,7 @@ export const createNeedleCallback = <Generator extends BaseGenerator = any>({
  *
  * @param this - generator if provided, editFile will be executed
  */
-export function createBaseNeedle<Generator extends BaseGenerator = BaseGenerator>(
+export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator | void,
   options: NeedleFileInsertion | Record<string, string>,
   needles?: Record<string, string>
