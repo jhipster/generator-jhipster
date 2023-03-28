@@ -82,13 +82,13 @@ describe(`generator - ${generator}`, () => {
               get [MavenGenerator.POST_WRITING]() {
                 return this.asPostWritingTaskGroup({
                   addProperty({ source }) {
-                    source.addMavenProperty?.({ property: 'foo', value: 'bar' });
+                    source.addMavenProperty?.({ property: 'foo', value: 'initial' });
                     source.addMavenProperty?.({ property: 'foo', value: 'bar' });
                     source.addMavenProperty?.({ property: 'foo2', value: 'bar2' });
-                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact' });
+                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact', version: 'initial' });
                     source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact' });
                     source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact2' });
-                    source.addMavenProfile?.({ id: 'profileId', content: '<foo>bar</foo>' });
+                    source.addMavenProfile?.({ id: 'profileId', content: '<foo>initial</foo>' });
                     source.addMavenProfile?.({ id: 'profileId', content: '<foo>bar</foo>' });
                     source.addMavenProfile?.({ id: 'profileId2', content: '<foo2>bar2</foo2>' });
                   },
