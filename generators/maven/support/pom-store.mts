@@ -21,7 +21,7 @@ import _ from 'lodash';
 
 import CoreGenerator from '../../base-core/index.mjs';
 import XmlStorage from '../internal/xml-store.mjs';
-import { MavenDependency, MavenProfile, MavenProperty } from '../types.mjs';
+import { MavenArtifact, MavenDependency, MavenProfile, MavenProperty } from '../types.mjs';
 
 const { set, get } = _;
 
@@ -101,16 +101,16 @@ function appendOrReplace<T>(array: T[], item: T, equals: (a: T, b: T) => boolean
   }
 }
 
-/*
 const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
 
-const sortDependencies = dependencies =>
-  dependencies.sort((a, b) => {
+const sortArtifacts = (artifacts: MavenArtifact[]) =>
+  artifacts.sort((a, b) => {
     const groupIdCompared = sortWithTemplate(groupIdOrder, a.groupId, b.groupId);
     if (groupIdCompared) return groupIdCompared;
     return a.artifactId.localeCompare(b.artifactId);
   });
-*/
+
+const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id.localeCompare(b.id));
 
 export default class PomStorage extends XmlStorage {
   constructor({ saveFile, loadFile }: { saveFile: (string) => void; loadFile: () => string }) {
@@ -156,11 +156,21 @@ export default class PomStorage extends XmlStorage {
       if (project.properties) {
         project.properties = sortProperties(project.properties);
       }
-      /*
-      if (project.dependencies) {
-        project.dependencies.dependency = sortDependencies(project.dependencies.dependency);
+      if (Array.isArray(project.dependencies?.dependency)) {
+        project.dependencies.dependency = sortArtifacts(project.dependencies.dependency);
       }
-      */
+      if (Array.isArray(project.dependencyManagement?.dependencies?.dependency)) {
+        project.dependencyManagement.dependencies.dependency = sortArtifacts(project.dependencyManagement.dependencies.dependency);
+      }
+      if (Array.isArray(project.build?.plugins?.plugin)) {
+        project.build.plugins.plugin = sortArtifacts(project.build.plugins.plugin);
+      }
+      if (Array.isArray(project.build?.pluginManagement?.plugins?.plugin)) {
+        project.build.pluginManagement.plugins.plugin = sortArtifacts(project.build.pluginManagement.plugins.plugin);
+      }
+      if (Array.isArray(project.profiles?.profile)) {
+        project.profiles.profile = sortProfiles(project.profiles.profile);
+      }
     }
   }
 }

@@ -17,10 +17,15 @@
  * limitations under the License.
  */
 
-export type MavenDependency = {
+export type MavenArtifact = {
   groupId: string;
   artifactId: string;
   version?: string;
+};
+
+export type MavenPlugin = MavenArtifact;
+
+export type MavenDependency = MavenArtifact & {
   type?: string;
   scope?: string;
   additionalContent?: string;
