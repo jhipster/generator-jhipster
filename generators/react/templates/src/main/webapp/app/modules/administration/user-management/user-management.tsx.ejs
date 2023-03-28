@@ -168,11 +168,11 @@ export const UserManagement = () => {
               <td>
                 {user.activated ? (
                   <Button color="success" onClick={toggleActive(user) }>
-                    <Translate contentKey="userManagement.activated">Activated</Translate>
+                    <Translate key="userManagement.activated" contentKey="userManagement.activated">Activated</Translate>
                   </Button>
                 ) : (
                   <Button color="danger" onClick={toggleActive(user) }>
-                    <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
+                    <Translate key="userManagement.deactivated" contentKey="userManagement.deactivated">Deactivated</Translate>
                   </Button>
                 )}
               </td>
