@@ -29,7 +29,7 @@
             "error": "Błąd"
         },
         "indicator": {
-<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
+<%_ if (messageBrokerAny) { _%>
             "binders": "Broker wiadomości",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

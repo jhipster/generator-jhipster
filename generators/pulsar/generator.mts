@@ -20,16 +20,10 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_PULSAR, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import { GeneratorDefinition } from '../server/index.mjs';
 import writePulsarFilesTask from './files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
-export default class PulsarGenerator extends BaseApplicationGenerator {
+export default class PulsarGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
@@ -38,12 +32,35 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       writePulsarFilesTask,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      customizeApplication({ source, application }) {
+        source.addLogbackMainLog?.({ name: 'org.apache.pulsar', level: 'INFO' });
+        source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedPulsar' });
+
+        source.addTestSpringFactory?.({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.PulsarTestContainersSpringContextCustomizerFactory`,
+        });
+      },
+      applyGradleScript({ source, application }) {
+        if (application.buildToolGradle) {
+          source.applyFromGradle?.({ script: 'gradle/pulsar.gradle' });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

@@ -29,7 +29,7 @@
             "error": "Chyba"
         },
         "indicator": {
-<%_ if (messageBroker || messageBrokerPulsar) { _%>
+<%_ if (messageBrokerAny) { _%>
             "binders": "Message broker",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

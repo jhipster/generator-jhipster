@@ -29,7 +29,7 @@
             "error": "Lỗi"
         },
         "indicator": {
-<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
+<%_ if (messageBrokerAny) { _%>
             "binders": "Truyền tải tin nhắn",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

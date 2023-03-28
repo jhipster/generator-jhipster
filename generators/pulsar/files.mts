@@ -16,25 +16,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { WriteFileSection } from '../base/api.mjs';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { moveToJavaPackageTestDir } from '../server/support/index.mjs';
+import PulsarGenerator from './generator.mjs';
 
-/**
- * @type {import('../base/api.mjs').WriteFileSection}
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-export const pulsarFiles = {
+export const pulsarFiles: WriteFileSection<any, any> = {
+  config: [
+    {
+      condition: data => data.buildToolGradle,
+      templates: ['gradle/pulsar.gradle'],
+    },
+  ],
   test: [
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/PulsarTestContainer.java', 'config/EmbeddedPulsar.java', 'PulsarIT.java'],
+      templates: [
+        'config/PulsarTestContainer.java',
+        'config/EmbeddedPulsar.java',
+        'config/PulsarTestContainersSpringContextCustomizerFactory.java',
+        'broker/PulsarIT.java',
+      ],
     },
   ],
 };
 
-export default function writePulsarFilesTask({ application }) {
+export default function writePulsarFilesTask(this: PulsarGenerator, { application }) {
   return this.writeFiles({
     sections: pulsarFiles,
     context: application,

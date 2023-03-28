@@ -5,13 +5,19 @@ exports[`generator - pulsar gateway-jwt-gradle-enableTranslation(true)-com.packa
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/PulsarIT.java": {
+  "gradle/pulsar.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -22,13 +28,16 @@ exports[`generator - pulsar gateway-oauth2-maven-enableTranslation(false)-tech.j
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/PulsarIT.java": {
+  "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -39,13 +48,16 @@ exports[`generator - pulsar microservice-jwt-reactive(false)-maven-enableTransla
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/PulsarIT.java": {
+  "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -56,13 +68,19 @@ exports[`generator - pulsar microservice-jwt-reactive(true)-gradle-enableTransla
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/PulsarIT.java": {
+  "gradle/pulsar.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -73,13 +91,16 @@ exports[`generator - pulsar microservice-oauth2-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/PulsarIT.java": {
+  "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -90,13 +111,19 @@ exports[`generator - pulsar microservice-oauth2-reactive(true)-gradle-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/PulsarIT.java": {
+  "gradle/pulsar.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -107,13 +134,16 @@ exports[`generator - pulsar monolith-jwt-reactive(false)-maven-enableTranslation
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/PulsarIT.java": {
+  "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -124,13 +154,19 @@ exports[`generator - pulsar monolith-jwt-reactive(true)-gradle-enableTranslation
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/PulsarIT.java": {
+  "gradle/pulsar.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -141,13 +177,16 @@ exports[`generator - pulsar monolith-oauth2-reactive(false)-maven-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/PulsarIT.java": {
+  "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -158,13 +197,19 @@ exports[`generator - pulsar monolith-oauth2-reactive(true)-gradle-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/PulsarIT.java": {
+  "gradle/pulsar.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -175,13 +220,16 @@ exports[`generator - pulsar monolith-session-reactive(false)-maven-enableTransla
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/PulsarIT.java": {
+  "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -192,13 +240,19 @@ exports[`generator - pulsar monolith-session-reactive(true)-gradle-enableTransla
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/PulsarIT.java": {
+  "gradle/pulsar.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }

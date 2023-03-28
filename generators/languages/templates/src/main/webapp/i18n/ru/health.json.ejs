@@ -29,7 +29,7 @@
             "error": "Ошибка"
         },
         "indicator": {
-<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
+<%_ if (messageBrokerAny) { _%>
             "binders": "Брокер сообщений",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

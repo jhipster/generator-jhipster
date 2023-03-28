@@ -29,7 +29,7 @@
             "error": "Хатолик"
         },
         "indicator": {
-<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
+<%_ if (messageBrokerAny) { _%>
             "binders": "Xabar brokeri",
 <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>

@@ -29,7 +29,7 @@
             "error": "ผิดพลาด"
         },
         "indicator": {
-<%_ if (messageBrokerKafka || messageBrokerPulsar) { _%>
+<%_ if (messageBrokerAny) { _%>
             "binders": "Message broker",
 <%_ } _%>
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

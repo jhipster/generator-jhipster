@@ -68,7 +68,7 @@ spring:
     exclude:
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
 <%_ } _%>
-<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul || messageBrokerKafka || messageBrokerPulsar) { _%>
+<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul || messageBrokerAny) { _%>
   cloud:
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
