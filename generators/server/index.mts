@@ -19,7 +19,7 @@
 
 import { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.mjs';
 import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
-import { SpringBootApplication } from './types.mjs';
+import { SpringBootApplication, SpringBootSourceType } from './types.mjs';
 
 export { default } from './generator.mjs';
 export { default as command } from './command.mjs';
@@ -29,4 +29,6 @@ export { serverFiles as files } from './files.mjs';
 export type ApplicationDefinition = GenericApplicationDefinition<SpringBootApplication>;
 
 // TODO move to ./generator.mts
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition<any>>;
+export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
+  ApplicationDefinition & GenericSourceTypeDefinition<SpringBootSourceType>
+>;

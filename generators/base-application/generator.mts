@@ -27,6 +27,7 @@ import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs
 import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 import type { Entity } from './types/index.mjs';
+import { SpringBootSourceType } from '../server/types.mjs';
 
 const { upperFirst } = _;
 
@@ -62,8 +63,10 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
+export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType;
+
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<Record<string, (...args: any[]) => void>>
+  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
 >;
 
 /**
@@ -73,7 +76,6 @@ export default class BaseApplicationGenerator<
   Definition extends BaseApplicationGeneratorDefinition<{
     applicationType: BaseApplication;
     entityType: Entity;
-    sourceType: any;
   }> = GeneratorDefinition
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
