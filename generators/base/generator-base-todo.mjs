@@ -67,6 +67,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
+import { createPomStorage } from '../maven/support/pom-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -304,30 +305,14 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} other - (optional) explicit other thing:  exclusions...
    */
   addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-    this.needleApi.serverMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Repository to the Maven build.
-   *
-   * @param {string} id - id of the repository
-   * @param {string} url - url of the repository
-   * @param  {string} other - (optional) explicit other thing: name, releases, snapshots, ...
-   */
-  addMavenRepository(id, url, other = '') {
-    this.needleApi.serverMaven.addRepository(id, url, other);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Plugin Repository to the Maven build.
-   *
-   * @param {string} id - id of the repository
-   * @param {string} url - url of the repository
-   */
-  addMavenPluginRepository(id, url) {
-    this.needleApi.serverMaven.addPluginRepository(id, url);
+    createPomStorage(this).addDependencyManagement({
+      groupId,
+      artifactId,
+      version,
+      type,
+      scope,
+      additionalContent: other,
+    });
   }
 
   /**
@@ -340,7 +325,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} releasesUrl Repository Url
    */
   addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-    this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
+    createPomStorage(this).addDistributionManagement({ snapshotsId, snapshotsUrl, releasesId, releasesUrl });
   }
 
   /**
@@ -351,7 +336,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - property value
    */
   addMavenProperty(name, value) {
-    this.needleApi.serverMaven.addProperty(name, value);
+    createPomStorage(this).addProperty({ property: name, value });
   }
 
   /**
@@ -364,21 +349,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} other - (optional) explicit other thing: scope, exclusions...
    */
   addMavenDependency(groupId, artifactId, version, other) {
-    this.addMavenDependencyInDirectory('.', groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven dependency in a specific folder..
-   *
-   * @param {string} directory - the folder to add the dependency in
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} other - (optional) explicit other thing: scope, exclusions...
-   */
-  addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
+    createPomStorage(this).addDependency({
+      groupId,
+      artifactId,
+      version,
+      additionalContent: other,
+    });
   }
 
   /**
@@ -391,7 +367,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} other - explicit other thing: executions, configuration...
    */
   addMavenPlugin(groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    createPomStorage(this).addPlugin({
+      groupId,
+      artifactId,
+      version,
+      additionalContent: other,
+    });
   }
 
   /**
@@ -404,7 +385,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} other - explicit other thing: executions, configuration...
    */
   addMavenPluginManagement(groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
+    createPomStorage(this).addPluginManagement({ groupId, artifactId, version, additionalContent: other });
   }
 
   /**
@@ -416,7 +397,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} version - explicit plugin version number
    */
   addMavenAnnotationProcessor(groupId, artifactId, version) {
-    this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
+    createPomStorage(this).addAnnotationProcessor({ groupId, artifactId, version });
   }
 
   /**
@@ -427,7 +408,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} other - explicit other thing: build, dependencies...
    */
   addMavenProfile(profileId, other) {
-    this.needleApi.serverMaven.addProfile(profileId, other);
+    createPomStorage(this).addProfile({ id: profileId, content: other });
   }
 
   /**

@@ -56,9 +56,16 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         assert.equal(application.buildTool, MAVEN);
       },
       addSourceNeddles({ source }) {
-        source.addMavenProperty = property => this.pomStorage.addProperty(property);
+        source.addMavenAnnotationProcessor = artifact => this.pomStorage.addAnnotationProcessor(artifact);
+        source.addMavenDependency = artifact => this.pomStorage.addDependency(artifact);
+        source.addMavenDependencyManagement = artifact => this.pomStorage.addDependencyManagement(artifact);
+        source.addMavenDistributionManagement = artifact => this.pomStorage.addDistributionManagement(artifact);
+        source.addMavenPlugin = plugin => this.pomStorage.addPlugin(plugin);
+        source.addMavenPluginManagement = plugin => this.pomStorage.addPluginManagement(plugin);
+        source.addMavenPluginRepository = repository => this.pomStorage.addPluginRepository(repository);
         source.addMavenProfile = profile => this.pomStorage.addProfile(profile);
-        source.addMavenDependency = dependency => this.pomStorage.addDependency(dependency);
+        source.addMavenProperty = property => this.pomStorage.addProperty(property);
+        source.addMavenRepository = repository => this.pomStorage.addRepository(repository);
       },
     });
   }

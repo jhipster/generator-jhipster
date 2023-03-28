@@ -23,7 +23,17 @@ export type MavenArtifact = {
   version?: string;
 };
 
-export type MavenPlugin = MavenArtifact;
+export type MavenPlugin = MavenArtifact & {
+  additionalContent?: string;
+};
+
+export type MavenRepository = {
+  id: string;
+  name?: string;
+  url: string;
+  releases?: boolean;
+  snapshots?: boolean;
+};
 
 export type MavenDependency = MavenArtifact & {
   type?: string;
@@ -31,12 +41,26 @@ export type MavenDependency = MavenArtifact & {
   additionalContent?: string;
 };
 
-export type MavenProperty = { property: string; value?: string };
+export type MavenDistributionManagement = {
+  snapshotsId: string;
+  snapshotsUrl: string;
+  releasesId: string;
+  releasesUrl: string;
+};
+
+export type MavenProperty = { property: string; value?: string | null };
 
 export type MavenProfile = { id: string; content?: string };
 
 export type MavenSourceType = {
+  addMavenAnnotationProcessor?(artifact: MavenArtifact): void;
+  addMavenDependency?(dependecy: MavenDependency): void;
+  addMavenDependencyManagement?(dependecy: MavenDependency): void;
+  addMavenDistributionManagement?(distributionManagement: MavenDistributionManagement): void;
+  addMavenPlugin?(plugin: MavenPlugin): void;
+  addMavenPluginManagement?(plugin: MavenPlugin): void;
+  addMavenPluginRepository?(repository: MavenRepository): void;
   addMavenProperty?(property: MavenProperty): void;
   addMavenProfile?(profile: MavenProfile): void;
-  addMavenDependency?(dependecy: MavenDependency): void;
+  addMavenRepository?(repository: MavenRepository): void;
 };

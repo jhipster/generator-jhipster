@@ -670,6 +670,30 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           });
         }
       },
+      customizeMaven({ application, source }) {
+        if (!application.buildToolMaven) return;
+        if (SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC') || SPRING_CLOUD_VERSION.indexOf('RC')) {
+          const springRepository = {
+            id: 'spring-milestone',
+            name: 'Spring Milestones',
+            url: 'https://repo.spring.io/milestone',
+          };
+          source.addMavenPluginRepository?.(springRepository);
+          source.addMavenRepository?.(springRepository);
+          source.addMavenDependency?.({
+            groupId: 'org.springframework.boot',
+            artifactId: 'spring-boot-properties-migrator',
+            scope: 'runtime',
+          });
+        }
+        if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) {
+          source.addMavenRepository?.({
+            id: 'ossrh-snapshots',
+            url: 'https://oss.sonatype.org/content/repositories/snapshots/',
+            releases: false,
+          });
+        }
+      },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
