@@ -2391,7 +2391,7 @@ spec:
               value: "x-request-id,x-ot-span-context"
             # Custom trustStore required when using Let's Encrypt staging
             - name: JAVA_OPTS
-              value: " -Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
+              value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
             - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
               value: https://keycloak.default.example.com/realms/jhipster
             - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
@@ -5834,7 +5834,7 @@ spec:
             - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
+              value: "-Xmx256m -Xms256m"
             - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
               value: http://keycloak.default.example.com/realms/jhipster
             - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
