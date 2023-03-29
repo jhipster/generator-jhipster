@@ -1,16 +1,18 @@
 package <%= packageName %>.web.rest.comm;
 
-import com.cmi.tic.config.webClient.AccessToken;
-import com.cmi.tic.config.webClient.WebClientConfig;
+import <%= packageName %>.config.webClient.AccessToken;
+import <%= packageName %>.config.webClient.WebClientConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
+import reactor.core.publisher.Mono;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -26,26 +28,42 @@ public class ClientResource<%= capitalizeServerName %> {
 
     private static final String TOKEN_TYPE = "Bearer ";
 
+    public ClientResource<%= capitalizeServerName %>(WebClientConfig webClientConfig, AccessToken oAuth) {
+        this.webClient = webClientConfig;
+        this.oAuthToken = oAuth;
+    }
+
 
     @GetMapping("/services/<%= serverName %>")
-    public ResponseEntity<?> getClient() {
+    public Mono<ResponseEntity<Map<String,String>>> getClient() {
         try {
+            Map<String,String> response = new HashMap<>();
             String accessToken = oAuthToken.getToken();
             if(accessToken.isEmpty() || accessToken.isBlank() ){
                 log.error("No access token found");
-                throw new NullPointerException();
+                response.put("server_error","Please hit the url again!");
+                response.put("cause","NO_ACCESS_TOKEN");
+                return  Mono.just(ResponseEntity.accepted().body(response));
             }
-            ResponseSpec result = webClient
+            return webClient
                 .serviceWebClient()
                 .build()
                 .get()
                 .uri("http://<%= serverName %>/api/services/<%= serverName %>")
-                .header(HttpHeaders.AUTHORIZATION,TOKEN_TYPE + accessToken)
-                .retrieve();
-          result.bodyToMono(HashMap.class).subscribe(service->{
-            log.info(service.get("server").toString() );
-          });
-          return new ResponseEntity<>(HttpStatus.OK);
+                .header(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + accessToken)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {
+                }).flatMap(hashmap -> {
+                    log.info(hashmap.get("server"));
+                    response.put("server", hashmap.get("server"));
+                    return Mono.just(ResponseEntity.ok(response));
+                }).onErrorResume(e -> {
+                if (e instanceof Exception) {
+                    log.error("Exception due to :- ".concat(e.getMessage()));
+                    response.put("server_error", e.getLocalizedMessage());
+                }
+                return Mono.just(ResponseEntity.ok(response));
+                });
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }

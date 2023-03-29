@@ -28,7 +28,7 @@ TypeError: Cannot read properties of undefined (reading 'replace')
 Change the docker Version in the following file before linking:-
 > Change directory
 ```
-cd generators/base-compose
+cd generators/docker-compose
 ```
 
 open generator.mjs  and change the line 
