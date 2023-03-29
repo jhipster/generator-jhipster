@@ -146,6 +146,19 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = LOGIN_REGEX_JS;
       },
+
+      addExternalResource({ application, source }) {
+        /**
+         * @private
+         * Add external resources to root file(index.html).
+         *
+         * @param {string} resources - Resources added to root file.
+         * @param {string} comment - comment to add before resources content.
+         */
+        source.addExternalResourceToRoot = (resources, comment) => {
+          this.needleApi.client.addExternalResourcesToApplicationRoot(application, resources, comment);
+        };
+      },
     });
   }
 

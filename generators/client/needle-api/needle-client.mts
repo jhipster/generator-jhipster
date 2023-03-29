@@ -58,4 +58,22 @@ export default class extends needleBase {
       errorMessage
     );
   }
+
+  addExternalResourcesToApplicationRoot(application: any, resources: string, comment: string) {
+    const errorMessage = 'Resources are not added to JHipster app.';
+    const file = `${application.clientSrcDir}index.html`;
+    let resourcesBlock = '';
+    if (comment) {
+      resourcesBlock += `<!-- ${comment} -->\n`;
+    }
+    resourcesBlock += `${resources}\n`;
+    this.addBlockContentToFile(
+      {
+        file,
+        needle: 'jhipster-needle-add-resources-to-root',
+        splicable: resourcesBlock,
+      },
+      errorMessage
+    );
+  }
 }

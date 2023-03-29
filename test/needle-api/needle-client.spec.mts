@@ -18,12 +18,12 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   }
 
   get [ClientGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
-      addExternalResourcesToRootStep() {
-        this.addExternalResourcesToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');
+    return this.asPostWritingTaskGroup({
+      // @ts-ignore
+      async additionalResource({ source }) {
+        source.addExternalResourceToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
