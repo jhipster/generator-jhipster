@@ -294,28 +294,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
-   * Add a Maven dependency Management.
-   *
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} type - (optional) explicit type
-   * @param {string} scope - (optional) explicit scope
-   * @param {string} other - (optional) explicit other thing:  exclusions...
-   */
-  addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-    createPomStorage(this).addDependencyManagement({
-      groupId,
-      artifactId,
-      version,
-      type,
-      scope,
-      additionalContent: other,
-    });
-  }
-
-  /**
+   * TODO drop when dropped from ci-cd generator
    * @private
    * Add a distributionManagement to the Maven build.
    *
@@ -329,6 +308,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * TODO drop when dropped from openapi-client generator
    * @private
    * Add a new Maven property.
    *
@@ -340,6 +320,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * TODO drop when dropped from gae and openapi-client generators
    * @private
    * Add a new Maven dependency.
    *
@@ -358,6 +339,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * TODO drop when dropped from gae generator
    * @private
    * Add a new Maven plugin.
    *
@@ -376,31 +358,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
-   * Add a new Maven plugin management.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   * @param {string} other - explicit other thing: executions, configuration...
-   */
-  addMavenPluginManagement(groupId, artifactId, version, other) {
-    createPomStorage(this).addPluginManagement({ groupId, artifactId, version, additionalContent: other });
-  }
-
-  /**
-   * @private
-   * Add a new annotation processor path to Maven compiler configuration.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   */
-  addMavenAnnotationProcessor(groupId, artifactId, version) {
-    createPomStorage(this).addAnnotationProcessor({ groupId, artifactId, version });
-  }
-
-  /**
+   * TODO drop when dropped from gae, azure-spring-cloud and heroku generators
    * @private
    * Add a new Maven profile.
    *
