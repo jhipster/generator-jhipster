@@ -24,6 +24,7 @@ import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens.js';
 import ValidationTokens from './validation-tokens.js';
 import ApplicationTokens from './application-tokens.js';
 import DeploymentTokens from './deployment-tokens.js';
+import CommunicationTokens from './communication-tokens.js';
 import RelationshipTypeTokens from './relationship-type-tokens.js';
 import OptionTokens from './option-tokens.js';
 
@@ -89,6 +90,15 @@ createTokenFromConfig({
 });
 
 DeploymentTokens.tokens.forEach(token => {
+  tokens[token.name] = token;
+});
+
+/**
+ * Creating Token from the Communication configuration    @cmi-tic-craxkumar
+ */
+createTokenFromConfig({ name: 'COMMUNICATION', pattern: 'communication' });
+
+CommunicationTokens.tokens.forEach(token => {
   tokens[token.name] = token;
 });
 

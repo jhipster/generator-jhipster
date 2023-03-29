@@ -18,7 +18,7 @@
  */
 
 import fs from 'fs';
-import { doesFileExist } from '../utils/file-utils.js';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
 
 export const GENERATOR_NAME = 'generator-jhipster';
 
@@ -46,4 +46,14 @@ export function writeConfigFile(config, yoRcPath = '.yo-rc.json') {
     };
   }
   fs.writeFileSync(yoRcPath, JSON.stringify(newYoRc, null, 2).concat('\n'));
+}
+
+/**
+ * This function writes a Communication config file (comm.yo-rc.json) in the application folders.
+ * @param content the content.
+ * @param yoRcPath the communication config file path
+ */
+export function writeCommunicationFile(content, yoRcPath = 'comm.yo-rc.json') {
+  let getCommunication = content.communications;
+  fs.writeFileSync(yoRcPath, JSON.stringify(getCommunication, null, 2).concat('\n'));
 }

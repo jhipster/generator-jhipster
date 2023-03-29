@@ -28,7 +28,7 @@ TypeError: Cannot read properties of undefined (reading 'replace')
 Change the docker Version in the following file before linking:-
 > Change directory
 ```
-cd generators/base-compose
+cd generators/docker-compose
 ```
 
 open generator.mjs  and change the line 
@@ -74,3 +74,25 @@ Copy the jdl file example/jdl/reminder-istio.jdl to the project directory.
 ```
 jhipster jdl reminder-istio.jdl    
 ```
+
+# Example with istio enabled & communication b/w microservices/gateway
+
+Run the example jdl file to generate the microservices.
+
+Copy the jdl file example/jdl/reminder-comm.jdl to the project directory.
+
+> Run cmd:-
+```
+jhipster jdl reminder-comm.jdl    
+```
+
+# Possible solution for the errors
+
+> ### Webpack: TypeError: Cannot read property 'properties' of undefined
+> Excute below command:- 
+
+>npm remove webpack webpack-cli
+
+>npm install --save-dev webpack webpack-cli
+
+>references : https://stackoverflow.com/questions/52724312/webpack-typeerror-cannot-read-property-properties-of-undefined

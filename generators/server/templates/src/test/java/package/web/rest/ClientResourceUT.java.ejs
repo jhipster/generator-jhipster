@@ -1,0 +1,57 @@
+package <%= packageName %>.web.rest.comm;
+
+import <%= packageName %>.config.webClient.AccessToken;
+import <%= packageName %>.config.webClient.WebClientConfig;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import java.util.Map;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class ClientResource<%= capitalizeServerName %>UT {
+    @Mock
+    private AccessToken oAuth;
+
+    @Mock
+    private WebClientConfig webClientConfig;
+
+    private ClientResource<%= capitalizeServerName %> clientResource<%= capitalizeServerName %>;
+
+    @BeforeEach
+    void init(){
+        clientResource<%= capitalizeServerName %> = new ClientResource<%= capitalizeServerName %>(webClientConfig,oAuth);
+    }
+
+    @Test
+    void getClientNullCheck(){
+        when(oAuth.getToken()).thenReturn("");
+        Mono<ResponseEntity<Map<String, String>>> result = clientResource<%= capitalizeServerName %>.getClient();
+        ResponseEntity<Map<String, String>> statusCode =  result.block();
+        Assertions.assertEquals(statusCode.getStatusCode(), HttpStatusCode.valueOf(202));
+    }
+
+    @Test
+    void getClient(){
+        when(oAuth.getToken()).thenReturn("access_token");
+        when(webClientConfig.serviceWebClient()).thenReturn(mockServiceWebClient());
+        Mono<ResponseEntity<Map<String, String>>> response = clientResource<%= capitalizeServerName %>.getClient();
+        ResponseEntity<Map<String, String>> statusCode =  response.block();
+        Assertions.assertEquals(statusCode.getStatusCode(), HttpStatusCode.valueOf(200));
+    }
+     WebClient.Builder mockServiceWebClient() {
+        return WebClient.builder();
+    }
+
+}

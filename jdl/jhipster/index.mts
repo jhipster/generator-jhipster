@@ -1,6 +1,7 @@
 import * as defaultApplicationOptions from './default-application-options.js';
 
 export { default as applicationOptions } from './application-options.js';
+export { default as communicationOptions } from './communication-options.js';  // indexing the communication-options   @cmi-tic-craxkumar
 export { default as applicationTypes } from './application-types.js';
 export { default as authenticationTypes } from './authentication-types.js';
 export { default as binaryOptions } from './binary-options.js';

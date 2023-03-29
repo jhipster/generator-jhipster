@@ -45,6 +45,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const ast = {
       applications: [],
       deployments: [],
+      communications: [],      // added communications list to the prog  @cmi-tic-craxkumar
       constants: {},
       entities: [],
       relationships: [],
@@ -66,6 +67,14 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
 
     if (context.deploymentDeclaration) {
       ast.deployments = context.deploymentDeclaration.map(this.visit, this);
+    }
+
+    /** 
+     * if context.communicationDeclaration exists, then add values to ast
+     * @cmi-tic-craxkumar
+     */
+    if (context.communicationDeclaration) {
+      ast.communications = context.communicationDeclaration.map(this.visit, this);
     }
 
     if (context.entityDeclaration) {
@@ -455,6 +464,35 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   deploymentConfigValue(context) {
+    return this.configValue(context);
+  }
+  /**
+   * Adding parased value from the commuication options to configProps
+   * @cmi-tic-craxkumar
+   * @param context 
+   * @returns 
+   */
+  communicationDeclaration(context) {
+    const config = {};
+
+    if (context.communicationConfigDeclaration) {
+      const configProps = context.communicationConfigDeclaration.map(this.visit, this);
+      configProps.forEach(configProp => {
+        config[configProp.key] = configProp.value;
+      });
+    }
+
+    return config;
+  }
+
+  communicationConfigDeclaration(context) {
+    const key = context.COMM_KEY[0].image;
+    const value = this.visit(context.communicationConfigValue);
+
+    return { key, value };
+  }
+
+  communicationConfigValue(context) {
     return this.configValue(context);
   }
 

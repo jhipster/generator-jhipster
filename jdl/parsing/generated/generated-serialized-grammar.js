@@ -18,6 +18,9 @@
  */
 
 /* eslint-disable no-unused-vars */
+/** Communication configuration are added to the end 
+ * @cmi-tic-craxkumar
+ */
 const serializedGrammar = [
     {
         type: 'Rule',
@@ -1803,6 +1806,125 @@ const serializedGrammar = [
                 label: "']'",
                 idx: 0,
                 pattern: ']',
+            },
+        ],
+    },
+    {
+        type: 'Rule',
+        name: 'communicationDeclaration',
+        orgText: '',
+        definition: [
+            {
+                type: 'Terminal',
+                name: 'COMMUNICATION',
+                label: "'communication'",
+                idx: 0,
+                pattern: 'communication',
+            },
+            {
+                type: 'Terminal',
+                name: 'LCURLY',
+                label: "'{'",
+                idx: 0,
+                pattern: '{',
+            },
+            {
+                type: 'Repetition',
+                idx: 0,
+                definition: [
+                    {
+                        type: 'Alternation',
+                        idx: 0,
+                        definition: [
+                            {
+                                type: 'Alternative',
+                                definition: [
+                                    {
+                                        type: 'Terminal',
+                                        name: 'JAVADOC',
+                                        label: 'JAVADOC',
+                                        idx: 0,
+                                        pattern: '\\/\\*\\*([\\s\\S]*?)\\*\\/',
+                                    },
+                                ],
+                            },
+                            {
+                                type: 'Alternative',
+                                definition: [
+                                    {
+                                        type: 'NonTerminal',
+                                        name: 'communicationConfigDeclaration',
+                                        idx: 0,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                type: 'Terminal',
+                name: 'RCURLY',
+                label: "'}'",
+                idx: 0,
+                pattern: '}',
+            },
+        ],
+    },
+    {
+        type: 'Rule',
+        name: 'communicationConfigDeclaration',
+        orgText: '',
+        definition: [
+            {
+                type: 'Terminal',
+                name: 'COMM_KEY',
+                label: 'COMM_KEY',
+                idx: 0,
+                pattern: 'NOT_APPLICABLE',
+            },
+            {
+                type: 'NonTerminal',
+                name: 'communicationConfigValue',
+                idx: 0,
+            },
+            {
+                type: 'Option',
+                idx: 0,
+                definition: [
+                    {
+                        type: 'Terminal',
+                        name: 'COMMA',
+                        label: "','",
+                        idx: 0,
+                        pattern: ',',
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        type: 'Rule',
+        name: 'communicationConfigValue',
+        orgText: '',
+        definition: [
+            {
+                type: 'Alternation',
+                idx: 0,
+                definition: [
+                    {
+                        type: 'Alternative',
+                        definition: [
+                            {
+                                type: 'Terminal',
+                                name: 'STRING',
+                                label: 'STRING',
+                                idx: 0,
+                                pattern: '"(?:[^"])*"',
+                            },
+                        ],
+                    },
+                ],
             },
         ],
     },

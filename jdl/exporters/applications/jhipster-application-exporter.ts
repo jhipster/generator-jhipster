@@ -19,18 +19,20 @@
 
 import path from 'path';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../../utils/file-utils.js';
-import { GENERATOR_NAME, writeConfigFile } from '../export-utils.js';
+import { GENERATOR_NAME, writeCommunicationFile, writeConfigFile } from '../export-utils.js';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
+ * Addationally passing content parameter to the function to write Communication config file.  @cmi-tic-craxkumar
  * @param {Array<Object>} applications -  the formatted applications to export
+ * @param content 
  */
-export function exportApplications(applications) {
+export function exportApplications(applications, content) {
   if (!applications) {
     throw new Error('Applications have to be passed to be exported.');
   }
   applications.forEach(application => {
-    writeApplicationFileForMultipleApplications(application);
+    writeApplicationFileForMultipleApplications(application, content);
   });
 }
 
@@ -44,9 +46,11 @@ export function exportApplication(application) {
 
 /**
  * This function writes a Yeoman config file in an application folder.
- * @param application the application.
+ * Addationally passing content parameter to the function to write Communication config file.  @cmi-tic-craxkumar
+ * @param application 
+ * @param content 
  */
-function writeApplicationFileForMultipleApplications(application) {
+function writeApplicationFileForMultipleApplications(application, content) {
   const applicationBaseName = application[GENERATOR_NAME].baseName;
   if (doesFileExist(applicationBaseName)) {
     throw new Error(
@@ -55,4 +59,18 @@ function writeApplicationFileForMultipleApplications(application) {
   }
   createFolderIfItDoesNotExist(applicationBaseName);
   writeConfigFile(application, path.join(applicationBaseName, '.yo-rc.json'));
+  
+  // This method write's communication File in each dir  @cmi-tic-craxkumar
+  writeCommunicationFileForMultipleApplications(content, path.join(applicationBaseName, 'comm.yo-rc.json'));
 }
+
+/**
+ * This method to write communication File in each dir  @cmi-tic-craxkumar
+ * 
+ * @param content 
+ * @param yoRcPath 
+ */
+function writeCommunicationFileForMultipleApplications(content,yoRcPath = 'comm.yo-rc.json') {
+  writeCommunicationFile(content,  yoRcPath);
+}
+
