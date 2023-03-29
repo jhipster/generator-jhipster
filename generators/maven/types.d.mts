@@ -21,6 +21,7 @@ export type MavenArtifact = {
   groupId: string;
   artifactId: string;
   version?: string;
+  inProfile?: string;
 };
 
 export type MavenPlugin = MavenArtifact & {
@@ -33,6 +34,7 @@ export type MavenRepository = {
   url: string;
   releases?: boolean;
   snapshots?: boolean;
+  inProfile?: string;
 };
 
 export type MavenDependency = MavenArtifact & {
@@ -46,9 +48,14 @@ export type MavenDistributionManagement = {
   snapshotsUrl: string;
   releasesId: string;
   releasesUrl: string;
+  inProfile?: string;
 };
 
-export type MavenProperty = { property: string; value?: string | null };
+export type MavenProperty = {
+  property: string;
+  value?: string | null;
+  inProfile?: string;
+};
 
 export type MavenProfile = { id: string; content?: string };
 

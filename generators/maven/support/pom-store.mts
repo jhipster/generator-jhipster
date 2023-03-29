@@ -145,6 +145,11 @@ function appendOrGet<T>(array: T[], item: T, equals: (a: T, b: T) => boolean) {
   return item;
 }
 
+const ensureProfile = (project, profileId: string) => {
+  const profileArray = ensureChildIsArray(project, 'profiles.profile');
+  return appendOrGet(profileArray, { id: profileId }, profileEquals);
+};
+
 const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
 
 const sortArtifacts = (artifacts: MavenArtifact[]) =>
@@ -185,29 +190,25 @@ export default class PomStorage extends XmlStorage {
     super({ saveFile, loadFile });
   }
 
-  public addProperty({ property, value = null }: MavenProperty) {
-    this.merge({
-      project: {
-        properties: {
-          [property]: value,
-        },
-      },
-    });
+  public addProperty({ inProfile, property, value = null }: MavenProperty) {
+    const node = this.getNode({ profile: inProfile });
+    set(node, `properties.${property}`, value);
     this.persist();
   }
 
-  public addDependency(dependecy: MavenDependency): void {
-    this.addDependencyAt('project', dependecy);
+  public addDependency({ inProfile, ...dependency }: MavenDependency): void {
+    this.addDependencyAt(this.getNode({ profile: inProfile }), dependency);
     this.persist();
   }
 
-  public addDependencyManagement(dependecy: MavenDependency): void {
-    this.addDependencyAt('project.dependencyManagement', dependecy);
+  public addDependencyManagement({ inProfile, ...dependency }: MavenDependency): void {
+    this.addDependencyAt(this.getNode({ profile: inProfile, nodePath: 'dependencyManagement' }), dependency);
     this.persist();
   }
 
-  public addDistributionManagement({ snapshotsId, snapshotsUrl, releasesId, releasesUrl }: MavenDistributionManagement) {
-    this.store.project.distributionManagement = {
+  public addDistributionManagement({ inProfile, snapshotsId, snapshotsUrl, releasesId, releasesUrl }: MavenDistributionManagement) {
+    const store = this.getNode({ profile: inProfile });
+    store.distributionManagement = {
       snapshotRepository: {
         id: snapshotsId,
         url: snapshotsUrl,
@@ -220,33 +221,35 @@ export default class PomStorage extends XmlStorage {
     this.persist();
   }
 
-  public addProfile(profile: MavenProfile): void {
-    this.addProfileAt('project', profile);
+  public addProfile({ content, ...profile }: MavenProfile): void {
+    const profileArray = ensureChildIsArray(this.getNode(), 'profiles.profile');
+    appendOrReplace(profileArray, this.mergeContent(profile, content), profileEquals);
     this.persist();
   }
 
-  public addPlugin(plugin: MavenPlugin): void {
-    this.addPluginAt('project.build', plugin);
+  public addPlugin({ inProfile, ...plugin }: MavenPlugin): void {
+    this.addPluginAt(this.getNode({ profile: inProfile, nodePath: 'build' }), plugin);
     this.persist();
   }
 
-  public addPluginManagement(plugin: MavenPlugin): void {
-    this.addPluginAt('project.build.pluginManagement', plugin);
+  public addPluginManagement({ inProfile, ...plugin }: MavenPlugin): void {
+    this.addPluginAt(this.getNode({ profile: inProfile, nodePath: 'build.pluginManagement' }), plugin);
     this.persist();
   }
 
-  public addRepository(repository: MavenRepository): void {
-    this.addRepositoryAt('project', repository);
+  public addRepository({ inProfile, ...repository }: MavenRepository): void {
+    this.addRepositoryAt(this.getNode({ profile: inProfile }), repository);
     this.persist();
   }
 
-  public addPluginRepository(repository: MavenRepository): void {
-    this.addPluginRepositoryAt('project', repository);
+  public addPluginRepository({ inProfile, ...repository }: MavenRepository): void {
+    this.addPluginRepositoryAt(this.getNode({ profile: inProfile }), repository);
     this.persist();
   }
 
-  public addAnnotationProcessor(artifact: MavenArtifact) {
-    const plugins = ensureChildIsArray(this.store, 'project.build.pluginManagement.plugins.plugin');
+  public addAnnotationProcessor({ inProfile, ...artifact }: MavenArtifact) {
+    const node = this.getNode({ profile: inProfile });
+    const plugins = ensureChildIsArray(node, 'build.pluginManagement.plugins.plugin');
     const annotationProcessorPaths = ensureChild(
       plugins,
       pluginArray => {
@@ -266,33 +269,31 @@ export default class PomStorage extends XmlStorage {
     this.persist();
   }
 
-  protected addDependencyAt(nodePath: string, { additionalContent, ...dependency }: MavenDependency) {
-    const dependencyPath = `${nodePath}.dependencies.dependency`;
-    const dependencyArray = ensureChildIsArray(this.store, dependencyPath);
+  protected getNode({ profile, nodePath }: { profile?: string; nodePath?: string } = {}): any {
+    const node = profile ? ensureProfile(this.store.project, profile) : this.store.project;
+    if (nodePath) {
+      return ensureChild(node, nodePath);
+    }
+    return node;
+  }
+
+  protected addDependencyAt(node, { additionalContent, ...dependency }: MavenDependency) {
+    const dependencyArray = ensureChildIsArray(node, 'dependencies.dependency');
     appendOrReplace(dependencyArray, this.mergeContent(dependency, additionalContent), dependencyEquals);
   }
 
-  protected addPluginAt(nodePath: string, { additionalContent, ...artifact }: MavenPlugin) {
-    const artifactPath = `${nodePath}.plugins.plugin`;
-    const artifactArray = ensureChildIsArray(this.store, artifactPath);
+  protected addPluginAt(node, { additionalContent, ...artifact }: MavenPlugin) {
+    const artifactArray = ensureChildIsArray(node, 'plugins.plugin');
     appendOrReplace(artifactArray, this.mergeContent(artifact, additionalContent), artifactEquals);
   }
 
-  protected addProfileAt(nodePath: string, { content, ...profile }: MavenProfile): void {
-    const profilePath = `${nodePath}.profiles.profile`;
-    const profileArray = ensureChildIsArray(this.store, profilePath);
-    appendOrReplace(profileArray, this.mergeContent(profile, content), profileEquals);
-  }
-
-  protected addRepositoryAt(nodePath: string, repository: MavenRepository): void {
-    const repositoryPath = `${nodePath}.repositories.repository`;
-    const repositoryArray = ensureChildIsArray(this.store, repositoryPath);
+  protected addRepositoryAt(node, repository: MavenRepository): void {
+    const repositoryArray = ensureChildIsArray(node, 'repositories.repository');
     appendOrReplace(repositoryArray, repository, repositoryEquals);
   }
 
-  protected addPluginRepositoryAt(nodePath: string, repository: MavenRepository): void {
-    const repositoryPath = `${nodePath}.pluginRepositories.pluginRepository`;
-    const repositoryArray = ensureChildIsArray(this.store, repositoryPath);
+  protected addPluginRepositoryAt(node, repository: MavenRepository): void {
+    const repositoryArray = ensureChildIsArray(node, 'pluginRepositories.pluginRepository');
     appendOrReplace(repositoryArray, repository, repositoryEquals);
   }
 
