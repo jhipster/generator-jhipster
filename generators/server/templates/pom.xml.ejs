@@ -1832,13 +1832,6 @@
                                     <artifactId>jakarta.validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-  <%_ if (devDatabaseTypePostgres) { _%>
-                                <dependency>
-                                    <groupId>tech.jhipster</groupId>
-                                    <artifactId>jhipster-framework</artifactId>
-                                    <version>${jhipster-dependencies.version}</version>
-                                </dependency>
-  <%_ } _%>
   <%_ if (devDatabaseTypeH2Disk) { _%>
                                 <dependency>
                                     <groupId>com.h2database</groupId>
@@ -2017,13 +2010,6 @@
                                     <artifactId>jakarta.validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-  <%_ if (prodDatabaseTypePostgres) { _%>
-                                <dependency>
-                                    <groupId>tech.jhipster</groupId>
-                                    <artifactId>jhipster-framework</artifactId>
-                                    <version>${jhipster-dependencies.version}</version>
-                                </dependency>
-  <%_ } _%>
                             </dependencies>
                         </plugin>
 <%_ } _%>
