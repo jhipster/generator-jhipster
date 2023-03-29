@@ -89,9 +89,12 @@ export default class Logger {
     this.adapter.log(msg);
   }
 
-  error(msg) {
+  error(msg, error) {
     const errorMessage = formatErrorMessageHeader(msg);
     this.adapter.log(errorMessage);
+    if (error) {
+      this.adapter.log(error);
+    }
 
     process.exitCode = 1;
   }

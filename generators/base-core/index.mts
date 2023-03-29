@@ -16,14 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type CoreGenerator from '../base-core/index.mjs';
 
-/**
- * Removes server files that where generated in previous JHipster versions and therefore
- * need to be removed.
- */
-export default function cleanupOldServerFilesTask(this: CoreGenerator) {
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
-    this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
-  }
-}
+export { default } from '../base/generator-base.mjs';
