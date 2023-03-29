@@ -54,7 +54,7 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
@@ -67,7 +67,6 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
-import { createPomStorage } from '../maven/support/pom-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -291,82 +290,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addWebpackConfig(config, clientFramework) {
     this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
-  }
-
-  /**
-   * TODO drop when dropped from ci-cd generator
-   * @private
-   * Add a distributionManagement to the Maven build.
-   *
-   * @param {string} snapshotsId Snapshots Repository Id
-   * @param {string} snapshotsUrl Snapshots Repository Url
-   * @param {string} releasesId Repository Id
-   * @param {string} releasesUrl Repository Url
-   */
-  addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-    createPomStorage(this).addDistributionManagement({ snapshotsId, snapshotsUrl, releasesId, releasesUrl });
-  }
-
-  /**
-   * TODO drop when dropped from openapi-client generator
-   * @private
-   * Add a new Maven property.
-   *
-   * @param {string} name - property name
-   * @param {string} value - property value
-   */
-  addMavenProperty(name, value) {
-    createPomStorage(this).addProperty({ property: name, value });
-  }
-
-  /**
-   * TODO drop when dropped from gae and openapi-client generators
-   * @private
-   * Add a new Maven dependency.
-   *
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} other - (optional) explicit other thing: scope, exclusions...
-   */
-  addMavenDependency(groupId, artifactId, version, other) {
-    createPomStorage(this).addDependency({
-      groupId,
-      artifactId,
-      version,
-      additionalContent: other,
-    });
-  }
-
-  /**
-   * TODO drop when dropped from gae generator
-   * @private
-   * Add a new Maven plugin.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   * @param {string} other - explicit other thing: executions, configuration...
-   */
-  addMavenPlugin(groupId, artifactId, version, other) {
-    createPomStorage(this).addPlugin({
-      groupId,
-      artifactId,
-      version,
-      additionalContent: other,
-    });
-  }
-
-  /**
-   * TODO drop when dropped from gae, azure-spring-cloud and heroku generators
-   * @private
-   * Add a new Maven profile.
-   *
-   * @param {string} profileId - profile ID
-   * @param {string} other - explicit other thing: build, dependencies...
-   */
-  addMavenProfile(profileId, other) {
-    createPomStorage(this).addProfile({ id: profileId, content: other });
   }
 
   /**
