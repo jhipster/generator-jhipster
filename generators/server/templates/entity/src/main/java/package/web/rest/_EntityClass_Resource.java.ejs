@@ -360,7 +360,11 @@ public class <%= entityClass %>Resource {
 <%_ } _%>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityInstancePlural %> in body.
      */
+<%_ if (reactive) { _%>
     @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_JSON_VALUE)
+<%_ } else { _%>
+    @GetMapping("/<%= entityApiUrl %>")
+<%_ } _%>
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
