@@ -257,7 +257,7 @@ const partialLanguages: PartialLanguage[] = [
   {
     name: 'Azerbaijani (Latin)',
     displayName: 'Azərbaycan dili',
-    languageTag: 'az-Latn-AZ',
+    languageTag: 'az-Latn-az',
     angularLocale: 'az-Latn',
     dayjsLocale: 'az-Latn',
   },
