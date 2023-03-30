@@ -341,25 +341,6 @@ public class <%= entityClass %>Resource {
     }
 <%_ } _%>
 
-<%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
-    /**
-     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
-     * @return the {@link Flux} of <%= entityInstancePlural %>.
-     */
-    @GetMapping(value = "/<%= entityApiUrl %>")
-  <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
-    @Transactional(readOnly = true)
-  <%_ } _%>
-    public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
-        log.debug("REST request to get all <%= entityClassPlural %> as a stream");
-  <%_ if (viaService) { _%>
-        return <%= entityInstance %>Service.findAll();
-  <%_ } else { _%>
-        return <%= entityInstance %>Repository.findAll()<%_ if (dtoMapstruct) { _%>.map(<%= entityToDtoReference %>)<%_ } _%>;
-  <%_ } _%>
-    }
-
-<%_ } else { _%>
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
      *
@@ -379,11 +360,29 @@ public class <%= entityClass %>Resource {
 <%_ } _%>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityInstancePlural %> in body.
      */
-    @GetMapping("/<%= entityApiUrl %>")
+    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_JSON_VALUE)
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
 <%- include('../../common/get_all_template', {viaService}); -%>
+
+<%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
+    /**
+     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
+     * @return the {@link Flux} of <%= entityInstancePlural %>.
+     */
+    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_NDJSON_VALUE)
+  <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
+    @Transactional(readOnly = true)
+  <%_ } _%>
+    public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
+        log.debug("REST request to get all <%= entityClassPlural %> as a stream");
+  <%_ if (viaService) { _%>
+        return <%= entityInstance %>Service.findAll();
+  <%_ } else { _%>
+        return <%= entityInstance %>Repository.findAll()<%_ if (dtoMapstruct) { _%>.map(<%= entityToDtoReference %>)<%_ } _%>;
+  <%_ } _%>
+    }
 
 <%_ } _%>
     /**
