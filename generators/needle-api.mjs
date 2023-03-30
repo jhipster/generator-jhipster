@@ -26,7 +26,6 @@ import ClientI18n from './client/needle-api/needle-client-i18n.mjs';
 import ServerGradle from './server/needle-api/needle-server-gradle.mjs';
 import ServerCache from './server/needle-api/needle-server-cache.mjs';
 import ServerLiquibase from './server/needle-api/needle-server-liquibase.mjs';
-import ServerLog from './server/needle-api/needle-server-logback-spring.mjs';
 
 export default class NeedleApi {
   constructor(generator) {
@@ -40,6 +39,5 @@ export default class NeedleApi {
     this.serverCache = new ServerCache(generator);
     this.serverLiquibase = new ServerLiquibase(generator);
     this.serverGradle = new ServerGradle(generator);
-    this.serverLog = new ServerLog(generator);
   }
 }
