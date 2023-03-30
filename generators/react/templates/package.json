@@ -19,7 +19,7 @@
     "react-router-dom": "6.10.0",
     "react-toastify": "9.1.2",
     "react-transition-group": "4.4.5",
-    "reactstrap": "9.1.6",
+    "reactstrap": "9.1.8",
     "redux": "4.2.1",
     "redux-thunk": "2.4.2",
     "sonar-scanner": "3.1.0",
