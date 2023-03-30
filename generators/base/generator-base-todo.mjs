@@ -1281,20 +1281,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.devDatabaseTypeH2Disk = dest.devDatabaseType === H2_DISK;
     dest.devDatabaseTypeH2Memory = dest.devDatabaseType === H2_MEMORY;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
-    dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
     dest.devDatabaseTypeMariadb = dest.devDatabaseType === MARIADB;
     dest.devDatabaseTypeMssql = dest.devDatabaseType === MSSQL;
     dest.devDatabaseTypeMysql = dest.devDatabaseType === MYSQL;
     dest.devDatabaseTypeOracle = dest.devDatabaseType === ORACLE;
     dest.devDatabaseTypePostgres = dest.devDatabaseType === POSTGRESQL;
 
-    dest.prodDatabaseTypeCouchbase = dest.prodDatabaseType === COUCHBASE;
     dest.prodDatabaseTypeH2Disk = dest.prodDatabaseType === H2_DISK;
     dest.prodDatabaseTypeMariadb = dest.prodDatabaseType === MARIADB;
-    dest.prodDatabaseTypeMongodb = dest.prodDatabaseType === MONGODB;
     dest.prodDatabaseTypeMssql = dest.prodDatabaseType === MSSQL;
     dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
-    dest.prodDatabaseTypeNeo4j = dest.prodDatabaseType === NEO4J;
     dest.prodDatabaseTypeOracle = dest.prodDatabaseType === ORACLE;
     dest.prodDatabaseTypePostgres = dest.prodDatabaseType === POSTGRESQL;
 
