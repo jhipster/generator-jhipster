@@ -18,6 +18,7 @@
  */
 
 import _ from 'lodash';
+import sortKeys from 'sort-keys';
 
 import CoreGenerator from '../../base-core/index.mjs';
 import XmlStorage from '../internal/xml-store.mjs';
@@ -90,14 +91,9 @@ const sortWithTemplate = (template: string[], a: string, b: string) => {
   return indexOfA - indexOfB;
 };
 
-const sortObject = (order, obj): any =>
-  Object.fromEntries(
-    Object.entries(obj).sort((a, b) => {
-      return sortWithTemplate(order, a[0], b[0]);
-    })
-  );
+const comparator = (order: string[]) => (a: string, b: string) => sortWithTemplate(order, a, b);
 
-const sortProperties = properties => sortObject(propertiesOrder, properties);
+const sortProperties = properties => sortKeys(properties, { compare: comparator(propertiesOrder) });
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => {
   return a.groupId === b.groupId && a.artifactId === b.artifactId;
@@ -300,7 +296,7 @@ export default class PomStorage extends XmlStorage {
 
   protected sort() {
     if (this.store.project) {
-      const project = sortObject(rootOrder, this.store.project);
+      const project = sortKeys(this.store.project, { compare: comparator(rootOrder) });
       this.store.project = project;
       if (project.properties) {
         project.properties = sortProperties(project.properties);

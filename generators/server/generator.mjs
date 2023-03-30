@@ -690,7 +690,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           source.addMavenRepository?.({
             id: 'ossrh-snapshots',
             url: 'https://oss.sonatype.org/content/repositories/snapshots/',
-            releases: false,
+            releasesEnabled: false,
           });
         }
       },
