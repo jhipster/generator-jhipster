@@ -91,38 +91,6 @@ describe('jdl - ApplicationConverter', () => {
             expect(convertedApplication).to.deep.equal(expectedApplication);
           });
         });
-        context('with a generator version', () => {
-          let convertedApplication;
-          let expectedApplication;
-
-          before(() => {
-            convertedApplication = convertApplications(
-              [
-                {
-                  config: {
-                    applicationType: MONOLITH,
-                    baseName: 'mono',
-                  },
-                  entities: [],
-                  options: {},
-                  useOptions: [],
-                },
-              ],
-              { generatorVersion: '7.0.0' }
-            );
-            expectedApplication = [
-              createJDLApplication({
-                applicationType: MONOLITH,
-                baseName: 'mono',
-                jhipsterVersion: '7.0.0',
-              }),
-            ];
-          });
-
-          it('should use it', () => {
-            expect(convertedApplication).to.deep.equal(expectedApplication);
-          });
-        });
         context('with blueprints', () => {
           context("when there are blueprints without the 'generator-jhipster-' prefix", () => {
             let convertedApplication;

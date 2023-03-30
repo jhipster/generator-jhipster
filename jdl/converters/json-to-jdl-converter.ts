@@ -58,7 +58,8 @@ export function convertToJDL(directory = '.', output: string | false = 'app.jdl'
     }
   }
   if (output) {
-    exportJDLObject(jdlObject, path.join(directory, output));
+    output = path.isAbsolute(output) ? output : path.join(directory, output);
+    exportJDLObject(jdlObject, output);
   }
   return jdlObject;
 }

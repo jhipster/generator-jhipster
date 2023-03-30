@@ -314,9 +314,6 @@ dependencies {
 if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
-<%_ if (!cacheProviderNo) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-cache"
-<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
   <%_ if (reactive) { _%>
@@ -327,30 +324,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-<%_ if (cacheProviderHazelcast) { _%>
-  <%_ if (enableHibernateCache) { _%>
-    implementation "com.hazelcast:hazelcast-hibernate53:${hazelcastHibernate53Version}"
-  <%_ } _%>
-    implementation "com.hazelcast:hazelcast-spring:${hazelcastSpringVersion}"
-<%_ } _%>
-<%_ if (cacheProviderInfinispan) { _%>
-    implementation "org.infinispan:infinispan-hibernate-cache-v60"
-    implementation "org.infinispan:infinispan-spring-boot-starter-embedded"
-    implementation "org.infinispan:infinispan-core-jakarta"
-    implementation "org.infinispan:infinispan-jcache"
-<%_ } _%>
-<%_ if (cacheProviderMemcached) { _%>
-    implementation "com.google.code.simple-spring-memcached:spring-cache"
-    implementation "com.google.code.simple-spring-memcached:xmemcached-provider"
-    implementation "com.googlecode.xmemcached:xmemcached"
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
-    implementation "org.redisson:redisson"
-  <%_ if (enableHibernateCache) { _%>
-    implementation "org.hibernate.orm:hibernate-jcache"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || databaseTypeSql) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || databaseTypeSql) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
@@ -381,29 +355,12 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
-    implementation "javax.cache:cache-api"
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     implementation "org.lz4:lz4-java"
-    testImplementation "org.cassandraunit:cassandra-unit-spring"
     testImplementation "org.testcontainers:cassandra"
 <%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
-    implementation "org.ehcache:ehcache"
-  <%_ if (enableHibernateCache) { _%>
-    implementation "org.hibernate.orm:hibernate-jcache"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
+<%_ if (authenticationTypeOauth2 && !cacheProviderCaffeine && !cacheProviderInfinispan) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
-<%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
-    implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
-    implementation "com.typesafe:config:${typesafeConfigVersion}"
-  <%_ if (enableHibernateCache) { _%>
-    implementation "org.hibernate.orm:hibernate-jcache"
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
@@ -481,11 +438,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-<%_ if (messageBrokerKafka) { _%>
-    implementation "org.springframework.cloud:spring-cloud-stream"
-    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka"
-    testImplementation "org.testcontainers:kafka"
-<%_ } _%>
 <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-undertow"
 <%_ } _%>

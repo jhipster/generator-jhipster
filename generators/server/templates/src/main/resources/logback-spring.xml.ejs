@@ -99,9 +99,6 @@
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
 <%_ } _%>
     <logger name="org.apache" level="WARN"/>
-<%_ if (messageBrokerKafka) { _%>
-    <logger name="org.apache.kafka" level="INFO"/>
-<%_ } _%>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -131,6 +128,7 @@
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.boot.autoconfigure.logging" level="INFO"/>
     <logger name="org.springframework.cache" level="WARN"/>
 <%_ if (reactive) { _%>
     <logger name="org.synchronoss" level="WARN"/>

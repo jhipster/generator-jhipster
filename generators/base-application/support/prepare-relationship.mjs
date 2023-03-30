@@ -26,6 +26,8 @@ import {
   validations,
   checkAndReturnRelationshipOnValue,
 } from '../../../jdl/jhipster/index.mjs';
+import { upperFirstCamelCase } from '../../base/support/string.mjs';
+import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.mjs';
 import { stringifyApplicationData } from './debug.mjs';
 
 const { isReservedTableName } = reservedKeywords;
@@ -55,7 +57,7 @@ function _defineOnUpdateAndOnDelete(relationship, generator) {
 export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
   const entityName = entityWithConfig.name;
   const otherEntityName = relationship.otherEntityName;
-  const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
+  const jhiTablePrefix = entityWithConfig.jhiTablePrefix || hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
   if (!relationship.otherEntity) {
     throw new Error(
@@ -80,63 +82,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   // Look for fields at the other other side of the relationship
   if (otherEntityData.relationships) {
-    let otherRelationship;
-    if (relationship.otherEntityRelationshipName) {
-      otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-        if (_.upperFirst(otherSideRelationship.otherEntityName) !== _.upperFirst(entityName)) {
-          return false;
-        }
-        return otherSideRelationship.relationshipName === relationship.otherEntityRelationshipName;
-      });
-      if (!otherRelationship) {
-        if (!relationship.otherEntity.builtIn) {
-          // TODO throw error at v8.
-          generator.logger.warn(
-            `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
-          );
-        } else {
-          generator.logger.debug(
-            `Ignoring '${entityName}' definitions as it is using a built-in Entity '${otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`
-          );
-        }
-      } else if (
-        // renaming a relationship could cause trouble here - old relationship needs to be removed
-        !ignoreMissingRequiredRelationship &&
-        otherRelationship &&
-        otherRelationship.otherEntityRelationshipName &&
-        otherRelationship.otherEntityRelationshipName !== relationship.relationshipName
-      ) {
-        throw new Error(
-          `Error at entity ${entityName}: relationship name is not synchronized ${stringifyApplicationData(
-            relationship
-          )} with ${stringifyApplicationData(otherRelationship)}`
-        );
-      }
-    } else {
-      otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-        if (_.upperFirst(otherSideRelationship.otherEntityName) !== _.upperFirst(entityName)) {
-          return false;
-        }
-        if (!otherSideRelationship.otherEntityRelationshipName) {
-          return false;
-        }
-        return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
-      });
-    }
+    const otherRelationship = relationship.otherRelationship;
     if (otherRelationship) {
       relationship.otherSideReferenceExists = true;
-      if (
-        !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
-        !(relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many') &&
-        !(relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one') &&
-        !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
-      ) {
-        throw new Error(
-          `Error at entity ${entityName}: relationship type is not synchronized ${stringifyApplicationData(
-            relationship
-          )} with ${stringifyApplicationData(otherRelationship)}`
-        );
-      }
       _.defaults(relationship, {
         otherRelationship,
         otherEntityRelationshipName: otherRelationship.relationshipName,
@@ -156,7 +104,6 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     } else {
       generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
     }
-    relationship.otherRelationship = otherRelationship;
   }
 
   relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
@@ -190,14 +137,13 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationshipFieldName: _.lowerFirst(relationshipName),
     relationshipNameCapitalized: _.upperFirst(relationshipName),
     relationshipNameHumanized: _.startCase(relationshipName),
-    columnName: generator.getColumnName(relationshipName),
-    columnNamePrefix:
-      relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${generator.getColumnName(relationshipName)}_`,
+    columnName: hibernateSnakeCase(relationshipName),
+    columnNamePrefix: relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${hibernateSnakeCase(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: _.upperFirst(otherEntityName),
     otherEntityTableName:
       otherEntityData.entityTableName ||
-      generator.getTableName(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
+      hibernateSnakeCase(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
   });
 
   _.defaults(relationship, {
@@ -233,8 +179,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       relationship.otherEntityAngularName = 'User';
     } else {
       const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-      relationship.otherEntityAngularName =
-        _.upperFirst(relationship.otherEntityName) + generator.upperFirstCamelCase(otherEntityAngularSuffix);
+      relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + upperFirstCamelCase(otherEntityAngularSuffix);
     }
   }
 
@@ -287,7 +232,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   relationship.shouldWriteJoinTable = relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
   if (relationship.shouldWriteJoinTable) {
     relationship.joinTable = {
-      name: generator.getJoinTableName(entityWithConfig.entityTableName, relationship.relationshipName, entityWithConfig.prodDatabaseType),
+      name: getJoinTableName(entityWithConfig.entityTableName, relationship.relationshipName, {
+        prodDatabaseType: entityWithConfig.prodDatabaseType,
+      }).value,
     };
   }
 

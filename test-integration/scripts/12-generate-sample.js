@@ -97,7 +97,7 @@ if (sample['app-sample']) {
       '--skip-jhipster-dependencies',
       '--skip-install',
       '--no-insight',
-      ...(sample['extra-args'] ?? '').split(' '),
+      ...(sample['extra-args']?.split(' ') ?? []),
     ],
   }).catch(done);
 }

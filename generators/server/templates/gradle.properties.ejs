@@ -76,25 +76,25 @@ gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 gradleNodePluginVersion=<%- javaDependencies['node-gradle'] %>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-liquibasePluginVersion=2.1.1
+liquibasePluginVersion=<%- javaDependencies['gradle-liquibase'] %>
 <%_ } _%>
-sonarqubePluginVersion=3.5.0.2730
+sonarqubePluginVersion=<%- javaDependencies['gradle-sonarqube'] %>
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ } _%>
 noHttpCheckstyleVersion=<%- javaDependencies['nohttp-checkstyle'] %>
 checkstyleVersion=<%- javaDependencies.checkstyle %>
-modernizerPluginVersion=1.6.2
+modernizerPluginVersion=<%- javaDependencies['gradle-modernizer-plugin'] %>
 <%_ if (enableGradleEnterprise) { _%>
-gradleEnterprisePluginVersion=3.12.3
-gradleCommonCustomUserDataPluginVersion=1.8.2
+gradleEnterprisePluginVersion=<%- javaDependencies['gradle-enterprise'] %>
+gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user-data-gradle-plugin'] %>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 awaitilityVersion=<%- javaDependencies.awaitility %>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
 gatlingVersion=<%- javaDependencies.gatling %>
-gatlingPluginVersion=3.9.0
+gatlingPluginVersion=<%- javaDependencies['gatling-gradle'] %>
 <%_ } _%>
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here

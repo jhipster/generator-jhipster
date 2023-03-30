@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseGenerator from '../../base/index.mjs';
+import CoreGenerator from '../../base-core/index.mjs';
 import { createBaseNeedle } from '../../base/support/needles.mjs';
 import { SpringBootApplication } from '../types.mjs';
 
@@ -58,7 +58,7 @@ type ApplicationPropertiesNeedles = {
  */
 // eslint-disable-next-line import/prefer-default-export
 export function insertContentIntoApplicationProperties(
-  this: BaseGenerator | void,
+  this: CoreGenerator | void,
   application: SpringBootApplication,
   needles: ApplicationPropertiesNeedles
 ) {

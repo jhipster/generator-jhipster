@@ -180,10 +180,10 @@
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-ng-eureka-oauth2-mongodb-caffeine sample",
+      "name": "generate ms-ng-consul-oauth2-mongodb-caffeine sample",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
       "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-ng-eureka-oauth2-mongodb-caffeine"],
+      "args": ["ms-ng-consul-oauth2-mongodb-caffeine"],
       "console": "integratedTerminal"
     },
     {

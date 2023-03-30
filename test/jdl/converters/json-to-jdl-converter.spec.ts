@@ -25,11 +25,16 @@ import { expect } from 'chai';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters/json-to-jdl-converter.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('jdl - JSONToJDLConverter', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
+
   describe('convertToJDL', () => {
     context('when there is a yo-rc file in the passed directory', () => {
       let dir;
@@ -37,14 +42,11 @@ describe('jdl - JSONToJDLConverter', () => {
       let jdlFileContent;
 
       context('without entities', () => {
-        before(() => {
+        beforeEach(() => {
           dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'only_app');
           jdlFilename = 'app.jdl';
           convertToJDL(dir);
           jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
-        });
-        after(() => {
-          fs.unlinkSync(path.join(dir, jdlFilename));
         });
 
         it('should write a JDL file with the application', () => {
@@ -92,14 +94,11 @@ describe('jdl - JSONToJDLConverter', () => {
         });
       });
       context('with entities', () => {
-        before(() => {
+        beforeEach(() => {
           dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'app_with_entities');
           jdlFilename = 'app.jdl';
           convertToJDL(dir);
           jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
-        });
-        after(() => {
-          fs.unlinkSync(path.join(dir, jdlFilename));
         });
 
         it('should export apps & entities', () => {
@@ -208,18 +207,8 @@ paginate Country with pager
     });
     context('when there is no yo-rc file in the passed directory', () => {
       context('with no JHipster app', () => {
-        let dir;
-
-        before(() => {
-          dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'empty_dir');
-          fs.mkdirSync(dir);
-        });
-        after(() => {
-          fs.rmSync(dir, { recursive: true });
-        });
-
         it('does not fail', () => {
-          expect(() => convertToJDL(dir)).not.to.throw();
+          expect(() => convertToJDL()).not.to.throw();
         });
       });
       context('with several JHipster apps', () => {
@@ -232,9 +221,6 @@ paginate Country with pager
           jdlFilename = 'app.jdl';
           convertToJDL(rootDir);
           jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
-        });
-        afterEach(() => {
-          fs.unlinkSync(path.join(rootDir, jdlFilename));
         });
 
         it('should export each app', () => {
@@ -378,24 +364,21 @@ noFluentMethod Region, Country, Location
       let dir;
       let output;
 
-      before(() => {
+      beforeEach(() => {
         dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'only_app');
-        output = 'exported.jdl';
+        output = path.resolve('exported.jdl');
         convertToJDL(dir, output);
-      });
-      after(() => {
-        fs.unlinkSync(path.join(dir, output));
       });
 
       it('should output it to the output file', () => {
-        expect(fs.readFileSync(path.join(dir, output), 'utf-8')).not.to.be.null;
+        expect(fs.readFileSync(output, 'utf-8')).not.to.be.null;
       });
     });
   });
   describe('convertSingleContentToJDL', () => {
     context('with microservices attribute', () => {
       let jdl;
-      before(() => {
+      beforeEach(() => {
         jdl = convertSingleContentToJDL({
           'generator-jhipster': {
             microfrontends: [

@@ -30,50 +30,14 @@
     <name><%= humanizedBaseName %></name>
     <description><%= projectDescription %></description>
 
-    <repositories>
-<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1 || SPRING_CLOUD_VERSION.indexOf('RC') > -1) { _%>
-        <repository>
-            <id>spring-milestone</id>
-            <url>https://repo.spring.io/milestone</url>
-        </repository>
-<%_ } _%>
-<%_ if (jhipsterDependenciesVersion.endsWith('-SNAPSHOT')) { _%>
-        <repository>
-            <id>ossrh-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-<%_ } _%>
-<%_ if (serviceDiscoveryEureka) { _%>
-        <repository>
-            <id>netflix-candidates</id>
-            <name>Netflix Candidates</name>
-            <url>https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-<%_ } _%>
-        <!-- jhipster-needle-maven-repository -->
-    </repositories>
-
-    <pluginRepositories>
-<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1 || SPRING_CLOUD_VERSION.indexOf('RC') > -1) { _%>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-        </pluginRepository>
-<%_ } _%>
-        <!-- jhipster-needle-maven-plugin-repository -->
-    </pluginRepositories>
-
-    <!-- jhipster-needle-distribution-management -->
-
     <properties>
-        <!-- Build properties -->
+        <!--
+            Build properties
+            The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
+<%_ if (databaseTypeCassandra) { _%>
+            The cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version}
+<%_ } _%>
+        -->
         <maven.version>3.2.5</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
 <%_ if (!skipClient) { _%>
@@ -90,7 +54,6 @@
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx1G</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
-        <!-- These remain empty unless the corresponding profile is active -->
 <%_ if (enableLiquibase) { _%>
         <profile.no-liquibase />
 <%_ } _%>
@@ -98,14 +61,9 @@
         <profile.tls />
         <profile.e2e />
 
-        <!-- Dependency versions -->
         <jhipster-dependencies.version><%= jhipsterDependenciesVersion %></jhipster-dependencies.version>
-        <!-- The spring-boot version should match the one managed by
-        https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
 <%_ if (databaseTypeSql) { _%>
-        <!-- The hibernate version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
 <%_ } _%>
 <%_ if (enableLiquibase) { _%>
@@ -129,8 +87,6 @@
         <jaxb-runtime.version><%- javaDependencies['jaxb-runtime'] %></jaxb-runtime.version>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-        <!-- The cassandra driver version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version><%= CASSANDRA_DRIVER_VERSION %></cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
@@ -156,7 +112,6 @@
 <%_ if (gatlingTests) { _%>
         <gatling.version><%- javaDependencies.gatling %></gatling.version>
 <%_ } _%>
-        <!-- Plugin versions -->
         <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
@@ -194,7 +149,6 @@
 <%_ } _%>
         <properties-maven-plugin.version><%- javaDependencies['properties-maven-plugin'] %></properties-maven-plugin.version>
         <sonar-maven-plugin.version><%- javaDependencies['sonar-maven-plugin'] %></sonar-maven-plugin.version>
-        <!-- jhipster-needle-maven-property -->
     </properties>
 
     <dependencyManagement>
@@ -206,9 +160,20 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+<%_ if (cacheProviderInfinispan) { _%>
+            <dependency>
+                <!-- TODO rework infinispan-bom dependency once spring-boot 3.0.5 is released -->
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>14.0.7.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+<%_ } _%>
 <%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
             <!-- TODO drop once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625 -->
             <dependency>
+                <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
                 <groupId>org.mariadb</groupId>
                 <artifactId>r2dbc-mariadb</artifactId>
                 <version><%- javaDependencies['r2dbc-mariadb'] %></version>
@@ -220,7 +185,6 @@
                 <version><%- javaDependencies['spring-data-relational'] %></version>
             </dependency>
 <%_ } _%>
-            <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
 
@@ -242,14 +206,6 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
-<%_ // This is useful for major Spring Boot migration
-    if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-properties-migrator</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (!cacheProviderNo) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -303,7 +259,11 @@
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring-boot-starter-embedded</artifactId>
+            <artifactId>infinispan-spring-boot3-starter-embedded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-commons-jakarta</artifactId>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -311,7 +271,8 @@
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-jcache</artifactId>
+            <artifactId>infinispan-component-annotations</artifactId>
+            <scope>compile</scope>
         </dependency>
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
@@ -382,9 +343,9 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
-        <!-- TODO: to be removed
-        Openapi generator uses javax namespace for now https://github.com/OpenAPITools/openapi-generator/pull/13593 -->
         <dependency>
+            <!-- TODO: to be removed
+            Openapi generator uses javax namespace for now https://github.com/OpenAPITools/openapi-generator/pull/13593 -->
              <groupId>javax.annotation</groupId>
              <artifactId>javax.annotation-api</artifactId>
              <version>1.3.2</version>
@@ -431,11 +392,6 @@
         <dependency>
             <groupId>org.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.cassandraunit</groupId>
-            <artifactId>cassandra-unit-spring</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -504,8 +460,8 @@
         </dependency>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-        <!-- Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6 -->
         <dependency>
+            <!-- Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6 -->
             <groupId>io.mongock</groupId>
             <artifactId>mongock-springboot-v3</artifactId>
             <exclusions>
@@ -699,9 +655,9 @@
             <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
-        <!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
         <dependency>
+            <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+            <!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-engine</artifactId>
             <version>${archunit-junit5.version}</version>
@@ -715,6 +671,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-test-binder</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -735,8 +696,8 @@
         </dependency>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-        <!-- Spring Security OAuth 2.0 -->
         <dependency>
+            <!-- Spring Security OAuth 2.0 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
@@ -748,13 +709,12 @@
         </dependency>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-        <!-- DataStax driver -->
         <dependency>
+            <!-- DataStax driver -->
             <groupId>com.datastax.oss</groupId>
             <artifactId>java-driver-mapper-runtime</artifactId>
         </dependency>
 <%_ } _%>
-        <!-- Spring Cloud -->
 <%_ if (applicationTypeGateway) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -842,8 +802,8 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <!-- fix https://github.com/reactor/BlockHound/issues/311 -->
         <dependency>
+            <!-- fix https://github.com/reactor/BlockHound/issues/311 -->
             <groupId>io.micrometer</groupId>
             <artifactId>context-propagation</artifactId>
             <version>1.0.0</version>
@@ -859,7 +819,6 @@
         </dependency>
 <%_ } _%>
 <%_ if (cucumberTests) { _%>
-        <!-- Cucumber -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
@@ -887,7 +846,6 @@
         </dependency>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
-        <!-- Gatling -->
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
@@ -895,7 +853,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-        <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
     <build>
@@ -983,7 +940,6 @@
                 <artifactId>openapi-generator-maven-plugin</artifactId>
             </plugin>
 <%_ } _%>
-            <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>
             <plugins>
@@ -1079,8 +1035,8 @@
                                 <version>${mapstruct.version}</version>
                             </path>
 <%_ if (databaseTypeSql) { _%>
-                            <!-- For JPA static metamodel generation -->
                             <path>
+                                <!-- For JPA static metamodel generation -->
                                 <groupId>org.hibernate.orm</groupId>
                                 <artifactId>hibernate-jpamodelgen</artifactId>
                                 <version>${hibernate.version}</version>
@@ -1098,7 +1054,6 @@
                                 <version>${cassandra-driver.version}</version>
                             </path>
 <%_ } _%>
-                            <!-- jhipster-needle-maven-add-annotation-processor -->
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
@@ -1217,8 +1172,8 @@
                                 <goal>prepare-agent</goal>
                             </goals>
                         </execution>
-                        <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
                         <execution>
+                            <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
                             <id>post-unit-test</id>
                             <phase>test</phase>
                             <goals>
@@ -1231,8 +1186,8 @@
                                 <goal>prepare-agent-integration</goal>
                             </goals>
                         </execution>
-                        <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
                         <execution>
+                            <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
                             <id>post-integration-tests</id>
                             <phase>post-integration-test</phase>
                             <goals>
@@ -1479,7 +1434,6 @@
                     </configuration>
 
                 </plugin>
-                <!-- jhipster-needle-maven-add-plugin-management -->
             </plugins>
         </pluginManagement>
     </build>
@@ -1839,13 +1793,6 @@
                                     <artifactId>jakarta.validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-  <%_ if (devDatabaseTypePostgres) { _%>
-                                <dependency>
-                                    <groupId>tech.jhipster</groupId>
-                                    <artifactId>jhipster-framework</artifactId>
-                                    <version>${jhipster-dependencies.version}</version>
-                                </dependency>
-  <%_ } _%>
   <%_ if (devDatabaseTypeH2Disk) { _%>
                                 <dependency>
                                     <groupId>com.h2database</groupId>
@@ -2024,13 +1971,6 @@
                                     <artifactId>jakarta.validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-  <%_ if (prodDatabaseTypePostgres) { _%>
-                                <dependency>
-                                    <groupId>tech.jhipster</groupId>
-                                    <artifactId>jhipster-framework</artifactId>
-                                    <version>${jhipster-dependencies.version}</version>
-                                </dependency>
-  <%_ } _%>
                             </dependencies>
                         </plugin>
 <%_ } _%>
@@ -2193,8 +2133,8 @@
                 </property>
             </activation>
             <dependencies>
-                <!-- The following dependency is added due to issue #9175-->
                 <dependency>
+                    <!-- The following dependency is added due to issue #9175-->
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
@@ -2297,6 +2237,5 @@
             </build>
         </profile>
 <%_ } _%>
-        <!-- jhipster-needle-maven-add-profile -->
     </profiles>
 </project>

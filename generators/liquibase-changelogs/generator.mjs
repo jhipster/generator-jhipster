@@ -21,14 +21,8 @@ import _ from 'lodash';
 
 import BaseApplication from '../base-application/index.mjs';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './files.mjs';
-import {
-  stringifyApplicationData,
-  prepareRelationship,
-  prepareField as prepareFieldForTemplates,
-} from '../base-application/support/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
-import { postPrepareEntity, prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { liquibaseComment } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
@@ -72,21 +66,13 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
         const entityChanges = this.entityChanges;
         entityChanges.skipFakeData = application.skipFakeData || entity.skipFakeData;
 
-        entityChanges.allFields = entity.fields
-          .filter(field => !field.transient)
-          .map(field => prepareFieldForLiquibaseTemplates(entity, field));
+        entityChanges.allFields = entity.fields.filter(field => !field.transient);
 
         if (databaseChangelog.type === 'entity-new') {
           entityChanges.fields = entityChanges.allFields;
         } else {
-          entityChanges.addedFields = databaseChangelog.addedFields
-            .map(field => prepareFieldForTemplates(entity, field, this))
-            .filter(field => !field.transient)
-            .map(field => prepareFieldForLiquibaseTemplates(entity, field));
-          entityChanges.removedFields = databaseChangelog.removedFields
-            .map(field => prepareFieldForTemplates(entity, field, this))
-            .filter(field => !field.transient)
-            .map(field => prepareFieldForLiquibaseTemplates(entity, field));
+          entityChanges.addedFields = databaseChangelog.addedFields.filter(field => !field.transient);
+          entityChanges.removedFields = databaseChangelog.removedFields.filter(field => !field.transient);
         }
       },
 
@@ -153,38 +139,12 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
         const databaseChangelog = this.databaseChangelog;
         const entity = this.entity;
         if (databaseChangelog.type === 'entity-new') {
-          entityChanges.relationships = entity.relationships.map(relationship => this._prepareRelationship(entity, relationship));
+          entityChanges.relationships = entity.relationships;
         } else {
-          entityChanges.addedRelationships = databaseChangelog.addedRelationships
-            .map(relationship => {
-              const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-              relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
-              if (!relationship.otherEntity) {
-                throw new Error(
-                  `Error at entity ${entity.name}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
-                );
-              }
-              return relationship;
-            })
-            .map(relationship => prepareRelationship(entity, relationship, this))
-            .map(relationship => this._prepareRelationship(entity, relationship));
-          entityChanges.removedRelationships = databaseChangelog.removedRelationships
-            .map(relationship => {
-              const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-              relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
-
-              if (!relationship.otherEntity) {
-                throw new Error(
-                  `Error at entity ${entity.name}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
-                );
-              }
-              return relationship;
-            })
-            .map(relationship => prepareRelationship(entity, relationship, this, true))
-            .map(relationship => this._prepareRelationship(entity, relationship));
+          entityChanges.addedRelationships = databaseChangelog.addedRelationships;
+          entityChanges.removedRelationships = databaseChangelog.removedRelationships;
           entityChanges.relationshipsToRecreateForeignKeysOnly = databaseChangelog.relationshipsToRecreateForeignKeysOnly;
         }
-        postPrepareEntity({ application, entity });
       },
     };
   }
@@ -386,24 +346,6 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     if (entityChanges.hasFieldConstraint || entityChanges.shouldWriteAnyRelationship) {
       this.addIncrementalChangelogToLiquibase(`${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}`);
     }
-  }
-
-  _prepareRelationship(entity, relationship) {
-    relationship.shouldWriteRelationship =
-      relationship.relationshipType === 'many-to-one' ||
-      (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
-
-    if (relationship.shouldWriteJoinTable) {
-      const joinTableName = relationship.joinTable.name;
-      const prodDatabaseType = entity.prodDatabaseType;
-      _.defaults(relationship.joinTable, {
-        constraintName: this.getFKConstraintName(joinTableName, entity.entityTableName, prodDatabaseType),
-        otherConstraintName: this.getFKConstraintName(joinTableName, relationship.columnName, prodDatabaseType),
-      });
-    }
-
-    relationship.columnDataType = relationship.otherEntity.columnType;
-    return relationship;
   }
 
   /**
