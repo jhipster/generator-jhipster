@@ -32,8 +32,8 @@ export type MavenRepository = {
   id: string;
   name?: string;
   url: string;
-  releases?: boolean;
-  snapshots?: boolean;
+  releasesEnabled?: boolean;
+  snapshotsEnabled?: boolean;
   inProfile?: string;
 };
 

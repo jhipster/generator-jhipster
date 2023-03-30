@@ -38,6 +38,7 @@ const rootOrder = [
   'groupId',
   'artifactId',
   'version',
+  'packaging',
   'name',
   'description',
   'repositories',
@@ -89,7 +90,7 @@ const sortWithTemplate = (template: string[], a: string, b: string) => {
   return indexOfA - indexOfB;
 };
 
-const sortObject = (order, obj) =>
+const sortObject = (order, obj): any =>
   Object.fromEntries(
     Object.entries(obj).sort((a, b) => {
       return sortWithTemplate(order, a[0], b[0]);
@@ -106,11 +107,7 @@ const dependencyEquals = (a: MavenDependency, b: MavenDependency) => {
   return artifactEquals(a, b) && a.scope === b.scope && a.type === b.type;
 };
 
-const profileEquals = (a: MavenProfile, b: MavenProfile) => {
-  return a.id === b.id;
-};
-
-const repositoryEquals = (a: MavenRepository, b: MavenRepository) => {
+const idEquals = (a: { id: string }, b: { id: string }) => {
   return a.id === b.id;
 };
 
@@ -147,7 +144,7 @@ function appendOrGet<T>(array: T[], item: T, equals: (a: T, b: T) => boolean) {
 
 const ensureProfile = (project, profileId: string) => {
   const profileArray = ensureChildIsArray(project, 'profiles.profile');
-  return appendOrGet(profileArray, { id: profileId }, profileEquals);
+  return appendOrGet(profileArray, { id: profileId }, idEquals);
 };
 
 const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
@@ -223,7 +220,7 @@ export default class PomStorage extends XmlStorage {
 
   public addProfile({ content, ...profile }: MavenProfile): void {
     const profileArray = ensureChildIsArray(this.getNode(), 'profiles.profile');
-    appendOrReplace(profileArray, this.mergeContent(profile, content), profileEquals);
+    appendOrReplace(profileArray, this.mergeContent(profile, content), idEquals);
     this.persist();
   }
 
@@ -287,20 +284,24 @@ export default class PomStorage extends XmlStorage {
     appendOrReplace(artifactArray, this.mergeContent(artifact, additionalContent), artifactEquals);
   }
 
-  protected addRepositoryAt(node, repository: MavenRepository): void {
+  protected addRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
+    const releases = releasesEnabled === undefined ? undefined : { enabled: releasesEnabled };
+    const snapshots = snapshotsEnabled === undefined ? undefined : { enabled: snapshotsEnabled };
     const repositoryArray = ensureChildIsArray(node, 'repositories.repository');
-    appendOrReplace(repositoryArray, repository, repositoryEquals);
+    appendOrReplace(repositoryArray, { ...repository, releases, snapshots }, idEquals);
   }
 
-  protected addPluginRepositoryAt(node, repository: MavenRepository): void {
+  protected addPluginRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
+    const releases = releasesEnabled === undefined ? undefined : { enabled: releasesEnabled };
+    const snapshots = snapshotsEnabled === undefined ? undefined : { enabled: snapshotsEnabled };
     const repositoryArray = ensureChildIsArray(node, 'pluginRepositories.pluginRepository');
-    appendOrReplace(repositoryArray, repository, repositoryEquals);
+    appendOrReplace(repositoryArray, { ...repository, releases, snapshots }, idEquals);
   }
 
   protected sort() {
-    const project = this.store.project;
-    if (project) {
-      this.store.project = sortObject(rootOrder, project);
+    if (this.store.project) {
+      const project = sortObject(rootOrder, this.store.project);
+      this.store.project = project;
       if (project.properties) {
         project.properties = sortProperties(project.properties);
       }

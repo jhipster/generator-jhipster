@@ -84,6 +84,16 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
           version: 'annotationProcessorVersion',
         });
         source.addMavenProfile?.({ id: 'profileId', content: '            <other>other</other>' });
+        source.addMavenRepository?.({
+          id: 'repositoryId',
+          url: 'repositoryUrl',
+          releasesEnabled: true,
+          snapshotsEnabled: false,
+        });
+        source.addMavenPluginRepository?.({
+          id: 'repositoryId',
+          url: 'repositoryUrl',
+        });
       },
     });
   }

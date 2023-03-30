@@ -672,7 +672,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
       customizeMaven({ application, source }) {
         if (!application.buildToolMaven) return;
-        if (SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC') || SPRING_CLOUD_VERSION.indexOf('RC')) {
+        if (SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC') || SPRING_CLOUD_VERSION.includes('RC')) {
           const springRepository = {
             id: 'spring-milestone',
             name: 'Spring Milestones',
@@ -686,7 +686,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             scope: 'runtime',
           });
         }
-        if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) {
+        if (application.jhipsterDependenciesVersion.endsWith('-SNAPSHOT')) {
           source.addMavenRepository?.({
             id: 'ossrh-snapshots',
             url: 'https://oss.sonatype.org/content/repositories/snapshots/',
