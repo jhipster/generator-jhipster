@@ -38,7 +38,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
           releasesId: 'releasesId',
           releasesUrl: 'releasesUrl',
         });
-        source.addMavenProperty?.({ inProfile, property: 'propertyName', value: 'propertyValue' });
+        source.addMavenProperty?.({ inProfile, property: 'propertyName.dotted', value: 'propertyValue' });
         source.addMavenDependency?.({
           inProfile,
           groupId: 'dependencyGroupId',
@@ -148,7 +148,7 @@ describe('generator - maven - needles', () => {
     });
 
     it('Assert pom.xml has the property added', () => {
-      runResult.assertFileContent('pom.xml', '<propertyName>propertyValue</propertyName>');
+      runResult.assertFileContent('pom.xml', '<propertyName.dotted>propertyValue</propertyName.dotted>');
     });
 
     it('Assert pom.xml has the dependency added', () => {
@@ -276,7 +276,7 @@ describe('generator - maven - needles', () => {
     });
 
     it('Assert pom.xml has the property added', () => {
-      runResult.assertFileContent('pom.xml', '<propertyName>propertyValue</propertyName>');
+      runResult.assertFileContent('pom.xml', '<propertyName.dotted>propertyValue</propertyName.dotted>');
     });
 
     it('Assert pom.xml has the dependency added', () => {

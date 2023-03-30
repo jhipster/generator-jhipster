@@ -184,8 +184,8 @@ export default class PomStorage extends XmlStorage {
   }
 
   public addProperty({ inProfile, property, value = null }: MavenProperty) {
-    const node = this.getNode({ profile: inProfile });
-    set(node, `properties.${property}`, value);
+    const node = this.getNode({ nodePath: 'properties', profile: inProfile });
+    node[property] = value;
     this.persist();
   }
 
