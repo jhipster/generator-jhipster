@@ -392,11 +392,7 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= instanceName %>, or with status {@code 404 (Not Found)}.
      */
-  <%_ if (reactive) { _%>
-    @GetMapping(value = "/<%= entityApiUrl %>/{id}")
-  <%_ } else { _%>
     @GetMapping("/<%= entityApiUrl %>/{id}")
-  <%_ } _%>
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
