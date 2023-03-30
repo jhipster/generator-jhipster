@@ -139,7 +139,7 @@
     "@typescript-eslint/parser": "5.57.0",
     "chai": "4.3.7",
     "chokidar": "3.5.3",
-    "concurrently": "8.0.0",
+    "concurrently": "8.0.1",
     "cpy-cli": "4.2.0",
     "ejs-lint": "2.0.0",
     "eslint": "8.37.0",
