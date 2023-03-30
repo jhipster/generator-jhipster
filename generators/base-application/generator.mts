@@ -27,6 +27,7 @@ import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs
 import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 import type { Entity } from './types/index.mjs';
+import { SpringBootSourceType } from '../server/types.mjs';
 
 const { upperFirst } = _;
 
@@ -62,8 +63,10 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
+export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType;
+
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<Record<string, (...args: any[]) => void>>
+  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
 >;
 
 /**
@@ -73,7 +76,6 @@ export default class BaseApplicationGenerator<
   Definition extends BaseApplicationGeneratorDefinition<{
     applicationType: BaseApplication;
     entityType: Entity;
-    sourceType: any;
   }> = GeneratorDefinition
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
@@ -127,12 +129,21 @@ export default class BaseApplicationGenerator<
   }
 
   /**
+   * Get Entity configuration path
+   * @param entityName Entity name
+   * @returns
+   */
+  getEntityConfigPath(entityName: string) {
+    return this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+  }
+
+  /**
    * Get all the generator configuration from the .yo-rc.json file
    * @param entityName - Name of the entity to load.
    * @param create - Create storage if doesn't exists.
    */
   getEntityConfig(entityName: string, create = false): Storage | undefined {
-    const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+    const entityPath = this.getEntityConfigPath(entityName);
     if (!create && !this.fs.exists(entityPath)) return undefined;
     return this.createStorage(entityPath);
   }
@@ -274,16 +285,6 @@ export default class BaseApplicationGenerator<
   asWritingEntitiesTaskGroup(
     taskGroup: GenericTaskGroup<this, Definition['writingEntitiesTaskParam']>
   ): GenericTaskGroup<this, Definition['writingEntitiesTaskParam']> {
-    return taskGroup;
-  }
-
-  /**
-   * Utility method to get typed objects for autocomplete.
-   *
-   * @param {import('./tasks.mjs').PostWritingTaskGroup<this, Definition>} taskGroup
-   * @returns {import('./tasks.mjs').PostWritingTaskGroup<this, Definition>}
-   */
-  asPostWritingTaskGroup(taskGroup) {
     return taskGroup;
   }
 

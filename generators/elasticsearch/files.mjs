@@ -24,7 +24,7 @@ export const files = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/ElasticsearchConfiguration.java', 'repository/search/package-info.java'],
+      templates: ['config/ElasticsearchConfiguration.java'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity || generator.authenticationTypeOauth2,

@@ -28,6 +28,7 @@ import { JAVA_VERSION, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../gener
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
 import { mavenProfile } from './templates.mjs';
+import { createPomStorage } from '../maven/support/pom-store.mjs';
 
 const { MEMCACHED } = cacheTypes;
 
@@ -481,5 +482,16 @@ for more detailed information.`
 
   get [BaseGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  /**
+   * @private
+   * Add a new Maven profile.
+   *
+   * @param {string} profileId - profile ID
+   * @param {string} other - explicit other thing: build, dependencies...
+   */
+  addMavenProfile(profileId, other) {
+    createPomStorage(this).addProfile({ id: profileId, content: other });
   }
 }

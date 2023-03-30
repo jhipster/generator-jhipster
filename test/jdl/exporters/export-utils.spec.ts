@@ -19,31 +19,31 @@
 /* eslint-disable no-unused-expressions */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import path from 'path';
-import { readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { writeConfigFile } from '../../../jdl/exporters/export-utils.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('jdl - ExportUtils', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
   describe('writeConfigFile', () => {
     context('when there is no .yo-rc.json file present', () => {
       let exportedConfig;
 
-      before(() => {
+      beforeEach(() => {
         const config = {
           'generator-jhipster': {
             jhipsterVersion: '7.0.0',
           },
         };
-        writeConfigFile(config, path.join(__dirname, '.yo-rc.json'));
-        exportedConfig = JSON.parse(readFileSync(path.join(__dirname, '.yo-rc.json'), { encoding: 'utf-8' }));
-      });
-      after(() => {
-        unlinkSync(path.join(__dirname, '.yo-rc.json'));
+        writeConfigFile(config);
+        exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
 
       it('should export the config', () => {
@@ -59,7 +59,7 @@ describe('jdl - ExportUtils', () => {
     context('when there is a .yo-rc.json file present', () => {
       let exportedConfig;
 
-      before(() => {
+      beforeEach(() => {
         const existingConfig = {
           'generator-jhipster': {
             jhipsterVersion: '6.5.4',
@@ -79,9 +79,6 @@ describe('jdl - ExportUtils', () => {
         };
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-      });
-      after(() => {
-        unlinkSync('.yo-rc.json');
       });
 
       it('should export the config', () => {
@@ -104,7 +101,7 @@ describe('jdl - ExportUtils', () => {
     context('when there is a .yo-rc.json file present with creationTimestamp', () => {
       let exportedConfig;
 
-      before(() => {
+      beforeEach(() => {
         const existingConfig = {
           'generator-jhipster': {
             jhipsterVersion: '6.5.4',
@@ -126,9 +123,6 @@ describe('jdl - ExportUtils', () => {
         };
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-      });
-      after(() => {
-        unlinkSync('.yo-rc.json');
       });
 
       it('should export the config', () => {
@@ -152,7 +146,7 @@ describe('jdl - ExportUtils', () => {
     context('when there is a .yo-rc.json file present without creationTimestamp', () => {
       let exportedConfig;
 
-      before(() => {
+      beforeEach(() => {
         const existingConfig = {
           'generator-jhipster': {
             jhipsterVersion: '6.5.4',
@@ -173,9 +167,6 @@ describe('jdl - ExportUtils', () => {
         };
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-      });
-      after(() => {
-        unlinkSync('.yo-rc.json');
       });
 
       it('should export the config with new creationTimestamp', () => {

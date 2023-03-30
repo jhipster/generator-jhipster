@@ -79,7 +79,6 @@ describe('jdl - JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_MANY,
-            unidirectionalRelationships: true,
           });
         });
 
@@ -98,7 +97,6 @@ describe('jdl - JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.MANY_TO_ONE,
-            unidirectionalRelationships: true,
           });
         });
 
@@ -117,7 +115,6 @@ describe('jdl - JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_ONE,
-            unidirectionalRelationships: true,
           });
         });
 
@@ -136,7 +133,6 @@ describe('jdl - JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.MANY_TO_MANY,
-            unidirectionalRelationships: true,
           });
         });
 

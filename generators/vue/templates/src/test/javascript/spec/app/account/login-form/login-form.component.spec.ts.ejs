@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import AccountService from '@/account/account.service';
-import VueRouter from 'vue-router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
@@ -47,7 +46,7 @@ describe('LoginForm Component', () => {
         <%_ } _%>
         localVue,
         provide: {
-          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationTypeSession) { %> { get: () => {} }, <% } %>new VueRouter())
+          accountService: () => new AccountService(store<% if (enableTranslation) { %>, new TranslationService(store, i18n)<% } %><% if (authenticationTypeSession) { %>, { get: () => {} }<% } %>)
         }
       });
     loginForm = wrapper.vm;

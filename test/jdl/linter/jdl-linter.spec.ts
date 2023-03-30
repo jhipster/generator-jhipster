@@ -21,7 +21,7 @@
 
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import { writeFileSync, unlinkSync } from 'fs';
+import { writeFileSync } from 'fs';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -29,11 +29,15 @@ import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '
 import Issues from '../../../jdl/linters/issues/issues.js';
 import EnumIssue from '../../../jdl/linters/issues/enum-issue.js';
 import relationshipIssue from '../../../jdl/linters/issues/relationship-issue.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('jdl - JDLLinter', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
   describe('createJDLLinterFromFile', () => {
     context('when not passing a file', () => {
       it('should fail', () => {
@@ -44,13 +48,9 @@ describe('jdl - JDLLinter', () => {
     context('when passing a file', () => {
       let path: string;
 
-      before(() => {
+      beforeEach(() => {
         path = 'test.jdl';
         writeFileSync(path, 'entity A');
-      });
-
-      after(() => {
-        unlinkSync(path);
       });
 
       it('should not fail', () => {
@@ -77,7 +77,7 @@ describe('jdl - JDLLinter', () => {
       let issue: any;
       let reportedIssues: Issues;
 
-      before(() => {
+      beforeEach(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'useless_entity_curly_braces.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
@@ -96,7 +96,7 @@ describe('jdl - JDLLinter', () => {
       let issueForSuperToto: { ruleName: any };
       let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
 
-      before(() => {
+      beforeEach(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'useless_table_names.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
@@ -119,7 +119,7 @@ describe('jdl - JDLLinter', () => {
         let issueForA: { ruleName: any };
         let issueForB: { ruleName: any };
 
-        before(() => {
+        beforeEach(() => {
           linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_entities.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
@@ -139,7 +139,7 @@ describe('jdl - JDLLinter', () => {
         let issueForAa: { ruleName: any };
         let issueForBb: { ruleName: any };
 
-        before(() => {
+        beforeEach(() => {
           linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_fields.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
@@ -158,7 +158,7 @@ describe('jdl - JDLLinter', () => {
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForA: { ruleName: any };
 
-        before(() => {
+        beforeEach(() => {
           linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_enums.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
@@ -177,7 +177,7 @@ describe('jdl - JDLLinter', () => {
       let issueFor2: EnumIssue;
       let issueFor3: EnumIssue;
 
-      before(() => {
+      beforeEach(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'unused_enums.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
@@ -198,7 +198,7 @@ describe('jdl - JDLLinter', () => {
       let issueForBToC: relationshipIssue;
       let issueForAToC: relationshipIssue;
 
-      before(() => {
+      beforeEach(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'ungrouped_relationships.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();

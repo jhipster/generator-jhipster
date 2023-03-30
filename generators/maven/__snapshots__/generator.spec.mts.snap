@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - maven needles should match generated pom 1`] = `
+{
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <foo>bar</foo>
+        <foo2>bar2</foo2>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>group</groupId>
+            <artifactId>artifact</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>group</groupId>
+            <artifactId>artifact2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>exclusionGroupId</groupId>
+                    <artifactId>exclusionArtifactId</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>profileId</id>
+            <foo>bar</foo>
+        </profile>
+        <profile>
+            <id>profileId2</id>
+            <foo2>bar2</foo2>
+        </profile>
+    </profiles>
+</project>
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - maven with empty configuration should generate only maven files 1`] = `
+{
+  ".mvn/jvm.config": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "mvnw": {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - maven with valid configuration should generate only maven files 1`] = `
+{
+  ".mvn/jvm.config": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "mvnw": {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+}
+`;

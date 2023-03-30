@@ -22,15 +22,8 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
     {
       "otherEntityField": "region",
       "otherEntityName": "region",
-      "otherEntityRelationshipName": "country",
       "relationshipName": "area",
       "relationshipType": "one-to-many",
-    },
-    {
-      "otherEntityName": "location",
-      "otherEntityRelationshipName": "country",
-      "relationshipName": "location",
-      "relationshipType": "many-to-one",
     },
   ],
   "service": "no",
@@ -344,7 +337,6 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
   "relationships": [
     {
       "otherEntityName": "country",
-      "otherEntityRelationshipName": "location",
       "relationshipName": "country",
       "relationshipType": "one-to-many",
     },
@@ -381,14 +373,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
   "name": "Region",
   "pagination": "no",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityName": "country",
-      "otherEntityRelationshipName": "area",
-      "relationshipName": "country",
-      "relationshipType": "many-to-one",
-    },
-  ],
+  "relationships": [],
   "service": "no",
 }
 `;
@@ -457,15 +442,8 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         {
           "otherEntityField": "region",
           "otherEntityName": "region",
-          "otherEntityRelationshipName": "country",
           "relationshipName": "area",
           "relationshipType": "one-to-many",
-        },
-        {
-          "otherEntityName": "location",
-          "otherEntityRelationshipName": "country",
-          "relationshipName": "location",
-          "relationshipType": "many-to-one",
         },
       ],
       "service": "no",
@@ -767,7 +745,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "relationships": [
         {
           "otherEntityName": "country",
-          "otherEntityRelationshipName": "location",
           "relationshipName": "country",
           "relationshipType": "one-to-many",
         },
@@ -802,14 +779,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "name": "Region",
       "pagination": "no",
       "readOnly": false,
-      "relationships": [
-        {
-          "otherEntityName": "country",
-          "otherEntityRelationshipName": "area",
-          "relationshipName": "country",
-          "relationshipType": "many-to-one",
-        },
-      ],
+      "relationships": [],
       "service": "no",
     },
     JSONEntity {
@@ -1723,7 +1693,6 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "ownerSide": true,
         "relationshipName": "oneToOneB",
         "relationshipType": "one-to-one",
-        "unidirectional": true,
       },
       {
         "otherEntityName": "b",
@@ -1731,40 +1700,34 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "ownerSide": true,
         "relationshipName": "biOneToOneB",
         "relationshipType": "one-to-one",
-        "unidirectional": false,
       },
       {
         "otherEntityName": "b",
         "relationshipName": "oneToManyB",
         "relationshipType": "one-to-many",
-        "unidirectional": true,
       },
       {
         "otherEntityName": "b",
         "otherEntityRelationshipName": "biOneToManyA",
         "relationshipName": "biOneToManyB",
         "relationshipType": "one-to-many",
-        "unidirectional": false,
       },
       {
         "otherEntityName": "b",
         "relationshipName": "manyToOneB",
         "relationshipType": "many-to-one",
-        "unidirectional": true,
       },
       {
         "otherEntityName": "b",
         "otherEntityRelationshipName": "biManyToOneA",
         "relationshipName": "biManyToOneB",
         "relationshipType": "many-to-one",
-        "unidirectional": false,
       },
       {
         "otherEntityName": "b",
         "ownerSide": true,
         "relationshipName": "manyToManyB",
         "relationshipType": "many-to-many",
-        "unidirectional": true,
       },
       {
         "otherEntityName": "b",
@@ -1772,7 +1735,6 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "ownerSide": true,
         "relationshipName": "biManyToManyB",
         "relationshipType": "many-to-many",
-        "unidirectional": false,
       },
     ],
     "service": "no",

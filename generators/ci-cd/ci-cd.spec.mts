@@ -23,7 +23,6 @@ const pomFile = `<?xml version="1.0" encoding="UTF-8"?>
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!-- jhipster-needle-distribution-management -->
 </project>
 `;
 

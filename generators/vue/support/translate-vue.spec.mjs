@@ -28,7 +28,6 @@ const FULL_BODY = `
     id="password"
     type="password"
     name="password"
-    v-model.trim="name"
     v-bind:placeholder="$t('login.form[\\'password.placeholder\\']')"
     v-model="password"
     data-cy="password"
@@ -75,7 +74,6 @@ describe('generator - vue - transform', () => {
     id="password"
     type="password"
     name="password"
-    v-model.trim="name"
     v-model="password"
     data-cy="password"
   >

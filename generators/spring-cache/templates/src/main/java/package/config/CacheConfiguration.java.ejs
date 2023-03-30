@@ -604,19 +604,13 @@ public class CacheConfiguration {
             TCP tcp = new TCP();
             tcp.setBindAddress(InetAddress.getLocalHost());
             tcp.setBindPort(7800);
-            tcp.setThreadPoolMinThreads(2);
-            tcp.setThreadPoolMaxThreads(30);
-            tcp.setThreadPoolKeepAliveTime(60000);
 
             TCPPING tcpping = new TCPPING();
             initialHosts.add(new InetSocketAddress(InetAddress.getLocalHost(), 7800));
             tcpping.setInitialHosts(initialHosts);
-            tcpping.setErgonomics(false);
             tcpping.setPortRange(10);
-            tcpping.sendCacheInformation();
 
             NAKACK2 nakack = new NAKACK2();
-            nakack.setUseMcastXmit(false);
             nakack.setDiscardDeliveredMsgs(false);
 
             MERGE3 merge = new MERGE3();

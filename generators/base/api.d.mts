@@ -24,6 +24,7 @@ export type CascatedEditFileCallback<Generator> = (...callbacks: EditFileCallbac
 
 export type WriteFileTemplate<Generator, DataType> =
   | string
+  | ((this: Generator, data: DataType, filePath: string) => string)
   | {
       /** source file */
       sourceFile?: ((this: Generator, data: DataType) => string) | string;
@@ -46,7 +47,7 @@ export type WriteFileBlock<Generator, DataType> = {
   /** relative path were sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
-  to?: ((this: Generator, data: DataType) => string) | string;
+  to?: ((this: Generator, data: DataType, filePath: string) => string) | string;
   path?: ((this: Generator, data: DataType) => string) | string;
   /** generate destinationFile based on sourceFile */
   renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export { default as addJavaAnnotation } from './add-java-annotation.mjs';
 export * from './checks/index.mjs';
 export * from './files.mjs';
 export { default as generatedAnnotationTransform } from './generated-annotation-transform.mjs';

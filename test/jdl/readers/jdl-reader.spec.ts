@@ -25,11 +25,15 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as JDLReader from '../../../jdl/readers/jdl-reader.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('jdl - JDLReader', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
   describe('parseFromFiles', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
@@ -70,7 +74,7 @@ describe('jdl - JDLReader', () => {
     });
     context('when passing valid arguments', () => {
       context('when passing an empty file', () => {
-        before(() => {
+        beforeEach(() => {
           fs.writeFileSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'), '');
         });
 
@@ -85,24 +89,20 @@ describe('jdl - JDLReader', () => {
         });
       });
       context('when passing a JDL file with a syntax error', () => {
-        before(() => {
-          fs.writeFileSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'), 'enity A');
-        });
-
-        after(() => {
-          fs.unlinkSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'));
+        beforeEach(() => {
+          fs.writeFileSync('test_file.jdl', 'enity A');
         });
 
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'test_file.jdl')]);
+            JDLReader.parseFromFiles(['test_file.jdl']);
           }).to.throw(/but found: 'enity'/);
         });
       });
       context('when reading a single JDL file', () => {
         let content;
 
-        before(() => {
+        beforeEach(() => {
           content = JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'valid_jdl.jdl')]);
         });
 
@@ -113,7 +113,7 @@ describe('jdl - JDLReader', () => {
       context('when reading more than one JDL file', () => {
         let content;
 
-        before(() => {
+        beforeEach(() => {
           content = JDLReader.parseFromFiles([
             path.join(__dirname, '..', 'test-files', 'valid_jdl.jdl'),
             path.join(__dirname, '..', 'test-files', 'valid_jdl2.jdl'),
@@ -127,7 +127,7 @@ describe('jdl - JDLReader', () => {
       context('when reading a complex JDL file', () => {
         let content;
 
-        before(() => {
+        beforeEach(() => {
           content = JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'complex_jdl.jdl')]);
         });
 
@@ -155,7 +155,7 @@ describe('jdl - JDLReader', () => {
     context('when passing a valid content', () => {
       let content;
 
-      before(() => {
+      beforeEach(() => {
         content = JDLReader.parseFromContent('entity A');
       });
 
@@ -167,7 +167,7 @@ describe('jdl - JDLReader', () => {
   context('when parsing a JDL application', () => {
     let parsed;
 
-    before(() => {
+    beforeEach(() => {
       parsed = JDLReader.parseFromContent(`application {
     config {
         baseName toto

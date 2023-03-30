@@ -28,15 +28,12 @@ export default { convertRelationships };
  * Converts parsed relationships to JDLRelationship objects.
  * @param {Array<Object>} parsedRelationships - the parsed relationships.
  * @param {Function} annotationToOptionConverter - the function that can convert annotations to options.
- * @param {Object} conversionOptions - conversion options
- * @param {Boolean} conversionOptions.unidirectionalRelationships - whether to generate bidirectional one-to-many.
  * @return the converted JDL relationships.
  */
-export function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions: any = {}): JDLRelationship[] {
+export function convertRelationships(parsedRelationships, annotationToOptionConverter): JDLRelationship[] {
   if (!parsedRelationships) {
     throw new Error('Relationships have to be passed so as to be converted.');
   }
-  const { unidirectionalRelationships } = conversionOptions;
   return parsedRelationships.map(parsedRelationship => {
     const relationshipConfiguration = {
       from: parsedRelationship.from.name,
@@ -53,7 +50,6 @@ export function convertRelationships(parsedRelationships, annotationToOptionConv
         source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
         destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
       },
-      unidirectionalRelationships,
     };
     if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
       relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);

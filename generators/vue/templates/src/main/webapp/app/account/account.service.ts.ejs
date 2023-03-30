@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { Store } from 'vuex';
-import VueRouter from 'vue-router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
 export default class AccountService {
-
   constructor(
     private store: Store<any>,
 <%_ if (enableTranslation) { _%>
@@ -15,78 +13,72 @@ export default class AccountService {
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
     private cookie: any,
 <%_ } _%>
-    private router: VueRouter
   ) {
-    this.init();
   }
 
-  public init(): void {
-    this.retrieveProfiles();
+  public async update(): Promise<void> {
+    if (!this.store.getters.profilesLoaded) {
+      await this.retrieveProfiles();
+      this.store.commit('profilesLoaded');
+    }
+    await this.loadAccount();
   }
 
-  public retrieveProfiles(): Promise<boolean> {
-    return new Promise(resolve => {
-      axios.get<any>('management/info').then(res => {
-        if (res.data && res.data.activeProfiles) {
-          this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
-          this.store.commit('setActiveProfiles', res.data['activeProfiles']);
-        }
-        resolve(true);
-      }).catch(() => resolve(false));
-    });
+  public async retrieveProfiles(): Promise<boolean> {
+    try {
+      const res = await axios.get<any>('management/info');
+      if (res.data && res.data.activeProfiles) {
+        this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
+        this.store.commit('setActiveProfiles', res.data['activeProfiles']);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
-  public retrieveAccount(): Promise<boolean> {
-    return new Promise(resolve => {
-      axios
-        .get<any>('api/account').then((response) => {
-        this.store.commit('authenticate');
+  public async retrieveAccount(): Promise<boolean> {
+    try {
+      const response = await axios.get<any>('api/account');
+      if (response.status === 200 && response.data) {
         const account = response.data;
-        if (account) {
-          this.store.commit('authenticated', account);
+        this.store.commit('authenticated', account);
 <%_ if (enableTranslation) { _%>
-          if (this.store.getters.currentLanguage !== account.langKey) {
-            this.store.commit('currentLanguage', account.langKey);
-          }
-<%_ } _%>
-          if(sessionStorage.getItem('requested-url')) {
-            this.router.replace(sessionStorage.getItem("requested-url"));
-            sessionStorage.removeItem("requested-url");
-          }
-        } else {
-          this.store.commit('logout');
-          if (this.router.currentRoute.path !== '/') {
-            this.router.push('/');
-          }
-          sessionStorage.removeItem("requested-url");
+        if (this.store.getters.currentLanguage !== account.langKey) {
+          this.store.commit('currentLanguage', account.langKey);
+          this.translationService.refreshTranslation(this.store.getters.currentLanguage);
         }
-<%_ if (enableTranslation) { _%>
-        this.translationService.refreshTranslation(this.store.getters.currentLanguage);
 <%_ } _%>
-        resolve(true);
-      }).catch(() => {
-        this.store.commit('logout');
-        resolve(false);
-      });
-    });
+        return true;
+      }
+    } catch (error) {}
+
+    this.store.commit('logout');
+    return false;
   }
 
-  public hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
-    if (typeof authorities === 'string') {
-      authorities = [authorities];
+  public async loadAccount() {
+    if (this.store.getters.logon) {
+      return this.store.getters.logon;
+    }
+<%_ if (authenticationTypeJwt) { _%>
+    const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
+<%_ } else { _%>
+    const token = this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN');
+<%_ } _%>
+    if (this.authenticated && this.userAuthorities && token) {
+      return;
     }
 
-    if (!this.authenticated || !this.userAuthorities) {
-      const token = <%_ if (authenticationTypeJwt) { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
-      if (!this.store.getters.account && !this.store.getters.logon && token) {
-        return this.retrieveAccount().then(resp => {
-          if (resp) {
-            return this.checkAuthorities(authorities);
-          }
-          return Promise.resolve(false);
-        });
-      }
-      return Promise.resolve(false);
+    const promise = this.retrieveAccount();
+    this.store.commit('authenticate', promise);
+    promise.then(() => this.store.commit('authenticate', null));
+    await promise;
+  }
+
+  public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
+    if (typeof authorities === 'string') {
+      authorities = [authorities];
     }
 
     return this.checkAuthorities(authorities);
@@ -96,18 +88,18 @@ export default class AccountService {
     return this.store.getters.authenticated;
   }
 
-  public get userAuthorities(): any {
+  public get userAuthorities(): string[] {
     return this.store.getters.account?.authorities;
   }
 
-  private checkAuthorities(authorities: any): Promise<boolean> {
+  private checkAuthorities(authorities: string[]): boolean {
     if (this.userAuthorities) {
       for (const authority of authorities) {
         if (this.userAuthorities.includes(authority)) {
-          return Promise.resolve(true);
+          return true;
         }
       }
     }
-    return Promise.resolve(false);
+    return false;
   }
 }

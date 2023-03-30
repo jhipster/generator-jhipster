@@ -26,6 +26,7 @@ import statistics from '../statistics.mjs';
 import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { createPomStorage } from '../maven/support/pom-store.mjs';
 
 const { MAVEN, GRADLE } = buildToolTypes;
 const { REACT } = clientFrameworkTypes;
@@ -266,5 +267,18 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  /**
+   * @private
+   * Add a distributionManagement to the Maven build.
+   *
+   * @param {string} snapshotsId Snapshots Repository Id
+   * @param {string} snapshotsUrl Snapshots Repository Url
+   * @param {string} releasesId Repository Id
+   * @param {string} releasesUrl Repository Url
+   */
+  addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
+    createPomStorage(this).addDistributionManagement({ snapshotsId, snapshotsUrl, releasesId, releasesUrl });
   }
 }

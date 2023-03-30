@@ -36,7 +36,6 @@ export default { convert };
  * Converts a JDLObject to ready-to-be exported JSON entities.
  * @param {Object} args - the configuration object, keys:
  * @param {JDLObject} args.jdlObject - the JDLObject to convert to JSON
- * @param {Boolean} [args.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @returns {Map} entities that can be exported to JSON
  */
 export function convert(args: any = {}) {
@@ -49,10 +48,9 @@ export function convert(args: any = {}) {
     const applicationNames = jdlObject.getApplications().map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
     return new Map(applicationNames.map(applicationName => [applicationName, []]));
   }
-  const { unidirectionalRelationships } = args;
   setBasicEntityInformation();
   setFields();
-  setRelationships({ unidirectionalRelationships });
+  setRelationships();
   setApplicationToEntities();
   const entitiesForEachApplication = getEntitiesForEachApplicationMap();
   setOptions(entitiesForEachApplication);
@@ -103,8 +101,8 @@ function setFields() {
   });
 }
 
-function setRelationships(conversionOptions) {
-  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames(), conversionOptions);
+function setRelationships() {
+  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames());
   convertedRelationships.forEach((entityRelationships, entityName) => {
     if (builtInEntities.has(entityName.toLowerCase())) {
       return;

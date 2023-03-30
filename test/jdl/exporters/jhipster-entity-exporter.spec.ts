@@ -27,6 +27,7 @@ import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
 import entityOptions from '../../../jdl/jhipster/entity-options.js';
 import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils.js';
+import { basicHelpers as helpers } from '../../support/helpers.mjs';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
 const { MONOLITH, MICROSERVICE } = applicationTypes;
@@ -36,6 +37,10 @@ const NO_PAGINATION = PaginationTypes.NO;
 const NO_SERVICE = ServiceTypes.NO;
 
 describe('jdl - JHipsterEntityExporter', () => {
+  beforeEach(async () => {
+    await helpers.prepareTemporaryDir();
+  });
+
   describe('exportEntities', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
@@ -53,7 +58,7 @@ describe('jdl - JHipsterEntityExporter', () => {
         let aEntityContent;
         let returned;
 
-        before(() => {
+        beforeEach(() => {
           entities = [
             {
               name: 'A',
@@ -86,11 +91,6 @@ describe('jdl - JHipsterEntityExporter', () => {
           aEntityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
         });
 
-        after(() => {
-          fs.unlinkSync('.jhipster/A.json');
-          fs.rmSync('.jhipster', { recursive: true });
-        });
-
         it('should return the exported entities', () => {
           expect(returned).to.deep.equal(entities);
         });
@@ -101,7 +101,7 @@ describe('jdl - JHipsterEntityExporter', () => {
       context('when not exporting entities', () => {
         let returned;
 
-        before(() => {
+        beforeEach(() => {
           returned = exportEntities({
             entities: [],
             application: {
@@ -123,7 +123,7 @@ describe('jdl - JHipsterEntityExporter', () => {
         let newChangelogDate;
         let returned;
 
-        before(done => {
+        beforeEach(done => {
           entities = [
             {
               name: 'A',
@@ -196,18 +196,13 @@ describe('jdl - JHipsterEntityExporter', () => {
         it('should export it with same changelogDate', () => {
           expect(newChangelogDate).to.equal(previousChangelogDate);
         });
-
-        after(() => {
-          fs.unlinkSync('.jhipster/A.json');
-          fs.rmSync('.jhipster', { recursive: true });
-        });
       });
       context('when passing an application name and application type', () => {
         context('inside a monolith', () => {
           let entities;
           let returned;
 
-          before(() => {
+          beforeEach(() => {
             entities = [
               {
                 name: 'Client',
@@ -405,21 +400,13 @@ describe('jdl - JHipsterEntityExporter', () => {
             expect(doesFileExist('.jhipster/LocalStore.json'));
             expect(doesFileExist('.jhipster/Product.json'));
           });
-
-          after(() => {
-            fs.unlinkSync('.jhipster/Client.json');
-            fs.unlinkSync('.jhipster/Location.json');
-            fs.unlinkSync('.jhipster/LocalStore.json');
-            fs.unlinkSync('.jhipster/Product.json');
-            fs.rmSync('.jhipster', { recursive: true });
-          });
         });
         context('inside a microservice', () => {
           context('and when entities without the microservice option are passed', () => {
             let entities;
             let returnedContent;
 
-            before(() => {
+            beforeEach(() => {
               entities = [
                 {
                   fields: [],
@@ -534,19 +521,12 @@ describe('jdl - JHipsterEntityExporter', () => {
                 expect(returnedContent.filter(entity => entity.name === entityName) !== undefined).to.be.true;
               });
             });
-
-            after(() => {
-              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-                fs.unlinkSync(`.jhipster/${entityName}.json`);
-              });
-              fs.rmSync('.jhipster', { recursive: true });
-            });
           });
           context('and when microservice entities are passed', () => {
             let entities;
             let returnedContent;
 
-            before(() => {
+            beforeEach(() => {
               entities = [
                 {
                   fields: [],
@@ -622,12 +602,6 @@ describe('jdl - JHipsterEntityExporter', () => {
             it('should return the entities that should be inside the microservice', () => {
               expect(returnedContent.length).to.be.equal(2);
             });
-
-            after(() => {
-              fs.unlinkSync('.jhipster/Client.json');
-              fs.unlinkSync('.jhipster/Location.json');
-              fs.rmSync('.jhipster', { recursive: true });
-            });
           });
         });
       });
@@ -636,7 +610,7 @@ describe('jdl - JHipsterEntityExporter', () => {
         let newContent;
         let returnedContent;
 
-        before(() => {
+        beforeEach(() => {
           originalContent = {
             fields: [
               {
@@ -672,11 +646,6 @@ describe('jdl - JHipsterEntityExporter', () => {
             },
           });
           newContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
-        });
-
-        after(() => {
-          fs.unlinkSync('.jhipster/A.json');
-          fs.rmSync('.jhipster', { recursive: true });
         });
 
         it('should merge the existing content with the new one', () => {

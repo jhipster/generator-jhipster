@@ -31,7 +31,7 @@ export const neo4jFiles = {
       condition: generator => generator.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/neo4j/Neo4jMigrations.java', 'config/neo4j/package-info.java'],
+      templates: ['config/neo4j/Neo4jMigrations.java'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
