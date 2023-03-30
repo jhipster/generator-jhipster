@@ -49,6 +49,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
         const gradleLibsVersions = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/gradle/libs.versions.toml'));
+        application.packageInfoJavadocs = [];
         application.javaDependencies = this.prepareDependencies(
           {
             ...javaDependencies,

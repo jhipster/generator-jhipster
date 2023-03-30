@@ -313,6 +313,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       loadEnvironmentVariables({ application }) {
+        application.packageInfoJavadocs?.push(
+          { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },
+          { packageName: `${application.packageName}.management`, documentation: 'Application management.' },
+          { packageName: `${application.packageName}.repository.rowmapper`, documentation: 'Webflux database column mapper.' },
+          { packageName: `${application.packageName}.security`, documentation: 'Application security utilities.' },
+          { packageName: `${application.packageName}.service.dto`, documentation: 'Data transfer objects for rest mapping.' },
+          { packageName: `${application.packageName}.service.mapper`, documentation: 'Data transfer objects mappers.' },
+          { packageName: `${application.packageName}.web.filter`, documentation: 'Request chain filters.' },
+          { packageName: `${application.packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
+          { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' }
+        );
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
