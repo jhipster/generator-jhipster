@@ -1,7 +1,6 @@
-import { dryRunHelpers as helpers, result as runResult } from '../support/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
-import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
-import { getGenerator } from '../support/index.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import { dryRunHelpers as helpers, result as runResult, getGenerator } from '../../test/support/index.mjs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
@@ -21,7 +20,10 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     return this.asPostWritingTaskGroup({
       // @ts-ignore
       async additionalResource({ source }) {
-        source.addExternalResourceToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');
+        source.addExternalResourceToRoot({
+          resource: '<link rel="stylesheet" href="content/css/my.css">',
+          comment: 'Comment added by JHipster API',
+        });
       },
     });
   }

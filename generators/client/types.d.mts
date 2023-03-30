@@ -17,3 +17,21 @@ export type ClientApplication = CommonClientServerApplication &
     webappLoginRegExp: string;
     webappEnumerationsDir?: string;
   };
+
+/**
+ * @private
+ * Add external resources to root file(index.html).
+ */
+export type ClientResources = {
+  /**
+   * @param {string} resource - Resources added to root file.
+   */
+  resource: string;
+  /**
+   * @param {string} comment - comment to add before resources content.
+   */
+  comment?: string | null;
+};
+export type ClientSourceType = {
+  addExternalResourceToRoot?(resources: ClientResources): void;
+};
