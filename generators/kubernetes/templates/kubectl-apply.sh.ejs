@@ -60,7 +60,12 @@ logSummary() {
     <%_ } _%>
   <%_ } _%>
   <%_ if (useKeycloak) { _%>
+      <%_ if (ingressTypeGke) { _%>
         echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+      <%_ } _%>
+      <%_ if (ingressTypeNginx) { _%>
+        echo "Keycloak - http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+      <%_ } _%>
   <%_ } _%>
         echo "#####################################################"
 <%_ } _%>
