@@ -26,6 +26,7 @@ import { GENERATOR_OPENAPI_CLIENT } from '../generator-list.mjs';
 import { askActionType, askExistingAvailableDocs, askGenerationInfos } from './prompts.mjs';
 import { writeFiles, customizeFiles } from './files.mjs';
 import { openapiOptions } from '../../jdl/jhipster/index.mjs';
+import { createPomStorage } from '../maven/support/index.mjs';
 
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = openapiOptions;
 
@@ -165,5 +166,36 @@ export default class OpenapiClientGenerator extends BaseGenerator {
 
   get [BaseGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  /**
+   * TODO drop when dropped from openapi-client generator
+   * @private
+   * Add a new Maven property.
+   *
+   * @param {string} name - property name
+   * @param {string} value - property value
+   */
+  addMavenProperty(name, value) {
+    createPomStorage(this).addProperty({ property: name, value });
+  }
+
+  /**
+   * TODO drop when dropped from gae and openapi-client generators
+   * @private
+   * Add a new Maven dependency.
+   *
+   * @param {string} groupId - dependency groupId
+   * @param {string} artifactId - dependency artifactId
+   * @param {string} version - (optional) explicit dependency version number
+   * @param {string} other - (optional) explicit other thing: scope, exclusions...
+   */
+  addMavenDependency(groupId, artifactId, version, other) {
+    createPomStorage(this).addDependency({
+      groupId,
+      artifactId,
+      version,
+      additionalContent: other,
+    });
   }
 }

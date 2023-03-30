@@ -30,6 +30,7 @@ import dockerPrompts from '../base-docker/docker-prompts.mjs';
 import { CLIENT_MAIN_SRC_DIR, MAIN_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';
+import { createPomStorage } from '../maven/support/pom-store.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -920,5 +921,52 @@ export default class GaeGenerator extends BaseGenerator {
     });
 
     return appsFolders;
+  }
+
+  /**
+   * @private
+   * Add a new Maven dependency.
+   *
+   * @param {string} groupId - dependency groupId
+   * @param {string} artifactId - dependency artifactId
+   * @param {string} version - (optional) explicit dependency version number
+   * @param {string} other - (optional) explicit other thing: scope, exclusions...
+   */
+  addMavenDependency(groupId, artifactId, version, other) {
+    createPomStorage(this).addDependency({
+      groupId,
+      artifactId,
+      version,
+      additionalContent: other,
+    });
+  }
+
+  /**
+   * @private
+   * Add a new Maven plugin.
+   *
+   * @param {string} groupId - plugin groupId
+   * @param {string} artifactId - plugin artifactId
+   * @param {string} version - explicit plugin version number
+   * @param {string} other - explicit other thing: executions, configuration...
+   */
+  addMavenPlugin(groupId, artifactId, version, other) {
+    createPomStorage(this).addPlugin({
+      groupId,
+      artifactId,
+      version,
+      additionalContent: other,
+    });
+  }
+
+  /**
+   * @private
+   * Add a new Maven profile.
+   *
+   * @param {string} profileId - profile ID
+   * @param {string} other - explicit other thing: build, dependencies...
+   */
+  addMavenProfile(profileId, other) {
+    createPomStorage(this).addProfile({ id: profileId, content: other });
   }
 }

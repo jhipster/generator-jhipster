@@ -18,12 +18,39 @@
  */
 
 import _ from 'lodash';
+import sortKeys from 'sort-keys';
 
 import CoreGenerator from '../../base-core/index.mjs';
 import XmlStorage from '../internal/xml-store.mjs';
-import { MavenDependency, MavenProfile, MavenProperty } from '../types.mjs';
+import {
+  MavenArtifact,
+  MavenDependency,
+  MavenDistributionManagement,
+  MavenPlugin,
+  MavenProfile,
+  MavenProperty,
+  MavenRepository,
+} from '../types.mjs';
 
 const { set, get } = _;
+
+const rootOrder = [
+  'modelVersion',
+  'groupId',
+  'artifactId',
+  'version',
+  'packaging',
+  'name',
+  'description',
+  'repositories',
+  'pluginRepositories',
+  'distributionManagement',
+  'properties',
+  'dependencyManagement',
+  'dependencies',
+  'build',
+  'profiles',
+];
 
 const propertiesOrder = [
   'maven.version',
@@ -45,7 +72,7 @@ const propertiesOrder = [
 
 const formatFirstXmlLevel = content =>
   content.replace(
-    /(\n {4}<(?:groupId|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
+    /(\n {4}<(?:groupId|distributionManagement|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
     '\n$1'
   );
 
@@ -64,18 +91,19 @@ const sortWithTemplate = (template: string[], a: string, b: string) => {
   return indexOfA - indexOfB;
 };
 
-const sortProperties = properties =>
-  Object.fromEntries(
-    Object.entries(properties).sort((a, b) => {
-      return sortWithTemplate(propertiesOrder, a[0], b[0]);
-    })
-  );
+const comparator = (order: string[]) => (a: string, b: string) => sortWithTemplate(order, a, b);
 
-const dependencyEquals = (a: MavenDependency, b: MavenDependency) => {
-  return a.groupId === b.groupId && a.artifactId === b.artifactId && a.scope === b.scope && a.type === b.type;
+const sortProperties = properties => sortKeys(properties, { compare: comparator(propertiesOrder) });
+
+const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => {
+  return a.groupId === b.groupId && a.artifactId === b.artifactId;
 };
 
-const profileEquals = (a: MavenProfile, b: MavenProfile) => {
+const dependencyEquals = (a: MavenDependency, b: MavenDependency) => {
+  return artifactEquals(a, b) && a.scope === b.scope && a.type === b.type;
+};
+
+const idEquals = (a: { id: string }, b: { id: string }) => {
   return a.id === b.id;
 };
 
@@ -101,66 +129,193 @@ function appendOrReplace<T>(array: T[], item: T, equals: (a: T, b: T) => boolean
   }
 }
 
-/*
+function appendOrGet<T>(array: T[], item: T, equals: (a: T, b: T) => boolean) {
+  const child = array.find(existing => equals(existing, item));
+  if (child) {
+    return child;
+  }
+  array.push(item);
+  return item;
+}
+
+const ensureProfile = (project, profileId: string) => {
+  const profileArray = ensureChildIsArray(project, 'profiles.profile');
+  return appendOrGet(profileArray, { id: profileId }, idEquals);
+};
+
 const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
 
-const sortDependencies = dependencies =>
-  dependencies.sort((a, b) => {
+const sortArtifacts = (artifacts: MavenArtifact[]) =>
+  artifacts.sort((a, b) => {
     const groupIdCompared = sortWithTemplate(groupIdOrder, a.groupId, b.groupId);
     if (groupIdCompared) return groupIdCompared;
     return a.artifactId.localeCompare(b.artifactId);
   });
-*/
+
+const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id.localeCompare(b.id));
+
+const ensureChildPath = (node: any, childPath) => {
+  let child = get(node, childPath);
+  if (child) return child;
+  child = {};
+  set(node, childPath, child);
+  return child;
+};
+
+const ensureChild = (current: any, ...childPath) => {
+  for (const node of childPath) {
+    if (typeof node === 'string') {
+      current = ensureChildPath(current, node);
+    } else if (typeof node === 'function') {
+      current = node(current);
+    } else {
+      throw new Error(`Path section not supported ${node}`);
+    }
+    if (!current) {
+      return undefined;
+    }
+  }
+  return current;
+};
 
 export default class PomStorage extends XmlStorage {
   constructor({ saveFile, loadFile }: { saveFile: (string) => void; loadFile: () => string }) {
     super({ saveFile, loadFile });
   }
 
-  public addProperty({ property, value }: MavenProperty) {
-    this.merge({
-      project: {
-        properties: {
-          [property]: value,
-        },
+  public addProperty({ inProfile, property, value = null }: MavenProperty) {
+    const node = this.getNode({ profile: inProfile });
+    set(node, `properties.${property}`, value);
+    this.persist();
+  }
+
+  public addDependency({ inProfile, ...dependency }: MavenDependency): void {
+    this.addDependencyAt(this.getNode({ profile: inProfile }), dependency);
+    this.persist();
+  }
+
+  public addDependencyManagement({ inProfile, ...dependency }: MavenDependency): void {
+    this.addDependencyAt(this.getNode({ profile: inProfile, nodePath: 'dependencyManagement' }), dependency);
+    this.persist();
+  }
+
+  public addDistributionManagement({ inProfile, snapshotsId, snapshotsUrl, releasesId, releasesUrl }: MavenDistributionManagement) {
+    const store = this.getNode({ profile: inProfile });
+    store.distributionManagement = {
+      snapshotRepository: {
+        id: snapshotsId,
+        url: snapshotsUrl,
       },
-    });
+      repository: {
+        id: releasesId,
+        url: releasesUrl,
+      },
+    };
     this.persist();
   }
 
-  public addDependency(dependecy: MavenDependency): void {
-    this.addDependencyAt('project', dependecy);
+  public addProfile({ content, ...profile }: MavenProfile): void {
+    const profileArray = ensureChildIsArray(this.getNode(), 'profiles.profile');
+    appendOrReplace(profileArray, this.mergeContent(profile, content), idEquals);
     this.persist();
   }
 
-  public addProfile(profile: MavenProfile): void {
-    this.addProfileAt('project', profile);
+  public addPlugin({ inProfile, ...plugin }: MavenPlugin): void {
+    this.addPluginAt(this.getNode({ profile: inProfile, nodePath: 'build' }), plugin);
     this.persist();
   }
 
-  protected addDependencyAt(nodePath: string, { additionalContent, ...dependency }: MavenDependency) {
-    const dependencyPath = `${nodePath}.dependencies.dependency`;
-    const dependencyArray = ensureChildIsArray(this.store, dependencyPath);
+  public addPluginManagement({ inProfile, ...plugin }: MavenPlugin): void {
+    this.addPluginAt(this.getNode({ profile: inProfile, nodePath: 'build.pluginManagement' }), plugin);
+    this.persist();
+  }
+
+  public addRepository({ inProfile, ...repository }: MavenRepository): void {
+    this.addRepositoryAt(this.getNode({ profile: inProfile }), repository);
+    this.persist();
+  }
+
+  public addPluginRepository({ inProfile, ...repository }: MavenRepository): void {
+    this.addPluginRepositoryAt(this.getNode({ profile: inProfile }), repository);
+    this.persist();
+  }
+
+  public addAnnotationProcessor({ inProfile, ...artifact }: MavenArtifact) {
+    const node = this.getNode({ profile: inProfile });
+    const plugins = ensureChildIsArray(node, 'build.pluginManagement.plugins.plugin');
+    const annotationProcessorPaths = ensureChild(
+      plugins,
+      pluginArray => {
+        return appendOrGet(
+          pluginArray,
+          {
+            groupId: 'org.apache.maven.plugins',
+            artifactId: 'maven-compiler-plugin',
+          },
+          artifactEquals
+        );
+      },
+      'configuration.annotationProcessorPaths'
+    );
+    const paths = ensureChildIsArray(annotationProcessorPaths, 'path');
+    appendOrReplace(paths, artifact, artifactEquals);
+    this.persist();
+  }
+
+  protected getNode({ profile, nodePath }: { profile?: string; nodePath?: string } = {}): any {
+    const node = profile ? ensureProfile(this.store.project, profile) : this.store.project;
+    if (nodePath) {
+      return ensureChild(node, nodePath);
+    }
+    return node;
+  }
+
+  protected addDependencyAt(node, { additionalContent, ...dependency }: MavenDependency) {
+    const dependencyArray = ensureChildIsArray(node, 'dependencies.dependency');
     appendOrReplace(dependencyArray, this.mergeContent(dependency, additionalContent), dependencyEquals);
   }
 
-  protected addProfileAt(nodePath: string, { content, ...profile }: MavenProfile): void {
-    const profilePath = `${nodePath}.profiles.profile`;
-    const profileArray = ensureChildIsArray(this.store, profilePath);
-    appendOrReplace(profileArray, this.mergeContent(profile, content), profileEquals);
+  protected addPluginAt(node, { additionalContent, ...artifact }: MavenPlugin) {
+    const artifactArray = ensureChildIsArray(node, 'plugins.plugin');
+    appendOrReplace(artifactArray, this.mergeContent(artifact, additionalContent), artifactEquals);
+  }
+
+  protected addRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
+    const releases = releasesEnabled === undefined ? undefined : { enabled: releasesEnabled };
+    const snapshots = snapshotsEnabled === undefined ? undefined : { enabled: snapshotsEnabled };
+    const repositoryArray = ensureChildIsArray(node, 'repositories.repository');
+    appendOrReplace(repositoryArray, { ...repository, releases, snapshots }, idEquals);
+  }
+
+  protected addPluginRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
+    const releases = releasesEnabled === undefined ? undefined : { enabled: releasesEnabled };
+    const snapshots = snapshotsEnabled === undefined ? undefined : { enabled: snapshotsEnabled };
+    const repositoryArray = ensureChildIsArray(node, 'pluginRepositories.pluginRepository');
+    appendOrReplace(repositoryArray, { ...repository, releases, snapshots }, idEquals);
   }
 
   protected sort() {
-    const project = this.store.project;
-    if (project) {
+    if (this.store.project) {
+      const project = sortKeys(this.store.project, { compare: comparator(rootOrder) });
+      this.store.project = project;
       if (project.properties) {
         project.properties = sortProperties(project.properties);
       }
-      /*
-      if (project.dependencies) {
-        project.dependencies.dependency = sortDependencies(project.dependencies.dependency);
+      if (Array.isArray(project.dependencies?.dependency)) {
+        project.dependencies.dependency = sortArtifacts(project.dependencies.dependency);
       }
-      */
+      if (Array.isArray(project.dependencyManagement?.dependencies?.dependency)) {
+        project.dependencyManagement.dependencies.dependency = sortArtifacts(project.dependencyManagement.dependencies.dependency);
+      }
+      if (Array.isArray(project.build?.plugins?.plugin)) {
+        project.build.plugins.plugin = sortArtifacts(project.build.plugins.plugin);
+      }
+      if (Array.isArray(project.build?.pluginManagement?.plugins?.plugin)) {
+        project.build.pluginManagement.plugins.plugin = sortArtifacts(project.build.pluginManagement.plugins.plugin);
+      }
+      if (Array.isArray(project.profiles?.profile)) {
+        project.profiles.profile = sortProfiles(project.profiles.profile);
+      }
     }
   }
 }

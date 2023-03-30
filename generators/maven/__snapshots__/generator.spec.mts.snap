@@ -20,6 +20,12 @@ exports[`generator - maven needles should match generated pom 1`] = `
         <dependency>
             <groupId>group</groupId>
             <artifactId>artifact2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>exclusionGroupId</groupId>
+                    <artifactId>exclusionArtifactId</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

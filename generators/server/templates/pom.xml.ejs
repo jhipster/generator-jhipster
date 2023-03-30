@@ -30,38 +30,6 @@
     <name><%= humanizedBaseName %></name>
     <description><%= projectDescription %></description>
 
-    <repositories>
-<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1 || SPRING_CLOUD_VERSION.indexOf('RC') > -1) { _%>
-        <repository>
-            <id>spring-milestone</id>
-            <url>https://repo.spring.io/milestone</url>
-        </repository>
-<%_ } _%>
-<%_ if (jhipsterDependenciesVersion.endsWith('-SNAPSHOT')) { _%>
-        <repository>
-            <id>ossrh-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-<%_ } _%>
-        <!-- jhipster-needle-maven-repository -->
-    </repositories>
-
-    <pluginRepositories>
-<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1 || SPRING_CLOUD_VERSION.indexOf('RC') > -1) { _%>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-        </pluginRepository>
-<%_ } _%>
-        <!-- jhipster-needle-maven-plugin-repository -->
-    </pluginRepositories>
-
-    <!-- jhipster-needle-distribution-management -->
-
     <properties>
         <!--
             Build properties
@@ -181,7 +149,6 @@
 <%_ } _%>
         <properties-maven-plugin.version><%- javaDependencies['properties-maven-plugin'] %></properties-maven-plugin.version>
         <sonar-maven-plugin.version><%- javaDependencies['sonar-maven-plugin'] %></sonar-maven-plugin.version>
-        <!-- jhipster-needle-maven-property -->
     </properties>
 
     <dependencyManagement>
@@ -211,7 +178,6 @@
                 <version>1.1.2</version>
             </dependency>
 <%_ } _%>
-            <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
 
@@ -233,14 +199,6 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
-<%_ // This is useful for major Spring Boot migration
-    if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-properties-migrator</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (!cacheProviderNo) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -888,7 +846,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-        <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
     <build>
@@ -976,7 +933,6 @@
                 <artifactId>openapi-generator-maven-plugin</artifactId>
             </plugin>
 <%_ } _%>
-            <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>
             <plugins>
@@ -1091,7 +1047,6 @@
                                 <version>${cassandra-driver.version}</version>
                             </path>
 <%_ } _%>
-                            <!-- jhipster-needle-maven-add-annotation-processor -->
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
@@ -1472,7 +1427,6 @@
                     </configuration>
 
                 </plugin>
-                <!-- jhipster-needle-maven-add-plugin-management -->
             </plugins>
         </pluginManagement>
     </build>
@@ -2276,6 +2230,5 @@
             </build>
         </profile>
 <%_ } _%>
-        <!-- jhipster-needle-maven-add-profile -->
     </profiles>
 </project>

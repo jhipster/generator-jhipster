@@ -37,9 +37,8 @@ describe(`generator - ${generator}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorFile).withJHipsterConfig({
+      await helpers.run(generatorFile).withJHipsterConfig({
         baseName: 'existing',
         packageName: 'tech.jhipster',
       });
@@ -52,9 +51,8 @@ describe(`generator - ${generator}`, () => {
     });
   });
   describe('with empty configuration', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorFile).withJHipsterConfig();
+      await helpers.run(generatorFile).withJHipsterConfig();
     });
     it('should generate only maven files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -68,9 +66,8 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(GENERATOR_MAVEN)
-        .withJHipsterConfig()
-        .withOptions({
-          blueprints: 'blueprint',
+        .withJHipsterConfig({
+          blueprints: [{ name: 'blueprint' }],
         })
         .withGenerators([
           [
@@ -82,12 +79,22 @@ describe(`generator - ${generator}`, () => {
               get [MavenGenerator.POST_WRITING]() {
                 return this.asPostWritingTaskGroup({
                   addProperty({ source }) {
+                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact', version: 'initial' });
+                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact' });
+                    source.addMavenDependency?.({
+                      groupId: 'group',
+                      artifactId: 'artifact2',
+                      additionalContent: `
+<exclusions>
+    <exclusion>
+        <groupId>exclusionGroupId</groupId>
+        <artifactId>exclusionArtifactId</artifactId>
+    </exclusion>
+</exclusions>`,
+                    });
                     source.addMavenProperty?.({ property: 'foo', value: 'initial' });
                     source.addMavenProperty?.({ property: 'foo', value: 'bar' });
                     source.addMavenProperty?.({ property: 'foo2', value: 'bar2' });
-                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact', version: 'initial' });
-                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact' });
-                    source.addMavenDependency?.({ groupId: 'group', artifactId: 'artifact2' });
                     source.addMavenProfile?.({ id: 'profileId', content: '<foo>initial</foo>' });
                     source.addMavenProfile?.({ id: 'profileId', content: '<foo>bar</foo>' });
                     source.addMavenProfile?.({ id: 'profileId2', content: '<foo2>bar2</foo2>' });
@@ -119,6 +126,12 @@ describe(`generator - ${generator}`, () => {
         <dependency>
             <groupId>group</groupId>
             <artifactId>artifact2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>exclusionGroupId</groupId>
+                    <artifactId>exclusionArtifactId</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 `
       );

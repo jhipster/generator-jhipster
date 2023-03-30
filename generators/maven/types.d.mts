@@ -17,21 +17,57 @@
  * limitations under the License.
  */
 
-export type MavenDependency = {
+export type MavenArtifact = {
   groupId: string;
   artifactId: string;
   version?: string;
+  inProfile?: string;
+};
+
+export type MavenPlugin = MavenArtifact & {
+  additionalContent?: string;
+};
+
+export type MavenRepository = {
+  id: string;
+  name?: string;
+  url: string;
+  releasesEnabled?: boolean;
+  snapshotsEnabled?: boolean;
+  inProfile?: string;
+};
+
+export type MavenDependency = MavenArtifact & {
   type?: string;
   scope?: string;
   additionalContent?: string;
 };
 
-export type MavenProperty = { property: string; value?: string };
+export type MavenDistributionManagement = {
+  snapshotsId: string;
+  snapshotsUrl: string;
+  releasesId: string;
+  releasesUrl: string;
+  inProfile?: string;
+};
+
+export type MavenProperty = {
+  property: string;
+  value?: string | null;
+  inProfile?: string;
+};
 
 export type MavenProfile = { id: string; content?: string };
 
 export type MavenSourceType = {
+  addMavenAnnotationProcessor?(artifact: MavenArtifact): void;
+  addMavenDependency?(dependecy: MavenDependency): void;
+  addMavenDependencyManagement?(dependecy: MavenDependency): void;
+  addMavenDistributionManagement?(distributionManagement: MavenDistributionManagement): void;
+  addMavenPlugin?(plugin: MavenPlugin): void;
+  addMavenPluginManagement?(plugin: MavenPlugin): void;
+  addMavenPluginRepository?(repository: MavenRepository): void;
   addMavenProperty?(property: MavenProperty): void;
   addMavenProfile?(profile: MavenProfile): void;
-  addMavenDependency?(dependecy: MavenDependency): void;
+  addMavenRepository?(repository: MavenRepository): void;
 };
