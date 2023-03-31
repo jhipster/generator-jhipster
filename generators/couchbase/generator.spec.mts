@@ -30,6 +30,7 @@ import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {
   mockedGenerators as serverGenerators,
   shouldComposeWithKafka,
+  shouldComposeWithPulsar,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
 
@@ -89,6 +90,7 @@ describe(`generator - ${databaseType}`, () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
       shouldComposeWithKafka(sampleConfig, () => runResult);
+      shouldComposeWithPulsar(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

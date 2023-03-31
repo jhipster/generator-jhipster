@@ -19,6 +19,7 @@
 
 const messageBrokerTypes = {
   KAFKA: 'kafka',
+  PULSAR: 'pulsar',
   NO: 'no',
 };
 export default messageBrokerTypes;

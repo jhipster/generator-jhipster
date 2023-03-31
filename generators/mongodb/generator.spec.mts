@@ -31,6 +31,7 @@ import {
   mockedGenerators as serverGenerators,
   shouldComposeWithKafka,
   shouldComposeWithLiquibase,
+  shouldComposeWithPulsar,
 } from '../server/__test-support/index.mjs';
 
 const { snakeCase } = lodash;
@@ -85,6 +86,7 @@ describe(`generator - ${databaseType}`, () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
       shouldComposeWithKafka(sampleConfig, () => runResult);
+      shouldComposeWithPulsar(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

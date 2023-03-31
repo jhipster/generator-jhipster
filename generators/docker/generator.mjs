@@ -160,6 +160,9 @@ export default class DockerGenerator extends BaseApplicationGenerator {
             { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
           );
         }
+        if (application.messageBrokerPulsar) {
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'pulsar' });
+        }
       },
 
       packageJsonScripts({ application }) {

@@ -10,7 +10,7 @@ import {
   GENERATOR_SQL,
 } from '../../generator-list.mjs';
 
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
 export const mockedGenerators = [
@@ -26,6 +26,7 @@ export const mockedGenerators = [
   'jhipster:liquibase',
   'jhipster:maven',
   'jhipster:mongodb',
+  'jhipster:pulsar',
   `jhipster:${GENERATOR_SPRING_CACHE}`,
   `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
   `jhipster:${GENERATOR_SQL}`,
@@ -53,6 +54,19 @@ export const shouldComposeWithKafka = (sampleConfig, runResultSupplier) => {
   } else {
     it(`should not compose with ${KAFKA} generator`, () => {
       assert(runResultSupplier().mockedGenerators['jhipster:kafka'].notCalled);
+    });
+  }
+};
+
+export const shouldComposeWithPulsar = (sampleConfig, runResultSupplier) => {
+  const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
+  if (pulsarEnabled) {
+    it(`should compose with ${PULSAR} generator`, () => {
+      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].calledOnce);
+    });
+  } else {
+    it(`should not compose with ${PULSAR} generator`, () => {
+      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].notCalled);
     });
   }
 };
