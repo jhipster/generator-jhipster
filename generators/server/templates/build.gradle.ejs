@@ -375,8 +375,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
     implementation "com.couchbase.client:java-client"
-    // TODO drop once spring-boot 3.0.5 is released
-    implementation "org.springframework.data:spring-data-couchbase:<%- javaDependencies['spring-data-couchbase'] %>"
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"

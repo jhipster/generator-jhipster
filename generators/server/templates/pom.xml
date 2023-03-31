@@ -50,7 +50,6 @@
         <openapi-generator-maven-plugin.version>6.4.0</openapi-generator-maven-plugin.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <spring-data-couchbase.version>5.0.4</spring-data-couchbase.version>
     </properties>
 
     <dependencyManagement>
@@ -124,12 +123,6 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct</artifactId>
               <version>${mapstruct.version}</version>
-            </dependency>
-            <!-- TODO drop once spring-boot 3.0.5 is released -->
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-couchbase</artifactId>
-                <version>${spring-data-couchbase.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
