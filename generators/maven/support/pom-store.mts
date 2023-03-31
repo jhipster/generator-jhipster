@@ -23,6 +23,7 @@ import sortKeys from 'sort-keys';
 import CoreGenerator from '../../base-core/index.mjs';
 import XmlStorage from '../internal/xml-store.mjs';
 import {
+  MavenAnnotationProcessor,
   MavenArtifact,
   MavenDependency,
   MavenDistributionManagement,
@@ -240,7 +241,7 @@ export default class PomStorage extends XmlStorage {
     this.persist();
   }
 
-  public addAnnotationProcessor({ inProfile, ...artifact }: MavenArtifact) {
+  public addAnnotationProcessor({ inProfile, ...artifact }: MavenAnnotationProcessor) {
     const node = this.getNode({ profile: inProfile });
     const plugins = ensureChildIsArray(node, 'build.pluginManagement.plugins.plugin');
     const annotationProcessorPaths = ensureChild(
