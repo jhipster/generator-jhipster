@@ -70,7 +70,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "CLIENT_WEBPACK_DIR": "webpack/",
   "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
   "DOCUMENTATION_URL": "https://www.jhipster.tech",
-  "HIBERNATE_VERSION": "HIBERNATE_VERSION",
   "JACKSON_DATABIND_NULLABLE_VERSION": "JACKSON_DATABIND_NULLABLE_VERSION",
   "JACOCO_VERSION": "JACOCO_VERSION",
   "JAVA_COMPATIBLE_VERSIONS": [
@@ -563,7 +562,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "CLIENT_WEBPACK_DIR": "webpack/",
   "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
   "DOCUMENTATION_URL": "https://www.jhipster.tech",
-  "HIBERNATE_VERSION": "HIBERNATE_VERSION",
   "JACKSON_DATABIND_NULLABLE_VERSION": "JACKSON_DATABIND_NULLABLE_VERSION",
   "JACOCO_VERSION": "JACOCO_VERSION",
   "JAVA_COMPATIBLE_VERSIONS": [
@@ -1058,7 +1056,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "CLIENT_WEBPACK_DIR": "webpack/",
   "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
   "DOCUMENTATION_URL": "https://www.jhipster.tech",
-  "HIBERNATE_VERSION": "HIBERNATE_VERSION",
   "JACKSON_DATABIND_NULLABLE_VERSION": "JACKSON_DATABIND_NULLABLE_VERSION",
   "JACOCO_VERSION": "JACOCO_VERSION",
   "JAVA_COMPATIBLE_VERSIONS": [

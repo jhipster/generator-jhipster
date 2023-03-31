@@ -63,9 +63,6 @@
 
         <jhipster-dependencies.version><%= jhipsterDependenciesVersion %></jhipster-dependencies.version>
         <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
-<%_ if (databaseTypeSql) { _%>
-        <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
-<%_ } _%>
 <%_ if (enableLiquibase) { _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -1032,7 +1029,6 @@
                                 <!-- For JPA static metamodel generation -->
                                 <groupId>org.hibernate.orm</groupId>
                                 <artifactId>hibernate-jpamodelgen</artifactId>
-                                <version>${hibernate.version}</version>
                             </path>
                             <path>
                                 <groupId>org.glassfish.jaxb</groupId>

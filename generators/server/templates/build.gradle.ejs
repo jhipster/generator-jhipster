@@ -363,7 +363,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
+    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen"
     implementation "org.hibernate.orm:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
 <%_ } _%>

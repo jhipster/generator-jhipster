@@ -51,8 +51,6 @@ export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 export const SPRING_BOOT_VERSION = '3.0.2';
 // The spring-cloud version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 export const SPRING_CLOUD_VERSION = '2022.0.0';
-// The hibernate driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
-export const HIBERNATE_VERSION = '6.1.6.Final';
 // The cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
 export const CASSANDRA_DRIVER_VERSION = '4.15.0';
 export const JACOCO_VERSION = '0.8.8';

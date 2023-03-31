@@ -78,7 +78,6 @@ import {
   JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
   SPRING_CLOUD_VERSION,
-  HIBERNATE_VERSION,
   CASSANDRA_DRIVER_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
   JACOCO_VERSION,
@@ -352,7 +351,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         application.SPRING_BOOT_VERSION = this.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
         application.SPRING_CLOUD_VERSION = this.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
-        application.HIBERNATE_VERSION = this.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
         application.CASSANDRA_DRIVER_VERSION = this.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = this.useVersionPlaceholders
           ? 'JACKSON_DATABIND_NULLABLE_VERSION'
