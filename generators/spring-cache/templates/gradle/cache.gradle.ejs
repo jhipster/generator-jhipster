@@ -4,7 +4,7 @@ dependencies {
   implementation "javax.cache:cache-api"
 <%_ } _%>
 <%_ if (cacheProviderEhCache) { _%>
-  implementation "org.ehcache:ehcache"
+  implementation group: "org.ehcache", name: "ehcache", classifier: "jakarta"
   <%_ if (enableHibernateCache) { _%>
   implementation "org.hibernate.orm:hibernate-jcache"
   <%_ } _%>
