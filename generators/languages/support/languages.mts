@@ -140,6 +140,13 @@ const partialLanguages: PartialLanguage[] = [
     dayjsLocale: 'hy-am',
   },
   {
+    name: 'Azerbaijani (Latin)',
+    displayName: 'Azərbaycan dili',
+    languageTag: 'az-Latn-az',
+    angularLocale: 'az-Latn',
+    dayjsLocale: 'az',
+  },
+  {
     name: 'Belarusian',
     displayName: 'Беларускі',
     languageTag: 'by',
@@ -253,13 +260,6 @@ const partialLanguages: PartialLanguage[] = [
     languageTag: 'kr-Latn-kr',
     angularLocale: 'en',
     dayjsLocale: 'en',
-  },
-  {
-    name: 'Azerbaijani (Latin)',
-    displayName: 'Azərbaycan dili',
-    languageTag: 'az-Latn-az',
-    angularLocale: 'az-Latn',
-    dayjsLocale: 'az',
   },
 ];
 
