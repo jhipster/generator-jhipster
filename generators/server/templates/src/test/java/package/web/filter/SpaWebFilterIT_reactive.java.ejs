@@ -2,12 +2,12 @@ package <%= packageName %>.web.filter;
 
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
-import org.assertj.core.api.Assertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.MediaType;
 
 
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
@@ -49,7 +49,7 @@ public class SpaWebFilterIT {
             .uri("/v3/api-docs")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType("application/json;charset=UTF-8");
+            .expectHeader().contentType(MediaType.APPLICATION_JSON);
     }
 
     @Test
