@@ -259,7 +259,7 @@ const partialLanguages: PartialLanguage[] = [
     displayName: 'Azərbaycan dili',
     languageTag: 'az-Latn-az',
     angularLocale: 'az-Latn',
-    dayjsLocale: 'az-Latn',
+    dayjsLocale: 'az',
   },
 ];
 
