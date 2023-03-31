@@ -55,6 +55,7 @@ import {
   GENERATOR_MAVEN,
   GENERATOR_MONGODB,
   GENERATOR_NEO4J,
+  GENERATOR_PULSAR,
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
@@ -132,7 +133,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, PULSAR } = messageBrokerTypes;
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -282,6 +283,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
+        }
+        if (messageBroker === PULSAR) {
+          await this.composeWithJHipster(GENERATOR_PULSAR);
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);

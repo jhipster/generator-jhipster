@@ -20,6 +20,7 @@
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
 
@@ -123,6 +124,11 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct</artifactId>
               <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.springframework.pulsar</groupId>
+              <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
+              <version>${spring-pulsar.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
