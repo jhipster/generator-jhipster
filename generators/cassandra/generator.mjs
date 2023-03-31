@@ -23,7 +23,6 @@ import { GENERATOR_CASSANDRA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generat
 import writeCassandraFilesTask from './files.mjs';
 import cleanupCassandraFilesTask from './cleanup.mjs';
 import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.mjs';
-import { CASSANDRA_DRIVER_VERSION } from '../generator-constants.mjs';
 
 export default class CassandraGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -68,7 +67,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
         if (application.buildToolMaven) {
           source.addMavenProperty?.({
             property: 'cassandra-driver.version',
-            value: CASSANDRA_DRIVER_VERSION,
+            value: application.javaDependencies.cassandra,
           });
 
           source.addMavenAnnotationProcessor?.({

@@ -20,9 +20,10 @@
 import path from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
-import { SERVER_MAIN_SRC_DIR, OPENAPI_GENERATOR_CLI_VERSION, JACKSON_DATABIND_NULLABLE_VERSION } from '../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR, OPENAPI_GENERATOR_CLI_VERSION } from '../generator-constants.mjs';
 import { applicationOptions, buildToolTypes, applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
 import { addGradleDependencyCallback, addGradlePropertyCallback } from '../gradle/internal/needles.mjs';
+import { getPomVersionProperties } from '../server/support/dependabot-maven.mjs';
 
 const { OptionNames } = applicationOptions;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -158,15 +159,19 @@ export function customizeFiles() {
      */
     addJacksonDataBindNullable() {
       if (!this.enableSwaggerCodegen) {
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
+        // TODO use application.javaDependencies
+        const versions = getPomVersionProperties(pomFile);
+        const jacksonDatabindNullableVersion = versions['jackson-databind-nullable'];
         if (this.buildTool === MAVEN) {
-          this.addMavenProperty('jackson-databind-nullable.version', JACKSON_DATABIND_NULLABLE_VERSION);
+          this.addMavenProperty('jackson-databind-nullable.version', jacksonDatabindNullableVersion);
           // eslint-disable-next-line no-template-curly-in-string
           this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
         } else if (this.buildTool === GRADLE) {
           // TODO addGradlePropertyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile(
             'gradle.properties',
-            addGradlePropertyCallback({ property: 'jacksonDatabindNullableVersion', value: JACKSON_DATABIND_NULLABLE_VERSION })
+            addGradlePropertyCallback({ property: 'jacksonDatabindNullableVersion', value: jacksonDatabindNullableVersion })
           );
           // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile(

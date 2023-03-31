@@ -23,14 +23,14 @@ profile=dev
 jhipsterDependenciesVersion=<%= jhipsterDependenciesVersion %>
 # The spring-boot version should match the one managed by
 # https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= jhipsterDependenciesVersion %>
-springBootVersion=<%= SPRING_BOOT_VERSION %>
+springBootVersion=<%- javaDependencies['spring-boot'] %>
 # The hibernate version should match the one managed by
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
-hibernateVersion=<%= HIBERNATE_VERSION %>
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%- javaDependencies['spring-boot'] %> -->
+hibernateVersion=<%- javaDependencies.hibernate %>
 mapstructVersion=<%- javaDependencies.mapstruct %>
 archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
 <%_ if (enableSwaggerCodegen) { _%>
-jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
+jacksonDatabindNullableVersion=<%- javaDependencies['jackson-databind-nullable'] %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
 caffeineVersion=<%- javaDependencies.caffeine %>
@@ -68,8 +68,8 @@ jaxbRuntimeVersion=<%- javaDependencies['jaxb-runtime'] %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=<%= CASSANDRA_DRIVER_VERSION %>
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%- javaDependencies['spring-boot'] %>
+cassandraDriverVersion=<%- javaDependencies.cassandra %>
 <%_ } _%>
 
 # gradle plugin version

@@ -16,15 +16,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// jhipster-bom version
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // Version of Java
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
+// Force spring milestone repository. Spring Boot milestones are detected.
+export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
-/**
- * Manually updated java dependencies
- * @type {Record<string,string>}
- */
-export const javaDependencies = {};
+// Version of Node, NPM
+export const NODE_VERSION = '16.17.0';
+export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
+
+export const javaDependencies: Record<string, string> = {
+  /**
+   * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
+   */
+  'spring-boot': '3.0.5',
+  /*
+   * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
+   * Required due to hibernate-jpamodelgen annotation processor.
+   */
+  hibernate: '6.1.7.Final',
+  /*
+   * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
+   * Required due to java-driver-mapper-processor annotation processor.
+   */
+  cassandra: '4.15.0',
+};
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
@@ -34,29 +53,12 @@ export const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch
 /**
  * Manually updated docker containers
  */
-export const dockerContainers = {
+export const dockerContainers: Record<string, string> = {
   elasticsearchTag: ELATICSEARCH_TAG,
   elasticsearchImage: ELATICSEARCH_IMAGE,
   elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
 };
 Object.freeze(dockerContainers);
-
-// Version of Node, NPM
-export const NODE_VERSION = '16.17.0';
-export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
-
-// Libraries version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
-// The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-export const SPRING_BOOT_VERSION = '3.0.5';
-// The spring-cloud version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-export const SPRING_CLOUD_VERSION = '2022.0.2';
-// The hibernate driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
-export const HIBERNATE_VERSION = '6.1.7.Final';
-// The cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
-export const CASSANDRA_DRIVER_VERSION = '4.15.0';
-export const JACOCO_VERSION = '0.8.8';
-export const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.4';
 
 // Kubernetes versions
 export const KUBERNETES_CORE_API_VERSION = 'v1';
