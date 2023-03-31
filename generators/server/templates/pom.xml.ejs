@@ -170,21 +170,6 @@
                 <scope>import</scope>
             </dependency>
 <%_ } _%>
-<%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
-            <!-- TODO drop once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625 -->
-            <dependency>
-                <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
-                <groupId>org.mariadb</groupId>
-                <artifactId>r2dbc-mariadb</artifactId>
-                <version><%- javaDependencies['r2dbc-mariadb'] %></version>
-            </dependency>
-            <!-- TODO drop once spring-boot 3.0.5 is released, adds support to mariadb -->
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-relational</artifactId>
-                <version><%- javaDependencies['spring-data-relational'] %></version>
-            </dependency>
-<%_ } _%>
         </dependencies>
     </dependencyManagement>
 
@@ -1619,30 +1604,6 @@
                 </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (devDatabaseTypeMysql) { _%>
-                <dependency>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeMariadb) { _%>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
 <%_ if (devDatabaseTypeOracle) { _%>
                 <dependency>
                     <groupId>com.oracle.database.jdbc</groupId>
@@ -1764,7 +1725,9 @@
                                 <defaultSchemaName><% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- devDatabaseUsername %></username>
                                 <password><%- devDatabasePassword %></password>
+  <%_ if (!reactive) { _%>
                                 <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+  <%_ } _%>
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
                                 <contexts>!test</contexts>
@@ -1829,30 +1792,6 @@
   <%_ } _%>
                     <scope>test</scope>
                 </dependency>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-                <dependency>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb) { _%>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>
                 <dependency>
                     <groupId>com.oracle.database.jdbc</groupId>
@@ -1942,7 +1881,9 @@
                                 <defaultSchemaName><% if (prodDatabaseTypeMysql) { %><%= baseName %><% } else if (prodDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- prodDatabaseUsername %></username>
                                 <password><%- prodDatabasePassword %></password>
+  <%_ if (!reactive) { _%>
                                 <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= prodHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+  <%_ } _%>
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
                                 <contexts>!test</contexts>

@@ -110,6 +110,36 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
           value: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
         });
       },
+      customizeMysql({ application, source }) {
+        if (!(application as any).prodDatabaseTypeMysql) return;
+
+        const inProfile = (application as any).devDatabaseTypeH2Any ? 'prod' : undefined;
+        source.addMavenDependency?.({ inProfile, groupId: 'com.mysql', artifactId: 'mysql-connector-j' });
+      },
+      customizeMariadb({ application, source }) {
+        if (!(application as any).prodDatabaseTypeMaridb) return;
+
+        const inProfile = (application as any).devDatabaseTypeH2Any ? 'prod' : undefined;
+        source.addMavenDependency?.({ inProfile, groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' });
+      },
+      customizeMariadbR2dbc({ application, source }) {
+        if (!(application as any).prodDatabaseTypeMysql && !(application as any).prodDatabaseTypeMariadb) return;
+
+        const inProfile = (application as any).devDatabaseTypeH2Any ? 'prod' : undefined;
+        if (application.reactive && application.buildToolMaven) {
+          const r2dbcArtifact = { inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb'};
+          // TODO drop once spring-boot manages r2dbc-mariadb version
+          const r2dbcArtifactManagement = {
+            ...r2dbcArtifact,
+            inProfile: undefined,
+            version: application.javaDependencies['r2dbc-mariadb'],
+          };
+
+          source.addMavenDependency?.(r2dbcArtifact);
+          // TODO drop once spring-boot manages r2dbc-mariadb version
+          source.addMavenDependencyManagement?.(r2dbcArtifactManagement);
+        }
+      },
     });
   }
 
