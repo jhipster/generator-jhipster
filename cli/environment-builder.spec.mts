@@ -195,9 +195,6 @@ describe('cli - EnvironmentBuilder', () => {
         };
         fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
       });
-      after(() => {
-        fs.unlinkSync('.yo-rc.json');
-      });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
       });
@@ -221,9 +218,6 @@ describe('cli - EnvironmentBuilder', () => {
           },
         };
         fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
-      });
-      after(() => {
-        fs.unlinkSync('.yo-rc.json');
       });
       beforeEach(() => {
         blueprintsWithVersion = envBuilder._blueprintsWithVersion;
@@ -258,7 +252,6 @@ describe('cli - EnvironmentBuilder', () => {
         fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
       });
       after(() => {
-        fs.unlinkSync('.yo-rc.json');
         process.argv = oldArgv;
       });
       beforeEach(() => {

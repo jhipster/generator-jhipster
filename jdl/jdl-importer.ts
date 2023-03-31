@@ -48,10 +48,8 @@ const { uniqBy } = _;
  * @param {String} configuration.applicationName - deprecated, the application's name, optional if parsing applications
  * @param {String} configuration.applicationType - deprecated, the application type, optional if parsing applications
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
- * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
- * @param {Boolean} [configuration.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
@@ -75,10 +73,8 @@ export function createImporterFromFiles(files, configuration?: any) {
  * @param {String} configuration.applicationName - deprecated, the application's name, optional if parsing applications
  * @param {String} configuration.applicationType - deprecated, the application type, optional if parsing applications
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
- * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
- * @param {Boolean} [configuration.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @param {Array} configuration.blueprints - the blueprints used.
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
@@ -140,15 +136,12 @@ function parseFiles(files) {
 function getJDLObject(parsedJDLContent, configuration) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
-  let generatorVersion = configuration.generatorVersion;
   let databaseType = configuration.databaseType;
-  const unidirectionalRelationships = configuration.unidirectionalRelationships;
   let skippedUserManagement = false;
 
   if (configuration.application) {
     baseName = configuration.application['generator-jhipster'].baseName;
     applicationType = configuration.application['generator-jhipster'].applicationType;
-    generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
     skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
     databaseType = configuration.application['generator-jhipster'].databaseType;
   }
@@ -157,16 +150,13 @@ function getJDLObject(parsedJDLContent, configuration) {
     parsedContent: parsedJDLContent,
     applicationType,
     applicationName: baseName,
-    generatorVersion,
     skippedUserManagement,
     databaseType,
-    unidirectionalRelationships,
   });
 }
 
 function checkForErrors(jdlObject, configuration, logger = console) {
   let validator;
-  const { unidirectionalRelationships } = configuration;
   if (jdlObject.getApplicationQuantity() === 0) {
     let application = configuration.application;
     if (!application && doesFileExist('.yo-rc.json')) {
@@ -198,17 +188,15 @@ function checkForErrors(jdlObject, configuration, logger = console) {
         skippedUserManagement,
         blueprints,
       },
-      logger,
-      { unidirectionalRelationships }
+      logger
     );
   } else {
-    validator = createWithApplicationValidator(jdlObject, logger, { unidirectionalRelationships });
+    validator = createWithApplicationValidator(jdlObject, logger);
   }
   validator.checkForErrors();
 }
 
 function importOnlyEntities(jdlObject, configuration) {
-  const { unidirectionalRelationships } = configuration;
   let { applicationName, applicationType, databaseType } = configuration;
 
   let application = configuration.application;
@@ -232,14 +220,13 @@ function importOnlyEntities(jdlObject, configuration) {
     applicationName,
     applicationType,
     databaseType,
-    unidirectionalRelationships,
   });
   const jsonEntities = entitiesPerApplicationMap.get(applicationName);
   return exportJSONEntities(jsonEntities, configuration);
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-  const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
+  const { skipFileGeneration, forceNoFiltering } = configuration;
 
   const importState: ImportState = {
     exportedApplications: [],
@@ -256,7 +243,6 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
   const entitiesPerApplicationMap = convert({
     jdlObject,
-    unidirectionalRelationships,
   });
   const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
   importState.exportedApplicationsWithEntities[applicationName] = {
@@ -278,7 +264,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-  const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
+  const { skipFileGeneration, forceNoFiltering } = configuration;
 
   const importState: ImportState = {
     exportedApplications: [],
@@ -294,7 +280,6 @@ function importApplicationsAndEntities(jdlObject, configuration) {
   }
   const entitiesPerApplicationMap: Map<any, any> = convert({
     jdlObject,
-    unidirectionalRelationships,
   });
   entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
     const jdlApplication = jdlObject.getApplication(applicationName);

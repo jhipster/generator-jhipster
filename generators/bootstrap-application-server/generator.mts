@@ -32,6 +32,7 @@ import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
+import { addEntitiesOtherRelationships } from '../server/support/index.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerGeneratorDefinition> {
   async _postConstruct() {
@@ -95,29 +96,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           loadRequiredConfigDerivedProperties(entity);
         }
       },
-      requiredOtherSideRelationships({ entitiesToLoad }) {
-        for (const { entityName } of entitiesToLoad) {
-          const entity = this.sharedData.getEntity(entityName);
-          for (const relationship of entity.relationships) {
-            if (
-              relationship.unidirectional &&
-              (relationship.relationshipType === 'many-to-many' ||
-                // OneToOne back reference is required due to filtering
-                relationship.relationshipType === 'one-to-one' ||
-                (relationship.relationshipType === 'one-to-many' && !entity.databaseTypeNeo4j && !entity.databaseTypeNo))
-            ) {
-              relationship.otherEntityRelationshipName = _.lowerFirst(entity.name);
-              relationship.otherEntity.relationships.push({
-                otherEntity: entity,
-                otherEntityName: relationship.otherEntityRelationshipName,
-                ownerSide: !relationship.ownerSide,
-                otherEntityRelationshipName: relationship.relationshipName,
-                relationshipName: relationship.otherEntityRelationshipName,
-                relationshipType: relationship.relationshipType.split('-').reverse().join('-'),
-              });
-            }
-          }
-        }
+      requiredOtherSideRelationships() {
+        this.validateResult(addEntitiesOtherRelationships(this.sharedData.getEntities().map(({ entity }) => entity)));
       },
     });
   }

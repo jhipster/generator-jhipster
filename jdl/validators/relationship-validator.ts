@@ -32,14 +32,14 @@ export default class RelationshipValidator extends Validator {
     if (typeof options === 'boolean') {
       options = { skippedUserManagement: options };
     }
-    const { skippedUserManagement, unidirectionalRelationships } = options;
+    const { skippedUserManagement } = options;
     super.validate(jdlRelationship);
     checkType(jdlRelationship);
     checkInjectedFields(jdlRelationship);
     checkForValidUseOfJPaDerivedIdentifier(jdlRelationship);
     checkForRequiredReflexiveRelationship(jdlRelationship);
     checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagement);
-    checkRelationshipType(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
+    checkRelationshipType(jdlRelationship, { skippedUserManagement });
   }
 }
 
@@ -92,7 +92,7 @@ function checkForForbiddenUseOfUserAsSource(jdlRelationship, skippedUserManageme
 }
 
 function checkRelationshipType(jdlRelationship, options) {
-  const { skippedUserManagement, unidirectionalRelationships } = options;
+  const { skippedUserManagement } = options;
   switch (jdlRelationship.type) {
     case ONE_TO_ONE:
       checkOneToOneRelationship(jdlRelationship);
@@ -101,7 +101,7 @@ function checkRelationshipType(jdlRelationship, options) {
       checkManyToOneRelationship(jdlRelationship, skippedUserManagement);
       break;
     case MANY_TO_MANY:
-      checkManyToManyRelationship(jdlRelationship, unidirectionalRelationships);
+      checkManyToManyRelationship(jdlRelationship);
       break;
     case ONE_TO_MANY:
       return;
@@ -135,22 +135,11 @@ function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption
   }
 }
 
-function checkManyToManyRelationship(jdlRelationship, unidirectionalRelationships) {
+function checkManyToManyRelationship(jdlRelationship) {
   const destinationEntityIsTheUser = isUserManagementEntity(jdlRelationship.to);
   if (jdlRelationship.injectedFieldInFrom && !jdlRelationship.injectedFieldInTo && destinationEntityIsTheUser) {
     // This is a valid case: even though bidirectionality is required for MtM relationships, having the destination
     // entity being the User is possible.
-    return;
-  }
-  const unidirectionalRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
-  if (unidirectionalRelationship && !unidirectionalRelationships) {
-    const injectedFieldInSourceEntity = !jdlRelationship.injectedFieldInFrom ? 'not set' : `'${jdlRelationship.injectedFieldInFrom}'`;
-    const injectedFieldInDestinationEntity = !jdlRelationship.injectedFieldInTo ? 'not set' : `'${jdlRelationship.injectedFieldInTo}'`;
-    throw new Error(
-      `In the Many-to-Many relationship from ${jdlRelationship.from} to ${jdlRelationship.to}, only ` +
-        `bidirectionality is supported. The injected field in the source entity is ${injectedFieldInSourceEntity} ` +
-        `and the injected field in the destination entity is ${injectedFieldInDestinationEntity}.`
-    );
   }
 }
 

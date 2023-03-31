@@ -60,4 +60,19 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        source.addTestSpringFactory?.({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.CassandraTestContainersSpringContextCustomizerFactory`,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
 }

@@ -33,7 +33,6 @@ export default { convertApplications };
  * Converts parsed applications to JDL applications.
  * @param {Array<Object>} parsedApplications - the parsed applications.
  * @param {Object} configuration - a configuration object.
- * @param {String} configuration.generatorVersion - the generator's version to use when converting applications.
  * @return {Array} the converted JDL applications.
  */
 export function convertApplications(parsedApplications, configuration = {}) {
@@ -41,8 +40,7 @@ export function convertApplications(parsedApplications, configuration = {}) {
     throw new Error('Applications have to be passed so as to be converted.');
   }
   return parsedApplications.map(parsedApplication => {
-    const applicationWithCustomValues = addCustomValuesToApplication(parsedApplication, configuration);
-    const formattedApplicationConfiguration = formatApplicationConfigurationOptions(applicationWithCustomValues.config);
+    const formattedApplicationConfiguration = formatApplicationConfigurationOptions(parsedApplication.config);
     const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
     jdlApplication.addEntityNames(parsedApplication.entities);
     const entityOptions = getEntityOptionsInApplication(parsedApplication);
@@ -50,14 +48,6 @@ export function convertApplications(parsedApplications, configuration = {}) {
     entityOptions.forEach(option => jdlApplication.addOption(option));
     return jdlApplication;
   });
-}
-
-function addCustomValuesToApplication(parsedApplication, configuration) {
-  const application = { ...parsedApplication };
-  if (configuration.generatorVersion) {
-    application.config.jhipsterVersion = configuration.generatorVersion;
-  }
-  return application;
 }
 
 function formatApplicationConfigurationOptions(applicationConfiguration) {

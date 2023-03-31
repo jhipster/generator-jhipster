@@ -86,6 +86,10 @@ _%>
 <%_ if (messageBrokerKafka) { _%>
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
 <%_ } _%>
+<%_ if (messageBrokerPulsar) { _%>
+      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
+      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+<%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
       - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
 <%_ } _%>

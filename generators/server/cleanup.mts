@@ -180,7 +180,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     }
     if (
       application.databaseTypeSql ||
-      (application as any).messageBrokerKafka ||
       (application as any).cacheProviderRedis ||
       application.databaseTypeMongodb ||
       application.databaseTypeCassandra ||

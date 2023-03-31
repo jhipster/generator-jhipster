@@ -36,9 +36,6 @@ import <%= packageName %>.config.EmbeddedCouchbase;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.config.EmbeddedElasticsearch;
 <%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-import <%= packageName %>.config.EmbeddedKafka;
-<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.config.EmbeddedNeo4j;
 <%_ } _%>
@@ -83,9 +80,6 @@ import java.lang.annotation.Target;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 @EmbeddedElasticsearch
-<%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-@EmbeddedKafka
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @EmbeddedNeo4j

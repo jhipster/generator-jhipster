@@ -339,6 +339,10 @@ export async function askForOptionalItems({ control }) {
     value: 'messageBroker:kafka',
   });
   choices.push({
+    name: 'Apache Pulsar as asynchronous messages broker',
+    value: 'messageBroker:pulsar',
+  });
+  choices.push({
     name: 'API first development using OpenAPI-generator',
     value: 'enableSwaggerCodegen:true',
   });

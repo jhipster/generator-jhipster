@@ -130,6 +130,11 @@ export const dockerFiles = {
       templates: ['kafka.yml'],
     },
     {
+      condition: generator => generator.messageBrokerPulsar,
+      path: DOCKER_DIR,
+      templates: ['pulsar.yml'],
+    },
+    {
       condition: generator => !!generator.enableSwaggerCodegen,
       path: DOCKER_DIR,
       templates: ['swagger-editor.yml'],

@@ -19,6 +19,7 @@
 import _ from 'lodash';
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.mjs';
+import { hibernateSnakeCase } from '../server/support/string.mjs';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -42,7 +43,7 @@ export function createUserEntity(customUserData = {}, application) {
   const user = {
     name: 'User',
     builtIn: true,
-    entityTableName: `${this.getTableName(application.jhiPrefix)}_user`,
+    entityTableName: `${hibernateSnakeCase(application.jhiPrefix)}_user`,
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     dto: true,

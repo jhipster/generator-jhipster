@@ -15,16 +15,17 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.2</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
-        <hazelcast-spring.version>5.2.2</hazelcast-spring.version>
+        <hazelcast-spring.version>5.2.3</hazelcast-spring.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>10.9.2</checkstyle.version>
+        <checkstyle.version>10.9.3</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.3.0</gatling-maven-plugin.version>
@@ -41,7 +42,7 @@
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-        <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
         <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
@@ -123,6 +124,11 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct</artifactId>
               <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.springframework.pulsar</groupId>
+              <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
+              <version>${spring-pulsar.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -39,6 +39,7 @@ import {
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { mavenProfileContent } from './templates.mjs';
+import { createPomStorage } from '../maven/support/pom-store.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -839,5 +840,17 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get [BaseGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  /**
+   * TODO drop when dropped from gae, azure-spring-cloud and heroku generators
+   * @private
+   * Add a new Maven profile.
+   *
+   * @param {string} profileId - profile ID
+   * @param {string} other - explicit other thing: build, dependencies...
+   */
+  addMavenProfile(profileId, other) {
+    createPomStorage(this).addProfile({ id: profileId, content: other });
   }
 }

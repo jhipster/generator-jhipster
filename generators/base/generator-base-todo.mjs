@@ -28,11 +28,17 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import PrivateBase from './generator-base-definitions.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
+import {
+  getDBTypeFromDBValue,
+  hibernateSnakeCase,
+  calculateDbName,
+  getFKConstraintName,
+  getUXConstraintName,
+} from '../server/support/index.mjs';
 import {
   databaseTypes,
   monitoringTypes,
@@ -48,7 +54,7 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
@@ -74,7 +80,7 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { KAFKA } = messageBrokerTypes;
+const { KAFKA, PULSAR } = messageBrokerTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -284,144 +290,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addWebpackConfig(config, clientFramework) {
     this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
-  }
-
-  /**
-   * @private
-   * Add a Maven dependency Management.
-   *
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} type - (optional) explicit type
-   * @param {string} scope - (optional) explicit scope
-   * @param {string} other - (optional) explicit other thing:  exclusions...
-   */
-  addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-    this.needleApi.serverMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Repository to the Maven build.
-   *
-   * @param {string} id - id of the repository
-   * @param {string} url - url of the repository
-   * @param  {string} other - (optional) explicit other thing: name, releases, snapshots, ...
-   */
-  addMavenRepository(id, url, other = '') {
-    this.needleApi.serverMaven.addRepository(id, url, other);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Plugin Repository to the Maven build.
-   *
-   * @param {string} id - id of the repository
-   * @param {string} url - url of the repository
-   */
-  addMavenPluginRepository(id, url) {
-    this.needleApi.serverMaven.addPluginRepository(id, url);
-  }
-
-  /**
-   * @private
-   * Add a distributionManagement to the Maven build.
-   *
-   * @param {string} snapshotsId Snapshots Repository Id
-   * @param {string} snapshotsUrl Snapshots Repository Url
-   * @param {string} releasesId Repository Id
-   * @param {string} releasesUrl Repository Url
-   */
-  addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-    this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
-  }
-
-  /**
-   * @private
-   * Add a new Maven property.
-   *
-   * @param {string} name - property name
-   * @param {string} value - property value
-   */
-  addMavenProperty(name, value) {
-    this.needleApi.serverMaven.addProperty(name, value);
-  }
-
-  /**
-   * @private
-   * Add a new Maven dependency.
-   *
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} other - (optional) explicit other thing: scope, exclusions...
-   */
-  addMavenDependency(groupId, artifactId, version, other) {
-    this.addMavenDependencyInDirectory('.', groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven dependency in a specific folder..
-   *
-   * @param {string} directory - the folder to add the dependency in
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} other - (optional) explicit other thing: scope, exclusions...
-   */
-  addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven plugin.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   * @param {string} other - explicit other thing: executions, configuration...
-   */
-  addMavenPlugin(groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven plugin management.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   * @param {string} other - explicit other thing: executions, configuration...
-   */
-  addMavenPluginManagement(groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new annotation processor path to Maven compiler configuration.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   */
-  addMavenAnnotationProcessor(groupId, artifactId, version) {
-    this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
-  }
-
-  /**
-   * @private
-   * Add a new Maven profile.
-   *
-   * @param {string} profileId - profile ID
-   * @param {string} other - explicit other thing: build, dependencies...
-   */
-  addMavenProfile(profileId, other) {
-    this.needleApi.serverMaven.addProfile(profileId, other);
   }
 
   /**
@@ -666,44 +534,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * get a table name in JHipster preferred style.
-   *
-   * @param {string} value - table name string
-   */
-  getTableName(value) {
-    return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
    * get a table column name in JHipster preferred style.
    *
    * @param {string} value - table column name string
    */
   getColumnName(value) {
     return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
-   * get a table name for joined tables in JHipster preferred style.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} relationshipName - name of the related entity
-   * @param {string} prodDatabaseType - database type
-   */
-  getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-    const separator = '__';
-    const prefix = 'rel_';
-    const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
-    const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
-    if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logger.warn(
-        `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
-      );
-      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
-    }
-    return joinTableName;
   }
 
   /**
@@ -718,25 +554,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} suffix - constraintName suffix for the constraintName
    */
   getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
-    let constraintName;
-    const separator = '__';
-    if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
-    } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}${suffix}`;
-    }
-    const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
-    if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logger.warn(
-        `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
-      );
-      return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
-        separator,
-        noSnakeCase,
-        prefix,
-      })}${suffix}`;
-    }
-    return constraintName;
+    const result = calculateDbName(entityName, columnOrRelationName, { prodDatabaseType, noSnakeCase, prefix, suffix });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -749,7 +569,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
+    const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -762,7 +584,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
+    const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -831,7 +655,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value string to convert
    */
   upperFirstCamelCase(value) {
-    return _.upperFirst(_.camelCase(value));
+    return upperFirstCamelCase(value);
   }
 
   /**
@@ -1462,7 +1286,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
-      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
+      dest.upperFirstCamelCaseBaseName = upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
@@ -1636,6 +1460,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.messageBroker = NO_MESSAGE_BROKER;
     }
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
+    dest.messageBrokerPulsar = dest.messageBroker === PULSAR;
+    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== NO_MESSAGE_BROKER;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
@@ -1700,6 +1526,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
 
     dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
+
+    dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
+    dest.generateAuthenticationApi = dest.applicationTypeMonolith || dest.applicationTypeGateway;
 
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);
