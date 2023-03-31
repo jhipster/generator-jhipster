@@ -117,7 +117,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
         source.addMavenDependency?.({ inProfile, groupId: 'com.mysql', artifactId: 'mysql-connector-j' });
       },
       customizeMariadb({ application, source }) {
-        if (!(application as any).prodDatabaseTypeMaridb) return;
+        if (!(application as any).prodDatabaseTypeMariadb) return;
 
         const inProfile = (application as any).devDatabaseTypeH2Any ? 'prod' : undefined;
         source.addMavenDependency?.({ inProfile, groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' });
