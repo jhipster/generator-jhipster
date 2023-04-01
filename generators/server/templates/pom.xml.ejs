@@ -1630,7 +1630,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}<%_ if (enableLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
                 <profile.test>testdev</profile.test>
             </properties>
             <dependencies>
@@ -1806,7 +1806,7 @@
             <id>prod</id>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (enableLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
                 <profile.test>testprod</profile.test>
             </properties>
 <%_ if (databaseTypeSql) { _%>
