@@ -21,42 +21,29 @@ package <%= packageName %>;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import <%= packageName %>.config.EmbeddedPulsar;
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Integration test for the Spring Cloud Stream Pulsar Binder.
  */
 @IntegrationTest
-@EmbeddedPulsar
-@Import(PulsarIT.TestConfig.class)
 public class PulsarIT {
 
-    private static final BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+    @Autowired
+    BlockingQueue<String> testInputQueue;
+
+    @Autowired
+    BlockingQueue<String> testOutputQueue;
 
     @Test
     public void testPulsar() throws Exception {
-        assertThat(queue.poll(5, TimeUnit.SECONDS)).isEqualTo("Hello world!");
+        String value = UUID.randomUUID().toString();
+        testInputQueue.put(value);
+        assertThat(testOutputQueue.poll(5, TimeUnit.SECONDS)).isEqualTo(value);
     }
 
-    @TestConfiguration
-    static class TestConfig {
-
-        @Bean
-        public Supplier<String> stringSupplier() {
-            return () -> "Hello world!";
-        }
-
-        @Bean
-        public Consumer<String> stringConsumer() {
-            return queue::offer;
-        }
-    }
 }
