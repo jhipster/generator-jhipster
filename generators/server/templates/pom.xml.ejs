@@ -1356,7 +1356,7 @@
                         </excludes>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                        <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
 <%_ } _%>
                     </configuration>
                 </plugin>
@@ -1445,7 +1445,7 @@
                         </includes>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=${profile.test}</argLine>
+                        <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=${profile.test}</argLine>
 <%_ } else { _%>
                         <argLine>@{argLine} -Dspring.profiles.active=${profile.test}</argLine>
 <%_ } _%>
