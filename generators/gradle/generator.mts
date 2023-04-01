@@ -26,11 +26,15 @@ import files from './files.mjs';
 import { GRADLE } from './constants.mjs';
 import cleanupOldServerFilesTask from './cleanup.mjs';
 import { createNeedleCallback } from '../base/support/index.mjs';
+import {
+  applyFromGradleCallback,
+  addGradleDependencyCallback,
+  addGradleMavenRepositoryCallback,
+  addGradlePluginCallback,
+  addGradlePluginManagementCallback,
+  addGradlePropertyCallback,
+} from './internal/needles.mjs';
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
- */
 export default class GradleGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -55,14 +59,12 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         assert.equal(application.buildTool, GRADLE);
       },
       addSourceNeddles({ source }) {
-        source.applyFromGradle = ({ script }) =>
-          this.editFile(
-            this.destinationPath('build.gradle'),
-            createNeedleCallback({
-              needle: 'gradle-apply-from',
-              contentToAdd: `apply from: "${script}"`,
-            })
-          );
+        source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
+        source.addGradleDependency = dependency => this.editFile('build.gradle', addGradleDependencyCallback(dependency));
+        source.addGradlePlugin = plugin => this.editFile('build.gradle', addGradlePluginCallback(plugin));
+        source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
+        source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
+        source.addGradleProperty = property => this.editFile('gradle.properties', addGradlePropertyCallback(property));
       },
     });
   }
