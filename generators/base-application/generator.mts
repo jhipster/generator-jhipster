@@ -24,10 +24,11 @@ import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from './tasks.mjs';
 import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs';
-import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
+import type { BaseApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 import type { Entity } from './types/index.mjs';
-import { SpringBootSourceType } from '../server/types.mjs';
+import { SpringBootApplication, SpringBootSourceType } from '../server/types.mjs';
+import { ClientApplication } from '../client/types.mjs';
 
 const { upperFirst } = _;
 
@@ -65,8 +66,10 @@ const asPriority = BaseGenerator.asPriority;
 
 export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType;
 
+export type JHipsterApplication = BaseApplication & Partial<SpringBootApplication & ClientApplication>;
+
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  GenericApplicationDefinition<CommonClientServerApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
+  GenericApplicationDefinition<JHipsterApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
 >;
 
 /**
@@ -74,8 +77,8 @@ export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
  */
 export default class BaseApplicationGenerator<
   Definition extends BaseApplicationGeneratorDefinition<{
-    applicationType: BaseApplication;
-    entityType: Entity;
+    applicationType: unknown;
+    entityType: unknown;
   }> = GeneratorDefinition
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
