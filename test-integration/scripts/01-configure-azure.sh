@@ -21,8 +21,6 @@ sudo apt-get install -y openjdk-17-jdk
 ls /usr/lib/jvm/ -la
 sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
 echo "##vso[task.setvariable variable=JAVA_HOME]/usr/lib/jvm/java-17-openjdk-amd64"
-# Use java backward compatible locale values https://bugs.openjdk.java.net/browse/JDK-8267069
-echo "##vso[task.setvariable variable=java.locale.useOldISOCodes]true"
 java -version
 javadoc --version
 
