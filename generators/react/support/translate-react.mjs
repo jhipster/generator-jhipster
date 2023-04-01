@@ -28,7 +28,8 @@ const TRANSLATE_FUNCTION = /translate\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\
 const CONTENT_TYPE_ATTRIBUTE = 'contentKey=(?:"(?<key>[^"]+)"|\\{[^\\}]+\\})\\s*';
 const INTERPOLATE_ATTRIBUTE = 'interpolate=\\{(?<interpolate>\\{[^\\}]+\\})\\}\\s*';
 const COMPONENT_ATTRIBUTE = 'component="(?<component>[^"]+)"\\s*';
-const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE})+)>(?<translation>[\\s\\S]*?)<\\/Translate>`;
+const KEY_ATTRIBUTE = 'key=(?:"([^"]+)"|\\{[^\\}]+\\})\\s*';
+const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE}|${KEY_ATTRIBUTE})+)>(?<translation>[\\s\\S]*?)<\\/Translate>`;
 
 function getTranslationValue(getWebappTranslation, key, data) {
   return getWebappTranslation(key, data) || undefined;
