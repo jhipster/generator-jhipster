@@ -31,6 +31,7 @@ import { CLIENT_MAIN_SRC_DIR, MAIN_DIR, SERVER_MAIN_RES_DIR } from '../generator
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
+import { addGradleDependencyCallback, addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -793,14 +794,32 @@ export default class GaeGenerator extends BaseGenerator {
           if (this.buildTool === MAVEN) {
             this.addMavenDependency('com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
           } else if (this.buildTool === GRADLE) {
-            this.addGradleDependency('compile', 'com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
+            // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+            this.editFile(
+              'build.gradle',
+              addGradleDependencyCallback({
+                groupId: 'com.google.cloud.sql',
+                artifactId: 'mysql-socket-factory',
+                version: '1.0.8',
+                scope: 'compile',
+              })
+            );
           }
         }
         if (this.prodDatabaseType === POSTGRESQL) {
           if (this.buildTool === MAVEN) {
             this.addMavenDependency('com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
           } else if (this.buildTool === GRADLE) {
-            this.addGradleDependency('compile', 'com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
+            // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+            this.editFile(
+              'build.gradle',
+              addGradleDependencyCallback({
+                groupId: 'com.google.cloud.sql',
+                artifactId: 'postgres-socket-factory',
+                version: '1.0.12',
+                scope: 'compile',
+              })
+            );
           }
         }
       },
@@ -808,9 +827,22 @@ export default class GaeGenerator extends BaseGenerator {
       addGradlePlugin() {
         if (this.abort) return;
         if (this.buildTool === GRADLE) {
-          this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.2.0');
-          this.addGradlePlugin('org.springframework.boot.experimental', 'spring-boot-thin-gradle-plugin', '1.0.13.RELEASE');
-          this.applyFromGradleScript('gradle/gae');
+          // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+          this.editFile(
+            'build.gradle',
+            addGradlePluginCallback({ groupId: 'com.google.cloud.tools', artifactId: 'appengine-gradle-plugin', version: '2.2.0' })
+          );
+          // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+          this.editFile(
+            'build.gradle',
+            addGradlePluginCallback({
+              groupId: 'org.springframework.boot.experimental',
+              artifactId: 'spring-boot-thin-gradle-plugin',
+              version: '1.0.13.RELEASE',
+            })
+          );
+          // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+          this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/gae.gradle' }));
         }
       },
 
