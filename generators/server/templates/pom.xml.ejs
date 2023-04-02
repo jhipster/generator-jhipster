@@ -34,9 +34,6 @@
         <!--
             Build properties
             The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
-<%_ if (databaseTypeCassandra) { _%>
-            The cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version}
-<%_ } _%>
         -->
         <maven.version>3.2.5</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
@@ -87,9 +84,6 @@
 <%_ if (databaseTypeSql) { _%>
         <jaxb-runtime.version><%- javaDependencies['jaxb-runtime'] %></jaxb-runtime.version>
 <%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-        <cassandra-driver.version><%= CASSANDRA_DRIVER_VERSION %></cassandra-driver.version>
-<%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
 <%_ if (messageBrokerPulsar) { _%>
@@ -109,9 +103,6 @@
         <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
   <%_ } _%>
         <hazelcast-spring.version><%- javaDependencies['hazelcast-spring'] %></hazelcast-spring.version>
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-        <awaitility.version><%- javaDependencies.awaitility %></awaitility.version>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
         <gatling.version><%- javaDependencies.gatling %></gatling.version>
@@ -298,18 +289,6 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerAny) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.springdoc</groupId>
 <%_ if (reactive) { _%>
@@ -328,12 +307,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
         <dependency>
             <groupId>org.openapitools</groupId>
@@ -341,55 +314,7 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>couchbase</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.couchbase.client</groupId>
-            <artifactId>java-client</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-neo4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.michael-simons.neo4j</groupId>
-            <artifactId>neo4j-migrations-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>neo4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-        <dependency>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>cassandra</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (cacheProviderEhCache) { _%>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <classifier>jakarta</classifier>
-        </dependency>
   <%_ if (enableHibernateCache) { _%>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
@@ -478,11 +403,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mongodb</artifactId>
-            <scope>test</scope>
-        </dependency>
   <%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -493,12 +413,6 @@
             <artifactId>mongodb-reactive-driver</artifactId>
         </dependency>
   <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>com.github.differentway</groupId>
-            <artifactId>couchmove</artifactId>
-        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -524,52 +438,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-        </dependency>
-  <%_ } else { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-  <%_ } _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>jdbc</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>${awaitility.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %></artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -649,42 +517,6 @@
             <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-<%_ if (messageBrokerKafka) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-test-binder</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>kafka</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (messageBrokerPulsar) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.pulsar</groupId>
-            <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
-            <version>${spring-pulsar.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>pulsar</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -708,13 +540,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-        <dependency>
-            <!-- DataStax driver -->
-            <groupId>com.datastax.oss</groupId>
-            <artifactId>java-driver-mapper-runtime</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
@@ -1039,13 +864,6 @@
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
                                 <version>${jaxb-runtime.version}</version>
-                            </path>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-                            <path>
-                                <groupId>com.datastax.oss</groupId>
-                                <artifactId>java-driver-mapper-processor</artifactId>
-                                <version>${cassandra-driver.version}</version>
                             </path>
 <%_ } _%>
                         </annotationProcessorPaths>

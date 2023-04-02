@@ -24,13 +24,6 @@ import writeElasticsearchFilesTask from './files.mjs';
 import cleanupElasticsearchFilesTask from './cleanup.mjs';
 import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
 export default class ElasticsearchGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -59,5 +52,56 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenProperty?.({
+            property: 'awaitility.version',
+            value: application.javaDependencies.awaitility,
+          });
+
+          source.addMavenDependency?.([
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: 'spring-boot-starter-data-elasticsearch',
+            },
+            {
+              groupId: 'org.awaitility',
+              artifactId: 'awaitility',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: '${awaitility.version}',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.apache.commons',
+              artifactId: 'commons-collections4',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'elasticsearch',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }

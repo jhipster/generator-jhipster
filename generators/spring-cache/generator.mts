@@ -64,6 +64,75 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<Sprin
           source.applyFromGradle?.({ script: 'gradle/cache.gradle' });
         }
       },
+      addDependencies({ application, source }) {
+        const applicationAny = application as any;
+        if (application.buildToolMaven) {
+          if (applicationAny.cacheProviderRedis) {
+            source.addMavenDependency?.([
+              {
+                groupId: 'org.testcontainers',
+                artifactId: 'junit-jupiter',
+                scope: 'test',
+              },
+              {
+                groupId: 'org.testcontainers',
+                artifactId: 'testcontainers',
+                scope: 'test',
+              },
+            ]);
+          }
+
+          if (applicationAny.cacheProviderEhCache) {
+            source.addMavenDependency?.([
+              {
+                groupId: 'javax.cache',
+                artifactId: 'cache-api',
+              },
+              {
+                groupId: 'org.ehcache',
+                artifactId: 'ehcache',
+                classifier: 'jakarta',
+              },
+            ]);
+          }
+
+          if (applicationAny.cacheProviderCaffeine) {
+            source.addMavenDependency?.([
+              {
+                groupId: 'javax.cache',
+                artifactId: 'cache-api',
+              },
+            ]);
+          }
+
+          if (applicationAny.cacheProviderHazelcast) {
+            source.addMavenDependency?.([
+              {
+                groupId: 'javax.cache',
+                artifactId: 'cache-api',
+              },
+            ]);
+          }
+
+          if (applicationAny.cacheProviderInfinispan) {
+            source.addMavenDependency?.([
+              {
+                groupId: 'javax.cache',
+                artifactId: 'cache-api',
+              },
+            ]);
+          }
+
+          if (applicationAny.cacheProviderMemcached) {
+            source.addMavenDependency?.([
+              {
+                groupId: 'javax.cache',
+                artifactId: 'cache-api',
+              },
+            ]);
+          }
+        }
+      },
     });
   }
 

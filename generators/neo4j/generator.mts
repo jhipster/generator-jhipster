@@ -53,4 +53,42 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDependency?.([
+            {
+              groupId: 'eu.michael-simons.neo4j',
+              artifactId: 'neo4j-migrations-spring-boot-starter',
+            },
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: 'spring-boot-starter-data-neo4j',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'neo4j',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
 }

@@ -20,11 +20,10 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_KAFKA, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
-import { GeneratorDefinition } from '../server/index.mjs';
 import cleanupKafkaFilesTask from './cleanup.mjs';
 import writeKafkaFilesTask from './files.mjs';
 
-export default class KafkaGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class KafkaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
@@ -61,10 +60,44 @@ export default class KafkaGenerator extends BaseApplicationGenerator<GeneratorDe
           source.applyFromGradle?.({ script: 'gradle/kafka.gradle' });
         }
       },
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDependency?.([
+            {
+              groupId: 'org.springframework.cloud',
+              artifactId: 'spring-cloud-stream',
+            },
+            {
+              groupId: 'org.springframework.cloud',
+              artifactId: 'spring-cloud-starter-stream-kafka',
+            },
+            {
+              groupId: 'org.springframework.cloud',
+              artifactId: 'spring-cloud-stream-test-binder',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'kafka',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
     });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }

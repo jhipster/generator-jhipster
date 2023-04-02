@@ -20,10 +20,9 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_PULSAR, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
-import { GeneratorDefinition } from '../server/index.mjs';
 import writePulsarFilesTask from './files.mjs';
 
-export default class PulsarGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class PulsarGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
@@ -57,10 +56,41 @@ export default class PulsarGenerator extends BaseApplicationGenerator<GeneratorD
           source.applyFromGradle?.({ script: 'gradle/pulsar.gradle' });
         }
       },
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDependency?.([
+            {
+              groupId: 'org.springframework.cloud',
+              artifactId: 'spring-cloud-stream',
+            },
+            {
+              groupId: 'org.springframework.pulsar',
+              artifactId: 'spring-pulsar-spring-cloud-stream-binder',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: '${spring-pulsar.version}',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'pulsar',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
     });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }

@@ -24,13 +24,6 @@ import writeMongodbFilesTask from './files.mjs';
 import cleanupMongodbFilesTask from './cleanup.mjs';
 import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
 export default class MongoDBGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -59,5 +52,40 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        const { reactive } = application;
+        if (application.buildToolMaven) {
+          source.addMavenDependency?.([
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`,
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'mongodb',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }
