@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import Generator from './generator.mjs';
 import { mergeSections, addSectionsCondition } from '../base/support/index.mjs';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
@@ -139,7 +140,7 @@ export const serverFiles = mergeSections(
 /**
  * @this {import('./index.mjs')}
  */
-export default async function writeSqlFiles({ application }) {
+export default async function writeSqlFiles(this: Generator, { application }) {
   await this.writeFiles({
     sections: serverFiles,
     context: application,

@@ -46,7 +46,8 @@ export default class InfoGenerator extends BaseApplicationGenerator {
         try {
           const { stdout } = await this.spawnCommand('npm', ['list', 'generator-jhipster'], { stdio: 'pipe' });
           console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
-        } catch ({ stdout }) {
+        } catch (error) {
+          const { stdout } = error as { stdout: string };
           console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
         }
       },
