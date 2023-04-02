@@ -39,11 +39,15 @@ describe(`generator - ${generator}`, () => {
   Object.entries(samples).forEach(([name, sample]) => {
     describe(name, () => {
       before(async () => {
-        await helpers.runJHipster(GENERATOR_SPRING_CACHE).withJHipsterConfig(sample);
+        await helpers.runJHipster(GENERATOR_SPRING_CACHE).withJHipsterConfig(sample).withMockedSource();
       });
 
       it('should match files snapshot', () => {
         expect(result.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(result.sourceCallsArg).toMatchSnapshot();
       });
     });
   });

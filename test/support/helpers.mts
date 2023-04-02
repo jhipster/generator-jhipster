@@ -176,6 +176,12 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunConte
           entities: entities.map(entity => `Entity[${entity.name}]`),
         }));
       }
+      if (sourceCallsArg.addEntityToCache) {
+        sourceCallsArg.addEntityToCache = (sourceCallsArg.addEntityToCache as any).map(({ relationships, ...fields }) => ({
+          ...fields,
+          relationships: relationships.map(rel => `Relationship[${rel.relationshipName}]`),
+        }));
+      }
       const jhipsterRunResult = runResult as unknown as JHipsterRunResult;
       jhipsterRunResult.sourceCallsArg = sourceCallsArg;
     }

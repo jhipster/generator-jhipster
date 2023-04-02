@@ -63,7 +63,7 @@ import {
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
-import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.mjs';
+import { writeFiles as writeEntityFiles } from './entity-files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
@@ -789,8 +789,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
-      customizeFiles,
-
       packageJsonE2eScripts({ application, entities }) {
         if (application.applicationTypeGateway) {
           const { serverPort, lowercaseBaseName } = application;

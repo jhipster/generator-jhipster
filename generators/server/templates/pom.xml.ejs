@@ -92,17 +92,8 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
+<%_ if (authenticationTypeOauth2 && !cacheProviderInfinispan) { _%>
         <caffeine.version><%- javaDependencies.caffeine %></caffeine.version>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
-        <typesafe.version><%- javaDependencies.typesafe %></typesafe.version>
-<%_ } _%>
-<%_ if (cacheProviderHazelcast) { _%>
-  <%_ if (enableHibernateCache) { _%>
-        <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
-  <%_ } _%>
-        <hazelcast-spring.version><%- javaDependencies['hazelcast-spring'] %></hazelcast-spring.version>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
         <gatling.version><%- javaDependencies.gatling %></gatling.version>
@@ -184,12 +175,6 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
-<%_ if (!cacheProviderNo) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
@@ -216,69 +201,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-<%_ if (cacheProviderHazelcast) { _%>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate53</artifactId>
-            <version>${hazelcast-hibernate53.version}</version>
-        </dependency>
-  <%_ } _%>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-spring</artifactId>
-            <version>${hazelcast-spring.version}</version>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderInfinispan) { _%>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-hibernate-cache-v60</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring-boot3-starter-embedded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-commons-jakarta</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core-jakarta</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-component-annotations</artifactId>
-            <scope>compile</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderMemcached) { _%>
-        <dependency>
-            <groupId>com.google.code.simple-spring-memcached</groupId>
-            <artifactId>spring-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.simple-spring-memcached</groupId>
-            <artifactId>xmemcached-provider</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.xmemcached</groupId>
-            <artifactId>xmemcached</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-        </dependency>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
         <dependency>
             <groupId>org.springdoc</groupId>
 <%_ if (reactive) { _%>
@@ -304,38 +226,12 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 <%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
+<%_ if (authenticationTypeOauth2 && !cacheProviderInfinispan) { _%>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
         </dependency>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>jcache</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe</groupId>
-            <artifactId>config</artifactId>
-            <version>${typesafe.version}</version>
-        </dependency>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
         <dependency>

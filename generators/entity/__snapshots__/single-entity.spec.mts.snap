@@ -10,6 +10,12 @@ exports[`generator - entity --single-entity when regenerating with default confi
       ],
     },
   ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+  ],
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
