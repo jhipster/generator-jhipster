@@ -218,8 +218,8 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
 
   // Public API method used by the getter and also by Blueprints
   get postWritingEntities() {
-    return {
-      writeLiquibaseFiles({ application }) {
+    return this.asPostWritingTaskGroup({
+      writeLiquibaseFiles({ application, source }) {
         const entity = this.entity;
         if (entity.skipServer) {
           return {};
@@ -228,14 +228,14 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
         const entityChanges = this.entityChanges;
 
         if (databaseChangelog.type === 'entity-new') {
-          return this._addLiquibaseFilesReferences(entity, databaseChangelog);
+          return this._addLiquibaseFilesReferences({ entity, databaseChangelog, source });
         }
         if (entityChanges.requiresUpdateChangelogs) {
-          return this._addUpdateFilesReferences(entity, databaseChangelog, entityChanges);
+          return this._addUpdateFilesReferences({ entity, databaseChangelog, entityChanges, source });
         }
         return undefined;
       },
-    };
+    });
   }
 
   get [BaseApplication.POST_WRITING_ENTITIES]() {
@@ -269,20 +269,20 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   /**
    * Write files for new entities.
    */
-  _addLiquibaseFilesReferences(entity, databaseChangelog) {
+  _addLiquibaseFilesReferences({ entity, databaseChangelog, source }) {
     const fileName = `${databaseChangelog.changelogDate}_added_entity_${entity.entityClass}`;
     if (entity.incremental) {
-      this.addIncrementalChangelogToLiquibase(fileName);
+      source.addLiquibaseIncrementalChangelog({ changelogName: fileName });
     } else {
-      this.addChangelogToLiquibase(fileName);
+      source.addLiquibaseChangelog({ changelogName: fileName });
     }
 
     if (entity.anyRelationshipIsOwnerSide) {
       const constFileName = `${databaseChangelog.changelogDate}_added_entity_constraints_${entity.entityClass}`;
       if (entity.incremental) {
-        this.addIncrementalChangelogToLiquibase(constFileName);
+        source.addLiquibaseIncrementalChangelog({ changelogName: constFileName });
       } else {
-        this.addConstraintsChangelogToLiquibase(constFileName);
+        source.addLiquibaseConstraintsChangelog({ changelogName: constFileName });
       }
     }
   }
@@ -336,15 +336,19 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   /**
    * Write files for updated entities.
    */
-  _addUpdateFilesReferences(entity, databaseChangelog, entityChanges) {
-    this.addIncrementalChangelogToLiquibase(`${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}`);
+  _addUpdateFilesReferences({ entity, databaseChangelog, entityChanges, source }) {
+    source.addLiquibaseIncrementalChangelog({ changelogName: `${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}` });
 
     if (!entityChanges.skipFakeData && (entityChanges.addedFields.length > 0 || entityChanges.shouldWriteAnyRelationship)) {
-      this.addIncrementalChangelogToLiquibase(`${databaseChangelog.changelogDate}_updated_entity_migrate_${entity.entityClass}`);
+      source.addLiquibaseIncrementalChangelog({
+        changelogName: `${databaseChangelog.changelogDate}_updated_entity_migrate_${entity.entityClass}`,
+      });
     }
 
     if (entityChanges.hasFieldConstraint || entityChanges.shouldWriteAnyRelationship) {
-      this.addIncrementalChangelogToLiquibase(`${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}`);
+      source.addLiquibaseIncrementalChangelog({
+        changelogName: `${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}`,
+      });
     }
   }
 

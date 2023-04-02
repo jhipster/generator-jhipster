@@ -24,7 +24,6 @@ import ClientVue from './client/needle-api/needle-client-vue.mjs';
 import ClientWebpack from './client/needle-api/needle-client-webpack.mjs';
 import ClientI18n from './client/needle-api/needle-client-i18n.mjs';
 import ServerCache from './server/needle-api/needle-server-cache.mjs';
-import ServerLiquibase from './server/needle-api/needle-server-liquibase.mjs';
 
 export default class NeedleApi {
   constructor(generator) {
@@ -36,6 +35,5 @@ export default class NeedleApi {
     this.clientWebpack = new ClientWebpack(generator);
     this.clientI18n = new ClientI18n(generator);
     this.serverCache = new ServerCache(generator);
-    this.serverLiquibase = new ServerLiquibase(generator);
   }
 }
