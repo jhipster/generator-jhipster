@@ -106,12 +106,12 @@ spring:
 <%_ } _%>
 <%_ if (messageBrokerPulsar) { _%>
     function:
-      definition: stringSupplier;stringConsumer
+      definition: testStringSupplier;testStringConsumer
     stream:
       bindings:
-        stringSupplier-out-0:
+        testStringSupplier-out-0:
           destination: <%= dasherizedBaseName %>
-        stringConsumer-in-0:
+        testStringConsumer-in-0:
           destination: <%= dasherizedBaseName %>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
