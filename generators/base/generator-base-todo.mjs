@@ -103,17 +103,6 @@ const isWin32 = os.platform() === 'win32';
 export default class JHipsterBaseGenerator extends PrivateBase {
   /**
    * @private
-   * Add external resources to root file(index.html).
-   *
-   * @param {string} resources - Resources added to root file.
-   * @param {string} comment - comment to add before resources content.
-   */
-  addExternalResourcesToRoot(resources, comment) {
-    this.needleApi.client.addExternalResourcesToRoot(resources, comment);
-  }
-
-  /**
-   * @private
    * Add a new element in the "global.json" translations.
    *
    * @param {string} key - Key for the menu entry
