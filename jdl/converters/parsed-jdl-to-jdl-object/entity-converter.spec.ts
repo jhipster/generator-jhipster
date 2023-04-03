@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertEntities } from '../../converters/parsed-jdl-to-jdl-object/entity-converter.js';
+import { convertEntities } from './entity-converter.js';
 
 describe('jdl - EntityConverter', () => {
   describe('convertEntities', () => {

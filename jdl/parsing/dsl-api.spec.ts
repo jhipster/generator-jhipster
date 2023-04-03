@@ -18,9 +18,9 @@
  */
 
 import { expect } from 'chai';
-import { tokens } from '../parsing/lexer/lexer.js';
+import { tokens } from './lexer/lexer.js';
 
-import { getSyntacticAutoCompleteSuggestions, parse } from '../parsing/api.js';
+import { getSyntacticAutoCompleteSuggestions, parse } from './api.js';
 
 describe('jdl - JDL DSL API', () => {
   context('when wanting an AST', () => {

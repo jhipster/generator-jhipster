@@ -30,7 +30,7 @@ import { JDLEntity } from '../../models/index.mjs';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { unaryOptions, binaryOptions } from '../../jhipster/index.mjs';
-import { convert } from '../../converters/jdl-to-json/jdl-to-json-option-converter.js';
+import { convert } from './jdl-to-json-option-converter.js';
 import logger from '../../utils/objects/logger.js';
 
 describe('jdl - JDLToJSONOptionConverter', () => {

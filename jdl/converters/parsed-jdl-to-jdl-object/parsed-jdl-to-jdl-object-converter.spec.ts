@@ -25,7 +25,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
-import ParsedJDLToJDLObjectConverter from '../../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
 import { JDLEntity, JDLEnum } from '../../models/index.mjs';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';

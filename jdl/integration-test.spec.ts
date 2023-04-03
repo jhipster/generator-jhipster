@@ -24,11 +24,11 @@ import { expect } from 'chai';
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { applicationTypes } from '../jhipster/index.mjs';
-import { parseFromFiles } from '../readers/jdl-reader.js';
-import DocumentParser from '../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
-import exportToJDL from '../exporters/jdl-exporter.js';
-import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
+import { applicationTypes } from './jhipster/index.mjs';
+import { parseFromFiles } from './readers/jdl-reader.js';
+import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import exportToJDL from './exporters/jdl-exporter.js';
+import { basicHelpers as helpers } from '../test/support/helpers.mjs';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
@@ -45,7 +45,7 @@ describe('jdl - integration tests', () => {
 
     beforeEach(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
-        parsedContent: parseFromFiles([path.join(__dirname, '..', '__test-files__', 'big_sample.jdl')]),
+        parsedContent: parseFromFiles([path.join(__dirname, '__test-files__', 'big_sample.jdl')]),
         applicationType: MONOLITH,
       });
       exportToJDL(originalContent, 'exported.jdl');

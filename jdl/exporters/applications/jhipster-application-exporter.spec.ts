@@ -23,7 +23,7 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import { exportApplication, exportApplications } from '../exporters/applications/jhipster-application-exporter.js';
+import { exportApplication, exportApplications } from './jhipster-application-exporter.js';
 import {
   applicationTypes,
   buildToolTypes,
@@ -35,7 +35,7 @@ import {
   searchEngineTypes,
   websocketTypes,
   messageBrokerTypes,
-} from '../jhipster/index.mjs';
+} from '../../jhipster/index.mjs';
 
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.NO;

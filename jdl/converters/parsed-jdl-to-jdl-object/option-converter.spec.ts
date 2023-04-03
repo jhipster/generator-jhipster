@@ -19,7 +19,7 @@
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.mjs';
-import { convertOptions } from '../../converters/parsed-jdl-to-jdl-object/option-converter.js';
+import { convertOptions } from './option-converter.js';
 
 const { MapperTypes, PaginationTypes } = entityOptions;
 const { COUCHBASE } = searchEngineTypes;

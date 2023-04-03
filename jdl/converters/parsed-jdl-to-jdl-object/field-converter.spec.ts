@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertField } from '../../converters/parsed-jdl-to-jdl-object/field-converter.js';
+import { convertField } from './field-converter.js';
 
 describe('jdl - FieldConverter', () => {
   describe('convertField', () => {

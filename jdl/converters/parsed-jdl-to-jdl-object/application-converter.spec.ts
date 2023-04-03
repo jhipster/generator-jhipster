@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import { applicationTypes } from '../../jhipster/index.mjs';
 import createJDLApplication from '../../models/jdl-application-factory.js';
-import { convertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.js';
+import { convertApplications } from './application-converter.js';
 
 const { MONOLITH } = applicationTypes;
 

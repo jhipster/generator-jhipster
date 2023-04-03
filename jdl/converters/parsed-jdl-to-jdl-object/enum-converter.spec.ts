@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertEnums } from '../../converters/parsed-jdl-to-jdl-object/enum-converter.js';
+import { convertEnums } from './enum-converter.js';
 
 describe('jdl - EnumConverter', () => {
   describe('convertEnums', () => {

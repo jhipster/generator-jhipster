@@ -18,13 +18,13 @@
  */
 
 import { expect } from 'chai';
-import Issues from '../../linters/issues/issues.js';
-import { rulesNames } from '../../linters/rules.js';
+import Issues from './issues.js';
+import { rulesNames } from '../rules.js';
 import { relationshipTypes } from '../../jhipster/index.mjs';
-import EntityIssue from '../../linters/issues/entity-issue.js';
-import FieldIssue from '../../linters/issues/field-issue.js';
-import EnumIssue from '../../linters/issues/enum-issue.js';
-import RelationshipIssue from '../../linters/issues/relationship-issue.js';
+import EntityIssue from './entity-issue.js';
+import FieldIssue from './field-issue.js';
+import EnumIssue from './enum-issue.js';
+import RelationshipIssue from './relationship-issue.js';
 
 describe('jdl - Issues', () => {
   describe('getNumberOfIssues', () => {

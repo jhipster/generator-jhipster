@@ -21,7 +21,7 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import JDLRelationship from '../../models/jdl-relationship.js';
-import { convert } from '../../converters/jdl-to-json/jdl-to-json-relationship-converter.js';
+import { convert } from './jdl-to-json-relationship-converter.js';
 import { relationshipTypes, relationshipOptions } from '../../jhipster/index.mjs';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;

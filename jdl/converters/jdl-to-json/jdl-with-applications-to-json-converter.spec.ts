@@ -46,7 +46,7 @@ import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 import logger from '../../utils/objects/logger.js';
-import { convert } from '../../converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
+import { convert } from './jdl-with-applications-to-json-converter.js';
 
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },

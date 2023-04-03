@@ -25,10 +25,10 @@ import { writeFileSync } from 'fs';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '../linters/jdl-linter.js';
-import Issues from '../linters/issues/issues.js';
-import EnumIssue from '../linters/issues/enum-issue.js';
-import relationshipIssue from '../linters/issues/relationship-issue.js';
+import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from './jdl-linter.js';
+import Issues from './issues/issues.js';
+import EnumIssue from './issues/enum-issue.js';
+import relationshipIssue from './issues/relationship-issue.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

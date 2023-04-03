@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import { JDLLexer } from '../parsing/lexer/lexer.js';
+import { JDLLexer } from './lexer.js';
 
 describe('jdl - JDLLexer', () => {
   context('when passing a valid JDL input', () => {

@@ -19,7 +19,7 @@
 /* eslint-disable no-useless-escape */
 
 import { expect } from 'chai';
-import { parse } from '../parsing/api.js';
+import { parse } from './api.js';
 
 describe('jdl - JDLSyntaxValidatorVisitor', () => {
   context('when declaring an application', () => {

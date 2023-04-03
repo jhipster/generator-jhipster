@@ -26,7 +26,7 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 import { expect } from 'chai';
 
-import { convert } from '../../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import { convert } from './jdl-without-application-to-json-converter.js';
 
 import {
   applicationTypes,

@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertValidations } from '../../converters/parsed-jdl-to-jdl-object/validation-converter.js';
+import { convertValidations } from './validation-converter.js';
 
 describe('jdl - ValidationConverter', () => {
   describe('convertValidations', () => {

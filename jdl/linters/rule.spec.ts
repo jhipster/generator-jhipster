@@ -18,8 +18,8 @@
  */
 
 import { expect } from 'chai';
-import Rule from '../linters/rule.js';
-import { INFO, ERROR } from '../linters/rule-levels.js';
+import Rule from './rule.js';
+import { INFO, ERROR } from './rule-levels.js';
 
 describe('jdl - Rule', () => {
   describe('new', () => {

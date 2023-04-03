@@ -18,48 +18,35 @@
  */
 
 import { expect } from 'chai';
-import RelationshipIssue from '../../linters/issues/relationship-issue.js';
+import FieldIssue from './field-issue.js';
 
-describe('jdl - RelationshipIssue', () => {
+describe('jdl - FieldIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new FieldIssue()).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
     context('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
-
-        // @ts-expect-error
-        expect(() => new RelationshipIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new FieldIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
-    context('when not passing a source', () => {
+    context('when not passing an entity name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' })).to.throw(
-          /^A relationship's source, destination & type must be passed\.$/
-        );
+        expect(() => new FieldIssue({ ruleName: 'Toto' })).to.throw(/^A field name and its entity's name must be passed\.$/);
       });
     });
-    context('when not passing a destination', () => {
+    context('when not passing a field name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' })).to.throw(
-          /^A relationship's source, destination & type must be passed\.$/
+        expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).to.throw(
+          /^A field name and its entity's name must be passed\.$/
         );
       });
-    });
-  });
-  context('when not passing a type', () => {
-    it('should fail', () => {
-      // @ts-expect-error
-      expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' })).to.throw(
-        /^A relationship's source, destination & type must be passed\.$/
-      );
     });
   });
 });
