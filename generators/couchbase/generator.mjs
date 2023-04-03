@@ -23,13 +23,6 @@ import { GENERATOR_COUCHBASE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generat
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.mjs';
 import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
 export default class CouchbaseGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -58,5 +51,52 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        const { reactive } = application;
+        if (application.buildToolMaven) {
+          source.addMavenDependency?.([
+            {
+              groupId: 'commons-codec',
+              artifactId: 'commons-codec',
+            },
+            {
+              groupId: 'com.couchbase.client',
+              artifactId: 'java-client',
+            },
+            {
+              groupId: 'com.github.differentway',
+              artifactId: 'couchmove',
+            },
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: `spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`,
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'couchbase',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }
