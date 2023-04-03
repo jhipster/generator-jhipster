@@ -542,8 +542,9 @@ export default class CoreGenerator extends YeomanGenerator {
   private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
-    const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
-    const applicationId = `${prefix}-${dirname}`;
+    const applicationId =
+      this.options.applicationId ??
+      `${createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex')}-${dirname}`;
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
     }

@@ -83,26 +83,22 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .run(generatorPath)
           .withJHipsterConfig()
-          .withFiles({
-            'src/main/resources/config/liquibase/master.xml': `
-  <databaseChangeLog>
-      <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-      <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-      <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
-  </databaseChangeLog>
-  `,
-          })
           .withArguments(['Foo', 'Bar'])
           .withOptions({
             regenerate: true,
             force: true,
             ignoreNeedlesError: true,
             applicationWithEntities,
-          });
+          })
+          .withMockedSource();
       });
 
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
       it('should create files for entity Foo', () => {
@@ -123,15 +119,6 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .run(generatorPath)
           .withJHipsterConfig()
-          .withFiles({
-            'src/main/resources/config/liquibase/master.xml': `
-  <databaseChangeLog>
-      <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-      <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-      <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
-  </databaseChangeLog>
-  `,
-          })
           .withArguments(['Foo', 'Bar'])
           .withOptions({
             regenerate: true,
@@ -139,11 +126,16 @@ describe(`generator - ${generator}`, () => {
             writeEveryEntity: true,
             ignoreNeedlesError: true,
             applicationWithEntities,
-          });
+          })
+          .withMockedSource();
       });
 
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
       it('should create files for entity Foo', () => {
@@ -164,25 +156,21 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .run(generatorPath)
           .withJHipsterConfig()
-          .withFiles({
-            'src/main/resources/config/liquibase/master.xml': `
-  <databaseChangeLog>
-      <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-      <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-      <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
-  </databaseChangeLog>
-  `,
-          })
           .withOptions({
             regenerate: true,
             force: true,
             ignoreNeedlesError: true,
             applicationWithEntities,
-          });
+          })
+          .withMockedSource();
       });
 
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
       it('should create files for entity Foo', () => {

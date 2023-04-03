@@ -68,9 +68,6 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/resources/config/liquibase/fake-data/skip.csv": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/master.xml": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/bar/bar.model.ts": {
     "stateCleared": "modified",
   },
@@ -302,6 +299,32 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - entities regenerating all entities should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+        "Entity[Bar]",
+        "Entity[Skip]",
+      ],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+    {
+      "changelogName": "20160926101211_added_entity_Bar",
+    },
+    {
+      "changelogName": "20160926101212_added_entity_Skip",
+    },
+  ],
 }
 `;
 
@@ -373,9 +396,6 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
   "src/main/resources/config/liquibase/fake-data/skip.csv": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/master.xml": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/bar/bar.model.ts": {
     "stateCleared": "modified",
   },
@@ -610,6 +630,32 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
 }
 `;
 
+exports[`generator - entities regenerating selected entities with writeEveryEntity should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+        "Entity[Bar]",
+        "Entity[Skip]",
+      ],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+    {
+      "changelogName": "20160926101211_added_entity_Bar",
+    },
+    {
+      "changelogName": "20160926101212_added_entity_Skip",
+    },
+  ],
+}
+`;
+
 exports[`generator - entities regenerating some entities should match snapshot 1`] = `
 {
   ".jhipster/Bar.json": {
@@ -661,9 +707,6 @@ exports[`generator - entities regenerating some entities should match snapshot 1
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/fake-data/foo.csv": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/bar.model.ts": {
@@ -822,5 +865,27 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - entities regenerating some entities should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+        "Entity[Bar]",
+      ],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+    {
+      "changelogName": "20160926101211_added_entity_Bar",
+    },
+  ],
 }
 `;
