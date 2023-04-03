@@ -18,20 +18,19 @@ export type ClientApplication = CommonClientServerApplication &
     webappEnumerationsDir?: string;
   };
 
-/**
- * @private
- * Add external resources to root file(index.html).
- */
 export type ClientResources = {
   /**
-   * @param {string} resource - Resources added to root file.
+   * resources added to root file.
    */
   resource: string;
   /**
-   * @param {string} comment - comment to add before resources content.
+   * comment to add before resources content.
    */
-  comment?: string | null;
+  comment?: string;
 };
 export type ClientSourceType = {
+  /**
+   * Add external resources to root file(index.html).
+   */
   addExternalResourceToRoot?(resources: ClientResources): void;
 };
