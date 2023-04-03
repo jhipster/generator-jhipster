@@ -47,7 +47,9 @@ describe('jdl - JSONReader', () => {
           expect(() => {
             parseFromDir('../../__test-files__/invalid_file.txt');
           }).to.throw(
-            new RegExp("The passed directory '../../__test-files__/invalid_file.txt' must exist and must be a directory to read JSON files.")
+            new RegExp(
+              "The passed directory '../../__test-files__/invalid_file.txt' must exist and must be a directory to read JSON files."
+            )
           );
         });
       });

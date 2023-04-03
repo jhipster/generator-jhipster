@@ -287,7 +287,9 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'authority_entity_to_relationship.jdl')]);
+          const input = JDLReader.parseFromFiles([
+            path.join(__dirname, '..', '..', '__test-files__', 'authority_entity_to_relationship.jdl'),
+          ]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
           });
