@@ -39,4 +39,23 @@ export default class SpringWebsocketGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDefinition?.({
+            dependencies: [
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-websocket' },
+              { groupId: 'org.springframework.security', artifactId: 'spring-security-messaging' },
+            ],
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
 }

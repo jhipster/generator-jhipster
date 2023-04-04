@@ -303,12 +303,6 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
         <dependency>
             <!-- Spring Security OAuth 2.0 -->
@@ -405,12 +399,6 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
-<%_ if (communicationSpringWebsocket) { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-messaging</artifactId>
-        </dependency>
-<%_ } _%>
     </dependencies>
 
     <build>
