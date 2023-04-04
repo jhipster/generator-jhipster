@@ -85,16 +85,10 @@
 <%_ if (authenticationTypeOauth2 && !cacheProviderInfinispan) { _%>
         <caffeine.version><%- javaDependencies.caffeine %></caffeine.version>
 <%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <gatling.version><%- javaDependencies.gatling %></gatling.version>
-<%_ } _%>
         <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version><%- javaDependencies['gatling-maven-plugin'] %></gatling-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version><%- javaDependencies['git-commit-id-plugin'] %></git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%- javaDependencies['jacoco-maven-plugin'] %></jacoco-maven-plugin.version>
@@ -444,14 +438,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <version>${gatling.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
     </dependencies>
 
     <build>
@@ -461,12 +447,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-            </plugin>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
             </plugin>
 <%_ } _%>
             <plugin>
@@ -572,17 +552,6 @@
                             </configuration>
                         </execution>
                     </executions>
-                </plugin>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-                <plugin>
-                    <groupId>io.gatling</groupId>
-                    <artifactId>gatling-maven-plugin</artifactId>
-                    <version>${gatling-maven-plugin.version}</version>
-                    <configuration>
-                        <runMultipleSimulations>true</runMultipleSimulations>
-                        <resourcesFolder>${project.basedir}/src/test/gatling/conf</resourcesFolder>
-                    </configuration>
                 </plugin>
 <%_ } _%>
                 <plugin>
