@@ -103,7 +103,7 @@ objects:
 <%_ if (app.prodDatabaseTypePostgres) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
+<%_ if (app.databaseTypeMongodb) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
 <%_ } _%>
 <%_ if (app.databaseTypeCassandra) { _%>
