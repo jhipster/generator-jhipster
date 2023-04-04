@@ -74,6 +74,22 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         source.addMavenProfile = createForEach(profile => this.pomStorage.addProfile(profile));
         source.addMavenProperty = createForEach(property => this.pomStorage.addProperty(property));
         source.addMavenRepository = createForEach(repository => this.pomStorage.addRepository(repository));
+
+        source.addMavenDefinition = definition => {
+          // profiles should be added first due to inProfile
+          definition.profiles?.forEach(profile => this.pomStorage.addProfile(profile));
+          // annotationProcessors may depend on pluginManagement
+          definition.pluginManagement?.forEach(plugin => this.pomStorage.addPluginManagement(plugin));
+
+          definition.dependencies?.forEach(dependency => this.pomStorage.addDependency(dependency));
+          definition.dependencyManagement?.forEach(dependency => this.pomStorage.addDependencyManagement(dependency));
+          definition.distributionManagement?.forEach(distribution => this.pomStorage.addDistributionManagement(distribution));
+          definition.plugins?.forEach(plugin => this.pomStorage.addPlugin(plugin));
+          definition.pluginRepositories?.forEach(repository => this.pomStorage.addPluginRepository(repository));
+          definition.properties?.forEach(property => this.pomStorage.addProperty(property));
+          definition.repositories?.forEach(repository => this.pomStorage.addRepository(repository));
+          definition.annotationProcessors?.forEach(annotation => this.pomStorage.addAnnotationProcessor(annotation));
+        };
       },
     });
   }
