@@ -76,9 +76,6 @@
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
-<%_ if (messageBrokerPulsar) { _%>
-        <spring-pulsar.version><%- javaDependencies['spring-pulsar'] %></spring-pulsar.version>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%- javaDependencies['jackson-databind-nullable'] %></jackson-databind-nullable.version>
 <%_ } _%>
