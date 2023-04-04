@@ -17,6 +17,7 @@ export type JavaApplication = BaseApplication & {
   temporaryDir: string;
 
   javaDependencies: Record<string, string>;
+  packageInfoJavadocs: { packageName: string; documentation: string }[];
 
   prettierJava: boolean;
 

@@ -496,6 +496,44 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
   "packageFolder": "com/mycompany/myapp/",
+  "packageInfoJavadocs": [
+    {
+      "documentation": "Logging aspect.",
+      "packageName": "com.mycompany.myapp.aop.logging",
+    },
+    {
+      "documentation": "Application management.",
+      "packageName": "com.mycompany.myapp.management",
+    },
+    {
+      "documentation": "Webflux database column mapper.",
+      "packageName": "com.mycompany.myapp.repository.rowmapper",
+    },
+    {
+      "documentation": "Application security utilities.",
+      "packageName": "com.mycompany.myapp.security",
+    },
+    {
+      "documentation": "Data transfer objects for rest mapping.",
+      "packageName": "com.mycompany.myapp.service.dto",
+    },
+    {
+      "documentation": "Data transfer objects mappers.",
+      "packageName": "com.mycompany.myapp.service.mapper",
+    },
+    {
+      "documentation": "Request chain filters.",
+      "packageName": "com.mycompany.myapp.web.filter",
+    },
+    {
+      "documentation": "Rest layer error handling.",
+      "packageName": "com.mycompany.myapp.web.rest.errors",
+    },
+    {
+      "documentation": "Rest layer visual models.",
+      "packageName": "com.mycompany.myapp.web.rest.vm",
+    },
+  ],
   "packageName": "com.mycompany.myapp",
   "pages": [],
   "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
@@ -993,6 +1031,44 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
   "packageFolder": "com/mycompany/myapp/",
+  "packageInfoJavadocs": [
+    {
+      "documentation": "Logging aspect.",
+      "packageName": "com.mycompany.myapp.aop.logging",
+    },
+    {
+      "documentation": "Application management.",
+      "packageName": "com.mycompany.myapp.management",
+    },
+    {
+      "documentation": "Webflux database column mapper.",
+      "packageName": "com.mycompany.myapp.repository.rowmapper",
+    },
+    {
+      "documentation": "Application security utilities.",
+      "packageName": "com.mycompany.myapp.security",
+    },
+    {
+      "documentation": "Data transfer objects for rest mapping.",
+      "packageName": "com.mycompany.myapp.service.dto",
+    },
+    {
+      "documentation": "Data transfer objects mappers.",
+      "packageName": "com.mycompany.myapp.service.mapper",
+    },
+    {
+      "documentation": "Request chain filters.",
+      "packageName": "com.mycompany.myapp.web.filter",
+    },
+    {
+      "documentation": "Rest layer error handling.",
+      "packageName": "com.mycompany.myapp.web.rest.errors",
+    },
+    {
+      "documentation": "Rest layer visual models.",
+      "packageName": "com.mycompany.myapp.web.rest.vm",
+    },
+  ],
   "packageName": "com.mycompany.myapp",
   "pages": [],
   "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
@@ -1434,6 +1510,44 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
   "packageFolder": "com/mycompany/myapp/",
+  "packageInfoJavadocs": [
+    {
+      "documentation": "Logging aspect.",
+      "packageName": "com.mycompany.myapp.aop.logging",
+    },
+    {
+      "documentation": "Application management.",
+      "packageName": "com.mycompany.myapp.management",
+    },
+    {
+      "documentation": "Webflux database column mapper.",
+      "packageName": "com.mycompany.myapp.repository.rowmapper",
+    },
+    {
+      "documentation": "Application security utilities.",
+      "packageName": "com.mycompany.myapp.security",
+    },
+    {
+      "documentation": "Data transfer objects for rest mapping.",
+      "packageName": "com.mycompany.myapp.service.dto",
+    },
+    {
+      "documentation": "Data transfer objects mappers.",
+      "packageName": "com.mycompany.myapp.service.mapper",
+    },
+    {
+      "documentation": "Request chain filters.",
+      "packageName": "com.mycompany.myapp.web.filter",
+    },
+    {
+      "documentation": "Rest layer error handling.",
+      "packageName": "com.mycompany.myapp.web.rest.errors",
+    },
+    {
+      "documentation": "Rest layer visual models.",
+      "packageName": "com.mycompany.myapp.web.rest.vm",
+    },
+  ],
   "packageName": "com.mycompany.myapp",
   "pages": [],
   "prettierExtensions": "md,json,yml,html,java",

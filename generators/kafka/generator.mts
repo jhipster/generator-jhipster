@@ -31,6 +31,21 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.packageInfoJavadocs?.push({
+          packageName: `${application.packageName}.broker`,
+          documentation: 'Kafta consumers and providers',
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupKafkaFilesTask,

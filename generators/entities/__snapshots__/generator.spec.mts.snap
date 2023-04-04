@@ -284,9 +284,6 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -294,9 +291,6 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/SkipResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -626,9 +620,6 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
   "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -636,9 +627,6 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/SkipResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -881,16 +869,10 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
 }
