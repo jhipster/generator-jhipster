@@ -1,9 +1,9 @@
 dependencies {
   implementation "org.springframework.boot:spring-boot-starter-cache"
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
+<%_ if (cacheProviderEhcache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
   implementation "javax.cache:cache-api"
 <%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
+<%_ if (cacheProviderEhcache) { _%>
   implementation group: "org.ehcache", name: "ehcache", classifier: "jakarta"
   <%_ if (enableHibernateCache) { _%>
   implementation "org.hibernate.orm:hibernate-jcache"

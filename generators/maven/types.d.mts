@@ -62,6 +62,19 @@ export type MavenProperty = {
 
 export type MavenProfile = { id: string; content?: string };
 
+export type MavenDefinition = {
+  annotationProcessors?: MavenAnnotationProcessor[];
+  dependencies?: MavenDependency[];
+  dependencyManagement?: MavenDependency[];
+  distributionManagement?: MavenDistributionManagement[];
+  plugins?: MavenPlugin[];
+  pluginManagement?: MavenPlugin[];
+  pluginRepositories?: MavenRepository[];
+  properties?: MavenProperty[];
+  profiles?: MavenProfile[];
+  repositories?: MavenRepository[];
+};
+
 export type MavenSourceType = {
   addMavenAnnotationProcessor?(artifact: MavenAnnotationProcessor | MavenAnnotationProcessor[]): void;
   addMavenDependency?(dependecy: MavenDependency | MavenDependency[]): void;
@@ -73,4 +86,5 @@ export type MavenSourceType = {
   addMavenProperty?(property: MavenProperty | MavenProperty[]): void;
   addMavenProfile?(profile: MavenProfile | MavenProfile[]): void;
   addMavenRepository?(repository: MavenRepository | MavenRepository[]): void;
+  addMavenDefinition?(definition: MavenDefinition): void;
 };

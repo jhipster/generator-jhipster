@@ -139,56 +139,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
-   *
-   * @param {string} entityClass - the entity to cache
-   * @param {array} relationships - the relationships of this entity
-   * @param {string} packageName - the Java package name
-   * @param {string} packageFolder - the Java package folder
-   */
-  addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
-    this.addEntityToCache(entityClass, relationships, packageName, packageFolder, EHCACHE);
-  }
-
-  /**
-   * @private
-   * Add a new entry to Ehcache in CacheConfiguration.java
-   *
-   * @param {string} entry - the entry (including package name) to cache
-   * @param {string} packageFolder - the Java package folder
-   */
-  addEntryToEhcache(entry, packageFolder) {
-    this.addEntryToCache(entry, packageFolder, EHCACHE);
-  }
-
-  /**
-   * @private
-   * Add a new entity to the chosen cache provider, for the 2nd level cache of an entity and its relationships.
-   *
-   * @param {string} entityClass - the entity to cache
-   * @param {array} relationships - the relationships of this entity
-   * @param {string} packageName - the Java package name
-   * @param {string} packageFolder - the Java package folder
-   * @param {string} cacheProvider - the cache provider
-   */
-  addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
-    this.needleApi.serverCache.addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider);
-  }
-
-  /**
-   * @private
-   * Add a new entry to the chosen cache provider in CacheConfiguration.java
-   *
-   * @param {string} entry - the entry (including package name) to cache
-   * @param {string} packageFolder - the Java package folder
-   * @param {string} cacheProvider - the cache provider
-   */
-  addEntryToCache(entry, packageFolder, cacheProvider) {
-    this.needleApi.serverCache.addEntryToCache(entry, packageFolder, cacheProvider);
-  }
-
-  /**
-   * @private
    * Copy third-party library resources path.
    *
    * @param {string} sourceFolder - third-party library resources source path
@@ -1271,7 +1221,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.cacheProviderNo = !dest.cacheProvider || dest.cacheProvider === NO_CACHE;
     dest.cacheProviderCaffeine = dest.cacheProvider === CAFFEINE;
-    dest.cacheProviderEhCache = dest.cacheProvider === EHCACHE;
+    dest.cacheProviderEhcache = dest.cacheProvider === EHCACHE;
     dest.cacheProviderHazelcast = dest.cacheProvider === HAZELCAST;
     dest.cacheProviderInfinispan = dest.cacheProvider === INFINISPAN;
     dest.cacheProviderMemcached = dest.cacheProvider === MEMCACHED;

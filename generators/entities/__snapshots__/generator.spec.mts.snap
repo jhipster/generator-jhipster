@@ -314,6 +314,20 @@ exports[`generator - entities regenerating all entities should match source call
       ],
     },
   ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Skip",
+      "relationships": [],
+    },
+  ],
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
@@ -642,6 +656,20 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
       ],
     },
   ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Skip",
+      "relationships": [],
+    },
+  ],
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
@@ -877,6 +905,16 @@ exports[`generator - entities regenerating some entities should match source cal
         "Entity[Foo]",
         "Entity[Bar]",
       ],
+    },
+  ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
+      "relationships": [],
     },
   ],
   "addLiquibaseChangelog": [
