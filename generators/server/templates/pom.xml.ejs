@@ -155,14 +155,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
-            <dependency>
-                <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
-                <groupId>org.mariadb</groupId>
-                <artifactId>r2dbc-mariadb</artifactId>
-                <version>1.1.2</version>
-            </dependency>
-<%_ } _%>
         </dependencies>
     </dependencyManagement>
 
