@@ -110,6 +110,21 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
           value: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
         });
       },
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDependency?.([
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: `spring-boot-starter-data-${application.reactive ? 'r2dbc' : 'jpa'}`,
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'jdbc',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
       customizeMysql({ application, source }) {
         if (!(application as any).prodDatabaseTypeMysql) return;
 

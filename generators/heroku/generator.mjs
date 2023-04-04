@@ -40,6 +40,7 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
+import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -598,8 +599,13 @@ export default class HerokuGenerator extends BaseGenerator {
       addHerokuBuildPlugin() {
         if (this.abort) return;
         if (this.buildTool !== GRADLE) return;
-        this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '1.0.4');
-        this.applyFromGradleScript('gradle/heroku');
+        // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+        this.editFile(
+          'build.gradle',
+          addGradlePluginCallback({ groupId: 'gradle.plugin.com.heroku.sdk', artifactId: 'heroku-gradle', version: '1.0.4' })
+        );
+        // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+        this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
       },
 
       addHerokuMavenProfile() {

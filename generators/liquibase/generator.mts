@@ -41,6 +41,11 @@ import {
   loadRequiredConfigIntoEntity,
   loadEntitiesAnnotations,
 } from '../base-application/support/index.mjs';
+import {
+  addLiquibaseChangelogCallback,
+  addLiquibaseConstraintsChangelogCallback,
+  addLiquibaseIncrementalChangelogCallback,
+} from './internal/needles.mjs';
 
 export type LiquibaseEntity = Entity & {
   anyRelationshipIsOwnerSide: boolean;
@@ -83,6 +88,23 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
     }
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      addNeedles({ source, application }) {
+        source.addLiquibaseChangelog = changelog =>
+          this.editFile(`${application.srcMainResources}config/liquibase/master.xml`, addLiquibaseChangelogCallback(changelog));
+        source.addLiquibaseIncrementalChangelog = changelog =>
+          this.editFile(`${application.srcMainResources}config/liquibase/master.xml`, addLiquibaseIncrementalChangelogCallback(changelog));
+        source.addLiquibaseConstraintsChangelog = changelog =>
+          this.editFile(`${application.srcMainResources}config/liquibase/master.xml`, addLiquibaseConstraintsChangelogCallback(changelog));
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntityField() {

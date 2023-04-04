@@ -23,10 +23,7 @@ import ClientReact from './react/needle-api/needle-client-react.mjs';
 import ClientVue from './client/needle-api/needle-client-vue.mjs';
 import ClientWebpack from './client/needle-api/needle-client-webpack.mjs';
 import ClientI18n from './client/needle-api/needle-client-i18n.mjs';
-import ServerGradle from './server/needle-api/needle-server-gradle.mjs';
 import ServerCache from './server/needle-api/needle-server-cache.mjs';
-import ServerLiquibase from './server/needle-api/needle-server-liquibase.mjs';
-import ServerLog from './server/needle-api/needle-server-logback-spring.mjs';
 
 export default class NeedleApi {
   constructor(generator) {
@@ -38,8 +35,5 @@ export default class NeedleApi {
     this.clientWebpack = new ClientWebpack(generator);
     this.clientI18n = new ClientI18n(generator);
     this.serverCache = new ServerCache(generator);
-    this.serverLiquibase = new ServerLiquibase(generator);
-    this.serverGradle = new ServerGradle(generator);
-    this.serverLog = new ServerLog(generator);
   }
 }

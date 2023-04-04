@@ -11,6 +11,9 @@ exports[`generator - pulsar gateway-jwt-gradle-enableTranslation(true)-com.packa
   "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
@@ -31,6 +34,9 @@ exports[`generator - pulsar gateway-oauth2-maven-enableTranslation(false)-tech.j
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
@@ -49,6 +55,9 @@ exports[`generator - pulsar microservice-jwt-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
@@ -74,6 +83,9 @@ exports[`generator - pulsar microservice-jwt-reactive(true)-gradle-enableTransla
   "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
@@ -92,6 +104,9 @@ exports[`generator - pulsar microservice-oauth2-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
@@ -117,6 +132,9 @@ exports[`generator - pulsar microservice-oauth2-reactive(true)-gradle-enableTran
   "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
@@ -135,6 +153,9 @@ exports[`generator - pulsar monolith-jwt-reactive(false)-maven-enableTranslation
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
@@ -160,6 +181,9 @@ exports[`generator - pulsar monolith-jwt-reactive(true)-gradle-enableTranslation
   "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
@@ -178,6 +202,9 @@ exports[`generator - pulsar monolith-oauth2-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
@@ -203,6 +230,9 @@ exports[`generator - pulsar monolith-oauth2-reactive(true)-gradle-enableTranslat
   "src/test/java/com/package/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
@@ -221,6 +251,9 @@ exports[`generator - pulsar monolith-session-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedPulsar.java": {
@@ -244,6 +277,9 @@ exports[`generator - pulsar monolith-session-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedPulsar.java": {

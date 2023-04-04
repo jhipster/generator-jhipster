@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - entity --single-entity when regenerating with default configuration should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+      ],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+  ],
+}
+`;

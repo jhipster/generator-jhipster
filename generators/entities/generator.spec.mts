@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
-import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 
 const { snakeCase } = lodash;
 const __filename = fileURLToPath(import.meta.url);
@@ -79,20 +79,26 @@ describe(`generator - ${generator}`, () => {
     ];
 
     describe('some entities', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withArguments(['Foo', 'Bar']).withOptions({
-          regenerate: true,
-          force: true,
-          ignoreNeedlesError: true,
-          applicationWithEntities,
-        });
+        await helpers
+          .run(generatorPath)
+          .withJHipsterConfig()
+          .withArguments(['Foo', 'Bar'])
+          .withOptions({
+            regenerate: true,
+            force: true,
+            ignoreNeedlesError: true,
+            applicationWithEntities,
+          })
+          .withMockedSource();
       });
-
-      after(() => runResult.cleanup());
 
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
       it('should create files for entity Foo', () => {
@@ -109,21 +115,27 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('selected entities with writeEveryEntity', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withArguments(['Foo', 'Bar']).withOptions({
-          regenerate: true,
-          force: true,
-          writeEveryEntity: true,
-          ignoreNeedlesError: true,
-          applicationWithEntities,
-        });
+        await helpers
+          .run(generatorPath)
+          .withJHipsterConfig()
+          .withArguments(['Foo', 'Bar'])
+          .withOptions({
+            regenerate: true,
+            force: true,
+            writeEveryEntity: true,
+            ignoreNeedlesError: true,
+            applicationWithEntities,
+          })
+          .withMockedSource();
       });
-
-      after(() => runResult.cleanup());
 
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
       it('should create files for entity Foo', () => {
@@ -140,20 +152,25 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('all entities', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withOptions({
-          regenerate: true,
-          force: true,
-          ignoreNeedlesError: true,
-          applicationWithEntities,
-        });
+        await helpers
+          .run(generatorPath)
+          .withJHipsterConfig()
+          .withOptions({
+            regenerate: true,
+            force: true,
+            ignoreNeedlesError: true,
+            applicationWithEntities,
+          })
+          .withMockedSource();
       });
-
-      after(() => runResult.cleanup());
 
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
       it('should create files for entity Foo', () => {
