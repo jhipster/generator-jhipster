@@ -155,16 +155,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<%_ if (cacheProviderInfinispan) { _%>
-            <dependency>
-                <!-- TODO rework infinispan-bom dependency once spring-boot 3.0.5 is released -->
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-bom</artifactId>
-                <version>14.0.7.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-<%_ } _%>
 <%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
             <dependency>
                 <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
