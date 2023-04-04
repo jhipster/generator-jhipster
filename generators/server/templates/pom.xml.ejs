@@ -1412,17 +1412,6 @@
                             </filesets>
                         </configuration>
                     </plugin>
-<%_ if (devDatabaseType !== prodDatabaseType && (devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypeMysql || devDatabaseTypePostgres)) { _%>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <testExcludes>
-                                <testExclude><%= packageFolder %>/config/<% if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
-                            </testExcludes>
-                        </configuration>
-                    </plugin>
-<%_ } _%>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
