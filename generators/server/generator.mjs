@@ -74,15 +74,10 @@ import {
   MAIN_DIR,
   LOGIN_REGEX,
   TEST_DIR,
-  JHIPSTER_DEPENDENCIES_VERSION,
-  SPRING_BOOT_VERSION,
   JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
-  SPRING_CLOUD_VERSION,
-  HIBERNATE_VERSION,
-  CASSANDRA_DRIVER_VERSION,
-  JACKSON_DATABIND_NULLABLE_VERSION,
-  JACOCO_VERSION,
+  ADD_SPRING_MILESTONE_REPOSITORY,
+  JHIPSTER_DEPENDENCIES_VERSION,
 } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 
@@ -310,8 +305,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get loading() {
+    return this.asLoadingTaskGroup({
       loadEnvironmentVariables({ application }) {
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
@@ -354,14 +349,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
-        application.SPRING_BOOT_VERSION = this.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
-        application.SPRING_CLOUD_VERSION = this.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
-        application.HIBERNATE_VERSION = this.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
-        application.CASSANDRA_DRIVER_VERSION = this.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
-        application.JACKSON_DATABIND_NULLABLE_VERSION = this.useVersionPlaceholders
-          ? 'JACKSON_DATABIND_NULLABLE_VERSION'
-          : JACKSON_DATABIND_NULLABLE_VERSION;
-        application.JACOCO_VERSION = this.useVersionPlaceholders ? 'JACOCO_VERSION' : JACOCO_VERSION;
 
         application.ANGULAR = ANGULAR;
         application.VUE = VUE;
@@ -370,8 +357,20 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         this.packagejs = packageJson;
         application.jhipsterPackageJson = packageJson;
       },
+    });
+  }
 
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
+        const SPRING_BOOT_VERSION = application.javaDependencies['spring-boot'];
+        application.addSpringMilestoneRepository =
+          ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC');
+
         // Application name modified, using each technology's conventions
         application.frontendAppName = this.getFrontendAppName(application.baseName);
         application.mainClass = this.getMainClassName(application.baseName);
@@ -676,7 +675,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
       customizeMaven({ application, source }) {
         if (!application.buildToolMaven) return;
-        if (SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC') || SPRING_CLOUD_VERSION.includes('RC')) {
+        if (application.addSpringMilestoneRepository) {
           const springRepository = {
             id: 'spring-milestone',
             name: 'Spring Milestones',

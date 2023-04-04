@@ -16,6 +16,7 @@
         <gatling.version>3.9.3</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.3</hazelcast-spring.version>
+        <jackson-databind-nullable.version>0.2.4</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.2</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
@@ -32,6 +33,7 @@
         <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
+        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
@@ -129,6 +131,11 @@
               <groupId>org.springframework.pulsar</groupId>
               <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
               <version>${spring-pulsar.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${jackson-databind-nullable.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -254,6 +261,11 @@
                   <groupId>org.gaul</groupId>
                   <artifactId>modernizer-maven-plugin</artifactId>
                   <version>${modernizer-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.openapitools</groupId>

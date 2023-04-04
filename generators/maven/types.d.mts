@@ -24,6 +24,8 @@ export type MavenArtifact = {
   inProfile?: string;
 };
 
+export type MavenAnnotationProcessor = MavenArtifact & Required<Pick<MavenArtifact, 'version'>>;
+
 export type MavenPlugin = MavenArtifact & {
   additionalContent?: string;
 };
@@ -61,7 +63,7 @@ export type MavenProperty = {
 export type MavenProfile = { id: string; content?: string };
 
 export type MavenSourceType = {
-  addMavenAnnotationProcessor?(artifact: MavenArtifact | MavenArtifact[]): void;
+  addMavenAnnotationProcessor?(artifact: MavenAnnotationProcessor | MavenAnnotationProcessor[]): void;
   addMavenDependency?(dependecy: MavenDependency | MavenDependency[]): void;
   addMavenDependencyManagement?(dependecy: MavenDependency | MavenDependency[]): void;
   addMavenDistributionManagement?(distributionManagement: MavenDistributionManagement | MavenDistributionManagement[]): void;

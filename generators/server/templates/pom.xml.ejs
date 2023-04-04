@@ -60,9 +60,9 @@
         <profile.test />
 
         <jhipster-dependencies.version><%= jhipsterDependenciesVersion %></jhipster-dependencies.version>
-        <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
+        <spring-boot.version><%- javaDependencies['spring-boot'] %></spring-boot.version>
 <%_ if (databaseTypeSql) { _%>
-        <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
+        <hibernate.version><%- javaDependencies.hibernate %></hibernate.version>
 <%_ } _%>
 <%_ if (enableLiquibase) { _%>
         <!-- The liquibase version should match the one managed by
@@ -90,7 +90,7 @@
         <spring-pulsar.version><%- javaDependencies['spring-pulsar'] %></spring-pulsar.version>
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
-        <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
+        <jackson-databind-nullable.version><%- javaDependencies['jackson-databind-nullable'] %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
         <caffeine.version><%- javaDependencies.caffeine %></caffeine.version>
@@ -116,7 +116,7 @@
         <gatling-maven-plugin.version><%- javaDependencies['gatling-maven-plugin'] %></gatling-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version><%- javaDependencies['git-commit-id-plugin'] %></git-commit-id-plugin.version>
-        <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version><%- javaDependencies['jacoco-maven-plugin'] %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
         <jib-maven-plugin.image><%- dockerContainers.javaJre %></jib-maven-plugin.image>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
