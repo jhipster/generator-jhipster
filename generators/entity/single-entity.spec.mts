@@ -1,3 +1,5 @@
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+
 import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import BaseApplicationGenerator from '../base-application/generator.mjs';
@@ -24,20 +26,14 @@ describe('generator - entity --single-entity', () => {
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
           .withJHipsterConfig({}, [entityFoo, entityBar])
-          .withFiles({
-            'src/main/resources/config/liquibase/master.xml': `
-  <databaseChangeLog>
-      <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-      <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-      <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
-  </databaseChangeLog>
-  `,
-          })
           .withArguments(['Foo'])
-          .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
+          .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true })
+          .withMockedSource();
       });
 
-      after(() => runResult.cleanup());
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
+      });
 
       it('should create files for entity Foo', () => {
         runResult.assertFile([
