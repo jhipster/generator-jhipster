@@ -73,7 +73,7 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java,xml}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java,xml}\"",
     "pretest": "npm run lint",
-    "test": "npm run mocha-test generators cli",
+    "test": "npm run mocha-test test generators cli",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
     "update-snapshots": "mocha jdl generators cli --require test/mocha-update-snapshots.config.cjs --no-insight --forbid-only",
     "watch": "concurrently \"tsc --watch\" \"node ./watch.mjs\""
