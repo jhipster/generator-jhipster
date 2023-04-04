@@ -61,9 +61,6 @@
 
         <jhipster-dependencies.version><%= jhipsterDependenciesVersion %></jhipster-dependencies.version>
         <spring-boot.version><%- javaDependencies['spring-boot'] %></spring-boot.version>
-<%_ if (databaseTypeSql) { _%>
-        <hibernate.version><%- javaDependencies.hibernate %></hibernate.version>
-<%_ } _%>
 <%_ if (enableLiquibase) { _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -73,16 +70,9 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate6.version><%- javaDependencies.liquibase %></liquibase-hibernate6.version>
   <%_ } _%>
-        <validation-api.version><%- javaDependencies['validation-api'] %></validation-api.version>
-  <%_ if (reactive) { _%>
-        <commons-beanutils.version><%- javaDependencies['commons-beanutils'] %></commons-beanutils.version>
-  <%_ } _%>
 <%_ } _%>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version><%- javaDependencies['blockhound-junit-platform'] %></blockhound-junit-platform.version>
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-        <jaxb-runtime.version><%- javaDependencies['jaxb-runtime'] %></jaxb-runtime.version>
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
@@ -146,14 +136,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
-            <dependency>
-                <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
-                <groupId>org.mariadb</groupId>
-                <artifactId>r2dbc-mariadb</artifactId>
-                <version>1.1.2</version>
-            </dependency>
-<%_ } _%>
         </dependencies>
     </dependencyManagement>
 
@@ -175,24 +157,6 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${commons-beanutils.version}</version>
-        </dependency>
-  <%_ } else { _%>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate5-jakarta</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
@@ -209,12 +173,6 @@
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
 <%_ } _%>
         </dependency>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -233,21 +191,7 @@
             <version>${caffeine.version}</version>
         </dependency>
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-<%_ } _%>
+
 <%_ if (enableLiquibase) { _%>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -497,12 +441,6 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!reactive && databaseTypeSql) { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-data</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -739,19 +677,6 @@
                                 <artifactId>mapstruct-processor</artifactId>
                                 <version>${mapstruct.version}</version>
                             </path>
-<%_ if (databaseTypeSql) { _%>
-                            <path>
-                                <!-- For JPA static metamodel generation -->
-                                <groupId>org.hibernate.orm</groupId>
-                                <artifactId>hibernate-jpamodelgen</artifactId>
-                                <version>${hibernate.version}</version>
-                            </path>
-                            <path>
-                                <groupId>org.glassfish.jaxb</groupId>
-                                <artifactId>jaxb-runtime</artifactId>
-                                <version>${jaxb-runtime.version}</version>
-                            </path>
-<%_ } _%>
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
@@ -1344,112 +1269,8 @@
                     <artifactId>spring-boot-devtools</artifactId>
                     <optional>true</optional>
                 </dependency>
-<%_ if (devDatabaseTypeH2Any) { _%>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-h2</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeMysql) { _%>
-                <dependency>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeMariadb) { _%>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeOracle) { _%>
-                <dependency>
-                    <groupId>com.oracle.database.jdbc</groupId>
-                    <artifactId>ojdbc8</artifactId>
-                </dependency>
-<%_ } _%>
-<%_ if (devDatabaseTypeMssql) { _%>
-                <dependency>
-                    <groupId>com.microsoft.sqlserver</groupId>
-                    <artifactId>mssql-jdbc</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.liquibase.ext</groupId>
-                    <artifactId>liquibase-mssql</artifactId>
-                    <version>${liquibase.version}</version>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-mssql</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypePostgres) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>r2dbc-postgresql</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeSql && !devDatabaseTypeH2Any) { _%>
-                <dependency>
-                    <groupId>org.testcontainers</groupId>
-  <%_ if (devDatabaseTypeMysql) { _%>
-                    <artifactId>mysql</artifactId>
-  <%_ } else if (devDatabaseTypeMariadb) { _%>
-                    <artifactId>mariadb</artifactId>
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-                    <artifactId>postgresql</artifactId>
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-                    <artifactId>mssqlserver</artifactId>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-                    <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-                    <scope>test</scope>
-                </dependency>
-<%_ } _%>
             </dependencies>
             <build>
-<%_ if (databaseTypeSql) { _%>
-                <plugins>
-  <%_ if (devDatabaseType !== prodDatabaseType && (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgres)) { _%>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <testExcludes>
-                                <testExclude><%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
-                            </testExcludes>
-                        </configuration>
-                    </plugin>
-  <%_ } _%>
-
-                </plugins>
-<%_ } _%>
                 <pluginManagement>
                     <plugins>
 <%_ if (databaseTypeSql) { _%>
@@ -1465,7 +1286,9 @@
                                 <defaultSchemaName><% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- devDatabaseUsername %></username>
                                 <password><%- devDatabasePassword %></password>
+  <%_ if (!reactive) { _%>
                                 <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+  <%_ } _%>
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
                                 <contexts>!test</contexts>
@@ -1516,79 +1339,12 @@
             </properties>
 <%_ if (databaseTypeSql) { _%>
             <dependencies>
-                <dependency>
-                    <groupId>org.testcontainers</groupId>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-                    <artifactId>mysql</artifactId>
-  <%_ } else if (prodDatabaseTypeMariadb) { _%>
-                    <artifactId>mariadb</artifactId>
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-                    <artifactId>postgresql</artifactId>
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-                    <artifactId>mssqlserver</artifactId>
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-                    <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-                    <scope>test</scope>
-                </dependency>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-                <dependency>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb) { _%>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeOracle) { _%>
-                <dependency>
-                    <groupId>com.oracle.database.jdbc</groupId>
-                    <artifactId>ojdbc8</artifactId>
-                </dependency>
-  <%_ } _%>
   <%_ if (prodDatabaseTypeMssql) { _%>
-                <dependency>
-                    <groupId>com.microsoft.sqlserver</groupId>
-                    <artifactId>mssql-jdbc</artifactId>
-                </dependency>
                 <dependency>
                     <groupId>org.liquibase.ext</groupId>
                     <artifactId>liquibase-mssql</artifactId>
                     <version>${liquibase.version}</version>
                 </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-mssql</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypePostgres) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>r2dbc-postgresql</artifactId>
-                </dependency>
-    <%_ } _%>
   <%_ } _%>
             </dependencies>
 <%_ } _%>
@@ -1608,7 +1364,9 @@
                                 <defaultSchemaName><% if (prodDatabaseTypeMysql) { %><%= baseName %><% } else if (prodDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- prodDatabaseUsername %></username>
                                 <password><%- prodDatabasePassword %></password>
+  <%_ if (!reactive) { _%>
                                 <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= prodHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+  <%_ } _%>
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
                                 <contexts>!test</contexts>
@@ -1774,12 +1532,6 @@
                     <artifactId>mapstruct-processor</artifactId>
                     <version>${mapstruct.version}</version>
                 </dependency>
-<%_ if (databaseTypeSql) { _%>
-                <dependency>
-                    <groupId>org.hibernate.orm</groupId>
-                    <artifactId>hibernate-jpamodelgen</artifactId>
-                </dependency>
-<%_ } _%>
             </dependencies>
         </profile>
         <profile>

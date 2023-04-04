@@ -29,8 +29,8 @@ sourceSets {
 dependencies {
   <%_ if (prodDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    // TODO spring-data-r2dbc is not managing r2dbc-mariadb version
-    implementation ("org.mariadb:r2dbc-mariadb:1.1.2")
+    // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
+    implementation ("org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>")
     <%_ } _%>
     implementation "com.mysql:mysql-connector-j"
     liquibaseRuntime "com.mysql:mysql-connector-j"
@@ -46,8 +46,8 @@ dependencies {
   <%_ } _%>
   <%_ if (prodDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
-    // TODO spring-data-r2dbc is not managing r2dbc-mariadb version
-    implementation "org.mariadb:r2dbc-mariadb:1.1.2"
+    // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
+    implementation "org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>"
     <%_ } _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"

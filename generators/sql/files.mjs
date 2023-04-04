@@ -100,10 +100,6 @@ export const mariadbFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/MariadbTestContainer.java'],
     },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mariadb/my.cnf', noEjs: true }],
-    },
   ],
 };
 

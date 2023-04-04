@@ -27,6 +27,13 @@ import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
 import { getDBCExtraOption } from './support/database-data.mjs';
+import {
+  getCommonMavenDefinition,
+  getDatabaseTypeMavenDefinition,
+  getH2MavenDefinition,
+  getImperativeMavenDefinition,
+  getReactiveMavenDefinition,
+} from './internal/dependencies.mjs';
 
 const { SQL } = databaseTypes;
 
@@ -112,17 +119,30 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
       },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
-          source.addMavenDependency?.([
-            {
-              groupId: 'org.springframework.boot',
-              artifactId: `spring-boot-starter-data-${application.reactive ? 'r2dbc' : 'jpa'}`,
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'jdbc',
-              scope: 'test',
-            },
-          ]);
+          const { reactive, javaDependencies, packageFolder } = application;
+          const applicationAny = application as any;
+          const { prodDatabaseType } = applicationAny;
+          source.addMavenDefinition?.(getCommonMavenDefinition({ javaDependencies }));
+
+          if (reactive) {
+            source.addMavenDefinition?.(getReactiveMavenDefinition({ javaDependencies }));
+          } else {
+            source.addMavenDefinition?.(getImperativeMavenDefinition({ javaDependencies }));
+          }
+
+          const inProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;
+          if (applicationAny.devDatabaseTypeH2Any) {
+            const h2Definitions = getH2MavenDefinition({ prodDatabaseType, packageFolder });
+            source.addMavenDefinition?.(h2Definitions.jdbc);
+            if (reactive) {
+              source.addMavenDefinition?.(h2Definitions.r2dbc);
+            }
+          }
+          const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, { inProfile });
+          source.addMavenDefinition?.(dbDefinitions.jdbc);
+          if (reactive) {
+            source.addMavenDefinition?.(dbDefinitions.r2dbc);
+          }
         }
       },
     });
