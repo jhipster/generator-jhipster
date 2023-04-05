@@ -116,6 +116,10 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 
     constraintNameMaxLength: 64,
     tableNameMaxLength: 64,
+    r2dbc: {
+      // TODO switch to mariadb if r2dbc-mariadb is reinstated
+      protocolSuffix: 'mysql://',
+    },
   },
   [MYSQL]: {
     name: 'MySQL',
@@ -128,10 +132,6 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     extraOptions:
       '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
     defaultUsername: 'root',
-
-    r2dbc: {
-      protocolSuffix: 'mariadb://',
-    },
   },
   [ORACLE]: {
     name: 'Oracle',
