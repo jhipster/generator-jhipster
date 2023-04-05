@@ -47,12 +47,10 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
         {
           "artifactId": "jcache",
           "groupId": "com.github.ben-manes.caffeine",
-          "version": "\${caffeine.version}",
         },
         {
           "artifactId": "caffeine",
           "groupId": "com.github.ben-manes.caffeine",
-          "version": "\${caffeine.version}",
         },
         {
           "artifactId": "config",
@@ -61,10 +59,6 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
         },
       ],
       "properties": [
-        {
-          "property": "caffeine.version",
-          "value": "'CAFFEINE-VERSION'",
-        },
         {
           "property": "typesafe.version",
           "value": "'TYPESAFE-VERSION'",

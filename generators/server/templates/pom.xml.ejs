@@ -79,9 +79,6 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%- javaDependencies['jackson-databind-nullable'] %></jackson-databind-nullable.version>
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && !cacheProviderInfinispan) { _%>
-        <caffeine.version><%- javaDependencies.caffeine %></caffeine.version>
-<%_ } _%>
         <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
@@ -289,13 +286,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-  <%_ if (!cacheProviderInfinispan) { _%>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
         </dependency>
-  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeJwt || authenticationTypeSession) { _%>
         <dependency>

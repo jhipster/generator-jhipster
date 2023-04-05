@@ -359,8 +359,8 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.lz4:lz4-java"
     testImplementation "org.testcontainers:cassandra"
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && !cacheProviderCaffeine && !cacheProviderInfinispan) { _%>
-    implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
+<%_ if (authenticationTypeOauth2) { _%>
+    implementation "com.github.ben-manes.caffeine:caffeine"
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
