@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": "Şəbəkə",
+    "routes": {
+      "title": "Etibarlı yönləndirmələr",
+      "url": "URL",
+      "service": "Xidmət",
+      "servers": "Mövcud serverlər",
+      "error": "Diqqət: mövcud server tapılmadı!"
+    },
+    "refresh": {
+      "button": "Yenilə"
+    }
+  }
+}

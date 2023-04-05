@@ -1,0 +1,94 @@
+{
+    "metrics": {
+        "title": "Proqram Göstəriciləri",
+        "refresh.button": "Yenilə",
+        "updating": "Yenilənir...",
+        "jvm": {
+            "title": "JVM Göstəriciləri",
+            "memory": {
+                "title": "Yaddaş",
+                "total": "Ümumi Yaddaş",
+                "heap": "Heap",
+                "nonheap": "Qeyri-heap Yaddaş"
+            },
+            "threads": {
+                "title": "Threadlər",
+                "all": "Hamısı",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Gözləyən",
+                "blocked": "Bloklanan",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Bloklanma Müddəti",
+                    "blockedcount": "Bloklanan Sayı",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Kilid Adı",
+                    "stacktrace": "Stacktrace",
+                    "show": "Göstər",
+                    "hide": "Gizlə"
+                }
+            },
+            "gc": {
+                "title": "Garbage collector",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP sorğuları (saniyədəki sorğu sayı)",
+                "active": "Aktiv sorğular:",
+                "total": "Cəmi:",
+                "table": {
+                    "code": "Code",
+                    "count": "Count",
+                    "mean": "Mean",
+                    "average": "Average",
+                    "max": "Max"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Tapılmadı",
+                    "servererror": "Server Xətası"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Servis statistikası (millisaniyə cinsindən)",
+            "table": {
+                "name": "Servis Adı",
+                "count": "Count",
+                "mean": "Mean",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache statistikası",
+            "cachename": "Cache adı",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictions": "Evictions"
+        },
+        "datasource": {
+            "usage": "İstifadə",
+            "title": "Verilənlər mənbəyi statistikası (millisaniyə cinsindən)",
+            "name": "Hovuz istifadəsi",
+            "count": "Sayğac",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
