@@ -305,9 +305,6 @@ exports[`generator - sql gateway-jwt-mariadb-maven-enableTranslation(false)-tech
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -2298,9 +2295,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4030,9 +4024,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(false)-maven-enableTr
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4297,9 +4288,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
 }
@@ -6903,9 +6891,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -7236,9 +7221,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
 }
@@ -10250,9 +10232,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -10562,9 +10541,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
 }
@@ -13789,9 +13765,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -14152,9 +14125,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
 }
@@ -17409,9 +17379,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -17685,9 +17652,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mariadb/my.cnf": {
     "stateCleared": "modified",
   },
 }
