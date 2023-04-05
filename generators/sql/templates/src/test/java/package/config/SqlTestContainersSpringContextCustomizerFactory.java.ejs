@@ -41,9 +41,6 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
 
     private Logger log = LoggerFactory.getLogger(SqlTestContainersSpringContextCustomizerFactory.class);
 
-<%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
-    private static SqlTestContainer devTestContainer;
-<%_ } _%>
 <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
     private static SqlTestContainer prodTestContainer;
 <%_ } _%>
@@ -58,30 +55,6 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
             if (null != sqlAnnotation) {
                 log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
                 log.info("Warming up the sql database");
-<%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
-                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
-                    if (null == devTestContainer) {
-                        try {
-                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
-                            devTestContainer = beanFactory.createBean(containerClass);
-                            beanFactory.registerSingleton(containerClass.getName(), devTestContainer);
-                            // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), devTestContainer);
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-  <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (devDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } else if (devDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- devDatabaseExtraOptions %>");
-                    testValues = testValues.and("spring.r2dbc.username=" + devTestContainer.getTestContainer().getUsername());
-                    testValues = testValues.and("spring.r2dbc.password=" + devTestContainer.getTestContainer().getPassword());
-                    testValues = testValues.and("spring.liquibase.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- devDatabaseExtraOptions %>" );
-  <%_ } else { _%>
-                    testValues = testValues.and("spring.datasource.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- devDatabaseExtraOptions %>");
-                    testValues = testValues.and("spring.datasource.username=" + devTestContainer.getTestContainer().getUsername());
-                    testValues = testValues.and("spring.datasource.password=" + devTestContainer.getTestContainer().getPassword());
-  <%_ } _%>
-                }
-<%_ } _%>
 <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
                 if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
                     if (null == prodTestContainer) {
@@ -95,7 +68,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                         }
                     }
   <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
+                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
                     testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- prodDatabaseExtraOptions %>");

@@ -37,8 +37,7 @@ dependencies {
   <%_ } _%>
   <%_ if (devDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-    implementation ("org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>")
+    implementation ("io.asyncer:r2dbc-mysql:<%- javaDependencies['r2dbc-mysql'] %>")
     <%_ } _%>
     implementation "com.mysql:mysql-connector-j"
     liquibaseRuntime "com.mysql:mysql-connector-j"
@@ -53,7 +52,8 @@ dependencies {
   <%_ if (devDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
     // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-    implementation "org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>"
+    // implementation "org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>"
+    implementation "io.asyncer:r2dbc-mysql:<%- javaDependencies['r2dbc-mysql'] %>"
     <%_ } _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
