@@ -58,33 +58,22 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
       },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
-          source.addMavenDependency?.([
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-stream',
-            },
-            {
-              groupId: 'org.springframework.pulsar',
-              artifactId: 'spring-pulsar-spring-cloud-stream-binder',
-              // eslint-disable-next-line no-template-curly-in-string
-              version: '${spring-pulsar.version}',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'junit-jupiter',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'pulsar',
-              scope: 'test',
-            },
-          ]);
+          const { javaDependencies } = application;
+          source.addMavenDefinition?.({
+            properties: [{ property: 'spring-pulsar.version', value: javaDependencies?.['spring-pulsar'] }],
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-stream' },
+              {
+                groupId: 'org.springframework.pulsar',
+                artifactId: 'spring-pulsar-spring-cloud-stream-binder',
+                // eslint-disable-next-line no-template-curly-in-string
+                version: '${spring-pulsar.version}',
+              },
+              { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'pulsar', scope: 'test' },
+            ],
+          });
         }
       },
     });

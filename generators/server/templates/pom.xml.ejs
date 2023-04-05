@@ -76,25 +76,16 @@
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
-<%_ if (messageBrokerPulsar) { _%>
-        <spring-pulsar.version><%- javaDependencies['spring-pulsar'] %></spring-pulsar.version>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%- javaDependencies['jackson-databind-nullable'] %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !cacheProviderInfinispan) { _%>
         <caffeine.version><%- javaDependencies.caffeine %></caffeine.version>
 <%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <gatling.version><%- javaDependencies.gatling %></gatling.version>
-<%_ } _%>
         <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version><%- javaDependencies['gatling-maven-plugin'] %></gatling-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version><%- javaDependencies['git-commit-id-plugin'] %></git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%- javaDependencies['jacoco-maven-plugin'] %></jacoco-maven-plugin.version>
@@ -184,14 +175,6 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && !cacheProviderInfinispan) { _%>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-<%_ } _%>
-
 <%_ if (enableLiquibase) { _%>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -199,50 +182,6 @@
             <!-- Inherited version from Spring Boot can't be used because of regressions -->
             <version>${liquibase.version}</version>
         </dependency>
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-        <dependency>
-            <!-- Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6 -->
-            <groupId>io.mongock</groupId>
-            <artifactId>mongock-springboot-v3</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.reflections</groupId>
-                    <artifactId>reflections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.mongock</groupId>
-            <artifactId>mongodb-springdata-v4-driver</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.reflections</groupId>
-                    <artifactId>reflections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mongock</groupId>
-            <artifactId>mongodb-reactive-driver</artifactId>
-        </dependency>
-  <%_ } _%>
 <%_ } _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -287,6 +226,17 @@
             <artifactId>netty-resolver-dns-native-macos</artifactId>
             <classifier>osx-aarch_64</classifier>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor.tools</groupId>
+            <artifactId>blockhound-junit-platform</artifactId>
+            <version>${blockhound-junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+<%_ } else { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -296,12 +246,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-<%_ if (!authenticationTypeOauth2) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -325,14 +269,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-<%_ if (reactive) { _%>
-        <dependency>
-            <groupId>io.projectreactor.tools</groupId>
-            <artifactId>blockhound-junit-platform</artifactId>
-            <version>${blockhound-junit-platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
@@ -347,23 +283,24 @@
             <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-<%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
         <dependency>
             <!-- Spring Security OAuth 2.0 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+  <%_ if (!cacheProviderInfinispan) { _%>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeSession) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
@@ -455,64 +392,11 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
-<%_ if (communicationSpringWebsocket) { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-messaging</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (cucumberTests) { _%>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit-platform-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-spring</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-console</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <version>${gatling.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
     </dependencies>
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
-<%_ if (cucumberTests) { _%>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-            </plugin>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-            </plugin>
-<%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -586,49 +470,6 @@
         </plugins>
         <pluginManagement>
             <plugins>
-<%_ if (cucumberTests) { _%>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
-                            <id>prepare cucumber feature files</id>
-                            <phase>integration-test</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <target>
-                                    <echo message="Running JUnit Platform CLI"/>
-                                    <java classname="org.junit.platform.console.ConsoleLauncher"
-                                          fork="true"
-                                          failonerror="true"
-                                          newenvironment="true"
-                                          maxmemory="512m"
-                                          classpathref="maven.test.classpath">
-                                        <arg value="--include-engine"/>
-                                        <arg value="cucumber"/>
-                                        <arg value="--scan-classpath"/>
-                                        <arg value="${project.build.testOutputDirectory}"/>
-                                    </java>
-                                </target>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-                <plugin>
-                    <groupId>io.gatling</groupId>
-                    <artifactId>gatling-maven-plugin</artifactId>
-                    <version>${gatling-maven-plugin.version}</version>
-                    <configuration>
-                        <runMultipleSimulations>true</runMultipleSimulations>
-                        <resourcesFolder>${project.basedir}/src/test/gatling/conf</resourcesFolder>
-                    </configuration>
-                </plugin>
-<%_ } _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
