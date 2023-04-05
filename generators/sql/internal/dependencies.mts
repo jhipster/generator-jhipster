@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import { javaDependencies } from '../../generator-constants.mjs';
 import { MavenDefinition, MavenPlugin } from '../../maven/types.mjs';
 
 type DatabaseTypeDependencies = {
@@ -112,10 +111,10 @@ export const getH2MavenDefinition = ({
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const getDatabaseTypeMavenDefinition: (databaseType: string, options?: { inProfile?: string }) => DatabaseTypeDependencies = (
-  databaseType,
-  { inProfile } = {}
-) => {
+export const getDatabaseTypeMavenDefinition: (
+  databaseType: string,
+  options: { inProfile?: string; javaDependencies: Record<string, string> }
+) => DatabaseTypeDependencies = (databaseType, { inProfile, javaDependencies }) => {
   const dependenciesForType: Record<string, DatabaseTypeDependencies> = {
     mariadb: {
       jdbc: {

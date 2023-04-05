@@ -138,7 +138,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
               source.addMavenDefinition?.(h2Definitions.r2dbc);
             }
           }
-          const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, { inProfile });
+          const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, { inProfile, javaDependencies });
           source.addMavenDefinition?.(dbDefinitions.jdbc);
           if (reactive) {
             source.addMavenDefinition?.(dbDefinitions.r2dbc);
