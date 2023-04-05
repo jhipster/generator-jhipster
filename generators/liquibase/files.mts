@@ -31,6 +31,12 @@ export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootAppl
       templates: ['config/LiquibaseConfiguration.java'],
     },
   ],
+  gradle: [
+    {
+      condition: ctx => ctx.buildToolGradle,
+      templates: ['gradle/liquibase.gradle'],
+    },
+  ],
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,

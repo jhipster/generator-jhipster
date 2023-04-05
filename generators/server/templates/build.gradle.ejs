@@ -40,9 +40,6 @@ plugins {
 <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-    id "org.liquibase.gradle"
-<%_ } _%>
     id "org.sonarqube"
     id "io.spring.nohttp"
     id "com.github.andygoossens.gradle-modernizer-plugin"
@@ -60,6 +57,16 @@ description = ""
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
 assert System.properties["java.specification.version"] == <%- JAVA_COMPATIBLE_VERSIONS.map(ver => `"${ver}"`).join(' || '); %>
+
+ext {
+    springProfiles = ""
+    if (project.hasProperty("tls")) {
+        springProfiles += ",tls"
+    }
+    if (project.hasProperty("e2e")) {
+        springProfiles += ",e2e"
+    }
+}
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -205,48 +212,6 @@ task cucumberTestReport(type: TestReport) {
 }
 
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-if (!project.hasProperty("runList")) {
-    project.ext.runList = "main"
-}
-
-project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
-
-liquibase {
-    activities {
-        main {
-            driver "<%= devJdbcDriver %>"
-            url "<%- devLiquibaseUrl %>"
-            username "<%- devDatabaseUsername %>"
-            password "<%- devDatabasePassword %>"
-            changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
-            defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
-            logLevel "debug"
-            classpath "<%= SERVER_MAIN_RES_DIR %>"
-        }
-        diffLog {
-            driver "<%= devJdbcDriver %>"
-            url "<%- devLiquibaseUrl %>"
-            username "<%- devDatabaseUsername %>"
-            password "<%- devDatabasePassword %>"
-            changeLogFile project.ext.diffChangelogFile
-            referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
-            defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
-            logLevel "debug"
-            classpath "$buildDir/classes/java/main"
-  <%_ if (authenticationTypeOauth2) { _%>
-            excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
-  <%_ } _%>
-        }
-    }
-
-    runList = project.ext.runList
-}
-
-liquibaseDiff.dependsOn compileJava
-liquibaseDiffChangeLog.dependsOn compileJava
-<%_ } _%>
-
 gitProperties {
     failOnNoGitDirectory = false
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
@@ -268,13 +233,6 @@ nohttp {
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
-    all {
-        resolutionStrategy {
-            // Inherited version from Spring Boot can't be used because of regressions:
-            // To be removed as soon as spring-boot use the same version
-            force 'org.liquibase:liquibase-core:<%- javaDependencies.liquibase %>'
-        }
-    }
 }
 
 repositories {
@@ -366,10 +324,6 @@ if (addSpringMilestoneRepository) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
     implementation "org.hibernate.orm:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
-<%_ } _%>
-<%_ if (enableLiquibase) { _%>
-    implementation "org.liquibase:liquibase-core"
-    liquibaseRuntime "org.liquibase:liquibase-core"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
@@ -497,14 +451,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
     testImplementation "io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
-<%_ } _%>
-<%_ if (enableLiquibase) { _%>
-    liquibaseRuntime sourceSets.main.compileClasspath
-<%_ } _%>
-<%_ if (enableLiquibase && databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"

@@ -21,7 +21,7 @@ import fs from 'fs';
 import _ from 'lodash';
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
-import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
+import type { LiquibaseApplication, SpringBootApplication, SpringBootSourceType } from '../server/types.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
 import {
@@ -41,6 +41,7 @@ import {
   loadRequiredConfigIntoEntity,
   loadEntitiesAnnotations,
 } from '../base-application/support/index.mjs';
+import mavenPlugin from './support/maven-plugin.mjs';
 import {
   addLiquibaseChangelogCallback,
   addLiquibaseConstraintsChangelogCallback,
@@ -56,7 +57,7 @@ export type LiquibaseEntity = Entity & {
 export type ApplicationDefinition = {
   applicationType: SpringBootApplication & LiquibaseApplication;
   entityType: LiquibaseEntity;
-  sourceType: Record<string, (...args: any[]) => any>;
+  sourceType: SpringBootSourceType;
 };
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
@@ -197,6 +198,82 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      customizeSpring({ source }) {
+        source.addLogbackMainLog?.({ name: 'liquibase', level: 'WARN' });
+        source.addLogbackMainLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
+        source.addLogbackTestLog?.({ name: 'liquibase', level: 'WARN' });
+        source.addLogbackTestLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
+      },
+      customizeMaven({ source, application }) {
+        if (!application.buildToolMaven) return;
+
+        const applicationAny = application as any;
+        const databaseTypeProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;
+
+        source.addMavenDefinition?.({
+          properties: [
+            { inProfile: 'no-liquibase', property: 'profile.no-liquibase', value: ',no-liquibase' },
+            { property: 'profile.no-liquibase' },
+            { property: 'liquibase.version', value: application.javaDependencies.liquibase },
+            { property: 'liquibase-plugin.hibernate-dialect' },
+            { property: 'liquibase-plugin.driver' },
+            { property: 'liquibase-plugin.url' },
+            { property: 'liquibase-plugin.username' },
+            { property: 'liquibase-plugin.password' },
+            { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
+            { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },
+            { inProfile: 'dev', property: 'liquibase-plugin.url', value: applicationAny.devLiquibaseUrl },
+            { inProfile: 'dev', property: 'liquibase-plugin.username', value: applicationAny.devDatabaseUsername },
+            { inProfile: 'dev', property: 'liquibase-plugin.password', value: applicationAny.devDatabasePassword },
+            { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
+            { inProfile: 'prod', property: 'liquibase-plugin.driver', value: applicationAny.prodJdbcDriver },
+            { inProfile: 'prod', property: 'liquibase-plugin.url', value: applicationAny.prodLiquibaseUrl },
+            { inProfile: 'prod', property: 'liquibase-plugin.username', value: applicationAny.prodDatabaseUsername },
+            { inProfile: 'prod', property: 'liquibase-plugin.password', value: applicationAny.prodDatabasePassword },
+          ],
+          dependencies: [
+            {
+              groupId: 'org.liquibase',
+              artifactId: 'liquibase-core',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: '${liquibase.version}',
+            },
+          ],
+        });
+
+        if (applicationAny.prodDatabaseTypeMssql) {
+          source.addMavenDependency?.({
+            inProfile: databaseTypeProfile,
+            groupId: 'org.liquibase.ext',
+            artifactId: 'liquibase-mssql',
+            // eslint-disable-next-line no-template-curly-in-string
+            version: '${liquibase.version}',
+          });
+        }
+      },
+      injectGradle({ source, application }) {
+        if (!application.buildToolGradle) return;
+
+        source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
+        source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: application.javaDependencies['gradle-liquibase'] });
+        if (application.databaseTypeSql && !application.reactive) {
+          source.addGradleProperty?.({ property: 'liquibaseHibernate6Version', value: application.javaDependencies.liquibase });
+        }
+
+        source.applyFromGradle?.({ script: 'gradle/liquibase.gradle' });
+        source.addGradlePlugin?.({ id: 'org.liquibase.gradle' });
+        // eslint-disable-next-line no-template-curly-in-string
+        source.addGradlePluginManagement?.({ id: 'org.liquibase.gradle', version: '${liquibasePluginVersion}' });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 
   /* ======================================================================== */
