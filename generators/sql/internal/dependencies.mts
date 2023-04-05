@@ -121,7 +121,7 @@ export const getDatabaseTypeMavenDefinition: (databaseType: string, options?: { 
       jdbc: {
         dependencies: [
           { inProfile, groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' },
-          { inProfile, groupId: 'org.testcontainers', artifactId: 'mariadb', scope: 'test' },
+          { groupId: 'org.testcontainers', artifactId: 'mariadb', scope: 'test' },
         ],
       },
       r2dbc: {
@@ -133,7 +133,7 @@ export const getDatabaseTypeMavenDefinition: (databaseType: string, options?: { 
       jdbc: {
         dependencies: [
           { inProfile, groupId: 'com.microsoft.sqlserver', artifactId: 'mssql-jdbc' },
-          { inProfile, groupId: 'org.testcontainers', artifactId: 'mssqlserver', scope: 'test' },
+          { groupId: 'org.testcontainers', artifactId: 'mssqlserver', scope: 'test' },
         ],
       },
       r2dbc: {
@@ -144,7 +144,7 @@ export const getDatabaseTypeMavenDefinition: (databaseType: string, options?: { 
       jdbc: {
         dependencies: [
           { inProfile, groupId: 'com.mysql', artifactId: 'mysql-connector-j' },
-          { inProfile, groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
+          { groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
         ],
       },
       r2dbc: {
@@ -156,7 +156,7 @@ export const getDatabaseTypeMavenDefinition: (databaseType: string, options?: { 
       jdbc: {
         dependencies: [
           { inProfile, groupId: 'com.oracle.database.jdbc', artifactId: 'ojdbc8' },
-          { inProfile, groupId: 'org.testcontainers', artifactId: 'oracle-xe', scope: 'test' },
+          { groupId: 'org.testcontainers', artifactId: 'oracle-xe', scope: 'test' },
         ],
       },
       r2dbc: {},
@@ -165,7 +165,7 @@ export const getDatabaseTypeMavenDefinition: (databaseType: string, options?: { 
       jdbc: {
         dependencies: [
           { inProfile, groupId: 'org.postgresql', artifactId: 'postgresql' },
-          { inProfile, groupId: 'org.testcontainers', artifactId: 'postgresql', scope: 'test' },
+          { groupId: 'org.testcontainers', artifactId: 'postgresql', scope: 'test' },
         ],
       },
       r2dbc: {
