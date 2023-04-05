@@ -47,10 +47,6 @@ export const javaDependencies: Record<string, string> = {
    * TODO drop once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
    */
   'r2dbc-mariadb': '1.1.2',
-  /**
-   * https://github.com/asyncer-io/r2dbc-mysql
-   */
-  'r2dbc-mysql': '1.0.0',
 };
 Object.freeze(javaDependencies);
 
