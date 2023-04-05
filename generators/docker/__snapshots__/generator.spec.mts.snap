@@ -14,7 +14,7 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_R2DBC_URL=r2dbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_R2DBC_URL=r2dbc:mysql://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
     ports:

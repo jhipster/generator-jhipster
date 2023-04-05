@@ -131,30 +131,30 @@ describe('generator - sql - database-url', () => {
 
   describe('getR2dbcUrl', () => {
     describe('when called for mysql', () => {
-      it('return r2dbc:mariadb://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+      it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
         expect(getR2dbcUrl(MYSQL, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
+          'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
         );
       });
     });
     describe('when called for mysql with skipExtraOptions enabled', () => {
-      it('return r2dbc:mariadb://localhost:3306/test', () => {
+      it('return r2dbc:mysql://localhost:3306/test', () => {
         expect(getR2dbcUrl(MYSQL, { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test'
+          'r2dbc:mysql://localhost:3306/test'
         );
       });
     });
     describe('when called for mariadb', () => {
-      it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+      it('return r2dbc:mysql://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
         expect(getR2dbcUrl(MARIADB, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
+          'r2dbc:mysql://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
         );
       });
     });
     describe('when called for mariadb with skipExtraOptions enabled', () => {
-      it('return r2dbc:mariadb://localhost:3306/test', () => {
+      it('return r2dbc:mysql://localhost:3306/test', () => {
         expect(getR2dbcUrl(MARIADB, { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test'
+          'r2dbc:mysql://localhost:3306/test'
         );
       });
     });
