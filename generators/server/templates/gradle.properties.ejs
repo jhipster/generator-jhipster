@@ -32,9 +32,6 @@ archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%- javaDependencies['jackson-databind-nullable'] %>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-caffeineVersion=<%- javaDependencies.caffeine %>
-<%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=<%- javaDependencies.typesafe %>
 <%_ } _%>

@@ -81,10 +81,6 @@ export const getCacheProviderMavenDefinition: (
       base: {
         properties: [
           {
-            property: 'caffeine.version',
-            value: javaDependencies.caffeine,
-          },
-          {
             property: 'typesafe.version',
             value: javaDependencies.typesafe,
           },
@@ -94,14 +90,10 @@ export const getCacheProviderMavenDefinition: (
           {
             groupId: 'com.github.ben-manes.caffeine',
             artifactId: 'jcache',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${caffeine.version}',
           },
           {
             groupId: 'com.github.ben-manes.caffeine',
             artifactId: 'caffeine',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${caffeine.version}',
           },
           {
             groupId: 'com.typesafe',
