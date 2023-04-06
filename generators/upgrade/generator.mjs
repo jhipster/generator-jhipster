@@ -183,8 +183,12 @@ export default class UpgradeGenerator extends BaseGenerator {
       this._rmRf('node_modules');
       generatorCommand = 'jhipster';
     } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
-      const generatorDir = shelljs.exec('npm bin', { silent: this.silent }).stdout;
-      generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
+      const result = shelljs.exec('npm bin', { silent: this.silent });
+      if (result.code === 0) {
+        generatorCommand = `"${result.stdout.replace('\n', '')}/jhipster"`;
+      } else {
+        generatorCommand = 'npm exec --no jhipster --';
+      }
     }
     const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
     const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
