@@ -147,7 +147,7 @@ export default class CoreGenerator extends YeomanGenerator {
       }
     }
 
-    this.sharedData = this.createSharedData(jhipsterOldVersion);
+    this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help });
 
     this.logger = new Logger({ adapter: this.env.adapter, namespace: this.options.namespace, debugEnabled: this.debugEnabled });
 
@@ -539,7 +539,13 @@ export default class CoreGenerator extends YeomanGenerator {
     });
   }
 
-  private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
+  private createSharedData({
+    jhipsterOldVersion,
+    help,
+  }: {
+    jhipsterOldVersion: string | null;
+    help: boolean;
+  }): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
     const applicationId =
@@ -548,7 +554,7 @@ export default class CoreGenerator extends YeomanGenerator {
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
     }
-    const sharedApplications = this.options.sharedData.applications;
+    const sharedApplications = help ? {} : this.options.sharedData.applications;
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
     }
