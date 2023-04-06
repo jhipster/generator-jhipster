@@ -43,7 +43,11 @@ export const neo4jFiles = {
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/Neo4jTestContainer.java', 'config/EmbeddedNeo4j.java'],
+      templates: [
+        'config/Neo4jTestContainer.java',
+        'config/Neo4jTestContainersSpringContextCustomizerFactory.java',
+        'config/EmbeddedNeo4j.java',
+      ],
     },
   ],
 };

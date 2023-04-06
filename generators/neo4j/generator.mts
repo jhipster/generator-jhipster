@@ -56,6 +56,12 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        source.addTestSpringFactory?.({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.Neo4jTestContainersSpringContextCustomizerFactory`,
+        });
+      },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
           source.addMavenDependency?.([

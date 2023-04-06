@@ -1,0 +1,63 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+
+import org.springframework.test.context.ContextConfigurationAttributes;
+import org.springframework.test.context.ContextCustomizer;
+import org.springframework.test.context.ContextCustomizerFactory;
+import org.springframework.boot.test.util.TestPropertyValues;
+
+public class Neo4jTestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
+
+    private Logger log = LoggerFactory.getLogger(Neo4jTestContainersSpringContextCustomizerFactory.class);
+
+    private static Neo4jTestContainer neo4jBean;
+
+    @Override
+    public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
+
+        return (context, mergedConfig) -> {
+            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+            TestPropertyValues testValues = TestPropertyValues.empty();
+            EmbeddedNeo4j neo4jAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedNeo4j.class);
+            if (null != neo4jAnnotation) {
+                log.debug("detected the EmbeddedNeo4j annotation on class {}", testClass.getName());
+                log.info("Warming up the neo4j database");
+                if (null == neo4jBean) {
+                    neo4jBean = beanFactory.createBean(Neo4jTestContainer.class);
+                    beanFactory.registerSingleton(Neo4jTestContainer.class.getName(), neo4jBean);
+                }
+
+                String boltUrl = neo4jBean.getNeo4jContainer().getBoltUrl();
+                testValues = testValues.and("spring.neo4j.uri=" + boltUrl);
+<%_ if (databaseMigrationLiquibase) { _%>
+                testValues = testValues.and("spring.liquibase.url=jdbc:neo4j:" + boltUrl);
+<%_ } _%>
+            }
+            testValues.applyTo(context);
+        };
+    }
+}
