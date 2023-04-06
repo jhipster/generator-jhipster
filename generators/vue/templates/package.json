@@ -60,7 +60,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-vue": "8.7.1",
     "typescript": "5.0.3",
-    "webpack": "5.77.0",
+    "webpack": "5.78.0",
     "webpack-bundle-analyzer": "4.8.0",
     "webpack-cli": "5.0.1",
     "webpack-dev-server": "4.13.2",
