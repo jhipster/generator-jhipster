@@ -199,6 +199,12 @@
             <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <!-- fix https://github.com/jhipster/generator-jhipster/issues/21359 -->
+            <groupId>io.micrometer</groupId>
+            <artifactId>context-propagation</artifactId>
+            <version>1.0.2</version>
+        </dependency>
 <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -345,12 +351,6 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-        <dependency>
-            <!-- fix https://github.com/reactor/BlockHound/issues/311 -->
-            <groupId>io.micrometer</groupId>
-            <artifactId>context-propagation</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
