@@ -118,15 +118,6 @@
         <dependency>
             <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
-<%_ // TODO : remove dependency from jhipster-framework
-    if (reactive) { _%>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-webmvc</artifactId>
-                </exclusion>
-            </exclusions>
-<%_ } _%>
         </dependency>
         <dependency>
             <groupId>jakarta.annotation</groupId>
