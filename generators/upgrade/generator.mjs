@@ -179,7 +179,9 @@ export default class UpgradeGenerator extends BaseGenerator {
   _generate(jhipsterVersion, blueprintInfo) {
     this.logger.info(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
     let generatorCommand = 'yo jhipster';
-    if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
+    if (this.options.regenerateExecutable) {
+      generatorCommand = this.options.regenerateExecutable;
+    } else if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
       this._rmRf('node_modules');
       generatorCommand = 'jhipster';
     } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
@@ -421,7 +423,9 @@ export default class UpgradeGenerator extends BaseGenerator {
           // Remove/rename old files
           this._cleanUp();
           // Install jhipster
-          installJhipsterLocally(this.currentJhipsterVersion);
+          if (!this.options.regenerateExecutable) {
+            installJhipsterLocally(this.currentJhipsterVersion);
+          }
           // Install blueprints
           await installBlueprintsLocally();
           const blueprintInfo =
@@ -448,7 +452,7 @@ export default class UpgradeGenerator extends BaseGenerator {
       },
 
       updateJhipster() {
-        if (this.originalTargetJhipsterVersion === GLOBAL_VERSION) {
+        if (this.originalTargetJhipsterVersion === GLOBAL_VERSION || this.options.regenerateExecutable) {
           return;
         }
         this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.targetJhipsterVersion);
