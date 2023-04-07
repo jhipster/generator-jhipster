@@ -68,6 +68,7 @@ export const GENERATOR_OPENAPI_CLIENT = 'openapi-client';
 export const GENERATOR_OPENSHIFT = 'openshift';
 export const GENERATOR_PAGE = 'page';
 export const GENERATOR_PROJECT_NAME = 'project-name';
+export const GENERATOR_PULSAR = 'pulsar';
 export const GENERATOR_REACT = 'react';
 export const GENERATOR_SERVER = 'server';
 export const GENERATOR_SPRING_CACHE = 'spring-cache';

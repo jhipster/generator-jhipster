@@ -61,7 +61,7 @@ export default class TrackerService {
 <%_ if (authenticationTypeJwt) { _%>
 
   private getAuthToken() {
-    const authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+    const authToken = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
   <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
     return JSON.parse(authToken);
   <%_ } else { _%>

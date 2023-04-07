@@ -48,6 +48,16 @@ services:
      - 5672:5672
      - 15672:15672
 <%_ } _%>
+<%_ if (usePulsar) { _%>
+  pulsar:
+    image: <%- dockerContainers.pulsar %>
+    environment:
+      PULSAR_MEM: ' -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g'
+    command: bin/pulsar standalone
+    #ports:
+    # - 6650:6650 # Uncomment to make Pulsar available externally
+    # - 8080:8080
+<%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
   jhipster-registry:
     image: <%- dockerContainers.jhipsterRegistry %>

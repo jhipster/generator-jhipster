@@ -43,7 +43,7 @@ const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
-const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
+const { KAFKA, PULSAR, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { MEMCACHED, REDIS } = cacheTypes;
 const { OAUTH2 } = authenticationTypes;
 
@@ -142,6 +142,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
         this.useRabbitMQ = this.appConfigs.some(appConfig => appConfig.messageBroker === RABBITMQ); // added rabbitmq option cmi-tic-varun
+        this.usePulsar = this.appConfigs.some(appConfig => appConfig.messageBroker === PULSAR);
         this.entryPort = 8080;
       },
 

@@ -30,9 +30,7 @@ const files: WriteFileSection<Generator, SpringBootApplication> = {
       templates: [
         'config/WebsocketConfiguration.java',
         'config/WebsocketSecurityConfiguration.java',
-        'web/websocket/package-info.java',
         'web/websocket/ActivityService.java',
-        'web/websocket/dto/package-info.java',
         'web/websocket/dto/ActivityDTO.java',
       ],
     },

@@ -61,7 +61,7 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 /**
  * This is the base class for a generator for every generator.
  */
-export default class BaseGenerator extends YeomanGenerator {
+export default class CoreGenerator extends YeomanGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -140,11 +140,10 @@ export default class BaseGenerator extends YeomanGenerator {
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      if (!this.options.reproducible) {
-        jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
-        if (!this.jhipsterConfig.jhipsterVersion) {
-          this.jhipsterConfig.jhipsterVersion = packageJson.version;
-        }
+      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
+      // Don't write jhipsterVersion to .yo-rc.json when reproducible
+      if (!this.options.reproducible && !this.jhipsterConfig.jhipsterVersion) {
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
       }
     }
 
@@ -543,8 +542,9 @@ export default class BaseGenerator extends YeomanGenerator {
   private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
-    const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
-    const applicationId = `${prefix}-${dirname}`;
+    const applicationId =
+      this.options.applicationId ??
+      `${createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex')}-${dirname}`;
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
     }

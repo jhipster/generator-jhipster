@@ -136,6 +136,11 @@ export const dockerFiles = {
       templates: ['rabbit.yml'],
     },
     {
+      condition: generator => generator.messageBrokerPulsar,
+      path: DOCKER_DIR,
+      templates: ['pulsar.yml'],
+    },
+    {
       condition: generator => !!generator.enableSwaggerCodegen,
       path: DOCKER_DIR,
       templates: ['swagger-editor.yml'],

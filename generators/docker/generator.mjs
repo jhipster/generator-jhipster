@@ -162,8 +162,10 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         }
         // added to generate rabbit.yml file  --  cmi-tic-varun
         if (application.messageBrokerRabbitMQ) {
-          const serviceName = 'rabbit';
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'rabbit' });
+        }
+        if (application.messageBrokerPulsar) {
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'pulsar' });
         }
       },
 

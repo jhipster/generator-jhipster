@@ -46,8 +46,7 @@ public class MariadbTestContainer implements SqlTestContainer {
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
-                .withReuse(true)
-                .withConfigurationOverride("testcontainers/mariadb");
+                .withReuse(true);
         }
         if (!mariaDBContainer.isRunning()) {
             mariaDBContainer.start();

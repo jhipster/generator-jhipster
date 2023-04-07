@@ -46,7 +46,7 @@ const PATH_PATTERN = /^"([^\/]+).*"$/;
 // const PASSWORD_PATTERN = /^(.+)$/;
 const REPONAME_PATTERN = /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:\/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/;
 const KUBERNETES_STORAGE_CLASS_NAME = /^"[A-Za-z]*"$/;
-const KUBERNETES_STORAGE_PROVISIONER = /^"[a-z][a-z-.]*"$/; 
+const KUBERNETES_STORAGE_PROVISIONER = /^"[a-z][a-z-.]*"$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
@@ -291,9 +291,8 @@ const deploymentConfigPropsValidations = {
     pattern: KUBERNETES_STORAGE_CLASS_NAME,
     msg: 'kubernetesStorageClassName property',
   },
-  
-  // added new parameter kubernetesStorageProvisioner @cmi-tic-craxkumar 
-  KUBERNETES_STORAGE_PROVISIONER: { 
+  // added new parameter kubernetesStorageProvisioner @cmi-tic-craxkumar
+  KUBERNETES_STORAGE_PROVISIONER: {
     type: 'STRING',
     pattern: KUBERNETES_STORAGE_PROVISIONER,
     msg: 'kubernetesStorageProvisioner property',

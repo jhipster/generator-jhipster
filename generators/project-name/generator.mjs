@@ -31,11 +31,7 @@ import command from './command.mjs';
  * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class ProjectNameGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (this.options.help) return;
-
+  async beforeQueue() {
     if (this.options.defaults) {
       if (!this.jhipsterConfig.baseName) {
         this.jhipsterConfig.baseName = getDefaultAppName(this);
@@ -47,9 +43,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
       this.options.withEntities ||
       this.options.applicationWithConfig ||
       (this.jhipsterConfig.baseName !== undefined && this.config.existed);
-  }
 
-  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
     }
@@ -110,7 +104,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
-        const { baseName } = application;
+        const { baseName, upperFirstCamelCaseBaseName } = application;
         const humanizedBaseName = baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(baseName);
         _.defaults(application, {
           humanizedBaseName,
@@ -119,7 +113,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
           capitalizedBaseName: _.upperFirst(baseName),
           dasherizedBaseName: _.kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),
-          upperFirstCamelCaseBaseName: this.upperFirstCamelCase(baseName),
+          upperFirstCamelCaseBaseName,
           projectDescription: `Description for ${humanizedBaseName}`,
         });
       },

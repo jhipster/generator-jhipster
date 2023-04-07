@@ -32,6 +32,7 @@ import {
   shouldComposeWithKafka,
   shouldComposeWithRabbitMQ, // cmi-tic-varun
   shouldComposeWithLiquibase,
+  shouldComposeWithPulsar,
 } from '../server/__test-support/index.mjs';
 
 const { snakeCase } = lodash;
@@ -87,6 +88,7 @@ describe(`generator - ${databaseType}`, () => {
       });
       shouldComposeWithKafka(sampleConfig, () => runResult);
       shouldComposeWithRabbitMQ(sampleConfig, () => runResult); // cmi-tic-varun
+      shouldComposeWithPulsar(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

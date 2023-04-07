@@ -1,8 +1,22 @@
 import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
 import { JavaApplication } from '../java/types.mjs';
+import { GradleSourceType } from '../gradle/types.mjs';
+import { MavenSourceType } from '../maven/types.mjs';
+import { LiquibaseSourceType } from '../liquibase/types.mjs';
+import { SpringCacheSourceType } from '../spring-cache/types.mjs';
 
 declare const CACHE_PROVIDER = 'cacheProvider';
+
+export type SpringBootSourceType = GradleSourceType &
+  MavenSourceType &
+  SpringCacheSourceType &
+  LiquibaseSourceType & {
+    addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
+    addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
+    addLogbackTestLog?({ name, level }: { name: string; level: string }): void;
+    addIntegrationTestAnnotation?({ package, annotation }: { package?: string; annotation: string }): void;
+  };
 
 type CacheProvider = {
   [CACHE_PROVIDER]: 'no' | 'caffeine' | 'ehcache' | 'hazelcast' | 'infinispan' | 'memcached' | 'redis';

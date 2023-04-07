@@ -197,7 +197,7 @@ fi
 # Print entities json
 #-------------------------------------------------------------------------------
 echo "*** Entities:"
-ls -al "$JHI_FOLDER_APP"/.jhipster/
+ls -al "$JHI_FOLDER_APP"/.jhipster/ || true
 
 #-------------------------------------------------------------------------------
 # Force no insight

@@ -28,11 +28,17 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { formatDateForChangelog, normalizePathEnd, createJHipster7Context } from './support/index.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import PrivateBase from './generator-base-definitions.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import { getDBTypeFromDBValue, calculateDbNameWithLimit, hibernateSnakeCase } from '../server/support/index.mjs';
+import {
+  getDBTypeFromDBValue,
+  hibernateSnakeCase,
+  calculateDbName,
+  getFKConstraintName,
+  getUXConstraintName,
+} from '../server/support/index.mjs';
 import {
   databaseTypes,
   monitoringTypes,
@@ -48,7 +54,7 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
@@ -74,7 +80,7 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
+const { KAFKA, PULSAR, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -95,17 +101,6 @@ const isWin32 = os.platform() === 'win32';
  * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
  */
 export default class JHipsterBaseGenerator extends PrivateBase {
-  /**
-   * @private
-   * Add external resources to root file(index.html).
-   *
-   * @param {string} resources - Resources added to root file.
-   * @param {string} comment - comment to add before resources content.
-   */
-  addExternalResourcesToRoot(resources, comment) {
-    this.needleApi.client.addExternalResourcesToRoot(resources, comment);
-  }
-
   /**
    * @private
    * Add a new element in the "global.json" translations.
@@ -144,130 +139,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
-   *
-   * @param {string} entityClass - the entity to cache
-   * @param {array} relationships - the relationships of this entity
-   * @param {string} packageName - the Java package name
-   * @param {string} packageFolder - the Java package folder
-   */
-  addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
-    this.addEntityToCache(entityClass, relationships, packageName, packageFolder, EHCACHE);
-  }
-
-  /**
-   * @private
-   * Add a new entry to Ehcache in CacheConfiguration.java
-   *
-   * @param {string} entry - the entry (including package name) to cache
-   * @param {string} packageFolder - the Java package folder
-   */
-  addEntryToEhcache(entry, packageFolder) {
-    this.addEntryToCache(entry, packageFolder, EHCACHE);
-  }
-
-  /**
-   * @private
-   * Add a new entity to the chosen cache provider, for the 2nd level cache of an entity and its relationships.
-   *
-   * @param {string} entityClass - the entity to cache
-   * @param {array} relationships - the relationships of this entity
-   * @param {string} packageName - the Java package name
-   * @param {string} packageFolder - the Java package folder
-   * @param {string} cacheProvider - the cache provider
-   */
-  addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
-    this.needleApi.serverCache.addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider);
-  }
-
-  /**
-   * @private
-   * Add a new entry to the chosen cache provider in CacheConfiguration.java
-   *
-   * @param {string} entry - the entry (including package name) to cache
-   * @param {string} packageFolder - the Java package folder
-   * @param {string} cacheProvider - the cache provider
-   */
-  addEntryToCache(entry, packageFolder, cacheProvider) {
-    this.needleApi.serverCache.addEntryToCache(entry, packageFolder, cacheProvider);
-  }
-
-  /**
-   * @private
-   * Add a new changelog to the Liquibase master.xml file.
-   *
-   * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
-   */
-  addChangelogToLiquibase(changelogName) {
-    this.needleApi.serverLiquibase.addChangelog(changelogName);
-  }
-
-  /**
-   * @private
-   * Add a incremental changelog to the Liquibase master.xml file.
-   *
-   * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
-   */
-  addIncrementalChangelogToLiquibase(changelogName) {
-    this.needleApi.serverLiquibase.addIncrementalChangelog(changelogName);
-  }
-
-  /**
-   * @private
-   * Add a new constraints changelog to the Liquibase master.xml file.
-   *
-   * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
-   */
-  addConstraintsChangelogToLiquibase(changelogName) {
-    this.needleApi.serverLiquibase.addConstraintsChangelog(changelogName);
-  }
-
-  /**
-   * @private
-   * Add a new changelog to the Liquibase master.xml file.
-   *
-   * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
-   * @param {string} needle - The needle at where it has to be added.
-   */
-  addLiquibaseChangelogToMaster(changelogName, needle) {
-    this.needleApi.serverLiquibase.addChangelogToMaster(changelogName, needle);
-  }
-
-  /**
-   * @private
-   * Add a new column to a Liquibase changelog file for entity.
-   *
-   * @param {string} filePath - The full path of the changelog file.
-   * @param {string} content - The content to be added as column, can have multiple columns as well
-   */
-  addColumnToLiquibaseEntityChangeset(filePath, content) {
-    this.needleApi.serverLiquibase.addColumnToEntityChangeset(filePath, content);
-  }
-
-  /**
-   * @private
-   * Add a new load column to a Liquibase changelog file for entity.
-   *
-   * @param {string} filePath - The full path of the changelog file.
-   * @param {string} content - The content to be added as column, can have multiple columns as well
-   */
-  addLoadColumnToLiquibaseEntityChangeSet(filePath, content) {
-    this.needleApi.serverLiquibase.addLoadColumnToEntityChangeSet(filePath, content);
-  }
-
-  /**
-   * @private
-   * Add a new changeset to a Liquibase changelog file for entity.
-   *
-   * @param {string} filePath - The full path of the changelog file.
-   * @param {string} content - The content to be added as changeset
-   */
-  addChangesetToLiquibaseEntityChangelog(filePath, content) {
-    this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
-  }
-
-  /**
-   * @private
    * Copy third-party library resources path.
    *
    * @param {string} sourceFolder - third-party library resources source path
@@ -284,261 +155,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addWebpackConfig(config, clientFramework) {
     this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
-  }
-
-  /**
-   * @private
-   * Add a Maven dependency Management.
-   *
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} type - (optional) explicit type
-   * @param {string} scope - (optional) explicit scope
-   * @param {string} other - (optional) explicit other thing:  exclusions...
-   */
-  addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-    this.needleApi.serverMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Repository to the Maven build.
-   *
-   * @param {string} id - id of the repository
-   * @param {string} url - url of the repository
-   * @param  {string} other - (optional) explicit other thing: name, releases, snapshots, ...
-   */
-  addMavenRepository(id, url, other = '') {
-    this.needleApi.serverMaven.addRepository(id, url, other);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Plugin Repository to the Maven build.
-   *
-   * @param {string} id - id of the repository
-   * @param {string} url - url of the repository
-   */
-  addMavenPluginRepository(id, url) {
-    this.needleApi.serverMaven.addPluginRepository(id, url);
-  }
-
-  /**
-   * @private
-   * Add a distributionManagement to the Maven build.
-   *
-   * @param {string} snapshotsId Snapshots Repository Id
-   * @param {string} snapshotsUrl Snapshots Repository Url
-   * @param {string} releasesId Repository Id
-   * @param {string} releasesUrl Repository Url
-   */
-  addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-    this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
-  }
-
-  /**
-   * @private
-   * Add a new Maven property.
-   *
-   * @param {string} name - property name
-   * @param {string} value - property value
-   */
-  addMavenProperty(name, value) {
-    this.needleApi.serverMaven.addProperty(name, value);
-  }
-
-  /**
-   * @private
-   * Add a new Maven dependency.
-   *
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} other - (optional) explicit other thing: scope, exclusions...
-   */
-  addMavenDependency(groupId, artifactId, version, other) {
-    this.addMavenDependencyInDirectory('.', groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven dependency in a specific folder..
-   *
-   * @param {string} directory - the folder to add the dependency in
-   * @param {string} groupId - dependency groupId
-   * @param {string} artifactId - dependency artifactId
-   * @param {string} version - (optional) explicit dependency version number
-   * @param {string} other - (optional) explicit other thing: scope, exclusions...
-   */
-  addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven plugin.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   * @param {string} other - explicit other thing: executions, configuration...
-   */
-  addMavenPlugin(groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new Maven plugin management.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   * @param {string} other - explicit other thing: executions, configuration...
-   */
-  addMavenPluginManagement(groupId, artifactId, version, other) {
-    this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
-  }
-
-  /**
-   * @private
-   * Add a new annotation processor path to Maven compiler configuration.
-   *
-   * @param {string} groupId - plugin groupId
-   * @param {string} artifactId - plugin artifactId
-   * @param {string} version - explicit plugin version number
-   */
-  addMavenAnnotationProcessor(groupId, artifactId, version) {
-    this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
-  }
-
-  /**
-   * @private
-   * Add a new Maven profile.
-   *
-   * @param {string} profileId - profile ID
-   * @param {string} other - explicit other thing: build, dependencies...
-   */
-  addMavenProfile(profileId, other) {
-    this.needleApi.serverMaven.addProfile(profileId, other);
-  }
-
-  /**
-   * @private
-   * A new Gradle property.
-   *
-   * @param {string} name - property name
-   * @param {string} value - property value
-   */
-  addGradleProperty(name, value) {
-    this.needleApi.serverGradle.addProperty(name, value);
-  }
-
-  /**
-   * @private
-   * A new Gradle plugin.
-   *
-   * @param {string} group - plugin GroupId
-   * @param {string} name - plugin name
-   * @param {string} version - explicit plugin version number
-   */
-  addGradlePlugin(group, name, version) {
-    this.needleApi.serverGradle.addPlugin(group, name, version);
-  }
-
-  /**
-   * @private
-   * A new Gradle plugin to plugin management block in settings.gradle
-   *
-   * @param {string} id - plugin id
-   * @param {string} version - explicit plugin version number
-   */
-  addGradlePluginToPluginManagement(id, version) {
-    this.needleApi.serverGradle.addPluginToPluginManagement(id, version);
-  }
-
-  /**
-   * @private
-   * Add Gradle plugin to the plugins block
-   *
-   * @param {string} id - plugin id
-   * @param {string} version - explicit plugin version number
-   */
-  addGradlePluginToPluginsBlock(id, version) {
-    this.needleApi.serverGradle.addPluginToPluginsBlock(id, version);
-  }
-
-  /**
-   * @private
-   * A new dependency to build.gradle file.
-   *
-   * @param {string} scope - scope of the new dependency, e.g. compile
-   * @param {string} group - maven GroupId
-   * @param {string} name - maven ArtifactId
-   * @param {string} version - (optional) explicit dependency version number
-   */
-  addGradleDependency(scope, group, name, version) {
-    this.addGradleDependencyInDirectory('.', scope, group, name, version);
-  }
-
-  /**
-   * @private
-   * A new dependency to build.gradle file in a specific folder.
-   *
-   * @param {string} directory - directory
-   * @param {string} scope - scope of the new dependency, e.g. compile
-   * @param {string} group - maven GroupId
-   * @param {string} name - maven ArtifactId
-   * @param {string} version - (optional) explicit dependency version number
-   */
-  addGradleDependencyInDirectory(directory, scope, group, name, version) {
-    this.needleApi.serverGradle.addDependencyInDirectory(directory, scope, group, name, version);
-  }
-
-  /**
-   * @private
-   * Apply from an external Gradle build script.
-   *
-   * @param {string} name - name of the file to apply from, must be 'fileName.gradle'
-   */
-  applyFromGradleScript(name) {
-    this.needleApi.serverGradle.applyFromScript(name);
-  }
-
-  /**
-   * @private
-   * Add a logger to the logback-spring.xml
-   *
-   * @param {string} logName - name of the log we want to track
-   * @param {string} level - tracking level
-   */
-  addLoggerForLogbackSpring(logName, level) {
-    this.needleApi.serverLog.addlog(logName, level);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven Repository to the Gradle build.
-   *
-   * @param {string} url - url of the repository
-   * @param {string} username - (optional) username of the repository credentials
-   * @param {string} password - (optional) password of the repository credentials
-   */
-  addGradleMavenRepository(url, username, password) {
-    this.needleApi.serverGradle.addMavenRepository(url, username, password);
-  }
-
-  /**
-   * @private
-   * Add a remote Maven repository to the Gradle plugin management block in settings.gradle
-   *
-   * @param {string} url - url of the repository
-   * @param {string} username - (optional) username of the repository credentials
-   * @param {string} password - (optional) password of the repository credentials
-   */
-  addGradlePluginManagementRepository(url, username, password) {
-    this.needleApi.serverGradle.addPluginManagementRepository(url, username, password);
   }
 
   /**
@@ -666,44 +282,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * get a table name in JHipster preferred style.
-   *
-   * @param {string} value - table name string
-   */
-  getTableName(value) {
-    return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
    * get a table column name in JHipster preferred style.
    *
    * @param {string} value - table column name string
    */
   getColumnName(value) {
     return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
-   * get a table name for joined tables in JHipster preferred style.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} relationshipName - name of the related entity
-   * @param {string} prodDatabaseType - database type
-   */
-  getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-    const separator = '__';
-    const prefix = 'rel_';
-    const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
-    const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
-    if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logger.warn(
-        `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
-      );
-      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
-    }
-    return joinTableName;
   }
 
   /**
@@ -718,25 +302,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} suffix - constraintName suffix for the constraintName
    */
   getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
-    let constraintName;
-    const separator = '__';
-    if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
-    } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}${suffix}`;
-    }
-    const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
-    if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.logger.warn(
-        `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
-      );
-      return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
-        separator,
-        noSnakeCase,
-        prefix,
-      })}${suffix}`;
-    }
-    return constraintName;
+    const result = calculateDbName(entityName, columnOrRelationName, { prodDatabaseType, noSnakeCase, prefix, suffix });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -749,7 +317,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
+    const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -762,7 +332,9 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
+    const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
+    this.validateResult(result);
+    return result.value;
   }
 
   /**
@@ -831,7 +403,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value string to convert
    */
   upperFirstCamelCase(value) {
-    return _.upperFirst(_.camelCase(value));
+    return upperFirstCamelCase(value);
   }
 
   /**
@@ -1462,7 +1034,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
-      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
+      dest.upperFirstCamelCaseBaseName = upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
@@ -1637,6 +1209,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
     dest.messageBrokerRabbitMQ = dest.messageBroker === RABBITMQ; // added rabbitmq option cmi-tic-varun
+    dest.messageBrokerPulsar = dest.messageBroker === PULSAR;
+    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== NO_MESSAGE_BROKER;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
@@ -1648,7 +1222,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.cacheProviderNo = !dest.cacheProvider || dest.cacheProvider === NO_CACHE;
     dest.cacheProviderCaffeine = dest.cacheProvider === CAFFEINE;
-    dest.cacheProviderEhCache = dest.cacheProvider === EHCACHE;
+    dest.cacheProviderEhcache = dest.cacheProvider === EHCACHE;
     dest.cacheProviderHazelcast = dest.cacheProvider === HAZELCAST;
     dest.cacheProviderInfinispan = dest.cacheProvider === INFINISPAN;
     dest.cacheProviderMemcached = dest.cacheProvider === MEMCACHED;
@@ -1658,20 +1232,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.devDatabaseTypeH2Disk = dest.devDatabaseType === H2_DISK;
     dest.devDatabaseTypeH2Memory = dest.devDatabaseType === H2_MEMORY;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
-    dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
     dest.devDatabaseTypeMariadb = dest.devDatabaseType === MARIADB;
     dest.devDatabaseTypeMssql = dest.devDatabaseType === MSSQL;
     dest.devDatabaseTypeMysql = dest.devDatabaseType === MYSQL;
     dest.devDatabaseTypeOracle = dest.devDatabaseType === ORACLE;
     dest.devDatabaseTypePostgres = dest.devDatabaseType === POSTGRESQL;
 
-    dest.prodDatabaseTypeCouchbase = dest.prodDatabaseType === COUCHBASE;
     dest.prodDatabaseTypeH2Disk = dest.prodDatabaseType === H2_DISK;
     dest.prodDatabaseTypeMariadb = dest.prodDatabaseType === MARIADB;
-    dest.prodDatabaseTypeMongodb = dest.prodDatabaseType === MONGODB;
     dest.prodDatabaseTypeMssql = dest.prodDatabaseType === MSSQL;
     dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
-    dest.prodDatabaseTypeNeo4j = dest.prodDatabaseType === NEO4J;
     dest.prodDatabaseTypeOracle = dest.prodDatabaseType === ORACLE;
     dest.prodDatabaseTypePostgres = dest.prodDatabaseType === POSTGRESQL;
 
@@ -1701,6 +1271,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
 
     dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
+
+    dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
+    dest.generateAuthenticationApi = dest.applicationTypeMonolith || dest.applicationTypeGateway;
 
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);

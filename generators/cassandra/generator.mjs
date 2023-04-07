@@ -24,13 +24,6 @@ import writeCassandraFilesTask from './files.mjs';
 import cleanupCassandraFilesTask from './cleanup.mjs';
 import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
 export default class CassandraGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -59,5 +52,70 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        source.addTestSpringFactory?.({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.CassandraTestContainersSpringContextCustomizerFactory`,
+        });
+      },
+      addDependencies({ application, source }) {
+        const { reactive } = application;
+        if (application.buildToolMaven) {
+          source.addMavenProperty?.({
+            property: 'cassandra-driver.version',
+            value: application.javaDependencies.cassandra,
+          });
+
+          source.addMavenAnnotationProcessor?.({
+            groupId: 'com.datastax.oss',
+            artifactId: 'java-driver-mapper-processor',
+            // eslint-disable-next-line no-template-curly-in-string
+            version: '${cassandra-driver.version}',
+          });
+
+          source.addMavenDependency?.([
+            {
+              groupId: 'com.datastax.oss',
+              artifactId: 'java-driver-mapper-runtime',
+            },
+            {
+              groupId: 'commons-codec',
+              artifactId: 'commons-codec',
+            },
+            {
+              groupId: 'org.lz4',
+              artifactId: 'lz4-java',
+            },
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: `spring-boot-starter-data-cassandra${reactive ? '-reactive' : ''}`,
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'junit-jupiter',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'testcontainers',
+              scope: 'test',
+            },
+            {
+              groupId: 'org.testcontainers',
+              artifactId: 'cassandra',
+              scope: 'test',
+            },
+          ]);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }

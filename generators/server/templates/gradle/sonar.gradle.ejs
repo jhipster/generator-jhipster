@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 jacoco {
-    toolVersion = "<%= JACOCO_VERSION %>"
+    toolVersion = "<%- javaDependencies['jacoco-maven-plugin'] %>"
 }
 
 jacocoTestReport {

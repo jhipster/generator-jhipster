@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Konfiqurasiya",
+        "filter": "Filterlə (prefikslə)",
+        "table": {
+            "prefix": "Prefiks",
+            "properties": "Xüsusiyyətlər"
+        }
+    }
+}

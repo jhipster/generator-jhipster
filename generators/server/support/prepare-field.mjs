@@ -20,6 +20,8 @@ import assert from 'assert';
 import _ from 'lodash';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
+import { getUXConstraintName } from './database.mjs';
+import { hibernateSnakeCase } from './string.mjs';
 
 const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = fieldTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
@@ -87,7 +89,7 @@ export default function prepareField(entityWithConfig, field, generator) {
 
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
-    const jhiFieldNamePrefix = generator.getColumnName(entityWithConfig.jhiPrefix);
+    const jhiFieldNamePrefix = hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
     if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType)) {
       if (!jhiFieldNamePrefix) {
@@ -105,11 +107,9 @@ export default function prepareField(entityWithConfig, field, generator) {
 
   field.columnName = field.fieldNameAsDatabaseColumn;
   if (field.unique) {
-    field.uniqueConstraintName = generator.getUXConstraintName(
-      entityWithConfig.entityTableName,
-      field.columnName,
-      entityWithConfig.prodDatabaseType
-    );
+    field.uniqueConstraintName = getUXConstraintName(entityWithConfig.entityTableName, field.columnName, {
+      prodDatabaseType: entityWithConfig.prodDatabaseType,
+    }).value;
   }
 
   if (field.fieldInJavaBeanMethod === undefined) {

@@ -113,7 +113,7 @@ management:
 <% if (cacheProviderAny) { -%>
           - caches
 <% } -%>
-<% if (databaseTypeSql) { -%>
+<% if (enableLiquibase) { -%>
           - liquibase
 <% } -%>
   endpoint:
@@ -212,6 +212,8 @@ spring:
           max-connections: 1000
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>
+    function:
+      definition: kafkaConsumer;kafkaProducer
     stream:
       kafka:
         binder:
@@ -219,12 +221,14 @@ spring:
           auto-create-topics: true
           brokers: localhost:9092
       bindings:
-        binding-in-sse:
+        binding-out-0:
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
+        kafkaConsumer-in-0:
           destination: sse-topic
           content-type: text/plain
           group: <%= dasherizedBaseName %>
-        binding-out-sse:
-          destination: sse-topic
+        kafkaProducer-out-0:
           content-type: text/plain
           group: <%= dasherizedBaseName %>
   <%_ } _%>
@@ -251,6 +255,7 @@ spring:
     open-in-view: false
     properties:
       hibernate.jdbc.time_zone: UTC
+      hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
       hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>

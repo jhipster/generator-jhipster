@@ -19,7 +19,7 @@
 
 pluginManagement {
     repositories {
-<%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+<%_ if (addSpringMilestoneRepository) { _%>
         mavenCentral()
         maven { url 'https://repo.spring.io/milestone' }
         gradlePluginPortal()
@@ -35,9 +35,6 @@ pluginManagement {
 <%_ } _%>
 <%_ if (!skipClient) { _%>
         id 'com.github.node-gradle.node' version "${gradleNodePluginVersion}"
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-        id 'org.liquibase.gradle' version "${liquibasePluginVersion}"
 <%_ } _%>
         id 'org.sonarqube' version "${sonarqubePluginVersion}"
         id "io.spring.nohttp" version "${noHttpCheckstyleVersion}"

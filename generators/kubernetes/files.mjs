@@ -66,7 +66,7 @@ export function writeFiles() {
         if (!this.app.serviceDiscoveryAny && this.app.authenticationType === JWT) {
           this.writeFile('secret/jwt-secret.yml.ejs', `${appOut}/jwt-secret.yml`);
         }
-        if (this.app.prodDatabaseTypeCouchbase) {
+        if (this.app.databaseTypeCouchbase) {
           this.writeFile('secret/couchbase-secret.yml.ejs', `${appOut}/templates/couchbase-secret.yml`);
         }
         if (this.monitoring === PROMETHEUS) {

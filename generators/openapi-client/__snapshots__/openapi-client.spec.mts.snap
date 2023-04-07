@@ -32,6 +32,21 @@ package.json
 ",
     "stateCleared": "modified",
   },
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+",
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -183,6 +198,21 @@ components:
           format: int32
         message:
           type: string",
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+",
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/client/petstore/api/PetsApiClientOld.java": {

@@ -19,6 +19,7 @@
 import { extname } from 'path';
 import { passthrough } from 'p-transform';
 import memFsEditor from 'mem-fs-editor';
+import addJavaAnnotation from './add-java-annotation.mjs';
 
 const {
   State: { isFileStateDeleted },
@@ -32,16 +33,9 @@ const generatedAnnotationTransform = packageName => {
       !isFileStateDeleted(file) &&
       !file.path.endsWith('GeneratedByJHipster.java')
     ) {
-      const content = file.contents.toString('utf8');
-
-      if (!new RegExp(`import ${packageName.replace('.', '\\.')}.GeneratedByJHipster;`).test(content)) {
-        const newContent = content
-          // add the import statement just after the package statement, prettier will arrange it correctly
-          .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
-          // add the annotation before class or interface
-          .replace(/\n([a-w ]*(class|interface|enum) )/g, '\n@GeneratedByJHipster\n$1');
-        file.contents = Buffer.from(newContent);
-      }
+      file.contents = Buffer.from(
+        addJavaAnnotation(file.contents.toString('utf8'), { package: packageName, annotation: 'GeneratedByJHipster' })
+      );
     }
   }, 'jhipster:generated-by-annotation');
 };

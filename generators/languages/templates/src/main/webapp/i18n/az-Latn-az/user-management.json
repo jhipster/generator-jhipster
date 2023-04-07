@@ -1,0 +1,31 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "İstifadəçilər",
+            "refreshListLabel": "Siyahını yenilə",
+            "createLabel": "Yeni istifadəçi yarat",
+            "createOrEditLabel": "İstifadəçi yarat və ya düzəliş et"
+        },
+        "created": "{{ param }} ID ilə yeni bir istifadəçi əlavə edildi.",
+        "updated": "{{ param }} nolu istifadəçi yeniləndi",
+        "deleted": "{{ param }} nolu istifadəçi silindi",
+        "delete": {
+            "question": "{{ login }} istifadəçisini silmək istədiyinizdən əminsiniz?"
+        },
+        "detail": {
+            "title": "İstifadəçi"
+        },
+        "login": "Giriş",
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "email": "Epoçt",
+        "activated": "Aktiv",
+        "deactivated": "Deaktiv",
+        "profiles": "Rollar",
+        "langKey": "Dil",
+        "createdBy": "Qeydiyyata alan",
+        "createdDate": "Qeydiyyat tarixi",
+        "lastModifiedBy": "Düzəliş edən",
+        "lastModifiedDate": "Düzəliş tarixi"
+    }
+}

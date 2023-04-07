@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 
+import _ from 'lodash';
+
 /**
  * Calculate a hash code for a given string.
  * @param str - any string
  * @returns returns the calculated hash code.
  */
-// eslint-disable-next-line import/prefer-default-export
 export function stringHashCode(str: string): number {
   let hash = 0;
 
@@ -36,4 +37,12 @@ export function stringHashCode(str: string): number {
     hash *= -1;
   }
   return hash;
+}
+
+/**
+ * get the an upperFirst camelCase value.
+ * @param value string to convert
+ */
+export function upperFirstCamelCase(value: string): string {
+  return _.upperFirst(_.camelCase(value));
 }

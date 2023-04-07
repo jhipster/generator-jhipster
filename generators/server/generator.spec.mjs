@@ -25,7 +25,7 @@ import { fileURLToPath } from 'url';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers, checkEnforcements } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
-import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka } from './__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka, shouldComposeWithPulsar } from './__test-support/index.mjs';
 import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -103,6 +103,7 @@ describe(`generator - ${generator}`, () => {
         });
         shouldComposeWithRabbitMQ(false, () => runResult); // cmi-tic-varun
         shouldComposeWithKafka(false, () => runResult);
+        shouldComposeWithPulsar(false, () => runResult);
       });
       describe('kafka', () => {
         let runResult;
@@ -116,6 +117,21 @@ describe(`generator - ${generator}`, () => {
             .withMockedGenerators(mockedGenerators);
         });
         shouldComposeWithKafka(true, () => runResult);
+        shouldComposeWithPulsar(false, () => runResult);
+      });
+      describe('pulsar', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              messageBroker: 'pulsar',
+            })
+            .withSkipWritingPriorities()
+            .withMockedGenerators(mockedGenerators);
+        });
+        shouldComposeWithPulsar(true, () => runResult);
+        shouldComposeWithKafka(false, () => runResult);
       });
       // rabbitmq -- cmi-tic-varun
       describe('rabbit', () => {

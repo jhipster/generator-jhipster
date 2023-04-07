@@ -24,16 +24,14 @@ import {
   moveToJavaEntityPackageSrcDir,
   moveToJavaEntityPackageTestDir,
   moveToJavaPackageSrcDir,
-  moveToJavaPackageTestDir,
   replaceEntityFilePathVariables,
 } from './support/index.mjs';
-import { SERVER_MAIN_SRC_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
-import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
+import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.mjs';
 import { getEnumInfo } from '../base-application/support/index.mjs';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes, ServiceTypes } = entityOptions;
-const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = cacheTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
@@ -271,20 +269,4 @@ export function writeFiles() {
       }
     },
   };
-}
-
-export function customizeFiles({ application, entities }) {
-  if (application.databaseType === SQL) {
-    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
-      if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
-        this.addEntityToCache(
-          entity.entityAbsoluteClass,
-          entity.relationships,
-          application.packageName,
-          application.packageFolder,
-          application.cacheProvider
-        );
-      }
-    }
-  }
 }

@@ -28,6 +28,7 @@ import { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from
 import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
 import command from './command.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
+import { matchMainJavaFiles } from './support/package-info-transform.mjs';
 
 export type ApplicationDefinition = GenericApplicationDefinition<JavaApplication>;
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition>;
@@ -71,12 +72,15 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
         }
       },
       generatedPackageInfo({ application }) {
+        const mainPackageMatch = matchMainJavaFiles(application.srcMainJava);
         if (this.packageInfoFile) {
           (this as any).queueTransformStream(
             packageInfoTransform({
-              javaRoots: [this.destinationPath(application.srcMainJava), this.destinationPath(application.srcTestJava)],
+              javaRoots: [this.destinationPath(application.srcMainJava)],
               editor: this.fs,
               javadocs: {
+                ...Object.fromEntries(application.packageInfoJavadocs.map(doc => [doc.packageName, doc.documentation])),
+                [`${application.packageName}`]: 'Application root.',
                 [`${application.packageName}.config`]: 'Application configuration.',
                 [`${application.packageName}.domain`]: 'Domain objects.',
                 [`${application.packageName}.repository`]: 'Repository layer.',
@@ -87,7 +91,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
             {
               name: 'adding package-info.java files',
               streamOptions: {
-                filter: file => isFilePending(file) && file.path.endsWith('.java') && !file.path.endsWith('package-info.java'),
+                filter: file => isFilePending(file) && !file.path.endsWith('package-info.java') && mainPackageMatch.match(file.path),
               },
             }
           );

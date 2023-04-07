@@ -92,16 +92,13 @@
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
 <%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
+<%_ if (cacheProviderEhcache) { _%>
     <logger name="org.ehcache" level="WARN"/>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
 <%_ } _%>
     <logger name="org.apache" level="WARN"/>
-<%_ if (messageBrokerKafka) { _%>
-    <logger name="org.apache.kafka" level="INFO"/>
-<%_ } _%>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -131,6 +128,7 @@
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.boot.autoconfigure.logging" level="INFO"/>
     <logger name="org.springframework.cache" level="WARN"/>
 <%_ if (reactive) { _%>
     <logger name="org.synchronoss" level="WARN"/>
@@ -145,10 +143,6 @@
 <%_ } _%>
     <logger name="io.swagger.v3" level="INFO"/>
     <logger name="sun.rmi" level="WARN"/>
-<%_ if (enableLiquibase) { _%>
-    <logger name="liquibase" level="WARN"/>
-    <logger name="LiquibaseSchemaResolver" level="INFO"/>
-<%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway || cacheProviderHazelcast) { _%>
     <logger name="sun.net.www" level="INFO"/>
 <%_ } _%>

@@ -35,8 +35,11 @@ Launch all your infrastructure by running: `docker compose up -d`.
 - Zookeeper
 <%_ } _%>
 <%_ if (useRabbitMQ === true) { _%>
-    - RabbitMQ
-    - RabbitMQ Management
+- RabbitMQ
+- RabbitMQ Management
+<%_ } _%>
+<%_ if (usePulsar === true) { _%>
+- Pulsar
 <%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
 - [Prometheus server](http://localhost:9090)

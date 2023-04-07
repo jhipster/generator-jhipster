@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.config;
 
-<%_ if (cacheProviderEhCache) { _%>
+<%_ if (cacheProviderEhcache) { _%>
 import java.time.Duration;
 
 import org.ehcache.config.builders.*;
@@ -53,7 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 <%_ } _%>
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderEhcache || cacheProviderCaffeine) { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
   <%_ if (enableHibernateCache) { _%>
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
@@ -181,11 +181,11 @@ public class CacheConfiguration {
     private GitProperties gitProperties;
     private BuildProperties buildProperties;
 <%_ } _%>
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderEhcache || cacheProviderCaffeine) { _%>
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-  <%_ if (cacheProviderEhCache) { _%>
+  <%_ if (cacheProviderEhcache) { _%>
         JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
 
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
@@ -230,7 +230,7 @@ public class CacheConfiguration {
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_ if (cacheProviderEhCache) { _%>
+  <%_ if (cacheProviderEhcache) { _%>
             // jhipster-needle-ehcache-add-entry
   <%_ } _%>
   <%_ if (cacheProviderCaffeine) { _%>
@@ -604,19 +604,13 @@ public class CacheConfiguration {
             TCP tcp = new TCP();
             tcp.setBindAddress(InetAddress.getLocalHost());
             tcp.setBindPort(7800);
-            tcp.setThreadPoolMinThreads(2);
-            tcp.setThreadPoolMaxThreads(30);
-            tcp.setThreadPoolKeepAliveTime(60000);
 
             TCPPING tcpping = new TCPPING();
             initialHosts.add(new InetSocketAddress(InetAddress.getLocalHost(), 7800));
             tcpping.setInitialHosts(initialHosts);
-            tcpping.setErgonomics(false);
             tcpping.setPortRange(10);
-            tcpping.sendCacheInformation();
 
             NAKACK2 nakack = new NAKACK2();
-            nakack.setUseMcastXmit(false);
             nakack.setDiscardDeliveredMsgs(false);
 
             MERGE3 merge = new MERGE3();

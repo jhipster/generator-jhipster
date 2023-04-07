@@ -63,13 +63,13 @@ spec:
 <%_ if (app.prodDatabaseTypePostgres) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-postgresql 5432)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
+<%_ if (app.databaseTypeMongodb) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mongodb 27017)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeCouchbase) { _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase-cluster-srv 8091)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeNeo4j) { _%>
+<%_ if (app.databaseTypeNeo4j) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-neo4j 7474)
 <%_ } _%>
                   if [ $? -eq 0 ]; then
@@ -165,17 +165,17 @@ spec:
           value: <%- this.getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
+<%_ if (app.databaseTypeMongodb) { _%>
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
         - name: SPRING_DATA_MONGODB_URI
           value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeNeo4j) { _%>
+<%_ if (app.databaseTypeNeo4j) { _%>
         - name: SPRING_NEO4J_URI
           value: bolt://<%= app.baseName.toLowerCase() %>-neo4j.<%= kubernetesNamespace %>.svc.cluster.local:7687
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeCouchbase) { _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
         - name: SPRING_COUCHBASE_CONNECTION_STRING
           value: "<%= app.baseName.toLowerCase() %>-couchbase-cluster-srv"
         - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME

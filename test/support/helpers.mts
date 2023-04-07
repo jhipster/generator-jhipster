@@ -1,8 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { Options } from 'yeoman-environment';
 import type YeomanGenerator from 'yeoman-generator';
-import { YeomanTest, RunContext, RunContextSettings } from 'yeoman-test';
+import { fn, type Mock } from 'jest-mock';
+import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { BaseEntity } from '../../generators/base-application/index.mjs';
@@ -13,7 +15,16 @@ import deploymentTestSamples from './deployment-samples.mjs';
 import { normalizePathEnd } from '../../generators/base/support/index.mjs';
 import BaseGenerator from '../../generators/base/index.mjs';
 
-export { result, result as runResult } from 'yeoman-test';
+type JHipsterRunResult<GeneratorType extends YeomanGenerator = YeomanGenerator> = RunResult<GeneratorType> & {
+  /**
+   * First argument of mocked source calls.
+   */
+  sourceCallsArg: Record<string, unknown[]>;
+};
+
+const runResult = result as JHipsterRunResult;
+
+export { runResult, runResult as result };
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
@@ -52,7 +63,7 @@ export const createBlueprintFiles = (
     return class extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
         return {};
-      }  
+      }
     };
   };
   `;
@@ -72,6 +83,7 @@ export const createBlueprintFiles = (
 };
 
 class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunContext<GeneratorType> {
+  public sharedSource: Record<string, Mock>;
   private workspaceApplications: string[] = [];
   private commonWorkspacesConfig: Record<string, unknown>;
   private generateApplicationsSet = false;
@@ -124,6 +136,56 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunConte
     return this.withFiles(createBlueprintFiles(blueprintPackage, { packageJson, generator }))
       .withLookups({ localOnly: true })
       .commitFiles();
+  }
+
+  withMockedSource(): this {
+    const applicationId = 'test-application';
+    this.sharedSource = new Proxy(
+      {},
+      {
+        get(target, name) {
+          if (!target[name]) {
+            target[name] = fn();
+          }
+          return target[name];
+        },
+        set() {
+          return true;
+        },
+      }
+    );
+    (this as any).envOptions = {
+      ...this.envOptions,
+      sharedOptions: { sharedData: { applications: { [applicationId]: { sharedSource: this.sharedSource } } } },
+    };
+
+    return this.withOptions({
+      applicationId,
+    });
+  }
+
+  async run(): Promise<RunResult<GeneratorType>> {
+    const runResult = await super.run();
+    if (this.sharedSource) {
+      const sourceCallsArg = Object.fromEntries(
+        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => args[0])])
+      );
+      if (sourceCallsArg.addEntitiesToClient) {
+        sourceCallsArg.addEntitiesToClient = (sourceCallsArg.addEntitiesToClient as any).map(({ application, entities }) => ({
+          application: `Application[${application.baseName}]`,
+          entities: entities.map(entity => `Entity[${entity.name}]`),
+        }));
+      }
+      if (sourceCallsArg.addEntityToCache) {
+        sourceCallsArg.addEntityToCache = (sourceCallsArg.addEntityToCache as any).map(({ relationships, ...fields }) => ({
+          ...fields,
+          relationships: relationships.map(rel => `Relationship[${rel.relationshipName}]`),
+        }));
+      }
+      const jhipsterRunResult = runResult as unknown as JHipsterRunResult;
+      jhipsterRunResult.sourceCallsArg = sourceCallsArg;
+    }
+    return runResult;
   }
 }
 

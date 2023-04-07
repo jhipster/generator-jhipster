@@ -21,7 +21,7 @@ import _ from 'lodash';
 
 import needleClientBase from '../../client/needle-api/needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
-import { stripMargin } from '../../base/support/index.mjs';
+import { stripMargin, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 import { createNeedleCallback } from '../../base/support/needles.mjs';
 
@@ -118,7 +118,7 @@ export default class extends needleClientBase {
   addIcon(iconName) {
     const iconsPath = `${this.clientSrcDir}app/config/font-awesome-icons.ts`;
     const ignoreNonExisting = this.generator.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
-    const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
+    const iconImport = `fa${upperFirstCamelCase(iconName)}`;
     this.generator.editFile(
       iconsPath,
       { ignoreNonExisting },

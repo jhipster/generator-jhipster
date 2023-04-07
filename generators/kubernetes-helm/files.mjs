@@ -71,7 +71,7 @@ export function writeFiles() {
         if (!this.app.serviceDiscoveryAny && this.app.authenticationType === JWT) {
           this.writeFile(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
         }
-        if (this.app.prodDatabaseTypeCouchbase) {
+        if (this.app.databaseTypeCouchbase) {
           this.writeFile(`${kubernetesSubgenPath}/secret/couchbase-secret.yml.ejs`, `${appOut}/templates/couchbase-secret.yml`);
         }
         if (this.istio) {
