@@ -10,7 +10,7 @@
         <!-- Dependency versions -->
         <archunit-junit5.version>1.0.1</archunit-junit5.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <blockhound-junit-platform.version>1.0.7.RELEASE</blockhound-junit-platform.version>
+        <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.3</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
