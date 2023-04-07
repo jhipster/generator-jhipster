@@ -18,7 +18,6 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 

@@ -34,8 +34,6 @@ const mockBlueprintSubGen: any = class extends ReactGenerator {
 };
 
 describe('needle API React: JHipster react generator with blueprint', () => {
-  let result;
-
   before(async () => {
     result = await helpers
       .run(getGenerator('react'))

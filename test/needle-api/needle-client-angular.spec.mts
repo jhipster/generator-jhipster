@@ -35,12 +35,9 @@ const mockBlueprintSubGen = class extends AngularGenerator {
 };
 
 describe('needle API Angular: JHipster angular generator with blueprint', () => {
-  let runContext;
-  let runResult;
-
   before(async () => {
-    runContext = helpers.create(getGenerator('angular'));
-    runResult = await runContext
+    await helpers
+      .create(getGenerator('angular'))
       .withJHipsterConfig()
       .withOptions({
         blueprint: 'myblueprint',
