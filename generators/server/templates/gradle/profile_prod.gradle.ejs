@@ -84,7 +84,8 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webapp(type: NpmTask, dependsOn: "npm_install") {
+task webapp(type: NpmTask) {
+    dependsOn npmInstall
     args = ["run", "webapp:prod"]
     environment = [APP_VERSION: project.version]
 }
@@ -129,7 +130,7 @@ task integrationTest(type: Test) {
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
-    reports.html.enabled = false
+    reports.html.required = false
 <%_ if (reactive) { _%>
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
         jvmArgs += [
