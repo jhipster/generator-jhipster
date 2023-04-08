@@ -3,7 +3,7 @@ gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = 
 
 node-gradle = { id = 'com.github.node-gradle.node', version = '3.5.1' }
 
-gradle-liquibase = { id = 'org.liquibase.gradle', version = '2.1.1' }
+gradle-liquibase = { id = 'org.liquibase.gradle', version = '2.2.0' }
 
 gradle-sonarqube = { id = 'org.sonarqube', version = '4.0.0.2929' }
 
