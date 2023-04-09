@@ -924,7 +924,6 @@ ${entities}`
               buildTool: 'maven',
               cacheProvider: 'ehcache',
               clientFramework: 'angular',
-              clientPackageManager: 'npm',
               clientTheme: 'none',
               clientThemeVariant: '',
               databaseType: 'sql',

@@ -24,14 +24,18 @@ import cacheTypes from './cache-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
-import messageBrokerTypes from './message-broker-types.js';
 import searchEngineTypes from './search-engine-types.js';
 import testFrameworkTypes from './test-framework-types.js';
 import websocketTypes from './websocket-types.js';
+import jhipsterDefinition from '../../generators/app/jdl/application-options.mjs';
+import {
+  JDLApplicationOptionType,
+  JDLApplicationOptionTypeValue,
+  JDLApplicationOptionValue,
+} from '../models/jdl-application-definition.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
-const { KAFKA, PULSAR } = messageBrokerTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
@@ -44,7 +48,6 @@ const { CYPRESS, CUCUMBER, GATLING } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, SVELTE, NO } = clientFrameworkTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
-const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const COUCHBASE_SEARCH_ENGINE = searchEngineTypes.COUCHBASE;
 
@@ -56,7 +59,7 @@ const { SPRING_WEBSOCKET } = websocketTypes;
 
 const NO_WEBSOCKET = websocketTypes.NO;
 
-const ApplicationOptionTypes = {
+const ApplicationOptionTypes: Record<string, JDLApplicationOptionTypeValue> = {
   STRING: 'string',
   INTEGER: 'integer',
   BOOLEAN: 'boolean',
@@ -93,7 +96,6 @@ const optionNames = {
   JHIPSTER_VERSION: 'jhipsterVersion',
   JWT_SECRET_KEY: 'jwtSecretKey',
   LANGUAGES: 'languages',
-  MESSAGE_BROKER: 'messageBroker',
   MICROFRONTEND: 'microfrontend',
   MICROFRONTENDS: 'microfrontends',
   NATIVE_LANGUAGE: 'nativeLanguage',
@@ -113,12 +115,11 @@ const optionNames = {
   SKIP_USER_MANAGEMENT: 'skipUserManagement',
   TEST_FRAMEWORKS: 'testFrameworks',
   WEBSOCKET: 'websocket',
-  WITH_ENTITIES: 'withEntities',
   ENABLE_GRADLE_ENTERPRISE: 'enableGradleEnterprise',
   GRADLE_ENTERPRISE_HOST: 'gradleEnterpriseHost',
 };
 
-const optionValues: any = {
+export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
   // TODO refactor it mixes default values (e.g. BaseName=Jhipster) and element list (e.g. application types)
   [optionNames.APPLICATION_TYPE]: {
     [MONOLITH]: MONOLITH,
@@ -157,7 +158,6 @@ const optionValues: any = {
     npm: 'npm',
   },
   [optionNames.CLIENT_THEME]: 'none',
-  [optionNames.CLIENT_THEME_VARIANT]: { none: '', default: 'primary' },
   [optionNames.DATABASE_TYPE]: {
     [SQL]: SQL,
     [MONGODB]: MONGODB,
@@ -170,6 +170,11 @@ const optionValues: any = {
     // these options + the prod database type
     [H2_DISK]: H2_DISK,
     [H2_MEMORY]: H2_MEMORY,
+    [MYSQL]: MYSQL,
+    [MARIADB]: MARIADB,
+    [POSTGRESQL]: POSTGRESQL,
+    [ORACLE]: ORACLE,
+    [MSSQL]: MSSQL,
   },
   [optionNames.DTO_SUFFIX]: 'DTO',
   [optionNames.EMBEDDABLE_LAUNCH_SCRIPT]: true,
@@ -184,11 +189,6 @@ const optionValues: any = {
   [optionNames.JHIPSTER_VERSION]: '',
   [optionNames.JWT_SECRET_KEY]: '',
   [optionNames.LANGUAGES]: [],
-  [optionNames.MESSAGE_BROKER]: {
-    kafka: KAFKA,
-    pulsar: PULSAR,
-    no: NO_MESSAGE_BROKER,
-  },
   [optionNames.MICROFRONTEND]: false,
   [optionNames.MICROFRONTENDS]: [],
   [optionNames.NPM]: true,
@@ -225,18 +225,17 @@ const optionValues: any = {
     [CUCUMBER]: CUCUMBER,
     [GATLING]: GATLING,
   },
-  [(optionNames as any).USE_NPM]: true,
   [optionNames.WEBSOCKET]: {
     [SPRING_WEBSOCKET]: SPRING_WEBSOCKET,
     no: NO_WEBSOCKET,
   },
-  [optionNames.WITH_ENTITIES]: false,
   [optionNames.WITH_ADMIN_UI]: true,
   [optionNames.ENABLE_GRADLE_ENTERPRISE]: false,
   [optionNames.GRADLE_ENTERPRISE_HOST]: '',
+  ...jhipsterDefinition.optionsValues,
 };
 
-const optionTypes = {
+export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.APPLICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.AUTHENTICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BASE_NAME]: { type: ApplicationOptionTypes.STRING },
@@ -265,7 +264,6 @@ const optionTypes = {
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
   [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
   [optionNames.LANGUAGES]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.MESSAGE_BROKER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.MICROFRONTEND]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.MICROFRONTENDS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.NATIVE_LANGUAGE]: { type: ApplicationOptionTypes.STRING },
@@ -284,78 +282,24 @@ const optionTypes = {
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
-  [(optionNames as any).USE_NPM]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.ENABLE_GRADLE_ENTERPRISE]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GRADLE_ENTERPRISE_HOST]: { type: ApplicationOptionTypes.STRING },
+  ...jhipsterDefinition.optionsTypes,
 };
 
-const QuotedOptionNames = [
+export const jhipsterQuotedOptionNames: string[] = [
   optionNames.JHIPSTER_VERSION,
   optionNames.REMEMBER_ME_KEY,
   optionNames.JWT_SECRET_KEY,
   optionNames.GRADLE_ENTERPRISE_HOST,
 ];
 
-/**
- * Returns the option's type, one of string, boolean, list or integer.
- * @param {String} optionName - the option's name.
- * @returns {string} the option's type.
- */
-function getTypeForOption(optionName) {
-  if (!optionName) {
-    throw new Error('A name has to be passed to get the option type.');
-  }
-  if (!optionTypes[optionName]) {
-    throw new Error(`Unrecognised application option name: ${optionName}.`);
-  }
-  return optionTypes[optionName].type;
-}
-
-/**
- * Checks whether the option value exists for the passed option name.
- * @param {String} name - the option name.
- * @param {String|Boolean|Number} value - the option value.
- * @returns {Boolean} whether the option value exists for the name.
- */
-function doesOptionValueExist(name, value) {
-  return doesOptionExist(name) && optionValues[name][value] != null;
-}
-
-/**
- * Checks whether the option's exists.
- * @param {String} optionName - the option's name.
- * @returns {Boolean} the option's existence.
- */
-function doesOptionExist(optionName) {
-  return !!optionName && !!optionTypes[optionName];
-}
-
-/**
- * Checks whether the corresponding option has a value that should be quoted in the JDL, like the jhipsterVersion
- * attribute.
- * @param {String} optionName - the name of the option to check.
- * @return {boolean} whether it should be quoted in the JDL.
- */
-function shouldTheValueBeQuoted(optionName) {
-  if (!optionName) {
-    throw new Error('An option name has to be passed to know whether it is quoted.');
-  }
-  return QuotedOptionNames.includes(optionName);
-}
-
-const OptionTypes = ApplicationOptionTypes;
 const OptionNames = optionNames;
-const OptionValues = optionValues;
+const OptionValues = jhipsterOptionValues;
 export default {
-  OptionTypes,
   OptionNames,
   OptionValues,
-  QuotedOptionNames,
-  getTypeForOption,
-  doesOptionExist,
-  doesOptionValueExist,
-  shouldTheValueBeQuoted,
+  QuotedOptionNames: jhipsterQuotedOptionNames,
 };

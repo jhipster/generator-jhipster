@@ -310,9 +310,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the build tool option to maven', () => {
         expect(options.buildTool).to.equal('maven');
       });
-      it('should set the client package manager to npm', () => {
-        expect(options.clientPackageManager).to.equal('npm');
-      });
       it('should set the database type option to sql', () => {
         expect(options.databaseType).to.equal('sql');
       });
@@ -333,9 +330,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
       it('should set the languages option to an empty array', () => {
         expect(options.languages).to.be.eql([]);
-      });
-      it('should set the message broker option to no', () => {
-        expect(options.messageBroker).to.be.equal('no');
       });
       it('should set the package folder to com/mycompany/myapp', () => {
         expect(options.packageFolder).to.equal('com/mycompany/myapp');
@@ -396,94 +390,45 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     context('when the database type option is MongoDB', () => {
-      let devDatabaseTypeOption;
-      let prodDatabaseTypeOption;
       let enableHibernateCacheOption;
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
           databaseType: 'mongodb',
         });
-        devDatabaseTypeOption = options.devDatabaseType;
-        prodDatabaseTypeOption = options.prodDatabaseType;
         enableHibernateCacheOption = options.enableHibernateCache;
       });
 
-      it('should set the devDatabaseType option to mongodb', () => {
-        expect(devDatabaseTypeOption).to.equal('mongodb');
-      });
-      it('should set the prodDatabaseType option to mongodb', () => {
-        expect(prodDatabaseTypeOption).to.equal('mongodb');
-      });
       it('should set the enableHibernateCache option to false', () => {
         expect(enableHibernateCacheOption).to.be.false;
       });
     });
     context('when the database type option is couchbase', () => {
-      let devDatabaseTypeOption;
-      let prodDatabaseTypeOption;
       let enableHibernateCacheOption;
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
           databaseType: 'couchbase',
         });
-        devDatabaseTypeOption = options.devDatabaseType;
-        prodDatabaseTypeOption = options.prodDatabaseType;
         enableHibernateCacheOption = options.enableHibernateCache;
       });
 
-      it('should set the devDatabaseType option to couchbase', () => {
-        expect(devDatabaseTypeOption).to.equal('couchbase');
-      });
-      it('should set the prodDatabaseType option to couchbase', () => {
-        expect(prodDatabaseTypeOption).to.equal('couchbase');
-      });
       it('should set the enableHibernateCache option to false', () => {
         expect(enableHibernateCacheOption).to.be.false;
       });
     });
     context('when the database type option is cassandra', () => {
-      let devDatabaseTypeOption;
-      let prodDatabaseTypeOption;
       let enableHibernateCacheOption;
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
           databaseType: 'cassandra',
         });
-        devDatabaseTypeOption = options.devDatabaseType;
-        prodDatabaseTypeOption = options.prodDatabaseType;
         enableHibernateCacheOption = options.enableHibernateCache;
       });
 
-      it('should set the devDatabaseType option to cassandra', () => {
-        expect(devDatabaseTypeOption).to.equal('cassandra');
-      });
-      it('should set the prodDatabaseType option to cassandra', () => {
-        expect(prodDatabaseTypeOption).to.equal('cassandra');
-      });
       it('should set the enableHibernateCache option to false', () => {
         expect(enableHibernateCacheOption).to.be.false;
-      });
-    });
-    context('when the database type option is no', () => {
-      let devDatabaseTypeOption;
-      let prodDatabaseTypeOption;
-
-      before(() => {
-        const options = getDefaultConfigForNewApplication({
-          databaseType: 'no',
-        });
-        devDatabaseTypeOption = options.devDatabaseType;
-        prodDatabaseTypeOption = options.prodDatabaseType;
-      });
-
-      it('should set the devDatabaseType option to no', () => {
-        expect(devDatabaseTypeOption).to.equal('no');
-      });
-      it('should set the prodDatabaseType option to no', () => {
-        expect(prodDatabaseTypeOption).to.equal('no');
       });
     });
     context('when the reactive option is set', () => {

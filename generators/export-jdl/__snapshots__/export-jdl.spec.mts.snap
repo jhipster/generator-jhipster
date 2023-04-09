@@ -11,7 +11,6 @@ exports[`generator - export-jdl exports entities to a JDL file with file argumen
     buildTool gradle
     cacheProvider ehcache
     clientFramework no
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Memory
     dtoSuffix DTO
@@ -139,7 +138,6 @@ exports[`generator - export-jdl exports entities to a JDL file without argument 
     buildTool gradle
     cacheProvider ehcache
     clientFramework no
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Memory
     dtoSuffix DTO

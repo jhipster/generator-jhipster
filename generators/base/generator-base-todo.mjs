@@ -46,7 +46,6 @@ import {
   buildToolTypes,
   cacheTypes,
   websocketTypes,
-  messageBrokerTypes,
   testFrameworkTypes,
   applicationTypes,
   serviceDiscoveryTypes,
@@ -67,6 +66,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
+import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -80,7 +80,6 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { KAFKA, PULSAR } = messageBrokerTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -88,7 +87,6 @@ const { ELASTICSEARCH } = searchEngineTypes;
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
@@ -1205,11 +1203,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
 
     if (!dest.messageBroker) {
-      dest.messageBroker = NO_MESSAGE_BROKER;
+      dest.messageBroker = MESSAGE_BROKER_NO;
     }
-    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
-    dest.messageBrokerPulsar = dest.messageBroker === PULSAR;
-    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== NO_MESSAGE_BROKER;
+    dest.messageBrokerKafka = dest.messageBroker === MESSAGE_BROKER_KAFKA;
+    dest.messageBrokerPulsar = dest.messageBroker === MESSAGE_BROKER_PULSAR;
+    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== MESSAGE_BROKER_NO;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
