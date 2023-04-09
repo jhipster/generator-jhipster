@@ -113,7 +113,7 @@ JDLApplicationConfiguration {
 
         before(() => {
           createdConfiguration = createApplicationConfigurationFromObject({
-            [OptionNames.TEST_FRAMEWORKS]: [],
+            [OptionNames.TEST_FRAMEWORKS]: ['gatling'],
           });
         });
 
@@ -123,7 +123,9 @@ JDLApplicationConfiguration {
   "options": {
     "testFrameworks": ListJDLApplicationConfigurationOption {
       "name": "testFrameworks",
-      "value": Set {},
+      "value": Set {
+        "gatling",
+      },
     },
   },
 }

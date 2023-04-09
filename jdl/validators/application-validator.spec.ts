@@ -140,8 +140,6 @@ describe('jdl - ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     databaseType: MONGODB,
-                    devDatabaseType: MONGODB,
-                    prodDatabaseType: MONGODB,
                     applicationType: MONOLITH,
                   },
                 })
@@ -157,8 +155,6 @@ describe('jdl - ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     databaseType: CASSANDRA,
-                    devDatabaseType: CASSANDRA,
-                    prodDatabaseType: CASSANDRA,
                     applicationType: MONOLITH,
                   },
                 })
@@ -174,8 +170,6 @@ describe('jdl - ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     databaseType: COUCHBASE,
-                    devDatabaseType: COUCHBASE,
-                    prodDatabaseType: COUCHBASE,
                     applicationType: MONOLITH,
                   },
                 })
@@ -191,8 +185,6 @@ describe('jdl - ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     databaseType: NEO4J,
-                    devDatabaseType: NEO4J,
-                    prodDatabaseType: NEO4J,
                     applicationType: MONOLITH,
                   },
                 })
@@ -216,9 +208,7 @@ describe('jdl - ApplicationValidator', () => {
                     },
                   })
                 );
-              }).to.throw(
-                /^Only 'mysql', 'postgresql', 'mariadb', 'oracle', 'mssql' are allowed as prodDatabaseType values for databaseType 'sql'\.$/
-              );
+              }).to.throw(/^Unknown value 'mongodb' for option 'prodDatabaseType'\.$/);
             });
           });
           context('with an invalid devDatabaseType', () => {
@@ -245,51 +235,16 @@ describe('jdl - ApplicationValidator', () => {
                     config: {
                       ...basicValidApplicationConfig,
                       databaseType: SQL,
-                      devDatabaseType: MONGODB,
-                      prodDatabaseType: MONGODB,
+                      devDatabaseType: POSTGRESQL,
+                      prodDatabaseType: H2_MEMORY,
                     },
                   })
                 );
-              }).to.throw(
-                /^Only 'mysql', 'postgresql', 'mariadb', 'oracle', 'mssql' are allowed as prodDatabaseType values for databaseType 'sql'\.$/
-              );
+              }).to.throw(/^Unknown value 'h2Memory' for option 'prodDatabaseType'\.$/);
             });
           });
         });
         context("for either 'mongodb', 'couchbase', 'neo4j' or 'cassandra'", () => {
-          context('when the devDatabaseType is not the same as the databaseType', () => {
-            it('should fail', () => {
-              expect(() => {
-                validator.validate(
-                  new JDLApplication({
-                    config: {
-                      ...basicValidApplicationConfig,
-                      databaseType: MONGODB,
-                      devDatabaseType: CASSANDRA,
-                      prodDatabaseType: MONGODB,
-                    },
-                  })
-                );
-              }).to.throw(
-                /^When the databaseType is either 'mongodb', 'couchbase', 'cassandra', 'neo4j', the devDatabaseType and prodDatabaseType must be the same\.$/
-              );
-            });
-          });
-          context('when the prodDatabaseType is not the same as the databaseType', () => {
-            it('should fail', () => {
-              expect(() => {
-                validator.validate(
-                  new JDLApplication({
-                    config: {
-                      databaseType: MONGODB,
-                      devDatabaseType: MONGODB,
-                      prodDatabaseType: CASSANDRA,
-                    },
-                  })
-                );
-              }).to.throw(/^The application applicationType, authenticationType, baseName and buildTool options are required\.$/);
-            });
-          });
           context('when the hibernate cache is enabled', () => {
             [COUCHBASE, CASSANDRA, MONGODB].forEach(databaseType => {
               context(`for ${databaseType}`, () => {
@@ -300,8 +255,6 @@ describe('jdl - ApplicationValidator', () => {
                         config: {
                           ...basicValidApplicationConfig,
                           databaseType,
-                          devDatabaseType: databaseType,
-                          prodDatabaseType: databaseType,
                           enableHibernateCache: true,
                         },
                       })
@@ -324,7 +277,7 @@ describe('jdl - ApplicationValidator', () => {
         });
         it('it should send a debug message', () => {
           expect(loggerDebug).to.have.been.calledOnce;
-          expect(loggerDebug.getCall(0).args[0]).to.equal('Unrecognized application option name and value: toto and 42');
+          expect(loggerDebug.getCall(0).args[0]).to.equal("Unrecognized application option name and value: 'toto' and '42'.");
         });
       });
       context('with unknown values', () => {
@@ -343,7 +296,7 @@ describe('jdl - ApplicationValidator', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate(new JDLApplication({ config: { ...basicValidApplicationConfig, clientFramework: 42 } }))
-            ).to.throw(/^Unknown option value '42' for option 'clientFramework'\.$/);
+            ).to.throw(/^Unknown value '42' for option 'clientFramework'\.$/);
           });
         });
         context('because the databaseType value is unknown', () => {
@@ -477,8 +430,6 @@ describe('jdl - ApplicationValidator', () => {
               config: {
                 ...basicValidApplicationConfig,
                 databaseType: CASSANDRA,
-                devDatabaseType: CASSANDRA,
-                prodDatabaseType: CASSANDRA,
               },
             });
             application.addOption(

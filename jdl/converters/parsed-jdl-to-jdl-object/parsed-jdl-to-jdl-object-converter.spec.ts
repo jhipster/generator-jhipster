@@ -550,11 +550,6 @@ JDLApplication {
         "quoted": false,
         "value": "angular",
       },
-      "clientPackageManager": StringJDLApplicationConfigurationOption {
-        "name": "clientPackageManager",
-        "quoted": false,
-        "value": "npm",
-      },
       "clientTheme": StringJDLApplicationConfigurationOption {
         "name": "clientTheme",
         "quoted": false,

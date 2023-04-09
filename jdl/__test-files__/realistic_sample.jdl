@@ -52,8 +52,6 @@ application {
     serviceDiscoveryType no,
     authenticationType jwt,
     databaseType mongodb,
-    devDatabaseType mongodb,
-    prodDatabaseType mongodb,
     cacheProvider no,
     enableHibernateCache false,
     buildTool gradle,

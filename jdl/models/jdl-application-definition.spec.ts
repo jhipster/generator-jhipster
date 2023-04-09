@@ -20,25 +20,28 @@
 
 import { expect } from 'chai';
 import { applicationOptions } from '../jhipster/index.mjs';
+import JDLApplicationDefinition from './jdl-application-definition.js';
 
-const { OptionNames, doesOptionExist, getTypeForOption, shouldTheValueBeQuoted } = applicationOptions;
+const { OptionNames } = applicationOptions;
+
+const applicationDefinition = new JDLApplicationDefinition();
 
 describe('jdl - ApplicationOptions', () => {
   describe('doesOptionExist', () => {
     context('when not passing anything', () => {
       it('should return false', () => {
         // @ts-expect-error
-        expect(doesOptionExist()).to.be.false;
+        expect(applicationDefinition.doesOptionExist()).to.be.false;
       });
     });
     context('when passing an option that does not exist', () => {
       it('should return false', () => {
-        expect(doesOptionExist('toto')).to.be.false;
+        expect(applicationDefinition.doesOptionExist('toto')).to.be.false;
       });
     });
     context('when passing an option that exists', () => {
       it('should return true', () => {
-        expect(doesOptionExist('baseName')).to.be.true;
+        expect(applicationDefinition.doesOptionExist('baseName')).to.be.true;
       });
     });
   });
@@ -46,33 +49,33 @@ describe('jdl - ApplicationOptions', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => getTypeForOption()).to.throw(/^A name has to be passed to get the option type.$/);
+        expect(() => applicationDefinition.getTypeForOption()).to.throw(/^A name has to be passed to get the option type.$/);
       });
     });
     context('when passing an unknown option name', () => {
       it('should fail', () => {
-        expect(() => getTypeForOption('tutu')).to.throw(/^Unrecognised application option name: tutu.$/);
+        expect(() => applicationDefinition.getTypeForOption('tutu')).to.throw(/^Unrecognised application option name: tutu.$/);
       });
     });
     context('when passing an option', () => {
       context('that has the string type', () => {
         it("should return 'string'", () => {
-          expect(getTypeForOption('baseName')).to.equal('string');
+          expect(applicationDefinition.getTypeForOption('baseName')).to.equal('string');
         });
       });
       context('that has the integer type', () => {
         it("should return 'integer'", () => {
-          expect(getTypeForOption('serverPort')).to.equal('integer');
+          expect(applicationDefinition.getTypeForOption('serverPort')).to.equal('integer');
         });
       });
       context('that has the boolean type', () => {
         it("should return 'boolean'", () => {
-          expect(getTypeForOption('skipServer')).to.equal('boolean');
+          expect(applicationDefinition.getTypeForOption('skipServer')).to.equal('boolean');
         });
       });
       context('that has the list type', () => {
         it("should return 'list'", () => {
-          expect(getTypeForOption('testFrameworks')).to.equal('list');
+          expect(applicationDefinition.getTypeForOption('testFrameworks')).to.equal('list');
         });
       });
     });
@@ -91,14 +94,16 @@ describe('jdl - ApplicationOptions', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => shouldTheValueBeQuoted()).to.throw(/^An option name has to be passed to know whether it is quoted.$/);
+        expect(() => applicationDefinition.shouldTheValueBeQuoted()).to.throw(
+          /^An option name has to be passed to know whether it is quoted.$/
+        );
       });
     });
     context('when passing an option for which the value should not be quoted', () => {
       optionsThatShouldNotBeQuoted.forEach(optionName => {
         context(`such as ${optionName}`, () => {
           it('should return false', () => {
-            expect(shouldTheValueBeQuoted(optionName)).to.be.false;
+            expect(applicationDefinition.shouldTheValueBeQuoted(optionName)).to.be.false;
           });
         });
       });
@@ -107,7 +112,7 @@ describe('jdl - ApplicationOptions', () => {
       optionsThatShouldBeQuoted.forEach(optionName => {
         context(`such as ${optionName}`, () => {
           it('should return true', () => {
-            expect(shouldTheValueBeQuoted(optionName)).to.be.true;
+            expect(applicationDefinition.shouldTheValueBeQuoted(optionName)).to.be.true;
           });
         });
       });

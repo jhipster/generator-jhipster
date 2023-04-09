@@ -50,8 +50,9 @@ export function writeFiles() {
         this.writeFile('deployment.yml.ejs', `${appOut}/${appName}-deployment.yml`);
         this.writeFile('service.yml.ejs', `${appOut}/${appName}-service.yml`);
         // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
-        if (this.app.prodDatabaseType !== NO_DATABASE) {
-          this.writeFile(`db/${this.app.prodDatabaseType}.yml.ejs`, `${appOut}/${appName}-${this.app.prodDatabaseType}.yml`);
+        if (this.app.databaseType !== NO_DATABASE) {
+          const databaseType = this.app.prodDatabaseType ?? this.app.databaseType;
+          this.writeFile(`db/${databaseType}.yml.ejs`, `${appOut}/${appName}-${databaseType}.yml`);
         }
         if (this.app.searchEngine === ELASTICSEARCH) {
           this.writeFile('db/elasticsearch.yml.ejs', `${appOut}/${appName}-elasticsearch.yml`);
