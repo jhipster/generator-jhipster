@@ -242,9 +242,9 @@ spec:
           value: graceful
     <%_ if (useKeycloak) { _%>
         # Custom trustStore required when using Let's Encrypt staging
-        volumeMounts:
-          - name: java-truststore
-            mountPath: /etc/pki/java
+        # volumeMounts:
+        #  - name: java-truststore
+        #    mountPath: /etc/pki/java
     <%_ } _%>
         resources:
           requests:

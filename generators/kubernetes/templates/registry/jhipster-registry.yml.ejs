@@ -141,8 +141,8 @@ spec:
           mountPath: /central-config
     <%_ if (useKeycloak) { _%>
         # Custom trustStore required when using Let's Encrypt staging
-        - name: java-truststore
-          mountPath: /etc/pki/java
+        # - name: java-truststore
+        #   mountPath: /etc/pki/java
     <%_ } _%>
       volumes:
       - name: config-volume
@@ -150,10 +150,10 @@ spec:
           name: application-config
   <%_ if (useKeycloak) { _%>
       # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
-      - name: java-truststore
-        secret:
-          secretName: letsencrypt-ca-secret
-          items:
-          - key: truststore.jks
-            path: cacerts
+      # - name: java-truststore
+      #  secret:
+      #    secretName: letsencrypt-ca-secret
+      #    items:
+      #    - key: truststore.jks
+      #      path: cacerts
   <%_ } _%>

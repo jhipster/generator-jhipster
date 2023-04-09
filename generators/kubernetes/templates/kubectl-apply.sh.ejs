@@ -73,6 +73,8 @@ default() {
 <%_ } _%> 
 <%_ if (kubernetesStorageClassName !== '') { _%>
     kubectl apply -f storage-class.yml
+<%_ } _%>  <%_ if (istio) { _%>
+    kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
 <%_ } _%> 
 <%_ if (useKeycloak) { _%>    
     kubectl apply -f keycloak-${suffix}/
@@ -80,15 +82,6 @@ default() {
         echo "Waiting for the keycloak server to get initialised";
         sleep 5;
     done
-<%_ } _%>
-<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
-    kubectl apply -f registry-${suffix}/
-<%_ } _%> <%_ if (istio) { _%>
-    kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
-<%_ } _%> 
-<%_ if (useKeycloak) { _%>    
-    kubectl apply -f cert-manager/
-    kubectl apply -f keycloak-${suffix}/
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     kubectl apply -f registry-${suffix}/
@@ -107,7 +100,6 @@ default() {
     kubectl apply -f monitoring-${suffix}/jhipster-grafana.yml
     kubectl apply -f monitoring-${suffix}/jhipster-grafana-dashboard.yml
 <%_ } _%>
-
 <%_ if (istio && kubernetesServiceTypeIngress) { _%>
     kubectl apply -f istio-${suffix}/
 <%_ } _%>
