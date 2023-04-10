@@ -84,7 +84,7 @@ relationship ManyToMany {
 }
 
 relationship ManyToOne {
-  Employee{user(login)} to User
+  Employee{user(login)} to User with builtInEntity
 }
 
 relationship OneToOne {

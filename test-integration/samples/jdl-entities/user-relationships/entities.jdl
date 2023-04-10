@@ -1,3 +1,5 @@
+entity User {}
+
 @ChangelogDate(20200804040000)
 entity UserMapsId {
 }

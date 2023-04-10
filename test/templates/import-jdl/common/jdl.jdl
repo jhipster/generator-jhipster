@@ -92,7 +92,7 @@ relationship OneToMany {
 
 relationship ManyToOne {
     Employee{manager} to Employee,
-    Employee{user} to User
+    Employee{user} to User with builtInEntity
 }
 
 // defining multiple oneToOne relationships

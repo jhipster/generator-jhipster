@@ -22,6 +22,7 @@ import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';
 import { binaryOptions } from '../jhipster/index.mjs';
 import JDLEntity from './jdl-entity.js';
+import JDLRelationship from './jdl-relationship.js';
 
 /**
  * The JDL object class, containing applications, entities etc.
@@ -202,7 +203,7 @@ export default class JDLObject {
     return count;
   }
 
-  forEachRelationship(passedFunction) {
+  forEachRelationship(passedFunction?: (relationship: JDLRelationship) => void) {
     if (!passedFunction) {
       return;
     }

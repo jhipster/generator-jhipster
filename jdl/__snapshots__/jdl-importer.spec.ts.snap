@@ -152,6 +152,7 @@ exports[`jdl - JDLImporter import when not parsing applications should export en
       "otherEntityName": "user",
       "relationshipName": "user",
       "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true,
     },
     {
       "otherEntityField": "lastName",
@@ -567,6 +568,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "otherEntityName": "user",
           "relationshipName": "user",
           "relationshipType": "many-to-one",
+          "relationshipWithBuiltInEntity": true,
         },
         {
           "otherEntityField": "lastName",

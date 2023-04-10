@@ -137,12 +137,10 @@ function getJDLObject(parsedJDLContent, configuration) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
   let databaseType = configuration.databaseType;
-  let skippedUserManagement = false;
 
   if (configuration.application) {
     baseName = configuration.application['generator-jhipster'].baseName;
     applicationType = configuration.application['generator-jhipster'].applicationType;
-    skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
     databaseType = configuration.application['generator-jhipster'].databaseType;
   }
 
@@ -150,7 +148,6 @@ function getJDLObject(parsedJDLContent, configuration) {
     parsedContent: parsedJDLContent,
     applicationType,
     applicationName: baseName,
-    skippedUserManagement,
     databaseType,
   });
 }
@@ -164,7 +161,6 @@ function checkForErrors(jdlObject, configuration, logger = console) {
     }
     let applicationType = configuration.applicationType;
     let databaseType = configuration.databaseType;
-    let skippedUserManagement = configuration.skipUserManagement;
     let blueprints = configuration.blueprints;
     if (application && application['generator-jhipster']) {
       if (applicationType === undefined) {
@@ -172,9 +168,6 @@ function checkForErrors(jdlObject, configuration, logger = console) {
       }
       if (databaseType === undefined) {
         databaseType = application['generator-jhipster'].databaseType;
-      }
-      if (skippedUserManagement === undefined) {
-        skippedUserManagement = application['generator-jhipster'].skipUserManagement;
       }
       if (blueprints === undefined) {
         blueprints = application['generator-jhipster'].blueprints;
@@ -185,7 +178,6 @@ function checkForErrors(jdlObject, configuration, logger = console) {
       {
         applicationType,
         databaseType,
-        skippedUserManagement,
         blueprints,
       },
       logger

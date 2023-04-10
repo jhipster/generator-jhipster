@@ -30,7 +30,7 @@ import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/in
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { JPA_DERIVED_IDENTIFIER, BUILT_IN_ENTITY } = relationshipOptions;
 
 const {
   Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
@@ -201,44 +201,6 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             it('should parse relationships to the JHipster managed User entity', () => {
               expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).not.to.be.undefined;
             });
-          });
-          context('when there is a User.json entity', () => {
-            let entities;
-
-            before(() => {
-              entities = new Map([
-                ['Country', readJsonEntity('Country')],
-                ['User', readJsonEntity('Region')],
-              ]);
-            });
-
-            it('should fail', () => {
-              expect(() => {
-                convertEntitiesToJDL({
-                  entities,
-                });
-              }).to.throw('User entity name is reserved if skipUserManagement is not set.');
-            });
-          });
-        });
-        context('when skipUserManagement flag is set', () => {
-          let jdlObject;
-
-          before(() => {
-            const regionEntity = readJsonEntity('Region');
-            regionEntity.relationships[0].otherEntityRelationshipName = 'user';
-            const entities = new Map([
-              ['Country', readJsonEntity('Country')],
-              ['User', regionEntity],
-            ]);
-            jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement: true });
-          });
-
-          it('should parse the User entity', () => {
-            expect(jdlObject.entities.Country).not.to.be.undefined;
-            expect(jdlObject.entities.User).not.to.be.undefined;
-            expect(jdlObject.entities.User.fields.regionId).not.to.be.undefined;
-            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User{country}')).not.to.be.undefined;
           });
         });
         context('without relationship', () => {

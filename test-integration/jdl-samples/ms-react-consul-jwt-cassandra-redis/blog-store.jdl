@@ -134,7 +134,7 @@ entity Notification {
 
 /* Relationships are broken or unsupported at cassandra db
 relationship OneToOne {
-  @Id UserData{user(login)} to User
+  @Id UserData{user(login)} to User with builtInEntity
 }
 
 relationship ManyToOne {

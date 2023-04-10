@@ -118,12 +118,11 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       });
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({
         entities,
-        skippedUserManagement: this.jhipsterConfig.skipUserManagement,
       });
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
-      this.logger.warn((error as any).message || error);
-      throw new Error('\nError while parsing entities to JDL\n');
+      this.logger.error('Error while parsing entities to JDL', error);
+      throw new Error('\nError while parsing entities to JDL\n', { cause: error });
     }
     return jdlObject;
   }
