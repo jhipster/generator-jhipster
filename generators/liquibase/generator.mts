@@ -93,6 +93,11 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      checkDatabaseCompatibility({ application }) {
+        if (!application.databaseTypeSql) {
+          throw new Error(`Database type ${application.databaseType} is not supported`);
+        }
+      },
       addNeedles({ source, application }) {
         source.addLiquibaseChangelog = changelog =>
           this.editFile(`${application.srcMainResources}config/liquibase/master.xml`, addLiquibaseChangelogCallback(changelog));

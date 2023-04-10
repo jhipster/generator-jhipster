@@ -113,7 +113,7 @@ management:
 <% if (cacheProviderAny) { -%>
           - caches
 <% } -%>
-<% if (enableLiquibase) { -%>
+<% if (databaseMigrationLiquibase) { -%>
           - liquibase
 <% } -%>
   endpoint:

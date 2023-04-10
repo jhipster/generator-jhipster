@@ -1144,6 +1144,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.buildTool = config.buildTool;
 
     dest.databaseType = config.databaseType;
+    dest.databaseMigration = config.databaseMigration;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
     dest.incrementalChangelog = config.incrementalChangelog;
@@ -1252,7 +1253,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
     dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
 
-    dest.enableLiquibase = dest.databaseTypeSql;
+    dest.databaseMigrationLiquibase = dest.databaseMigration ? dest.databaseMigration === 'liquibase' : dest.databaseType === SQL;
 
     if (dest.databaseType === NO_DATABASE) {
       // User management requires a database.

@@ -86,4 +86,7 @@ export type SpringBootApplication = CommonClientServerApplication &
     skipCheckLengthOfIdentifier: boolean;
 
     imperativeOrReactive: string;
+
+    databaseMigration: string;
+    databaseMigrationLiquibase: boolean;
   };
