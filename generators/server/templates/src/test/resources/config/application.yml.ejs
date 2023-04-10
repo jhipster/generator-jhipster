@@ -114,7 +114,7 @@ spring:
         testStringConsumer-in-0:
           destination: <%= dasherizedBaseName %>
 <%_ } _%>
-<%_ if (enableLiquibase) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: test

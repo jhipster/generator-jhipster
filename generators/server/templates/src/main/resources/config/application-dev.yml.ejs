@@ -174,7 +174,7 @@ spring:
     username: Administrator
     password: password
 <%_ } _%>
-<%_ if (enableLiquibase) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
   liquibase:
   <%_ if (!skipFakeData) { _%>
     # Remove 'faker' if you do not want the sample data to be loaded automatically
