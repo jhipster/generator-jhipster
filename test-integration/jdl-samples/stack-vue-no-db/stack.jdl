@@ -1,0 +1,103 @@
+/*
+ * Microservice stack sample to test compilation and base gateway/microservices functionality.
+ *
+ * Test focus:
+ * - databaseType: no
+ * - testFrameworks: cypress
+ *
+ * Matrix:
+ * - reactive: true, false
+ * - buildTool: maven, gradle
+ */
+
+/* reactive, maven */
+application {
+  config {
+    applicationType gateway
+    authenticationType oauth2
+    baseName gatewayOauth2
+    buildTool maven
+    clientFramework vue
+    creationTimestamp 1617901618886
+    databaseType no
+    jhiPrefix custom
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.gateway_jwt
+    serviceDiscoveryType no
+    testFrameworks [cypress]
+  }
+}
+
+application {
+  config {
+    applicationType gateway
+    authenticationType jwt
+    baseName gatewayJwt
+    buildTool gradle
+    clientFramework no
+    creationTimestamp 1617901618887
+    databaseType no
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.gateway_oauth2
+    serverPort 8081
+    serviceDiscoveryType no
+  }
+}
+
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName monolithJwt
+    buildTool maven
+    cacheProvider no
+    clientFramework no
+    creationTimestamp 1617901618888
+    databaseType no
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.monolith_jwt
+    serverPort 8082
+    serviceDiscoveryType no
+  }
+}
+
+application {
+  config {
+    applicationType monolith
+    authenticationType oauth2
+    baseName monolithOauth2
+    buildTool gradle
+    cacheProvider no
+    clientFramework no
+    creationTimestamp 1617901618889
+    databaseType no
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.monolith_oauth2
+    serverPort 8083
+  }
+}
+
+application {
+  config {
+    applicationType monolith
+    authenticationType session
+    baseName monolithSession
+    buildTool maven
+    cacheProvider no
+    clientFramework no
+    creationTimestamp 1617901618890
+    databaseType no
+    rememberMeKey "1c0faa36864eb6b9863b48914ac61fa1a7699af2cb7ede015b0b38e4a596334bf48d15fffa2d9459751281b2e5b138ba57bc"
+    packageName com.okta.developer.monolith_session
+    serverPort 8084
+  }
+}
+
+deployment {
+  deploymentType docker-compose
+  /* Test e2e at gateway + oauth2 only */
+  appsFolders [gatewayOauth2]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType no
+}
