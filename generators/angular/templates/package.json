@@ -39,7 +39,7 @@
     "jest-junit": "15.0.0",
     "jest-sonar": "0.2.15",
     "merge-jsons-webpack-plugin": "2.0.1",
-    "postcss-rtlcss": "4.0.3",
+    "postcss-rtlcss": "4.0.4",
     "rimraf": "4.4.1",
     "ts-jest": "29.0.5",
     "typescript": "4.9.5",
