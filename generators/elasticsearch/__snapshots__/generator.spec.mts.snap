@@ -1610,6 +1610,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/test/java/com/package/config/Neo4jTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -4280,6 +4283,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/package/config/Neo4jTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -5191,6 +5197,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/Neo4jTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
