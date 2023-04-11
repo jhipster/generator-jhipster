@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@cypress/code-coverage": "3.10.3",
+    "@cypress/code-coverage": "3.10.4",
     "babel-loader": "9.1.2",
     "babel-plugin-istanbul": "6.1.1",
     "cypress": "12.9.0",
