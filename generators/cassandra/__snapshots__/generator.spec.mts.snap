@@ -706,9 +706,6 @@ exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tec
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/vm/RouteVM.java": {
     "stateCleared": "modified",
   },
@@ -984,9 +981,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -1003,9 +997,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": {
@@ -1041,9 +1032,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
@@ -1051,9 +1039,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -1075,12 +1060,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1789,12 +1768,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -2167,12 +2140,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -3384,12 +3351,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -3801,12 +3762,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {

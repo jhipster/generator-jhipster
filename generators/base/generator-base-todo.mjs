@@ -1063,8 +1063,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationTypeJwt = dest.authenticationType === JWT;
     dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
 
-    dest.generateUserManagement = !dest.skipUserManagement && dest.authenticationType !== OAUTH2 && dest.applicationType !== MICROSERVICE;
-    dest.generateBuiltInUserEntity = dest.generateUserManagement;
+    dest.generateAuthenticationApi = dest.applicationType === MONOLITH || dest.applicationType === GATEWAY;
+    const authenticationApiWithUserManagement = dest.authenticationType !== OAUTH2 && dest.generateAuthenticationApi;
+    dest.generateUserManagement = !dest.skipUserManagement && dest.databaseType !== NO_DATABASE && authenticationApiWithUserManagement;
+    dest.generateInMemoryUserCredentials = !dest.generateUserManagement && authenticationApiWithUserManagement;
+
+    // TODO make UserEntity optional on relationships for microservices and oauth2
+    // TODO check if we support syncWithIdp using jwt authentication
+    // Used for relationships and syncWithIdp
+    const usesSyncWithIdp = dest.authenticationType === OAUTH2;
+    dest.generateBuiltInUserEntity = dest.generateUserManagement || usesSyncWithIdp;
+
+    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && dest.databaseType !== CASSANDRA;
   }
 
   /**
@@ -1255,23 +1265,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.databaseMigrationLiquibase = dest.databaseMigration ? dest.databaseMigration === 'liquibase' : dest.databaseType === SQL;
 
-    if (dest.databaseType === NO_DATABASE) {
-      // User management requires a database.
-      dest.generateUserManagement = false;
-    }
-    // TODO make UserEntity optional on relationships for microservices and oauth2
-    // Used for relationships and syncWithIdp
-    dest.generateBuiltInUserEntity =
-      dest.generateUserManagement ||
-      dest.authenticationType === OAUTH2 ||
-      (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
-
-    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
-
     dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
 
     dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
-    dest.generateAuthenticationApi = dest.applicationTypeMonolith || dest.applicationTypeGateway;
 
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);
