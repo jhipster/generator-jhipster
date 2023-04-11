@@ -19,20 +19,25 @@
 package <%= packageName %>.web.rest;
 
 <%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
 import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
-import java.security.Principal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+  <%_ if (reactive) { _%>
+import org.springframework.web.server.ServerWebExchange;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+import java.security.Principal;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 <%_ } else { _%>
   <%_ if (reactive) { _%>
 import java.security.Principal;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,7 +65,7 @@ public class AccountResource {
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private static class AccountResourceException extends RuntimeException {
-<%_ if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
         private static final long serialVersionUID = 1L;
 
         private AccountResourceException(String message) {
@@ -72,7 +77,7 @@ public class AccountResource {
     /**
      * {@code GET  /account} : get the current user.
      *
-<%_ if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
      * @param principal the current user; resolves to {@code null} if not authenticated.
 <%_ } _%>
      * @return the current user.
@@ -80,7 +85,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
 <%_ if (reactive) { _%>
-  <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
     public Mono<UserVM> getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
             return Mono.just(getUserFromAuthentication((AbstractAuthenticationToken) principal));
@@ -110,7 +115,7 @@ public class AccountResource {
     }
   <%_ } _%>
 <%_ } else { _%>
-  <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
     public UserVM getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
             return getUserFromAuthentication((AbstractAuthenticationToken) principal);
@@ -172,10 +177,15 @@ public class AccountResource {
             return login;
         }
     }
-<%_ if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
 
     private UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
-        if (!(authToken instanceof OAuth2AuthenticationToken) && !(authToken instanceof JwtAuthenticationToken)) {
+        if (
+  <%_ if (authenticationTypeOauth2) { _%>
+            !(authToken instanceof OAuth2AuthenticationToken) &&
+  <%_ } _%>
+            !(authToken instanceof JwtAuthenticationToken)
+        ) {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
 
