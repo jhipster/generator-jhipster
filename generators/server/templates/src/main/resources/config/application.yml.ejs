@@ -299,7 +299,7 @@ spring:
   <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
     problemdetails:
       enabled: true
-<%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
+<%_ if (generateInMemoryUserCredentials) { _%>
   security:
     user:
       name: admin

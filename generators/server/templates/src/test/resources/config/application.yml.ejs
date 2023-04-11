@@ -132,7 +132,7 @@ spring:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-<%_ if (!generateUserManagement && (applicationTypeMonolith || applicationTypeGateway) && authenticationTypeJwt) { _%>
+<%_ if (generateInMemoryUserCredentials) { _%>
   security:
     user:
       name: test

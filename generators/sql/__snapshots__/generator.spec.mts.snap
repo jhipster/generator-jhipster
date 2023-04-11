@@ -2151,9 +2151,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/web/rest/vm/RouteVM.java": {
     "stateCleared": "modified",
   },
@@ -2534,9 +2531,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/web/rest/vm/RouteVM.java": {
     "stateCleared": "modified",
   },
@@ -2884,12 +2878,6 @@ exports[`generator - sql gateway-oauth2-mysql-maven-enableTranslation(false)-tec
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -3223,9 +3211,6 @@ exports[`generator - sql gateway-oauth2-oracle-maven-enableTranslation(false)-te
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/RouteVM.java": {
@@ -3581,9 +3566,6 @@ exports[`generator - sql gateway-oauth2-postgresql-maven-enableTranslation(false
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/vm/RouteVM.java": {
     "stateCleared": "modified",
   },
@@ -3820,12 +3802,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -3838,15 +3814,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -3857,15 +3824,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(false)-maven-enableTr
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -3881,15 +3839,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(false)-maven-enableTr
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -4385,12 +4334,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -4403,15 +4346,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -4422,15 +4356,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -4446,15 +4371,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -4956,12 +4872,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -4974,15 +4884,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -4993,15 +4894,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -5017,15 +4909,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -5530,12 +5413,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/User.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -5548,15 +5425,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -5567,15 +5435,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -5591,15 +5450,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -6089,12 +5939,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -6107,15 +5951,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -6126,15 +5961,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -6150,15 +5976,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -6753,12 +6570,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -7097,12 +6908,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -7409,12 +7214,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -7755,12 +7554,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -8058,12 +7851,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -8398,12 +8185,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -8713,12 +8494,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -9056,12 +8831,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -9365,12 +9134,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(false)-maven-en
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -9709,12 +9472,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -13615,12 +13372,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
@@ -13998,12 +13749,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -14328,12 +14073,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -14707,12 +14446,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -15049,12 +14782,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -15434,12 +15161,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -15773,12 +15494,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -16155,12 +15870,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "src/main/java/com/package/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -16482,12 +16191,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -16859,12 +16562,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {

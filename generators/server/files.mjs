@@ -91,20 +91,19 @@ const feignFiles = {
 const commonUserFiles = {
   commonUserFiles: [
     {
-      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
+      condition: data => data.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['service/UserService.java'],
     },
     {
-      condition: data =>
-        data.authenticationTypeOauth2 || data.generateUserManagement || (data.applicationTypeMicroservice && !data.skipUserManagement),
+      condition: data => data.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['service/mapper/UserMapper.java', 'web/rest/PublicUserResource.java'],
     },
     {
-      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
+      condition: data => data.generateBuiltInUserEntity,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
@@ -113,12 +112,6 @@ const commonUserFiles = {
         'web/rest/PublicUserResourceIT.java',
         'service/UserServiceIT.java',
       ],
-    },
-    {
-      condition: data => data.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/vm/ManagedUserVM.java'],
     },
   ],
 };
@@ -195,6 +188,12 @@ const accountFiles = {
           return 'web/rest/AccountResource_skipUserManagement.java';
         },
       ],
+    },
+    {
+      condition: data => data.generateUserManagement,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/vm/ManagedUserVM.java'],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,

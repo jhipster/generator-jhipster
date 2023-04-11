@@ -1131,9 +1131,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/user/user.service.ts": {
-    "stateCleared": "modified",
-  },
   "src/app/index.ts": {
     "stateCleared": "modified",
   },
