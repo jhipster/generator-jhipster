@@ -137,7 +137,7 @@
     "@types/shelljs": "0.8.11",
     "@types/sinon-chai": "3.2.9",
     "@typescript-eslint/eslint-plugin": "5.58.0",
-    "@typescript-eslint/parser": "5.57.1",
+    "@typescript-eslint/parser": "5.58.0",
     "chai": "4.3.7",
     "chokidar": "3.5.3",
     "concurrently": "8.0.1",
