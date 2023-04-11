@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import path from 'path';
+import path, { isAbsolute } from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
 import fs, { existsSync } from 'fs';
@@ -225,24 +225,26 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   composeWithJHipster(generator, args, options, { immediately = false } = {}) {
     assert(typeof generator === 'string', 'generator should to be a string');
-    const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
-    if (!Array.isArray(args)) {
-      options = args;
-      args = [];
-    }
-
-    if (this.env.get(namespace)) {
-      generator = namespace;
-    } else {
-      // Keep test compatibily were jhipster lookup does not run.
-      const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
-        const pathToLook = join(__dirname, `../${generator}${extension}`);
-        return existsSync(pathToLook) ? pathToLook : undefined;
-      });
-      if (!found) {
-        throw new Error(`Generator ${generator} was not found`);
+    if (!isAbsolute(generator)) {
+      const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+      if (!Array.isArray(args)) {
+        options = args;
+        args = [];
       }
-      generator = join(__dirname, `../${generator}${found}`);
+
+      if (this.env.get(namespace)) {
+        generator = namespace;
+      } else {
+        // Keep test compatibily were jhipster lookup does not run.
+        const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
+          const pathToLook = join(__dirname, `../${generator}${extension}`);
+          return existsSync(pathToLook) ? pathToLook : undefined;
+        });
+        if (!found) {
+          throw new Error(`Generator ${generator} was not found`);
+        }
+        generator = join(__dirname, `../${generator}${found}`);
+      }
     }
 
     return this.env.composeWith(
@@ -601,7 +603,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         };
         const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
-        const data = createJHipster7Context(this, context, { ignoreWarnings: true });
+        const data = this.jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
         if (useAsync) {
           await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {

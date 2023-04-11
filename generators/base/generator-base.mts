@@ -92,6 +92,7 @@ export default class CoreGenerator extends YeomanGenerator {
   skipChecks?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
+  jhipster7Migration?: boolean;
 
   readonly sharedData!: SharedData<BaseApplication>;
   readonly logger: Logger;
@@ -183,6 +184,7 @@ export default class CoreGenerator extends YeomanGenerator {
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
+    this.jhipster7Migration = this.features.jhipster7Migration ?? false;
   }
 
   /**
