@@ -25,12 +25,8 @@ import JDLRelationship from '../../models/jdl-relationship.js';
 const {
   Validations: { REQUIRED },
 } = validations;
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { JPA_DERIVED_IDENTIFIER, BUILT_IN_ENTITY } = relationshipOptions;
 const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
-
-const USER = 'user';
-const AUTHORITY = 'authority';
-const builtInEntities = new Set([USER, AUTHORITY]);
 
 let convertedRelationships;
 
@@ -156,6 +152,8 @@ function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRel
       if (convertedRelationship.ownerSide) {
         convertedRelationship.useJPADerivedIdentifier = optionValue;
       }
+    } else if (optionName === BUILT_IN_ENTITY) {
+      convertedRelationship.relationshipWithBuiltInEntity = optionValue;
     } else {
       convertedRelationship.options[optionName] = optionValue;
     }

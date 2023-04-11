@@ -46,10 +46,8 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
       context('with some of them being built-in entities', () => {
         let builtInEntitiesAreConverted;
         let customEntitiesAreConverted;
-        let loggerSpy;
 
         before(() => {
-          loggerSpy = sinon.spy(logger, 'warn');
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -66,18 +64,8 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           builtInEntitiesAreConverted = returnedMap.has('User') || returnedMap.has('Authority');
         });
 
-        after(() => {
-          loggerSpy.restore();
-        });
-
-        it('should warn about them', () => {
-          expect(loggerSpy.getCall(0).args[0]).to.equal(
-            "An Entity name 'User' was used: 'User' is an entity created by default by JHipster. All relationships " +
-              'toward it will be kept but any attributes and relationships from it will be disregarded.'
-          );
-        });
-        it('should not convert built-in entities', () => {
-          expect(builtInEntitiesAreConverted).to.be.false;
+        it('should convert built-in entities', () => {
+          expect(builtInEntitiesAreConverted).to.be.true;
         });
         it('should convert custom entities', () => {
           expect(customEntitiesAreConverted).to.be.true;

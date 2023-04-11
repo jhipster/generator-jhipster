@@ -15,7 +15,7 @@ relationship OneToMany {
 }
 
 relationship ManyToOne {
-  CustomPackageChild to User
+  CustomPackageChild to User with builtInEntity
 }
 
 dto CustomPackageParent, CustomPackageChild with mapstruct

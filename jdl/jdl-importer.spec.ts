@@ -52,6 +52,20 @@ describe('jdl - JDLImporter', () => {
     });
   });
   describe('import', () => {
+    context('parsing a relationship with builtInEntity', () => {
+      it('import and add relationshipWithBuiltInEntity to the relationship', () => {
+        const importState = createImporterFromContent(
+          `
+entity A
+relationship OneToMany {
+  A{user} to User with builtInEntity
+}
+`,
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL, skipFileGeneration: true }
+        ).import();
+        jestExpect(importState.exportedEntities[0].relationships[0].relationshipWithBuiltInEntity).toBe(true);
+      });
+    });
     context('when not parsing applications', () => {
       const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
       let filesExist: any = true;

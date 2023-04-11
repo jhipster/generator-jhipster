@@ -9,5 +9,5 @@ entity A { // Another line
 }
 // thing
 relationship OneToOne {
-  A to User
+  A to User with builtInEntity
 }

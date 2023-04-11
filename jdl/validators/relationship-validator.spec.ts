@@ -231,24 +231,6 @@ describe('jdl - RelationshipValidator', () => {
               expect(() => validator.validate(relationship)).not.to.throw();
             });
           });
-          context('having the source entity as user', () => {
-            let relationship;
-
-            before(() => {
-              relationship = {
-                from: 'User',
-                to: 'A',
-                type: ONE_TO_ONE,
-                injectedFieldInFrom: 'a',
-              };
-            });
-
-            it('should fail', () => {
-              expect(() => validator.validate(relationship)).to.throw(
-                /^Relationships from the User entity is not supported in the declaration between 'User' and 'A'\. You can have this by using the 'skipUserManagement' option\.$/
-              );
-            });
-          });
         });
         context(`when having a ${MANY_TO_ONE} relationship`, () => {
           context('without the User having the injected field', () => {
@@ -268,22 +250,6 @@ describe('jdl - RelationshipValidator', () => {
             });
           });
           context('with the User having the injected field', () => {
-            context('with the skipUserManagement option', () => {
-              let relationship;
-
-              before(() => {
-                relationship = new JDLRelationship({
-                  from: 'User',
-                  to: 'A',
-                  type: MANY_TO_ONE,
-                  injectedFieldInFrom: 'a',
-                });
-              });
-
-              it('should not fail', () => {
-                expect(() => validator.validate(relationship, true)).not.to.throw();
-              });
-            });
             context('as the source', () => {
               let relationship;
 
@@ -296,10 +262,8 @@ describe('jdl - RelationshipValidator', () => {
                 });
               });
 
-              it('should fail', () => {
-                expect(() => validator.validate(relationship)).to.throw(
-                  /^Relationships from the User entity is not supported in the declaration between 'User' and 'A'\. You can have this by using the 'skipUserManagement' option\.$/
-                );
+              it('should not fail', () => {
+                expect(() => validator.validate(relationship)).not.to.throw();
               });
             });
             context('as the destination', () => {
@@ -315,9 +279,7 @@ describe('jdl - RelationshipValidator', () => {
               });
 
               it('should fail', () => {
-                expect(() => validator.validate(relationship)).to.throw(
-                  /^In the Many-to-One relationship from A to User, the User entity has the injected field without its management being skipped\. To have such a relation, you should use the 'skipUserManagement' option\.$/
-                );
+                expect(() => validator.validate(relationship)).not.to.throw();
               });
             });
           });
@@ -352,9 +314,7 @@ describe('jdl - RelationshipValidator', () => {
             });
 
             it('should fail', () => {
-              expect(() => validator.validate(relationship)).to.throw(
-                /^Relationships from the User entity is not supported in the declaration between 'User' and 'A'. You can have this by using the 'skipUserManagement' option\.$/
-              );
+              expect(() => validator.validate(relationship)).not.to.throw();
             });
           });
         });

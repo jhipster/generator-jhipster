@@ -18,11 +18,16 @@
  */
 
 import _ from 'lodash';
-import JDLRelationship from '../../models/jdl-relationship.js';
+import JDLRelationship, { JDLRelationshipType } from '../../models/jdl-relationship.js';
 import { lowerFirst, upperFirst } from '../../utils/string-utils.js';
 import { formatComment } from '../../utils/format-utils.js';
+import { RelationshipType } from '../types.js';
+
+const { camelCase } = _;
 
 export default { convertRelationships };
+
+export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 
 /**
  * Converts parsed relationships to JDLRelationship objects.
@@ -38,7 +43,7 @@ export function convertRelationships(parsedRelationships, annotationToOptionConv
     const relationshipConfiguration = {
       from: parsedRelationship.from.name,
       to: parsedRelationship.to.name,
-      type: upperFirst(_.camelCase(parsedRelationship.cardinality)),
+      type: asJdlRelationshipType(parsedRelationship.cardinality),
       injectedFieldInFrom: parsedRelationship.from.injectedField,
       injectedFieldInTo: parsedRelationship.to.injectedField,
       isInjectedFieldInFromRequired: parsedRelationship.from.required,

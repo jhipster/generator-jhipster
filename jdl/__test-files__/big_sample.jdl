@@ -86,7 +86,7 @@ relationship OneToMany {
 }
 
 relationship ManyToOne {
-  Employee{user(login)} to User,
+  Employee{user(login)} to User with builtInEntity,
   Employee{manager(lastName)} to Employee
 }
 
