@@ -124,7 +124,9 @@ class AccountResourceIT {
             .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
             .jsonPath("$.login").isEqualTo("jane")
+  <%_ if (generateBuiltInUserEntity) { _%>
             .jsonPath("$.email").isEqualTo("jane.doe@jhipster.com")
+  <%_ } _%>
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
 <%_ } else { _%>
         TestSecurityContextHolder
@@ -136,7 +138,9 @@ class AccountResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
+  <%_ if (generateBuiltInUserEntity) { _%>
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
+  <%_ } _%>
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
 <%_ } _%>
     }

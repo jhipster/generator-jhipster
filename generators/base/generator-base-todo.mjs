@@ -1073,7 +1073,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // TODO make UserEntity optional on relationships for microservices and oauth2
     // TODO check if we support syncWithIdp using jwt authentication
     // Used for relationships and syncWithIdp
-    const usesSyncWithIdp = dest.authenticationType === OAUTH2;
+    const usesSyncWithIdp = dest.authenticationType === OAUTH2 && dest.databaseType !== NO_DATABASE;
     dest.generateBuiltInUserEntity = dest.generateUserManagement || usesSyncWithIdp;
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && dest.databaseType !== CASSANDRA;
@@ -1264,6 +1264,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeMysql = dest.databaseType === SQL && (dest.devDatabaseType === MYSQL || dest.prodDatabaseType === MYSQL);
     dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
     dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
+    dest.databaseTypeAny = !dest.databaseTypeNo;
 
     dest.databaseMigrationLiquibase = dest.databaseMigration ? dest.databaseMigration === 'liquibase' : dest.databaseType === SQL;
 
