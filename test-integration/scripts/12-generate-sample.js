@@ -8,7 +8,7 @@ import { globSync } from 'glob';
 import { runJHipster } from '../../cli/program.mjs';
 import { done } from '../../cli/utils.mjs';
 
-import getWorkflowSamples from './lib/get-workflow-samples.js';
+import getSamples from './lib/get-workflow-samples.js';
 import copyEntitySamples from './lib/copy-entity-samples.js';
 import copyJdlEntitySamples from './lib/copy-jdl-entity-samples.js';
 
@@ -28,7 +28,8 @@ const jdlEntitiesSamplesFolder = join(samplesFolder, 'jdl-entities');
 const destSamplesFolder = join(__dirname, '../../../jhipster-samples');
 const destSampleFolder = process.env.JHI_FOLDER_APP ? resolve(process.env.JHI_FOLDER_APP) : join(destSamplesFolder, sampleName);
 
-const samples = getWorkflowSamples();
+const samples = getSamples();
+console.log(samples);
 
 const sample = samples[sampleName];
 mkdirSync(destSampleFolder, { recursive: true });

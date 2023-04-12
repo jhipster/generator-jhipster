@@ -5,11 +5,24 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default function (samples = ['angular', 'react', 'vue']) {
-  return Object.fromEntries(
-    samples
-      .map(sampleFile => JSON.parse(readFileSync(join(__dirname, `../../workflow-samples/${sampleFile}.json`)).toString()).include)
-      .flat()
-      .map(sample => [sample.name, sample])
+const WORKFLOW_NAMES = ['angular', 'react', 'vue'];
+
+export const getWorkflowSamples = (workflows = WORKFLOW_NAMES) =>
+  Object.fromEntries(
+    workflows.map(workflow => [
+      workflow,
+      Object.fromEntries(
+        JSON.parse(readFileSync(join(__dirname, `../../workflow-samples/${workflow}.json`)).toString()).include.map(sample => [
+          sample.name,
+          sample,
+        ])
+      ),
+    ])
   );
-}
+
+export default workflows =>
+  Object.fromEntries(
+    Object.values(getWorkflowSamples(workflows))
+      .map(workflowSamples => Object.entries(workflowSamples))
+      .flat()
+  );
