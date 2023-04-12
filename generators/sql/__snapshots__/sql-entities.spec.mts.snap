@@ -235,6 +235,9 @@ exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/UserEntityCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
@@ -880,6 +883,9 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {
@@ -1560,6 +1566,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/criteria/SimpleCriteria.java": {

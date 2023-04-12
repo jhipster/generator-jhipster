@@ -2034,6 +2034,9 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/package/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserEntityCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2414,6 +2417,9 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/main/java/com/package/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserEntityCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2767,6 +2773,9 @@ exports[`generator - sql gateway-oauth2-mysql-maven-enableTranslation(false)-tec
   "src/main/java/tech/jhipster/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -3094,6 +3103,9 @@ exports[`generator - sql gateway-oauth2-oracle-maven-enableTranslation(false)-te
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/package-info.java": {
@@ -3447,6 +3459,9 @@ exports[`generator - sql gateway-oauth2-postgresql-maven-enableTranslation(false
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/package-info.java": {
@@ -6815,6 +6830,9 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "src/main/java/com/package/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -7461,6 +7479,9 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/main/java/com/package/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -8090,6 +8111,9 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/package-info.java": {
@@ -8738,6 +8762,9 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "src/main/java/com/package/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -9379,6 +9406,9 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/package-info.java": {
@@ -13638,6 +13668,9 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "src/main/java/com/package/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -14333,6 +14366,9 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/package-info.java": {
@@ -15050,6 +15086,9 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -15759,6 +15798,9 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "src/main/java/com/package/domain/User.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/UserCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
@@ -16451,6 +16493,9 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/UserCallback.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/package-info.java": {
