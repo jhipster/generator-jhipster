@@ -19,7 +19,6 @@ const baseFile = {
       internalConsoleOptions: 'neverOpen',
       name: 'update vscode launch.json',
       program: '${workspaceFolder}/test-integration/scripts/99-update-vscode.js',
-      runtimeArgs: ['--loader=@node-loaders/esbuild'],
       console: 'integratedTerminal',
     },
     {
@@ -45,7 +44,6 @@ for (const [workflowName, samples] of Object.entries(workflows)) {
     internalConsoleOptions: 'neverOpen',
     name: `generate sample from ${workflowName} workflow`,
     program: '${workspaceFolder}/test-integration/scripts/12-generate-sample.js',
-    runtimeArgs: ['--loader=@node-loaders/esbuild'],
     args: [`\${input:${workflowName}Sample}`],
     console: 'integratedTerminal',
   });

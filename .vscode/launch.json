@@ -54,6 +54,21 @@
         "ms-vue-eureka-jwt-couchbase-hazelcast",
         "ms-mf-vue-consul-oauth2-mysql-memcached"
       ]
+    },
+    {
+      "id": "daily-ms-oauth2Sample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ms-ngx-gateway-eureka-oauth2",
+        "daily-ms-micro-eureka-oauth2",
+        "daily-ms-ngx-gateway-consul-oauth2",
+        "daily-ms-micro-consul-oauth2",
+        "daily-gradle-ms-ngx-gateway-eureka-oauth2",
+        "daily-gradle-ms-micro-eureka-oauth2",
+        "daily-gradle-ms-ngx-gateway-consul-oauth2",
+        "daily-gradle-ms-micro-consul-oauth2"
+      ]
     }
   ],
   "configurations": [
@@ -63,7 +78,6 @@
       "internalConsoleOptions": "neverOpen",
       "name": "update vscode launch.json",
       "program": "${workspaceFolder}/test-integration/scripts/99-update-vscode.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
       "console": "integratedTerminal"
     },
     {
@@ -78,7 +92,6 @@
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from angular workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
       "args": ["${input:angularSample}"],
       "console": "integratedTerminal"
     },
@@ -88,7 +101,6 @@
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from react workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
       "args": ["${input:reactSample}"],
       "console": "integratedTerminal"
     },
@@ -98,8 +110,16 @@
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from vue workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
       "args": ["${input:vueSample}"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-ms-oauth2 workflow",
+      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
+      "args": ["${input:daily-ms-oauth2Sample}"],
       "console": "integratedTerminal"
     }
   ]
