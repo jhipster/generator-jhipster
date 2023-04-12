@@ -13,6 +13,8 @@ export interface JHipsterGeneratorOptions extends GeneratorOptions {
 
 export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
   priorityArgs?: boolean;
+  jhipster7Migration?: boolean;
+  sbsBlueprint?: boolean;
 }
 
 // eslint-disable-next-line no-use-before-define
