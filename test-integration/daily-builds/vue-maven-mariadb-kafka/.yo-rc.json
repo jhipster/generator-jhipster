@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "baseName": "appDefault",
+    "packageName": "io.github.jhipster.app",
+    "packageFolder": "io/github/jhipster/app",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mariadb",
+    "prodDatabaseType": "mariadb",
+    "searchEngine": false,
+    "messageBroker": "kafka",
+    "buildTool": "maven",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
+    "useSass": false,
+    "applicationType": "monolith",
+    "testFrameworks": ["gatling", "cypress"],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
+    "ci": true,
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "npm",
+    "clientFramework": "vue"
+  }
+}

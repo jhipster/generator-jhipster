@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "appCouchbase",
+    "packageName": "io.github.jhipster.app",
+    "packageFolder": "io/github/jhipster/app",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "couchbase",
+    "devDatabaseType": "couchbase",
+    "prodDatabaseType": "couchbase",
+    "searchEngine": false,
+    "useSass": false,
+    "buildTool": "gradle",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
+    "testFrameworks": ["gatling", "cypress"],
+    "serverPort": "8080",
+    "jhiPrefix": "jhi",
+    "ci": true,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "npm",
+    "clientFramework": "react"
+  }
+}

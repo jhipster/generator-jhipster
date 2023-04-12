@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "appMicroserviceEureka",
+    "packageName": "io.github.jhipster.app",
+    "packageFolder": "io/github/jhipster/app",
+    "authenticationType": "oauth2",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "gradle",
+    "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
+    "testFrameworks": ["gatling", "cypress"],
+    "skipClient": true,
+    "skipUserManagement": true,
+    "serverPort": "8081",
+    "jhiPrefix": "jhi",
+    "ci": true,
+    "websocket": false,
+    "messageBroker": false,
+    "clientPackageManager": "npm"
+  }
+}

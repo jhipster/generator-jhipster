@@ -1,0 +1,28 @@
+{
+  "generator-jhipster": {
+    "baseName": "appNg2SassNoi18n",
+    "packageName": "io.github.jhipster.app",
+    "packageFolder": "io/github/jhipster/app",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "buildTool": "gradle",
+    "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
+    "useSass": true,
+    "applicationType": "monolith",
+    "testFrameworks": ["gatling", "cypress"],
+    "jhiPrefix": "jhi",
+    "ci": true,
+    "serviceDiscoveryType": false,
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "clientFramework": "angular"
+  }
+}

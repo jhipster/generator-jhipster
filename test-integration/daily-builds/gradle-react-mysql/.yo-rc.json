@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "baseName": "appNg2",
+    "packageName": "io.github.jhipster.app",
+    "packageFolder": "io/github/jhipster/app",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "buildTool": "gradle",
+    "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
+    "useSass": false,
+    "applicationType": "monolith",
+    "testFrameworks": ["gatling", "cypress"],
+    "jhiPrefix": "custom",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en"],
+    "ci": true,
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "npm",
+    "clientFramework": "react"
+  }
+}

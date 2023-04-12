@@ -1,0 +1,31 @@
+{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "appDefault",
+    "packageName": "io.github.jhipster.app",
+    "packageFolder": "io/github/jhipster/app",
+    "authenticationType": "oauth2",
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "serviceDiscoveryType": "consul",
+    "useSass": false,
+    "buildTool": "maven",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
+    "testFrameworks": ["gatling", "cypress"],
+    "serverPort": "8080",
+    "jhiPrefix": "jhi",
+    "ci": true,
+    "messageBroker": false,
+    "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
+    "clientPackageManager": "npm",
+    "clientFramework": "angular",
+    "reactive": true
+  }
+}
