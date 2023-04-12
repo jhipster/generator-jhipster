@@ -46,15 +46,16 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("io.netty.util.NetUtil", "<clinit>");
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
+  <%_ if (databaseMigrationLiquibase) { _%>
+        builder.allowBlockingCallsInside("io.netty.util.concurrent.DefaultPromise", "awaitUninterruptibly");
+  <%_ } _%>
         builder.allowBlockingCallsInside("org.springframework.data.neo4j.core.PropertyFilterSupport", "getInputProperties");
 <%_ } _%>
 <%_ if (messageBrokerPulsar) { _%>
         builder.allowBlockingCallsInside("com.scurrilous.circe.utils.NativeUtils", "loadLibraryFromJar");
 <%_ } _%>
-<%_ if (reactive) { _%>
         builder.allowBlockingCallsInside("org.springframework.web.reactive.result.method.InvocableHandlerMethod", "invoke");
         builder.allowBlockingCallsInside("org.springdoc.core.service.OpenAPIService", "build");
         builder.allowBlockingCallsInside("org.springdoc.core.service.AbstractRequestService", "build");
-<%_ } _%>
     }
 }

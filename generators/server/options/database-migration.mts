@@ -17,5 +17,19 @@
  * limitations under the License.
  */
 
-export * from './database-migration.mjs';
-export * from './message-broker.mjs';
+import { JHipsterOptionDefinition } from '../../app/jdl/types.mjs';
+
+export const DATABASE_MIGRATION = 'databaseMigration';
+export const DATABASE_MIGRATION_LIQUIBASE = 'liquibase';
+
+const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
+
+const optionDefinition: JHipsterOptionDefinition = {
+  name: DATABASE_MIGRATION,
+  type: 'string',
+  tokenType: 'NAME',
+  tokenValuePattern: ALPHANUMERIC_PATTERN,
+  knownChoices: [DATABASE_MIGRATION_LIQUIBASE],
+};
+
+export default optionDefinition;

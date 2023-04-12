@@ -18,11 +18,12 @@
  */
 import _ from 'lodash';
 import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../app/jdl/types.mjs';
+import databaseMigrationOption from '../options/database-migration.mjs';
 import messageBrokerOption from '../options/message-broker.mjs';
 
 const { upperCase, snakeCase } = _;
 
-const jdlOptions: JHipsterOptionDefinition[] = [messageBrokerOption];
+const jdlOptions: JHipsterOptionDefinition[] = [databaseMigrationOption, messageBrokerOption];
 
 const applicationConfig: JDLApplicationConfig = {
   tokenConfigs: jdlOptions.map(option => ({

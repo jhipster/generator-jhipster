@@ -19,7 +19,7 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeNeo4j || reactive) { _%>
 import java.util.Optional;
 import tech.jhipster.config.liquibase.AsyncSpringLiquibase;
 <%_ } else { _%>
@@ -28,9 +28,14 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.beans.factory.ObjectProvider;
 <%_ } _%>
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+import liquibase.ext.neo4j.database.jdbc.Neo4jDriver;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 <%_ } _%>
 
 import javax.sql.DataSource;
@@ -61,7 +66,9 @@ public class LiquibaseConfiguration {
     public SpringLiquibase liquibase(
         @Qualifier("taskExecutor") Executor executor,
         LiquibaseProperties liquibaseProperties,
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeNeo4j) { _%>
+        Neo4jProperties dataSourceProperties
+<%_ } else if (reactive) { _%>
         R2dbcProperties dataSourceProperties
 <%_ } else { _%>
         @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
@@ -70,7 +77,7 @@ public class LiquibaseConfiguration {
 <%_ } _%>
     ) {
 
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeNeo4j || reactive) { _%>
         SpringLiquibase liquibase = new AsyncSpringLiquibase(executor, env);
         liquibase.setDataSource(createLiquibaseDataSource(liquibaseProperties, dataSourceProperties));
 <%_ } else { _%>
@@ -98,7 +105,17 @@ public class LiquibaseConfiguration {
         }
         return liquibase;
     }
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeNeo4j) { _%>
+
+    public DataSource createLiquibaseDataSource(LiquibaseProperties liquibaseProperties, Neo4jProperties dataSourceProperties) {
+        String url = Optional.ofNullable(liquibaseProperties.getUrl()).orElse("jdbc:neo4j:" + dataSourceProperties.getUri().toString());
+        String user = Optional.ofNullable(liquibaseProperties.getUser()).orElse(dataSourceProperties.getAuthentication().getUsername());
+        String password = Optional.ofNullable(liquibaseProperties.getPassword()).orElse(dataSourceProperties.getAuthentication().getPassword());
+
+        return new SimpleDriverDataSource(new Neo4jDriver(), url, user, password);
+    }
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 
     private static DataSource createLiquibaseDataSource(LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
         String user = Optional.ofNullable(liquibaseProperties.getUser()).orElse(dataSourceProperties.getUsername());

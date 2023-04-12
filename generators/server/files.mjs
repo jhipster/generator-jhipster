@@ -598,8 +598,7 @@ export const baseServerFiles = {
         generator.databaseTypeMongodb ||
         generator.searchEngineElasticsearch ||
         generator.databaseTypeCouchbase ||
-        generator.searchEngineCouchbase ||
-        generator.databaseTypeNeo4j,
+        generator.searchEngineCouchbase,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/TestContainersSpringContextCustomizerFactory.java'],

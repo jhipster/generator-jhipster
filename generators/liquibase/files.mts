@@ -43,7 +43,7 @@ export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootAppl
       templates: [
         {
           override: ctx => !ctx.incrementalChangelog || (ctx as any).recreateInitialChangelog,
-          file: 'config/liquibase/changelog/initial_schema.xml',
+          file: data => `config/liquibase/changelog/initial_schema_${data.databaseType}.xml`,
           renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
         },
         {
