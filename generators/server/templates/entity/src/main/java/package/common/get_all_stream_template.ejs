@@ -37,15 +37,38 @@ for (const relationship of relationships) {
     <%_ if (viaService) { _%>
             return <%- toResponseEntityPrefix %><%= entityInstance %>Service.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<% if (reactiveSql) { %>.collectList()<% } %><%= toResponseEntityPostfix %>;
     <%_ } else { _%>
-            return <%- toResponseEntityPrefix %><% if (reactiveSql) { %><%= entityInstance %>Repository.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<% if (dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>.collectList()<%= toResponseEntityPostfix %>;
-                <%_ } else { _%>StreamSupport
+      <%_ if (reactiveSql) { _%>
+            return <%- toResponseEntityPrefix %><%= entityInstance %>Repository
+                .findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()
+        <%_ if (dtoMapstruct) { _%>
+                .map(<%= entityToDtoReference %>)
+        <%_ } _%>
+                .collectList()<%= toResponseEntityPostfix %>;
+      <%_ } else if (reactive) { _%>
+            return <%- toResponseEntityPrefix %><%= entityInstance %>Repository
+                .findAll()
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+        <%_ if (dtoMapstruct) { _%>
+                .map(<%= entityToDtoReference %>)
+        <%_ } _%>
+                .collectList()<%= toResponseEntityPostfix %>;
+      <%_ } else { _%>
+            return <%- toResponseEntityPrefix %>StreamSupport
                 .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)<% if (dtoMapstruct) { %>
-                .map(<%= entityToDtoReference %>)<% } if (!paginationNo) { %>
-                .toList(), HttpStatus.OK);<% } else { if (dtoMapstruct) { %>
-                .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
-                .toList();<% }} %>
-                <%_ } _%>
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+        <%_ if (dtoMapstruct) { _%>
+                .map(<%= entityToDtoReference %>)
+        <%_ } _%>
+        <%_ if (!paginationNo) { _%>
+                .toList(), HttpStatus.OK);
+        <%_ } else { _%>
+          <%_ if (dtoMapstruct) { _%>
+                .collect(Collectors.toCollection(LinkedList::new));
+          <%_ } else { _%>
+                .toList();
+          <%_ } _%>
+        <%_ } _%>
+      <%_ } _%>
     <%_ } _%>
         }
   <%_ } _%>

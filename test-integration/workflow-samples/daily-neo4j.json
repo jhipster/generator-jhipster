@@ -1,0 +1,32 @@
+{
+  "include": [
+    {
+      "name": "ngx-neo4j",
+      "entity": "neo4j"
+    },
+    {
+      "name": "gradle-ngx-neo4j",
+      "entity": "neo4j"
+    },
+    {
+      "name": "react-maven-neo4j",
+      "entity": "neo4j"
+    },
+    {
+      "name": "react-gradle-neo4j",
+      "entity": "neo4j"
+    },
+    {
+      "name": "vue-maven-neo4j",
+      "entity": "neo4j"
+    },
+    {
+      "name": "vue-gradle-neo4j",
+      "entity": "neo4j"
+    },
+    {
+      "name": "webflux-neo4j",
+      "entity": "neo4j"
+    }
+  ]
+}

@@ -69,6 +69,20 @@
         "daily-gradle-ms-ngx-gateway-consul-oauth2",
         "daily-gradle-ms-micro-consul-oauth2"
       ]
+    },
+    {
+      "id": "daily-neo4jSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ngx-neo4j",
+        "daily-gradle-ngx-neo4j",
+        "daily-react-maven-neo4j",
+        "daily-react-gradle-neo4j",
+        "daily-vue-maven-neo4j",
+        "daily-vue-gradle-neo4j",
+        "daily-webflux-neo4j"
+      ]
     }
   ],
   "configurations": [
@@ -120,6 +134,15 @@
       "name": "generate sample from daily-ms-oauth2 workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
       "args": ["${input:daily-ms-oauth2Sample}"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-neo4j workflow",
+      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
+      "args": ["${input:daily-neo4jSample}"],
       "console": "integratedTerminal"
     }
   ]

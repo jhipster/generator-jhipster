@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const WORKFLOW_NAMES = ['angular', 'react', 'vue', 'daily-ms-oauth2'];
+const WORKFLOW_NAMES = ['angular', 'react', 'vue', 'daily-ms-oauth2', 'daily-neo4j'];
 export const DAILY_PREFIX = 'daily-';
 
 export const isDaily = workflow => workflow.startsWith(DAILY_PREFIX);
