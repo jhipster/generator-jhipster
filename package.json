@@ -134,7 +134,7 @@
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
     "@types/node": "16.18.23",
-    "@types/shelljs": "0.8.11",
+    "@types/shelljs": "0.8.12",
     "@types/sinon-chai": "3.2.9",
     "@typescript-eslint/eslint-plugin": "5.58.0",
     "@typescript-eslint/parser": "5.58.0",
