@@ -23,7 +23,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers, checkEnforcements } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka, shouldComposeWithPulsar } from './__test-support/index.mjs';
 import { GENERATOR_SERVER } from '../generator-list.mjs';
@@ -136,16 +136,53 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('databaseType option', () => {
-      describe('no', () => {
-        let runResult;
+      describe('no with jwt', () => {
         before(async () => {
-          runResult = await helpers
+          await helpers
             .run(generatorPath)
             .withJHipsterConfig({
               databaseType: 'no',
+              authenticationType: 'jwt',
             })
-            .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
+        });
+
+        it('should match generated files', () => {
+          expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        });
+
+        shouldComposeWithCouchbase(false, () => runResult);
+      });
+      describe('no with session', () => {
+        before(async () => {
+          await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              databaseType: 'no',
+              authenticationType: 'session',
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        it('should match generated files', () => {
+          expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        });
+
+        shouldComposeWithCouchbase(false, () => runResult);
+      });
+      describe('no with oauth2', () => {
+        before(async () => {
+          await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              databaseType: 'no',
+              authenticationType: 'oauth2',
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        it('should match generated files', () => {
+          expect(runResult.getStateSnapshot()).toMatchSnapshot();
         });
 
         shouldComposeWithCouchbase(false, () => runResult);

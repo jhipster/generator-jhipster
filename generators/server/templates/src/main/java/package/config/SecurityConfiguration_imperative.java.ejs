@@ -84,9 +84,6 @@ import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-  <%_ if (applicationTypeMonolith) { _%>
-import org.springframework.security.config.Customizer;
-  <%_ } _%>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>

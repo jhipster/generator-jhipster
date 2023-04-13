@@ -399,7 +399,7 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
     private Set<Authority> authorities = new HashSet<>();
-<%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ } else { _%>
     private Set<String> authorities = new HashSet<>();
 <%_ } _%>
 <%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>
@@ -520,11 +520,11 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
         this.langKey = langKey;
     }
 
-    public Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else if (databaseTypeCassandra || databaseTypeCouchbase) { %>String<% } %>> getAuthorities() {
+    public Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else { %>String<% } %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else if (databaseTypeCassandra || databaseTypeCouchbase) { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else { %>String<% } %>> authorities) {
         this.authorities = authorities;
     }
 <%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>

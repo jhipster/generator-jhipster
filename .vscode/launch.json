@@ -52,7 +52,8 @@
         "vue-h2disk-ws-theme",
         "vue-session-cassandra-fr",
         "ms-vue-eureka-jwt-couchbase-hazelcast",
-        "ms-mf-vue-consul-oauth2-mysql-memcached"
+        "ms-mf-vue-consul-oauth2-mysql-memcached",
+        "stack-vue-no-db"
       ]
     },
     {
