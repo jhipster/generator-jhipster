@@ -34,6 +34,13 @@ for (const relationship of relationships) { if (relationship.relationshipOneToOn
     <%_ if (reactiveSql) { _%>
         return <%= entityInstance %>Repository.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<%_ if (dtoMapstruct) { _%>
              .map(<%= entityToDtoReference %>)<%_ } _%>;
+    <%_ } else if (reactive) { _%>
+        return <%= entityInstance %>Repository
+            .findAll()
+            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+      <%_ if (dtoMapstruct) { _%>
+            .map(<%= entityToDtoReference %>)
+      <%_ } _%>;
     <%_ } else { _%>
         return StreamSupport
             .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
