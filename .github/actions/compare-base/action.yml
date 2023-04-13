@@ -69,7 +69,7 @@ runs:
     - name: 'MERGE: merge base project'
       id: base
       run: |
-        $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --skip-git ${{ inputs.extra-args }}
+        $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git ${{ inputs.extra-args }}
         echo "application-path=${{inputs.application-path}}" >> $GITHUB_OUTPUT
       env:
         JHI_FOLDER_APP: ${{ inputs.application-path }}

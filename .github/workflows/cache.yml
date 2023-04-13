@@ -117,7 +117,7 @@ jobs:
         continue-on-error: true
       - name: 'mvn(imperative): cache dependencies'
         run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces
           npm install --force
           npm run backend:build-cache || true
           cd ..
@@ -131,7 +131,7 @@ jobs:
         continue-on-error: true
       - name: 'mvn(reactive): cache dependencies'
         run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --reactive
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --reactive
           npm install --force
           npm run backend:build-cache || true
           cd ..
@@ -145,7 +145,7 @@ jobs:
         continue-on-error: true
       - name: 'gradle(imperative): cache dependencies'
         run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --build gradle
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --build gradle
           npm install --force
           npm run backend:build-cache || true
           cd ..
@@ -159,7 +159,7 @@ jobs:
         continue-on-error: true
       - name: 'gradle(reactive): cache dependencies'
         run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --build gradle --reactive
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --build gradle --reactive
           npm install --force
           npm run backend:build-cache || true
           cd ..
