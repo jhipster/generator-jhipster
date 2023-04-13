@@ -94,12 +94,12 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          application-sample: ${{ matrix.jhi-app-sample || matrix.app-sample || 'jdl' }}
-          entities-sample: ${{ matrix.entity || 'none' }}
-          jdl-entities-sample: ${{ matrix.jdl-entity || '' }}
-          jdl-sample: ${{ matrix.jdl-samples || '' }}
-          application-environment: ${{ matrix.environment || 'prod' }}
-          application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
+          application-sample: ${{ matrix.setup-application-sample }}
+          entities-sample: ${{ matrix.setup-entities-sample }}
+          jdl-entities-sample: ${{ matrix.setup-jdl-entities-sample }}
+          jdl-sample: ${{ matrix.setup-jdl-sample }}
+          application-environment: ${{ matrix.setup-application-environment }}
+          application-packaging: ${{ matrix.setup-application-packaging }}
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.setup.outputs.node-version }}

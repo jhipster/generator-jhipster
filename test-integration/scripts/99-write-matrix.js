@@ -24,17 +24,24 @@ writeFileSync(
         ...existing.include,
         ...process.argv
           .slice(2)
+          .map(file => join(__dirname, `../../${file.includes('/') ? file : `test-integration/workflow-samples/${file}.json`}`))
           .map(file => {
             try {
-              return JSON.parse(readFileSync(join(__dirname, `../../${file}`)))
+              return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
                 .map(sample => ({
                   ...sample,
                   'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
                   'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
+                  'setup-application-sample': sample['jhi-app-sample'] || sample['app-sample'] || 'jdl',
+                  'setup-application-environment': sample.environment ?? 'prod',
+                  'setup-application-packaging': sample.packaging ?? 'jar',
+                  'setup-entities-sample': sample.entity ?? 'none',
+                  'setup-jdl-entities-sample': sample['jdl-entity'] ?? '',
+                  'setup-jdl-sample': sample['jdl-samples'] ?? '',
                 }));
-            } catch (_) {
-              console.log(`File ${file} not found`);
+            } catch (error) {
+              console.log(`File ${file} not found`, error);
               return [];
             }
           })
