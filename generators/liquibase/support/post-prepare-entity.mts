@@ -16,15 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CommonClientServerApplication } from '../../base-application/types.mjs';
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
 import { LiquibaseEntity } from '../generator.mjs';
-import { Entity } from '../../base-application/index.mjs';
+import { GeneratorDefinition } from '../../base-application/generator.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
-export default function postPrepareEntity({ application, entity }: { application: CommonClientServerApplication; entity: Entity }) {
+export default function postPrepareEntity({
+  application,
+  entity,
+}: Pick<GeneratorDefinition['postPreparingEachEntityTaskParam'], 'application' | 'entity'>) {
   const { relationships, builtIn, name, primaryKey } = entity;
   if (builtIn && name === 'User') {
     const userIdType = primaryKey.type;

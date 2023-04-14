@@ -144,12 +144,10 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       async writeFiles({ application }) {
         const faker = await createFaker();
         faker.seed(stringHashCode(application.baseName));
+        const context = { ...application, faker } as any;
         return this.writeFiles({
           sections: cypressFiles,
-          context: {
-            ...application,
-            faker,
-          },
+          context,
         });
       },
     });
@@ -171,9 +169,10 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
       async writeCypressEntityFiles({ application, entities }) {
         for (const entity of entities) {
+          const context = { ...application, ...entity } as any;
           await this.writeFiles({
             sections: cypressEntityFiles,
-            context: { ...application, ...entity },
+            context,
           });
         }
       },

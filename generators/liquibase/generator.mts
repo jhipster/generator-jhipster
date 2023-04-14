@@ -180,12 +180,13 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
+        const context = {
+          ...application,
+          recreateInitialChangelog: this.recreateInitialChangelog,
+        } as any;
         await this.writeFiles({
           sections: liquibaseFiles,
-          context: {
-            ...application,
-            recreateInitialChangelog: this.recreateInitialChangelog,
-          },
+          context,
         });
       },
     });
