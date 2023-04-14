@@ -20,11 +20,10 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_SPRING_CACHE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
-import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
 import { createNeedleCallback } from '../base/support/needles.mjs';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.mjs';
 
-export default class SpringCacheGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -102,6 +101,9 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<Sprin
       },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
+          if (!application.javaDependencies) {
+            throw new Error('Some application fields are be mandatory');
+          }
           const applicationAny = application as any;
 
           source.addMavenDependency?.({

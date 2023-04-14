@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { GeneratorDefinition } from '../base-application/generator.mjs';
 import { clientApplicationBlock } from '../client/utils.mjs';
-import AngularGenerator, { type GeneratorDefinition } from './generator.mjs';
+import CoreGenerator from '../base-core/index.mjs';
 
 export const angularFiles = {
   client: [
@@ -60,7 +61,7 @@ export const angularFiles = {
 };
 
 export async function writeEntitiesFiles(
-  this: AngularGenerator,
+  this: CoreGenerator,
   { application, entities, control }: GeneratorDefinition['writingEntitiesTaskParam']
 ) {
   await control.loadClientTranslations?.();
@@ -73,13 +74,13 @@ export async function writeEntitiesFiles(
   }
 }
 
-export async function postWriteEntitiesFiles(this: AngularGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
+export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
   const { source, application } = taskParam;
   const entities = taskParam.entities.filter(entity => !entity.skipClient && !entity.builtIn && !entity.embedded);
   source.addEntitiesToClient({ application, entities });
 }
 
-export function cleanupEntitiesFiles(this: AngularGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
+export function cleanupEntitiesFiles(this: CoreGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (this.isJhipsterVersionLessThan('5.0.0')) {

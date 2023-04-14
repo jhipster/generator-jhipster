@@ -29,6 +29,7 @@ import { getEntitiesFromDir } from './support/index.mjs';
 import type { Entity } from './types/index.mjs';
 import { SpringBootApplication, SpringBootSourceType } from '../server/types.mjs';
 import { ClientApplication } from '../client/types.mjs';
+import type { CommonClientServerApplication } from './types.mjs';
 
 const { upperFirst } = _;
 
@@ -66,7 +67,7 @@ const asPriority = BaseGenerator.asPriority;
 
 export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType;
 
-export type JHipsterApplication = BaseApplication & Partial<SpringBootApplication & ClientApplication>;
+export type JHipsterApplication = BaseApplication & Partial<CommonClientServerApplication>;
 
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
   GenericApplicationDefinition<JHipsterApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
@@ -77,8 +78,9 @@ export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
  */
 export default class BaseApplicationGenerator<
   Definition extends BaseApplicationGeneratorDefinition<{
-    applicationType: unknown;
-    entityType: unknown;
+    applicationType: any;
+    entityType: any;
+    sourceType: any;
   }> = GeneratorDefinition
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);

@@ -41,20 +41,11 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
-import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.mjs';
-import type { ClientApplication } from '../client/types.mjs';
-import type { SourceType as ClientSourceType } from '../client/index.mjs';
-import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
-
-type AngularApplication = ClientApplication & { angularLocaleId: string };
-
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  GenericApplicationDefinition<AngularApplication> & GenericSourceTypeDefinition<ClientSourceType>
->;
+import type { CommonClientServerApplication } from '../base-application/types.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class AngularGenerator extends BaseApplicationGenerator {
   localEntities?: any[];
 
   async beforeQueue() {
@@ -95,7 +86,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<Generator
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
-        application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale;
+        application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!;
       },
       addNeedles({ source }) {
         source.addEntitiesToClient = param => {
@@ -272,7 +263,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<Generator
     this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
   }
 
-  addEntitiesToMenu({ application, entities }: { application: ClientApplication; entities: Entity[] }) {
+  addEntitiesToMenu({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
     const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
     const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
     const editCallback = addToEntitiesMenu({ application, entities });
@@ -280,7 +271,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<Generator
     this.editFile(filePath, { ignoreNonExisting }, editCallback);
   }
 
-  addEntitiesToModule({ application, entities }: { application: ClientApplication; entities: Entity[] }) {
+  addEntitiesToModule({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
     const filePath = `${application.clientSrcDir}app/entities/entity-routing.module.ts`;
     const ignoreNonExisting = chalk.yellow(`Route(s) not added to ${filePath}.`);
     const addRouteCallback = addEntitiesRoute({ application, entities });

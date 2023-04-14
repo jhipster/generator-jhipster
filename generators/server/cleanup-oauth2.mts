@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type BaseGenerator from '../base/index.mjs';
-import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.mjs';
+import { type GeneratorDefinition as ServerGeneratorDefinition } from '../base-application/generator.mjs';
 
 type WritingTaskParam = ServerGeneratorDefinition['writingTaskParam'];
 

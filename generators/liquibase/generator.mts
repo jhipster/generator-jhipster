@@ -20,8 +20,6 @@ import fs from 'fs';
 
 import _ from 'lodash';
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
-import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
-import type { LiquibaseApplication, SpringBootApplication, SpringBootSourceType } from '../server/types.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
 import {
@@ -54,14 +52,6 @@ export type LiquibaseEntity = Entity & {
   fakeDataCount: number;
 };
 
-export type ApplicationDefinition = {
-  applicationType: SpringBootApplication & LiquibaseApplication;
-  entityType: LiquibaseEntity;
-  sourceType: SpringBootSourceType;
-};
-
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
-
 const BASE_CHANGELOG = {
   addedFields: [],
   removedFields: [],
@@ -69,7 +59,7 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
   relationshipsToRecreateForeignKeysOnly: [],
 };
-export default class LiquibaseGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class LiquibaseGenerator extends BaseApplicationGenerator {
   recreateInitialChangelog: boolean;
 
   constructor(args: any, options: any, features: any) {
@@ -190,12 +180,13 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
-        await this.writeFiles<SpringBootApplication & LiquibaseApplication & Record<string, any>>({
+        const context = {
+          ...application,
+          recreateInitialChangelog: this.recreateInitialChangelog,
+        } as any;
+        await this.writeFiles({
           sections: liquibaseFiles,
-          context: {
-            ...application,
-            recreateInitialChangelog: this.recreateInitialChangelog,
-          },
+          context,
         });
       },
     });
@@ -215,6 +206,9 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       },
       customizeMaven({ source, application }) {
         if (!application.buildToolMaven) return;
+        if (!application.javaDependencies) {
+          throw new Error('Some application fields are be mandatory');
+        }
 
         const applicationAny = application as any;
         const databaseTypeProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;
@@ -313,6 +307,9 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator<Generat
       },
       injectGradle({ source, application }) {
         if (!application.buildToolGradle) return;
+        if (!application.javaDependencies) {
+          throw new Error('Some application fields are be mandatory');
+        }
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: application.javaDependencies['gradle-liquibase'] });

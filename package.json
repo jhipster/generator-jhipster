@@ -119,6 +119,7 @@
     "semver": "7.4.0",
     "shelljs": "0.8.5",
     "simple-git": "3.17.0",
+    "type-fest": "3.8.0",
     "uuid": "9.0.0",
     "winston": "3.8.2",
     "yaml": "2.2.1",
@@ -161,7 +162,7 @@
     "sinon": "15.0.3",
     "sinon-chai": "3.7.0",
     "sort-keys": "5.0.0",
-    "typescript": "4.9.5",
+    "typescript": "5.0.4",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "7.4.0"
   },
@@ -173,5 +174,18 @@
     "type": "opencollective",
     "url": "https://opencollective.com/generator-jhipster",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "overrides": {
+    "@types/shelljs": {
+      "@types/glob": {
+        "@types/minimatch": "3.0.5"
+      }
+    },
+    "@types/mem-fs-editor": {
+      "@types/glob": {
+        ".": "7.2.0",
+        "@types/minimatch": "3.0.5"
+      }
+    }
   }
 }

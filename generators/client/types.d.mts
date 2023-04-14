@@ -1,18 +1,14 @@
-import { OptionalGenericDerivedProperty } from '../base/application.mjs';
-import type { CommonClientServerApplication } from '../base-application/types.mjs';
+import type { AngularApplication } from '../angular/types.mjs';
+import type { OptionWithDerivedProperties } from '../base-application/application-options.mjs';
+import type { CypressApplication } from '../cypress/types.mjs';
 
-type ClientFrameworkType = 'no' | 'angular' | 'react' | 'vue' | 'svelte';
+type ClientFrameworkType = ['no', 'angular', 'react', 'vue', 'svelte'];
 
-declare const CLIENT_FRAMEWORK = 'clientFramework';
+type ClientFrameworkApplication = OptionWithDerivedProperties<'clientFramework', ClientFrameworkType>;
 
-type ClientFramework = {
-  [CLIENT_FRAMEWORK]: ClientFrameworkType;
-};
-
-type ClientFrameworkApplication = OptionalGenericDerivedProperty<ClientFramework, ClientFramework[typeof CLIENT_FRAMEWORK]>;
-
-export type ClientApplication = CommonClientServerApplication &
-  ClientFrameworkApplication & {
+export type ClientApplication = ClientFrameworkApplication &
+  AngularApplication &
+  CypressApplication & {
     withAdminUi: boolean;
     webappLoginRegExp: string;
     webappEnumerationsDir?: string;
