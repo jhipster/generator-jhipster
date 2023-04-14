@@ -487,7 +487,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {import('./api.mjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
-  async writeFiles(options) {
+  async internalWriteFiles(options) {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');

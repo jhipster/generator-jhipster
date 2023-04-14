@@ -42,6 +42,7 @@ import type {
   CascatedEditFileCallback,
   JHipsterOptions,
   ValidationResult,
+  WriteFileOptions,
 } from './api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
@@ -357,6 +358,13 @@ export default class CoreGenerator extends YeomanGenerator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
     return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+  }
+
+  /**
+   * write the given files using provided options.
+   */
+  writeFiles<DataType = any>(options: WriteFileOptions<this, DataType>): Promise<string[]> {
+    return (this as any).internalWriteFiles(options);
   }
 
   /**

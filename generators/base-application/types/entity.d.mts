@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 
+import Field from './field.mjs';
+import Relationship from './relationship.mjs';
+
 export type BaseEntity = {
   name: string;
   changelogDate?: string;

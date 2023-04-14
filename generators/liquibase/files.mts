@@ -18,12 +18,12 @@
  */
 import type { WriteFileSection } from '../base/api.mjs';
 import type LiquibaseGenerator from './generator.mjs';
-import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { moveToJavaPackageSrcDir } from '../server/support/index.mjs';
+import { CommonClientServerApplication } from '../base-application/types.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
-export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootApplication & LiquibaseApplication> = {
+export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientServerApplication> = {
   liquibase: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,

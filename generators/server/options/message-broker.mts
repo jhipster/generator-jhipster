@@ -18,6 +18,7 @@
  */
 
 import { JHipsterOptionDefinition } from '../../app/jdl/types.mjs';
+import { OptionWithDerivedProperties } from '../../base-application/application-options.mjs';
 
 export const MESSAGE_BROKER = 'messageBroker';
 
@@ -36,3 +37,7 @@ const optionDefinition: JHipsterOptionDefinition = {
 };
 
 export default optionDefinition;
+
+type MessageBrokerTypes = [typeof MESSAGE_BROKER_KAFKA, typeof MESSAGE_BROKER_PULSAR, typeof MESSAGE_BROKER_NO];
+
+export type MessageBrokerApplicationType = OptionWithDerivedProperties<typeof MESSAGE_BROKER, MessageBrokerTypes>;
