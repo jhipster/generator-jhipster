@@ -45,7 +45,7 @@
   },
   "main": "dist/lib/index.mjs",
   "bin": {
-    "jhipster": "dist/cli/jhipster.mjs"
+    "jhipster": "dist/cli/jhipster.cjs"
   },
   "files": [
     "dist",

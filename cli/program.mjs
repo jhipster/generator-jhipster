@@ -20,7 +20,6 @@
  */
 
 import chalk from 'chalk';
-import { Option } from 'commander';
 import didYouMean from 'didyoumean';
 import fs from 'fs';
 import path, { dirname } from 'path';
@@ -263,7 +262,7 @@ export const buildCommands = async ({
         if (options.installPath) {
           // eslint-disable-next-line no-console
           console.log(`Using jhipster at ${path.dirname(__dirname)}`);
-          return undefined;
+          return Promise.resolve();
         }
 
         printLogo();
@@ -272,7 +271,9 @@ export const buildCommands = async ({
         if (cliOnly) {
           logger.debug('Executing CLI only script');
           const cliOnlyCommand = await loadCommand(cmdName);
-          return cliOnlyCommand instanceof Function ? cliOnlyCommand(args, options, env, envBuilder, createEnvBuilder) : undefined;
+          return cliOnlyCommand instanceof Function
+            ? cliOnlyCommand(args, options, env, envBuilder, createEnvBuilder)
+            : Promise.reject(new Error(`Command ${cmdName} is not a function.`));
         }
 
         if (cmdName === 'run') {

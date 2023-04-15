@@ -28,7 +28,7 @@ describe('generator - upgrade', function () {
       await runResult
         .create(getGenerator(GENERATOR_UPGRADE))
         .withOptions({
-          regenerateExecutable: resolve(__dirname, '../../bin/jhipster.mjs'),
+          regenerateExecutable: resolve(__dirname, '../../bin/jhipster.cjs'),
           force: true,
           silent: false,
           targetVersion: packageJson.version,

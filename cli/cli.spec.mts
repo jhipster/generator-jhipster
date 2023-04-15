@@ -15,7 +15,7 @@ const { logger, getCommand } = await mock<typeof import('./utils.mjs')>('./utils
 const { buildJHipster } = await import('./program.mjs');
 
 const __filename = fileURLToPath(import.meta.url);
-const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.mjs');
+const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -254,7 +254,6 @@ describe('cli', () => {
     } as { mocked: any };
     beforeEach(() => {
       commands.mocked = {
-        cb: () => {},
         options: [
           {
             option: '--foo',
@@ -278,7 +277,7 @@ describe('cli', () => {
 
     const commonTests = () => {
       it('should pass a defined environment', async () => {
-        return mockCli(argv, { commands });
+        return mockCli(argv, { commands, './mocked': () => {} });
       });
     };
 
