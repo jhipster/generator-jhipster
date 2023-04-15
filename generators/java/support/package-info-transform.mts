@@ -30,7 +30,7 @@ const packageInfoTransform = ({ javaRoots, editor, javadocs }: PackageInfoTransf
     for (const root of javaRoots) {
       if (file.path.startsWith(root)) {
         const directory = dirname(file.path);
-        const packageName = relative(root, directory).replaceAll('/', '.');
+        const packageName = relative(root, directory).replaceAll(/[/\\]/g, '.');
         const packageInfoFile = join(directory, 'package-info.java');
         const packageJavadoc = javadocs?.[packageName] ?? DEFAULT_DOC;
         if (!editor.exists(packageInfoFile)) {
