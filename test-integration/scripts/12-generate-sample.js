@@ -19,7 +19,7 @@ if (!sampleName) {
   throw new Error('Sample name is required');
 }
 
-const jhipsterBin = join(__dirname, '../../bin/jhipster.mjs');
+const jhipsterBin = join(__dirname, '../../bin/jhipster.cjs');
 const jdlSamplesFolder = join(__dirname, '../jdl-samples');
 const samplesFolder = join(__dirname, '../samples');
 const dailyBuildsFolder = join(__dirname, '../daily-builds');
