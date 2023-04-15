@@ -51,7 +51,6 @@ export const CLI_LOGGER = 'jhipster:cli';
 export default class Logger {
   adapter: TerminalAdapter;
   debugger: Debugger;
-  debugEnabled: boolean;
 
   constructor({ adapter, namespace = 'jhipster', debugEnabled }: LoggerOptions) {
     this.adapter = adapter;
@@ -59,15 +58,13 @@ export default class Logger {
 
     const cliLogger = namespace === CLI_LOGGER;
     if (cliLogger) {
-      this.debugEnabled = debugEnabled || process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
-    } else {
-      this.debugEnabled = debugEnabled ?? false;
+      debugEnabled = debugEnabled || process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
+      if (debugEnabled) {
+        this.info('Debug logging is on');
+      }
     }
     if (debugEnabled) {
       this.debugger.enabled = true;
-    }
-    if (cliLogger && this.debugEnabled) {
-      this.info('Debug logging is on');
     }
   }
 
