@@ -1,12 +1,14 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import Settings from '@/account/settings/settings.vue';
-import SettingsClass from '@/account/settings/settings.component';
+import type SettingsComponent from '@/account/settings/settings.component';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
+
+type SettingsComponentType = Vue & InstanceType<typeof SettingsComponent>;
 
 const localVue = createLocalVue();
 
@@ -22,8 +24,7 @@ const axiosStub = {
 };
 
 describe('Settings Component', () => {
-  let wrapper: Wrapper<SettingsClass>;
-  let settings: SettingsClass;
+  let settings: SettingsComponentType;
   const account = {
     firstName: 'John',
     lastName: 'Doe',
@@ -35,7 +36,7 @@ describe('Settings Component', () => {
     axiosStub.post.reset();
 
     store.commit('authenticated', account);
-    wrapper = shallowMount<SettingsClass>(Settings,
+    const wrapper = shallowMount<SettingsComponentType>(Settings,
       {
         store,
 <%_ if (enableTranslation) { _%>
