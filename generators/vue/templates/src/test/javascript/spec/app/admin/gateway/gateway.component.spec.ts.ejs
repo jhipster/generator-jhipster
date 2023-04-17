@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import GatewayComponent from '@/admin/gateway/gateway.vue';
 import GatewayClass from '@/admin/gateway/gateway.component';
@@ -12,7 +13,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('Gateway Component', () => {

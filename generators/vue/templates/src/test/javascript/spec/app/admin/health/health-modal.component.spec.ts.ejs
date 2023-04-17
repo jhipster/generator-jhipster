@@ -1,4 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import HealthModal from '@/admin/health/health-modal.vue';
 import HealthModalClass from '@/admin/health/health-modal.component';
@@ -8,7 +10,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 localVue.component('font-awesome-icon', {});
 const healthsService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 

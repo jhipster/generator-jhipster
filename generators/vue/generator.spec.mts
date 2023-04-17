@@ -132,13 +132,6 @@ describe(`generator - ${clientFramework}`, () => {
                 "import LogsService from './admin/logs/logs.service';\n" +
                 "import ConfigurationService from '@/admin/configuration/configuration.service';"
             );
-            assertion(
-              `${clientSrcDir}app/main.ts`,
-              '    healthService: () => new HealthService(),\n' +
-                '    configurationService: () => new ConfigurationService(),\n' +
-                '    logsService: () => new LogsService(),\n' +
-                '    metricsService: () => new MetricsService(),'
-            );
 
             assertion(
               `${clientSrcDir}app/router/admin.ts`,

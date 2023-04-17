@@ -32,6 +32,7 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
   <%_ } _%>
 <%_ } _%>
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
@@ -62,7 +63,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 const router = new Router();
 localVue.use(Router);
 localVue.use(ToastPlugin);

@@ -1,12 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Vue, { provide } from 'vue';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
+import { useStore } from '@/store';
+
 import App from './app.vue';
-import Vue2Filters from 'vue2-filters';
-import { ToastPlugin } from 'bootstrap-vue';
 import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
@@ -48,17 +47,14 @@ Vue.config.productionTip = false;
 config.initVueApp(Vue);
 config.initFortAwesome(Vue);
 bootstrapVueConfig.initBootstrapVue(Vue);
-Vue.use(Vue2Filters);
-Vue.use(ToastPlugin);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 Vue.component('infinite-loading', InfiniteLoading);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
 <%_ } _%>
-const store = config.initVueXStore(Vue);
-
+const store = useStore();
 <%_ if (communicationSpringWebsocket) { _%>
 const trackerService = new TrackerService(router, store<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
@@ -140,33 +136,33 @@ setupAxiosInterceptors(
   components: { App },
   template: '<App/>',
   router,
-  provide: {
-    loginService: () => loginService,
+  setup() {
+    provide('loginService', () => loginService);
 <%_ if (generateUserManagement) { _%>
-    activateService: () => new ActivateService(),
-    registerService: () => new RegisterService(),
-    userManagementService: () => new UserManagementService(),
+    provide('activateService', () => new ActivateService());
+    provide('registerService', () => new RegisterService());
+    provide('userManagementService', () => new UserManagementService());
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-    gatewayService: () => new GatewayService(),
+    provide('gatewayService', () => new GatewayService());
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-    healthService: () => new HealthService(),
-    configurationService: () => new ConfigurationService(),
-    logsService: () => new LogsService(),
-    metricsService: () => new MetricsService(),
+    provide('healthService', () => new HealthService());
+    provide('configurationService', () => new ConfigurationService());
+    provide('logsService', () => new LogsService());
+    provide('metricsService', () => new MetricsService());
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-    trackerService: () => trackerService,
+    provide('trackerService', () => trackerService);
 <%_ } %>
 <%_ if (enableTranslation) { _%>
-    translationService: () => translationService,
+    provide('translationService', () => translationService);
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    accountService: () => accountService,
-    alertService: () => new AlertService(),
+    provide('accountService', () => accountService);
+    provide('alertService', () => new AlertService());
 <%_ if (applicationTypeMicroservice && microfrontend) { _%>
-    microfrontendI18n: false,
+    provide('microfrontendI18n', false);
 <%_ } _%>
   },
 <%_ if (enableTranslation) { _%>

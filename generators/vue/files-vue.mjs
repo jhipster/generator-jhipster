@@ -83,6 +83,7 @@ export const vueFiles = {
         'shared/config/dayjs.ts',
         'shared/config/store/account-store.ts',
         'shared/security/authority.ts',
+        'store.ts',
         'router/index.ts',
         'router/admin.ts',
         'router/pages.ts',

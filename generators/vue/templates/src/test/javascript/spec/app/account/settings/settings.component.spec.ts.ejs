@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import Settings from '@/account/settings/settings.vue';
 import SettingsClass from '@/account/settings/settings.component';
@@ -13,7 +14,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),

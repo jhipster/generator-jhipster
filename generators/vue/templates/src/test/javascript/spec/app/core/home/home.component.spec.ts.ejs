@@ -1,11 +1,13 @@
 import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
 import Home from '@/core/home/home.vue';
 import HomeClass from '@/core/home/home.component';
+
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
-const store = config.initVueXStore(localVue);
+const store = useStore();
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>

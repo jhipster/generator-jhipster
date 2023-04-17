@@ -1,6 +1,8 @@
 import { createLocalVue, Wrapper, shallowMount } from '@vue/test-utils';
 import Error from '@/core/error/error.vue';
 import ErrorClass from '@/core/error/error.component';
+
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import router from '@/router';
 import LoginService from '@/account/login.service';
@@ -10,7 +12,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {

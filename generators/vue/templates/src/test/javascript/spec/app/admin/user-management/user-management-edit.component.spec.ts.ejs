@@ -6,6 +6,7 @@ import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
 import UserManagementEditClass from '@/admin/user-management/user-management-edit.component';
@@ -22,7 +23,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 const axiosStub = {
