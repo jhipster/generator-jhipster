@@ -48,4 +48,7 @@ export default function cleanupOldFilesTask({ application } = {}) {
   if (this.isJhipsterVersionLessThan('7.4.2')) {
     this.removeFile(`${application.clientSrcDir}app/entities/user/user.oauth2.service.ts`);
   }
+  if (this.isJhipsterVersionLessThan('7.10.1')) {
+    this.removeFile('tsconfig.spec.json');
+  }
 }
