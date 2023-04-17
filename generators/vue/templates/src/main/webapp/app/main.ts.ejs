@@ -139,7 +139,6 @@ setupAxiosInterceptors(
   setup() {
     provide('loginService', () => loginService);
 <%_ if (generateUserManagement) { _%>
-    provide('activateService', () => new ActivateService());
     provide('registerService', () => new RegisterService());
     provide('userManagementService', () => new UserManagementService());
 <%_ } _%>
