@@ -22,7 +22,7 @@
     "@rushstack/eslint-patch": "1.2.0",
     "@types/jest": "29.5.0",
     "@types/node": "16.18.23",
-    "@types/sinon": "10.0.13",
+    "@types/sinon": "10.0.14",
     "@types/vuelidate": "0.7.16",
     "@vue/eslint-config-prettier": "7.1.0",
     "@vue/eslint-config-typescript": "10.0.0",
