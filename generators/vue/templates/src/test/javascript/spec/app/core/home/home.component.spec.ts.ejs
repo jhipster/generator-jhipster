@@ -1,9 +1,11 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Home from '@/core/home/home.vue';
-import HomeClass from '@/core/home/home.component';
+import type HomeComponent from '@/core/home/home.component';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
+
+type HomeComponentType = Vue & InstanceType<typeof HomeComponent>;
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
@@ -14,8 +16,7 @@ const i18n = config.initI18N(localVue);
 localVue.component('router-link', {});
 
 describe('Home', () => {
-  let home: HomeClass;
-  let wrapper: Wrapper<HomeClass>;
+  let home: HomeComponentType;
 <%_ if (authenticationTypeJwt) { _%>
   const loginService = { openLogin: jest.fn() };
 <%_ } else if (authenticationTypeSession) { _%>
@@ -25,7 +26,7 @@ describe('Home', () => {
 <%_ } _%>
 
   beforeEach(() => {
-    wrapper = shallowMount<HomeClass>(Home, {
+    const wrapper = shallowMount<HomeComponentType>(Home, {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
