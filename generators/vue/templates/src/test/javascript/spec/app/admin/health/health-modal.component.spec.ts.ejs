@@ -1,9 +1,11 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import HealthModal from '@/admin/health/health-modal.vue';
-import HealthModalClass from '@/admin/health/health-modal.component';
+import type HealthModalComponent from '@/admin/health/health-modal.component';
+
+type HealthModalComponentType = Vue & InstanceType<typeof HealthModalComponent>;
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
@@ -15,11 +17,10 @@ localVue.component('font-awesome-icon', {});
 const healthsService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 
 describe('Health Modal Component', () => {
-let wrapper: Wrapper<HealthModalClass>;
-  let healthModal: HealthModalClass;
+  let healthModal: HealthModalComponentType;
 
   beforeEach(() => {
-    wrapper = shallowMount<HealthModalClass>(HealthModal, {
+    const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
       propsData: {
         currentHealth: {},
       },
@@ -28,8 +29,8 @@ let wrapper: Wrapper<HealthModalClass>;
 <%_ } _%>
       localVue,
       provide: {
-        healthService: () => healthsService
-      }
+        healthService: () => healthsService,
+      },
     });
     healthModal = wrapper.vm;
   });
@@ -50,7 +51,7 @@ let wrapper: Wrapper<HealthModalClass>;
 
   describe('readableValue should transform data', () => {
     it('to string when is an object', () => {
-      const result = healthModal.readableValue({'data': 1000});
+      const result = healthModal.readableValue({ data: 1000 });
 
       expect(result).toBe('{"data":1000}');
     });
@@ -64,21 +65,20 @@ let wrapper: Wrapper<HealthModalClass>;
 });
 
 describe('Health Modal Component for diskSpace', () => {
-  let wrapper: Wrapper<HealthModalClass>;
-    let healthModal: HealthModalClass;
+  let healthModal: HealthModalComponentType;
 
-    beforeEach(() => {
-    wrapper = shallowMount<HealthModalClass>(HealthModal, {
+  beforeEach(() => {
+    const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
       propsData: {
-        currentHealth: {name: 'diskSpace'},
+        currentHealth: { name: 'diskSpace' },
       },
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
       localVue,
       provide: {
-        healthService: () => healthsService
-      }
+        healthService: () => healthsService,
+      },
     });
     healthModal = wrapper.vm;
   });

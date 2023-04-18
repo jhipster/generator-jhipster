@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -7,8 +7,10 @@ import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import Health from '@/admin/health/health.vue';
 import HealthModal from '@/admin/health/health-modal.vue';
-import HealthClass from '@/admin/health/health.component';
+import type HealthComponent from '@/admin/health/health.component';
 import HealthService from '@/admin/health/health.service';
+
+type HealthComponentType = Vue & InstanceType<typeof HealthComponent>;
 
 const localVue = createLocalVue();
 
@@ -26,23 +28,22 @@ const axiosStub = {
 };
 
 describe('Health Component', () => {
-  let wrapper: Wrapper<HealthClass>;
-  let health: HealthClass;
+  let health: HealthComponentType;
 
   beforeEach(() => {
     axiosStub.get.resolves({});
-    wrapper = shallowMount<HealthClass>(Health, {
+    const wrapper = shallowMount<HealthComponentType>(Health, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
       localVue,
       stubs: {
-        bModal: true
+        bModal: true,
       },
       provide: {
-        healthService: () => new HealthService()
-      }
+        healthService: () => new HealthService(),
+      },
     });
     health = wrapper.vm;
   });
