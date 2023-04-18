@@ -136,9 +136,6 @@ setupAxiosInterceptors(
   router,
   setup() {
     provide('loginService', () => loginService);
-<%_ if (generateUserManagement) { _%>
-    provide('userManagementService', () => new UserManagementService());
-<%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
     provide('gatewayService', () => new GatewayService());
 <%_ } _%>
