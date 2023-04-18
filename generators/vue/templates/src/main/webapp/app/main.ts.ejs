@@ -19,8 +19,6 @@ import LogsService from './admin/logs/logs.service';
 import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-import ActivateService from './account/activate/activate.service';
-import RegisterService from './account/register/register.service';
 import UserManagementService from './admin/user-management/user-management.service';
 <%_ } _%>
 import LoginService from './account/login.service';
@@ -139,7 +137,6 @@ setupAxiosInterceptors(
   setup() {
     provide('loginService', () => loginService);
 <%_ if (generateUserManagement) { _%>
-    provide('registerService', () => new RegisterService());
     provide('userManagementService', () => new UserManagementService());
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
