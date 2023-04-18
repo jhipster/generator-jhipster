@@ -15,7 +15,6 @@ import InfiniteLoading from 'vue-infinite-loading';
 <%_ if (withAdminUi) { _%>
 import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
-import LogsService from './admin/logs/logs.service';
 import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -142,7 +141,6 @@ setupAxiosInterceptors(
 <%_ if (withAdminUi) { _%>
     provide('healthService', () => new HealthService());
     provide('configurationService', () => new ConfigurationService());
-    provide('logsService', () => new LogsService());
     provide('metricsService', () => new MetricsService());
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
