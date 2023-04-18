@@ -5752,7 +5752,7 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 The following Keycloak [best practices](https://www.keycloak.org/server/configuration-production) for production are included in the generated k8s: a production grade database PostgreSQL, the \`edge\` deployment mode, high availability through clustered deployment, and \`HOSTNAME\` configuration. HTTP/TLS is not enabled for ease of deployment, but it is required for a secure exchange of credentials and other sensitive data with Keycloak, preventing several attack vectors.
 
-if you are using minikube, install the ingress controller for [cloud deployment](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) (the minikube ingress add on does not work on macOS or Windows).
+If you are using minikube, install the ingress controller for [cloud deployment](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) (the minikube ingress add on does not work on macOS or Windows).
 
 \`\`\`
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
