@@ -3,7 +3,9 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
-import MetricsModalClass from '@/admin/metrics/metrics-modal.component';
+import type MetricsModalComponent from '@/admin/metrics/metrics-modal.component';
+
+type MetricsModalComponentType = Vue & InstanceType<typeof MetricsModalComponent>;
 
 const localVue = createLocalVue();
 
@@ -14,14 +16,20 @@ const i18n = config.initI18N(localVue);
 const store = useStore();
 
 describe('Metrics Component', () => {
-  let wrapper: Wrapper<MetricsModalClass>;
-  let metricsModal: MetricsModalClass;
+  let metricsModal: MetricsModalComponentType;
+  let wrapper: Wrapper<MetricsModalComponentType>;
 
   beforeEach(() => {
-    wrapper = shallowMount<MetricsModalClass>(MetricsModal, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
+    wrapper = shallowMount<MetricsModalComponentType>(MetricsModal, {
+      store,
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
+      localVue,
+    });
     metricsModal = wrapper.vm;
   });
-  
+
   describe('init', () => {
     it('should count the numbers of each thread type', async () => {
       await wrapper.setProps({
@@ -31,8 +39,8 @@ describe('Metrics Component', () => {
           { name: 'test3', threadState: 'TIMED_WAITING' },
           { name: 'test4', threadState: 'BLOCKED' },
           { name: 'test5', threadState: 'BLOCKED' },
-          { name: 'test5', threadState: 'NONE' }
-        ]
+          { name: 'test5', threadState: 'NONE' },
+        ],
       });
 
       expect(metricsModal.threadDumpData.threadDumpRunnable).toBe(1);
