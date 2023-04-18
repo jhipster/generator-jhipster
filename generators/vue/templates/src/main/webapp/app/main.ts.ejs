@@ -28,9 +28,6 @@ import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-import GatewayService from '@/admin/gateway/gateway.service';
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
@@ -136,9 +133,6 @@ setupAxiosInterceptors(
     useTrackerService();
 <%_ } _%>
     provide('loginService', () => loginService);
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-    provide('gatewayService', () => new GatewayService());
-<%_ } _%>
 <%_ if (withAdminUi) { _%>
     provide('healthService', () => new HealthService());
     provide('metricsService', () => new MetricsService());
