@@ -1,15 +1,17 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
-import SessionsClass from '@/account/sessions/sessions.component';
+import type SessionsComponent from '@/account/sessions/sessions.component';
 import Sessions from '@/account/sessions/sessions.vue';
 import router from '@/router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
+
+type SessionsComponentType = Vue & InstanceType<typeof SessionsComponent>;
 
 const localVue = createLocalVue();
 
@@ -25,8 +27,7 @@ const axiosStub = {
 };
 
 describe('Sessions Component', () => {
-  let wrapper: Wrapper<SessionsClass>;
-  let sessions: SessionsClass;
+  let sessions: SessionsComponentType;
 
   beforeEach(() => {
     axiosStub.get.reset();
@@ -37,7 +38,7 @@ describe('Sessions Component', () => {
       login: 'username'
     });
 
-    wrapper = shallowMount<SessionsClass>(Sessions, {
+    const wrapper = shallowMount<SessionsComponentType>(Sessions, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,
