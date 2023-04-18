@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import AccountService from '@/account/account.service';
@@ -9,7 +9,9 @@ import TranslationService from '@/locale/translation.service';
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import LoginForm from '@/account/login-form/login-form.vue';
-import LoginFormClass from '@/account/login-form/login-form.component';
+import type LoginFormComponent from '@/account/login-form/login-form.component';
+
+type LoginFormComponentType = Vue & InstanceType<typeof LoginFormComponent>;
 
 const localVue = createLocalVue();
 localVue.component('b-alert', {});
@@ -32,14 +34,13 @@ const axiosStub = {
 };
 
 describe('LoginForm Component', () => {
-  let wrapper: Wrapper<LoginFormClass>;
-  let loginForm: LoginFormClass;
+  let loginForm: LoginFormComponentType;
 
   beforeEach(() => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
 
-    wrapper = shallowMount<LoginFormClass>(LoginForm,
+    const wrapper = shallowMount<LoginFormComponentType>(LoginForm,
       {
         store,
         <%_ if (enableTranslation) { _%>
