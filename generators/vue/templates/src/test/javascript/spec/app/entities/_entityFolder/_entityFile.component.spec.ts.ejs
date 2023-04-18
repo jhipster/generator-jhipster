@@ -20,16 +20,18 @@
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
-import <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
-import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
+import <%= entityAngularName %> from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
+import type <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import AlertService from '@/shared/alert/alert.service';
+
+type <%= entityAngularName %>ComponentType = Vue & InstanceType<typeof <%= entityAngularName %>Component>;
 
 const localVue = createLocalVue();
 localVue.use(ToastPlugin);
@@ -58,15 +60,14 @@ const bModalStub = {
 
 describe('Component Tests', () => {
   describe('<%= entityAngularName %> Management Component', () => {
-    let wrapper: Wrapper<<%= entityAngularName %>Class>;
-    let comp: <%= entityAngularName %>Class;
+    let comp: <%= entityAngularName %>ComponentType;
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
       <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>Component, {
+      const wrapper = shallowMount<<%= entityAngularName %>ComponentType>(<%= entityAngularName %>, {
         store,
 <%_ if (enableTranslation) { _%>
         i18n,
