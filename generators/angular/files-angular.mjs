@@ -371,7 +371,7 @@ export const files = {
       templates: ['core/auth/auth-jwt.service.ts', 'core/auth/auth-jwt.service.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeSession || generator.authenticationTypeOauth2,
+      condition: generator => generator.authenticationUsesCsrf,
       ...clientApplicationBlock,
       templates: ['core/auth/auth-session.service.ts'],
     },

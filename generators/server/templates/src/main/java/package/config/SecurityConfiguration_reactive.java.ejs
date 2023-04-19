@@ -27,7 +27,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
@@ -100,7 +100,7 @@ import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 <%_ } _%>
@@ -111,7 +111,7 @@ import org.springframework.security.web.server.savedrequest.NoOpServerRequestCac
 <%_ } _%>
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -212,7 +212,7 @@ public class SecurityConfiguration {
                 pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**")
             )))
             .csrf(csrf -> csrf
-<%_ if ((authenticationTypeSession || authenticationTypeOauth2) && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
                 // See https://stackoverflow.com/q/74447118/65681
                 .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler()))

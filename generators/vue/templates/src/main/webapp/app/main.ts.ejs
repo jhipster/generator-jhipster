@@ -53,7 +53,7 @@ const store = useStore();
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
 const loginService = new LoginService();
-const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, (<any>Vue).cookie<%_ } _%>);
+const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%><%_ if (authenticationUsesCsrf) { _%>, (<any>Vue).cookie<%_ } _%>);
 
 router.beforeEach(async (to, from, next) => {
   // Make sure login modal is closed

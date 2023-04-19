@@ -10,7 +10,7 @@ export default class AccountService {
 <%_ if (enableTranslation) { _%>
     private translationService: TranslationService,
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
     private cookie: any,
 <%_ } _%>
   ) {
