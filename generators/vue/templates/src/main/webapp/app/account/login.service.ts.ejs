@@ -12,9 +12,9 @@ export default class LoginService {
     instance.$emit('bv::show::modal','login-page');
   }
 <%_ } else { _%>
-  public login(loc = window.location) {
-    const port = (loc.port ? ':' + loc.port : '');
-    let contextPath = location.pathname;
+  public login(loc: { href: string; hostname: string; pathname: string; port?: string } = window.location) {
+    const port = loc.port ? `:${loc.port}` : '';
+    let contextPath = loc.pathname;
     if (contextPath.endsWith('accessdenied')) {
       contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
     }
