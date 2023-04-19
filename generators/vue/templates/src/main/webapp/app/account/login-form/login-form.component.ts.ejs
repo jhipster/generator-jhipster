@@ -46,7 +46,7 @@ export default defineComponent({
 
           this.authenticationError = false;
           this.$root.$emit('bv::hide::modal', 'login-page');
-          this.accountService.retrieveAccount();
+          this.accountService().retrieveAccount();
         })
         .catch(error => {
           this.authenticationError = true;
