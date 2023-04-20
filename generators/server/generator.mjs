@@ -182,9 +182,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           }
 
           try {
-            await this.spawnCommand('./npmw', ['install'], { preferLocal: true });
+            const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
+            await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
           } catch (error) {
-            this.logger.error(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
+            this.logger.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
           }
           return true;
         }.bind(this),
