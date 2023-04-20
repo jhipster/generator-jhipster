@@ -1,19 +1,18 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 export default defineComponent({
-  setup() {
-    const page: Ref<number> = ref();
-    const total: Ref<number> = ref();
-    const itemsPerPage: Ref<number> = ref();
-    const i18nEnabled: Ref<boolean> = ref(true);
-    const first = computed(() => ((page.value - 1) * itemsPerPage.value === 0 ? 1 : (page.value - 1) * itemsPerPage.value + 1));
-    const second = computed(() => (page.value * itemsPerPage.value < total.value ? page.value * itemsPerPage.value : total.value));
+  props: {
+    page: Number,
+    total: Number,
+    itemsPerPage: Number,
+  },
+  setup(props) {
+    const { page, total, itemsPerPage} = props;
+
+    const first = computed(() => ((page - 1) * itemsPerPage === 0 ? 1 : (page - 1) * itemsPerPage + 1));
+    const second = computed(() => (page * itemsPerPage < total ? page * itemsPerPage : total));
 
     return {
-      page,
-      total,
-      itemsPerPage,
-      i18nEnabled,
       first,
       second,
     };
