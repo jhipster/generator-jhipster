@@ -1,18 +1,18 @@
+<%_ if (enableTranslation) { _%>
 import { createLocalVue } from '@vue/test-utils';
+<%_ } %>
 import axios from 'axios';
 import sinon from 'sinon';
 
+import { useStore } from '@/store';
 import AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } %>
 
-import {
-  initVueXStore,
 <%_ if (enableTranslation) { _%>
-  initI18N,
+import { initI18N } from '@/shared/config/config'; 
 <%_ } %>
-} from '@/shared/config/config';
 import { defaultAccountState } from '@/shared/config/store/account-store';
 
 const resetStore = store => {
@@ -32,8 +32,10 @@ const axiosStub = {
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 const mockedCookie = { get: jest.fn(() => { return 'token'; }) };
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
 const localVue = createLocalVue();
-const store = initVueXStore(localVue);
+<%_ } %>
+const store = useStore();
 
 describe('Account Service test suite', () => {
 <%_ if (enableTranslation) { _%>

@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
 import MetricsModalClass from '@/admin/metrics/metrics-modal.component';
@@ -10,7 +11,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 describe('Metrics Component', () => {
   let wrapper: Wrapper<MetricsModalClass>;

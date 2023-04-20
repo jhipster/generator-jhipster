@@ -1,24 +1,44 @@
-import { createLocalVue, Wrapper, shallowMount } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
+import VueRouter from 'vue-router';
+
 import Error from '@/core/error/error.vue';
-import ErrorClass from '@/core/error/error.component';
+import type ErrorComponent from '@/core/error/error.component';
+
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
-import router from '@/router';
 import LoginService from '@/account/login.service';
 
+type ErrorComponentType = Vue & InstanceType<typeof ErrorComponent>;
+
 const localVue = createLocalVue();
+localVue.use(VueRouter);
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {
-let error: ErrorClass;
-let wrapper: Wrapper<ErrorClass>;
+  let error: ErrorComponentType;
   let loginService: LoginService;
+  let router: VueRouter;
 
   beforeEach(() => {
+    router = new VueRouter({
+      routes: [
+        {
+          path: '/forbidden',
+          name: 'Forbidden',
+          meta: { error403: true },
+        },
+        {
+          path: '/not-found',
+          name: 'NotFound',
+          meta: { error404: true },
+        },
+      ],
+    });
 <%_ if (authenticationTypeJwt) { _%>
     loginService = { openLogin: jest.fn() };
 <%_ } else if (authenticationTypeSession) { _%>
@@ -26,7 +46,16 @@ let wrapper: Wrapper<ErrorClass>;
 <%_ } else if (authenticationTypeOauth2) { _%>
     loginService = { login: jest.fn(), logout: jest.fn() };
 <%_ } _%>
-    wrapper = shallowMount<ErrorClass>(Error, {
+  });
+
+  it('should have retrieve custom error on routing', () => {
+    router.addRoute({
+      path: '/custom-error',
+      name: 'CustomMessage',
+      meta: { errorMessage: customErrorMsg },
+    });
+    router.push('/custom-error');
+    const wrapper = shallowMount<ErrorComponentType>(Error, {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
@@ -34,14 +63,10 @@ let wrapper: Wrapper<ErrorClass>;
       router,
       localVue,
       provide: {
-        loginService: () => loginService
-      }
+        loginService: () => loginService,
+      },
     });
     error = wrapper.vm;
-  });
-
-  it('should have retrieve custom error on routing', () => {
-    error.beforeRouteEnter({meta: { errorMessage: customErrorMsg}}, null, cb => cb(error));
 
     expect(error.errorMessage).toBe(customErrorMsg);
     expect(error.error403).toBeFalsy();
@@ -54,7 +79,19 @@ let wrapper: Wrapper<ErrorClass>;
   });
 
   it('should have set forbidden error on routing', () => {
-    error.beforeRouteEnter({meta: { error403: true}}, null, cb => cb(error));
+    router.push('/forbidden');
+    const wrapper = shallowMount<ErrorComponentType>(Error, {
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
+      store,
+      router,
+      localVue,
+      provide: {
+        loginService: () => loginService,
+      },
+    });
+    error = wrapper.vm;
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeTruthy();
@@ -67,7 +104,19 @@ let wrapper: Wrapper<ErrorClass>;
   });
 
   it('should have set not found error on routing', () => {
-    error.beforeRouteEnter({meta: { error404: true}}, null, cb => cb(error));
+    router.push('/not-found');
+    const wrapper = shallowMount<ErrorComponentType>(Error, {
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
+      store,
+      router,
+      localVue,
+      provide: {
+        loginService: () => loginService,
+      },
+    });
+    error = wrapper.vm;
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
@@ -79,47 +128,24 @@ let wrapper: Wrapper<ErrorClass>;
 <%_ } _%>
   });
 
-  it('should have retrieve custom error on init', () => {
-    error.init(customErrorMsg, false, false);
-
-    expect(error.errorMessage).toBe(customErrorMsg);
-    expect(error.error403).toBeFalsy();
-    expect(error.error404).toBeFalsy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-<%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
+  it('should have set default on no error', () => {
+    router.addRoute({
+      path: '/no-error',
+      name: 'NoError',
+    });
+    router.push('/no-error');
+    const wrapper = shallowMount<ErrorComponentType>(Error, {
+<%_ if (enableTranslation) { _%>
+      i18n,
 <%_ } _%>
-  });
-
-  it('should have set forbidden error on init', () => {
-    error.init(null, true, false);
-
-    expect(error.errorMessage).toBeNull();
-    expect(error.error403).toBeTruthy();
-    expect(error.error404).toBeFalsy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalled();
-<%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalled();
-<%_ } _%>
-  });
-
-  it('should have set not found error on init', () => {
-    error.init(null, false, true);
-
-    expect(error.errorMessage).toBeNull();
-    expect(error.error403).toBeFalsy();
-    expect(error.error404).toBeTruthy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-<%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
-<%_ } _%>
-  });
-
-  it('should have set default on init', () => {
-    error.init();
+      store,
+      router,
+      localVue,
+      provide: {
+        loginService: () => loginService,
+      },
+    });
+    error = wrapper.vm;
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
