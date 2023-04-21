@@ -1,8 +1,9 @@
-import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
 import AlertService from '@/shared/alert/alert.service';
-import { defineComponent, inject, ref, Ref } from 'vue';
 import { useRoute } from 'vue-router/composables';
 
 const loginValidator = (value: string) => {
@@ -75,6 +76,7 @@ export default defineComponent({
       authorities,
       languages,
       userManagementService,
+      v$: useVuelidate(),
     };
   },
   methods: {

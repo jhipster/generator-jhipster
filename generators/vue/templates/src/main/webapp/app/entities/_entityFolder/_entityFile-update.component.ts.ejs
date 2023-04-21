@@ -1,5 +1,6 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router/composables';
+import { useVuelidate } from '@vuelidate/core'
 <%_ if (anyFieldIsBlobDerived) { _%>
   import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
@@ -39,7 +40,8 @@ import { useRoute, useRouter } from 'vue-router/composables';
   }
   if (fieldsContainedValidators.length !== 0) {
     let validators = fieldsContainedValidators.toString();
-  _%>import {<%= validators %>} from 'vuelidate/lib/validators';
+  _%>
+import {<%= validators %>} from '@vuelidate/validators';
 <%_ } _%>
 <%_
   let dayJsIncluded = false;
@@ -203,6 +205,7 @@ _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
       ...dataUtils,
 <%_ } _%>
+      v$: useVuelidate(),
     };
   },
   created(): void {
