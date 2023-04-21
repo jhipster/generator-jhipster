@@ -1,5 +1,7 @@
 import { defineComponent, ref, Ref, computed, PropType } from 'vue';
 
+import { filterBy } from '@/shared/computables';
+
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>MetricsModal',
   props: {
@@ -8,7 +10,8 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const threadDumpFilter: Ref<any> = ref(null);
+    const threadDumpFilter: Ref<any> = ref('');
+    const filteredThreadDump = computed(() => filterBy(props.threadDump, { filterByTerm: threadDumpFilter.value }));
 
     const threadDumpData = computed(() => {
       const data = {
@@ -38,6 +41,7 @@ export default defineComponent({
     return {
       threadDumpFilter,
       threadDumpData,
+      filteredThreadDump,
     };
   },
   methods: {

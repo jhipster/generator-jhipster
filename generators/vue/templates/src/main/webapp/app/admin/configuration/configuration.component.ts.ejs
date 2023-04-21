@@ -1,4 +1,6 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+
+import { orderAndFilterBy } from '@/shared/computables';
 import ConfigurationService from './configuration.service';
 
 export default defineComponent({
@@ -13,6 +15,14 @@ export default defineComponent({
     const configKeys: Ref<any[]> = ref([]);
     const filtered = ref('');
 
+    const filteredConfiguration = computed(() =>
+      orderAndFilterBy(configuration.value, {
+        filterByTerm: filtered.value,
+        orderByProp: orderProp.value,
+        reverse: reverse.value,
+      })
+    );
+
     return {
       configurationService,
       orderProp,
@@ -21,6 +31,7 @@ export default defineComponent({
       configuration,
       configKeys,
       filtered,
+      filteredConfiguration,
     };
   },
   mounted() {

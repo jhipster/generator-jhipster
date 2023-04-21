@@ -1,4 +1,6 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+
+import { orderAndFilterBy } from '@/shared/computables';
 import LogsService from './logs.service';
 
 export default defineComponent({
@@ -10,6 +12,13 @@ export default defineComponent({
     const filtered = ref('');
     const orderProp = ref('name');
     const reverse = ref(false);
+    const filteredLoggers = computed(() =>
+      orderAndFilterBy(loggers.value, {
+        filterByTerm: filtered.value,
+        orderByProp: orderProp.value,
+        reverse: reverse.value,
+      })
+    );
 
     return {
       logsService,
@@ -17,6 +26,7 @@ export default defineComponent({
       filtered,
       orderProp,
       reverse,
+      filteredLoggers,
     };
   },
   mounted() {

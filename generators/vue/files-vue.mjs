@@ -112,6 +112,8 @@ export const vueFiles = {
         'core/ribbon/ribbon.vue',
         'core/ribbon/ribbon.component.ts',
         'shared/date/filters.ts',
+        'shared/computables/arrays.ts',
+        'shared/computables/index.ts',
         'shared/sort/jhi-sort-indicator.component.ts',
         'shared/sort/jhi-sort-indicator.vue',
         'shared/sort/sorts.ts',
