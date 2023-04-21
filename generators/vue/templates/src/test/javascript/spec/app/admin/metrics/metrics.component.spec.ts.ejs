@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -7,8 +7,10 @@ import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import Metrics from '@/admin/metrics/metrics.vue';
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
-import MetricsClass from '@/admin/metrics/metrics.component';
+import type MetricsComponent from '@/admin/metrics/metrics.component';
 import MetricsService from '@/admin/metrics/metrics.service';
+
+type MetricsComponentType = Vue & InstanceType<typeof MetricsComponent>;
 
 const localVue = createLocalVue();
 
@@ -28,8 +30,7 @@ const axiosStub = {
 };
 
 describe('Metrics Component', () => {
-  let wrapper: Wrapper<MetricsClass>;
-  let metricsComponent: MetricsClass;
+  let metricsComponent: MetricsComponentType;
   const response = {
     'jvm' : {
       'PS Eden Space' : {
@@ -235,7 +236,7 @@ describe('Metrics Component', () => {
 
   beforeEach(() => {
     axiosStub.get.resolves({ data: { timers: [], gauges: []} });
-    wrapper = shallowMount<MetricsClass>(Metrics, {
+    const wrapper = shallowMount<MetricsComponentType>(Metrics, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,

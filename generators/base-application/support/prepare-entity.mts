@@ -540,18 +540,20 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.anyPropertyHasValidation =
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
-  const relationshipsByType = relationships
+  const relationshipsByOtherEntity = relationships
+    .filter(rel => !rel.otherEntity.embedded)
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
-    .reduce((relationshipsByType: any, [type, relationship]) => {
-      if (!relationshipsByType[type]) {
-        relationshipsByType[type] = [relationship];
+    .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
+      if (!relationshipsByOtherEntity[type]) {
+        relationshipsByOtherEntity[type] = [relationship];
       } else {
-        relationshipsByType[type].push(relationship);
+        relationshipsByOtherEntity[type].push(relationship);
       }
-      return relationshipsByType;
+      return relationshipsByOtherEntity;
     }, {});
 
-  entity.differentRelationships = relationshipsByType;
+  entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
+  entity.differentRelationships = relationshipsByOtherEntity;
 
   entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
 

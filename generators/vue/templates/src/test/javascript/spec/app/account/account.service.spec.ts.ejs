@@ -34,7 +34,7 @@ const mockedCookie = { get: jest.fn(() => { return 'token'; }) };
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const localVue = createLocalVue();
-<%_ } %>
+<%_ } _%>
 const store = useStore();
 
 describe('Account Service test suite', () => {

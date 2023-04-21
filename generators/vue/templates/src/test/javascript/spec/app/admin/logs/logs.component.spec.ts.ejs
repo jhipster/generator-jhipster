@@ -1,12 +1,14 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import Logs from '@/admin/logs/logs.vue';
-import LogsClass from '@/admin/logs/logs.component';
+import type LogsComponent from '@/admin/logs/logs.component';
 import LogsService from '@/admin/logs/logs.service';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
+
+type LogsComponentType = Vue & InstanceType<typeof LogsComponent>;
 
 const localVue = createLocalVue();
 
@@ -22,12 +24,17 @@ const axiosStub = {
 };
 
 describe('Logs Component', () => {
-  let wrapper: Wrapper<LogsClass>;
-  let logs: LogsClass;
+  let logs: LogsComponentType;
 
   beforeEach(() => {
     axiosStub.get.resolves({});
-    wrapper = shallowMount<LogsClass>(Logs, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {logsService: () => new LogsService() } });
+    const wrapper = shallowMount<LogsComponentType>(Logs, {
+      store,
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
+      localVue,
+    });
     logs = wrapper.vm;
   });
 
@@ -57,10 +64,9 @@ describe('Logs Component', () => {
       await logs.$nextTick();
 
       // THEN
-      expect(axiosStub.post.calledWith('management/loggers/main', {configuredLevel: 'ERROR'})).toBeTruthy();
+      expect(axiosStub.post.calledWith('management/loggers/main', { configuredLevel: 'ERROR' })).toBeTruthy();
       expect(axiosStub.get.calledWith('management/loggers')).toBeTruthy();
     });
-
   });
 
   describe('change order', () => {

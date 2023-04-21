@@ -20,17 +20,17 @@
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import VueRouter from 'vue-router';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
-import <%= entityAngularName %>DetailComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
-import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
+import <%= entityAngularName %>Detail from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
+import type <%= entityAngularName %>DetailsComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+
+type <%= entityAngularName %>DetailsComponentType = Vue & InstanceType<typeof <%= entityAngularName %>DetailsComponent>;
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -43,52 +43,62 @@ const store = useStore();
 localVue.component('font-awesome-icon', {});
 localVue.component('router-link', {});
 
-describe('Component Tests', () => {
+const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
+describe('Component Tests', () => {
   describe('<%= entityAngularName %> Management Detail Component', () => {
-    let wrapper: Wrapper<<%= entityAngularName %>Class>;
-    let comp: <%= entityAngularName %>Class;
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
+    let mountOptions: ThisTypedShallowMountOptions<<%= entityAngularName %>DetailsComponentType>;
+    let router: VueRouter;
 
     beforeEach(() => {
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+      router = new VueRouter({
+        routes: [
+          {
+            path: '/<%= entityApiUrl %>/:<%= entityInstance %>Id',
+          },
+        ],
+      });
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub, alertService: () => new AlertService(), } });
-      comp = wrapper.vm;
+      mountOptions = {
+        store,
+<%_ if (enableTranslation) { _%>
+        i18n,
+<%_ } _%>
+        localVue,
+        router,
+        provide: {
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
-        <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
-
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        router.push('/<%= entityApiUrl %>/' + <%- tsKeyId %>);
+        const wrapper = shallowMount<<%= entityAngularName %>DetailsComponentType>(<%= entityAngularName %>Detail, mountOptions);
+        const comp = wrapper.vm;
+  
         // WHEN
-        comp.retrieve<%= entityAngularName %>(<%- tsKeyId %>);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
-        <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
+        expect(comp.<%= entityInstance %>).toBe(<%= entityInstance %>Sample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        router.push('/');
+        router.push('/cass-bank-accounts/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
+        const wrapper = shallowMount<<%= entityAngularName %>DetailsComponentType>(<%= entityAngularName %>Detail, mountOptions);
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 

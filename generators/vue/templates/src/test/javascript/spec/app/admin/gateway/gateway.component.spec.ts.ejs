@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
-import GatewayComponent from '@/admin/gateway/gateway.vue';
-import GatewayClass from '@/admin/gateway/gateway.component';
+import GatewayVue from '@/admin/gateway/gateway.vue';
+import type GatewayComponent from '@/admin/gateway/gateway.component';
 import GatewayService from '@/admin/gateway/gateway.service';
+
+type GatewayComponentType = Vue & InstanceType<typeof GatewayComponent>;
 
 const localVue = createLocalVue();
 
@@ -17,11 +19,20 @@ const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('Gateway Component', () => {
-  let wrapper: Wrapper<GatewayClass>;
-  let comp : GatewayClass;
+  let wrapper: Wrapper<GatewayComponentType>;
+  let comp: GatewayComponentType;
 
   beforeEach(() => {
-    wrapper = shallowMount<GatewayClass>(GatewayComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {gatewayService: () => new GatewayService() } });
+    const gatewayService = new GatewayService();
+    jest.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
+    wrapper = shallowMount<GatewayComponentType>(GatewayVue, {
+      store,
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
+      localVue,
+      provide: { gatewayService },
+    });
     comp = wrapper.vm;
   });
 

@@ -126,14 +126,6 @@ describe(`generator - ${clientFramework}`, () => {
 
           it(adminUiRoutingTitle, () => {
             assertion(
-              `${clientSrcDir}app/main.ts`,
-              "import HealthService from './admin/health/health.service';\n" +
-                "import MetricsService from './admin/metrics/metrics.service';\n" +
-                "import LogsService from './admin/logs/logs.service';\n" +
-                "import ConfigurationService from '@/admin/configuration/configuration.service';"
-            );
-
-            assertion(
               `${clientSrcDir}app/router/admin.ts`,
               "  const JhiConfigurationComponent = () => import('@/admin/configuration/configuration.vue');\n" +
                 "  const JhiHealthComponent = () => import('@/admin/health/health.vue');\n" +

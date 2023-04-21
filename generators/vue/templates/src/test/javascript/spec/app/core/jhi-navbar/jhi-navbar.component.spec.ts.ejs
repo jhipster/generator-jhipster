@@ -1,10 +1,12 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
-import JhiNavbarClass from '@/core/jhi-navbar/jhi-navbar.component';
+import type JhiNavbarComponent from '@/core/jhi-navbar/jhi-navbar.component';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import router from '@/router';
+
+type JhiNavbarComponentType = Vue & InstanceType<typeof JhiNavbarComponent>;
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
@@ -24,8 +26,7 @@ localVue.component('b-navbar-brand', {});
 localVue.component('b-navbar-nav', {});
 
 describe('JhiNavbar', () => {
-let jhiNavbar: JhiNavbarClass;
-let wrapper: Wrapper<JhiNavbarClass>;
+  let jhiNavbar: JhiNavbarComponentType;
 <%_ if (authenticationTypeJwt) { _%>
   const loginService = { openLogin: jest.fn() };
 <%_ } else if (authenticationTypeSession) { _%>
@@ -39,7 +40,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
 <%_ } _%>
 
   beforeEach(() => {
-    wrapper = shallowMount<JhiNavbarClass>(JhiNavbar, {
+    const wrapper = shallowMount<JhiNavbarComponentType>(JhiNavbar, {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
@@ -51,8 +52,8 @@ let wrapper: Wrapper<JhiNavbarClass>;
 <%_ if (enableTranslation) { _%>
         translationService: () => translationService,
 <%_ } _%>
-        accountService: () => accountService
-      }
+        accountService: () => accountService,
+      },
     });
     jhiNavbar = wrapper.vm;
   });

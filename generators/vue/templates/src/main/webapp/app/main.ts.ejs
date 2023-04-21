@@ -15,8 +15,6 @@ import InfiniteLoading from 'vue-infinite-loading';
 <%_ if (withAdminUi) { _%>
 import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
-import LogsService from './admin/logs/logs.service';
-import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
 import UserManagementService from './admin/user-management/user-management.service';
@@ -30,11 +28,8 @@ import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-import GatewayService from '@/admin/gateway/gateway.service';
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-import TrackerService from './admin/tracker/tracker.service';
+import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 /* tslint:disable */
 
@@ -54,7 +49,6 @@ const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = useStore();
 <%_ if (communicationSpringWebsocket) { _%>
-const trackerService = new TrackerService(router, store<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
@@ -135,22 +129,14 @@ setupAxiosInterceptors(
   template: '<App/>',
   router,
   setup() {
+<%_ if (communicationSpringWebsocket) { _%>
+    useTrackerService();
+<%_ } _%>
     provide('loginService', () => loginService);
-<%_ if (generateUserManagement) { _%>
-    provide('userManagementService', () => new UserManagementService());
-<%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-    provide('gatewayService', () => new GatewayService());
-<%_ } _%>
 <%_ if (withAdminUi) { _%>
     provide('healthService', () => new HealthService());
-    provide('configurationService', () => new ConfigurationService());
-    provide('logsService', () => new LogsService());
     provide('metricsService', () => new MetricsService());
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-    provide('trackerService', () => trackerService);
-<%_ } %>
 <%_ if (enableTranslation) { _%>
     provide('translationService', () => translationService);
 <%_ } _%>

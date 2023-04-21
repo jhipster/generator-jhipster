@@ -12,7 +12,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= clientTestDir %>', '<rootDir>/<%= clientSrcDir %>app/router', '.*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
-    '.*\\.(vue)$': '<%= microfrontend ? '@vue/vue2-jest' : 'vue-jest' %>',
+    '.*\\.(vue)$': '@vue/vue2-jest',
     '^.+\\.tsx?$': [
       'ts-jest',
       {

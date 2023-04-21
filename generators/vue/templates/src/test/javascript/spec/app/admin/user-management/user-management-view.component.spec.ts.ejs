@@ -1,18 +1,19 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueRouter from 'vue-router';
 
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import UserManagementView from '@/admin/user-management/user-management-view.vue';
-import UserManagementViewClass from '@/admin/user-management/user-management-view.component';
-import UserManagementService from '@/admin/user-management/user-management.service';
-import {Authority} from '@/shared/security/authority';
-import AlertService from '@/shared/alert/alert.service';
+import type UserManagementViewComponent from '@/admin/user-management/user-management-view.component';
+import { Authority } from '@/shared/security/authority';
+
+type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementViewComponent>;
 
 const localVue = createLocalVue();
 
@@ -24,20 +25,13 @@ const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 localVue.component('b-badge', {});
 localVue.component('router-link', {});
+localVue.use(VueRouter);
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
 };
 
 describe('UserManagementView Component', () => {
-  let wrapper: Wrapper<UserManagementViewClass>;
-  let userManagementView: UserManagementViewClass;
-
-  beforeEach(() => {
-    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userManagementService: () => new UserManagementService(), alertService: () => new AlertService(), } });
-    userManagementView = wrapper.vm;
-  });
-
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
       // GIVEN
@@ -54,12 +48,26 @@ describe('UserManagementView Component', () => {
         createdDate: null,
         lastModifiedBy: null,
         lastModifiedDate: null,
-        password: null
+        password: null,
       };
       axiosStub.get.resolves({ data: userData });
 
+      const router = new VueRouter({
+        routes: [{ path: '/:userId' }],
+      });
+      router.push('/' + <%- tsKeyId %>);
+
+      const wrapper = shallowMount<UserManagementViewComponentType>(UserManagementView, {
+        store,
+        localVue,
+        router,
+<%_ if (enableTranslation) { _%>
+        i18n,
+<%_ } _%>
+      });
+      const userManagementView = wrapper.vm;
+  
       // WHEN
-      userManagementView.init(<%- tsKeyId %>);
       await userManagementView.$nextTick();
 
       // THEN

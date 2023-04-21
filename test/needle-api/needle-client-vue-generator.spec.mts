@@ -128,7 +128,7 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
   it('menu contains the item in service', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
-      "@Provide('entityInstanceService') private entityInstanceService = () => new entityNameService();"
+      "provide('entityInstanceService', () => new entityNameService());"
     );
   });
 });

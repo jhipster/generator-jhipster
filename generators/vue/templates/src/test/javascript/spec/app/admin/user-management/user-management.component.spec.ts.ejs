@@ -1,7 +1,7 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -10,9 +10,9 @@ import { ToastPlugin } from 'bootstrap-vue';
 import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import UserManagement from '@/admin/user-management/user-management.vue';
-import UserManagementClass from '@/admin/user-management/user-management.component';
-import UserManagementService from '@/admin/user-management/user-management.service';
-import AlertService from '@/shared/alert/alert.service';
+import type UserManagementComponent from '@/admin/user-management/user-management.component';
+
+type UserManagementComponentType = Vue & InstanceType<typeof UserManagementComponent>;
 
 const localVue = createLocalVue();
 
@@ -34,8 +34,7 @@ const axiosStub = {
 };
 
 describe('UserManagement Component', () => {
-  let wrapper: Wrapper<UserManagementClass>;
-  let userManagement: UserManagementClass;
+  let userManagement: UserManagementComponentType;
 
   const account = {
     firstName: 'John',
@@ -49,7 +48,7 @@ describe('UserManagement Component', () => {
     axiosStub.get.resolves({ headers: {} });
 
     store.commit('authenticated', account);
-    wrapper = shallowMount<UserManagementClass>(UserManagement, {
+    const wrapper = shallowMount<UserManagementComponentType>(UserManagement, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,
@@ -60,10 +59,6 @@ describe('UserManagement Component', () => {
         jhiItemCount: true,
         bModal: true
       },
-      provide: {
-        userManagementService: () => new UserManagementService(),
-        alertService: () => new AlertService(),
-      }
     });
     userManagement = wrapper.vm;
   });
