@@ -45,7 +45,6 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 import VueCookie from 'vue-cookie';
 import Vuelidate from 'vuelidate';
-import Vue2Filters from 'vue2-filters';
 
 import * as filters from '@/shared/date/filters';
 
@@ -58,7 +57,6 @@ const dateTimeFormats: DateTimeFormats = {
 export function initVueApp(vue) {
   vue.use(VueCookie);
   vue.use(Vuelidate);
-  vue.use(Vue2Filters);
   filters.initFilters();
 }
 

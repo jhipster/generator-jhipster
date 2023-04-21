@@ -1,5 +1,4 @@
 import { defineComponent, ref, Ref, computed, PropType } from 'vue';
-import Vue2Filters from 'vue2-filters';
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>MetricsModal',
@@ -8,7 +7,6 @@ export default defineComponent({
       type: Array as PropType<any[]>,
     },
   },
-  mixins: [Vue2Filters.mixin],
   setup(props) {
     const threadDumpFilter: Ref<any> = ref(null);
 
