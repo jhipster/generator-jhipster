@@ -3,7 +3,7 @@ import Vue2Filters from 'vue2-filters';
 import LogsService from './logs.service';
 
 export default defineComponent({
-  name: 'Logs',
+  name: '<%=jhiPrefixCapitalized%>Logs',
   mixins: [Vue2Filters.mixin],
   setup() {
     const logsService = inject('logsService', () => new LogsService(), true);
