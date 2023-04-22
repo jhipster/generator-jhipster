@@ -711,19 +711,19 @@ export default class HerokuGenerator extends BaseGenerator {
             await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
             const herokuBuildPack = execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
             herokuBuildPack.child.stdout.on('data', async data => {
-              this.logger.info(data)
+              this.logger.info(data);
               // remote:  !     The following add-ons were automatically provisioned: . These add-ons may incur additional cost,
               // which is prorated to the second. Run `heroku addons` for more info.
               if (data.includes('Run `heroku addons` for more info.')) {
-                await execCmd(`heroku addons`);
+                await execCmd('heroku addons');
               }
 
-              this.log('')
+              this.log('');
               const prompts = [
                 {
                   type: 'list',
                   name: 'userDeployDecision',
-                  message: `Continue to deploy?`,
+                  message: 'Continue to deploy?',
                   choices: [
                     {
                       value: 'Yes',
@@ -743,14 +743,14 @@ export default class HerokuGenerator extends BaseGenerator {
                 if (props.userDeployDecision === 'Yes') {
                   this.log.info(chalk.bold('Continued deploying...'));
                 } else {
-                  this.log(this.logger)
-                  this.log.info(chalk.bold('You aborted deployment!'))
+                  this.log(this.logger);
+                  this.log.info(chalk.bold('You aborted deployment!'));
                   this.abort = true;
                   this.herokuAppName = null;
                 }
               });
               this.log('');
-            })
+            });
 
             this.logger.log(chalk.bold('\nDeploying application'));
 
