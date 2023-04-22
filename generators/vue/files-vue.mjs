@@ -229,6 +229,7 @@ export const vueFiles = {
       ...clientTestBlock,
       templates: [
         'jest.conf.js',
+        'spec/setup.js',
         'spec/tsconfig.json',
         'spec/app/account/account.service.spec.ts',
         'spec/app/core/home/home.component.spec.ts',
