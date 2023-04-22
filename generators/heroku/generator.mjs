@@ -424,6 +424,7 @@ export default class HerokuGenerator extends BaseGenerator {
               });
             } else {
               this.abort = true;
+              this.herokuAppName = null;
               if (stderr.includes('Invalid credentials')) {
                 this.logger.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
               } else {
