@@ -131,7 +131,7 @@ export default defineComponent({
     const userService = inject('userService', () => new UserService());
     const <%= relationship.otherEntity.entityInstancePlural %>: Ref<Array<any>> = ref([]);
   <%_ } else { _%>
-    const <%= relationship.otherEntity.entityInstance %>Service = inject('<%= relationship.otherEntity.entityName %>Service', () => new <%= relationship.otherEntity.entityAngularName %>Service());
+    const <%= relationship.otherEntity.entityInstance %>Service = inject('<%= relationship.otherEntity.entityInstance %>Service', () => new <%= relationship.otherEntity.entityAngularName %>Service());
     const <%= relationship.otherEntity.entityInstancePlural %>: Ref<I<%= relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>
