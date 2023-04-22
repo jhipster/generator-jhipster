@@ -429,7 +429,6 @@ export default class HerokuGenerator extends BaseGenerator {
               } else {
                 this.logger.error(err);
               }
-              done();
             }
           } else {
             done();
