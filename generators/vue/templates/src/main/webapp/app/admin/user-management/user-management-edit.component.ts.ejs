@@ -1,13 +1,13 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useVuelidate } from '@vuelidate/core'
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
 import { useAlertService } from '@/shared/alert/alert.service';
-import { useRoute, useRouter } from 'vue-router/composables';
+import { useRoute, useRouter } from 'vue-router';
 <%_ if (enableTranslation) { _%>
 import languages from '@/shared/config/languages';
 <%_ } _%>
@@ -42,6 +42,7 @@ const validations: any = {
 };
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementEdit',
   validations,
   setup() {

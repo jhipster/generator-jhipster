@@ -1,26 +1,22 @@
-import { createLocalVue, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import Ribbon from '@/core/ribbon/ribbon.vue';
-import type RibbonComponent from '@/core/ribbon/ribbon.component';
 
-import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 import { AccountStore, useStore } from '@/store';
 
-type RibbonComponentType = Vue & InstanceType<typeof RibbonComponent>;
+type RibbonComponentType = InstanceType<typeof Ribbon>;
 
-const localVue = createLocalVue();
 const pinia = createTestingPinia({ stubActions: false });
-localVue.use(PiniaVuePlugin);
-
 
 describe('Ribbon', () => {
   let ribbon: RibbonComponentType;
   let store: AccountStore;
 
   beforeEach(async () => {
-    const wrapper = shallowMount<RibbonComponentType>(Ribbon, {
-      pinia,
-      localVue
+    const wrapper = shallowMount(Ribbon, {
+      global: {
+        plugins: [pinia],
+      },
     });
     ribbon = wrapper.vm;
     await ribbon.$nextTick();

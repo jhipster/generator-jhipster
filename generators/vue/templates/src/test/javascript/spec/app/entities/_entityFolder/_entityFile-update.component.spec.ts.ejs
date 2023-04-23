@@ -18,16 +18,15 @@
 -%>
 <%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { Route } from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
-import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import AlertService from '@/shared/alert/alert.service';
 
@@ -45,14 +44,12 @@ import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities
   <%_ } _%>
 <%_ } _%>
 
-type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%= entityAngularName %>UpdateComponent>;
+type <%= entityAngularName %>UpdateComponentType = InstanceType<typeof <%= entityAngularName %>Update>;
 
-const localVue = createLocalVue();
-
-let route: Partial<Route>;
+let route: Partial<RouteLocation>;
 const routerGoMock = jest.fn();
 
-jest.mock('vue-router/composables', () => ({
+jest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
@@ -60,7 +57,7 @@ jest.mock('vue-router/composables', () => ({
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
-  let mountOptions: MountOptions<<%= entityAngularName %>UpdateComponentType>;
+  let mountOptions: MountingOptions<<%= entityAngularName %>UpdateComponentType>['global'];
   let alertService: AlertService;
 
   describe('<%= entityAngularName %> Management Update Component', () => {
@@ -81,7 +78,6 @@ describe('Component Tests', () => {
       });
 
       mountOptions = {
-        localVue,
         stubs: {
           'font-awesome-icon': true,
           'b-input-group': true,
@@ -94,15 +90,15 @@ describe('Component Tests', () => {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-          userService: () =>
-            sinon.createStubInstance<UserService>(UserService, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
+            userService: () =>
+              sinon.createStubInstance<UserService>(UserService, {
+                retrieve: sinon.stub().resolves({}),
+              } as any),
   <%_ } else { _%>
-          <%= relationship.otherEntity.entityInstance %>Service: () =>
-            sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
+            <%= relationship.otherEntity.entityInstance %>Service: () =>
+              sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
+                retrieve: sinon.stub().resolves({}),
+              } as any),
   <%_ } _%>
 <%_ } _%>
         },
@@ -116,7 +112,7 @@ describe('Component Tests', () => {
 <%_ if (anyFieldIsTimeDerived) { _%>
     describe('load', () => {
       beforeEach(() => {
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
       });
       it('Should convert date from string', () => {
@@ -139,7 +135,7 @@ describe('Component Tests', () => {
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%= entityInstance %> = <%= entityInstance %>Sample;
         <%= entityInstance %>ServiceStub.update.resolves(<%= entityInstance %>Sample);
@@ -157,7 +153,7 @@ describe('Component Tests', () => {
         // GIVEN
         const entity = {};
         <%= entityInstance %>ServiceStub.create.resolves(entity);
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%= entityInstance %> = entity;
 
@@ -183,19 +179,19 @@ describe('Component Tests', () => {
             <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
           },
         };
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%= entityInstance %>).toBe(<%= entityInstance %>Sample);
+        expect(comp.<%= entityInstance %>).toMatchObject(<%= entityInstance %>Sample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
 

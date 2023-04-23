@@ -1,23 +1,20 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
-import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { Route } from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
-import type UserManagementEditComponent from '@/admin/user-management/user-management-edit.component';
 
-type UserManagementEditComponentType = Vue & InstanceType<typeof UserManagementEditComponent>;
+type UserManagementEditComponentType = InstanceType<typeof UserManagementEdit>;
 
-const localVue = createLocalVue();
-
-let route: Partial<Route>;
+let route: Partial<RouteLocation>;
 const routerGoMock = jest.fn();
 
-jest.mock('vue-router/composables', () => ({
+jest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
@@ -28,7 +25,7 @@ describe('UserManagementEdit Component', () => {
     post: sinon.stub(axios, 'post'),
     put: sinon.stub(axios, 'put'),
   };
-  let mountOptions: MountOptions<UserManagementEditComponentType>;
+  let mountOptions: MountingOptions<UserManagementEditComponentType>['global'];
   let alertService: AlertService;
 
   beforeEach(() => {
@@ -49,8 +46,7 @@ describe('UserManagementEdit Component', () => {
       provide: {
         alertService,
       },
-      localVue,
-  };
+    };
 
     axiosStub.get.reset();
     axiosStub.post.reset();
@@ -69,8 +65,8 @@ describe('UserManagementEdit Component', () => {
           userId: '' + <%- tsKeyId %>,
         },
       };
-      const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
-      const userManagementEdit = wrapper.vm;
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
 
       // WHEN
       await userManagementEdit.$nextTick();
@@ -90,8 +86,8 @@ describe('UserManagementEdit Component', () => {
       route = {
         params: {},
       };
-      const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
-      const userManagementEdit = wrapper.vm;
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
 
       // WHEN
       await userManagementEdit.$nextTick();
@@ -126,8 +122,8 @@ describe('UserManagementEdit Component', () => {
           userId: '' + <%- tsKeyId %>,
         },
       };
-      const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
-      const userManagementEdit = wrapper.vm;
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
       await userManagementEdit.$nextTick();
 
       // WHEN
@@ -154,8 +150,8 @@ describe('UserManagementEdit Component', () => {
       route = {
         params: {},
       };
-      const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
-      const userManagementEdit = wrapper.vm;
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
       await userManagementEdit.$nextTick();
       userManagementEdit.userAccount = { authorities: [] };
 

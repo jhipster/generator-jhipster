@@ -1,18 +1,11 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
 import Metrics from '@/admin/metrics/metrics.vue';
-import type MetricsComponent from '@/admin/metrics/metrics.component';
 import MetricsService from '@/admin/metrics/metrics.service';
 
-type MetricsComponentType = Vue & InstanceType<typeof MetricsComponent>;
-
-const localVue = createLocalVue();
-
-localVue.directive('b-modal', {});
-localVue.directive('b-progress', {});
-localVue.directive('b-progress-bar', {});
+type MetricsComponentType = InstanceType<typeof Metrics>;
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -225,17 +218,23 @@ describe('Metrics Component', () => {
 
   beforeEach(() => {
     axiosStub.get.resolves({ data: { timers: [], gauges: []} });
-    const wrapper = shallowMount<MetricsComponentType>(Metrics, {
-      localVue,
-      stubs: {
-        bModal: true,
-        bProgress: true,
-        bProgressBar: true,
-        'font-awesome-icon': true,
-        'metrics-modal': true,
-      },
-      provide: {
-        metricsService: new MetricsService(),
+    const wrapper = shallowMount(Metrics, {
+      global: {
+        stubs: {
+          bModal: true,
+          bProgress: true,
+          bProgressBar: true,
+          'font-awesome-icon': true,
+          'metrics-modal': true,
+        },
+        directives: {
+          'b-modal': {},
+          'b-progress': {},
+          'b-progress-bar': {},
+        },
+        provide: {
+          metricsService: new MetricsService(),
+        },
       },
     });
     metricsComponent = wrapper.vm;
@@ -247,7 +246,7 @@ describe('Metrics Component', () => {
       axiosStub.get.resolves({ data: response });
 
       // WHEN
-      metricsComponent.refresh();
+      await metricsComponent.refresh();
       await metricsComponent.$nextTick();
 
       // THEN

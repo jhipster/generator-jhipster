@@ -13,7 +13,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= clientTestDir %>', '<rootDir>/<%= clientSrcDir %>app/router', '.*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
-    '.*\\.(vue)$': '@vue/vue2-jest',
+    '.*\\.(vue)$': '@vue/vue3-jest',
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -22,6 +22,8 @@ module.exports = {
     ],
   },
   moduleNameMapper: {
+    // Force cjs version
+    '^@vue/test-utils$': require.resolve('@vue/test-utils'),
     rxjs: '<rootDir>/node_modules/rxjs/dist/bundles/rxjs.umd.js',
     '^@/(.*)$': '<rootDir>/<%= clientSrcDir %>app/$1',
     ...pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),

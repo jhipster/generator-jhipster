@@ -39,9 +39,9 @@ describe('Axios interceptor', () => {
 describe('Axios errors interceptor', () => {
     it('should use callback on 401, 403 errors', async () => {
       const callback = sinon.spy();
-  
+
       setupAxiosConfig.setupAxiosInterceptors(callback, () => {});
-  
+
       try {
         mock.onGet().reply(401);
         await axios('/api/test');
@@ -51,9 +51,9 @@ describe('Axios errors interceptor', () => {
     });
     it('should use callback 50x errors', async () => {
       const callback = sinon.spy();
-  
+
       setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
-  
+
       try {
         mock.onGet().reply(500);
         await axios('/api/test');
@@ -63,9 +63,9 @@ describe('Axios errors interceptor', () => {
     });
     it('should not use callback for errors different 50x, 401, 403', async () => {
       const callback = sinon.spy();
-  
+
       setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
-  
+
       try {
         mock.onGet().reply(402);
         await axios('/api/test');
@@ -74,4 +74,3 @@ describe('Axios errors interceptor', () => {
       }
     });
   });
-  

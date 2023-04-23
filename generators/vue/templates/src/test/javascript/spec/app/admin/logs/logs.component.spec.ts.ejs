@@ -1,15 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import Logs from '@/admin/logs/logs.vue';
-import type LogsComponent from '@/admin/logs/logs.component';
 import LogsService from '@/admin/logs/logs.service';
 
-
-type LogsComponentType = Vue & InstanceType<typeof LogsComponent>;
-
-const localVue = createLocalVue();
-
+type LogsComponentType = InstanceType<typeof Logs>;
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -21,9 +16,7 @@ describe('Logs Component', () => {
 
   beforeEach(() => {
     axiosStub.get.resolves({});
-    const wrapper = shallowMount<LogsComponentType>(Logs, {
-      localVue,
-    });
+    const wrapper = shallowMount(Logs);
     logs = wrapper.vm;
   });
 

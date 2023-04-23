@@ -1,6 +1,6 @@
 <%_ if (enableTranslation) { _%>
-const Vue = require('vue');
-const { initI18N } = require('@/shared/config/config');
+const { config } = require('@vue/test-utils');
+const { createI18n } = require('vue-i18n');
 <%_ } _%>
 const axios = require('axios');
 
@@ -10,5 +10,11 @@ axios.interceptors.request.use(request => {
 });
 <%_ if (enableTranslation) { _%>
 
-initI18N(Vue);
+config.global.plugins = [
+  createI18n({
+    legacy: false,
+    missingWarn: false,
+    fallbackWarn: false,
+  }),
+];
 <%_ } _%>

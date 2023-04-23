@@ -1,7 +1,7 @@
-import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { Route } from 'vue-router';
+import { RouteLocation } from 'vue-router';
 import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
@@ -9,21 +9,18 @@ import LoginService from '@/account/login.service';
 import AccountService from '@/account/account.service';
 import { useStore } from '@/store';
 import LoginForm from '@/account/login-form/login-form.vue';
-import type LoginFormComponent from '@/account/login-form/login-form.component';
 
-type LoginFormComponentType = Vue & InstanceType<typeof LoginFormComponent>;
+type LoginFormComponentType = InstanceType<typeof LoginForm>;
 
-const localVue = createLocalVue();
-
-let route: Partial<Route>;
+let route: Partial<RouteLocation>;
 const routerGoMock = jest.fn();
-jest.mock('vue-router/composables', () => ({
+jest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
 
 const pinia = createTestingPinia();
-localVue.use(PiniaVuePlugin);
+
 const store = useStore();
 
 const axiosStub = {
@@ -41,7 +38,7 @@ describe('LoginForm Component', () => {
 
     const loginService = new LoginService({ emit: jest.fn() });
 
-    const mountOptions: MountOptions<LoginFormComponentType> = {
+    const globalOptions: MountingOptions<LoginFormComponentType>['global'] = {
       stubs: {
         'b-alert': true,
         'b-button': true,
@@ -51,14 +48,14 @@ describe('LoginForm Component', () => {
         'b-form-checkbox': true,
         'b-link': true,
       },
-      pinia,
-      localVue,
+      plugins: [pinia],
       provide: {
         loginService,
         accountService: new AccountService(store)
       }
     };
-    const wrapper = shallowMount<LoginFormComponentType>(LoginForm, mountOptions);
+    const wrapper = shallowMount(LoginForm, { global: globalOptions });
+
     loginForm = wrapper.vm;
   });
 

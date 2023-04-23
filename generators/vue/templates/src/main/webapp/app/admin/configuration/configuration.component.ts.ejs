@@ -1,12 +1,13 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
 import ConfigurationService from './configuration.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Configuration',
   setup() {
     const configurationService = inject('configurationService', () => new ConfigurationService(), true);

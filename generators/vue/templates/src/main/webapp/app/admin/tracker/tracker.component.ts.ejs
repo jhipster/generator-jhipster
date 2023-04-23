@@ -1,14 +1,15 @@
 import { defineComponent, inject, ref, Ref, onMounted, onUnmounted } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { Subscription } from 'rxjs';
 
 import { useDateFormat } from '@/shared/composables'
 import TrackerService from './tracker.service';
-import { useRoute } from 'vue-router/composables';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>TrackerComponent',
   setup() {
     const { formatDateShort: formatDate } = useDateFormat();

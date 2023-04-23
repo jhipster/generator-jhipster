@@ -45,12 +45,8 @@ module.exports = async (env, options) => {
       resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
-          vue$: 'vue/dist/vue.esm.js',
+          vue$: '@vue/compat/dist/vue.esm-bundler.js',
           '@': resolve('<%= clientSrcDir %>app'),
-<%_ if (microfrontend) { _%>
-          // Force vue-demi to v2.7 version. Detection breaks module federation.
-          'vue-demi': 'vue-demi/lib/v2.7/index.cjs',
-<%_ } _%>
         },
       },
       devServer: {
@@ -111,7 +107,14 @@ module.exports = async (env, options) => {
           {
             test: /\.vue$/,
             loader: 'vue-loader',
-            options: vueLoaderConfig(!development),
+            options: {
+              ...vueLoaderConfig(!development),
+              compilerOptions: {
+                compatConfig: {
+                  MODE: 2
+                },
+              },
+            },
           },
           {
             test: /\.ts$/,

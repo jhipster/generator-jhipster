@@ -1,25 +1,21 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import VueRouter, { Route } from 'vue-router';
+import { RouteLocation, Router } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
 import UserManagementView from '@/admin/user-management/user-management-view.vue';
-import type UserManagementViewComponent from '@/admin/user-management/user-management-view.component';
 import { Authority } from '@/shared/security/authority';
 
-type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementViewComponent>;
+type UserManagementViewComponentType = InstanceType<typeof UserManagementView>;
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+let route: Partial<RouteLocation>;
+let router: Router;
 
-let route: Partial<Route>;
-let router: VueRouter;
-
-jest.mock('vue-router/composables', () => ({
+jest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => router,
 }));
@@ -69,19 +65,20 @@ describe('UserManagementView Component', () => {
         },
       };
 
-      const wrapper = shallowMount<UserManagementViewComponentType>(UserManagementView, {
-        stubs: {
-          'b-badge': true,
-          'router-link': true,
-          'font-awesome-icon': true,
-        },
-        localVue,
-        provide: {
-          alertService,
+      const wrapper = shallowMount(UserManagementView, {
+        global: {
+          stubs: {
+            'b-badge': true,
+            'router-link': true,
+            'font-awesome-icon': true,
+          },
+          provide: {
+            alertService,
+          },
         },
       });
       const userManagementView = wrapper.vm;
-  
+
       // WHEN
       await userManagementView.$nextTick();
 

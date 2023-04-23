@@ -1,27 +1,26 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 import HealthModal from '@/admin/health/health-modal.vue';
-import type HealthModalComponent from '@/admin/health/health-modal.component';
 
-type HealthModalComponentType = Vue & InstanceType<typeof HealthModalComponent>;
+type HealthModalComponentType = InstanceType<typeof HealthModal>;
 
-const localVue = createLocalVue();
 const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;
 
   beforeEach(() => {
-    const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
-      stubs: {
-        'font-awesome-icon': true,
-      },
+    const wrapper = shallowMount(HealthModal, {
       propsData: {
         currentHealth: {},
       },
-      localVue,
-      provide: {
-        healthService,
+      global: {
+        stubs: {
+          'font-awesome-icon': true,
+        },
+        provide: {
+          healthService,
+        },
       },
     });
     healthModal = wrapper.vm;
@@ -60,13 +59,14 @@ describe('Health Modal Component for diskSpace', () => {
   let healthModal: HealthModalComponentType;
 
   beforeEach(() => {
-    const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
+    const wrapper = shallowMount(HealthModal, {
       propsData: {
         currentHealth: { name: 'diskSpace' },
       },
-      localVue,
-      provide: {
-        healthService,
+      global: {
+        provide: {
+          healthService,
+        },
       },
     });
     healthModal = wrapper.vm;

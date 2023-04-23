@@ -58,7 +58,7 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application, control
   const { clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   // Add i18n config snippets for all languages
-  let i18nConfig = 'const datetimeFormats: DateTimeFormats = {\n';
+  let i18nConfig = 'const datetimeFormats: IntlDateTimeFormats = {\n';
   languages?.forEach((ln, i) => {
     i18nConfig += generateDateTimeFormat(ln, i, languages.length);
   });

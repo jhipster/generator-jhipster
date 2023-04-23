@@ -1,19 +1,16 @@
 import { Ref, ref } from 'vue';
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import { Route } from 'vue-router';
+import { shallowMount } from '@vue/test-utils';
+import { RouteLocation } from 'vue-router';
 
 import Error from '@/core/error/error.vue';
-import type ErrorComponent from '@/core/error/error.component';
 
 import LoginService from '@/account/login.service';
 
-type ErrorComponentType = Vue & InstanceType<typeof ErrorComponent>;
+type ErrorComponentType = InstanceType<typeof Error>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
 
-let route: Partial<Route>;
-
-jest.mock('vue-router/composables', () => ({
+jest.mock('vue-router', () => ({
   useRoute: () => route,
 }));
 
@@ -45,11 +42,12 @@ describe('Error component', () => {
       name: 'CustomMessage',
       meta: { errorMessage: customErrorMsg },
     };
-    const wrapper = shallowMount<ErrorComponentType>(Error, {
-      localVue,
-      provide: {
-        loginService,
-        authenticated,
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
       },
     });
     error = wrapper.vm;
@@ -68,11 +66,12 @@ describe('Error component', () => {
     route = {
       meta: { error403: true },
     };
-    const wrapper = shallowMount<ErrorComponentType>(Error, {
-      localVue,
-      provide: {
-        loginService,
-        authenticated,
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
       },
     });
     error = wrapper.vm;
@@ -91,11 +90,12 @@ describe('Error component', () => {
     route = {
       meta: { error404: true },
     };
-    const wrapper = shallowMount<ErrorComponentType>(Error, {
-      localVue,
-      provide: {
-        loginService,
-        authenticated,
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
       },
     });
     error = wrapper.vm;
@@ -111,11 +111,12 @@ describe('Error component', () => {
   });
 
   it('should have set default on no error', () => {
-    const wrapper = shallowMount<ErrorComponentType>(Error, {
-      localVue,
-      provide: {
-        loginService,
-        authenticated,
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
       },
     });
     error = wrapper.vm;

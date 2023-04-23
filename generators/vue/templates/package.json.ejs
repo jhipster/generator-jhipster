@@ -29,6 +29,7 @@
     "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
     "@fortawesome/vue-fontawesome": "<%= nodeDependencies['@fortawesome/vue-fontawesome'] %>",
+    "@vue/compat": "<%= nodeDependencies.vue %>",
     "@vuelidate/core": "<%= nodeDependencies['@vuelidate/core'] %>",
     "@vuelidate/validators": "<%= nodeDependencies['@vuelidate/validators'] %>",
     "@vueuse/core": "<%= nodeDependencies['@vueuse/core'] %>",
@@ -49,7 +50,6 @@
     "vue": "<%= nodeDependencies['vue'] %>",
 <%_ if (enableTranslation) { _%>
     "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
-    "vue-i18n-bridge": "<%= nodeDependencies['vue-i18n-bridge'] %>",
 <%_ } _%>
     "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
@@ -59,9 +59,11 @@
     "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "@types/sinon": "<%= nodeDependencies['@types/sinon'] %>",
+    "@vue/compiler-sfc": "<%= nodeDependencies.vue %>",
     "@vue/eslint-config-prettier": "<%= nodeDependencies['@vue/eslint-config-prettier'] %>",
     "@vue/eslint-config-typescript": "<%= nodeDependencies['@vue/eslint-config-typescript'] %>",
     "@vue/test-utils": "<%= nodeDependencies['@vue/test-utils'] %>",
+    "@vue/vue3-jest": "<%= nodeDependencies['@vue/vue3-jest'] %>",
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
@@ -109,8 +111,8 @@
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
-    "@vue/vue2-jest": "<%= nodeDependencies['@vue/vue2-jest'] %>",
     "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
+    "vue-style-loader": "<%= nodeDependencies['vue-style-loader'] %>",
     "webpack": "<%= nodeDependencies['webpack'] %>",
     "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
     "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
