@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import os from 'os';
-import chalk from 'chalk';
 
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -214,7 +212,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
             'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
             'e2e:cypress:audits':
               // eslint-disable-next-line no-template-curly-in-string
-              'cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.config.js',
+              'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
           },
         });
       },
@@ -272,25 +270,6 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  get end() {
-    return this.asEndTaskGroup({
-      end() {
-        if (os.platform() === 'win32') {
-          this.log.ok('Cypress setup successfully.');
-          this.logger.log(
-            chalk.green(`  If you want to run cypress locally on Windows platform, try to restart your IDE after set
-    ${chalk.yellow.bold('CYPRESS_ENABLE_RECORD')} in the Environment Variables
-  `)
-          );
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
   generateTestEntity(references, index = 'random') {

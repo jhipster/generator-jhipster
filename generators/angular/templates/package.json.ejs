@@ -146,7 +146,7 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
-    "e2e:cypress": "cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
+    "e2e:cypress": "cypress run --e2e --browser chrome",
     "cypress": "cypress open --e2e",
 <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
