@@ -709,13 +709,13 @@ export default class HerokuGenerator extends BaseGenerator {
 
             this.logger.log(chalk.bold('\nConfiguring Heroku'));
             await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
-            const herokuBuildPack = execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
-            herokuBuildPack.child.stdout.on('data', async data => {
+            const { stdout: data } = await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+            if (data) {
               this.logger.info(data);
               // remote:  !     The following add-ons were automatically provisioned: . These add-ons may incur additional cost,
               // which is prorated to the second. Run `heroku addons` for more info.
               if (data.includes('Run `heroku addons` for more info.')) {
-                await execCmd('heroku addons');
+                this.spawnCommand('heroku addons');
               }
 
               this.log('');
@@ -739,18 +739,17 @@ export default class HerokuGenerator extends BaseGenerator {
               ];
 
               this.log('');
-              this.prompt(prompts).then(props => {
-                if (props.userDeployDecision === 'Yes') {
-                  this.log.info(chalk.bold('Continued deploying...'));
-                } else {
-                  this.log(this.logger);
-                  this.log.info(chalk.bold('You aborted deployment!'));
-                  this.abort = true;
-                  this.herokuAppName = null;
-                }
-              });
+              const props = await this.prompt(prompts);
+              if (props.userDeployDecision === 'Yes') {
+                this.log.info(chalk.bold('Continued deploying...'));
+              } else {
+                this.log(this.logger);
+                this.log.info(chalk.bold('You aborted deployment!'));
+                this.abort = true;
+                this.herokuAppName = null;
+              }
               this.log('');
-            });
+            }
 
             this.logger.log(chalk.bold('\nDeploying application'));
 
