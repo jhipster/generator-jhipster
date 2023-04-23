@@ -7,6 +7,7 @@ module.exports = {
   rootDir: '../../../',
   roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/<%= clientTestDir %>spec/app/`],
   preset: 'ts-jest',
+  setupFiles: ['<rootDir>/<%= clientTestDir %>spec/setup.js'],
   testEnvironment: 'jsdom',
   coverageDirectory: '<rootDir>/<%= temporaryDir %>test-results/',
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= clientTestDir %>', '<rootDir>/<%= clientSrcDir %>app/router', '.*.json'],
