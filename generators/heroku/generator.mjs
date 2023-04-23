@@ -715,7 +715,7 @@ export default class HerokuGenerator extends BaseGenerator {
               // remote:  !     The following add-ons were automatically provisioned: . These add-ons may incur additional cost,
               // which is prorated to the second. Run `heroku addons` for more info.
               if (data.includes('Run `heroku addons` for more info.')) {
-                this.spawnCommand('heroku addons');
+                await execCmd('heroku addons');
               }
 
               this.log('');
