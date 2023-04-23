@@ -29,10 +29,12 @@
           v-if="authenticated"
           active-class="active" class="pointer"
           data-cy="entity">
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="th-list" />
-            <span class="no-bold" v-text="t$('global.menu.entities.main')">Entities</span>
-          </span>
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="th-list" />
+              <span class="no-bold" v-text="t$('global.menu.entities.main')">Entities</span>
+            </span>
+          </template>
           <entities-menu></entities-menu>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
@@ -49,10 +51,12 @@
           active-class="active"
           class="pointer"
           data-cy="adminMenu">
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="users-cog" />
-            <span class="no-bold" v-text="t$('global.menu.admin.main')">Administration</span>
-          </span>
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="users-cog" />
+              <span class="no-bold" v-text="t$('global.menu.admin.main')">Administration</span>
+            </span>
+          </template>
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
           <b-dropdown-item to="/admin/gateway" active-class="active">
             <font-awesome-icon icon="road" />
@@ -102,10 +106,10 @@
         </b-nav-item-dropdown>
 <%_ if (enableTranslation) { _%>
         <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
-          <span slot="button-content">
+          <template #button-content>
             <font-awesome-icon icon="flag" />
             <span class="no-bold" v-text="t$('global.menu.language')">Language</span>
-          </span>
+          </template>
           <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);"
               :class="{ active: isActiveLanguage(key)}">
             {{value.name}}
@@ -120,12 +124,14 @@
           active-class="active"
           class="pointer"
           data-cy="accountMenu">
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="user" />
-            <span class="no-bold" v-text="t$('global.menu.account.main')">
-              Account
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="user" />
+              <span class="no-bold" v-text="t$('global.menu.account.main')">
+                Account
+              </span>
             </span>
-          </span>
+          </template>
 <%_ if (generateUserManagement) { _%>
           <b-dropdown-item data-cy="settings" to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />

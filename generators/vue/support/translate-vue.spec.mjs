@@ -39,10 +39,12 @@ const FULL_BODY = `
   <div class="modal-body">
     <p id="<%= jhiPrefixDashed %>-delete-user-heading" v-text="t$('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
   </div>
-  <div slot="modal-footer">
-    <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-    <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" v-on:click="deleteUser()">Delete</button>
-  </div>
+  <template #modal-footer>
+    <div>
+      <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" v-on:click="deleteUser()">Delete</button>
+    </div>
+  </template>
 </b-modal>
 
 <span v-bind:value="t$('sessions.title')"></span>
@@ -84,10 +86,12 @@ describe('generator - vue - transform', () => {
   <div class="modal-body">
     <p id="<%= jhiPrefixDashed %>-delete-user-heading">Are you sure you want to delete this user?</p>
   </div>
-  <div slot="modal-footer">
-    <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-    <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">Delete</button>
-  </div>
+  <template #modal-footer>
+    <div>
+      <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">Delete</button>
+    </div>
+  </template>
 </b-modal>
 
 <span></span>
