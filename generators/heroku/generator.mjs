@@ -747,6 +747,7 @@ export default class HerokuGenerator extends BaseGenerator {
                 this.log.info(chalk.bold('You aborted deployment!'));
                 this.abort = true;
                 this.herokuAppName = null;
+                return;
               }
               this.log('');
             }
