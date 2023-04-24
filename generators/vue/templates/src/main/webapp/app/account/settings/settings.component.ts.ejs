@@ -1,7 +1,8 @@
-import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
+import { computed, defineComponent, ref, Ref } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import axios from 'axios';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
-import { computed, defineComponent, ref, Ref } from 'vue';
 import { useStore } from '@/store';
 
 const validations = {
@@ -46,6 +47,7 @@ export default defineComponent({
       languages,
       settingsAccount,
       username,
+      v$: useVuelidate(),
     };
   },
   methods: {
