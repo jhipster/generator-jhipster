@@ -1,10 +1,10 @@
-import JhiDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/shared/data/data-utils.service';
 
 describe('Formatter i18n', () => {
-  let dataUtilsService: JhiDataUtils;
+  let dataUtilsService: ReturnType<typeof useDataUtils>;
 
   beforeEach(() => {
-    dataUtilsService = new JhiDataUtils();
+    dataUtilsService = useDataUtils();
   });
 
   it('should not abbreviate text shorter than 30 characters', () => {

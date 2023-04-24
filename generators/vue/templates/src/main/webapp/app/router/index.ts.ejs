@@ -1,20 +1,14 @@
 import Vue from 'vue';
-import Component from 'vue-class-component';
-Component.registerHooks([
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate' // for vue-router 2.2+
-])
-import Router, { RouteConfig } from 'vue-router';
+import Router<% if (applicationTypeGateway && microfrontend) { %>, { RouteConfig }<% } %> from 'vue-router';
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
 <%_ if (generateUserManagement) { _%>
-import account from "@/router/account";
+import account from '@/router/account';
 <%_ } _%>
-import admin from "@/router/admin";
-import entities from "@/router/entities";
-import pages from "@/router/pages";
+import admin from '@/router/admin';
+import entities from '@/router/entities';
+import pages from '@/router/pages';
 
 Vue.use(Router);
 

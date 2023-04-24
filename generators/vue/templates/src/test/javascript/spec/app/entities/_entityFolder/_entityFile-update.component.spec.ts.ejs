@@ -18,10 +18,11 @@
 -%>
 <%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
+import VueRouter from 'vue-router';
 
 <%_ let dayJsIncluded = false;
   for (field of fields.filter(field => !field.id)) { _%>
@@ -32,29 +33,27 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
   <%_ } _%>
 <%_ } _%>
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
-import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
-import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
+import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
+import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
-<%_ const importEntitiesSeen = [entityAngularName];
-  for (relationship of relationships) { _%>
-  <%_ if (!relationship.otherEntityIsEmbedded) {
-    const otherEntityAngularName = relationship.otherEntityAngularName;
-    const otherEntityFileName = relationship.otherEntityFileName;
-    const otherEntityFolderName = relationship.otherEntityFileName;
-    const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder; _%>
-    <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
-      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+<%_
+  const allRelationshipsThatNeedSelectOptions = Object
+    .values(relationshipsByOtherEntity)
+    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .filter(relationships => relationships.length > 0);
+_%>
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
 import UserService from '@/entities/user/user.service';
-      <% } else if (!relationship.otherEntityUser) { %>
-import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
-      <%_ } _%>
-    <%_ } _%>
-    <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } else { _%>
+import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
-import AlertService from '@/shared/alert/alert.service';
+
+type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%= entityAngularName %>UpdateComponent>;
 
 const localVue = createLocalVue();
 
@@ -62,7 +61,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 const router = new Router();
 localVue.use(Router);
 localVue.use(ToastPlugin);
@@ -72,17 +71,27 @@ localVue.component('b-input-group-prepend', {});
 localVue.component('b-form-datepicker', {});
 localVue.component('b-form-input', {});
 
+const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
+
 describe('Component Tests', () => {
+  let mountOptions: ThisTypedShallowMountOptions<<%= entityAngularName %>UpdateComponentType>;
+  let router: VueRouter;
 
   describe('<%= entityAngularName %> Management Update Component', () => {
-    let wrapper: Wrapper<<%= entityAngularName %>Class>;
-    let comp: <%= entityAngularName %>Class;
+    let comp: <%= entityAngularName %>UpdateComponentType;
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+      router = new VueRouter({
+        routes: [
+          {
+            path: '/<%= entityApiUrl %>/:<%= entityInstance %>Id',
+          },
+        ],
+      });
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, {
+      mountOptions = {
         store,
 <%_ if (enableTranslation) { _%>
         i18n,
@@ -91,30 +100,22 @@ describe('Component Tests', () => {
         router,
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-          alertService: () => new AlertService(),
-<%_
-  const entitiesSeen = [entityAngularName];
-  for (relationship of relationships) { _%>
-  <%_ if (!relationship.otherEntityIsEmbedded) {
-      const otherEntityName = relationship.otherEntityName;
-      const otherEntityAngularName = relationship.otherEntityAngularName; _%>
-    <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-          userService: () => new UserService(),
-      <%_ } else { _%>
-          <%= otherEntityName %>Service: () =>
-            sinon.createStubInstance<<%= otherEntityAngularName %>Service>(<%= otherEntityAngularName %>Service, {
+
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+          userService: () =>
+            sinon.createStubInstance<UserService>(UserService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
-      <%_ } _%>
-    <%_ } _%>
-    <%_ entitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } else { _%>
+          <%= relationship.otherEntity.entityInstance %>Service: () =>
+            sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
   <%_ } _%>
 <%_ } _%>
-
-        }
-      });
-      comp = wrapper.vm;
+        },
+      };
     });
 
 <%_
@@ -124,6 +125,10 @@ describe('Component Tests', () => {
       dateTestsIncluded = true;
 _%>
     describe('load', () => {
+      beforeEach(() => {
+        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        comp = wrapper.vm;
+      });
       it('Should convert date from string', () => {
         // GIVEN
         const date = new Date('2019-10-15T11:42:02Z');
@@ -145,24 +150,27 @@ _%>
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = {id:<%- tsKeyId %>};
-        comp.<%= entityInstance %> = entity;
-        <%= entityInstance %>ServiceStub.update.resolves(entity);
+        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        comp = wrapper.vm;
+        comp.<%= entityInstance %> = <%= entityInstance %>Sample;
+        <%= entityInstance %>ServiceStub.update.resolves(<%= entityInstance %>Sample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(<%= entityInstance %>ServiceStub.update.calledWith(<%= entityInstance %>Sample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.<%= entityInstance %> = entity;
         <%= entityInstance %>ServiceStub.create.resolves(entity);
+        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        comp = wrapper.vm;
+        comp.<%= entityInstance %> = entity;
 
         // WHEN
         comp.save();
@@ -177,21 +185,29 @@ _%>
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
-        <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
-        <%= entityInstance %>ServiceStub.retrieve.resolves([found<%= entityAngularName %>]);
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        <%= entityInstance %>ServiceStub.retrieve.resolves([<%= entityInstance %>Sample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));
+        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
+        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
+        expect(comp.<%= entityInstance %>).toBe(<%= entityInstance %>Sample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        router.push('/');
+        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
+        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 

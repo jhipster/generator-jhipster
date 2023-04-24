@@ -1,0 +1,6 @@
+const axios = require('axios');
+
+// Make sure axios is never executed.
+axios.interceptors.request.use(request => {
+  throw new Error(`Error axios should be mocked ${request.url}`);
+});

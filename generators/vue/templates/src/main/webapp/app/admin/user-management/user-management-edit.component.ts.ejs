@@ -1,8 +1,9 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
-import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
 import AlertService from '@/shared/alert/alert.service';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useRoute } from 'vue-router/composables';
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -16,118 +17,127 @@ const validations: any = {
     login: {
       required,
       maxLength: maxLength(254),
-      pattern: loginValidator
+      pattern: loginValidator,
     },
     firstName: {
-      maxLength: maxLength(50)
+      maxLength: maxLength(50),
     },
     lastName: {
-      maxLength: maxLength(50)
+      maxLength: maxLength(50),
     },
     email: {
       required,
       email,
       minLength: minLength(5),
-      maxLength: maxLength(50)
-    }
-  }
+      maxLength: maxLength(50),
+    },
+  },
 };
 
-@Component({
-  validations
-})
-export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
-  @Inject('userManagementService') private userManagementService: () => UserManagementService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  name: '<%=jhiPrefixCapitalized%>UserManagementEdit',
+  validations,
+  setup() {
+    const route = useRoute();
 
-  public userAccount: IUser;
-  public isSaving = false;
-  public authorities: any[] = [];
-  public languages: any = this.$store.getters.languages;
+    const alertService = inject('alertService', () => new AlertService());
+    const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.initAuthorities();
-      if (to.params.userId) {
-        vm.init(to.params.userId);
-      }
-    });
-  }
+    const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
+    const isSaving: Ref<boolean> = ref(false);
+    const authorities: Ref<string[]> = ref([]);
+    const languages: Ref<string[]> = ref([]);
 
-  public constructor() {
-    super();
-    this.userAccount = new User();
-    this.userAccount.authorities = [];
-  }
+    const initAuthorities = async () => {
+      const response = await userManagementService.retrieveAuthorities();
+      authorities.value = response.data;
+    };
 
-  public initAuthorities() {
-    this.userManagementService()
-      .retrieveAuthorities()
-      .then(_res => {
-        this.authorities = _res.data;
-      });
-  }
+    const loadUser = async (userId: <%- user.primaryKey.tsType _%>) => {
+      const response = await userManagementService.get(userId);
+      userAccount.value = response.data;
+    };
 
-  public init(userId: <% if (user.primaryKey.typeString || user.primaryKey.typeUUID) { %>string<% } else { %>number<% } %>): void {
-    this.userManagementService().get(userId).then(res => {
-      this.userAccount = res.data;
-    });
-  }
-
-  public previousState(): void {
-    (<any> this).$router.go(-1);
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.userAccount.id) {
-      this.userManagementService().update(this.userAccount).then((res) => {
-        this.returnToList();
-        (this.$root as any).$bvToast.toast(this.getMessageFromHeader(res).toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'info',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-      }).catch(error => {
-        this.isSaving = true;
-        this.alertService().showHttpError(this,error.response);
-      });
-    } else {
-<%_ if (!enableTranslation) { _%>
-      this.userAccount.langKey = 'en';
+    initAuthorities();
+    const userId = route.params.userId;
+    if (userId) {
+<%_ if (user.primaryKey.tsType === 'number') { _%>
+      loadUser(Number(userId));
+<%_ } else { _%>
+      loadUser(userId);
 <%_ } _%>
-      this.userManagementService().create(this.userAccount).then(res => {
-        this.returnToList();
-        (this.$root as any).$bvToast.toast(this.getMessageFromHeader(res).toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Success',
-          variant: 'success',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-      }).catch(error => {
-        this.isSaving = true;
-        this.alertService().showHttpError(this,error.response);
-      });
     }
-  }
 
-  private returnToList(): void {
-    this.isSaving = false;
-    (<any> this).$router.go(-1);
-  }
+    return {
+      alertService,
+      userAccount,
+      isSaving,
+      authorities,
+      languages,
+      userManagementService,
+    };
+  },
+  methods: {
+    previousState(): void {
+      this.$router.go(-1);
+    },
+    save(): void {
+      this.isSaving = true;
+      if (this.userAccount.id) {
+        this.userManagementService
+          .update(this.userAccount)
+          .then(res => {
+            this.returnToList();
+            (this.$root as any).$bvToast.toast(this.getMessageFromHeader(res).toString(), {
+              toaster: 'b-toaster-top-center',
+              title: 'Info',
+              variant: 'info',
+              solid: true,
+              autoHideDelay: 5000,
+            });
+          })
+          .catch(error => {
+            this.isSaving = true;
+            this.alertService().showHttpError(this, error.response);
+          });
+      } else {
+<%_ if (!enableTranslation) { _%>
+        this.userAccount.langKey = this.userAccount.langKey ?? '<%= nativeLanguage %>';
+<%_ } _%>
+        this.userManagementService
+          .create(this.userAccount)
+          .then(res => {
+            this.returnToList();
+            this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
+              toaster: 'b-toaster-top-center',
+              title: 'Success',
+              variant: 'success',
+              solid: true,
+              autoHideDelay: 5000,
+            });
+          })
+          .catch(error => {
+            this.isSaving = true;
+            this.alertService().showHttpError(this.$root, error.response);
+          });
+      }
+    },
 
-  private getMessageFromHeader(res: any): any {
-    <%_
-    const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
-    const headerParams = `X-${frontendAppName}-params`.toLowerCase();
-    if (enableTranslation) {
-    _%>
-    return this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
-    <%_ } else {_%>
-    return res.headers['<%=headerAlert%>'];
-    <%_ } _%>
-  }
-}
+    returnToList(): void {
+      this.isSaving = false;
+      this.$router.go(-1);
+    },
+
+    getMessageFromHeader(res: any): any {
+<%_
+  const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
+  const headerParams = `X-${frontendAppName}-params`.toLowerCase();
+  if (enableTranslation) {
+_%>
+      return this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
+<%_ } else {_%>
+      return res.headers['<%=headerAlert%>'];
+<%_ } _%>
+    },
+  },
+});

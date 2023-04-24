@@ -25,7 +25,6 @@ export const vueFiles = {
       templates: [
         'package.json',
         'tsconfig.json',
-        'tsconfig.spec.json',
         '.postcssrc.js',
         '.eslintrc.js',
         'webpack/config.js',
@@ -84,6 +83,7 @@ export const vueFiles = {
         'shared/config/dayjs.ts',
         'shared/config/store/account-store.ts',
         'shared/security/authority.ts',
+        'store.ts',
         'router/index.ts',
         'router/admin.ts',
         'router/pages.ts',
@@ -112,6 +112,8 @@ export const vueFiles = {
         'core/ribbon/ribbon.vue',
         'core/ribbon/ribbon.component.ts',
         'shared/date/filters.ts',
+        'shared/computables/arrays.ts',
+        'shared/computables/index.ts',
         'shared/sort/jhi-sort-indicator.component.ts',
         'shared/sort/jhi-sort-indicator.vue',
         'shared/sort/sorts.ts',
@@ -229,6 +231,8 @@ export const vueFiles = {
       ...clientTestBlock,
       templates: [
         'jest.conf.js',
+        'spec/setup.js',
+        'spec/tsconfig.json',
         'spec/app/account/account.service.spec.ts',
         'spec/app/core/home/home.component.spec.ts',
         'spec/app/core/error/error.component.spec.ts',

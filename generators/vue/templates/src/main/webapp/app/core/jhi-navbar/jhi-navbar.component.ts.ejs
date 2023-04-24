@@ -1,13 +1,16 @@
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
 import LoginService from '@/account/login.service';
-import AccountService from '@/account/account.service';
+import type AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
-<%_ } %>
-
+<%_ } _%>
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
-@Component({
+import { useStore } from '@/store';
+import { useRouter } from 'vue-router/composables';
+
+export default defineComponent({
+  name: 'JhiNavbar',
   components: {
     'entities-menu': EntitiesMenu,
 <%_ if (applicationTypeGateway && microfrontend) { _%>
@@ -16,97 +19,104 @@ import EntitiesMenu from '@/entities/entities-menu.vue';
   <%_ } _%>
 <%_ } _%>
   },
-})
-export default class JhiNavbar extends Vue {
-  @Inject('loginService')
-  private loginService: () => LoginService;
+  setup() {
+    const loginService = inject('loginService', () => new LoginService());
+    const accountService = inject<() => AccountService>('accountService');
 <%_ if (enableTranslation) { _%>
-  @Inject('translationService') private translationService: () => TranslationService;
-<%_ } %>
-  @Inject('accountService') private accountService: () => AccountService;
-  public version = 'v' + VERSION;
-  private currentLanguage = this.$store.getters.currentLanguage;
-  private languages: any = this.$store.getters.languages;
-  private hasAnyAuthorityValues = {};
+    const translationService = inject<() => TranslationService>('translationService');
+<%_ } _%>
 
-  created() {
+    const router = useRouter();
+    const store = useStore();
+
+    const version = 'v' + VERSION;
+    const currentLanguage = computed(() => store.getters.currentLanguage);
+    const languages = computed(() => store.getters.languages);
+    const hasAnyAuthorityValues: Ref<any> = ref({});
+
+    const openAPIEnabled = computed(() => store.getters.activeProfiles.indexOf('api-docs') > -1);
+    const inProduction = computed(() => store.getters.activeProfiles.indexOf('prod') > -1);
+    const authenticated = computed(() => store.getters.authenticated);
+
+    return {
+      router,
+      accountService,
+      loginService,
 <%_ if (enableTranslation) { _%>
+      translationService,
+<%_ } _%>
+      version,
+      currentLanguage,
+      languages,
+      hasAnyAuthorityValues,
+      openAPIEnabled,
+      inProduction,
+      authenticated,
+    };
+  },
+<%_ if (enableTranslation) { _%>
+  created() {
     const currentLanguage = Object.keys(this.languages).includes(navigator.language) ? navigator.language : this.currentLanguage;
     this.translationService().refreshTranslation(currentLanguage);
+  },
 <%_ } _%>
-  }
-
-  public subIsActive(input) {
-    const paths = Array.isArray(input) ? input : [input]
-    return paths.some(path => {
-      return this.$route.path.indexOf(path) === 0 // current path starts with this path string
-    })
-  }
-
-
+  methods: {
 <%_ if (enableTranslation) { _%>
-  public changeLanguage(newLanguage: string) : void {
-    this.translationService().refreshTranslation(newLanguage);
-  }
-
-  public isActiveLanguage(key: string) : boolean {
-    return key === this.$store.getters.currentLanguage;
-  }
+    changeLanguage(newLanguage: string) : void {
+      this.translationService().refreshTranslation(newLanguage);
+    },
+    isActiveLanguage(key: string) : boolean {
+      return key === this.currentLanguage;
+    },
 <%_ } _%>
-
-  public logout() : Promise<any> {
+    subIsActive(input) {
+      const paths = Array.isArray(input) ? input : [input];
+      return paths.some(path => {
+        return this.$route.path.indexOf(path) === 0; // current path starts with this path string
+      });
+    },
+    logout(): Promise<any> {
 <%_ if (!authenticationTypeJwt) { _%>
-    return this.loginService().logout().then(response => {
-      this.$store.commit('logout');
+      return this.loginService().logout().then(response => {
+        this.$store.commit('logout');
   <%_ if (authenticationTypeOauth2) { _%>
-      window.location.href = response.data.logoutUrl;
-      const next = response.data?.logoutUrl ?? '/';
-      if (this.$route.path !== next) {
-        return this.$router.push(next);
-      }
+        window.location.href = response.data.logoutUrl;
+        const next = response.data?.logoutUrl ?? '/';
+        if (this.$route.path !== next) {
+          return this.$router.push(next);
+        }
   <%_ } else { _%>
+        if (this.$route.path !== '/') {
+          return this.$router.push('/');
+        }
+  <%_ } _%>
+      });
+<%_ } else { _%>
+      localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+      sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+      this.$store.commit('logout');
       if (this.$route.path !== '/') {
         return this.$router.push('/');
       }
-  <%_ } _%>
-    });
-<%_ } else { _%>
-    localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-    sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-    this.$store.commit('logout');
-    if (this.$route.path !== '/') {
-      return this.$router.push('/');
-    }
 <%_ } _%>
-    return Promise.resolve(this.$router.currentRoute);
-  }
-
-  public openLogin() : void {
+      return Promise.resolve(this.$router.currentRoute);
+    },
+    openLogin(): void {
 <%_ if (!authenticationTypeOauth2) { _%>
-    this.loginService().openLogin((<any>this).$root);
+      this.loginService().openLogin(this.$root);
 <%_ } else { %>
-    this.loginService().login();
-<%_ } %>
-  }
-
-  public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
-  }
-
-  public hasAnyAuthority(authorities: any): boolean {
-    this.accountService().hasAnyAuthorityAndCheckAuth(authorities).then(value => {
-      if (this.hasAnyAuthorityValues[authorities] !== value) {
-        this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
-      }
-    });
-    return this.hasAnyAuthorityValues[authorities] ?? false;
-  }
-
-  public get openAPIEnabled() : boolean {
-    return (this.$store.getters.activeProfiles.indexOf('api-docs') > -1);
-  }
-
-  public get inProduction() : boolean {
-    return (this.$store.getters.activeProfiles.indexOf('prod') > -1);
-  }
-}
+      this.loginService().login();
+<%_ } _%>
+    },
+    hasAnyAuthority(authorities: any): boolean {
+      this.accountService()
+        .hasAnyAuthorityAndCheckAuth(authorities)
+        .then(value => {
+          if (this.hasAnyAuthorityValues[authorities] !== value) {
+            this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
+          }
+        });
+      return this.hasAnyAuthorityValues[authorities] ?? false;
+    },
+  },
+});

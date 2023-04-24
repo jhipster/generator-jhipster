@@ -3,12 +3,13 @@ import * as sinon from 'sinon';
 import VueRouter from 'vue-router';
 import { Subject } from 'rxjs';
 
+import { useStore } from '@/store';
 import TrackerService from '@/admin/tracker/tracker.service';
 import * as config from '@/shared/config/config';
 import { defaultAccountState } from '@/shared/config/store/account-store';
 
 const localVue = createLocalVue();
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
@@ -25,7 +26,7 @@ describe('Tracker Service', () => {
     sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/' }));
     routerStub.afterEach = sinon.spy();
 
-    trackerService = new TrackerService(routerStub, store<%_ if (authenticationTypeSession) { _%>,{ get: jest.fn()}<%_ } %>);
+    trackerService = new TrackerService(routerStub, store<%_ if (authenticationUsesCsrf) { _%>,{ get: jest.fn()}<%_ } %>);
 
     const watch$ = new Subject<any>();
 

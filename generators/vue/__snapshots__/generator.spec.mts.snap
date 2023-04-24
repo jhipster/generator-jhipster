@@ -200,6 +200,12 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "src/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -252,6 +258,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "src/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/content/css/loading.css": {
@@ -419,10 +428,13 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "test/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "test/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "test/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -688,6 +700,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -746,6 +764,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "src/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/content/css/loading.css": {
@@ -937,10 +958,13 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "test/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "test/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "test/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -1155,6 +1179,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -1207,6 +1237,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/content/css/loading.css": {
@@ -1383,10 +1416,13 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "test/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "test/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "test/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -1601,6 +1637,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -1659,6 +1701,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/content/css/loading.css": {
@@ -1838,10 +1883,13 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/test/javascript2/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "src/test/javascript2/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "src/test/javascript2/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -2173,6 +2221,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp2/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -2231,6 +2285,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/content/css/loading.css": {
@@ -2446,10 +2503,13 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/test/javascript2/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "src/test/javascript2/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "src/test/javascript2/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -2655,6 +2715,12 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -2707,6 +2773,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/css/loading.css": {
@@ -2871,10 +2940,13 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "src/test/javascript/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "src/test/javascript/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -3086,6 +3158,12 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -3138,6 +3216,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/store.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/css/loading.css": {
@@ -3302,10 +3383,13 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "src/test/javascript/spec/setup.js": {
     "stateCleared": "modified",
   },
-  "tsconfig.spec.json": {
+  "src/test/javascript/spec/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {

@@ -1,7 +1,9 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import EntitiesMenu from '@/entities/entities-menu.vue';
-import EntitiesMenuClass from '@/entities/entities-menu.component';
+import type EntitiesMenuComponent from '@/entities/entities-menu.component';
 import * as config from '@/shared/config/config';
+
+type EntitiesMenuComponentType = Vue & InstanceType<typeof EntitiesMenuComponent>;
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
@@ -18,7 +20,7 @@ describe('EntitiesMenu', () => {
 
   describe('using microfrontendI18n', () => {
     beforeEach(() => {
-      shallowMount<EntitiesMenuClass>(EntitiesMenu, {
+      shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
         i18n,
         localVue,
         provide: {
@@ -35,7 +37,7 @@ describe('EntitiesMenu', () => {
 
   describe('not using microfrontendI18n', () => {
     beforeEach(() => {
-      shallowMount<EntitiesMenuClass>(EntitiesMenu, {
+      shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
         i18n,
         localVue,
         provide: {

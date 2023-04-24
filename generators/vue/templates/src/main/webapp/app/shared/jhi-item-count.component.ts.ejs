@@ -1,21 +1,20 @@
-import Component from 'vue-class-component';
-import { Prop, Vue } from 'vue-property-decorator';
+import { computed, defineComponent, Ref, ref } from 'vue';
 
-@Component
-export default class JhiItemCountComponent extends Vue {
-  @Prop()
-  page: number;
-  @Prop()
-  total: number;
-  @Prop()
-  itemsPerPage: number;
-  i18nEnabled = <%_ if (enableTranslation) { _%> true <%_ } else { _%> false <%_ } _%>;
+export default defineComponent({
+  props: {
+    page: Number,
+    total: Number,
+    itemsPerPage: Number,
+  },
+  setup(props) {
+    const { page, total, itemsPerPage} = props;
 
-  get first() {
-    return ((this.page - 1) * this.itemsPerPage) === 0 ? 1 : ((this.page - 1) * this.itemsPerPage + 1);
-  }
+    const first = computed(() => ((page - 1) * itemsPerPage === 0 ? 1 : (page - 1) * itemsPerPage + 1));
+    const second = computed(() => (page * itemsPerPage < total ? page * itemsPerPage : total));
 
-  get second() {
-    return (this.page * this.itemsPerPage) < this.total ? (this.page * this.itemsPerPage) : this.total;
-  }
-}
+    return {
+      first,
+      second,
+    };
+  },
+});

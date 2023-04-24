@@ -19,6 +19,7 @@
 import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import <%= pageName %>Component from '@/pages/<%= pageFolderName %>/<%= pageFolderName %>.vue';
 import <%= pageName %>Class from '@/pages/<%= pageFolderName %>/<%= pageFolderName %>.component';
@@ -30,7 +31,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 describe('Component Tests', () => {
   describe('<%= pageName %> Component', () => {

@@ -6,6 +6,11 @@ import MockAdapter from "axios-mock-adapter";
 const mock = new MockAdapter(axios);
 
 describe('Axios interceptor', () => {
+  beforeEach(() => {
+    axios.interceptors.request.clear();
+    axios.interceptors.response.clear();
+  });
+
   it('should use localStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'auth');
