@@ -26,13 +26,9 @@
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
   <%_ } else if (field.fieldTypeDuration) { _%>
-                        <span>{{<%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %>}})</span>
+                        <span>{{formatDuration(<%= entityInstance %>.<%= fieldName %>)}} ({{<%= entityInstance %>.<%= fieldName %>}})</span>
   <%_ } else if (field.fieldTypeTimed) { _%>
-    <%_ if (enableTranslation) { _%>
-                        <span v-if="<%= entityInstance %>.<%=fieldName %>">{{$d(Date.parse(<%= entityInstance %>.<%=fieldName %>), 'long') }}</span>
-    <%_ } else { _%>
-                        <span>{{<%= entityInstance %>.<%=fieldName %> | formatDate}}</span>
-    <%_ } _%>
+                        <span v-if="<%= entityInstance %>.<%=fieldName %>">{{formatDateLong(<%= entityInstance %>.<%=fieldName %>)}}</span>
   <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%= fieldName %>}}</span>
   <%_ } _%>

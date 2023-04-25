@@ -28,7 +28,7 @@ import dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (anyFieldIsLocalDate || anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
-import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/date/filters';
+import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/composables/date-format';
 <%_ } _%>
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';

@@ -3,7 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import Configuration from '@/admin/configuration/configuration.vue';
 import type ConfigurationComponent from '@/admin/configuration/configuration.component';
 
@@ -11,9 +13,8 @@ type ConfigurationComponentType = Vue & InstanceType<typeof ConfigurationCompone
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 

@@ -25,7 +25,9 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import <%= entityAngularName %> from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
 import type <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -35,9 +37,8 @@ type <%= entityAngularName %>ComponentType = Vue & InstanceType<typeof <%= entit
 const localVue = createLocalVue();
 localVue.use(ToastPlugin);
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 localVue.component('font-awesome-icon', {});

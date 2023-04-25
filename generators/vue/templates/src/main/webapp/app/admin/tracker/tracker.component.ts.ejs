@@ -4,11 +4,13 @@ import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
 import { Subscription } from 'rxjs';
 
+import { useDateFormat } from '@/shared/composables'
 import TrackerService from './tracker.service';
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>TrackerComponent',
   setup() {
+    const { formatDateShort: formatDate } = useDateFormat();
     const trackerService = inject<TrackerService>('trackerService');
     const activities: Ref<any[]> = ref([]);
     const subscription: Ref<Subscription> = ref(null);
@@ -46,6 +48,7 @@ export default defineComponent({
 
     return {
       activities,
+      formatDate,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>

@@ -4,7 +4,9 @@ import sinon from 'sinon';
 
 import { useStore } from '@/store';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import Register from '@/account/register/register.vue';
 import type RegisterComponent from '@/account/register/register.component';
 import RegisterService from '@/account/register/register.service';
@@ -14,9 +16,8 @@ type RegisterComponentType = Vue & InstanceType<typeof RegisterComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 
