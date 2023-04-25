@@ -14,6 +14,7 @@
     "vue-infinite-loading": "2.4.5",
     "vue-router": "3.6.5",
     "vue-i18n": "8.28.2",
+    "vue-i18n-bridge": "9.2.2",
     "vuex": "3.6.2"
   },
   "devDependencies": {
