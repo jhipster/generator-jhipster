@@ -42,6 +42,9 @@ public class SpaWebFilter implements WebFilter {
 <%_ if (applicationTypeGateway) { _%>
             !path.startsWith("/services") &&
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
+            !path.startsWith("/i18n") &&
+<%_ } _%>
             !path.contains(".") &&
             path.matches("/(.*)")
         ) {

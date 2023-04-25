@@ -46,6 +46,9 @@ public class SpaWebFilter extends OncePerRequestFilter {
 <%_ if (communicationSpringWebsocket) { _%>
             !path.startsWith("/websocket") &&
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
+            !path.startsWith("/i18n") &&
+<%_ } _%>
             !path.contains(".") &&
             path.matches("/(.*)")
         ) {
