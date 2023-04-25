@@ -85,9 +85,9 @@ export default defineComponent({
       this.userManagementService
         .retrieve({
 <%_ if (!databaseTypeCassandra) { _%>
+          sort: this.sort(),
           page: this.page - 1,
           size: this.itemsPerPage,
-          sort: this.sort(),
 <%_ } _%>
         })
         .then(res => {
