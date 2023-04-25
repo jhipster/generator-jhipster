@@ -16,8 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as convertTranslationsSupport } from './convert-translation.mjs';
-export * from './needles.mjs';
-export * from './translate-vue.mjs';
-export { default as translateVueFilesTransform } from './translate-vue.mjs';
-export { default as updateLanguagesTask } from './update-languages.mjs';
+import { passthrough } from 'p-transform';
+import { Minimatch } from 'minimatch';
+
+export function convertVueTranslations(body) {
+  return body.replace(/\{\{(\s*\w+\s*)\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
+}
+
+const convertTranslationsSupport = ({ clientSrcDir }) => {
+  const minimatch = new Minimatch(`**/${clientSrcDir}i18n/**/*.json`);
+  const isTranslationFile = (file: { path: string }) => minimatch.match(file.path);
+  const transform = passthrough(file => {
+    if (isTranslationFile(file)) {
+      file.contents = Buffer.from(convertVueTranslations(file.contents.toString()));
+    }
+  }, 'jhipster:convert-vue-translation-files');
+  return { transform, isTranslationFile };
+};
+
+export default convertTranslationsSupport;
