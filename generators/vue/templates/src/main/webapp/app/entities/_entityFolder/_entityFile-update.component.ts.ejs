@@ -244,7 +244,7 @@ _%>
           this.isSaving = false;
           this.$router.go(-1);
         <%_ if (enableTranslation) { _%>
-          const message = this.$t('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id });
+          const message = this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id });
         <%_ } else {_%>
           const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
         <%_ } _%>
@@ -264,7 +264,7 @@ _%>
           this.isSaving = false;
           this.$router.go(-1);
         <%_ if (enableTranslation) { _%>
-            const message = this.$t('<%= i18nAlertHeaderPrefix %>.created', { 'param' : param.id });
+            const message = this.t$('<%= i18nAlertHeaderPrefix %>.created', { 'param' : param.id });
         <%_ } else {_%>
           const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
         <%_ } _%>

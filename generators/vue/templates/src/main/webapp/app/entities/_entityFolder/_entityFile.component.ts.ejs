@@ -195,7 +195,7 @@ export default defineComponent({
     remove<%= entityAngularName %>() : void {
       this.<%= entityInstance %>Service().delete(this.removeId).then(() => {
   <%_ if (enableTranslation) { _%>
-        const message = this.$t('<%= i18nAlertHeaderPrefix %>.deleted', { 'param' : this.removeId });
+        const message = this.t$('<%= i18nAlertHeaderPrefix %>.deleted', { 'param' : this.removeId });
   <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is deleted with identifier ' + this.removeId;
   <%_ } _%>
