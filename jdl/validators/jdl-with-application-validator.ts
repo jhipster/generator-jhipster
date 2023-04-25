@@ -19,7 +19,15 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, reservedKeywords, applicationOptions } from '../jhipster/index.mjs';
+import {
+  fieldTypes,
+  applicationTypes,
+  databaseTypes,
+  binaryOptions,
+  reservedKeywords,
+  applicationOptions,
+  relationshipOptions,
+} from '../jhipster/index.mjs';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
@@ -28,10 +36,12 @@ import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 import ApplicationValidator from './application-validator.js';
 import JDLObject from '../models/jdl-object.js';
+import JDLRelationship from '../models/jdl-relationship.js';
 
 const { OptionNames } = applicationOptions;
 const { SQL } = databaseTypes;
 
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { APPLICATION_TYPE, BLUEPRINTS, DATABASE_TYPE, BASE_NAME, REACTIVE, JHI_PREFIX, SKIP_USER_MANAGEMENT } = OptionNames;
 const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
 /**
@@ -138,14 +148,12 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
-    const skippedUserManagement = jdlApplication.getConfigurationOptionValue(SKIP_USER_MANAGEMENT);
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
-      validator.validate(jdlRelationship, { skippedUserManagement });
+      validator.validate(jdlRelationship);
       checkForAbsentEntities({
         jdlRelationship,
         doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
-        skippedUserManagementOption: skippedUserManagement,
       });
     });
   }
@@ -206,24 +214,28 @@ function checkForPaginationInAppWithCassandra(jdlOption, jdlApplication) {
   }
 }
 
-function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
+function checkForAbsentEntities({
+  jdlRelationship,
+  doesEntityExist,
+}: {
+  jdlRelationship: JDLRelationship;
+  doesEntityExist: (string) => boolean;
+}) {
   const absentEntities: any[] = [];
   if (!doesEntityExist(jdlRelationship.from)) {
     absentEntities.push(jdlRelationship.from);
   }
-  if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
+  if (!doesEntityExist(jdlRelationship.to) && !jdlRelationship.options.global[BUILT_IN_ENTITY]) {
     absentEntities.push(jdlRelationship.to);
   }
   if (absentEntities.length !== 0) {
     throw new Error(
       `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
-        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
+        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared. If '${
+          jdlRelationship.to
+        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`
     );
   }
-}
-
-function isUserManagementEntity(entityName) {
-  return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
 }
 
 function isTableNameReserved(tableName, jdlApplication: any = []) {

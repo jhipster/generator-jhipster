@@ -48,18 +48,6 @@ function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
 
   jdlEntities.forEach(jdlEntity => {
     const entityName = jdlEntity.name;
-    /*
-     * If the user adds a 'User' entity we consider it as the already
-     * created JHipster User entity and none of its fields and owner-side
-     * relationships will be considered.
-     */
-    if (builtInEntities.has(entityName.toLowerCase())) {
-      logger.warn(
-        `An Entity name '${entityName}' was used: '${entityName}' is an entity created by default by JHipster.` +
-          ' All relationships toward it will be kept but any attributes and relationships from it will be disregarded.'
-      );
-      return;
-    }
     convertedEntities.set(
       entityName,
       new JSONEntity({

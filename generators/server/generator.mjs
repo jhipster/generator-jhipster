@@ -683,8 +683,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.databaseTypeMongodb ||
           application.searchEngineElasticsearch ||
           application.databaseTypeCouchbase ||
-          application.searchEngineCouchbase ||
-          application.databaseTypeNeo4j
+          application.searchEngineCouchbase
         ) {
           source.addTestSpringFactory({
             key: 'org.springframework.test.context.ContextCustomizerFactory',

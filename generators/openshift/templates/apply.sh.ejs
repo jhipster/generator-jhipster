@@ -35,7 +35,7 @@ oc process -f <%- directoryPath %>ocp/monitoring/jhipster-metrics.yml | oc apply
 const appName = appConfigs[i].baseName.toLowerCase();
 app = appConfigs[i];
 if (!app.databaseTypeNo) { _%>
-oc process -f <%- directoryPath %>ocp/<%- appName %>/<%- appName %>-<%- app.prodDatabaseType %>.yml | oc apply -f -
+oc process -f <%- directoryPath %>ocp/<%- appName %>/<%- appName %>-<%- app.prodDatabaseType ?? app.databaseType %>.yml | oc apply -f -
 <%_ } _%> <%_ if (app.searchEngineElasticsearch) { _%>
 oc process -f <%- directoryPath %>ocp/<%- appName %>/<%- appName %>-elasticsearch.yml | oc apply -f -
 <%_ } _%>

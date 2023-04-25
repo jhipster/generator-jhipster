@@ -18,10 +18,9 @@
  */
 import _ from 'lodash';
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity } from '../../models/index.mjs';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { applicationTypes, binaryOptions, databaseTypes } from '../../jhipster/index.mjs';
+import { applicationTypes, binaryOptions } from '../../jhipster/index.mjs';
 
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
@@ -31,8 +30,6 @@ import { convertValidations } from './validation-converter.js';
 import { convertOptions } from './option-converter.js';
 import { convertRelationships } from './relationship-converter.js';
 import { convertDeployments } from './deployment-converter.js';
-
-const USER = 'User';
 
 let parsedContent;
 let configuration;
@@ -48,7 +45,6 @@ let applicationsPerEntityName;
  * @param {String} configurationObject.applicationType - The application's type
  * @param {String} configurationObject.applicationName - The application's name
  * @param {String} configurationObject.databaseType - The application's database type
- * @param {Boolean} configurationObject.skippedUserManagement - Whether user management is skipped
  * @return the built JDL object.
  */
 export function parseFromConfigurationObject(configurationObject): JDLObject {
@@ -110,7 +106,6 @@ function fillClassesAndFields() {
   jdlEntities.forEach(jdlEntity => {
     jdlObject.addEntity(jdlEntity);
   });
-  addUserEntityIfNeedBe();
   addOptionsFromEntityAnnotations();
 }
 
@@ -155,27 +150,6 @@ function addOptionsFromEntityAnnotations() {
   });
 }
 
-function addUserEntityIfNeedBe() {
-  const relationshipsToTheUserEntity = getRelationshipsToTheUserEntity();
-  if (relationshipsToTheUserEntity && relationshipsToTheUserEntity.length && !jdlObject.getEntity(USER)) {
-    addUserEntity();
-  }
-}
-
-function getRelationshipsToTheUserEntity() {
-  return parsedContent.relationships.filter(relationship => relationship.to.name.toLowerCase() === USER.toLowerCase());
-}
-
-function addUserEntity() {
-  jdlObject.addEntity(
-    new JDLEntity({
-      name: USER,
-      tableName: 'jhi_user',
-      fields: {},
-    })
-  );
-}
-
 function getValidations(field) {
   return convertValidations(field.validations, getConstantValueFromConstantName).reduce((jdlValidations, jdlValidation) => {
     jdlValidations[jdlValidation.name] = jdlValidation;
@@ -192,8 +166,7 @@ function fillAssociations() {
   jdlRelationships.forEach(jdlRelationship => {
     // TODO: addRelationship only expects one argument.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    jdlObject.addRelationship(jdlRelationship, configuration.skippedUserManagement);
+    jdlObject.addRelationship(jdlRelationship);
   });
 }
 

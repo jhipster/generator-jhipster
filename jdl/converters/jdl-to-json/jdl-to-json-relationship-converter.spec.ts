@@ -25,7 +25,7 @@ import { convert } from './jdl-to-json-relationship-converter.js';
 import { relationshipTypes, relationshipOptions } from '../../jhipster/index.mjs';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 
 describe('jdl - JDLToJSONRelationshipConverter', () => {
   describe('convert', () => {
@@ -158,6 +158,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               injectedFieldInTo: 'a',
               injectedFieldInFrom: 'b',
               options: {
+                source: {},
+                destination: {},
                 global: {
                   custom: 42,
                 },
@@ -193,8 +195,10 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               injectedFieldInTo: 'a',
               injectedFieldInFrom: 'b',
               options: {
+                source: {},
+                destination: {},
                 global: {
-                  [JPA_DERIVED_IDENTIFIER]: true,
+                  [BUILT_IN_ENTITY]: true,
                 },
               },
             });
@@ -210,7 +214,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
   "ownerSide": true,
   "relationshipName": "b",
   "relationshipType": "one-to-one",
-  "useJPADerivedIdentifier": true,
+  "relationshipWithBuiltInEntity": true,
 }
 `);
           });

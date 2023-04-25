@@ -50,14 +50,14 @@ export default class JDLOptions {
     return options;
   }
 
-  getOptionsForName(optionName) {
+  getOptionsForName(optionName: string) {
     if (!optionName) {
       return [];
     }
     return this.getOptions().filter(option => option.name === optionName);
   }
 
-  has(optionName) {
+  has(optionName: string) {
     if (!optionName) {
       return false;
     }

@@ -57,10 +57,12 @@ org:
     driver:
       pool:
         metrics-enabled: true
+  <%_ if (!databaseMigrationLiquibase) { _%>
     migrations:
       locations-to-scan:
       packages-to-scan: <%= packageName %>.config.neo4j
       installed-by: <%= baseName %>
+  <%_ } _%>
 <%_ } _%>
 management:
   prometheus:
@@ -154,11 +156,11 @@ spring:
     username: Administrator
     password: password
 <%_ } _%>
-<%_ if (enableLiquibase) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
-  <%_ if (reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     url: <%- prodJdbcUrl %>
   <%_ } _%>
 <%_ } _%>

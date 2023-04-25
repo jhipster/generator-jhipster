@@ -26,7 +26,6 @@ import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
-  stringifyApplicationData,
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
@@ -149,7 +148,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           const user = createUserEntity.call(this, {}, application);
           this.sharedData.setEntity('User', user);
-          application.user = user;
+          (application as any).user = user;
         }
       },
       loadingEntities({ entitiesToLoad }) {

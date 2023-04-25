@@ -24,6 +24,7 @@ import { tokenMatcher as matchesToken } from 'chevrotain';
 import JDLParser from './jdl-parser.js';
 import { tokens as LexerTokens } from './lexer/lexer.js';
 import { checkConfigKeys } from './self-checks/parsing-system-checker.js';
+import jhipsterDefinition from '../../generators/app/jdl/index.mjs';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
@@ -52,7 +53,15 @@ const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
-const configPropsValidations = {
+export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING';
+
+export type JDLValidatorOption = {
+  type: JDLValidatorOptionType;
+  pattern?: RegExp;
+  msg?: string;
+};
+
+const configPropsValidations: Record<string, JDLValidatorOption> = {
   APPLICATION_TYPE: {
     type: 'NAME',
     pattern: ALPHABETIC_LOWER,
@@ -160,11 +169,6 @@ const configPropsValidations = {
     pattern: LANGUAGE_PATTERN,
     msg: 'languages property',
   },
-  MESSAGE_BROKER: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'messageBroker property',
-  },
   MICROFRONTENDS: {
     type: 'list',
     pattern: ALPHANUMERIC_UNDERSCORE,
@@ -222,6 +226,7 @@ const configPropsValidations = {
     pattern: JWT_SECRET_KEY_PATTERN,
     msg: 'gradleEnterpriseHost property',
   },
+  ...jhipsterDefinition.validatorConfig,
 };
 
 const deploymentConfigPropsValidations = {

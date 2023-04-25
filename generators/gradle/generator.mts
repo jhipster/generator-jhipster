@@ -25,7 +25,6 @@ import { GENERATOR_GRADLE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../gen
 import files from './files.mjs';
 import { GRADLE } from './constants.mjs';
 import cleanupOldServerFilesTask from './cleanup.mjs';
-import { createNeedleCallback } from '../base/support/index.mjs';
 import {
   applyFromGradleCallback,
   addGradleDependencyCallback,

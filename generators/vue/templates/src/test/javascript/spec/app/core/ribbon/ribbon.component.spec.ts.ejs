@@ -1,23 +1,25 @@
-import { createLocalVue, shallowMount, Wrapper } from "@vue/test-utils";
+import { createLocalVue, shallowMount } from "@vue/test-utils";
 import Ribbon from '@/core/ribbon/ribbon.vue';
-import RibbonClass from '@/core/ribbon/ribbon.component';
+import type RibbonComponent from '@/core/ribbon/ribbon.component';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
+
+type RibbonComponentType = Vue & InstanceType<typeof RibbonComponent>;
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
 
 describe('Ribbon', () => {
-  let ribbon: RibbonClass;
-  let wrapper: Wrapper<RibbonClass>;
+  let ribbon: RibbonComponentType;
 
   const wrap = async (managementInfo?: any) => {
-    wrapper = shallowMount<RibbonClass>(Ribbon, {
+    const wrapper = shallowMount<RibbonComponentType>(Ribbon, {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>

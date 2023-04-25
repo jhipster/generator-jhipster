@@ -34,6 +34,7 @@ const { GATEWAY, MICROSERVICE } = applicationTypes;
 
 const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');
+const dailyBuildsSamplesPath = path.join(__dirname, '..', 'test-integration', 'daily-builds');
 const itEntitiesSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples', '.jhipster');
 const REMENBER_ME_KEY = 'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
 const JWT_SECRET_KEY =
@@ -45,6 +46,13 @@ const itSamplesEntries = fs
   .map(({ name }) => name)
   .map(name => [name, path.join(itSamplesPath, name, '.yo-rc.json')])
   .filter(([name, yoFile]) => fs.existsSync(yoFile));
+const dailyBuildEntries = fs
+  .readdirSync(dailyBuildsSamplesPath, { withFileTypes: true })
+  .filter(dirent => dirent.isDirectory())
+  .map(({ name }) => name)
+  .map(name => [name, path.join(dailyBuildsSamplesPath, name, '.yo-rc.json')])
+  .filter(([name, yoFile]) => fs.existsSync(yoFile));
+
 const itEntitiesSamplesEntries = fs
   .readdirSync(itEntitiesSamplesPath, { withFileTypes: true })
   .filter(dirent => dirent.isFile())
@@ -53,7 +61,7 @@ const itEntitiesSamplesEntries = fs
 
 describe('integration-test', () => {
   describe('::application samples', () => {
-    for (const [name, yoFile] of itSamplesEntries) {
+    for (const [name, yoFile] of [...itSamplesEntries, ...dailyBuildEntries]) {
       let yoJson = fse.readJsonSync(yoFile);
       const config = yoJson['generator-jhipster'];
       describe(`${name} test`, () => {

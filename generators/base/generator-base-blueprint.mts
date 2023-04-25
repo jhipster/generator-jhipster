@@ -48,6 +48,7 @@ export default class JHipsterBaseBlueprintGenerator<
       return;
     }
 
+    this.sbsBlueprint = this.features.sbsBlueprint ?? false;
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
     if (this.fromBlueprint) {

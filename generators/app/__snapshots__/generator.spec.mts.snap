@@ -58,6 +58,7 @@ Options:
   --message-broker <value>                 message brooker
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --prettier-tab-width                     Default tab width for prettier
+  --with-admin-ui                          Generate administrative user interface
   --skip-git                               Skip git repository initialization
   -h, --help                               display help for command
 "
@@ -133,7 +134,10 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "cucumberTests": false,
   "cypressTests": false,
   "dasherizedBaseName": "jhipster",
+  "databaseMigration": undefined,
+  "databaseMigrationLiquibase": true,
   "databaseType": "sql",
+  "databaseTypeAny": true,
   "databaseTypeCassandra": false,
   "databaseTypeCouchbase": false,
   "databaseTypeMariadb": false,
@@ -296,7 +300,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "enableGradleEnterprise": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
-  "enableLiquibase": true,
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "",
@@ -308,6 +311,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,
   "generateBuiltInUserEntity": true,
+  "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
@@ -379,7 +383,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": "7.9.3",
+  "jhipsterVersion": Any<String>,
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
@@ -668,7 +672,10 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "cucumberTests": false,
   "cypressTests": false,
   "dasherizedBaseName": "jhipster",
+  "databaseMigration": undefined,
+  "databaseMigrationLiquibase": true,
   "databaseType": "sql",
+  "databaseTypeAny": true,
   "databaseTypeCassandra": false,
   "databaseTypeCouchbase": false,
   "databaseTypeMariadb": false,
@@ -832,7 +839,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "enableGradleEnterprise": false,
   "enableHibernateCache": false,
   "enableI18nRTL": false,
-  "enableLiquibase": true,
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "",
@@ -844,6 +850,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,
   "generateBuiltInUserEntity": true,
+  "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
@@ -915,7 +922,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": "7.9.3",
+  "jhipsterVersion": Any<String>,
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1204,7 +1211,10 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "cucumberTests": false,
   "cypressTests": false,
   "dasherizedBaseName": "jhipster",
+  "databaseMigration": undefined,
+  "databaseMigrationLiquibase": true,
   "databaseType": "sql",
+  "databaseTypeAny": true,
   "databaseTypeCassandra": false,
   "databaseTypeCouchbase": false,
   "databaseTypeMariadb": false,
@@ -1367,7 +1377,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "enableGradleEnterprise": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
-  "enableLiquibase": true,
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "services/jhipster",
@@ -1379,6 +1388,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "generateAuthenticationApi": false,
   "generateBuiltInAuthorityEntity": false,
   "generateBuiltInUserEntity": false,
+  "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
@@ -1450,7 +1460,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": "7.9.3",
+  "jhipsterVersion": Any<String>,
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",

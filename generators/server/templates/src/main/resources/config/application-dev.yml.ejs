@@ -72,7 +72,7 @@ management:
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
 org:
   neo4j:
     migrations:
@@ -174,13 +174,13 @@ spring:
     username: Administrator
     password: password
 <%_ } _%>
-<%_ if (enableLiquibase) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
   liquibase:
   <%_ if (!skipFakeData) { _%>
     # Remove 'faker' if you do not want the sample data to be loaded automatically
   <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-  <%_ if (reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     url: <%- devJdbcUrl %>
   <%_ } _%>
 <%_ } _%>

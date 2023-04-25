@@ -4,7 +4,6 @@ import type YeomanGenerator from 'yeoman-generator';
 import { fn, type Mock } from 'jest-mock';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { BaseEntity } from '../../generators/base-application/index.mjs';

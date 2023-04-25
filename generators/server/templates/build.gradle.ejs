@@ -16,15 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        // jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
-    }
-}
-
 plugins {
     id "java"
     id "maven-publish"
@@ -136,7 +127,7 @@ test {
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
-    reports.html.enabled = false
+    reports.html.required = false
 <%_ if (reactive) { _%>
 
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
@@ -188,7 +179,7 @@ task cucumberTest(type: Test) {
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
-    reports.html.enabled = false
+    reports.html.required = false
 }
 
 check.dependsOn cucumberTest
@@ -196,19 +187,19 @@ check.dependsOn cucumberTest
 
 check.dependsOn integrationTest
 task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
 }
 
 task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
 }
 
 <%_ if (cucumberTests) { _%>
 task cucumberTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn cucumberTest
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(cucumberTest)
 }
 
 <%_ } _%>
@@ -308,7 +299,9 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
+  <%_ if (!databaseMigrationLiquibase) { _%>
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+  <%_ } _%>
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
@@ -488,7 +481,53 @@ wrapper {
 }
 
 <%_ if (!skipClient) { _%>
-task webapp_test(type: NpmTask, dependsOn: "npm_install") {
+task webapp_test(type: NpmTask) {
+    inputs.property('appVersion', project.version)
+    inputs.files("package-lock.json")
+        .withPropertyName('package-lock')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files("build.gradle")
+        .withPropertyName('build.gradle')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ if (clientFrameworkAngular) { _%>
+    inputs.files("angular.json")
+        .withPropertyName('angular.json')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files("tsconfig.json", "tsconfig.app.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
+        .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+    inputs.dir("<%= clientSrcDir %>")
+        .withPropertyName("webapp-source-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ if (!clientFrameworkAngular) { _%>
+    inputs.files("tsconfig.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+  <%_ if (clientFrameworkVue) { _%>
+    inputs.files(".postcssrc")
+        .withPropertyName("postcssrc")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+
+    outputs.dir("build/test-results/jest/")
+        .withPropertyName("jest-result-dir")
+    outputs.file("build/test-results/TESTS-results-jest.xml")
+        .withPropertyName("jest-result")
+        outputs.file("build/test-results/clover.xml")
+        .withPropertyName("clover-result")
+
+    dependsOn npmInstall,compileTestJava
     args = ["run", "webapp:test"]
 }
 

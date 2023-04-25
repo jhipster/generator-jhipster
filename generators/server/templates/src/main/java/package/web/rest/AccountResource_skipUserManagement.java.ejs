@@ -18,31 +18,42 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (!reactive) { _%>
-import <%= packageName %>.security.SecurityUtils;
-
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } else { _%>
+import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
+
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+  <%_ if (reactive) { _%>
+import org.springframework.web.server.ServerWebExchange;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+import java.security.Principal;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+<%_ } else { _%>
+  <%_ if (reactive) { _%>
+import java.security.Principal;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
+  <%_ } else { _%>
+import <%= packageName %>.security.SecurityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+  <%_ } _%>
+<%_ } _%>
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
-<%_ if (reactive) { _%>
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.UserDetails;
-<%_ } else { _%>
-import org.springframework.security.core.context.SecurityContextHolder;
-<%_ } _%>
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-<%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
-import java.security.Principal;
-<%_ } else { _%>
-import jakarta.servlet.http.HttpServletRequest;
-<%_ } _%>
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,16 +65,35 @@ public class AccountResource {
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private static class AccountResourceException extends RuntimeException {
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+        private static final long serialVersionUID = 1L;
+
+        private AccountResourceException(String message) {
+            super(message);
+        }
+<%_ } _%>
     }
 
     /**
      * {@code GET  /account} : get the current user.
      *
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+     * @param principal the current user; resolves to {@code null} if not authenticated.
+<%_ } _%>
      * @return the current user.
      * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
 <%_ if (reactive) { _%>
+  <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+    public Mono<UserVM> getAccount(Principal principal) {
+        if (principal instanceof AbstractAuthenticationToken) {
+            return Mono.just(getUserFromAuthentication((AbstractAuthenticationToken) principal));
+        } else {
+            throw new AccountResourceException("User could not be found");
+        }
+    }
+  <%_ } else { _%>
     public Mono<UserVM> getAccount() {
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -82,7 +112,18 @@ public class AccountResource {
                 return new UserVM(login, authorities);
             })
             .switchIfEmpty(Mono.error(new AccountResourceException()));
+    }
+  <%_ } _%>
 <%_ } else { _%>
+  <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+    public UserVM getAccount(Principal principal) {
+        if (principal instanceof AbstractAuthenticationToken) {
+            return getUserFromAuthentication((AbstractAuthenticationToken) principal);
+        } else {
+            throw new AccountResourceException("User could not be found");
+        }
+    }
+  <%_ } else { _%>
     public UserVM getAccount() {
         String login = SecurityUtils.getCurrentUserLogin()
             .orElseThrow(AccountResourceException::new);
@@ -90,8 +131,10 @@ public class AccountResource {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.toSet());
         return new UserVM(login, authorities);
-<%_ } _%>
     }
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!authenticationTypeJwt) { _%>
 
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
@@ -100,16 +143,17 @@ public class AccountResource {
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     public Mono<String> isAuthenticated(ServerWebExchange request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getPrincipal().map(Principal::getName);
-<%_ } else { _%>
+  <%_ } else { _%>
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
-<%_ } _%>
+  <%_ } _%>
     }
+<%_ } _%>
 
     private static class UserVM {
         private String login;
@@ -133,4 +177,22 @@ public class AccountResource {
             return login;
         }
     }
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+
+    private UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+        if (
+  <%_ if (authenticationTypeOauth2) { _%>
+            !(authToken instanceof OAuth2AuthenticationToken) &&
+  <%_ } _%>
+            !(authToken instanceof JwtAuthenticationToken)
+        ) {
+            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
+        }
+
+        return new UserVM(
+            authToken.getName(),
+            authToken.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet())
+        );
+    }
+<%_ } _%>
 }

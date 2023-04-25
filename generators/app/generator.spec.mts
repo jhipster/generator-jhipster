@@ -58,6 +58,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
+          jhipsterVersion: expect.any(String),
         });
       });
     });
@@ -78,6 +79,7 @@ describe(`generator - ${generator}`, () => {
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
+          jhipsterVersion: expect.any(String),
         });
       });
     });
@@ -97,6 +99,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
+          jhipsterVersion: expect.any(String),
         });
       });
     });

@@ -20,6 +20,7 @@
 import { Lexer } from 'chevrotain';
 
 import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens.js';
+import { relationshipOptions } from '../../jhipster/index.mjs';
 
 import ValidationTokens from './validation-tokens.js';
 import ApplicationTokens from './application-tokens.js';
@@ -31,6 +32,8 @@ import OptionTokens from './option-tokens.js';
 import createTokenFromConfigCreator from './token-creator.js';
 
 export const tokens: any = {};
+
+const { BUILT_IN_ENTITY } = relationshipOptions;
 
 function createTokenFromConfig(config) {
   const newToken = createTokenFromConfigCreator(config);
@@ -113,6 +116,7 @@ createTokenFromConfig({ name: 'ENUM', pattern: 'enum' });
 // Relationship-related
 createTokenFromConfig({ name: 'RELATIONSHIP', pattern: 'relationship' });
 createTokenFromConfig({ name: 'JPA_DERIVED_IDENTIFIER', pattern: 'jpaDerivedIdentifier' });
+createTokenFromConfig({ name: 'BUILT_IN_ENTITY', pattern: BUILT_IN_ENTITY });
 
 // Category For the relationship type key names
 RelationshipTypeTokens.tokens.forEach(token => {

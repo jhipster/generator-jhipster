@@ -46,8 +46,8 @@ export default class InfoGenerator extends BaseApplicationGenerator {
         try {
           const { stdout } = await this.spawnCommand('npm', ['list', 'generator-jhipster'], { stdio: 'pipe' });
           console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
-        } catch ({ stdout }) {
-          console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
+        } catch (error) {
+          console.log(`\n\`\`\`\n${(error as any).stdout}\`\`\`\n`);
         }
       },
 
@@ -118,12 +118,11 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       });
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({
         entities,
-        skippedUserManagement: this.jhipsterConfig.skipUserManagement,
       });
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
-      this.logger.warn((error as any).message || error);
-      throw new Error('\nError while parsing entities to JDL\n');
+      this.logger.error('Error while parsing entities to JDL', error);
+      throw new Error('\nError while parsing entities to JDL\n', { cause: error });
     }
     return jdlObject;
   }

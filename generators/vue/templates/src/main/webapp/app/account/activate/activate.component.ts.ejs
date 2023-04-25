@@ -1,37 +1,40 @@
-import Component from 'vue-class-component';
-import { Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
 import LoginService from '@/account/login.service';
 import ActivateService from './activate.service';
+import { useRouter } from 'vue-router/composables';
 
-@Component
-export default class Activate extends Vue {
-  @Inject('activateService')
-  private activateService: () => ActivateService;
-  @Inject('loginService')
-  private loginService: () => LoginService;
-  success = false;
-  error = false;
+export default defineComponent({
+  setup() {
+    const activateService = inject('activateService', () => new ActivateService(), true);
+    const loginService = inject('loginService', () => new LoginService());
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.query.key) {
-        vm.init(to.query.key);
+    const success: Ref<boolean> = ref(false);
+    const error: Ref<boolean> = ref(false);
+
+    router.beforeEach(async (to) => {
+      const key = Array.isArray(to.query.key) ? to.query.key[0] : to.query.key;
+      try {
+        await activateService.activateAccount(key);
+        success.value = true;
+        error.value = false;
+      } catch {
+        error.value = true;
+        success.value = false;
       }
     });
-  }
 
-  public init(key: string): void {
-    this.activateService().activateAccount(key)
-      .then(() => {
-        this.success = true;
-        this.error = false;
-      }, () => {
-        this.error = true;
-        this.success = false;
-      });
-  }
-
-  public openLogin(): void {
-    this.loginService().openLogin((<any>this).$root);
-  }
-}
+    return {
+      router,
+      activateService,
+      loginService,
+      success,
+      error,
+    };
+  },
+  methods: {
+    openLogin(): void {
+      this.loginService.openLogin((<any>this).$root);
+    },
+  },
+});

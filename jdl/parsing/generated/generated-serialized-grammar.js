@@ -904,6 +904,13 @@ const serializedGrammar = [
                                 idx: 0,
                                 pattern: 'jpaDerivedIdentifier',
                             },
+                            {
+                                type: 'Terminal',
+                                name: 'BUILT_IN_ENTITY',
+                                label: "'builtInEntity'",
+                                idx: 0,
+                                pattern: 'builtInEntity',
+                            },
                         ],
                     },
                 ],

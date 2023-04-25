@@ -45,7 +45,7 @@ import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -84,9 +84,6 @@ import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-  <%_ if (applicationTypeMonolith) { _%>
-import org.springframework.security.config.Customizer;
-  <%_ } _%>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
@@ -121,7 +118,7 @@ public class SecurityConfiguration {
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
     }
-<%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -179,7 +176,7 @@ public class SecurityConfiguration {
 <%_ } else { _%>
                     .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
                     .requestMatchers("/api/register").permitAll()
                     .requestMatchers("/api/activate").permitAll()
                     .requestMatchers("/api/account/reset-password/init").permitAll()
@@ -200,7 +197,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/management/prometheus").permitAll()
                     .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
             .rememberMe(rememberMe ->
                 rememberMe
                     .rememberMeServices(rememberMeServices)

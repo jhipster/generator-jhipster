@@ -1,5 +1,91 @@
 {
   "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "angularSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "ng-default",
+        "ng-default-additional",
+        "ng-mysql-es-noi18n-mapsid",
+        "ng-mongodb-kafka-cucumber",
+        "ng-h2mem-ws-nol2",
+        "ng-couchbase",
+        "ng-gradle-couchbase-search",
+        "ng-gradle-fr",
+        "ng-gradle-mariadb-oauth2-infinispan",
+        "ng-gradle-h2disk-ws-nocache",
+        "ng-webflux-mongodb",
+        "ng-webflux-gradle-mongodb-oauth2",
+        "ng-webflux-psql-default",
+        "ng-webflux-psql-additional",
+        "ng-webflux-gradle-session-h2mem-es",
+        "ng-webflux-couchbase",
+        "ms-ng-consul-oauth2-mongodb-caffeine",
+        "mf-ng-eureka-jwt-psql-ehcache",
+        "ms-mf-ng-consul-oauth2-neo4j"
+      ]
+    },
+    {
+      "id": "reactSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "react-default",
+        "react-maven-h2mem-memcached",
+        "react-gradle-mysql-es-noi18n-mapsid",
+        "react-gradle-cassandra-session-redis",
+        "ms-react-consul-jwt-cassandra-redis",
+        "ms-mf-react-eureka-oauth2-mariadb-infinispan"
+      ]
+    },
+    {
+      "id": "vueSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "vue-default",
+        "vue-noi18n-mysql-ws-oauth2",
+        "vue-fulli18n-mysql-es",
+        "vue-gradle-h2mem-ws-session",
+        "vue-h2disk-ws-theme",
+        "vue-session-cassandra-fr",
+        "ms-vue-eureka-jwt-couchbase-hazelcast",
+        "ms-mf-vue-consul-oauth2-mysql-memcached",
+        "stack-vue-no-db"
+      ]
+    },
+    {
+      "id": "daily-ms-oauth2Sample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ms-ngx-gateway-eureka-oauth2",
+        "daily-ms-micro-eureka-oauth2",
+        "daily-ms-ngx-gateway-consul-oauth2",
+        "daily-ms-micro-consul-oauth2",
+        "daily-gradle-ms-ngx-gateway-eureka-oauth2",
+        "daily-gradle-ms-micro-eureka-oauth2",
+        "daily-gradle-ms-ngx-gateway-consul-oauth2",
+        "daily-gradle-ms-micro-consul-oauth2"
+      ]
+    },
+    {
+      "id": "daily-neo4jSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ngx-neo4j",
+        "daily-gradle-ngx-neo4j",
+        "daily-react-maven-neo4j",
+        "daily-react-gradle-neo4j",
+        "daily-vue-maven-neo4j",
+        "daily-vue-gradle-neo4j",
+        "daily-webflux-neo4j"
+      ]
+    }
+  ],
   "configurations": [
     {
       "type": "node",
@@ -7,7 +93,6 @@
       "internalConsoleOptions": "neverOpen",
       "name": "update vscode launch.json",
       "program": "${workspaceFolder}/test-integration/scripts/99-update-vscode.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
       "console": "integratedTerminal"
     },
     {
@@ -20,330 +105,45 @@
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-default sample",
+      "name": "generate sample from angular workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-default"],
+      "args": ["${input:angularSample}"],
       "console": "integratedTerminal"
     },
     {
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-default-additional sample",
+      "name": "generate sample from react workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-default-additional"],
+      "args": ["${input:reactSample}"],
       "console": "integratedTerminal"
     },
     {
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-mysql-es-noi18n-mapsid sample",
+      "name": "generate sample from vue workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-mysql-es-noi18n-mapsid"],
+      "args": ["${input:vueSample}"],
       "console": "integratedTerminal"
     },
     {
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-mongodb-kafka-cucumber sample",
+      "name": "generate sample from daily-ms-oauth2 workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-mongodb-kafka-cucumber"],
+      "args": ["${input:daily-ms-oauth2Sample}"],
       "console": "integratedTerminal"
     },
     {
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-h2mem-ws-nol2 sample",
+      "name": "generate sample from daily-neo4j workflow",
       "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-h2mem-ws-nol2"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-couchbase sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-couchbase"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-gradle-couchbase-search sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-gradle-couchbase-search"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-gradle-fr sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-gradle-fr"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-gradle-mariadb-oauth2-infinispan sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-gradle-mariadb-oauth2-infinispan"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-gradle-h2disk-ws-nocache sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-gradle-h2disk-ws-nocache"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-webflux-mongodb sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-webflux-mongodb"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-webflux-gradle-mongodb-oauth2 sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-webflux-gradle-mongodb-oauth2"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-webflux-psql-default sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-webflux-psql-default"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-webflux-psql-additional sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-webflux-psql-additional"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-webflux-gradle-session-h2mem-es sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-webflux-gradle-session-h2mem-es"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ng-webflux-couchbase sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ng-webflux-couchbase"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-ng-consul-oauth2-mongodb-caffeine sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-ng-consul-oauth2-mongodb-caffeine"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate mf-ng-eureka-jwt-psql-ehcache sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["mf-ng-eureka-jwt-psql-ehcache"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-mf-ng-consul-oauth2-neo4j sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-mf-ng-consul-oauth2-neo4j"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate react-default sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["react-default"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate react-maven-h2mem-memcached sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["react-maven-h2mem-memcached"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate react-gradle-mysql-es-noi18n-mapsid sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["react-gradle-mysql-es-noi18n-mapsid"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate react-gradle-cassandra-session-redis sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["react-gradle-cassandra-session-redis"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-react-consul-jwt-cassandra-redis sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-react-consul-jwt-cassandra-redis"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-mf-react-eureka-oauth2-mariadb-infinispan sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-mf-react-eureka-oauth2-mariadb-infinispan"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate vue-default sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["vue-default"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate vue-noi18n-mysql-ws-oauth2 sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["vue-noi18n-mysql-ws-oauth2"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate vue-fulli18n-mysql-es sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["vue-fulli18n-mysql-es"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate vue-gradle-h2mem-ws-session sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["vue-gradle-h2mem-ws-session"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate vue-h2disk-ws-theme sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["vue-h2disk-ws-theme"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate vue-session-cassandra-fr sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["vue-session-cassandra-fr"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-vue-eureka-jwt-couchbase-hazelcast sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-vue-eureka-jwt-couchbase-hazelcast"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "internalConsoleOptions": "neverOpen",
-      "name": "generate ms-mf-vue-consul-oauth2-mysql-memcached sample",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "runtimeArgs": ["--loader=@node-loaders/esbuild"],
-      "args": ["ms-mf-vue-consul-oauth2-mysql-memcached"],
+      "args": ["${input:daily-neo4jSample}"],
       "console": "integratedTerminal"
     }
   ]

@@ -52,8 +52,6 @@ application {
     serviceDiscoveryType no,
     authenticationType jwt,
     databaseType mongodb,
-    devDatabaseType mongodb,
-    prodDatabaseType mongodb,
     cacheProvider no,
     enableHibernateCache false,
     buildTool gradle,
@@ -81,7 +79,7 @@ enum Gender {
 }
 
 relationship OneToOne {
-    Customer{user(login) required} to User
+    Customer{user(login) required} to User with builtInEntity
 }
 
 service Customer with serviceClass

@@ -134,7 +134,7 @@ entity Product {
 
 /*
 relationship OneToOne {
-  @Id UserData{user(login)} to User
+  @Id UserData{user(login)} to User with builtInEntity
 }
 */
 

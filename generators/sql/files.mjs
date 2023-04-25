@@ -132,9 +132,6 @@ export const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.devDatabaseTypePostgres || context.prodDatabaseTypePostgres)
 );
 
-/**
- * @this {import('./index.mjs')}
- */
 export default async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,

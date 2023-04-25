@@ -25,7 +25,7 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     done
     cd "$JHI_FOLDER_APP"
     ls -la "$JHI_FOLDER_APP"/
-    eval "$JHI_CLI import-jdl *.jdl --no-insight $@"
+    eval "$JHI_CLI import-jdl *.jdl --no-insight --skip-jhipster-dependencies $@"
 
 elif [[ "$JHI_APP" == "jdl" ]]; then
     #-------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ elif [[ "$JHI_APP" == "jdl" ]]; then
     ls -la "$JHI_FOLDER_APP"/
 
     cd "$JHI_FOLDER_APP"
-    eval "$JHI_CLI import-jdl *.jdl --no-insight $@"
+    eval "$JHI_CLI import-jdl *.jdl --no-insight --skip-jhipster-dependencies $@"
 
 else
     #-------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ else
     fi
 
     cd "$JHI_FOLDER_APP"
-    eval "$JHI_CLI --force --no-insight --skip-checks --with-entities $@"
+    eval "$JHI_CLI --force --no-insight --skip-checks --with-entities --skip-jhipster-dependencies $@"
 
 fi
 

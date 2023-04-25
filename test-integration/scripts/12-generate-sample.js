@@ -4,11 +4,9 @@ import { dirname, join, resolve } from 'path';
 import process from 'process';
 import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
+import { execa } from 'execa';
 
-import { runJHipster } from '../../cli/program.mjs';
-import { done } from '../../cli/utils.mjs';
-
-import getWorkflowSamples from './lib/get-workflow-samples.js';
+import getSamples, { DAILY_PREFIX, isDaily } from './lib/get-workflow-samples.js';
 import copyEntitySamples from './lib/copy-entity-samples.js';
 import copyJdlEntitySamples from './lib/copy-jdl-entity-samples.js';
 
@@ -21,14 +19,16 @@ if (!sampleName) {
   throw new Error('Sample name is required');
 }
 
+const jhipsterBin = join(__dirname, '../../bin/jhipster.cjs');
 const jdlSamplesFolder = join(__dirname, '../jdl-samples');
 const samplesFolder = join(__dirname, '../samples');
+const dailyBuildsFolder = join(__dirname, '../daily-builds');
 const jdlEntitiesSamplesFolder = join(samplesFolder, 'jdl-entities');
 
 const destSamplesFolder = join(__dirname, '../../../jhipster-samples');
 const destSampleFolder = process.env.JHI_FOLDER_APP ? resolve(process.env.JHI_FOLDER_APP) : join(destSamplesFolder, sampleName);
 
-const samples = getWorkflowSamples();
+const samples = getSamples();
 
 const sample = samples[sampleName];
 mkdirSync(destSampleFolder, { recursive: true });
@@ -55,28 +55,7 @@ if (jdlEntity && jdlEntity !== 'none') {
   }
 }
 
-if (sample['app-sample']) {
-  cpSync(join(samplesFolder, sample['app-sample'], '.yo-rc.json'), join(destSampleFolder, '.yo-rc.json'));
-
-  if (jdlEntity) {
-    // Generate jdl entities
-    const files = globSync('*.jdl');
-    await runJHipster({ argv: ['jhipster', 'jhipster', 'jdl', ...files, '--json-only', '--no-insight'] }).catch(done);
-  }
-
-  // Generate the application
-  await runJHipster({
-    argv: [
-      'jhipster',
-      'jhipster',
-      '--with-entities',
-      '--skip-jhipster-dependencies',
-      '--skip-install',
-      '--no-insight',
-      ...(sample['extra-args']?.split(' ') ?? []),
-    ],
-  }).catch(done);
-} else if (sample['jdl-samples']) {
+if (sample['jdl-samples']) {
   const jdlSamples = sample['jdl-samples'].split(',');
   for (const jdlSample of jdlSamples) {
     if (existsSync(join(jdlSamplesFolder, jdlSample))) {
@@ -88,18 +67,31 @@ if (sample['app-sample']) {
 
   const files = globSync('*.jdl');
   // Generate the application using every jdl file
-  await runJHipster({
-    argv: [
-      'jhipster',
-      'jhipster',
-      'jdl',
-      ...files,
-      '--skip-jhipster-dependencies',
-      '--skip-install',
-      '--no-insight',
-      ...(sample['extra-args']?.split(' ') ?? []),
-    ],
-  }).catch(done);
+  await execa(
+    jhipsterBin,
+    ['jdl', ...files, '--skip-jhipster-dependencies', '--skip-install', '--no-insight', ...(sample['extra-args']?.split(' ') ?? [])],
+    { stdio: 'inherit' }
+  );
+} else {
+  const appSample = sample['app-sample'] ?? sample.name;
+  const isDailySample = isDaily(appSample);
+  cpSync(
+    join(isDailySample ? dailyBuildsFolder : samplesFolder, isDailySample ? appSample.replace(DAILY_PREFIX, '') : appSample, '.yo-rc.json'),
+    join(destSampleFolder, '.yo-rc.json')
+  );
+
+  if (jdlEntity) {
+    // Generate jdl entities
+    const files = globSync('*.jdl');
+    await execa(jhipsterBin, ['jdl', ...files, '--json-only', '--no-insight'], { stdio: 'inherit' });
+  }
+
+  // Generate the application
+  await execa(
+    jhipsterBin,
+    ['--with-entities', '--skip-jhipster-dependencies', '--skip-install', '--no-insight', ...(sample['extra-args']?.split(' ') ?? [])],
+    { stdio: 'inherit' }
+  );
 }
 
-await runJHipster({ argv: ['jhipster', 'jhipster', 'info'] }).catch(done);
+await execa(jhipsterBin, ['info'], { stdio: 'inherit' });

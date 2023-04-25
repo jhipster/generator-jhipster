@@ -1,7 +1,10 @@
+configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
 dependencies {
   implementation "org.liquibase:liquibase-core"
   liquibaseRuntime "org.liquibase:liquibase-core"
-  liquibaseRuntime sourceSets.main.compileClasspath
 <%_ if (databaseTypeSql && !reactive) { _%>
 
   liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
@@ -29,6 +32,9 @@ dependencies {
   <%_ if (prodDatabaseType !== devDatabaseType) { _%>
   }
   <%_ } _%>
+<%_ } else if (databaseTypeNeo4j) { _%>
+  implementation "org.liquibase.ext:liquibase-neo4j:${liquibaseVersion}"
+  implementation "org.springframework:spring-jdbc"
 <%_ } _%>
 }
 
@@ -71,7 +77,7 @@ liquibase {
 }
 
 liquibaseDiff.dependsOn compileJava
-liquibaseDiffChangeLog.dependsOn compileJava
+liquibaseDiffChangelog.dependsOn compileJava
 
 configurations {
   all {

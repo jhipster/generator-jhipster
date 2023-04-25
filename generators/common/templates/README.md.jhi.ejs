@@ -385,13 +385,13 @@ You can use Docker to improve your JHipster development experience. A number of 
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
 ```
-docker compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+docker compose -f src/main/docker/<%= prodDatabaseType ?? databaseType %>.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+docker compose -f src/main/docker/<%= prodDatabaseType ?? databaseType %>.yml down
 ```
 <%_ } _%>
 

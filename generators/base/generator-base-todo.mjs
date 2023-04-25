@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import path from 'path';
+import path, { isAbsolute } from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
 import fs, { existsSync } from 'fs';
@@ -46,7 +46,6 @@ import {
   buildToolTypes,
   cacheTypes,
   websocketTypes,
-  messageBrokerTypes,
   testFrameworkTypes,
   applicationTypes,
   serviceDiscoveryTypes,
@@ -67,6 +66,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
+import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_RABBITMQ, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -80,7 +80,6 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { KAFKA, PULSAR, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -88,7 +87,6 @@ const { ELASTICSEARCH } = searchEngineTypes;
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
@@ -227,24 +225,26 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   composeWithJHipster(generator, args, options, { immediately = false } = {}) {
     assert(typeof generator === 'string', 'generator should to be a string');
-    const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
-    if (!Array.isArray(args)) {
-      options = args;
-      args = [];
-    }
-
-    if (this.env.get(namespace)) {
-      generator = namespace;
-    } else {
-      // Keep test compatibily were jhipster lookup does not run.
-      const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
-        const pathToLook = join(__dirname, `../${generator}${extension}`);
-        return existsSync(pathToLook) ? pathToLook : undefined;
-      });
-      if (!found) {
-        throw new Error(`Generator ${generator} was not found`);
+    if (!isAbsolute(generator)) {
+      const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+      if (!Array.isArray(args)) {
+        options = args;
+        args = [];
       }
-      generator = join(__dirname, `../${generator}${found}`);
+
+      if (this.env.get(namespace)) {
+        generator = namespace;
+      } else {
+        // Keep test compatibily were jhipster lookup does not run.
+        const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
+          const pathToLook = join(__dirname, `../${generator}${extension}`);
+          return existsSync(pathToLook) ? pathToLook : undefined;
+        });
+        if (!found) {
+          throw new Error(`Generator ${generator} was not found`);
+        }
+        generator = join(__dirname, `../${generator}${found}`);
+      }
     }
 
     return this.env.composeWith(
@@ -487,7 +487,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {import('./api.mjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
-  async writeFiles(options) {
+  async internalWriteFiles(options) {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
@@ -603,7 +603,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         };
         const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
-        const data = createJHipster7Context(this, context, { ignoreWarnings: true });
+        const data = this.jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
         if (useAsync) {
           await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {
@@ -1065,8 +1065,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationTypeJwt = dest.authenticationType === JWT;
     dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
 
-    dest.generateUserManagement = !dest.skipUserManagement && dest.authenticationType !== OAUTH2 && dest.applicationType !== MICROSERVICE;
-    dest.generateBuiltInUserEntity = dest.generateUserManagement;
+    dest.generateAuthenticationApi = dest.applicationType === MONOLITH || dest.applicationType === GATEWAY;
+    const authenticationApiWithUserManagement = dest.authenticationType !== OAUTH2 && dest.generateAuthenticationApi;
+    dest.generateUserManagement = !dest.skipUserManagement && dest.databaseType !== NO_DATABASE && authenticationApiWithUserManagement;
+    dest.generateInMemoryUserCredentials = !dest.generateUserManagement && authenticationApiWithUserManagement;
+
+    // TODO make UserEntity optional on relationships for microservices and oauth2
+    // TODO check if we support syncWithIdp using jwt authentication
+    // Used for relationships and syncWithIdp
+    const usesSyncWithIdp = dest.authenticationType === OAUTH2 && dest.databaseType !== NO_DATABASE;
+    dest.generateBuiltInUserEntity = dest.generateUserManagement || usesSyncWithIdp;
+
+    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && dest.databaseType !== CASSANDRA;
   }
 
   /**
@@ -1146,6 +1156,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.buildTool = config.buildTool;
 
     dest.databaseType = config.databaseType;
+    dest.databaseMigration = config.databaseMigration;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
     dest.incrementalChangelog = config.incrementalChangelog;
@@ -1205,12 +1216,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
 
     if (!dest.messageBroker) {
-      dest.messageBroker = NO_MESSAGE_BROKER;
+      dest.messageBroker = MESSAGE_BROKER_NO;
     }
-    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
-    dest.messageBrokerRabbitMQ = dest.messageBroker === RABBITMQ; // added rabbitmq option cmi-tic-varun
-    dest.messageBrokerPulsar = dest.messageBroker === PULSAR;
-    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== NO_MESSAGE_BROKER;
+    dest.messageBrokerKafka = dest.messageBroker === MESSAGE_BROKER_KAFKA;
+    dest.messageBrokerRabbitMQ = dest.messageBroker === MESSAGE_BROKER_RABBITMQ;
+    dest.messageBrokerPulsar = dest.messageBroker === MESSAGE_BROKER_PULSAR;
+    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== MESSAGE_BROKER_NO;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
@@ -1254,26 +1265,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeMysql = dest.databaseType === SQL && (dest.devDatabaseType === MYSQL || dest.prodDatabaseType === MYSQL);
     dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
     dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
+    dest.databaseTypeAny = !dest.databaseTypeNo;
 
-    dest.enableLiquibase = dest.databaseTypeSql;
-
-    if (dest.databaseType === NO_DATABASE) {
-      // User management requires a database.
-      dest.generateUserManagement = false;
-    }
-    // TODO make UserEntity optional on relationships for microservices and oauth2
-    // Used for relationships and syncWithIdp
-    dest.generateBuiltInUserEntity =
-      dest.generateUserManagement ||
-      dest.authenticationType === OAUTH2 ||
-      (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
-
-    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+    dest.databaseMigrationLiquibase = dest.databaseMigration ? dest.databaseMigration === 'liquibase' : dest.databaseType === SQL;
 
     dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
 
     dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
-    dest.generateAuthenticationApi = dest.applicationTypeMonolith || dest.applicationTypeGateway;
 
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);

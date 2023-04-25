@@ -3,7 +3,7 @@ export default function mavenPluginContent({
   packageName,
   srcMainResources,
   authenticationTypeOauth2,
-  devDatabaseTypeH2Disk,
+  devDatabaseTypeH2Any,
   driver,
   url,
   username,
@@ -47,7 +47,7 @@ export default function mavenPluginContent({
         <groupId>jakarta.validation</groupId>
         <artifactId>jakarta.validation-api</artifactId>
         <version>\${validation-api.version}</version>
-      </dependency>${devDatabaseTypeH2Disk? `
+      </dependency>${devDatabaseTypeH2Any? `
       <dependency>
         <groupId>com.h2database</groupId>
         <artifactId>h2</artifactId>

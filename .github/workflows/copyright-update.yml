@@ -47,7 +47,7 @@ jobs:
           grep -rlZE "Copyright ([0-9]+)-$CURRENT_YEAR" . | xargs -0 sed -i -E "s/Copyright ([0-9]+)-$CURRENT_YEAR/Copyright \1-$NEW_YEAR/g"
       # Create PR
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'Update copyright headers'

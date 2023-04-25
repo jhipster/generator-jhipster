@@ -16,7 +16,7 @@ LABEL ALIAS=postgresql
 FROM quay.io/keycloak/keycloak:20.0.1
 LABEL ALIAS=keycloak
 
-FROM mysql:8.0.32
+FROM mysql:8.0.33
 
 FROM mariadb:10.11.2
 
@@ -31,14 +31,14 @@ FROM cassandra:3.11.14
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.6.0
+FROM neo4j:5.7.0
 
 FROM hazelcast/management-center:5.2.1
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.19-alpine
 
-FROM redis:7.0.10
+FROM redis:7.0.11
 
 FROM confluentinc/cp-kafka:7.3.3
 LABEL ALIAS=kafka

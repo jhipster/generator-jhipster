@@ -1,25 +1,28 @@
-import Component from 'vue-class-component';
-import { Inject, Vue } from 'vue-property-decorator';
+import { computed, ComputedRef, defineComponent, inject } from 'vue';
+
 import LoginService from '@/account/login.service';
+import { useStore } from '@/store';
 
-@Component
-export default class Home extends Vue {
-  @Inject('loginService')
-  private loginService: () => LoginService;
+export default defineComponent({
+  setup(this: any, prop) {
+    const loginService = inject('loginService', () => new LoginService(), true);
 
-  public openLogin(): void {
+    const authenticated: ComputedRef<string> = computed(() => useStore().getters.authenticated);
+    const username: ComputedRef<string> = computed(() => useStore().getters.account?.login ?? '');
+
+    return {
+      authenticated,
+      username,
+      loginService,
+    };
+  },
+  methods: {
+    openLogin(): void {
 <%_ if (!authenticationTypeOauth2) { _%>
-    this.loginService().openLogin((<any>this).$root);
+      this.loginService().openLogin(this.$root);
 <%_ } else { %>
-    this.loginService().login();
+      this.loginService().login();
 <%_ } %>
-  }
-
-  public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
-  }
-
-  public get username(): string {
-    return this.$store.getters.account?.login ?? '';
-  }
-}
+    },
+  },
+});
