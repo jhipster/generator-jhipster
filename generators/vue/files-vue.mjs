@@ -94,7 +94,7 @@ export const vueFiles = {
     {
       condition: generator => generator.enableTranslation,
       ...clientApplicationBlock,
-      templates: ['locale/translation.service.ts', 'shared/config/formatter.ts', 'shared/config/store/translation-store.ts'],
+      templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts'],
     },
   ],
   sharedVueApp: [
@@ -256,11 +256,6 @@ export const vueFiles = {
         'spec/app/admin/metrics/metrics.component.spec.ts',
         'spec/app/admin/metrics/metrics-modal.component.spec.ts',
       ],
-    },
-    {
-      condition: generator => generator.enableTranslation,
-      ...clientTestBlock,
-      templates: ['spec/app/shared/config/formatter.spec.ts'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
