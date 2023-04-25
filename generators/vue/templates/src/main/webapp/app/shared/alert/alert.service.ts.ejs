@@ -11,7 +11,7 @@ export const useAlertService = () => {
   }
 <%_ if (enableTranslation) { _%>
   const i18n = getCurrentInstance().proxy.$i18n;
-  if (!bvToast) {
+  if (!i18n) {
     throw new Error('I18n component was not found');
   }
 <%_ } _%>
@@ -41,7 +41,9 @@ export default class AlertService {
 <%_ } _%>
   }) {
     this.bvToast = bvToast;
+<%_ if (enableTranslation) { _%>
     this.i18n = i18n;
+<%_ } _%>
   }
 
   public showError(message: string, params?: any) {

@@ -5,6 +5,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
 import { useStore } from '@/store';
@@ -16,6 +17,7 @@ import { Authority } from '@/shared/security/authority';
 type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementViewComponent>;
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
