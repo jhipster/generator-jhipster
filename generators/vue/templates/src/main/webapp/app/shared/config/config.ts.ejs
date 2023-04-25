@@ -103,13 +103,16 @@ export function initFortAwesome(vue) {
 }
 
 <%_ if (enableTranslation) { _%>
-export function initI18N(vue) {
+export function initI18N(vue, opts: any = {}) {
   vue.use(VueI18n, { bridge: true });
   const i18n = createI18n(
     {
+      missingWarn: false,
+      fallbackWarn: false,
       legacy: false,
       datetimeFormats,
       silentTranslationWarn: true,
+      ...opts,
     },
     VueI18n
   ) as unknown as VueI18n;
