@@ -1,4 +1,7 @@
 import { defineComponent, computed } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { useStore } from '@/store';
 
 export default defineComponent({
@@ -13,6 +16,9 @@ export default defineComponent({
     return {
       ribbonEnv,
       ribbonEnabled,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

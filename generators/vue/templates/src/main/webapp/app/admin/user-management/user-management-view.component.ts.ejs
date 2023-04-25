@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { useRoute, useRouter } from 'vue-router/composables';
 
 import UserManagementService from './user-management.service';
@@ -34,6 +37,9 @@ export default defineComponent({
       alertService,
       userManagementService,
       user,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

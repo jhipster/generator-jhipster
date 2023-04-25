@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { useVuelidate } from '@vuelidate/core'
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
@@ -77,6 +80,9 @@ export default defineComponent({
       languages,
       userManagementService,
       v$: useVuelidate(),
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {

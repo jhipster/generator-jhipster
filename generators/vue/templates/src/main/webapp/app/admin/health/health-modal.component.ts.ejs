@@ -1,4 +1,7 @@
 import { defineComponent, inject } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import HealthService from './health.service';
 
 export default defineComponent({
@@ -11,6 +14,9 @@ export default defineComponent({
 
     return {
       healthService,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {

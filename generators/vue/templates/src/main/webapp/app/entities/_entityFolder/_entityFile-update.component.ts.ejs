@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { useRoute, useRouter } from 'vue-router/composables';
 import { useVuelidate } from '@vuelidate/core'
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -206,6 +209,9 @@ _%>
       ...dataUtils,
 <%_ } _%>
       v$: useVuelidate(),
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   created(): void {

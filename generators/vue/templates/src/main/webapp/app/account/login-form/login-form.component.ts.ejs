@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 export default defineComponent({
   components: {
@@ -23,6 +26,9 @@ export default defineComponent({
       password,
       rememberMe,
       accountService,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {

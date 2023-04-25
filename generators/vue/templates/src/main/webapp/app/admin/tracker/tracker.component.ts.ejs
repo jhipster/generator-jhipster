@@ -1,4 +1,7 @@
 import <% if (authenticationUsesCsrf) { %>Vue, <% } %>{ defineComponent, inject, ref, Ref, onMounted, onUnmounted } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { Subscription } from 'rxjs';
 
 import TrackerService from './tracker.service';
@@ -43,6 +46,9 @@ export default defineComponent({
 
     return {
       activities,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

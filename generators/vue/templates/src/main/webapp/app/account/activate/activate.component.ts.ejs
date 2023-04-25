@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import LoginService from '@/account/login.service';
 import ActivateService from './activate.service';
 import { useRouter } from 'vue-router/composables';
@@ -30,6 +33,9 @@ export default defineComponent({
       loginService,
       success,
       error,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {

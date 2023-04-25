@@ -1,4 +1,7 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
 import ConfigurationService from './configuration.service';
@@ -32,6 +35,9 @@ export default defineComponent({
       configKeys,
       filtered,
       filteredConfiguration,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   mounted() {

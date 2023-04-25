@@ -1,4 +1,7 @@
 import { defineComponent, ref, Ref, computed, PropType } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 import { filterBy } from '@/shared/computables';
 
@@ -42,6 +45,9 @@ export default defineComponent({
       threadDumpFilter,
       threadDumpData,
       filteredThreadDump,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {

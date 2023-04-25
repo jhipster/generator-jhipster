@@ -1,4 +1,7 @@
 import { defineComponent, ref, Ref, computed } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import axios from 'axios';
 
 import { useStore } from '@/store';
@@ -21,6 +24,9 @@ export default defineComponent({
       sessions,
       authenticated,
       username,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   created(): void {

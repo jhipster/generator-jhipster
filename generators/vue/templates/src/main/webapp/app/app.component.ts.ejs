@@ -1,4 +1,7 @@
 import { defineComponent, provide } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import Ribbon from '@/core/ribbon/ribbon.vue';
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
@@ -21,5 +24,11 @@ export default defineComponent({
   },
   setup() {
     provide('alertService', useAlertService());
+
+    return {
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
   },
 });

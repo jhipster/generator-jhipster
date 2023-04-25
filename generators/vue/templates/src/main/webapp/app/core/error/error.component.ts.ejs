@@ -1,4 +1,7 @@
 import { defineComponent, inject, Ref, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import LoginService from '@/account/login.service';
 import {
   useRoute,
@@ -43,6 +46,9 @@ export default defineComponent({
       errorMessage,
       error403,
       error404,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });
