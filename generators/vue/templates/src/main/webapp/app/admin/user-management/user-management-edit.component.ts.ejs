@@ -3,7 +3,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 import { useRoute } from 'vue-router/composables';
 
 const loginValidator = (value: string) => {
@@ -41,7 +41,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
 
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
@@ -100,7 +100,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService().showHttpError(this, error.response);
+            this.alertService.showHttpError(error.response);
           });
       } else {
 <%_ if (!enableTranslation) { _%>
@@ -120,7 +120,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService().showHttpError(this.$root, error.response);
+            this.alertService.showHttpError(error.response);
           });
       }
     },

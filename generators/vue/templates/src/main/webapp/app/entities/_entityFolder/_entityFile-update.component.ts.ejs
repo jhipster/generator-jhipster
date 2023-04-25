@@ -53,7 +53,7 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
   <%_ } _%>
 <%_ } _%>
 
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_
   const allRelationshipsThatNeedSelectOptions = Object
@@ -125,7 +125,7 @@ export default defineComponent({
   validations,
   setup() {
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
   
     const <%= entityInstance %>: Ref<I<%= entityAngularName %>> = ref(new <%= entityAngularName %>());
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
@@ -159,7 +159,7 @@ _%>
 <%_ } } _%>
         <%= entityInstance %>.value = res;
       } catch (error) {
-        alertService().showHttpError(router.app, error.response);
+        alertService.showHttpError(error.response);
       }
     };
 
@@ -251,7 +251,7 @@ _%>
           })
         }).catch(error => {
             this.isSaving = false;
-            this.alertService().showHttpError(this,error.response);
+            this.alertService.showHttpError(error.response);
         });
       } else {
         this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
@@ -271,7 +271,7 @@ _%>
           });
         }).catch(error => {
             this.isSaving = false;
-            this.alertService().showHttpError(this,error.response);
+            this.alertService.showHttpError(error.response);
         });
       }
     },

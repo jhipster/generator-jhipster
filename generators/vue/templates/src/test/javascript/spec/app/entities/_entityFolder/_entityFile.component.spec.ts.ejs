@@ -29,7 +29,6 @@ import * as config from '@/shared/config/config';
 import <%= entityAngularName %> from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
 import type <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
 
 type <%= entityAngularName %>ComponentType = Vue & InstanceType<typeof <%= entityAngularName %>Component>;
 
@@ -76,7 +75,6 @@ describe('Component Tests', () => {
         stubs: {<%_ if (!paginationNo) { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-          alertService: () => new AlertService(),
         }
       });
       comp = wrapper.vm;

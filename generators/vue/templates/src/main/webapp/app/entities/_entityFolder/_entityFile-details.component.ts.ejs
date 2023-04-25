@@ -6,13 +6,13 @@ import useDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%= entityAngularName %>Details',
   setup() {
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
 <% if (anyFieldIsBlobDerived) { %>
     const dataUtils = useDataUtils();
@@ -27,7 +27,7 @@ export default defineComponent({
         const res = await <%= entityInstance %>Service().find(<%= entityInstance %>Id);
         <%= entityInstance %>.value = res;
       } catch (error) {
-        alertService().showHttpError(router.app, error.response);
+        alertService.showHttpError(error.response);
       }
     };
 

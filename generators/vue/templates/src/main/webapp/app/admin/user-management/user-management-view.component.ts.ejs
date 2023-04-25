@@ -2,7 +2,7 @@ import { defineComponent, inject, ref, Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router/composables';
 
 import UserManagementService from './user-management.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>UserManagementView',
@@ -10,7 +10,7 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const user: Ref<any> = ref(null);
@@ -20,7 +20,7 @@ export default defineComponent({
         const response = await userManagementService.get(userId);
         user.value = response.data;
       } catch (error) {
-        alertService().showHttpError(router.app, error.response);
+        alertService.showHttpError(error.response);
       }
     }
 

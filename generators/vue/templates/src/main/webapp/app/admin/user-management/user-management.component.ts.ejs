@@ -1,5 +1,5 @@
 import UserManagementService from './user-management.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 import { computed, defineComponent, inject, Ref, ref } from 'vue';
 import { useStore } from '@/store';
 
@@ -9,7 +9,7 @@ export default defineComponent({
     this.loadAll();
   },
   setup(prop) {
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const error = ref('');
@@ -143,7 +143,7 @@ _%>
           this.closeDialog();
         })
         .catch(error => {
-          this.alertService().showHttpError(this, error.response);
+          this.alertService.showHttpError(error.response);
         });
     },
     prepareRemove(instance): void {

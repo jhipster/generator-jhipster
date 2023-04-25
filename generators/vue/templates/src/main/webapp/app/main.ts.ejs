@@ -21,7 +21,6 @@ import UserManagementService from './admin/user-management/user-management.servi
 <%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
-import AlertService from './shared/alert/alert.service';
 
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
@@ -142,7 +141,6 @@ setupAxiosInterceptors(
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     provide('accountService', () => accountService);
-    provide('alertService', () => new AlertService());
 <%_ if (applicationTypeMicroservice && microfrontend) { _%>
     provide('microfrontendI18n', false);
 <%_ } _%>
