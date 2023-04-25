@@ -100,7 +100,6 @@ describe('Component Tests', () => {
         router,
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
           userService: () =>

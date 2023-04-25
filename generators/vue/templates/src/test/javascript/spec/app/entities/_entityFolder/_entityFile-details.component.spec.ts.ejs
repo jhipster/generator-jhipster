@@ -22,6 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
 import { useStore } from '@/store';
@@ -33,6 +34,7 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
 type <%= entityAngularName %>DetailsComponentType = Vue & InstanceType<typeof <%= entityAngularName %>DetailsComponent>;
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 localVue.use(VueRouter);
 
 config.initVueApp(localVue);

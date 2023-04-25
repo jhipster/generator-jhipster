@@ -4,7 +4,7 @@ import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileNam
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%= entityAngularName %>',
@@ -13,7 +13,7 @@ export default defineComponent({
     const dataUtils = useDataUtils();
 <%_ } _%>
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
 <%_ if (searchEngineAny) { _%>
     const currentSearch = ref('');
@@ -140,7 +140,7 @@ export default defineComponent({
   <%_ } _%>
         }, err => {
           this.isFetching = false;
-          this.alertService().showHttpError(this,err.response);
+          this.alertService.showHttpError(err.response);
       });
         return;
       }
@@ -173,7 +173,7 @@ export default defineComponent({
 <%_ } _%>
       }, err => {
         this.isFetching = false;
-        this.alertService().showHttpError(this,err.response);
+        this.alertService.showHttpError(err.response);
       });
     },
     handleSyncList(): void {
@@ -208,7 +208,7 @@ export default defineComponent({
   <%_ } _%>
         this.closeDialog();
       }).catch(error => {
-        this.alertService().showHttpError(this,error.response);
+        this.alertService.showHttpError(error.response);
       });
     },
 <%_ } _%>
