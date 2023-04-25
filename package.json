@@ -118,7 +118,7 @@
     "randexp": "0.5.3",
     "semver": "7.5.0",
     "shelljs": "0.8.5",
-    "simple-git": "3.17.0",
+    "simple-git": "3.18.0",
     "type-fest": "3.8.0",
     "uuid": "9.0.0",
     "winston": "3.8.2",
