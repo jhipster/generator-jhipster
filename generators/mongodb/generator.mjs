@@ -24,13 +24,6 @@ import writeMongodbFilesTask from './files.mjs';
 import cleanupMongodbFilesTask from './cleanup.mjs';
 import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.mjs';
 
-/**
- * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
- */
-/**
- * @class
- * @extends {BaseApplicationGenerator<SpringBootApplication>}
- */
 export default class MongoDBGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -59,5 +52,49 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        const { reactive } = application;
+        if (application.buildToolMaven) {
+          const reactiveMongock = false; // workaround https://github.com/mongock/mongock/issues/613
+          source.addMavenDefinition?.({
+            dependencies: [
+              { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },
+              { groupId: 'org.springframework.boot', artifactId: `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}` },
+              { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'mongodb', scope: 'test' },
+            ],
+            dependencyManagement: [
+              // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
+              { groupId: 'org.reflections', artifactId: 'reflections', version: '0.10.1' },
+            ],
+          });
+
+          if (reactive) {
+            source.addMavenDefinition?.({
+              dependencies: [
+                // Mongock requires non reactive starter workaround https://github.com/mongock/mongock/issues/613.
+                { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-mongodb' },
+                // Mongock requires non reactive driver workaround https://github.com/mongock/mongock/issues/613.
+                // switch to mongodb-reactive-driver
+                { groupId: 'io.mongock', artifactId: 'mongodb-springdata-v4-driver' },
+              ],
+            });
+          } else {
+            source.addMavenDefinition?.({
+              dependencies: [{ groupId: 'io.mongock', artifactId: 'mongodb-springdata-v4-driver' }],
+            });
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 }

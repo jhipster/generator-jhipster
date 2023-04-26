@@ -111,7 +111,10 @@ export default class EnvironmentBuilder {
   }
 
   getBlueprintsNamespaces() {
-    return Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName));
+    return [
+      ...Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName)),
+      '@jhipster/jhipster-local',
+    ];
   }
 
   /**

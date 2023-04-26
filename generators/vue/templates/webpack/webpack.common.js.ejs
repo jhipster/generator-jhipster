@@ -9,7 +9,7 @@ const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
 
-const { DefinePlugin, EnvironmentPlugin } = require('webpack');
+const { DefinePlugin } = require('webpack');
 const { vueLoaderConfig } = require('./vue.utils');
 const config = require('./config');
 
@@ -47,6 +47,10 @@ module.exports = async (env, options) => {
         alias: {
           vue$: 'vue/dist/vue.esm.js',
           '@': resolve('<%= clientSrcDir %>app'),
+<%_ if (microfrontend) { _%>
+          // Force vue-demi to v2.7 version. Detection breaks module federation.
+          'vue-demi': 'vue-demi/lib/v2.7/index.cjs',
+<%_ } _%>
         },
       },
       devServer: {
@@ -130,10 +134,6 @@ module.exports = async (env, options) => {
         ],
       },
       plugins: [
-        new EnvironmentPlugin({
-          // Required by vuelidate https://github.com/vuelidate/vuelidate/issues/365
-          BUILD: 'web',
-        }),
         new DefinePlugin({
 <%_ if (enableTranslation) { _%>
           I18N_HASH: JSON.stringify(languagesHash.hash),

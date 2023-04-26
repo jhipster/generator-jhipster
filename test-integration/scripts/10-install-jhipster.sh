@@ -70,11 +70,12 @@ else
 
     if [[ "$JHI_INSTALL_GLOBALLY" == "true" || "$JHI_BIN_FOLDER" == "" ]]; then
         echo "*** installing generator-jhipster globally"
+        npm install
         npm install -g .
     else
         echo "*** adding development jhipster to path"
-        ln -s "$(pwd)/bin/jhipster.mjs" "$JHI_BIN_FOLDER/jhipster"
+        ln -s "$(pwd)/bin/jhipster.cjs" "$JHI_BIN_FOLDER/jhipster"
         ls -la bin "$JHI_BIN_FOLDER"
-        jhipster --install-path
+        jhipster --install-path --debug
     fi
 fi

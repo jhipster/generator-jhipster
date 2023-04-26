@@ -166,7 +166,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
+      migrateLanguages() {
+        if (this.isJhipsterVersionLessThan('7.10.0')) {
+          this.migrateLanguages({ in: 'id' });
+        }
+      },
       defaults() {
         const { nativeLanguage, languages, enableTranslation } = this.jhipsterConfigWithDefaults;
         if (!enableTranslation) {
@@ -192,7 +197,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages, ...this.languagesToApply])];
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
@@ -351,5 +356,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  migrateLanguages(languagesToMigrate) {
+    const { languages, nativeLanguage } = this.jhipsterConfig;
+    if (languagesToMigrate[nativeLanguage]) {
+      this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage];
+    }
+    if (languages && languages.some(lang => languagesToMigrate[lang])) {
+      this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang] ?? lang);
+    }
   }
 }

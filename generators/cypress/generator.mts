@@ -19,27 +19,17 @@
 import _ from 'lodash';
 
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
-import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { cypressFiles, cypressEntityFiles } from './files.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
-import type { CypressApplication } from './types.mjs';
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.mjs';
-import { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-type ApplicationDefinition = {
-  applicationType: CypressApplication;
-  entityType: Entity;
-  sourceType: Record<string, (...args: any[]) => void>;
-};
-
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
-
-export default class CypressGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class CypressGenerator extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, features);
 
@@ -154,12 +144,10 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
       async writeFiles({ application }) {
         const faker = await createFaker();
         faker.seed(stringHashCode(application.baseName));
+        const context = { ...application, faker } as any;
         return this.writeFiles({
           sections: cypressFiles,
-          context: {
-            ...application,
-            faker,
-          },
+          context,
         });
       },
     });
@@ -181,9 +169,10 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
 
       async writeCypressEntityFiles({ application, entities }) {
         for (const entity of entities) {
+          const context = { ...application, ...entity } as any;
           await this.writeFiles({
             sections: cypressEntityFiles,
-            context: { ...application, ...entity },
+            context,
           });
         }
       },

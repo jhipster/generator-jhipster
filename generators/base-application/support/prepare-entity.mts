@@ -19,8 +19,8 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 
-import { getDatabaseTypeData } from '../../server/support/index.mjs';
-import { createFaker, parseChangelog, stringHashCode } from '../../base/support/index.mjs';
+import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.mjs';
+import { createFaker, parseChangelog, stringHashCode, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { fieldToReference } from './prepare-field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
 import {
@@ -160,7 +160,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     entityNameCapitalized: entityName,
     entityClass: _.upperFirst(entityName),
     entityInstance: _.lowerFirst(entityName),
-    entityTableName: generator.getTableName(entityName),
+    entityTableName: hibernateSnakeCase(entityName),
     entityNamePlural: pluralize(entityName),
   });
 
@@ -206,9 +206,9 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
-  entityWithConfig.entityAngularName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
+  entityWithConfig.entityAngularName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
   entityWithConfig.entityAngularNamePlural = pluralize(entityWithConfig.entityAngularName);
-  entityWithConfig.entityReactName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
+  entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
 
   entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
   entityWithConfig.entityStateName = _.kebabCase(entityWithConfig.entityAngularName);
@@ -333,7 +333,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
                 : `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`;
             },
             get columnName() {
-              return idCount === 1 ? field.columnName : `${generator.getColumnName(relationship.relationshipName)}_${field.columnName}`;
+              return idCount === 1 ? field.columnName : `${hibernateSnakeCase(relationship.relationshipName)}_${field.columnName}`;
             },
             get reference() {
               return fieldToReference(entityWithConfig, this);
@@ -540,18 +540,20 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.anyPropertyHasValidation =
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
-  const relationshipsByType = relationships
+  const relationshipsByOtherEntity = relationships
+    .filter(rel => !rel.otherEntity.embedded)
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
-    .reduce((relationshipsByType: any, [type, relationship]) => {
-      if (!relationshipsByType[type]) {
-        relationshipsByType[type] = [relationship];
+    .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
+      if (!relationshipsByOtherEntity[type]) {
+        relationshipsByOtherEntity[type] = [relationship];
       } else {
-        relationshipsByType[type].push(relationship);
+        relationshipsByOtherEntity[type].push(relationship);
       }
-      return relationshipsByType;
+      return relationshipsByOtherEntity;
     }, {});
 
-  entity.differentRelationships = relationshipsByType;
+  entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
+  entity.differentRelationships = relationshipsByOtherEntity;
 
   entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
 

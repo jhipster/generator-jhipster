@@ -19,6 +19,8 @@
 
 type Relationship = {
   relationshipName: string;
+  propertyName: string;
+  collection: boolean;
 } & Record<string, any>;
 
 export default Relationship;

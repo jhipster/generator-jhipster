@@ -2,20 +2,11 @@ import sinon from 'sinon';
 
 import AlertService from '@/shared/alert/alert.service';
 import Vue from 'vue';
-import { createLocalVue, mount, shallowMount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 <%_ if (enableTranslation) { _%>
 const translationStub = sinon.stub();
 <%_ } _%> 
 const toastStub = sinon.stub();
-
-const vueInstance = {
-  <% if (enableTranslation) { %>$t: translationStub,<% } %>
-  $root: {
-    $bvToast: {
-      toast: toastStub,
-    },
-  },
-};
 
 describe('Alert Service test suite', () => {
   let alertService: AlertService;
@@ -25,7 +16,14 @@ describe('Alert Service test suite', () => {
     translationStub.reset();
     <%_ } _%> 
     toastStub.reset();
-    alertService = new AlertService();
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: translationStub } as any,
+<%_ } _%> 
+      bvToast: {
+        toast: toastStub,
+      } as any,
+    });
   });
 
   it('should show error toast with translation/message', async () => {
@@ -38,7 +36,7 @@ describe('Alert Service test suite', () => {
     <%_ } _%>
     
     // WHEN
-    alertService.showError((<any>vueInstance) as Vue, <% if (enableTranslation) { %>translationKey<%} else {%>message<% } %>);
+    alertService.showError(<% if (enableTranslation) { %>translationKey<%} else {%>message<% } %>);
 
     // THEN
     <%_ if (enableTranslation) { _%>
@@ -69,7 +67,7 @@ describe('Alert Service test suite', () => {
     <%_ } _%>
 
     // WHEN
-    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+    alertService.showHttpError(httpErrorResponse);
 
     // THEN
     <%_ if (enableTranslation) { _%>
@@ -105,7 +103,7 @@ describe('Alert Service test suite', () => {
     <%_ } _%>
 
     // WHEN
-    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+    alertService.showHttpError(httpErrorResponse);
 
     // THEN
     <%_ if (enableTranslation) { _%>
@@ -144,7 +142,7 @@ describe('Alert Service test suite', () => {
     <%_ } _%>
 
     // WHEN
-    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+    alertService.showHttpError(httpErrorResponse);
 
     // THEN
     <%_ if (enableTranslation) { _%>
@@ -176,7 +174,7 @@ describe('Alert Service test suite', () => {
     <%_ } _%>
 
     // WHEN
-    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+    alertService.showHttpError(httpErrorResponse);
 
     // THEN
     <%_ if (enableTranslation) { _%>
@@ -208,7 +206,7 @@ describe('Alert Service test suite', () => {
     <%_ } _%>
 
     // WHEN
-    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+    alertService.showHttpError(httpErrorResponse);
 
     // THEN
     <%_ if (enableTranslation) { _%>

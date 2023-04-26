@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<strong>{{username}}</strong>] istifadəçisi üçün aktiv sessiyalar",
+        "table": {
+            "ipaddress": "IP adresi",
+            "useragent": "İstifadəçi Məlumatı",
+            "date": "Tarix",
+            "button": "Deaktiv edin"
+        },
+        "messages": {
+            "success": "<strong>Sessiya deaktiv edildi!</strong>",
+            "error": "<strong>Xəta baş verdi!</strong> Sessiya deaktiv edilmədi."
+        }
+    }
+}

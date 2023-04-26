@@ -69,7 +69,7 @@
 <%_ if (cacheProviderMemcached) { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
 <%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
+<%_ if (cacheProviderEhcache) { _%>
     <logger name="org.ehcache" level="WARN"/>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
@@ -112,10 +112,6 @@
 <%_ } _%>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
-<%_ if (messageBrokerKafka) { _%>
-    <logger name="kafka" level="WARN"/>
-    <logger name="org.I0Itec" level="WARN"/>
-<%_ } _%>
 <%_ if (prodDatabaseTypeMssql) { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
 <%_ } _%>
@@ -124,10 +120,6 @@
 <%_ } _%>
     <logger name="io.swagger.v3" level="INFO"/>
     <logger name="sun.rmi" level="WARN"/>
-<%_ if (databaseTypeSql) { _%>
-    <logger name="liquibase" level="WARN"/>
-    <logger name="LiquibaseSchemaResolver" level="INFO"/>
-<%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     <logger name="sun.net.www" level="INFO"/>
 <%_ } _%>
@@ -136,5 +128,6 @@
     <logger name="unknown.jul.logger" level="WARN"/>
 <%_ } _%>
     <logger name="com.tngtech.archunit.core.importer" level="ERROR"/>
+    <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level -->
 
 </configuration>

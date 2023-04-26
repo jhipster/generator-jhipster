@@ -179,12 +179,18 @@ export default class UpgradeGenerator extends BaseGenerator {
   _generate(jhipsterVersion, blueprintInfo) {
     this.logger.info(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
     let generatorCommand = 'yo jhipster';
-    if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
+    if (this.options.regenerateExecutable) {
+      generatorCommand = this.options.regenerateExecutable;
+    } else if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
       this._rmRf('node_modules');
       generatorCommand = 'jhipster';
     } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
-      const generatorDir = shelljs.exec('npm bin', { silent: this.silent }).stdout;
-      generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
+      const result = shelljs.exec('npm bin', { silent: this.silent });
+      if (result.code === 0) {
+        generatorCommand = `"${result.stdout.replace('\n', '')}/jhipster"`;
+      } else {
+        generatorCommand = 'npm exec --no jhipster --';
+      }
     }
     const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
     const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
@@ -417,7 +423,9 @@ export default class UpgradeGenerator extends BaseGenerator {
           // Remove/rename old files
           this._cleanUp();
           // Install jhipster
-          installJhipsterLocally(this.currentJhipsterVersion);
+          if (!this.options.regenerateExecutable) {
+            installJhipsterLocally(this.currentJhipsterVersion);
+          }
           // Install blueprints
           await installBlueprintsLocally();
           const blueprintInfo =
@@ -444,7 +452,7 @@ export default class UpgradeGenerator extends BaseGenerator {
       },
 
       updateJhipster() {
-        if (this.originalTargetJhipsterVersion === GLOBAL_VERSION) {
+        if (this.originalTargetJhipsterVersion === GLOBAL_VERSION || this.options.regenerateExecutable) {
           return;
         }
         this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.targetJhipsterVersion);

@@ -18,30 +18,32 @@
  */
 
 import _ from 'lodash';
-import JDLRelationship from '../../models/jdl-relationship.js';
+import JDLRelationship, { JDLRelationshipType } from '../../models/jdl-relationship.js';
 import { lowerFirst, upperFirst } from '../../utils/string-utils.js';
 import { formatComment } from '../../utils/format-utils.js';
+import { RelationshipType } from '../types.js';
+
+const { camelCase } = _;
 
 export default { convertRelationships };
+
+export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 
 /**
  * Converts parsed relationships to JDLRelationship objects.
  * @param {Array<Object>} parsedRelationships - the parsed relationships.
  * @param {Function} annotationToOptionConverter - the function that can convert annotations to options.
- * @param {Object} conversionOptions - conversion options
- * @param {Boolean} conversionOptions.unidirectionalRelationships - whether to generate bidirectional one-to-many.
  * @return the converted JDL relationships.
  */
-export function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions: any = {}): JDLRelationship[] {
+export function convertRelationships(parsedRelationships, annotationToOptionConverter): JDLRelationship[] {
   if (!parsedRelationships) {
     throw new Error('Relationships have to be passed so as to be converted.');
   }
-  const { unidirectionalRelationships } = conversionOptions;
   return parsedRelationships.map(parsedRelationship => {
     const relationshipConfiguration = {
       from: parsedRelationship.from.name,
       to: parsedRelationship.to.name,
-      type: upperFirst(_.camelCase(parsedRelationship.cardinality)),
+      type: asJdlRelationshipType(parsedRelationship.cardinality),
       injectedFieldInFrom: parsedRelationship.from.injectedField,
       injectedFieldInTo: parsedRelationship.to.injectedField,
       isInjectedFieldInFromRequired: parsedRelationship.from.required,
@@ -53,7 +55,6 @@ export function convertRelationships(parsedRelationships, annotationToOptionConv
         source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
         destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
       },
-      unidirectionalRelationships,
     };
     if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
       relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);

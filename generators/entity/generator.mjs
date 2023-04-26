@@ -28,7 +28,7 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 import { removeFieldsWithNullishValues } from '../base/support/index.mjs';
-import { getDBTypeFromDBValue } from '../server/support/index.mjs';
+import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
@@ -359,7 +359,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     }
 
     if (context.options.tableName) {
-      this.entityConfig.entityTableName = generator.getTableName(context.options.tableName);
+      this.entityConfig.entityTableName = hibernateSnakeCase(context.options.tableName);
     }
   }
 

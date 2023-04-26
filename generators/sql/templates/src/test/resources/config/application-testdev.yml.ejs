@@ -81,6 +81,7 @@ spring:
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
       hibernate.hbm2ddl.auto: none #TODO: temp relief for integration tests, revisit required
+      hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
       hibernate.jdbc.time_zone: UTC
       hibernate.query.fail_on_pagination_over_collection_fetch: true
 <%_ } _%>

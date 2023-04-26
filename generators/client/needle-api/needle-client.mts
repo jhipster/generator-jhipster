@@ -40,22 +40,4 @@ export default class extends needleBase {
 
     return styleBlock;
   }
-
-  addExternalResourcesToRoot(resources: string, comment: string) {
-    const errorMessage = 'Resources are not added to JHipster app.';
-    const file = `${this.clientSrcDir}index.html`;
-    let resourcesBlock = '';
-    if (comment) {
-      resourcesBlock += `<!-- ${comment} -->\n`;
-    }
-    resourcesBlock += `${resources}\n`;
-    this.addBlockContentToFile(
-      {
-        file,
-        needle: 'jhipster-needle-add-resources-to-root',
-        splicable: resourcesBlock,
-      },
-      errorMessage
-    );
-  }
 }

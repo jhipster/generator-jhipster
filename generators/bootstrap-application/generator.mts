@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import _ from 'lodash';
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
+import { validations } from '../../jdl/jhipster/index.mjs';
 import {
   stringifyApplicationData,
   derivedPrimaryKeyProperties,
@@ -28,15 +29,15 @@ import {
 } from '../base-application/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
-import type { GeneratorDefinition as ServerGeneratorDefinition } from '../common/index.mjs';
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 
+const { lowerFirst } = _;
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<ServerGeneratorDefinition> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, features);
 
@@ -55,7 +56,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     return this.asPreparingTaskGroup({
       preparing({ application }) {
         if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
-          application.skipUserManagement = true;
+          (application as any).skipUserManagement = true;
         }
 
         let prettierExtensions = 'md,json,yml,html';
@@ -151,8 +152,9 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
             `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
           );
 
+          relationship.otherEntityName = lowerFirst(otherEntityName);
           if (relationship.relationshipName === undefined) {
-            relationship.relationshipName = otherEntityName;
+            relationship.relationshipName = relationship.otherEntityName;
             this.logger.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
                 relationship

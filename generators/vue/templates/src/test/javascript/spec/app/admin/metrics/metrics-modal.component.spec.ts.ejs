@@ -1,8 +1,11 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
-import MetricsModalClass from '@/admin/metrics/metrics-modal.component';
+import type MetricsModalComponent from '@/admin/metrics/metrics-modal.component';
+
+type MetricsModalComponentType = Vue & InstanceType<typeof MetricsModalComponent>;
 
 const localVue = createLocalVue();
 
@@ -10,30 +13,35 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 describe('Metrics Component', () => {
-  let wrapper: Wrapper<MetricsModalClass>;
-  let metricsModal: MetricsModalClass;
+  let metricsModal: MetricsModalComponentType;
+  let wrapper: Wrapper<MetricsModalComponentType>;
 
   beforeEach(() => {
-    wrapper = shallowMount<MetricsModalClass>(MetricsModal, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
-    metricsModal = wrapper.vm;
-  });
-  
-  describe('init', () => {
-    it('should count the numbers of each thread type', async () => {
-      await wrapper.setProps({
+    wrapper = shallowMount<MetricsModalComponentType>(MetricsModal, {
+      store,
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
+      localVue,
+      propsData: {
         threadDump: [
           { name: 'test1', threadState: 'RUNNABLE' },
           { name: 'test2', threadState: 'WAITING' },
           { name: 'test3', threadState: 'TIMED_WAITING' },
           { name: 'test4', threadState: 'BLOCKED' },
           { name: 'test5', threadState: 'BLOCKED' },
-          { name: 'test5', threadState: 'NONE' }
-        ]
-      });
+          { name: 'test5', threadState: 'NONE' },
+        ],
+      },
+    });
+    metricsModal = wrapper.vm;
+  });
 
+  describe('init', () => {
+    it('should count the numbers of each thread type', async () => {
       expect(metricsModal.threadDumpData.threadDumpRunnable).toBe(1);
       expect(metricsModal.threadDumpData.threadDumpWaiting).toBe(1);
       expect(metricsModal.threadDumpData.threadDumpTimedWaiting).toBe(1);

@@ -28,7 +28,7 @@ relationship OneToOne {
     Profile {
         user
     }
-    to User
+    to User with builtInEntity
 }
 
 relationship ManyToOne {

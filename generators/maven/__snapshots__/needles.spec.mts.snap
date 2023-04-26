@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - maven - needles prod profile should match generated pom 1`] = `
+{
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <repositories>
+        <repository>
+            <id>repositoryId</id>
+            <url>repositoryUrl</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repositoryId</id>
+            <url>repositoryUrl</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>dependencyManagementGroupId</groupId>
+                        <artifactId>dependencyManagementArtifactId</artifactId>
+                        <version>version</version>
+                        <type>type</type>
+                        <scope>scope</scope>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>exclusionGroupId</groupId>
+                                <artifactId>exclusionArtifactId</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>snapshotsId</id>
+                    <url>snapshotsUrl</url>
+                </snapshotRepository>
+                <repository>
+                    <id>releasesId</id>
+                    <url>releasesUrl</url>
+                </repository>
+            </distributionManagement>
+            <properties>
+                <propertyName.dotted>propertyValue</propertyName.dotted>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>dependencyGroupId</groupId>
+                    <artifactId>dependencyArtifactId</artifactId>
+                    <version>version</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>exclusionGroupId</groupId>
+                            <artifactId>exclusionArtifactId</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>mavenPluginGroupId</groupId>
+                        <artifactId>mavenPluginArtifactId</artifactId>
+                        <version>version</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>exclusionGroupId</groupId>
+                                <artifactId>exclusionArtifactId</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </plugin>
+                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>mavenPluginManagementGroupId</groupId>
+                            <artifactId>mavenPluginManagementArtifactId</artifactId>
+                            <version>version</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>exclusionGroupId</groupId>
+                                    <artifactId>exclusionArtifactId</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <configuration>
+                                <annotationProcessorPaths>
+                                    <path>
+                                        <groupId>annotationProcessorGroupId</groupId>
+                                        <artifactId>annotationProcessorArtifactId</artifactId>
+                                        <version>annotationProcessorVersion</version>
+                                    </path>
+                                </annotationProcessorPaths>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>profileId</id>
+            <other>other</other>
+        </profile>
+    </profiles>
+</project>
+",
+    "stateCleared": "modified",
+  },
+}
+`;

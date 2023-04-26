@@ -89,8 +89,7 @@ application {
     entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.notification
-    // TODO switch to reactive
-    // reactive true
+    reactive true
     serverPort 8083
     serviceDiscoveryType consul
     testFrameworks [cucumber, gatling]
@@ -135,7 +134,7 @@ entity Notification {
 
 /* Relationships are broken or unsupported at cassandra db
 relationship OneToOne {
-  @Id UserData{user(login)} to User
+  @Id UserData{user(login)} to User with builtInEntity
 }
 
 relationship ManyToOne {

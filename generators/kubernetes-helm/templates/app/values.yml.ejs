@@ -38,7 +38,7 @@ mariadb:
     annotations:
       sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseTypeMongodb) { _%>
+<%_ } else if (app.databaseTypeMongodb) { _%>
 mongodb:
   enabled: true
 mongodb-replicaset:
@@ -47,7 +47,7 @@ mongodb-replicaset:
   podAnnotations:
     sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseTypeCouchbase) { _%>
+<%_ } else if (app.databaseTypeCouchbase) { _%>
 couchbase-operator:
   enabled: true
   buckets:

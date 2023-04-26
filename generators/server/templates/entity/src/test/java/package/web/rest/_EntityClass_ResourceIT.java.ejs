@@ -1364,7 +1364,7 @@ _%>
         // Get the <%= entityInstance %>
 <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL_ID, <% if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>)
-            .accept(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_PROBLEM_JSON)
             .exchange()
             .expectStatus().isNotFound();
 <%_ } else { _%>

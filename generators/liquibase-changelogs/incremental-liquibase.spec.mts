@@ -39,7 +39,7 @@ entity Another {
 const jdlApplicationWithRelationshipToUser = `
 ${jdlApplicationWithEntities}
 relationship ManyToOne {
-    One{user(login)} to User
+    One{user(login)} to User with builtInEntity
 }
 `;
 

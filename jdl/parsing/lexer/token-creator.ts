@@ -18,13 +18,13 @@
  */
 
 import _ from 'lodash';
-import { createToken } from 'chevrotain';
+import { createToken, ITokenConfig } from 'chevrotain';
 
 import { NAME, KEYWORD, namePattern } from './shared-tokens.js';
 
 const { isString } = _;
 
-export default function createTokenFromConfig(config) {
+export default function createTokenFromConfig(config: ITokenConfig) {
   if (!config) {
     throw new Error("Can't create a token without the proper config.");
   }
@@ -36,6 +36,9 @@ export default function createTokenFromConfig(config) {
     config.longer_alt = NAME;
     if (!config.categories) {
       config.categories = [];
+    }
+    if (!Array.isArray(config.categories)) {
+      config.categories = [config.categories];
     }
     config.categories.push(KEYWORD);
   }

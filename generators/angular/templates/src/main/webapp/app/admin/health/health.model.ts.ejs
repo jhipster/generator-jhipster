@@ -19,7 +19,7 @@
 export type HealthStatus = 'UP' | 'DOWN' | 'UNKNOWN' | 'OUT_OF_SERVICE';
 
 export type HealthKey =
-  <%_ if (messageBrokerKafka) { _%>
+  <%_ if (messageBrokerAny) { _%>
   | 'binders'
   <%_ } _%>
   <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>

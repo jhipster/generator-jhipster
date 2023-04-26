@@ -100,6 +100,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/maven' \
   'generators/mongodb' \
   'generators/neo4j' \
+  'generators/pulsar' \
   'generators/server' \
   'generators/spring-cache' \
   'generators/spring-websocket' \

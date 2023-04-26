@@ -1,13 +1,16 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
+import { useStore } from '@/store';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 import * as config from '@/shared/config/config';
 import Register from '@/account/register/register.vue';
-import RegisterClass from '@/account/register/register.component';
+import type RegisterComponent from '@/account/register/register.component';
 import RegisterService from '@/account/register/register.service';
 import LoginService from '@/account/login.service';
+
+type RegisterComponentType = Vue & InstanceType<typeof RegisterComponent>;
 
 const localVue = createLocalVue();
 
@@ -15,7 +18,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -23,24 +26,27 @@ const axiosStub = {
 };
 
 describe('Register Component', () => {
-  let wrapper: Wrapper<RegisterClass>;
-  let register: RegisterClass;
-  const filledRegisterAccount = {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'};
+  let register: RegisterComponentType;
+  const filledRegisterAccount = {
+    email: 'jhi@pster.net',
+    langKey: '<%= nativeLanguage %>',
+    login: 'jhi',
+    password: 'jhipster',
+  };
 
   beforeEach(() => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
 
-    wrapper = shallowMount<RegisterClass>(Register, {
+    const wrapper = shallowMount<RegisterComponentType>(Register, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
       localVue,
       provide: {
-        registerService: () => new RegisterService(),
-        loginService: () => new LoginService()
-       }
+        loginService: () => new LoginService(),
+      },
     });
     register = wrapper.vm;
   });
@@ -72,7 +78,14 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post.calledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'})).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/register', {
+        email: 'jhi@pster.net',
+        langKey: '<%= nativeLanguage %>',
+        login: 'jhi',
+        password: 'jhipster',
+      })
+    ).toBeTruthy();
     expect(register.success).toBe(true);
     expect(register.error).toBe(null);
     expect(register.errorEmailExists).toBe(null);
@@ -80,14 +93,16 @@ describe('Register Component', () => {
   });
 
   it('should register when password match but throw error when login already exist', async () => {
-    const error = { response: { status: 400, data: { type: LOGIN_ALREADY_USED_TYPE} } };
+    const error = { response: { status: 400, data: { type: LOGIN_ALREADY_USED_TYPE } } };
     axiosStub.post.rejects(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post.calledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'})).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: '<%= nativeLanguage %>', login: 'jhi', password: 'jhipster' })
+    ).toBeTruthy();
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.error).toBe(null);
@@ -96,14 +111,16 @@ describe('Register Component', () => {
   });
 
   it('should register when password match but throw error when email already used', async () => {
-    const error = { response: { status: 400, data: { type: EMAIL_ALREADY_USED_TYPE} } };
+    const error = { response: { status: 400, data: { type: EMAIL_ALREADY_USED_TYPE } } };
     axiosStub.post.rejects(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post.calledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'})).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: '<%= nativeLanguage %>', login: 'jhi', password: 'jhipster' })
+    ).toBeTruthy();
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.error).toBe(null);
@@ -112,14 +129,16 @@ describe('Register Component', () => {
   });
 
   it('should register when password match but throw error', async () => {
-    const error = { response: { status: 400, data: { type: 'unknown'} } };
+    const error = { response: { status: 400, data: { type: 'unknown' } } };
     axiosStub.post.rejects(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post.calledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'})).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: '<%= nativeLanguage %>', login: 'jhi', password: 'jhipster' })
+    ).toBeTruthy();
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.errorEmailExists).toBe(null);

@@ -32,31 +32,38 @@ import {
 } from './commands';
 
 Cypress.Commands.add('clickOnLoginItem', () => {
-  return cy.get(navbarSelector).get(accountMenuSelector).click().get(loginItemSelector).click();
+  cy.get(navbarSelector).get(accountMenuSelector).click();
+  return cy.get(navbarSelector).get(accountMenuSelector).get(loginItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnLogoutItem', () => {
-  return cy.get(navbarSelector).get(accountMenuSelector).click().get(logoutItemSelector).click();
+  cy.get(navbarSelector).get(accountMenuSelector).click();
+  return cy.get(navbarSelector).get(accountMenuSelector).get(logoutItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnRegisterItem', () => {
-  return cy.get(navbarSelector).get(accountMenuSelector).click().get(registerItemSelector).click();
+  cy.get(navbarSelector).get(accountMenuSelector).click();
+  return cy.get(navbarSelector).get(accountMenuSelector).get(registerItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnSettingsItem', () => {
-  return cy.get(navbarSelector).get(accountMenuSelector).click().get(settingsItemSelector).click();
+  cy.get(navbarSelector).get(accountMenuSelector).click();
+  return cy.get(navbarSelector).get(accountMenuSelector).get(settingsItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnPasswordItem', () => {
-  return cy.get(navbarSelector).get(accountMenuSelector).click().get(passwordItemSelector).click();
+  cy.get(navbarSelector).get(accountMenuSelector).click();
+  return cy.get(navbarSelector).get(accountMenuSelector).get(passwordItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
-  return cy.get(navbarSelector).get(adminMenuSelector).click().get(`.dropdown-item[href="/admin/${item}"]`).click();
+  cy.get(navbarSelector).get(adminMenuSelector).click();
+  return cy.get(navbarSelector).get(adminMenuSelector).get(`.dropdown-item[href="/admin/${item}"]`).click();
 });
 
 Cypress.Commands.add('clickOnEntityMenuItem', (entityName: string) => {
-  return cy.get(navbarSelector).get(entityItemSelector).click().get(`.dropdown-item[href="/${entityName}"]`).click(<% if(clientFrameworkAngular) { %>{ force: true }<% } %>);
+  cy.get(navbarSelector).get(entityItemSelector).click();
+  return cy.get(navbarSelector).get(entityItemSelector).get(`.dropdown-item[href="/${entityName}"]`).click(<% if(clientFrameworkAngular) { %>{ force: true }<% } %>);
 });
 
 declare global {

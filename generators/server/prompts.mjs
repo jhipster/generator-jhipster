@@ -29,6 +29,7 @@ import {
   cacheTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { MESSAGE_BROKER } from './options/index.mjs';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
 
 const { OptionNames } = applicationOptions;
@@ -51,7 +52,6 @@ const {
   SERVICE_DISCOVERY_TYPE,
   WEBSOCKET,
   SEARCH_ENGINE,
-  MESSAGE_BROKER,
   ENABLE_SWAGGER_CODEGEN,
 } = OptionNames;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
@@ -337,6 +337,10 @@ export async function askForOptionalItems({ control }) {
   choices.push({
     name: 'Apache Kafka as asynchronous messages broker',
     value: 'messageBroker:kafka',
+  });
+  choices.push({
+    name: 'Apache Pulsar as asynchronous messages broker',
+    value: 'messageBroker:pulsar',
   });
   choices.push({
     name: 'API first development using OpenAPI-generator',

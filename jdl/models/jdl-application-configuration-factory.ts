@@ -23,20 +23,20 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
-import { applicationOptions } from '../jhipster/index.mjs';
+import JDLApplicationDefinition from './jdl-application-definition.js';
 
-const { getTypeForOption, doesOptionExist, OptionTypes, shouldTheValueBeQuoted } = applicationOptions;
+const applicationDefinition = new JDLApplicationDefinition();
 
 export default function createApplicationConfigurationFromObject(configurationObject = {}) {
   const configuration = new JDLApplicationConfiguration();
   Object.keys(configurationObject).forEach(optionName => {
     const optionValue = configurationObject[optionName];
-    // TODO: This is probably a bug. The function does not expect two arguments!
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    if (!doesOptionExist(optionName, optionValue)) {
-      logger.debug(`Unrecognized application option name and value: ${optionName} and ${optionValue}`);
+    if (!applicationDefinition.doesOptionExist(optionName)) {
+      logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
+    }
+    if (!applicationDefinition.doesOptionValueExist(optionName, optionValue)) {
+      throw new Error(`Unknown value '${optionValue}' for option '${optionName}'.`);
     }
     configuration.setOption(createJDLConfigurationOption(optionName, optionValue));
   });
@@ -44,15 +44,15 @@ export default function createApplicationConfigurationFromObject(configurationOb
 }
 
 function createJDLConfigurationOption(name, value) {
-  const type = getTypeForOption(name);
+  const type = applicationDefinition.getTypeForOption(name);
   switch (type) {
-    case OptionTypes.STRING:
-      return new StringJDLApplicationConfigurationOption(name, value, shouldTheValueBeQuoted(name));
-    case OptionTypes.INTEGER:
+    case 'string':
+      return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));
+    case 'integer':
       return new IntegerJDLApplicationConfigurationOption(name, value);
-    case OptionTypes.BOOLEAN:
+    case 'boolean':
       return new BooleanJDLApplicationConfigurationOption(name, value);
-    case OptionTypes.LIST:
+    case 'list':
       return new ListJDLApplicationConfigurationOption(name, value);
     /* istanbul ignore next */
     default:

@@ -1,0 +1,9 @@
+dependencies {
+    implementation "org.springframework.cloud:spring-cloud-stream"
+    implementation ("org.springframework.pulsar:spring-pulsar-spring-cloud-stream-binder:${springPulsarVersion}") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter'
+    }
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:pulsar"
+    testImplementation "org.testcontainers:testcontainers"
+}

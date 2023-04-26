@@ -42,6 +42,7 @@ import type {
   CascatedEditFileCallback,
   JHipsterOptions,
   ValidationResult,
+  WriteFileOptions,
 } from './api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
@@ -61,7 +62,7 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 /**
  * This is the base class for a generator for every generator.
  */
-export default class BaseGenerator extends YeomanGenerator {
+export default class CoreGenerator extends YeomanGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -92,6 +93,7 @@ export default class BaseGenerator extends YeomanGenerator {
   skipChecks?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
+  jhipster7Migration?: boolean;
 
   readonly sharedData!: SharedData<BaseApplication>;
   readonly logger: Logger;
@@ -140,15 +142,14 @@ export default class BaseGenerator extends YeomanGenerator {
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      if (!this.options.reproducible) {
-        jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
-        if (!this.jhipsterConfig.jhipsterVersion) {
-          this.jhipsterConfig.jhipsterVersion = packageJson.version;
-        }
+      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
+      // Don't write jhipsterVersion to .yo-rc.json when reproducible
+      if (!this.options.reproducible && !this.jhipsterConfig.jhipsterVersion) {
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
       }
     }
 
-    this.sharedData = this.createSharedData(jhipsterOldVersion);
+    this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help });
 
     this.logger = new Logger({ adapter: this.env.adapter, namespace: this.options.namespace, debugEnabled: this.debugEnabled });
 
@@ -184,6 +185,7 @@ export default class BaseGenerator extends YeomanGenerator {
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
+    this.jhipster7Migration = this.features.jhipster7Migration ?? false;
   }
 
   /**
@@ -356,6 +358,13 @@ export default class BaseGenerator extends YeomanGenerator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
     return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+  }
+
+  /**
+   * write the given files using provided options.
+   */
+  writeFiles<DataType = any>(options: WriteFileOptions<this, DataType>): Promise<string[]> {
+    return (this as any).internalWriteFiles(options);
   }
 
   /**
@@ -540,15 +549,22 @@ export default class BaseGenerator extends YeomanGenerator {
     });
   }
 
-  private createSharedData(jhipsterOldVersion: string | null): SharedData<BaseApplication> {
+  private createSharedData({
+    jhipsterOldVersion,
+    help,
+  }: {
+    jhipsterOldVersion: string | null;
+    help: boolean;
+  }): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
-    const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
-    const applicationId = `${prefix}-${dirname}`;
+    const applicationId =
+      this.options.applicationId ??
+      `${createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex')}-${dirname}`;
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
     }
-    const sharedApplications = this.options.sharedData.applications;
+    const sharedApplications = help ? {} : this.options.sharedData.applications;
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
     }

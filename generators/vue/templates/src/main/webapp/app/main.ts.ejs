@@ -1,43 +1,34 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue from 'vue';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import Vue, { provide } from 'vue';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
+import { useStore } from '@/store';
+
 import App from './app.vue';
-import Vue2Filters from 'vue2-filters';
-import { ToastPlugin } from 'bootstrap-vue';
 import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
-import JhiSortIndicatorComponent from "./shared/sort/jhi-sort-indicator.vue";
+import JhiSortIndicatorComponent from './shared/sort/jhi-sort-indicator.vue';
 import InfiniteLoading from 'vue-infinite-loading';
 <%_ if (withAdminUi) { _%>
 import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
-import LogsService from './admin/logs/logs.service';
-import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-import ActivateService from './account/activate/activate.service';
-import RegisterService from './account/register/register.service';
 import UserManagementService from './admin/user-management/user-management.service';
 <%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
-import AlertService from './shared/alert/alert.service';
 
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-import GatewayService from '@/admin/gateway/gateway.service';
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-import TrackerService from './admin/tracker/tracker.service';
+import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 /* tslint:disable */
 
@@ -48,27 +39,27 @@ Vue.config.productionTip = false;
 config.initVueApp(Vue);
 config.initFortAwesome(Vue);
 bootstrapVueConfig.initBootstrapVue(Vue);
-Vue.use(Vue2Filters);
-Vue.use(ToastPlugin);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 Vue.component('infinite-loading', InfiniteLoading);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
 <%_ } _%>
-const store = config.initVueXStore(Vue);
-
+const store = useStore();
 <%_ if (communicationSpringWebsocket) { _%>
-const trackerService = new TrackerService(router, store<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
 const loginService = new LoginService();
-const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>(<any>Vue).cookie, <%_ } _%>router);
+const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, (<any>Vue).cookie<%_ } _%>);
 
 router.beforeEach(async (to, from, next) => {
+  // Make sure login modal is closed
+  router.app.$emit('bv::hide::modal', 'login-page');
+
+  await accountService.update();
   if (!to.matched.length) {
 <%_ if (applicationTypeGateway && microfrontend) { _%>
     await lazyRoutes;
@@ -78,66 +69,37 @@ router.beforeEach(async (to, from, next) => {
     }
 
 <%_ } _%>
-    next('/not-found');
+    next({ path: '/not-found' });
   } else if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
-    accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
-      if (!value) {
+    const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
+    if (!value) {
+      if (router.currentRoute.path !== '/forbidden') {
         sessionStorage.setItem('requested-url', to.fullPath);
-        next('/forbidden');
+        next({ path: '/forbidden' });
       } else {
         next();
       }
-    });
+    } else {
+      const requestedUrl = sessionStorage.getItem('requested-url');
+      if (requestedUrl) {
+        router.replace(requestedUrl);
+        sessionStorage.removeItem('requested-url');
+      } else {
+        next();
+      }
+    }
   } else {
     // no authorities, so just proceed
     next();
   }
 });
 
-/* tslint:disable */
-<% if (!authenticationTypeOauth2) { %>const vue = <% } %>new Vue({
-  el: '#app',
-  components: { App },
-  template: '<App/>',
-  router,
-  provide: {
-    loginService: () => loginService,
-<%_ if (generateUserManagement) { _%>
-    activateService: () => new ActivateService(),
-    registerService: () => new RegisterService(),
-    userManagementService: () => new UserManagementService(),
+<%_ if (!authenticationTypeOauth2) { _%>
+let openLogin = () => {};
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
-    gatewayService: () => new GatewayService(),
-<%_ } _%>
-<%_ if (withAdminUi) { _%>
-    healthService: () => new HealthService(),
-    configurationService: () => new ConfigurationService(),
-    logsService: () => new LogsService(),
-    metricsService: () => new MetricsService(),
-<%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-    trackerService: () => trackerService,
-<%_ } %>
-<%_ if (enableTranslation) { _%>
-    translationService: () => translationService,
-<%_ } _%>
-    // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    accountService: () => accountService,
-    alertService: () => new AlertService(),
-<%_ if (applicationTypeMicroservice && microfrontend) { _%>
-    microfrontendI18n: false,
-<%_ } _%>
-  },
-<%_ if (enableTranslation) { _%>
-  i18n,
-<%_ } _%>
-  store,
-});
-
 setupAxiosInterceptors(
   error => {
-	const url = error.response?.config?.url;
+    const url = error.response?.config?.url;
     const status = error.status || error.response.status;
     if (status === 401) {
       // Store logged out state.
@@ -147,16 +109,48 @@ setupAxiosInterceptors(
 <%_ if (authenticationTypeOauth2) { _%>
         window.location.reload();
 <%_ } else { _%>
-        loginService.openLogin(vue);
+        openLogin();
 <%_ } _%>
         return;
       }
     }
-    console.log('Unauthorized!');
     return Promise.reject(error);
   },
   error => {
-    console.log('Server error!');
     return Promise.reject(error);
   }
 );
+
+/* tslint:disable */
+<% if (!authenticationTypeOauth2) { %>const vue = <% } %>new Vue({
+  el: '#app',
+  components: { App },
+  template: '<App/>',
+  router,
+  setup() {
+<%_ if (communicationSpringWebsocket) { _%>
+    useTrackerService();
+<%_ } _%>
+    provide('loginService', () => loginService);
+<%_ if (withAdminUi) { _%>
+    provide('healthService', () => new HealthService());
+    provide('metricsService', () => new MetricsService());
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+    provide('translationService', () => translationService);
+<%_ } _%>
+    // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
+    provide('accountService', () => accountService);
+<%_ if (applicationTypeMicroservice && microfrontend) { _%>
+    provide('microfrontendI18n', false);
+<%_ } _%>
+  },
+<%_ if (enableTranslation) { _%>
+  i18n,
+<%_ } _%>
+  store,
+});
+
+<%_ if (!authenticationTypeOauth2) { _%>
+openLogin = () => loginService.openLogin(vue);
+<%_ } _%>

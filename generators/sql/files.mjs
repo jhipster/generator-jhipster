@@ -100,10 +100,6 @@ export const mariadbFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/MariadbTestContainer.java'],
     },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mariadb/my.cnf', noEjs: true }],
-    },
   ],
 };
 
@@ -136,9 +132,6 @@ export const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.devDatabaseTypePostgres || context.prodDatabaseTypePostgres)
 );
 
-/**
- * @this {import('./index.mjs')}
- */
 export default async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,

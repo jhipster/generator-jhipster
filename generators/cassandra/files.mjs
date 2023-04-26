@@ -53,7 +53,12 @@ export const cassandraFiles = {
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['CassandraKeyspaceIT.java', 'config/CassandraTestContainer.java', 'config/EmbeddedCassandra.java'],
+      templates: [
+        'CassandraKeyspaceIT.java',
+        'config/CassandraTestContainer.java',
+        'config/CassandraTestContainersSpringContextCustomizerFactory.java',
+        'config/EmbeddedCassandra.java',
+      ],
     },
   ],
 };

@@ -40,7 +40,9 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.security.SecurityUtils;
 <%_ } _%>
 import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+<%_ if (!databaseTypeNo) { _%>
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+<%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 
 import tech.jhipster.security.RandomUtil;

@@ -4,10 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as sinon from 'sinon';
 import { Subject, Subscription } from 'rxjs';
 
+import { useStore } from '@/store';
 import * as config from '@/shared/config/config';
 import <%=jhiPrefixCapitalized%>Tracker from '@/admin/tracker/tracker.vue';
 import <%=jhiPrefixCapitalized%>TrackerComponent from '@/admin/tracker/tracker.component';
 import TrackerService from '@/admin/tracker/tracker.service';
+
+type <%=jhiPrefixCapitalized%>TrackerComponentType = Vue & InstanceType<typeof <%=jhiPrefixCapitalized%>TrackerComponent>;
 
 const localVue = createLocalVue();
 
@@ -15,7 +18,7 @@ config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
 <%_ } _%>
-const store = config.initVueXStore(localVue);
+const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 const axiosStub = {
@@ -23,8 +26,8 @@ const axiosStub = {
 };
 
 describe('<%=jhiPrefixCapitalized%>Tracker', () => {
-  let wrapper: Wrapper<<%=jhiPrefixCapitalized%>TrackerComponent>;
-  let trackerView: <%=jhiPrefixCapitalized%>TrackerComponent;
+  let wrapper: Wrapper<<%=jhiPrefixCapitalized%>TrackerComponentType>;
+  let trackerView: <%=jhiPrefixCapitalized%>TrackerComponentType;
 
   let subject: Subject<any>;
   let subscription: Subscription;
@@ -41,14 +44,14 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
       return subscription;
     });
 
-    wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponent>(<%=jhiPrefixCapitalized%>Tracker, {
+    wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponentType>(<%=jhiPrefixCapitalized%>Tracker, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
       localVue,
       provide: {
-        trackerService: () => trackerServiceStub,
+        trackerService: trackerServiceStub,
       },
     });
     trackerView = wrapper.vm;

@@ -24,7 +24,8 @@ import { GENERATOR_ANGULAR, GENERATOR_APP, GENERATOR_COMMON, GENERATOR_GIT } fro
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseGenerator from '../base/index.mjs';
-import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
+import { deploymentOptions, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
+import { removeFieldsWithNullishValues } from '../base/support/config.mjs';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
@@ -190,6 +191,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
 
         const {
           dependencies: { rxjs },
+          devDependencies: { webpack: webpackVersion },
         } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'));
 
         const {
@@ -201,7 +203,6 @@ export default class WorkspacesGenerator extends BaseGenerator {
             packages: this.packages,
           },
           devDependencies: {
-            rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
             concurrently,
           },
           scripts: {
@@ -212,6 +213,28 @@ export default class WorkspacesGenerator extends BaseGenerator {
             ...this._createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
+
+        const applications = this.loadApplications();
+        if (applications.some(app => app.clientFrameworkAngular)) {
+          this.packageJson.merge({
+            devDependencies: {
+              rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
+            },
+            overrides: {
+              webpack: webpackVersion,
+            },
+          });
+        }
+        if (applications.some(app => app.clientFrameworkVue)) {
+          this.packageJson.merge({
+            // https://github.com/vuejs/vue-jest/issues/480#issuecomment-1330479635
+            overrides: {
+              '@babel/core': '7.17.9',
+              '@babel/generator': '7.17.9',
+              'istanbul-lib-instrument': '5.2.0',
+            },
+          });
+        }
       },
     };
   }
@@ -264,5 +287,27 @@ export default class WorkspacesGenerator extends BaseGenerator {
 
   _createWorkspacesScript(...scripts) {
     return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
+  }
+
+  loadApplications() {
+    return this.workspacesConfig.packages
+      .map(appPath => {
+        const appConfig = this.readDestinationJSON(`${appPath}/.yo-rc.json`)[GENERATOR_JHIPSTER];
+        if (!appConfig) return undefined;
+
+        const app = getConfigWithDefaults(removeFieldsWithNullishValues(appConfig));
+
+        this.loadAppConfig(app, app);
+        this.loadServerConfig(app, app);
+        this.loadClientConfig(app, app);
+        this.loadPlatformConfig(app, app);
+
+        this.loadDerivedAppConfig(app);
+        this.loadDerivedClientConfig(app);
+        this.loadDerivedServerConfig(app);
+        this.loadDerivedPlatformConfig(app);
+        return app;
+      })
+      .filter(app => app);
   }
 }

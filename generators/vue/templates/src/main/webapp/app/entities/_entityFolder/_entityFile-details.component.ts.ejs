@@ -1,36 +1,51 @@
-import { Component,<% if (!anyFieldIsBlobDerived) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router/composables';
+
 <% if (anyFieldIsBlobDerived) { %>
-import { mixins } from 'vue-class-component';
-import JhiDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class <%= entityAngularName %>Details extends <% if (anyFieldIsBlobDerived) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
-  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  name: '<%= entityAngularName %>Details',
+  setup() {
+    const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public <%= entityInstance %>: I<%= entityAngularName %> = {};
+<% if (anyFieldIsBlobDerived) { %>
+    const dataUtils = useDataUtils();
+<% } %>
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.<%= entityInstance %>Id) {
-        vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+    const <%= entityInstance %>: Ref<I<%= entityAngularName %>> = ref({});
+
+    const retrieve<%= entityAngularName %> = async <%= entityInstance %>Id => {
+      try {
+        const res = await <%= entityInstance %>Service().find(<%= entityInstance %>Id);
+        <%= entityInstance %>.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
-    this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
-      this.<%= entityInstance %> = res;
-    }).catch(error => {
-      this.alertService().showHttpError(this,error.response);
-    });
-  }
+    if (route.params.<%= entityInstance %>Id) {
+      retrieve<%= entityAngularName %>(route.params.<%= entityInstance %>Id);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    const previousState = () => {
+      router.go(-1);
+    };
+
+    return {
+      alertService,
+      <%= entityInstance %>,
+<% if (anyFieldIsBlobDerived) { %>
+      ...dataUtils,
+<% } %>
+      previousState,
+    };
+  },
+});

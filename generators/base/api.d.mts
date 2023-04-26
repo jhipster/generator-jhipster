@@ -1,4 +1,5 @@
 import type { OptionConfig, GeneratorOptions, GeneratorFeatures, ArgumentConfig } from 'yeoman-generator';
+import type CoreGenerator from '../base-core/index.mjs';
 
 export type ApplicationWithConfig = {
   config: {
@@ -13,17 +14,22 @@ export interface JHipsterGeneratorOptions extends GeneratorOptions {
 
 export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
   priorityArgs?: boolean;
+  jhipster7Migration?: boolean;
+  sbsBlueprint?: boolean;
 }
 
 // eslint-disable-next-line no-use-before-define
-export type EditFileCallback<Generator> = (this: Generator, content: string, filePath: string) => string;
+export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
 
 export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean };
 
-export type CascatedEditFileCallback<Generator> = (...callbacks: EditFileCallback<Generator>[]) => CascatedEditFileCallback<Generator>;
+export type CascatedEditFileCallback<Generator = CoreGenerator> = (
+  ...callbacks: EditFileCallback<Generator>[]
+) => CascatedEditFileCallback<Generator>;
 
-export type WriteFileTemplate<Generator, DataType> =
+export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
   | string
+  | ((this: Generator, data: DataType, filePath: string) => string)
   | {
       /** source file */
       sourceFile?: ((this: Generator, data: DataType) => string) | string;
@@ -42,11 +48,11 @@ export type WriteFileTemplate<Generator, DataType> =
       override?: (this: Generator, data: DataType) => boolean;
     };
 
-export type WriteFileBlock<Generator, DataType> = {
+export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
   /** relative path were sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
-  to?: ((this: Generator, data: DataType) => string) | string;
+  to?: ((this: Generator, data: DataType, filePath: string) => string) | string;
   path?: ((this: Generator, data: DataType) => string) | string;
   /** generate destinationFile based on sourceFile */
   renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
@@ -57,9 +63,9 @@ export type WriteFileBlock<Generator, DataType> = {
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
-export type WriteFileSection<Generator, DataType> = Record<string, WriteFileBlock<Generator, DataType>[]>;
+export type WriteFileSection<Generator = CoreGenerator, DataType = any> = Record<string, WriteFileBlock<Generator, DataType>[]>;
 
-export type WriteFileOptions<Generator, DataType> = {
+export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback<Generator>[];
   /** context to be used as template data */

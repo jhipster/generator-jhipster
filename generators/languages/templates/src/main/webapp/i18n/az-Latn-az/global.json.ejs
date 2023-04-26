@@ -1,0 +1,168 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "<strong>Müasir olmayan</strong> bir brauzer istifadə edirsiniz. Zəhmət olmasa, istifadəçi rahatlığını yüksəltmək üçün <a href=\"http://browsehappy.com/?locale=tr\">brauzerinizi güncəlləyin</a>.",
+        "menu": {
+            "home": "Ana Səhifə",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Məlumatlar",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Hesab",
+                "settings": "Parametrlər",
+                "password": "Şifrə",
+                "sessions": "Sessiyalar",
+                "login": "Giriş",
+                "logout": "Çıxış",
+                "register": "Qeydiyyat"
+            },
+            "admin": {
+                "main": "Administrasiya",
+<%_ if (applicationTypeGateway) { _%>
+                "gateway": "Şəbəkə",
+<%_ } _%>
+                "userManagement": "İstifadəçi idarəetməsi",
+                "tracker": "İstifadəçi izləmə",
+                "metrics": "Ölçülər",
+                "health": "Sağlamlıq",
+                "configuration": "Konfiqurasiya",
+                "logs": "Sistem loqları",
+                "apidocs": "API",
+                "database": "Məlumat bazası",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Dil"
+        },
+        "form": {
+            "username.label": "İstifadəçi Adı",
+            "username.placeholder": "İstifadəçi Adınız",
+            "currentpassword.label": "Mövcud Şifrə",
+            "currentpassword.placeholder": "Mövcud Şifrəniz",
+            "newpassword.label": "Yeni Şifrə",
+            "newpassword.placeholder": "Yeni Şifrəniz",
+            "confirmpassword.label": "Yeni Şifrə Təsdiq",
+            "confirmpassword.placeholder": "Yeni Şifrənizi Təsdiqləyin",
+            "email.label": "E-poçt",
+            "email.placeholder": "E-poçt adresiniz"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "",
+                    "link": "Giriş",
+                    "suffix": " etmək istəyirsinizsə, cari hesablardan birini yoxlaya bilərsniz:<br/>- Admin (istifadəçi adı=\"admin\" və şifrə=\"admin\") <br/>- İstifadəçi (istifadəçi adı=\"user\" və şifrə=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Hazırda hesabınız yoxdur?",
+                    "link": "Yeni hesab yarat"
+                }
+            },
+            "error": {
+                "dontmatch" : "Şifrələr eyni deyil!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Şifrə məcburidir.",
+                    "minlength": "Şifrəniz ən az 4 hərfdən ibarət olmalıdır",
+                    "maxlength": "Şifrəniz 50 hərfdən uzun ola bilməz",
+                    "strength": "Şifrə çətinliyi:"
+                },
+                "confirmpassword": {
+                    "required": "Şifrə təsdiqi məcburidir.",
+                    "minlength": "Şifrə təsdiqi ən az 4 hərfdən ibarət olmalıdır",
+                    "maxlength": "Şifrə təsdiqi 50 hərfdən uzun ola bilməz"
+                },
+                "email": {
+                    "required": "E-poçt adresiniz zorunludur.",
+                    "invalid": "E-poçt adresiniz düzgün deyil.",
+                    "minlength": "E-poçt adresiniz ən az 5 hərf olmalıdır",
+                    "maxlength": "E-poçt adresiniz 50 hərfdən uzun ola bilməz"
+                }
+            }
+        },
+        "field": {
+            "id" : "ID"
+        },
+        "ribbon": {
+            "dev": "Proqram Modu"
+        },
+        "item-count": "Cəmi {{total}} məlumatın {{first}} - {{second}} arası göstərilir."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Binary Böyük Data Əlavə Et",
+            "addimage": "Şəkil Əlavə Et",
+            "back": "Geri",
+            "cancel": "İmtina",
+            "delete": "Sil",
+            "edit": "Dəyişiklik Et",
+            "open": "Aç",
+            "save": "Yadda Saxla",
+            "view": "Göstər",
+            "show": "Göstər {{otherEntity}}"
+        },
+        "detail": {
+            "field": "Məlumat",
+            "value": "Dəyər"
+        },
+        "delete": {
+            "title": "Silmək istədiyinizdən Əminsiniz?"
+        },
+        "validation": {
+            "required": "Bu məlumat məcburidir.",
+            "minlength": "Bu məlumat ən az {{min}} hərfdən ibarət ola bilər.",
+            "maxlength": "Bu məlumat ən çox {{max}} hərfdən ibarət ola bilər.",
+            "min": "Bu məlumat en az {{min}} olmalıdır.",
+            "max": "Bu məlumat ən çox {{max}} olmalıdır.",
+            "minbytes": "Bu məlumat ən az {{min}} byte olmalıdır.",
+            "maxbytes": "Bu məlumat ən çox {{max}} byte olmalıdır.",
+            "pattern": "Bu məlumat {{pattern}} formatına uymur.",
+            "number": "Bu məlumat ədəd olmalı.",
+            "datetimelocal": "Bu məlumat tarix və ya vaxt olmalıdır.",
+            "patternLogin": "Bu məlumat hərf, ədəd və ya e-poçt adresi olmalıdır."
+        },
+        "filters": {
+          "set": "Aşağıdaki filterlər qeyd edildi",
+          "clear": "Filteri təmizlə",
+          "clearAll": "Bütün filterləri təmizlə"
+        }
+    },
+    "error": {
+        "internalServerError": "Daxili server xətası",
+        "server.not.reachable": "Serverə bağlanmaq mümkün deyil",
+        "url.not.found": "Tapılmadı",
+        "NotNull": "{{fieldName}} məlumatı boş ola bilməz!",
+        "Size": "{{fieldName}} məlumatı min/max limitlərini dəstəkləmir!",
+        "userexists": "Bu istifadəçi adı daha əvvəl istifadə edilib!",
+        "emailexists": "Bu E-poçt adresi artıq istifadə edilir!",
+        "idexists": "Yeni bir {{entityName}} əlavə edilərkən ID məlumatına sahib ola bilməz",
+        "idnull": "Etibarsız ID",
+        "idinvalid": "Etibarsız Id",
+        "idnotfound": "ID tapılmadı",
+        "file": {
+            "could.not.extract": "Fayl çıxarıla bilmədi",
+            "not.image": "Faylın bir şəkil olması gözlənilirdi; ancaq \"{{ fileType }}\" olduğu göründü"
+        }
+    },
+    "footer": "Səhifənin aşağısı üçün məlumat"
+}

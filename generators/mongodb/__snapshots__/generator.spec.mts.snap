@@ -68,6 +68,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "src/main/java/com/package/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -140,6 +143,12 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "src/main/java/com/package/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -168,6 +177,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/jwt/JWTRelayGatewayFilterFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/package-info.java": {
@@ -209,6 +221,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/impl/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
@@ -225,6 +240,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AccountResource.java": {
@@ -496,6 +514,9 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -562,6 +583,9 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -592,6 +616,9 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
   "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -616,6 +643,9 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
@@ -638,6 +668,9 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -677,9 +710,6 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/RouteVM.java": {
@@ -876,7 +906,13 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/client/UserFeignClientInterceptor.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
@@ -921,12 +957,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/dbmigrations/InitialSetupMigration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/dbmigrations/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
@@ -936,13 +966,7 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/package-info.java": {
@@ -951,16 +975,16 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": {
@@ -984,16 +1008,19 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/package-info.java": {
@@ -1003,9 +1030,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -1027,12 +1051,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1220,6 +1238,9 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -1265,9 +1286,6 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/dbmigrations/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/package-info.java": {
     "stateCleared": "modified",
   },
@@ -1284,6 +1302,12 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -1310,13 +1334,22 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/package-info.java": {
@@ -1344,9 +1377,6 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1522,6 +1552,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/client/AuthorizedFeignClient.java": {
     "stateCleared": "modified",
   },
@@ -1529,6 +1562,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/client/TokenRelayRequestInterceptor.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
@@ -1600,6 +1636,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -1636,6 +1675,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -1658,6 +1700,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
@@ -1700,12 +1745,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1905,6 +1944,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/main/java/com/package/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -1971,6 +2013,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -2001,6 +2046,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/security/oauth2/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2023,6 +2071,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
@@ -2065,12 +2116,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -2252,6 +2297,9 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -2324,6 +2372,12 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -2393,6 +2447,9 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
@@ -2409,6 +2466,9 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -2716,6 +2776,9 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/package/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -2758,9 +2821,6 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/package/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/dbmigrations/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2777,6 +2837,12 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
     "stateCleared": "modified",
   },
   "src/main/java/com/package/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -2803,7 +2869,13 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
@@ -2812,10 +2884,16 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AccountResource.java": {
@@ -3030,6 +3108,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -3099,6 +3180,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/domain/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -3135,6 +3219,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -3159,6 +3246,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
@@ -3178,6 +3268,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -3214,12 +3307,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -3428,6 +3515,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/main/java/com/package/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -3500,6 +3590,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/main/java/com/package/domain/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -3530,6 +3623,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/security/oauth2/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -3554,6 +3650,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/impl/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
@@ -3573,6 +3672,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AccountResource.java": {
@@ -3609,12 +3711,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -3808,6 +3904,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -3875,6 +3974,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
@@ -3952,6 +4054,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/impl/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
@@ -3968,6 +4073,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -4242,6 +4350,9 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -4281,9 +4392,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/dbmigrations/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/package-info.java": {
     "stateCleared": "modified",
   },
@@ -4297,6 +4405,9 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
@@ -4323,7 +4434,13 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
@@ -4332,10 +4449,16 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/main/java/com/package/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AccountResource.java": {
@@ -4363,9 +4486,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {

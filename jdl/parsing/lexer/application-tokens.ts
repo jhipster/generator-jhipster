@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import { Lexer } from 'chevrotain';
+import { ITokenConfig, Lexer } from 'chevrotain';
 import createTokenFromConfig from './token-creator.js';
 import { UNARY_OPTION, KEYWORD } from './shared-tokens.js';
 
 import { applicationOptions } from '../../jhipster/index.mjs';
+import jhipsterDefinition from '../../../generators/app/jdl/index.mjs';
 
 const { OptionNames } = applicationOptions;
 
@@ -51,7 +52,6 @@ const {
   JHI_PREFIX,
   JWT_SECRET_KEY,
   LANGUAGES,
-  MESSAGE_BROKER,
   MICROFRONTEND,
   MICROFRONTENDS,
   NATIVE_LANGUAGE,
@@ -73,7 +73,7 @@ const {
 
 const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
-const applicationConfigTokens = [
+const applicationConfigTokens: Pick<ITokenConfig, 'name' | 'pattern'>[] = [
   { name: 'BASE_NAME', pattern: BASE_NAME },
   { name: 'BLUEPRINTS', pattern: BLUEPRINTS },
   { name: 'BLUEPRINT', pattern: BLUEPRINT },
@@ -98,7 +98,6 @@ const applicationConfigTokens = [
   { name: 'JHI_PREFIX', pattern: JHI_PREFIX },
   { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
   { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
-  { name: 'MESSAGE_BROKER', pattern: MESSAGE_BROKER },
   { name: 'CLIENT_PACKAGE_MANAGER', pattern: CLIENT_PACKAGE_MANAGER },
   { name: 'CLIENT_FRAMEWORK', pattern: CLIENT_FRAMEWORK },
   { name: 'CLIENT_THEME_VARIANT', pattern: CLIENT_THEME_VARIANT },
@@ -118,17 +117,21 @@ const applicationConfigTokens = [
   { name: 'GRADLE_ENTERPRISE_HOST', pattern: GRADLE_ENTERPRISE_HOST },
   { name: 'MICROFRONTENDS', pattern: MICROFRONTENDS },
   { name: 'MICROFRONTEND', pattern: MICROFRONTEND },
-].map(tokenConfig => {
-  (tokenConfig as any).categories = [applicationConfigCategoryToken];
-  // This is actually needed as the skipClient & skipServer options are both entity & app options...
-  if (['SKIP_CLIENT', 'SKIP_SERVER'].includes(tokenConfig.name)) {
-    (tokenConfig as any).categories.push(KEYWORD);
-    (tokenConfig as any).categories.push(UNARY_OPTION);
-  }
-  return createTokenFromConfig(tokenConfig);
-});
+  ...jhipsterDefinition.tokenConfigs,
+];
 
 export default {
   categoryToken: applicationConfigCategoryToken,
-  tokens: [applicationConfigCategoryToken, ...applicationConfigTokens],
+  tokens: [
+    applicationConfigCategoryToken,
+    ...applicationConfigTokens.map((tokenConfig: ITokenConfig) => {
+      tokenConfig.categories = [applicationConfigCategoryToken];
+      // This is actually needed as the skipClient & skipServer options are both entity & app options...
+      if (['SKIP_CLIENT', 'SKIP_SERVER'].includes(tokenConfig.name)) {
+        tokenConfig.categories.push(KEYWORD);
+        tokenConfig.categories.push(UNARY_OPTION);
+      }
+      return createTokenFromConfig(tokenConfig);
+    }),
+  ],
 };

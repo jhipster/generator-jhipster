@@ -18,9 +18,11 @@
  */
 
 import { relationshipTypes } from '../jhipster/index.mjs';
+import { relationshipTypeExists } from '../jhipster/relationship-types.js';
+import JDLRelationship, { JDLRelationshipType } from './jdl-relationship.js';
 
 export default class JDLRelationships {
-  relationships: { OneToOne: Map<any, any>; OneToMany: Map<any, any>; ManyToOne: Map<any, any>; ManyToMany: Map<any, any> };
+  relationships: Record<JDLRelationshipType, Map<string, JDLRelationship>>;
 
   constructor() {
     this.relationships = {
@@ -31,7 +33,7 @@ export default class JDLRelationships {
     };
   }
 
-  add(relationship) {
+  add(relationship: JDLRelationship) {
     if (!relationship) {
       throw new Error('A relationship must be passed so as to be added.');
     }
@@ -54,8 +56,8 @@ export default class JDLRelationships {
     return this.get(relationshipTypes.MANY_TO_MANY, relationshipId);
   }
 
-  get(type, relationshipId) {
-    if (!relationshipTypes.exists(type)) {
+  get(type, relationshipId): JDLRelationship {
+    if (!relationshipTypeExists(type)) {
       throw new Error(`A valid relationship type must be passed so as to retrieve the relationship, got '${type}'.`);
     }
     if (!relationshipId) {
@@ -84,7 +86,7 @@ export default class JDLRelationships {
     return this.oneToOneQuantity() + this.oneToManyQuantity() + this.manyToOneQuantity() + this.manyToManyQuantity();
   }
 
-  forEach(passedFunction) {
+  forEach(passedFunction: (relationship: JDLRelationship) => void) {
     if (!passedFunction) {
       return;
     }
@@ -93,7 +95,7 @@ export default class JDLRelationships {
     });
   }
 
-  toArray() {
+  toArray(): JDLRelationship[] {
     const relationships: any[] = [];
     Object.keys(this.relationships).forEach(type => {
       this.relationships[type].forEach(relationship => {

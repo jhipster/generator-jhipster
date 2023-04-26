@@ -18,17 +18,23 @@
  */
 import type { WriteFileSection } from '../base/api.mjs';
 import type LiquibaseGenerator from './generator.mjs';
-import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { moveToJavaPackageSrcDir } from '../server/support/index.mjs';
+import { CommonClientServerApplication } from '../base-application/types.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
-export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootApplication & LiquibaseApplication> = {
+export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientServerApplication> = {
   liquibase: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/LiquibaseConfiguration.java'],
+    },
+  ],
+  gradle: [
+    {
+      condition: ctx => ctx.buildToolGradle,
+      templates: ['gradle/liquibase.gradle'],
     },
   ],
   serverResource: [
@@ -37,7 +43,7 @@ export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootAppl
       templates: [
         {
           override: ctx => !ctx.incrementalChangelog || (ctx as any).recreateInitialChangelog,
-          file: 'config/liquibase/changelog/initial_schema.xml',
+          file: data => `config/liquibase/changelog/initial_schema_${data.databaseType}.xml`,
           renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
         },
         {

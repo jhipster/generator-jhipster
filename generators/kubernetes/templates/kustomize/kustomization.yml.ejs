@@ -19,7 +19,7 @@ const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-deployment.yml
 - <%= appOut %>/<%= appName %>-service.yml
   <%_ if (!appConfig.databaseTypeNo) { _%>
-- <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType %>.yml
+- <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType ?? appConfig.databaseType %>.yml
   <%_ } _%>
   <%_ if (appConfig.searchEngineElasticsearch) { _%>
 - <%= appOut %>/<%= appName %>-elasticsearch.yml

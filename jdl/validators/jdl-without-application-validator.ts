@@ -19,7 +19,7 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, applicationOptions, reservedKeywords } from '../jhipster/index.mjs';
+import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, reservedKeywords, relationshipOptions } from '../jhipster/index.mjs';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
@@ -28,9 +28,10 @@ import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 
 import JDLObject from '../models/jdl-object.js';
+import JDLRelationship from '../models/jdl-relationship.js';
 
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
-const { OptionNames } = applicationOptions;
 const { SQL } = databaseTypes;
 
 /**
@@ -40,16 +41,14 @@ const { SQL } = databaseTypes;
  * @param {String} applicationSettings.baseName - the application's name.
  * @param {String} applicationSettings.applicationType - the application type.
  * @param {String} applicationSettings.databaseType - the DB type.
- * @param {Boolean} applicationSettings.skippedUserManagement - whether user management is skipped.
  * @param {Array} applicationSettings.blueprints - the blueprints used.
  * @param {Object} [logger] - the logger to use, default to the console.
  * @param {Object} [options]
  */
-export default function createValidator(jdlObject: JDLObject, applicationSettings: any = {}, logger: any = console, options: any = {}) {
+export default function createValidator(jdlObject: JDLObject, applicationSettings: any = {}, logger: any = console) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
-  const { unidirectionalRelationships } = options;
 
   if (applicationSettings.blueprints && applicationSettings.blueprints.length !== 0) {
     return {
@@ -62,7 +61,7 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
   return {
     checkForErrors: () => {
       checkForEntityErrors();
-      checkForRelationshipErrors({ unidirectionalRelationships });
+      checkForRelationshipErrors();
       checkForEnumErrors();
       checkDeploymentsErrors();
       checkForOptionErrors();
@@ -120,20 +119,16 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     });
   }
 
-  function checkForRelationshipErrors(options: any = {}) {
+  function checkForRelationshipErrors() {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
-    const { unidirectionalRelationships } = options;
-    const skippedUserManagement =
-      applicationSettings.skippedUserManagement || jdlObject.getOptionsForName(OptionNames.SKIP_USER_MANAGEMENT)[0];
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
-      validator.validate(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
+      validator.validate(jdlRelationship);
       checkForAbsentEntities({
         jdlRelationship,
         doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
-        skippedUserManagementOption: skippedUserManagement,
       });
     });
   }
@@ -182,23 +177,28 @@ function getTypeCheckingFunction(entityName, applicationSettings) {
   return fieldTypes.getIsType(applicationSettings.databaseType);
 }
 
-function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
+function checkForAbsentEntities({
+  jdlRelationship,
+  doesEntityExist,
+}: {
+  jdlRelationship: JDLRelationship;
+  doesEntityExist: (string) => boolean;
+}) {
   const absentEntities: any[] = [];
   if (!doesEntityExist(jdlRelationship.from)) {
     absentEntities.push(jdlRelationship.from);
   }
-  if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
+  if (!doesEntityExist(jdlRelationship.to) && !jdlRelationship.options.global[BUILT_IN_ENTITY]) {
     absentEntities.push(jdlRelationship.to);
   }
   if (absentEntities.length !== 0) {
     throw new Error(
       `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
-        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
+        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared. If '${
+          jdlRelationship.to
+        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`
     );
   }
-}
-function isUserManagementEntity(entityName) {
-  return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
 }
 function checkForPaginationInAppWithCassandra(jdlOption, applicationSettings) {
   if (applicationSettings.databaseType === databaseTypes.CASSANDRA && jdlOption.name === binaryOptions.Options.PAGINATION) {

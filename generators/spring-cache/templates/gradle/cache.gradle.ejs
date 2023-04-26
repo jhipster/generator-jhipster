@@ -1,0 +1,46 @@
+dependencies {
+  implementation "org.springframework.boot:spring-boot-starter-cache"
+<%_ if (cacheProviderEhcache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
+  implementation "javax.cache:cache-api"
+<%_ } _%>
+<%_ if (cacheProviderEhcache) { _%>
+  implementation group: "org.ehcache", name: "ehcache", classifier: "jakarta"
+  <%_ if (enableHibernateCache) { _%>
+  implementation "org.hibernate.orm:hibernate-jcache"
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
+  implementation "com.github.ben-manes.caffeine:caffeine"
+  implementation "com.github.ben-manes.caffeine:jcache"
+  implementation "com.typesafe:config:${typesafeConfigVersion}"
+  <%_ if (enableHibernateCache) { _%>
+  implementation "org.hibernate.orm:hibernate-jcache"
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+  <%_ if (enableHibernateCache) { _%>
+  implementation "com.hazelcast:hazelcast-hibernate53:${hazelcastHibernate53Version}"
+  <%_ } _%>
+  implementation "com.hazelcast:hazelcast-spring:${hazelcastSpringVersion}"
+<%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
+  implementation "org.infinispan:infinispan-hibernate-cache-v60"
+  implementation "org.infinispan:infinispan-spring-boot3-starter-embedded"
+  implementation "org.infinispan:infinispan-commons-jakarta"
+  implementation "org.infinispan:infinispan-core-jakarta"
+  compileOnly "org.infinispan:infinispan-component-annotations"
+<%_ } _%>
+<%_ if (cacheProviderMemcached) { _%>
+  implementation "com.google.code.simple-spring-memcached:spring-cache"
+  implementation "com.google.code.simple-spring-memcached:xmemcached-provider"
+  implementation "com.googlecode.xmemcached:xmemcached"
+<%_ } _%>
+<%_ if (cacheProviderRedis) { _%>
+  implementation "org.redisson:redisson"
+  <%_ if (enableHibernateCache) { _%>
+  implementation "org.hibernate.orm:hibernate-jcache"
+  <%_ } _%>
+  testImplementation "org.testcontainers:junit-jupiter"
+  testImplementation "org.testcontainers:testcontainers"
+<%_ } _%>
+}

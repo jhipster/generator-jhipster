@@ -82,10 +82,24 @@ const sqlFiles = {
 export function cleanupEntitiesTask({ application, entities }) {}
 
 export default async function writeEntitiesTask({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
-    await this.writeFiles({
-      sections: sqlFiles,
-      context: { ...application, ...entity },
-    });
+  for (const entity of entities.filter(entity => !entity.skipServer)) {
+    if (entity.builtInUser) {
+      await this.writeFiles({
+        blocks: [
+          {
+            condition: generator => generator.reactive && generator.requiresPersistableImplementation,
+            path: `${SERVER_MAIN_SRC_DIR}package/`,
+            renameTo: moveToJavaEntityPackageSrcDir,
+            templates: ['domain/_PersistClass_Callback.java'],
+          },
+        ],
+        context: { ...application, ...entity },
+      });
+    } else if (!entity.builtIn) {
+      await this.writeFiles({
+        sections: sqlFiles,
+        context: { ...application, ...entity },
+      });
+    }
   }
 }

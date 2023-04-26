@@ -1,13 +1,28 @@
-import * as SockJS from 'sockjs-client';
-import { Observer, map } from 'rxjs';
+import <% if (authenticationUsesCsrf) { %>Vue, <% } %>{ provide } from 'vue';
 import VueRouter from 'vue-router';
+import { useRouter } from 'vue-router/composables';
+import * as SockJS from 'sockjs-client';
+import { map } from 'rxjs';
 import { Store } from 'vuex';
 import { RxStomp } from '@stomp/rx-stomp';
 
+import { useStore } from '@/store';
 import { AccountStateStorable } from '@/shared/config/store/account-store';
 
 const DESTINATION_TRACKER = '/topic/tracker';
 const DESTINATION_ACTIVITY = '/topic/activity';
+
+export const useTrackerService = () => {
+  const router = useRouter();
+  const store = useStore();
+  provide('trackerService', new TrackerService(
+    router,
+    store,
+<%_ if (authenticationUsesCsrf) { _%>
+    (<any>Vue).cookie,
+<%_ } _%>
+  ));
+};
 
 export default class TrackerService {
   private rxStomp: RxStomp;
@@ -15,7 +30,7 @@ export default class TrackerService {
   constructor(
       private router: VueRouter,
       private store: Store<AccountStateStorable>,
-<%_ if (authenticationTypeSession) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
       private cookie: any,
 <%_ } _%>
     ) {
@@ -61,7 +76,7 @@ export default class TrackerService {
 <%_ if (authenticationTypeJwt) { _%>
 
   private getAuthToken() {
-    const authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+    const authToken = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
   <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
     return JSON.parse(authToken);
   <%_ } else { _%>
@@ -73,8 +88,8 @@ export default class TrackerService {
   private buildUrl(): string {
     // building absolute path so that websocket doesn't fail when deploying with a context path
     const loc = window.location;
-    const baseHref = document.querySelector('base').getAttribute('href');
-    const url = '//' + loc.host + baseHref + 'websocket/tracker';
+    const baseHref = document.querySelector('base')?.getAttribute('href');
+    const url = '//' + loc.host + (baseHref ?? '/') + 'websocket/tracker';
 <%_ if (authenticationTypeJwt) { _%>
     const authToken = this.getAuthToken();
     if (authToken) {
@@ -89,7 +104,7 @@ export default class TrackerService {
       webSocketFactory: () => {
         return new SockJS(this.buildUrl());
       },
-<%_ if (authenticationTypeSession) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
       connectHeaders: {
         ['X-XSRF-TOKEN']: this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'),
       }
@@ -110,4 +125,4 @@ export default class TrackerService {
       .pipe(map(imessage => JSON.parse(imessage.body)))
       .subscribe(observer);
   }
-};
+}

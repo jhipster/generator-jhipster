@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { CommonClientServerApplication } from '../../base-application/types.mjs';
 import BaseGenerator from '../../base/index.mjs';
-import { ClientApplication } from '../types.mjs';
 
-export type UpdateClientLanguagesTaskParam = { application: ClientApplication & { enableTranslation: true }; control?: any };
+export type UpdateClientLanguagesTaskParam = { application: CommonClientServerApplication & { enableTranslation: true }; control?: any };
 
 /**
  * Update DayJS Locales.

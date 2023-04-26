@@ -28,13 +28,13 @@ export const neo4jFiles = {
       templates: ['config/DatabaseConfiguration.java_neo4j'],
     },
     {
-      condition: generator => generator.generateBuiltInUserEntity,
+      condition: generator => generator.generateBuiltInUserEntity && !generator.databaseMigrationLiquibase,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/neo4j/Neo4jMigrations.java', 'config/neo4j/package-info.java'],
+      templates: ['config/neo4j/Neo4jMigrations.java'],
     },
     {
-      condition: generator => generator.generateBuiltInUserEntity,
+      condition: generator => generator.generateBuiltInUserEntity && !generator.databaseMigrationLiquibase,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/neo4j/migrations/user__admin.json', 'config/neo4j/migrations/user__user.json'],
     },
@@ -43,7 +43,11 @@ export const neo4jFiles = {
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/Neo4jTestContainer.java', 'config/EmbeddedNeo4j.java'],
+      templates: [
+        'config/Neo4jTestContainer.java',
+        'config/Neo4jTestContainersSpringContextCustomizerFactory.java',
+        'config/EmbeddedNeo4j.java',
+      ],
     },
   ],
 };

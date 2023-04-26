@@ -23,9 +23,9 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers, checkEnforcements } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
-import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka } from './__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka, shouldComposeWithPulsar } from './__test-support/index.mjs';
 import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -103,6 +103,7 @@ describe(`generator - ${generator}`, () => {
         });
 
         shouldComposeWithKafka(false, () => runResult);
+        shouldComposeWithPulsar(false, () => runResult);
       });
       describe('kafka', () => {
         let runResult;
@@ -116,20 +117,72 @@ describe(`generator - ${generator}`, () => {
             .withMockedGenerators(mockedGenerators);
         });
         shouldComposeWithKafka(true, () => runResult);
+        shouldComposeWithPulsar(false, () => runResult);
       });
-    });
-
-    describe('databaseType option', () => {
-      describe('no', () => {
+      describe('pulsar', () => {
         let runResult;
         before(async () => {
           runResult = await helpers
             .run(generatorPath)
             .withJHipsterConfig({
-              databaseType: 'no',
+              messageBroker: 'pulsar',
             })
             .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
+        });
+        shouldComposeWithPulsar(true, () => runResult);
+        shouldComposeWithKafka(false, () => runResult);
+      });
+    });
+
+    describe('databaseType option', () => {
+      describe('no with jwt', () => {
+        before(async () => {
+          await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              databaseType: 'no',
+              authenticationType: 'jwt',
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        it('should match generated files', () => {
+          expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        });
+
+        shouldComposeWithCouchbase(false, () => runResult);
+      });
+      describe('no with session', () => {
+        before(async () => {
+          await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              databaseType: 'no',
+              authenticationType: 'session',
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        it('should match generated files', () => {
+          expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        });
+
+        shouldComposeWithCouchbase(false, () => runResult);
+      });
+      describe('no with oauth2', () => {
+        before(async () => {
+          await helpers
+            .run(generatorPath)
+            .withJHipsterConfig({
+              databaseType: 'no',
+              authenticationType: 'oauth2',
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        it('should match generated files', () => {
+          expect(runResult.getStateSnapshot()).toMatchSnapshot();
         });
 
         shouldComposeWithCouchbase(false, () => runResult);
