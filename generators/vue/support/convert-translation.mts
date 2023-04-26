@@ -20,7 +20,7 @@ import { passthrough } from 'p-transform';
 import { Minimatch } from 'minimatch';
 
 export function convertVueTranslations(body) {
-  return body.replace(/\{\{(\s*\w+\s*)\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
+  return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
 }
 
 const convertTranslationsSupport = ({ clientSrcDir }) => {
