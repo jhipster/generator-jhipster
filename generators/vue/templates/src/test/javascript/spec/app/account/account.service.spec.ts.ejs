@@ -1,17 +1,12 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import { useStore } from '@/store';
+import { createTestingPinia } from '@pinia/testing';
 import AccountService from '@/account/account.service';
-import { defaultAccountState } from '@/shared/config/store/account-store';
+import { AccountStore, useStore } from '@/store';
 
-const resetStore = store => {
-  store.replaceState({
-    accountStore: { ...defaultAccountState },
-<%_ if (enableTranslation) { _%>
-    translationStore: { languages: {} },
-<%_ } %>
-  });
+const resetStore = (store: AccountStore) => {
+  store.$reset();
 };
 
 const axiosStub = {
@@ -19,6 +14,7 @@ const axiosStub = {
   post: sinon.stub(axios, 'post'),
 };
 
+createTestingPinia({ stubActions: false });
 const store = useStore();
 
 describe('Account Service test suite', () => {
@@ -40,13 +36,13 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    expect(store.getters.logon).toBe(null);
+    expect(store.logon).toBe(null);
     expect(accountService.authenticated).toBe(false);
-    expect(store.getters.account).toBe(null);
+    expect(store.account).toBe(null);
     expect(axiosStub.get.calledWith('management/info')).toBeTruthy();
-    expect(store.getters.activeProfiles[0]).toBe('dev');
-    expect(store.getters.activeProfiles[1]).toBe('test');
-    expect(store.getters.ribbonOnProfiles).toBe('dev');
+    expect(store.activeProfiles[0]).toBe('dev');
+    expect(store.activeProfiles[1]).toBe('test');
+    expect(store.ribbonOnProfiles).toBe('dev');
   });
 
   it('should init service and retrieve profiles if already logged in before but no account found', async () => {
@@ -54,9 +50,9 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    expect(store.getters.logon).toBe(null);
+    expect(store.logon).toBe(null);
     expect(accountService.authenticated).toBe(false);
-    expect(store.getters.account).toBe(null);
+    expect(store.account).toBe(null);
     expect(axiosStub.get.calledWith('management/info')).toBeTruthy();
   });
 
@@ -67,7 +63,7 @@ describe('Account Service test suite', () => {
     await accountService.update();
 
     expect(accountService.authenticated).toBe(false);
-    expect(store.getters.account).toBe(null);
+    expect(store.account).toBe(null);
     expect(axiosStub.get.calledWith('management/info')).toBeTruthy();
   });
 

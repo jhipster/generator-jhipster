@@ -8,6 +8,9 @@ import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
 import { useAlertService } from '@/shared/alert/alert.service';
 import { useRoute } from 'vue-router/composables';
+<%_ if (enableTranslation) { _%>
+import languages from '@/shared/config/languages';
+<%_ } _%>
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -50,7 +53,6 @@ export default defineComponent({
     const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
     const isSaving: Ref<boolean> = ref(false);
     const authorities: Ref<string[]> = ref([]);
-    const languages: Ref<string[]> = ref([]);
 
     const initAuthorities = async () => {
       const response = await userManagementService.retrieveAuthorities();
@@ -73,10 +75,10 @@ export default defineComponent({
       userAccount,
       isSaving,
       authorities,
-      languages,
       userManagementService,
       v$: useVuelidate(),
 <%_ if (enableTranslation) { _%>
+      languages: languages(),
       t$: useI18n().t,
 <%_ } _%>
     };

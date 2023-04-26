@@ -4,8 +4,9 @@ import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router/composables';
 import { useVuelidate } from '@vuelidate/core'
+
 <%_ if (anyFieldIsBlobDerived) { _%>
-  import useDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
 import { useDateFormat } from '@/shared/composables';

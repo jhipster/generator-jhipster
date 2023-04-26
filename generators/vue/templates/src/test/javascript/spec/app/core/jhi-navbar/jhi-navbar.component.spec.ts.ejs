@@ -3,6 +3,8 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import type JhiNavbarComponent from '@/core/jhi-navbar/jhi-navbar.component';
 import VueRouter from 'vue-router';
+import { createTestingPinia } from '@pinia/testing';
+import { PiniaVuePlugin } from 'pinia';
 
 import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
@@ -14,10 +16,12 @@ import LoginService from '@/account/login.service';
 type JhiNavbarComponentType = Vue & InstanceType<typeof JhiNavbarComponent>;
 
 const localVue = createLocalVue();
+localVue.use(PiniaVuePlugin);
+const pinia = createTestingPinia({ stubActions: false });
+const store = useStore();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', {});
 localVue.component('b-navbar', {});
 localVue.component('b-navbar-nav', {});
@@ -54,7 +58,7 @@ describe('JhiNavbar', () => {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
-      store,
+      pinia,
       router,
       localVue,
       provide: {
@@ -76,13 +80,13 @@ describe('JhiNavbar', () => {
   });
 
   it('should have user data set after authentication', () => {
-    store.commit('authenticated', { login: 'test' });
+    store.setAuthentication({ login: 'test' });
 
     expect(jhiNavbar.authenticated).toBeTruthy();
   });
 
   it('should have profile info set after info retrieved', () => {
-    store.commit('setActiveProfiles', ['prod', 'api-docs']);
+    store.setActiveProfiles(['prod', 'api-docs']);
 
     expect(jhiNavbar.openAPIEnabled).toBeTruthy();
     expect(jhiNavbar.inProduction).toBeTruthy();
@@ -104,7 +108,7 @@ describe('JhiNavbar', () => {
   });
 
   it('logout should clear credentials', async () => {
-    store.commit('authenticated', { login: 'test' });
+    store.setAuthentication({ login: 'test' });
 <%_ if (authenticationTypeOauth2) { _%>
     const logoutUrl = '/to-match';
     (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl } }));

@@ -1,19 +1,17 @@
-import { Module } from 'vuex';
-import languages from '@/shared/config/languages';
+import { defineStore } from 'pinia';
 
-export const translationStore: Module<any, any> = {
-    state: {
-        currentLanguage: undefined,
-        languages: languages(),
+interface TranslationState {
+  currentLanguage: string;
+}
+
+export const useTranslationStore = defineStore('translationStore', {
+  state: (): TranslationState => ({
+    currentLanguage: undefined,
+  }),
+  actions: {
+    setCurrentLanguage(newLanguage) {
+      this.currentLanguage = newLanguage;
+      localStorage.setItem('currentLanguage', newLanguage);
     },
-    getters: {
-        currentLanguage: state => state.currentLanguage,
-        languages: state => state.languages,
-    },
-    mutations: {
-        currentLanguage(state, newLanguage) {
-            state.currentLanguage = newLanguage;
-            localStorage.setItem("currentLanguage", newLanguage);
-        },
-    },
-};
+  },
+});

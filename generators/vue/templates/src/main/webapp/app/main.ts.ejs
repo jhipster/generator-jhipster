@@ -1,9 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
 import Vue, { provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
-import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
+import { createPinia, PiniaVuePlugin } from 'pinia'
 
-import { useStore } from '@/store';
+import { useStore<% if (enableTranslation) { %>, useTranslationStore<% } %> } from '@/store';
+import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
 import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
@@ -24,6 +25,9 @@ import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 /* tslint:disable */
 
+Vue.use(PiniaVuePlugin)
+const pinia = createPinia()
+
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -36,7 +40,6 @@ Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(Vue);
 <%_ } _%>
-const store = useStore();
 
 new Vue({
   el: '#app',
@@ -51,15 +54,17 @@ new Vue({
   setup() {
     provide('loginService', new LoginService());
 <%_ } _%>
+    const store = useStore();
     const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
+    const translationStore = useTranslationStore();
     const translationService = new TranslationService(i18n);
 
-    const currentLanguage = computed(() => store.getters.currentLanguage);
+    const currentLanguage = computed(() => translationStore.currentLanguage);
     const changeLanguage = async (newLanguage: string) => {
       if (currentLanguage.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
-        store.commit('currentLanguage', newLanguage);
+        translationStore.setCurrentLanguage(newLanguage);
       }
     };
 
@@ -67,7 +72,7 @@ new Vue({
     provide('changeLanguage', changeLanguage);
 
     watch(
-      () => store.getters.account,
+      () => store.account,
       async value => {
         if (!translationService.getLocalStoreLanguage()) {
           await changeLanguage(value.langKey);
@@ -76,7 +81,7 @@ new Vue({
     );
 
     watch(
-      () => store.getters.currentLanguage,
+      () => translationStore.currentLanguage,
       value => {
         translationService.setLocale(value);
       }
@@ -85,14 +90,14 @@ new Vue({
     onMounted(async () => {
       const lang = [
       translationService.getLocalStoreLanguage(),
-        store.getters.account?.langKey,
+        store.account?.langKey,
         navigator.language,
         '<%- nativeLanguage %>'
       ].find(lang => lang && translationService.isLanguageSupported(lang));
       await changeLanguage(lang);
     });
 <%_ } else { _%>
-    provide('currentLanguage', computed(() => store.getters.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
+    provide('currentLanguage', computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
 
     router.beforeResolve(async (to, from, next) => {
@@ -101,7 +106,7 @@ new Vue({
       loginService.hideLogin();
 
 <%_ } _%>
-      if (!store.getters.authenticated) {
+      if (!store.authenticated) {
         await accountService.update();
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
@@ -122,7 +127,7 @@ new Vue({
         const status = error.status || error.response.status;
         if (status === 401) {
           // Store logged out state.
-          store.commit('logout');
+          store.logout();
           if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
             // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
@@ -140,8 +145,8 @@ new Vue({
       }
     );
 
-    provide('authenticated', computed(() => store.getters.authenticated));
-    provide('currentUsername', computed(() => store.getters.account?.login));
+    provide('authenticated', computed(() => store.authenticated));
+    provide('currentUsername', computed(() => store.account?.login));
 
 <%_ if (enableTranslation) { _%>
     provide('translationService', translationService);
@@ -156,5 +161,5 @@ new Vue({
     provide('microfrontendI18n', false);
 <%_ } _%>
   },
-  store,
+  pinia,
 });
