@@ -12,8 +12,7 @@ import pages from '@/router/pages';
 
 Vue.use(Router);
 
-// prettier-ignore
-const router = new Router({
+export const createRouter = () => new Router({
   mode: 'history',
   routes: [
     {
@@ -42,6 +41,8 @@ const router = new Router({
   ]
 });
 
+const router = createRouter();
+
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 export const lazyRoutes = Promise.all([
   <%_ for (const remote of microfrontends) { _%>
@@ -56,4 +57,20 @@ export const lazyRoutes = Promise.all([
 ]);
 
 <%_ } _%>
+router.beforeResolve(async (to, from, next) => {
+  if (!to.matched.length) {
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    await lazyRoutes;
+    if (router.match(to.fullPath).matched.length > 0) {
+      next({ path: to.fullPath });
+      return;
+    }
+
+<%_ } _%>
+    next({ path: '/not-found' });
+    return;
+  }
+  next();
+});
+
 export default router;

@@ -40,9 +40,12 @@ describe('Error component', () => {
       ],
     });
 <%_ if (authenticationTypeJwt) { _%>
-    loginService = { openLogin: jest.fn() };
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
 <%_ } else if (authenticationTypeSession) { _%>
-    loginService = { openLogin: jest.fn(), logout: jest.fn() };
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
+    jest.spyOn(loginService, 'logout');
 <%_ } else if (authenticationTypeOauth2) { _%>
     loginService = { login: jest.fn(), logout: jest.fn() };
 <%_ } _%>
@@ -63,7 +66,7 @@ describe('Error component', () => {
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
       },
     });
     error = wrapper.vm;
@@ -88,7 +91,7 @@ describe('Error component', () => {
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
       },
     });
     error = wrapper.vm;
@@ -113,7 +116,7 @@ describe('Error component', () => {
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
       },
     });
     error = wrapper.vm;
@@ -142,7 +145,7 @@ describe('Error component', () => {
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
       },
     });
     error = wrapper.vm;

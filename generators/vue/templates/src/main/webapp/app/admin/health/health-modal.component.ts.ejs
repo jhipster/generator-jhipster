@@ -10,7 +10,7 @@ export default defineComponent({
     currentHealth: {},
   },
   setup() {
-    const healthService = inject('healthService', () => new HealthService());
+    const healthService = inject('healthService', () => new HealthService(), true);
 
     return {
       healthService,
@@ -21,10 +21,10 @@ export default defineComponent({
   },
   methods: {
     baseName(name: string): any {
-      return this.healthService().getBaseName(name);
+      return this.healthService.getBaseName(name);
     },
     subSystemName(name: string): any {
-      return this.healthService().getSubSystemName(name);
+      return this.healthService.getSubSystemName(name);
     },
     readableValue(value: any): string {
       if (this.currentHealth.name === 'diskSpace') {

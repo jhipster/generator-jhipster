@@ -24,7 +24,7 @@ describe('EntitiesMenu', () => {
         i18n,
         localVue,
         provide: {
-          translationService: () => translationService,
+          translationService,
           microfrontendI18n: true,
         },
       });
@@ -41,7 +41,7 @@ describe('EntitiesMenu', () => {
         i18n,
         localVue,
         provide: {
-          translationService: () => translationService,
+          translationService,
           microfrontendI18n: false,
         },
       });

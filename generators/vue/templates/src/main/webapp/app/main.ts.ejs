@@ -12,13 +12,6 @@ import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import JhiSortIndicatorComponent from './shared/sort/jhi-sort-indicator.vue';
 import InfiniteLoading from 'vue-infinite-loading';
-<%_ if (withAdminUi) { _%>
-import HealthService from './admin/health/health.service';
-import MetricsService from './admin/metrics/metrics.service';
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
-import UserManagementService from './admin/user-management/user-management.service';
-<%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
@@ -47,79 +40,6 @@ Vue.component('infinite-loading', InfiniteLoading);
 const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = useStore();
-<%_ if (communicationSpringWebsocket) { _%>
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
-const translationService = new TranslationService(store, i18n);
-<%_ } _%>
-const loginService = new LoginService();
-const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%>);
-
-router.beforeEach(async (to, from, next) => {
-  // Make sure login modal is closed
-  router.app.$emit('bv::hide::modal', 'login-page');
-
-  await accountService.update();
-  if (!to.matched.length) {
-<%_ if (applicationTypeGateway && microfrontend) { _%>
-    await lazyRoutes;
-    if (router.match(to.fullPath).matched.length > 0) {
-      next(to.fullPath);
-      return;
-    }
-
-<%_ } _%>
-    next({ path: '/not-found' });
-  } else if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
-    const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
-    if (!value) {
-      if (router.currentRoute.path !== '/forbidden') {
-        sessionStorage.setItem('requested-url', to.fullPath);
-        next({ path: '/forbidden' });
-      } else {
-        next();
-      }
-    } else {
-      const requestedUrl = sessionStorage.getItem('requested-url');
-      if (requestedUrl) {
-        router.replace(requestedUrl);
-        sessionStorage.removeItem('requested-url');
-      } else {
-        next();
-      }
-    }
-  } else {
-    // no authorities, so just proceed
-    next();
-  }
-});
-
-<%_ if (!authenticationTypeOauth2) { _%>
-let openLogin = () => {};
-<%_ } _%>
-setupAxiosInterceptors(
-  error => {
-    const url = error.response?.config?.url;
-    const status = error.status || error.response.status;
-    if (status === 401) {
-      // Store logged out state.
-      store.commit('logout');
-      if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
-        // Ask for a new authentication
-<%_ if (authenticationTypeOauth2) { _%>
-        window.location.reload();
-<%_ } else { _%>
-        openLogin();
-<%_ } _%>
-        return;
-      }
-    }
-    return Promise.reject(error);
-  },
-  error => {
-    return Promise.reject(error);
-  }
-);
 
 /* tslint:disable */
 <% if (!authenticationTypeOauth2) { %>const vue = <% } %>new Vue({
@@ -127,27 +47,76 @@ setupAxiosInterceptors(
   components: { App },
   template: '<App/>',
   router,
+<%_ if (!authenticationTypeOauth2) { _%>
+  setup(_props, { emit }) {
+    const loginService = new LoginService({ emit });
+    provide('loginService', loginService);
+<%_ } else { _%>
   setup() {
-<%_ if (communicationSpringWebsocket) { _%>
-    provide('trackerService', useTrackerService());
-<%_ } _%>
-    provide('loginService', () => loginService);
-<%_ if (withAdminUi) { _%>
-    provide('healthService', () => new HealthService());
-    provide('metricsService', () => new MetricsService());
+    provide('loginService', new LoginService());
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-    provide('translationService', () => translationService);
+    const translationService = new TranslationService(store, i18n);
 <%_ } _%>
+    const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%>);
+
+    router.beforeResolve(async (to, from, next) => {
+<%_ if (!authenticationTypeOauth2) { _%>
+      // Make sure login modal is closed
+      loginService.hideLogin();
+
+<%_ } _%>
+      if (!store.getters.authenticated) {
+        await accountService.update();
+      }
+      if (to.meta?.authorities && to.meta.authorities.length > 0) {
+        const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
+        if (!value) {
+          if (router.currentRoute.path !== '/forbidden') {
+            next({ path: '/forbidden' });
+            return;
+          }
+        }
+      }
+      next();
+    });
+
+    setupAxiosInterceptors(
+      error => {
+        const url = error.response?.config?.url;
+        const status = error.status || error.response.status;
+        if (status === 401) {
+          // Store logged out state.
+          store.commit('logout');
+          if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
+            // Ask for a new authentication
+<%_ if (authenticationTypeOauth2) { _%>
+            window.location.reload();
+<%_ } else { _%>
+            loginService.openLogin();
+<%_ } _%>
+            return;
+          }
+        }
+        return Promise.reject(error);
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+
+<%_ if (enableTranslation) { _%>
+    provide('translationService', translationService);
+<%_ } _%>
+    provide('accountService', accountService);
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    provide('accountService', () => accountService);
+<%_ if (communicationSpringWebsocket) { _%>
+
+    provide('trackerService', useTrackerService());
+<%_ } _%>
 <%_ if (applicationTypeMicroservice && microfrontend) { _%>
     provide('microfrontendI18n', false);
 <%_ } _%>
   },
   store,
 });
-
-<%_ if (!authenticationTypeOauth2) { _%>
-openLogin = () => loginService.openLogin(vue);
-<%_ } _%>

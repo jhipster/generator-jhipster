@@ -20,11 +20,11 @@ export default defineComponent({
     const i18n = useI18n();
   <%_ if (applicationTypeMicroservice) { _%>
     const microfrontendI18n = inject('microfrontendI18n', true);
-    const translationService = inject<() => TranslationService>('translationService');
+    const translationService = inject<TranslationService>('translationService');
 
     const loadLanguage = () => {
       if (microfrontendI18n) {
-        translationService().loadTranslations('<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
+        translationService.loadTranslations('<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
       }
     };
 

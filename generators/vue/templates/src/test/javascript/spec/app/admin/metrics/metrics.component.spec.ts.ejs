@@ -245,11 +245,11 @@ describe('Metrics Component', () => {
       stubs: {
         bModal: true,
         bProgress: true,
-        bProgressBar: true
+        bProgressBar: true,
       },
       provide: {
-        metricsService: () => new MetricsService()
-      }
+        metricsService: new MetricsService(),
+      },
     });
     metricsComponent = wrapper.vm;
   });

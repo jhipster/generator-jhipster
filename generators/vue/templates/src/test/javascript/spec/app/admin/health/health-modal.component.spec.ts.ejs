@@ -14,7 +14,7 @@ const i18n = config.initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 localVue.component('font-awesome-icon', {});
-const healthsService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
+const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;
@@ -29,7 +29,7 @@ describe('Health Modal Component', () => {
 <%_ } _%>
       localVue,
       provide: {
-        healthService: () => healthsService,
+        healthService,
       },
     });
     healthModal = wrapper.vm;
@@ -39,13 +39,13 @@ describe('Health Modal Component', () => {
     it('should use healthService', () => {
       healthModal.baseName('base');
 
-      expect(healthsService.getBaseName).toHaveBeenCalled();
+      expect(healthService.getBaseName).toHaveBeenCalled();
     });
 
     it('should use healthService', () => {
       healthModal.subSystemName('base');
 
-      expect(healthsService.getSubSystemName).toHaveBeenCalled();
+      expect(healthService.getSubSystemName).toHaveBeenCalled();
     });
   });
 
@@ -77,7 +77,7 @@ describe('Health Modal Component for diskSpace', () => {
 <%_ } _%>
       localVue,
       provide: {
-        healthService: () => healthsService,
+        healthService,
       },
     });
     healthModal = wrapper.vm;
