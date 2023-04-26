@@ -28,6 +28,7 @@ export { default as unaryOptions } from './unary-options.js';
 export { default as validations } from './validations.js';
 export { default as websocketTypes } from './websocket-types.js';
 export { default as checkAndReturnRelationshipOnValue } from './relationship-on-handler-options.js';
+export { IngressTypes as ingressTypes } from './kubernetes-platform-types.js';
 
 export { defaultApplicationOptions };
 

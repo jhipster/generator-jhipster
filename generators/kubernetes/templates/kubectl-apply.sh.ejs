@@ -60,7 +60,12 @@ logSummary() {
     <%_ } _%>
   <%_ } _%>
   <%_ if (useKeycloak) { _%>
+      <%_ if (ingressTypeGke) { _%>
         echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+      <%_ } _%>
+      <%_ if (ingressTypeNginx) { _%>
+        echo "Keycloak - http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+      <%_ } _%>
   <%_ } _%>
         echo "#####################################################"
 <%_ } _%>
@@ -72,9 +77,11 @@ default() {
     kubectl apply -f namespace.yml
 <%_ } _%> <%_ if (istio) { _%>
     kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
-<%_ } _%> 
-<%_ if (useKeycloak) { _%>    
+<%_ } _%>
+<%_ if (useKeycloak) { _%>
+    <%_ if (ingressTypeGke) { _%>
     kubectl apply -f cert-manager/
+    <%_ } _%>
     kubectl apply -f keycloak-${suffix}/
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>

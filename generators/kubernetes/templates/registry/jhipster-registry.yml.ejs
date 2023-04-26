@@ -126,11 +126,16 @@ spec:
         - name: K8S_CONFIG_PATH
           value: '/central-config/'
   <%_ if (useKeycloak) { _%>
+        <%_ if (ingressTypeGke) { _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
         # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
           value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456"
+        <%_ } else { _%>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+        <%_ } _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: jhipster-registry
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
@@ -140,15 +145,18 @@ spec:
         - name: config-volume
           mountPath: /central-config
     <%_ if (useKeycloak) { _%>
+        <%_ if (ingressTypeGke) { _%>
         # Custom trustStore required when using Let's Encrypt staging
         - name: java-truststore
           mountPath: /etc/pki/java
+        <%_ } _%>
     <%_ } _%>
       volumes:
       - name: config-volume
         configMap:
           name: application-config
   <%_ if (useKeycloak) { _%>
+      <%_ if (ingressTypeGke) { _%>
       # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
       - name: java-truststore
         secret:
@@ -156,4 +164,5 @@ spec:
           items:
           - key: truststore.jks
             path: cacerts
+      <%_ } _%>
   <%_ } _%>

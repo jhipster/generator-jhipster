@@ -218,7 +218,7 @@ export async function askForIstioSupport() {
 export async function askForPersistentStorage() {
   if (this.regenerate) return;
   let usingDataBase = false;
-  this.appConfigs.forEach((appConfig, index) => {
+  this.appConfigs.forEach(appConfig => {
     if (appConfig.prodDatabaseType !== NO_DATABASE) {
       usingDataBase = true;
     }
