@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 
 const {
@@ -93,12 +93,20 @@ describe(`generator - ${generator}`, () => {
 
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig({}, [
+        await helpers.run(generatorPath).withJHipsterConfig({}, [
           {
             name: 'EntityA',
             changelogDate: '20220129025419',
+            fields: [
+              {
+                fieldName: 'id',
+                fieldType: UUID,
+              },
+            ],
+          },
+          {
+            name: 'User',
             fields: [
               {
                 fieldName: 'id',
@@ -122,6 +130,21 @@ describe(`generator - ${generator}`, () => {
     }
   ],
   "name": "EntityA",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".jhipster/User.json": {
+    "contents": "{
+  "changelogDate": "20230427174459",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID"
+    }
+  ],
+  "name": "User",
   "relationships": []
 }
 ",
@@ -157,7 +180,7 @@ describe(`generator - ${generator}`, () => {
   "anyFieldIsInstant": false,
   "anyFieldIsLocalDate": false,
   "anyFieldIsTimeDerived": false,
-  "anyFieldIsUUID": false,
+  "anyFieldIsUUID": true,
   "anyFieldIsZonedDateTime": false,
   "anyPropertyHasValidation": false,
   "applicationType": "monolith",
@@ -165,6 +188,8 @@ describe(`generator - ${generator}`, () => {
   "baseName": "jhipster",
   "builtIn": true,
   "builtInUser": true,
+  "changelogDate": "20230427174459",
+  "changelogDateForRecent": 2023-04-27T17:44:59.000Z,
   "clientFramework": "angular",
   "clientRootFolder": "",
   "containsBagRelationships": false,
@@ -229,7 +254,7 @@ describe(`generator - ${generator}`, () => {
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "id",
-      "columnType": "bigint",
+      "columnType": "\${uuidType}",
       "createRandexp": Any<Function>,
       "dynamic": false,
       "entity": Any<Object>,
@@ -241,7 +266,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "ID",
       "fieldNameUnderscored": "id",
       "fieldTranslationKey": "global.field.id",
-      "fieldType": "Long",
+      "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
       "fieldTypeBinary": false,
@@ -249,7 +274,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeBoolean": false,
       "fieldTypeByteBuffer": false,
       "fieldTypeBytes": false,
-      "fieldTypeCharSequence": false,
+      "fieldTypeCharSequence": true,
       "fieldTypeDouble": false,
       "fieldTypeDuration": false,
       "fieldTypeFloat": false,
@@ -257,13 +282,13 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeInstant": false,
       "fieldTypeInteger": false,
       "fieldTypeLocalDate": false,
-      "fieldTypeLong": true,
-      "fieldTypeNumeric": true,
+      "fieldTypeLong": false,
+      "fieldTypeNumeric": false,
       "fieldTypeString": false,
       "fieldTypeTemporal": false,
       "fieldTypeTextBlob": false,
       "fieldTypeTimed": false,
-      "fieldTypeUUID": false,
+      "fieldTypeUUID": true,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
       "fieldValidateRulesMaxlength": undefined,
@@ -283,9 +308,9 @@ describe(`generator - ${generator}`, () => {
       "filterableField": true,
       "generateFakeData": Any<Function>,
       "id": true,
-      "javaFieldType": "Long",
-      "jpaGeneratedValue": "sequence",
-      "loadColumnType": "numeric",
+      "javaFieldType": "UUID",
+      "jpaGeneratedValue": true,
+      "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
         "id",
@@ -297,7 +322,7 @@ describe(`generator - ${generator}`, () => {
       "requiresPersistableImplementation": false,
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
-      "tsType": "number",
+      "tsType": "string",
       "unique": false,
       "uniqueValue": [],
     },
@@ -528,6 +553,7 @@ describe(`generator - ${generator}`, () => {
   "importApiModelProperty": false,
   "isUsingMapsId": false,
   "jhiPrefix": "jhi",
+  "jhiTablePrefix": "jhi",
   "jpaMetamodelFiltering": false,
   "mapsIdAssoc": null,
   "microfrontend": false,
@@ -555,8 +581,8 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
-    "hasLong": true,
-    "hasUUID": false,
+    "hasLong": false,
+    "hasUUID": true,
     "ids": [
       {
         "autoGenerate": true,
@@ -574,12 +600,12 @@ describe(`generator - ${generator}`, () => {
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
     "relationships": [],
-    "tsType": "number",
-    "type": "Long",
-    "typeLong": true,
-    "typeNumeric": true,
+    "tsType": "string",
+    "type": "UUID",
+    "typeLong": false,
+    "typeNumeric": false,
     "typeString": false,
-    "typeUUID": false,
+    "typeUUID": true,
   },
   "prodDatabaseType": "postgresql",
   "reactive": false,
@@ -599,12 +625,16 @@ describe(`generator - ${generator}`, () => {
   "restInstance": "userDTO",
   "saveUserSnapshot": false,
   "searchEngine": "no",
+  "searchEngineAny": false,
+  "searchEngineCouchbase": false,
+  "searchEngineElasticsearch": false,
+  "searchEngineNo": true,
   "service": "no",
   "serviceImpl": false,
   "serviceNo": true,
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
-  "tsKeyType": "number",
+  "tsKeyType": "string",
   "uniqueEnums": {},
   "updatableEntity": true,
   "useMicroserviceJson": false,
