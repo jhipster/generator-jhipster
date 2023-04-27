@@ -3540,7 +3540,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*", 
+            "https://localhost:8080/*",
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "http://localhost:9000/*",
@@ -3549,7 +3549,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080", 
+            "https://localhost:8080",
             "http://localhost:8100",
             "http://127.0.0.1:8761",
             "http://localhost:9000"
@@ -5012,7 +5012,7 @@ data:
         "cibaInterval": "5",
         "frontendUrl": ""
       },
-      "keycloakVersion": "19.0.1",
+      "keycloakVersion": "21.1.1",
       "userManagedAccessAllowed": false,
       "clientProfiles": {
         "profiles": []
@@ -6983,7 +6983,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*", 
+            "https://localhost:8080/*",
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "http://localhost:9000/*",
@@ -6992,7 +6992,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080", 
+            "https://localhost:8080",
             "http://localhost:8100",
             "http://127.0.0.1:8761",
             "http://localhost:9000"
@@ -8455,7 +8455,7 @@ data:
         "cibaInterval": "5",
         "frontendUrl": ""
       },
-      "keycloakVersion": "19.0.1",
+      "keycloakVersion": "21.1.1",
       "userManagedAccessAllowed": false,
       "clientProfiles": {
         "profiles": []
