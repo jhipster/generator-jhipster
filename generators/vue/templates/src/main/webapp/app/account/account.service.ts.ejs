@@ -10,9 +10,6 @@ export default class AccountService {
 <%_ if (enableTranslation) { _%>
     private translationService: TranslationService,
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
-    private cookie: any,
-<%_ } _%>
   ) {
   }
 
@@ -63,10 +60,10 @@ export default class AccountService {
     }
 <%_ if (authenticationTypeJwt) { _%>
     const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
-<%_ } else { _%>
-    const token = this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN');
-<%_ } _%>
     if (this.authenticated && this.userAuthorities && token) {
+<%_ } else { _%>
+    if (this.authenticated && this.userAuthorities) {
+<%_ } _%>
       return;
     }
 
