@@ -43,8 +43,6 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons/faUsersCog';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
-import VueCookie from 'vue-cookie';
-
 import * as filters from '@/shared/date/filters';
 
 <%_ if (enableTranslation) { _%>
@@ -54,7 +52,6 @@ const dateTimeFormats: DateTimeFormats = {
 <%_ } _%>
 
 export function initVueApp(vue) {
-  vue.use(VueCookie);
   filters.initFilters();
 }
 

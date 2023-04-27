@@ -29,9 +29,6 @@ const axiosStub = {
   post: sinon.stub(axios, 'post'),
 };
 
-<%_ if (authenticationUsesCsrf) { _%>
-const mockedCookie = { get: jest.fn(() => { return 'token'; }) };
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
 const localVue = createLocalVue();
 <%_ } _%>
@@ -59,7 +56,7 @@ describe('Account Service test suite', () => {
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('management/info').resolves({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
 
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     expect(store.getters.logon).toBe(null);
@@ -73,7 +70,7 @@ describe('Account Service test suite', () => {
 
   it('should init service and retrieve profiles if already logged in before but no account found', async () => {
     axiosStub.get.resolves({});
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     expect(store.getters.logon).toBe(null);
@@ -85,7 +82,7 @@ describe('Account Service test suite', () => {
   it('should init service and retrieve profiles if already logged in before but exception occurred and should be logged out', async () => {
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('api/account').rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     expect(accountService.authenticated).toBe(false);
@@ -95,7 +92,7 @@ describe('Account Service test suite', () => {
 
   it('should init service and check for authority after retrieving account but getAccount failed', async () => {
     axiosStub.get.rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
@@ -105,7 +102,7 @@ describe('Account Service test suite', () => {
 
   it('should init service and check for authority after retrieving account', async () => {
     axiosStub.get.resolves({ status: 200, data: { authorities: ['USER'], langKey: 'en' } });
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
@@ -115,7 +112,7 @@ describe('Account Service test suite', () => {
 
   it('should init service as not authentified and not return any authorities admin and not retrieve account', async () => {
     axiosStub.get.rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('ADMIN').then((value: boolean) => {
@@ -125,7 +122,7 @@ describe('Account Service test suite', () => {
 
   it('should init service as not authentified and return authority user', async () => {
     axiosStub.get.rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationUsesCsrf) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %>);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
