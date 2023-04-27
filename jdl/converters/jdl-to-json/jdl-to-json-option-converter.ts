@@ -33,8 +33,6 @@ const {
 } = binaryOptions;
 const serviceClassOptionValue = binaryOptions.Values.service.SERVICE_CLASS;
 
-const USER = 'user';
-
 let convertedOptionContent: Map<string, any>;
 
 export default { convert };
@@ -63,9 +61,7 @@ export function convert(jdlOptionHolder: JDLOptionHolder) {
 function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder) {
   jdlOptionHolder.forEachOption(jdlOption => {
     if (jdlOption.entityNames.has('*')) {
-      jdlOption.setEntityNames(
-        jdlOptionHolder.getEntityNames().filter(entityName => !jdlOption.excludedNames.has(entityName) && entityName.toLowerCase() !== USER)
-      );
+      jdlOption.setEntityNames(jdlOptionHolder.getEntityNames().filter(entityName => !jdlOption.excludedNames.has(entityName)));
     }
   });
 }

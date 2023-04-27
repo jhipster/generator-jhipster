@@ -112,7 +112,7 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
           }
         });
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
-        this.usesIngress = this.kubernetesServiceType === 'Ingress' && this.ingressType === 'gke';
+        this.usesIngress = this.kubernetesServiceType === 'Ingress';
         this.useKeycloak = this.usesOauth2 && this.usesIngress;
       },
       saveConfig,
@@ -180,9 +180,13 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
             const appConfig = this.appConfigs[index];
             let runCommand = '';
             if (appConfig.buildTool === MAVEN) {
-              runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
+              runCommand = `./mvnw -ntp -Pprod verify jib:build${
+                process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''
+              } -Djib.to.image=${appConfig.targetImageName}`;
             } else {
-              runCommand = `./gradlew bootJar -Pprod jib -Djib.to.image=${appConfig.targetImageName}`;
+              runCommand = `./gradlew bootJar -Pprod jib${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''} -Djib.to.image=${
+                appConfig.targetImageName
+              }`;
             }
             this.logger.info(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
           });

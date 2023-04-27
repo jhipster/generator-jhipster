@@ -119,6 +119,34 @@ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceD
 <%_ if (useKeycloak) { _%>
 ## Keycloak
 
+  <%_ if (ingressTypeNginx) { _%>
+The following Keycloak [best practices](https://www.keycloak.org/server/configuration-production) for production are included in the generated k8s: a production grade database PostgreSQL, the `edge` deployment mode, high availability through clustered deployment, and `HOSTNAME` configuration. HTTP/TLS is not enabled for ease of deployment, but it is required for a secure exchange of credentials and other sensitive data with Keycloak, preventing several attack vectors.
+
+If you are using minikube, install the ingress controller for [cloud deployment](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) (the minikube ingress add on does not work on macOS or Windows).
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+Then run `minikube tunnel` in a separate terminal window.
+Get the `ingress-nginx-controller` external IP:
+
+```
+kubectl get svc/ingress-nginx-controller -n ingress-nginx
+```
+
+The output will look like the following:
+
+```
+NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+ingress-nginx-controller   LoadBalancer   10.103.44.162   10.103.44.162   80:30982/TCP,443:32664/TCP   27s
+```
+
+When running the `jhipster k8s` generator, it will prompt for a root FQDN (fully qualified domain name). You can use `nip.io` as the DNS provider and set `<external-ip>.nip.io`.
+
+  <%_ } _%>
+
+  <%_ if (ingressTypeGke) { _%>
 Keycloak deployment in production mode requires the installation of [cert-manager](https://cert-manager.io/docs/installation/) Kubernetes add-on for the TLS certificate generation.
 
 ```
@@ -162,6 +190,7 @@ Events:
 
 cert-manager first creates a temporary certificate. Once you see the event "The certificate has been successfully issued", it means Let's Encrypt staging has issued the certificate. The staging certificate will be trusted by deployed applications, but not by browsers. Let's Encrypt production certificates are trusted by browsers, but the production issuer will probably not work with nip.io, and fail with "too many certificates already issued for nip.io".
 
+  <%_ } _%>
 <%_ } _%>
 
 ## Troubleshooting
@@ -179,6 +208,7 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the `i
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
 
 <%_ if (useKeycloak) { _%>
+  <%_ if (ingressTypeGke) { _%>
 > my applications don't start, because of 'Remote host terminated the handshake' or 'PKIX path building failed'
 
 The k8s sub-generator configures Let's Encrypt staging environment, which is not trusted by browsers and Java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the application pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
@@ -186,4 +216,5 @@ The k8s sub-generator configures Let's Encrypt staging environment, which is not
 ```
 kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
+  <%_ } _%>
 <%_ } _%>

@@ -23,10 +23,7 @@ import prompts from './prompts.mjs';
 import AwsFactory from './lib/aws.mjs';
 import statistics from '../statistics.mjs';
 import { GENERATOR_AWS } from '../generator-list.mjs';
-import { applicationOptions, databaseTypes } from '../../jdl/jhipster/index.mjs';
-
-const { OptionNames } = applicationOptions;
-const { BUILD_TOOL, BASE_NAME, PROD_DATABASE_TYPE } = OptionNames;
+import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 
 const { MYSQL, POSTGRESQL, MARIADB } = databaseTypes;
 

@@ -149,9 +149,9 @@ function importJDL(jdlImporter) {
 
   try {
     const importState = jdlImporter.import();
-    logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
-    logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
-    logger.debug(`importState exportedDeployments: ${importState.exportedDeployments.length}`);
+    logger.debug('importState exportedEntities:', importState.exportedEntities);
+    logger.debug('importState exportedApplications:', importState.exportedApplications);
+    logger.debug('importState exportedDeployments:', importState.exportedDeployments);
 
     if (importState.exportedEntities.length > 0) {
       const entityNames = _.uniq(importState.exportedEntities.map(exportedEntity => exportedEntity.name)).join(', ');

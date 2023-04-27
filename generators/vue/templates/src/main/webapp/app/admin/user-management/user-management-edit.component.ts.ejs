@@ -57,7 +57,7 @@ export default defineComponent({
       authorities.value = response.data;
     };
 
-    const loadUser = async (userId: <%- user.primaryKey.tsType _%>) => {
+    const loadUser = async (userId: string) => {
       const response = await userManagementService.get(userId);
       userAccount.value = response.data;
     };
@@ -65,11 +65,7 @@ export default defineComponent({
     initAuthorities();
     const userId = route.params.userId;
     if (userId) {
-<%_ if (user.primaryKey.tsType === 'number') { _%>
-      loadUser(Number(userId));
-<%_ } else { _%>
       loadUser(userId);
-<%_ } _%>
     }
 
     return {

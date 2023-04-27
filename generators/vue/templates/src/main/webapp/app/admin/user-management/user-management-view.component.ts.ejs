@@ -18,7 +18,7 @@ export default defineComponent({
 
     const user: Ref<any> = ref(null);
 
-    async function loadUser(userId: <%- user.primaryKey.tsType _%>) {
+    async function loadUser(userId: string) {
       try {
         const response = await userManagementService.get(userId);
         user.value = response.data;
@@ -27,11 +27,7 @@ export default defineComponent({
       }
     }
 
-<%_ if (user.primaryKey.tsType === 'number') { _%>
-    loadUser(Number(route.params.userId));
-<%_ } else { _%>
     loadUser(route.params.userId);
-<%_ } _%>
 
     return {
       alertService,

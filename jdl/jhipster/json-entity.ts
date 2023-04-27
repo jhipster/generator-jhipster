@@ -122,15 +122,6 @@ function getDefaults(entityName) {
     name: upperFirst(entityName),
     fields: [],
     relationships: [],
-    javadoc: formatComment(),
-    entityTableName: getTableNameFromEntityName(entityName),
-    [binaryOptions.Options.DTO]: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
-    [binaryOptions.Options.PAGINATION]: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
-    [binaryOptions.Options.SERVICE]: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
-    fluentMethods: true,
-    [unaryOptions.READ_ONLY]: false,
-    [unaryOptions.EMBEDDED]: false,
-    jpaMetamodelFiltering: false,
     applications: [],
   };
 }

@@ -1,10 +1,11 @@
-import <% if (authenticationUsesCsrf) { %>Vue, <% } %>{ provide } from 'vue';
+import { provide } from 'vue';
 import VueRouter from 'vue-router';
 import { useRouter } from 'vue-router/composables';
 import * as SockJS from 'sockjs-client';
 import { map } from 'rxjs';
 import { Store } from 'vuex';
 import { RxStomp } from '@stomp/rx-stomp';
+import Cookies from 'js-cookie';
 
 import { useStore } from '@/store';
 import { AccountStateStorable } from '@/shared/config/store/account-store';
@@ -15,13 +16,7 @@ const DESTINATION_ACTIVITY = '/topic/activity';
 export const useTrackerService = () => {
   const router = useRouter();
   const store = useStore();
-  provide('trackerService', new TrackerService(
-    router,
-    store,
-<%_ if (authenticationUsesCsrf) { _%>
-    (<any>Vue).cookie,
-<%_ } _%>
-  ));
+  return new TrackerService(router, store);
 };
 
 export default class TrackerService {
@@ -29,10 +24,7 @@ export default class TrackerService {
 
   constructor(
       private router: VueRouter,
-      private store: Store<AccountStateStorable>,
-<%_ if (authenticationUsesCsrf) { _%>
-      private cookie: any,
-<%_ } _%>
+      private store: Store<AccountStateStorable>
     ) {
     this.stomp = new RxStomp();
     this.router.afterEach(() => this.sendActivity());
@@ -106,7 +98,7 @@ export default class TrackerService {
       },
 <%_ if (authenticationUsesCsrf) { _%>
       connectHeaders: {
-        ['X-XSRF-TOKEN']: this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'),
+        ['X-XSRF-TOKEN']: Cookies.get('JSESSIONID') || Cookies.get('XSRF-TOKEN'),
       }
 <%_ } _%>
     });

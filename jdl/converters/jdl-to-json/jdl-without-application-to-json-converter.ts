@@ -23,10 +23,6 @@ import RelationshipConverter from './jdl-to-json-relationship-converter.js';
 import OptionConverter from './jdl-to-json-option-converter.js';
 import JDLObject from '../../models/jdl-object.js';
 
-const USER = 'user';
-const AUTHORITY = 'authority';
-const builtInEntities = new Set([USER, AUTHORITY]);
-
 let entities;
 let jdlObject: JDLObject | null;
 
@@ -86,9 +82,6 @@ function setOptions() {
 function setFields() {
   const convertedFields = FieldConverter.convert(jdlObject!);
   convertedFields.forEach((entityFields, entityName) => {
-    if (builtInEntities.has(entityName.toLowerCase())) {
-      return;
-    }
     entities[entityName].addFields(entityFields);
   });
 }
@@ -96,9 +89,6 @@ function setFields() {
 function setRelationships() {
   const convertedRelationships = RelationshipConverter.convert(jdlObject!.getRelationships(), jdlObject!.getEntityNames());
   convertedRelationships.forEach((entityRelationships, entityName) => {
-    if (builtInEntities.has(entityName.toLowerCase())) {
-      return;
-    }
     entities[entityName].addRelationships(entityRelationships);
   });
 }

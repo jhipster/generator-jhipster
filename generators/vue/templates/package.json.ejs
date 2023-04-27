@@ -39,12 +39,12 @@
 <%_ } _%>
     "dayjs": "<%= nodeDependencies['dayjs'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
-    "sockjs-client": "1.5.2",
     "@stomp/rx-stomp": "1.1.4",
+    "js-cookie": "<%= nodeDependencies['js-cookie'] %>",
+    "sockjs-client": "1.5.2",
     "rxjs": "7.4.0",
 <%_ } _%>
     "vue": "<%= nodeDependencies['vue'] %>",
-    "vue-cookie": "<%= nodeDependencies['vue-cookie'] %>",
 <%_ if (enableTranslation) { _%>
     "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
     "vue-i18n-bridge": "<%= nodeDependencies['vue-i18n-bridge'] %>",

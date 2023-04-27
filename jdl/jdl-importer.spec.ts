@@ -668,17 +668,11 @@ paginate * with infinite-scroll
   "applications": [
     "tata",
   ],
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "a",
   "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "pagination",
-  "readOnly": false,
   "relationships": [],
-  "service": "no",
 }
 `);
         jestExpect(entityB).toMatchInlineSnapshot(`
@@ -686,17 +680,11 @@ paginate * with infinite-scroll
   "applications": [
     "tata",
   ],
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "b",
   "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "B",
   "pagination": "infinite-scroll",
-  "readOnly": false,
   "relationships": [],
-  "service": "no",
 }
 `);
         jestExpect(entityCInTata).toMatchInlineSnapshot(`
@@ -705,17 +693,11 @@ paginate * with infinite-scroll
     "tata",
     "tutu",
   ],
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "c",
   "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "C",
   "pagination": "pagination",
-  "readOnly": false,
   "relationships": [],
-  "service": "no",
 }
 `);
         jestExpect(entityCInTutu).toMatchInlineSnapshot(`
@@ -724,17 +706,11 @@ paginate * with infinite-scroll
     "tata",
     "tutu",
   ],
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "c",
   "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "C",
   "pagination": "pagination",
-  "readOnly": false,
   "relationships": [],
-  "service": "no",
 }
 `);
         jestExpect(entityD).toMatchInlineSnapshot(`
@@ -743,14 +719,10 @@ paginate * with infinite-scroll
     "tutu",
   ],
   "dto": "mapstruct",
-  "embedded": false,
   "entityTableName": "d",
   "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "D",
   "pagination": "infinite-scroll",
-  "readOnly": false,
   "relationships": [],
   "service": "serviceClass",
 }
@@ -760,17 +732,11 @@ paginate * with infinite-scroll
   "applications": [
     "tutu",
   ],
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "e",
   "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "E",
   "pagination": "infinite-scroll",
-  "readOnly": false,
   "relationships": [],
-  "service": "no",
 }
 `);
       });

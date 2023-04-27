@@ -19,7 +19,6 @@
 import _ from 'lodash';
 
 import shelljs from 'shelljs';
-import chalk from 'chalk';
 import crypto from 'crypto';
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
 import { loadFromYoRc } from '../base-docker/docker-base.mjs';
