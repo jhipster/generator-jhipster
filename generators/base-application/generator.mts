@@ -26,9 +26,7 @@ import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition }
 import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs';
 import type { BaseApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
-import type { Entity } from './types/index.mjs';
-import { SpringBootApplication, SpringBootSourceType } from '../server/types.mjs';
-import { ClientApplication } from '../client/types.mjs';
+import { SpringBootSourceType } from '../server/types.mjs';
 import type { CommonClientServerApplication } from './types.mjs';
 
 const { upperFirst } = _;
