@@ -26,7 +26,7 @@ describe('Tracker Service', () => {
     sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/' }));
     routerStub.afterEach = sinon.spy();
 
-    trackerService = new TrackerService(routerStub, store<%_ if (authenticationUsesCsrf) { _%>,{ get: jest.fn()}<%_ } %>);
+    trackerService = new TrackerService(routerStub, store);
 
     const watch$ = new Subject<any>();
 
