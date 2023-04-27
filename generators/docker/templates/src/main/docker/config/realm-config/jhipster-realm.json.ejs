@@ -2,6 +2,7 @@
   "id": "jhipster",
   "realm": "jhipster",
   "displayName": "JHipster",
+  "displayNameHtml" : "<div class=\"kc-logo-text\"><span>JHipster</span></div>",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -471,7 +472,8 @@
   "otpPolicyCodeReusable": false,
   "otpSupportedApplications": [
     "totpAppGoogleName",
-    "totpAppFreeOTPName"
+    "totpAppFreeOTPName",
+    "totpAppMicrosoftAuthenticatorName"
   ],
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
@@ -568,6 +570,7 @@
       "nodeReRegistrationTimeout": 0,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -623,6 +626,7 @@
       ],
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -663,6 +667,7 @@
       "nodeReRegistrationTimeout": 0,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -703,6 +708,7 @@
       "nodeReRegistrationTimeout": 0,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -803,6 +809,7 @@
       ],
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -866,6 +873,7 @@
       "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "jhipster",
         "roles",
         "profile",
@@ -927,6 +935,7 @@
       "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "jhipster",
         "roles",
         "profile",
@@ -968,6 +977,7 @@
       "nodeReRegistrationTimeout": 0,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -1032,6 +1042,7 @@
       ],
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "roles",
         "profile",
         "email"
@@ -1095,6 +1106,7 @@
       "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
+        "acr",
         "jhipster",
         "roles",
         "profile",
@@ -1630,6 +1642,27 @@
       ]
     },
     {
+    "id" : "49177925-3cb4-4fe1-9ced-d9a331dee5c6",
+    "name" : "acr",
+    "description" : "OpenID Connect scope for add acr (authentication context class reference) to the token",
+    "protocol" : "openid-connect",
+    "attributes" : {
+    "include.in.token.scope" : "false",
+    "display.on.consent.screen" : "false"
+    },
+    "protocolMappers" : [ {
+    "id" : "df11a217-a90d-4d01-9aab-84fbaa3a0ad6",
+    "name" : "acr loa level",
+    "protocol" : "openid-connect",
+    "protocolMapper" : "oidc-acr-mapper",
+    "consentRequired" : false,
+    "config" : {
+    "id.token.claim" : "true",
+    "access.token.claim" : "true"
+    }
+    } ]
+    },
+    {
       "id": "2daaac74-636f-4074-87a9-d1aba9dffb96",
       "name": "web-origins",
       "description": "OpenID Connect scope for add allowed web origins to the access token",
@@ -1653,6 +1686,7 @@
   ],
   "defaultDefaultClientScopes": [
     "web-origins",
+    "acr",
     "email",
     "profile",
     "roles",
@@ -2500,6 +2534,23 @@
       "defaultAction": false,
       "priority": 1000,
       "config": {}
+    },
+    {
+    "alias" : "webauthn-register",
+    "name" : "Webauthn Register",
+    "providerId" : "webauthn-register",
+    "enabled" : true,
+    "defaultAction" : false,
+    "priority" : 70,
+    "config" : { }
+    }, {
+    "alias" : "webauthn-register-passwordless",
+    "name" : "Webauthn Register Passwordless",
+    "providerId" : "webauthn-register-passwordless",
+    "enabled" : true,
+    "defaultAction" : false,
+    "priority" : 80,
+    "config" : { }
     }
   ],
   "browserFlow": "browser",
@@ -2524,7 +2575,7 @@
     "frontendUrl": "",
     "acr.loa.map": "[]"
   },
-  "keycloakVersion": "20.0.1",
+  "keycloakVersion": "21.1.1",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []
