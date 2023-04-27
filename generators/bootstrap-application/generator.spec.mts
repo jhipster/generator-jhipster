@@ -107,6 +107,7 @@ describe(`generator - ${generator}`, () => {
           },
           {
             name: 'User',
+            changelogDate: '20220129025420',
             fields: [
               {
                 fieldName: 'id',
@@ -137,7 +138,7 @@ describe(`generator - ${generator}`, () => {
   },
   ".jhipster/User.json": {
     "contents": "{
-  "changelogDate": "20230427174459",
+  "changelogDate": "20220129025420",
   "fields": [
     {
       "fieldName": "id",
@@ -188,8 +189,8 @@ describe(`generator - ${generator}`, () => {
   "baseName": "jhipster",
   "builtIn": true,
   "builtInUser": true,
-  "changelogDate": "20230427174459",
-  "changelogDateForRecent": 2023-04-27T17:44:59.000Z,
+  "changelogDate": "20220129025420",
+  "changelogDateForRecent": 2022-01-29T02:54:20.000Z,
   "clientFramework": "angular",
   "clientRootFolder": "",
   "containsBagRelationships": false,
