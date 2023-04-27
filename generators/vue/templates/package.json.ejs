@@ -143,7 +143,7 @@
 <%_ if (cypressTests) { _%>
     "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
     "e2e:cypress": "cypress run --e2e --browser chrome",
-    "e2e:cypress:record": "<%= clientPackageManager %> run e2e:cypress -- --record"
+    "e2e:cypress:record": "<%= clientPackageManager %> run e2e:cypress -- --record",
     "cypress": "cypress open --e2e",
 <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= clientTestDir %>jest.conf.js",
