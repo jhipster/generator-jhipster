@@ -23,10 +23,10 @@ export default defineComponent({
 <%_ } _%>
   },
   setup() {
-    const loginService = inject('loginService', () => new LoginService());
-    const accountService = inject<() => AccountService>('accountService');
+    const loginService = inject<LoginService>('loginService');
+    const accountService = inject<AccountService>('accountService');
 <%_ if (enableTranslation) { _%>
-    const translationService = inject<() => TranslationService>('translationService');
+    const translationService = inject<TranslationService>('translationService');
 <%_ } _%>
 
     const router = useRouter();
@@ -41,10 +41,19 @@ export default defineComponent({
     const inProduction = computed(() => store.getters.activeProfiles.indexOf('prod') > -1);
     const authenticated = computed(() => store.getters.authenticated);
 
+    const openLogin = () => {
+<%_ if (!authenticationTypeOauth2) { _%>
+      loginService.openLogin();
+<%_ } else { %>
+      loginService.login();
+<%_ } _%>
+    };
+
     return {
       router,
       accountService,
       loginService,
+      openLogin,
 <%_ if (enableTranslation) { _%>
       translationService,
 <%_ } _%>
@@ -63,13 +72,13 @@ export default defineComponent({
 <%_ if (enableTranslation) { _%>
   created() {
     const currentLanguage = Object.keys(this.languages).includes(navigator.language) ? navigator.language : this.currentLanguage;
-    this.translationService().refreshTranslation(currentLanguage);
+    this.translationService.refreshTranslation(currentLanguage);
   },
 <%_ } _%>
   methods: {
 <%_ if (enableTranslation) { _%>
     changeLanguage(newLanguage: string) : void {
-      this.translationService().refreshTranslation(newLanguage);
+      this.translationService.refreshTranslation(newLanguage);
     },
     isActiveLanguage(key: string) : boolean {
       return key === this.currentLanguage;
@@ -83,7 +92,7 @@ export default defineComponent({
     },
     logout(): Promise<any> {
 <%_ if (!authenticationTypeJwt) { _%>
-      return this.loginService().logout().then(response => {
+      return this.loginService.logout().then(response => {
         this.$store.commit('logout');
   <%_ if (authenticationTypeOauth2) { _%>
         window.location.href = response.data.logoutUrl;
@@ -107,15 +116,8 @@ export default defineComponent({
 <%_ } _%>
       return Promise.resolve(this.$router.currentRoute);
     },
-    openLogin(): void {
-<%_ if (!authenticationTypeOauth2) { _%>
-      this.loginService().openLogin(this.$root);
-<%_ } else { %>
-      this.loginService().login();
-<%_ } _%>
-    },
     hasAnyAuthority(authorities: any): boolean {
-      this.accountService()
+      this.accountService
         .hasAnyAuthorityAndCheckAuth(authorities)
         .then(value => {
           if (this.hasAnyAuthorityValues[authorities] !== value) {

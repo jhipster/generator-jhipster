@@ -27,10 +27,12 @@ const axiosStub = {
 
 describe('Activate Component', () => {
   let activate: ActivateComponentType;
+  let loginService: LoginService;
 
   beforeEach(() => {
     axiosStub.get.resolves({});
     const router = new VueRouter();
+    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: jest.fn() }<% } %>);
 
     const wrapper = shallowMount<ActivateComponentType>(Activate, {
 <%_ if (enableTranslation) { _%>
@@ -38,6 +40,9 @@ describe('Activate Component', () => {
 <%_ } _%>
       localVue,
       router,
+      provide: {
+        loginService,
+      },
     });
     activate = wrapper.vm;
   });

@@ -8,27 +8,26 @@ import { useStore } from '@/store';
 
 export default defineComponent({
   setup(this: any, prop) {
-    const loginService = inject('loginService', () => new LoginService(), true);
+    const loginService = inject<LoginService>('loginService');
 
     const authenticated: ComputedRef<string> = computed(() => useStore().getters.authenticated);
     const username: ComputedRef<string> = computed(() => useStore().getters.account?.login ?? '');
 
+    const openLogin = () => {
+<%_ if (!authenticationTypeOauth2) { _%>
+      loginService.openLogin();
+<%_ } else { %>
+      loginService.login();
+<%_ } _%>
+    };
+
     return {
       authenticated,
       username,
-      loginService,
+      openLogin,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
     };
-  },
-  methods: {
-    openLogin(): void {
-<%_ if (!authenticationTypeOauth2) { _%>
-      this.loginService().openLogin(this.$root);
-<%_ } else { %>
-      this.loginService().login();
-<%_ } %>
-    },
   },
 });

@@ -13,7 +13,7 @@ describe('Login Service test suite', () => {
   let loginService: LoginService;
 
   beforeEach(() => {
-    loginService = new LoginService();
+    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: jest.fn() }<% } %>);
   });
 
 <%_ if (authenticationTypeOauth2) { _%>

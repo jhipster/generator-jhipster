@@ -15,7 +15,7 @@ export default defineComponent({
   },
   setup() {
     const { formatDate } = useDateFormat();
-    const metricsService = inject('metricsService', () => new MetricsService());
+    const metricsService = inject('metricsService', () => new MetricsService(), true);
 
     const metrics: Ref<any> = ref({});
     const threadData: Ref<any> = ref(null);
@@ -39,11 +39,11 @@ export default defineComponent({
   },
   methods: {
     refresh(): void {
-      this.metricsService()
+      this.metricsService
         .getMetrics()
         .then(resultsMetrics => {
           this.metrics = resultsMetrics.data;
-          this.metricsService()
+          this.metricsService
             .retrieveThreadDump()
             .then(res => {
               this.updatingMetrics = true;

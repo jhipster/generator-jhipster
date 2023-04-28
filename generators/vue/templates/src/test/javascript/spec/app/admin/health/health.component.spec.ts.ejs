@@ -43,7 +43,7 @@ describe('Health Component', () => {
         bModal: true,
       },
       provide: {
-        healthService: () => new HealthService(),
+        healthService: new HealthService(),
       },
     });
     health = wrapper.vm;

@@ -28,6 +28,7 @@ const axiosStub = {
 
 describe('Register Component', () => {
   let register: RegisterComponentType;
+  let loginService: LoginService;
   const filledRegisterAccount = {
     email: 'jhi@pster.net',
     langKey: '<%= nativeLanguage %>',
@@ -38,6 +39,8 @@ describe('Register Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
 
     const wrapper = shallowMount<RegisterComponentType>(Register, {
       store,
@@ -46,7 +49,7 @@ describe('Register Component', () => {
 <%_ } _%>
       localVue,
       provide: {
-        loginService: () => new LoginService(),
+        loginService,
       },
     });
     register = wrapper.vm;
@@ -64,12 +67,8 @@ describe('Register Component', () => {
   });
 
   it('should open login modal when asked to', () => {
-    let called = false;
-    (register.$root as any).$on('bv::show::modal', () => {
-      called = true;
-    });
     register.openLogin();
-    expect(called).toBe(true);
+    expect(loginService.openLogin).toBeCalledTimes(1);
   });
 
   it('should register when password match', async () => {

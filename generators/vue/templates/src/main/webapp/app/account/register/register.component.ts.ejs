@@ -42,7 +42,7 @@ export default defineComponent({
     };
   },
   setup(prop) {
-    const loginService = inject('loginService', () => new LoginService());
+    const loginService = inject<LoginService>('loginService');
     const registerService = inject('registerService', () => new RegisterService(), true);
 
     const error: Ref<string> = ref('');
@@ -57,8 +57,12 @@ export default defineComponent({
       password: undefined,
     });
 
+    const openLogin = () => {
+      loginService.openLogin();
+    };
+
     return {
-      loginService,
+      openLogin,
       registerService,
       error,
       errorEmailExists,
@@ -97,9 +101,6 @@ export default defineComponent({
             this.error = 'ERROR';
           }
         });
-    },
-    openLogin(): void {
-      this.loginService().openLogin(this.$root);
     },
   },
 });

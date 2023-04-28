@@ -1,12 +1,14 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import type JhiNavbarComponent from '@/core/jhi-navbar/jhi-navbar.component';
+import VueRouter from 'vue-router';
 
 import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
-import router from '@/router';
+import { createRouter } from '@/router';
+import LoginService from '@/account/login.service';
 
 type JhiNavbarComponentType = Vue & InstanceType<typeof JhiNavbarComponent>;
 
@@ -28,19 +30,25 @@ localVue.component('b-navbar-nav', {});
 
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
-<%_ if (authenticationTypeJwt) { _%>
-  const loginService = { openLogin: jest.fn() };
-<%_ } else if (authenticationTypeSession) { _%>
-  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
-<%_ } else if (authenticationTypeOauth2) { _%>
-  const loginService = { login: jest.fn(), logout: jest.fn() };
-<%_ } _%>
+  let loginService: LoginService;
+  let router: VueRouter;
   const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
   const translationService = { refreshTranslation: jest.fn() };
 <%_ } _%>
 
   beforeEach(() => {
+    router = createRouter();
+<%_ if (authenticationTypeJwt) { _%>
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
+<%_ } else if (authenticationTypeSession) { _%>
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
+    jest.spyOn(loginService, 'logout');
+<%_ } else if (authenticationTypeOauth2) { _%>
+    loginService = { login: jest.fn(), logout: jest.fn() };
+<%_ } _%>
     const wrapper = shallowMount<JhiNavbarComponentType>(JhiNavbar, {
 <%_ if (enableTranslation) { _%>
       i18n,
@@ -49,11 +57,11 @@ describe('JhiNavbar', () => {
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
 <%_ if (enableTranslation) { _%>
-        translationService: () => translationService,
+        translationService,
 <%_ } _%>
-        accountService: () => accountService,
+        accountService,
       },
     });
     jhiNavbar = wrapper.vm;
@@ -102,9 +110,9 @@ describe('JhiNavbar', () => {
     store.commit('authenticated', { login: 'test' });
 <%_ if (authenticationTypeOauth2) { _%>
     const logoutUrl = '/to-match';
-    loginService.logout.mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
+    (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
 <%_ } else if (!authenticationTypeJwt) { _%>
-    loginService.logout.mockReturnValue(Promise.resolve({}));
+    (loginService.logout as any).mockReturnValue(Promise.resolve({}));
 <%_ } _%>
     await jhiNavbar.logout();
 

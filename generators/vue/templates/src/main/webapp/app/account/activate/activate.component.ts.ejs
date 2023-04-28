@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router/composables';
 export default defineComponent({
   setup() {
     const activateService = inject('activateService', () => new ActivateService(), true);
-    const loginService = inject('loginService', () => new LoginService());
+    const loginService = inject<LoginService>('loginService');
     const router = useRouter();
 
     const success: Ref<boolean> = ref(false);
@@ -27,20 +27,19 @@ export default defineComponent({
       }
     });
 
+    const openLogin = () => {
+      loginService.openLogin();
+    };
+
     return {
       router,
       activateService,
-      loginService,
+      openLogin,
       success,
       error,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
     };
-  },
-  methods: {
-    openLogin(): void {
-      this.loginService.openLogin((<any>this).$root);
-    },
   },
 });
