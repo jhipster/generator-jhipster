@@ -1,0 +1,38 @@
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: quickstart
+  # namespace: default
+spec:
+  type: filebeat
+  version: 8.7.0
+  # elasticsearchRef:
+  #   name: quickstart
+  config:
+    filebeat.inputs:
+    - type: filestream
+      paths:
+      - /var/logs/*.log
+    # output.elasticsearch.index: "wda-%{[agent.version]}"
+    # setup.template.name: "wda"
+    # setup.template.pattern: "wda-%{[agent.version]}"
+    output.elasticsearch:
+      hosts: ["https://localhost:9200"]
+      username: "elastic"
+      password: "9UOk32d2Hm639Sdm57SlD8Ii"
+  daemonSet:
+    podTemplate:
+      spec:
+        dnsPolicy: ClusterFirstWithHostNet
+        hostNetwork: true
+        securityContext:
+          runAsUser: 0
+        containers:
+        - name: filebeat
+          volumeMounts:
+          - name: my-pv
+            mountPath: /var/logs
+        volumes:
+        - name: my-pv
+          persistentVolumeClaim:
+            claimName: my-pvc

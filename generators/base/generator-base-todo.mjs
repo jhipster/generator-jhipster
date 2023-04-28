@@ -52,6 +52,7 @@ import {
   searchEngineTypes,
   clientFrameworkTypes,
   getConfigWithDefaults,
+  logManagementTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import {
@@ -75,6 +76,7 @@ const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
+const ECK_LOG = logManagementTypes.ECK;
 const { PROMETHEUS, ELK } = monitoringTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
@@ -1180,6 +1182,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
       }
     }
+
+    dest.logManagementType = config.logManagementType;
   }
 
   loadServerAndPlatformConfig(dest = this) {
@@ -1272,6 +1276,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
 
     dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
+
+    dest.logManagementTypeEck = dest.logManagementType === ECK_LOG;    //added eck option cmi-tic-lokesh
 
     if (dest.databaseTypeSql) {
       prepareSqlApplicationProperties(dest);

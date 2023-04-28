@@ -169,6 +169,11 @@ const configPropsValidations: Record<string, JDLValidatorOption> = {
     pattern: LANGUAGE_PATTERN,
     msg: 'languages property',
   },
+  LOG_MANAGEMENT_TYPE: {
+    type: 'NAME',
+    pattern: ALPHABETIC_LOWER,
+    msg: 'logManagementType property',
+  },
   MICROFRONTENDS: {
     type: 'list',
     pattern: ALPHANUMERIC_UNDERSCORE,

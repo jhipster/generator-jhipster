@@ -28,6 +28,7 @@ import {
   databaseTypes,
   cacheTypes,
   serviceDiscoveryTypes,
+  logManagementTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { MESSAGE_BROKER } from './options/index.mjs';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
@@ -53,10 +54,13 @@ const {
   WEBSOCKET,
   SEARCH_ENGINE,
   ENABLE_SWAGGER_CODEGEN,
+  LOG_MANAGEMENT_TYPE,
 } = OptionNames;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
+const { ECK, NO_LOG } = logManagementTypes;
+// const NO_LOG_MANAGEMENT = logManagementTypes.NO;
 
 /**
  * Get Option From Array
@@ -301,6 +305,22 @@ export async function askForServerSideOpts({ control }) {
       name: 'gradleEnterpriseHost',
       message: 'Enter your Gradle Enterprise host',
       validate: input => (input.length === 0 ? 'Please enter your Gradle Enterprise host' : true),
+    },
+    {
+      type: 'list',
+      name: LOG_MANAGEMENT_TYPE,
+      message: 'Which log manager would you like to use?',
+      choices: [
+        {
+          value: ECK,
+          name: 'Elastic Cloud on Kubernetes',
+        },
+        {
+          value: NO_LOG,
+          name: 'No',
+        },
+      ],
+      default: ECK,
     },
   ];
 

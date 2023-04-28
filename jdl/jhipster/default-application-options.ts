@@ -26,6 +26,7 @@ import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
 import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.mjs';
+import logManagementTypes from './log-management-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;
@@ -40,6 +41,7 @@ const NO_CACHE_PROVIDER = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;
+const { NO_LOG } = logManagementTypes;
 
 const {
   APPLICATION_TYPE,
@@ -60,6 +62,7 @@ const {
   ENTITY_SUFFIX,
   JHI_PREFIX,
   LANGUAGES,
+  LOG_MANAGEMENT_TYPE,
   NATIVE_LANGUAGE,
   PACKAGE_FOLDER,
   PACKAGE_NAME,
@@ -84,6 +87,7 @@ const commonDefaultOptions = {
   [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
   [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
   [JHI_PREFIX]: OptionValues[JHI_PREFIX],
+  [LOG_MANAGEMENT_TYPE]: NO_LOG,
   [MESSAGE_BROKER]: MESSAGE_BROKER_NO,
   [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,

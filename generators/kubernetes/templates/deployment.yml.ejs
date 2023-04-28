@@ -82,6 +82,11 @@ spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>-app
         image: <%= app.targetImageName %>
+<%_ if (app.logManagementTypeEck) { _%>
+        volumeMounts:
+          - name: logs_pvc
+            mountPath: /var/logs
+<%_ } _%>
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
@@ -268,4 +273,11 @@ spec:
             path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
+<%_ if (app.logManagementTypeEck) { _%>
+      volumes:
+      - name: logs_pv
+        persistentVolumeClaim:
+          claimName: logs_pvc
+<%_ } _%>
+
           

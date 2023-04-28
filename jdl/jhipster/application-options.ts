@@ -33,10 +33,11 @@ import {
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
 } from '../models/jdl-application-definition.js';
+import logManagementTypes from './log-management-types.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
-
+const { ECK, NO_LOG} = logManagementTypes;
 const NO_DATABASE = databaseTypes.NO;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { MAVEN, GRADLE } = buildToolTypes;
@@ -96,6 +97,8 @@ const optionNames = {
   JHIPSTER_VERSION: 'jhipsterVersion',
   JWT_SECRET_KEY: 'jwtSecretKey',
   LANGUAGES: 'languages',
+  LOG_MANAGEMENT_TYPE: 'logManagementType',
+  MESSAGE_BROKER: 'messageBroker',
   MICROFRONTEND: 'microfrontend',
   MICROFRONTENDS: 'microfrontends',
   NATIVE_LANGUAGE: 'nativeLanguage',
@@ -189,6 +192,10 @@ export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
   [optionNames.JHIPSTER_VERSION]: '',
   [optionNames.JWT_SECRET_KEY]: '',
   [optionNames.LANGUAGES]: [],
+  [optionNames.LOG_MANAGEMENT_TYPE]: {
+    [ECK]: ECK,
+    [NO_LOG]: NO_LOG,
+  },
   [optionNames.MICROFRONTEND]: false,
   [optionNames.MICROFRONTENDS]: [],
   [optionNames.NPM]: true,
@@ -264,6 +271,7 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
   [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
   [optionNames.LANGUAGES]: { type: ApplicationOptionTypes.LIST },
+  [optionNames.LOG_MANAGEMENT_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.MICROFRONTEND]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.MICROFRONTENDS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.NATIVE_LANGUAGE]: { type: ApplicationOptionTypes.STRING },
