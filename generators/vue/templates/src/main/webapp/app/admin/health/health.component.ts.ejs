@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 import HealthService from './health.service';
 import <%=jhiPrefixCapitalized%>HealthModal from './health-modal.vue';
@@ -20,6 +23,9 @@ export default defineComponent({
       healthData,
       currentHealth,
       updatingHealth,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   mounted(): void {

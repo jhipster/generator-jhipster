@@ -2,6 +2,7 @@ import type { BvToast } from 'bootstrap-vue';
 import { getCurrentInstance } from 'vue';
 <%_ if (enableTranslation) { _%>
 import type VueI18n from 'vue-i18n';
+import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
 
 export const useAlertService = () => {
@@ -10,10 +11,7 @@ export const useAlertService = () => {
     throw new Error('BootstrapVue toast component was not found');
   }
 <%_ if (enableTranslation) { _%>
-  const i18n = getCurrentInstance().proxy.$i18n;
-  if (!i18n) {
-    throw new Error('I18n component was not found');
-  }
+  const i18n = useI18n() as unknown as VueI18n;
 <%_ } _%>
   return new AlertService({
     bvToast,

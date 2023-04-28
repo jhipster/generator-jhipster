@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { useRoute, useRouter } from 'vue-router/composables';
 
 <% if (anyFieldIsBlobDerived) { %>
@@ -46,6 +49,9 @@ export default defineComponent({
       ...dataUtils,
 <% } %>
       previousState,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

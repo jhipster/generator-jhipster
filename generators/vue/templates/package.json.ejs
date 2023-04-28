@@ -45,7 +45,10 @@
     "rxjs": "7.4.0",
 <%_ } _%>
     "vue": "<%= nodeDependencies['vue'] %>",
+<%_ if (enableTranslation) { _%>
     "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
+    "vue-i18n-bridge": "<%= nodeDependencies['vue-i18n-bridge'] %>",
+<%_ } _%>
     "vue-infinite-loading": "<%= nodeDependencies['vue-infinite-loading'] %>",
     "vue-router": "<%= nodeDependencies['vue-router'] %>",
     "vuex": "<%= nodeDependencies['vuex'] %>"

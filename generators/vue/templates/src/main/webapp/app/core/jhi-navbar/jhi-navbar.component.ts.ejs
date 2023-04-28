@@ -1,4 +1,7 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import LoginService from '@/account/login.service';
 import type AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
@@ -52,6 +55,9 @@ export default defineComponent({
       openAPIEnabled,
       inProduction,
       authenticated,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 <%_ if (enableTranslation) { _%>

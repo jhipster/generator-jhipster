@@ -1,6 +1,9 @@
 import UserManagementService from './user-management.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 import { computed, defineComponent, inject, Ref, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import { useStore } from '@/store';
 
 export default defineComponent({
@@ -50,6 +53,9 @@ export default defineComponent({
 <%_ if (!databaseTypeCassandra) { _%>
       totalItems,
       queryCount,
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
 <%_ } _%>
     };
   },
@@ -127,7 +133,7 @@ export default defineComponent({
   const headerParams = `X-${frontendAppName}-params`.toLowerCase();
   if (enableTranslation) {
 _%>
-          const message = this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
+          const message = this.t$(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
 <%_ } else {_%>
           const message = res.headers['<%=headerAlert%>'];
 <%_ } _%>

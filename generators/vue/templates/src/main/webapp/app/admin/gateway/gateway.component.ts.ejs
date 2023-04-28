@@ -1,4 +1,7 @@
 import { defineComponent, inject, ref, Ref, onMounted } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import GatewayService from './gateway.service';
 
 export default defineComponent({
@@ -45,6 +48,9 @@ export default defineComponent({
       updatingRoutes,
       gatewayService,
       refresh,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

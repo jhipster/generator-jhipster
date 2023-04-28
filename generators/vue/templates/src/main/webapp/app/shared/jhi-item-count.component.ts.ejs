@@ -1,4 +1,7 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 export default defineComponent({
   props: {
@@ -15,6 +18,9 @@ export default defineComponent({
     return {
       first,
       second,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

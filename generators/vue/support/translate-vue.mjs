@@ -20,7 +20,7 @@ import { passthrough } from 'p-transform';
 import { Minimatch } from 'minimatch';
 
 const TRANSLATIONS_ATTRIBUTES = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
-  .map(s => `(?:${s}="\\$t\\(.*?\\)")`)
+  .map(s => `(?:${s}="t\\$\\(.*?\\)")`)
   .join('|');
 
 /**

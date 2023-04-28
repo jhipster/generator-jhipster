@@ -164,19 +164,19 @@ describe(`generator - ${clientFramework}`, () => {
               `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
               '<b-dropdown-item  to="/admin/metrics" active-class="active">\n' +
                 '            <font-awesome-icon icon="tachometer-alt" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.metrics\')">Metrics</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.metrics\')">Metrics</span>\n' +
                 '          </b-dropdown-item>\n' +
                 '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
                 '            <font-awesome-icon icon="heart" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.health\')">Health</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.health\')">Health</span>\n' +
                 '          </b-dropdown-item>\n' +
                 '          <b-dropdown-item  to="/admin/configuration" active-class="active">\n' +
                 '            <font-awesome-icon icon="cogs" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.configuration\')">Configuration</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.configuration\')">Configuration</span>\n' +
                 '          </b-dropdown-item>\n' +
                 '          <b-dropdown-item  to="/admin/logs" active-class="active">\n' +
                 '            <font-awesome-icon icon="tasks" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.logs\')">Logs</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.logs\')">Logs</span>\n' +
                 '          </b-dropdown-item>'
             );
           });

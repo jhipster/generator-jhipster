@@ -33,7 +33,7 @@ import {
   generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
-import { isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
+import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -113,6 +113,14 @@ export default class VueGenerator extends BaseApplicationGenerator {
           this.queueTransformStream(translateVueFilesTransform(control.getWebappTranslation), {
             name: 'translating webapp',
             streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
+          });
+        }
+        if (application.enableTranslation) {
+          const { clientSrcDir } = application;
+          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
+          this.queueTransformStream(transform, {
+            name: 'converting translations',
+            streamOptions: { filter: file => isFilePending(file) && isTranslationFile(file) },
           });
         }
       },

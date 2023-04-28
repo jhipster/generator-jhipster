@@ -1,4 +1,7 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
 import LogsService from './logs.service';
@@ -27,6 +30,9 @@ export default defineComponent({
       orderProp,
       reverse,
       filteredLoggers,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   mounted() {

@@ -22,30 +22,30 @@ import jest from 'jest-mock';
 import { replaceVueTranslations } from './translate-vue.mjs';
 
 const FULL_BODY = `
-<span v-html="$t('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
-<b-form-group v-bind:label="$t('login.form.password')" label-for="password">
+<span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
+<b-form-group v-bind:label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
     type="password"
     name="password"
-    v-bind:placeholder="$t('login.form[\\'password.placeholder\\']')"
+    v-bind:placeholder="t$('login.form[\\'password.placeholder\\']')"
     v-model="password"
     data-cy="password"
   >
   </b-form-input>
 </b-form-group>
 
-<b-modal ref="removeUser" id="removeUser" v-bind:title="$t('entity.delete.title')" @ok="deleteUser()">
+<b-modal ref="removeUser" id="removeUser" v-bind:title="t$('entity.delete.title')" @ok="deleteUser()">
   <div class="modal-body">
-    <p id="<%= jhiPrefixDashed %>-delete-user-heading" v-text="$t('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
+    <p id="<%= jhiPrefixDashed %>-delete-user-heading" v-text="t$('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
   </div>
   <div slot="modal-footer">
-    <button type="button" class="btn btn-secondary" v-text="$t('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-    <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="$t('entity.action.delete')" v-on:click="deleteUser()">Delete</button>
+    <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
+    <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" v-on:click="deleteUser()">Delete</button>
   </div>
 </b-modal>
 
-<span v-bind:value="$t('sessions.title')"></span>
+<span v-bind:value="t$('sessions.title')"></span>
 `;
 
 describe('generator - vue - transform', () => {

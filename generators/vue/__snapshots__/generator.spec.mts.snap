@@ -718,9 +718,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/formatter.ts": {
-    "stateCleared": "modified",
-  },
   "src/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
@@ -947,9 +944,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "test/spec/app/shared/config/axios-interceptor.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/shared/config/formatter.spec.ts": {
     "stateCleared": "modified",
   },
   "test/spec/app/shared/data/data-utils.service.spec.ts": {
@@ -1655,9 +1649,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/formatter.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp2/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
@@ -1872,9 +1863,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/app/shared/config/axios-interceptor.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/shared/config/formatter.spec.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/app/shared/data/data-utils.service.spec.ts": {
@@ -2239,9 +2227,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp2/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/formatter.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp2/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
@@ -2492,9 +2477,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/app/shared/config/axios-interceptor.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/shared/config/formatter.spec.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/app/shared/data/data-utils.service.spec.ts": {
