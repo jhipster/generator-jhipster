@@ -6,12 +6,18 @@ import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileNam
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+import { useDateFormat } from '@/shared/composables'
+<%_ } _%>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%= entityAngularName %>',
   setup() {
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+    const dateFormat = useDateFormat();
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
     const dataUtils = useDataUtils();
 <%_ } _%>
@@ -41,6 +47,9 @@ export default defineComponent({
     const isFetching = ref(false);
 
     return {
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+      ...dateFormat,
+<%_ } _%>
       <%= entityInstance %>Service,
       alertService,
 <%_ if (searchEngineAny) { _%>

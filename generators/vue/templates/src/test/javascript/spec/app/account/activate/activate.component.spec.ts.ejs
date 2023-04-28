@@ -3,7 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 import VueRouter from 'vue-router';
 
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import Activate from '@/account/activate/activate.vue';
 import type ActivateComponent from '@/account/activate/activate.component';
 import ActivateService from '@/account/activate/activate.service';
@@ -13,9 +15,8 @@ type ActivateComponentType = Vue & InstanceType<typeof ActivateComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 localVue.use(VueRouter);
 

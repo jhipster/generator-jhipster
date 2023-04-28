@@ -85,13 +85,9 @@
   <%_ } else if (field.fieldIsEnum) { _%>
                     <td v-text="t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
   <%_ } else if (field.fieldTypeDuration) { _%>
-                    <td>{{<%=entityInstance %>.<%=fieldName%> | duration}}</td>
+                    <td>{{formatDuration(<%=entityInstance %>.<%=fieldName%>)}}</td>
   <%_ } else if (field.fieldTypeTimed) { _%>
-    <%_ if (enableTranslation) { _%>
-                    <td>{{<%=entityInstance %>.<%=fieldName%> ? $d(Date.parse(<%=entityInstance %>.<%=fieldName%>), 'short') : ''}}</td>
-    <%_ } else { _%>
-                    <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
-    <%_ } _%>
+                    <td>{{formatDateShort(<%=entityInstance %>.<%=fieldName%>) || ''}}</td>
   <%_ } else { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
   <%_ } _%>

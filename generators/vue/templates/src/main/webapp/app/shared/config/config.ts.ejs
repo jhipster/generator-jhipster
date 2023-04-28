@@ -43,17 +43,11 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons/faUsersCog';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
-import * as filters from '@/shared/date/filters';
-
 <%_ if (enableTranslation) { _%>
 const datetimeFormats: DateTimeFormats = {
   // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
 }
 <%_ } _%>
-
-export function initVueApp(vue) {
-  filters.initFilters();
-}
 
 export function initFortAwesome(vue) {
   vue.component('font-awesome-icon', FontAwesomeIcon);
