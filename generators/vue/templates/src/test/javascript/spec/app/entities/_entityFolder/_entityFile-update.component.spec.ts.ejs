@@ -24,17 +24,14 @@ import Router from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-<%_ let dayJsIncluded = false;
-  for (field of fields.filter(field => !field.id)) { _%>
-  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
-      dayJsIncluded = true; _%>
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-  <%_ } _%>
-<%_ } _%>
-
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (anyFieldIsTimeDerived) { _%>
+import dayjs from 'dayjs';
+import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -57,9 +54,8 @@ type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%=
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 const router = new Router();
@@ -117,12 +113,7 @@ describe('Component Tests', () => {
       };
     });
 
-<%_
-  let dateTestsIncluded = false;
-  for (field of fields.filter(field => !field.id)) {
-    if (field.fieldTypeTimed && !dateTestsIncluded) {
-      dateTestsIncluded = true;
-_%>
+<%_ if (anyFieldIsTimeDerived) { _%>
     describe('load', () => {
       beforeEach(() => {
         const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
@@ -143,7 +134,6 @@ _%>
         expect(comp.convertDateTimeFromServer(null)).toBeNull();
       });
     });
-  <%_ } _%>
 <%_ } _%>
 
     describe('save', () => {

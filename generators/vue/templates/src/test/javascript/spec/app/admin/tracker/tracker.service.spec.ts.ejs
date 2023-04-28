@@ -5,7 +5,9 @@ import { Subject } from 'rxjs';
 
 import { useStore } from '@/store';
 import TrackerService from '@/admin/tracker/tracker.service';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import { defaultAccountState } from '@/shared/config/store/account-store';
 
 const localVue = createLocalVue();

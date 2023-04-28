@@ -7,7 +7,9 @@ import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import LoginForm from '@/account/login-form/login-form.vue';
 import type LoginFormComponent from '@/account/login-form/login-form.component';
 
@@ -22,9 +24,8 @@ localVue.component('b-form-group', {});
 localVue.component('b-form-checkbox', {});
 localVue.component('b-link', {});
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 

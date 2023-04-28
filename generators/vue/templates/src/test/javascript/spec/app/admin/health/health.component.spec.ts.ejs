@@ -4,7 +4,9 @@ import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import Health from '@/admin/health/health.vue';
 import HealthModal from '@/admin/health/health-modal.vue';
 import type HealthComponent from '@/admin/health/health.component';
@@ -14,9 +16,8 @@ type HealthComponentType = Vue & InstanceType<typeof HealthComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);

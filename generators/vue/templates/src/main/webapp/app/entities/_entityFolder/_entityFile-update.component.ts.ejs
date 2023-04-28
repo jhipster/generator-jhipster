@@ -7,6 +7,9 @@ import { useVuelidate } from '@vuelidate/core'
 <%_ if (anyFieldIsBlobDerived) { _%>
   import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
+import { useDateFormat } from '@/shared/composables';
+<%_ } _%>
 <%_
   let fieldsContainedValidators = [];
   for (field of fields.filter(field => !field.id)) {
@@ -45,15 +48,6 @@ import { useVuelidate } from '@vuelidate/core'
     let validators = fieldsContainedValidators.toString();
   _%>
 import {<%= validators %>} from '@vuelidate/validators';
-<%_ } _%>
-<%_
-  let dayJsIncluded = false;
-  for (field of fields.filter(field => !field.id)) { _%>
-  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
-    dayJsIncluded = true; _%>
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-  <%_ } _%>
 <%_ } _%>
 
 import { useAlertService } from '@/shared/alert/alert.service';
@@ -209,6 +203,9 @@ _%>
       ...dataUtils,
 <%_ } _%>
       v$: useVuelidate(),
+<%_ if (anyFieldIsTimeDerived) { _%>
+      ...useDateFormat({ entityRef: <%= entityInstance %> }),
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
@@ -281,38 +278,6 @@ _%>
         });
       }
     },
-
-  <%_
-    let dateFunctionIncluded = false;
-    for (field of fields.filter(field => !field.id)) {
-        const fieldName = field.fieldName;
-        const fieldType = field.fieldType;
-        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateFunctionIncluded) {
-            dateFunctionIncluded = true;
-  _%>
-    convertDateTimeFromServer(date: Date): string {
-      if (date && dayjs(date).isValid()) {
-        return dayjs(date).format(DATE_TIME_LONG_FORMAT);
-      }
-      return null;
-    },
-
-    updateInstantField(field, event) {
-      if (event.target.value) {
-        this.<%= entityInstance %>[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-      } else {
-        this.<%= entityInstance %>[field] = null;
-      }
-    },
-
-    updateZonedDateTimeField(field, event) {
-      if (event.target.value) {
-        this.<%= entityInstance %>[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-      } else {
-        this.<%= entityInstance %>[field] = null;
-      }
-    },
-    <%_ } } _%>
 
     previousState() : void {
       this.$router.go(-1);
