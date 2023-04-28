@@ -41,7 +41,8 @@
     "./package.json": "./package.json",
     "./generators": "./dist/generators/generator-list.mjs",
     "./generators/*": "./dist/generators/*/index.mjs",
-    "./jdl/": "./dist/jdl/"
+    "./jdl/": "./dist/jdl/",
+    "./lib/util/namespace": "./lib/util/namespace.js"
   },
   "main": "dist/lib/index.mjs",
   "bin": {
