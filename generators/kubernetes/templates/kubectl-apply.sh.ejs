@@ -44,7 +44,7 @@ logSummary() {
   <%_ if (monitoringPrometheus) { _%>
         echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>"
   <%_ } _%>
-  <%_ if (kubernetesServiceTypeIngress) { _%>
+  <%_ if (istio) { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
       <%_ if (appConfig.applicationTypeGateway) {_%>
         echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
@@ -100,7 +100,7 @@ default() {
     kubectl apply -f monitoring-${suffix}/jhipster-grafana.yml
     kubectl apply -f monitoring-${suffix}/jhipster-grafana-dashboard.yml
 <%_ } _%>
-<%_ if (istio && kubernetesServiceTypeIngress) { _%>
+<%_ if (istio) { _%>
     kubectl apply -f istio-${suffix}/
 <%_ } _%>
 }
