@@ -3,7 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import Settings from '@/account/settings/settings.vue';
 import type SettingsComponent from '@/account/settings/settings.component';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
@@ -12,9 +14,8 @@ type SettingsComponentType = Vue & InstanceType<typeof SettingsComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 

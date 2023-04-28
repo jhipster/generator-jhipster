@@ -4,7 +4,9 @@ import { computed, defineComponent, inject, Ref, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
+
 import { useStore } from '@/store';
+import { useDateFormat } from '@/shared/composables'
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
@@ -13,6 +15,7 @@ export default defineComponent({
   },
   setup(prop) {
     const alertService = inject('alertService', () => useAlertService(), true);
+    const { formatDateShort: formatDate } = useDateFormat();
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const error = ref('');
@@ -35,6 +38,7 @@ export default defineComponent({
     const username = computed(() => useStore().getters.account?.login ?? '');
 
     return {
+      formatDate,
       userManagementService,
       alertService,
       error,

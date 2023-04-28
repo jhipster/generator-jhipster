@@ -26,7 +26,9 @@ import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import <%= entityAngularName %>Detail from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
 import type <%= entityAngularName %>DetailsComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -37,9 +39,8 @@ const localVue = createLocalVue();
 localVue.use(ToastPlugin);
 localVue.use(VueRouter);
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 localVue.component('font-awesome-icon', {});

@@ -4,7 +4,9 @@ import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import Metrics from '@/admin/metrics/metrics.vue';
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
 import type MetricsComponent from '@/admin/metrics/metrics.component';
@@ -14,9 +16,8 @@ type MetricsComponentType = Vue & InstanceType<typeof MetricsComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);

@@ -4,9 +4,12 @@ import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router/composables';
 
-<% if (anyFieldIsBlobDerived) { %>
+<%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
-<% } %>
+<%_ } _%>
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+import { useDateFormat } from '@/shared/composables'
+<%_ } _%>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
@@ -14,6 +17,9 @@ import { useAlertService } from '@/shared/alert/alert.service';
 export default defineComponent({
   name: '<%= entityAngularName %>Details',
   setup() {
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+    const dateFormat = useDateFormat();
+<%_ } _%>
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
 
@@ -43,6 +49,9 @@ export default defineComponent({
     };
 
     return {
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+      ...dateFormat,
+<%_ } _%>
       alertService,
       <%= entityInstance %>,
 <% if (anyFieldIsBlobDerived) { %>

@@ -7,8 +7,8 @@ import { useStore } from '@/store';
 
 import App from './app.vue';
 import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
-import * as config from './shared/config/config';
-import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
+import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from './shared/config/config';
+import { initBootstrapVue } from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import JhiSortIndicatorComponent from './shared/sort/jhi-sort-indicator.vue';
 import InfiniteLoading from 'vue-infinite-loading';
@@ -29,15 +29,14 @@ import { useTrackerService } from './admin/tracker/tracker.service';
 
 /* tslint:enable */
 Vue.config.productionTip = false;
-config.initVueApp(Vue);
-config.initFortAwesome(Vue);
-bootstrapVueConfig.initBootstrapVue(Vue);
+initFortAwesome(Vue);
+initBootstrapVue(Vue);
 
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 Vue.component('infinite-loading', InfiniteLoading);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(Vue);
+const i18n = initI18N(Vue);
 <%_ } _%>
 const store = useStore();
 

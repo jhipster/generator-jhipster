@@ -9,7 +9,9 @@ import VueRouter from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
+<%_ if (enableTranslation) { _%>
+import { initI18N } from '@/shared/config/config';
+<%_ } _%>
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
 import type UserManagementEditComponent from '@/admin/user-management/user-management-edit.component';
 
@@ -19,9 +21,8 @@ const localVue = createLocalVue();
 localVue.use(VueRouter);
 localVue.use(ToastPlugin);
 
-config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
+const i18n = initI18N(localVue);
 <%_ } _%>
 const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
