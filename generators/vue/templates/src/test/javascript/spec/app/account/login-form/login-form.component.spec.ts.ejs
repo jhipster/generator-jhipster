@@ -4,9 +4,6 @@ import sinon from 'sinon';
 import VueRouter from 'vue-router';
 
 import AccountService from '@/account/account.service';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
 
 import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
@@ -63,7 +60,7 @@ describe('LoginForm Component', () => {
         localVue,
         router,
         provide: {
-          accountService: new AccountService(store<% if (enableTranslation) { %>, new TranslationService(store, i18n)<% } %>)
+          accountService: new AccountService(store)
         }
       });
     loginForm = wrapper.vm;

@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import EntitiesMenu from '@/entities/entities-menu.vue';
 import type EntitiesMenuComponent from '@/entities/entities-menu.component';
@@ -25,6 +26,7 @@ describe('EntitiesMenu', () => {
         provide: {
           translationService,
           microfrontendI18n: true,
+          currentLanguage: ref('<%- nativeLanguage %>'),
         },
       });
     });

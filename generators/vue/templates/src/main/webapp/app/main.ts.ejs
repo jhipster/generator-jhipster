@@ -1,6 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue, { provide } from 'vue';
+import Vue, { provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import { useStore } from '@/store';
@@ -38,8 +38,7 @@ const i18n = initI18N(Vue);
 <%_ } _%>
 const store = useStore();
 
-/* tslint:disable */
-<% if (!authenticationTypeOauth2) { %>const vue = <% } %>new Vue({
+new Vue({
   el: '#app',
   components: { App },
   template: '<App/>',
@@ -52,10 +51,49 @@ const store = useStore();
   setup() {
     provide('loginService', new LoginService());
 <%_ } _%>
+    const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
-    const translationService = new TranslationService(store, i18n);
+    const translationService = new TranslationService(i18n);
+
+    const currentLanguage = computed(() => store.getters.currentLanguage);
+    const changeLanguage = async (newLanguage: string) => {
+      if (currentLanguage.value !== newLanguage) {
+        await translationService.refreshTranslation(newLanguage);
+        store.commit('currentLanguage', newLanguage);
+      }
+    };
+
+    provide('currentLanguage', currentLanguage);
+    provide('changeLanguage', changeLanguage);
+
+    watch(
+      () => store.getters.account,
+      async value => {
+        if (!translationService.getLocalStoreLanguage()) {
+          await changeLanguage(value.langKey);
+        }
+      }
+    );
+
+    watch(
+      () => store.getters.currentLanguage,
+      value => {
+        translationService.setLocale(value);
+      }
+    );
+
+    onMounted(async () => {
+      const lang = [
+      translationService.getLocalStoreLanguage(),
+        store.getters.account?.langKey,
+        navigator.language,
+        '<%- nativeLanguage %>'
+      ].find(lang => lang && translationService.isLanguageSupported(lang));
+      await changeLanguage(lang);
+    });
+<%_ } else { _%>
+    provide('currentLanguage', computed(() => store.getters.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
-    const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%>);
 
     router.beforeResolve(async (to, from, next) => {
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -101,6 +139,9 @@ const store = useStore();
         return Promise.reject(error);
       }
     );
+
+    provide('authenticated', computed(() => store.getters.authenticated));
+    provide('currentUsername', computed(() => store.getters.account?.login));
 
 <%_ if (enableTranslation) { _%>
     provide('translationService', translationService);

@@ -1,17 +1,8 @@
 import axios from 'axios';
 import { Store } from 'vuex';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
 
 export default class AccountService {
-  constructor(
-    private store: Store<any>,
-<%_ if (enableTranslation) { _%>
-    private translationService: TranslationService,
-<%_ } _%>
-  ) {
-  }
+  constructor(private store: Store<any>) {}
 
   public async update(): Promise<void> {
     if (!this.store.getters.profilesLoaded) {
@@ -40,12 +31,6 @@ export default class AccountService {
       if (response.status === 200 && response.data) {
         const account = response.data;
         this.store.commit('authenticated', account);
-<%_ if (enableTranslation) { _%>
-        if (this.store.getters.currentLanguage !== account.langKey) {
-          this.store.commit('currentLanguage', account.langKey);
-          this.translationService.refreshTranslation(this.store.getters.currentLanguage);
-        }
-<%_ } _%>
         return true;
       }
     } catch (error) {}

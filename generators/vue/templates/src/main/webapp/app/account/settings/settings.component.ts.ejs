@@ -1,6 +1,7 @@
-import { computed, defineComponent, ref, Ref } from 'vue';
+import { computed, ComputedRef, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
+import languages from '@/shared/config/languages';
 <%_ } _%>
 import { useVuelidate } from '@vuelidate/core'
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
@@ -32,26 +33,25 @@ const validations = {
 export default defineComponent({
   name: 'Settings',
   validations,
-  setup(prop) {
+  setup() {
     const store = useStore();
 
     const success: Ref<string> = ref(null);
     const error: Ref<string> = ref(null);
     const errorEmailExists: Ref<string> = ref(null);
-    const languages: Ref<string[]> = ref(store.getters.languages || []);
 
     const settingsAccount = computed(() => store.getters.account);
-    const username = computed(() => store.getters.account?.login ?? '');
+    const username = inject<ComputedRef<string>>('currentUsername', () => computed(() => store.getters.account?.login), true);
 
     return {
       success,
       error,
       errorEmailExists,
-      languages,
       settingsAccount,
       username,
       v$: useVuelidate(),
 <%_ if (enableTranslation) { _%>
+      languages: languages(),
       t$: useI18n().t,
 <%_ } _%>
     };

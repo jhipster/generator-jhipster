@@ -24,7 +24,6 @@ import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -40,7 +39,6 @@ localVue.use(ToastPlugin);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', {});
 localVue.component('b-badge', {});
 <%_ if (!paginationNo) { _%>
@@ -68,7 +66,6 @@ describe('Component Tests', () => {
       <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {} });
 
       mountOptions = {
-        store,
 <%_ if (enableTranslation) { _%>
         i18n,
 <%_ } _%>

@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -16,7 +15,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -31,7 +29,6 @@ describe('Configuration Component', () => {
       { beans: [{prefix: 'A'}, {prefix: 'B'}] }
     ], propertySources: [{ properties: { key1: {value: 'value'} }}] } });
     const wrapper = shallowMount<ConfigurationComponentType>(Configuration, {
-      store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>

@@ -1,11 +1,10 @@
-import UserManagementService from './user-management.service';
-import { useAlertService } from '@/shared/alert/alert.service';
-import { computed, defineComponent, inject, Ref, ref } from 'vue';
+import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
+import UserManagementService from './user-management.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-import { useStore } from '@/store';
 import { useDateFormat } from '@/shared/composables'
 
 export default defineComponent({
@@ -17,6 +16,7 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
     const { formatDateShort: formatDate } = useDateFormat();
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
+    const username = inject<ComputedRef<string>>('currentUsername');
 
     const error = ref('');
     const success = ref('');
@@ -34,8 +34,6 @@ export default defineComponent({
     const totalItems = ref(0);
     const queryCount: Ref<number> = ref(null);
 <%_ } _%>
-
-    const username = computed(() => useStore().getters.account?.login ?? '');
 
     return {
       formatDate,

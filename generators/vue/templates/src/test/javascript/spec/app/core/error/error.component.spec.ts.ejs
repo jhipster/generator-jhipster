@@ -1,10 +1,10 @@
+import { Ref, ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import VueRouter from 'vue-router';
 
 import Error from '@/core/error/error.vue';
 import type ErrorComponent from '@/core/error/error.component';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -17,15 +17,16 @@ localVue.use(VueRouter);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {
   let error: ErrorComponentType;
   let loginService: LoginService;
   let router: VueRouter;
+  let authenticated: Ref<boolean>;
 
   beforeEach(() => {
+    authenticated = ref(false);
     router = new VueRouter({
       routes: [
         {
@@ -63,11 +64,11 @@ describe('Error component', () => {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
-      store,
       router,
       localVue,
       provide: {
         loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;
@@ -88,11 +89,11 @@ describe('Error component', () => {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
-      store,
       router,
       localVue,
       provide: {
         loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;
@@ -113,11 +114,11 @@ describe('Error component', () => {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
-      store,
       router,
       localVue,
       provide: {
         loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;
@@ -142,11 +143,11 @@ describe('Error component', () => {
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
-      store,
       router,
       localVue,
       provide: {
         loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;

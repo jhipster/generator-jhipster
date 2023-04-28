@@ -94,7 +94,7 @@ export const vueFiles = {
     {
       condition: generator => generator.enableTranslation,
       ...clientApplicationBlock,
-      templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts'],
+      templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts', 'shared/config/languages.ts'],
     },
   ],
   sharedVueApp: [

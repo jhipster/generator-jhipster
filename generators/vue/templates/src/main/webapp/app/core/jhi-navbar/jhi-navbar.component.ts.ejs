@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n-bridge';
 import LoginService from '@/account/login.service';
 import type AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import languages from '@/shared/config/languages';
 <%_ } _%>
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
@@ -25,16 +25,19 @@ export default defineComponent({
   setup() {
     const loginService = inject<LoginService>('loginService');
     const accountService = inject<AccountService>('accountService');
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 <%_ if (enableTranslation) { _%>
-    const translationService = inject<TranslationService>('translationService');
+    const changeLanguage = inject<(string) => Promise<void>>('changeLanguage');
+
+    const isActiveLanguage = (key: string) => {
+      return key === currentLanguage.value;
+    };
 <%_ } _%>
 
     const router = useRouter();
     const store = useStore();
 
     const version = 'v' + VERSION;
-    const currentLanguage = computed(() => store.getters.currentLanguage);
-    const languages = computed(() => store.getters.languages);
     const hasAnyAuthorityValues: Ref<any> = ref({});
 
     const openAPIEnabled = computed(() => store.getters.activeProfiles.indexOf('api-docs') > -1);
@@ -55,11 +58,12 @@ export default defineComponent({
       loginService,
       openLogin,
 <%_ if (enableTranslation) { _%>
-      translationService,
+      changeLanguage,
+      languages: languages(),
+      isActiveLanguage,
 <%_ } _%>
       version,
       currentLanguage,
-      languages,
       hasAnyAuthorityValues,
       openAPIEnabled,
       inProduction,
@@ -69,21 +73,7 @@ export default defineComponent({
 <%_ } _%>
     };
   },
-<%_ if (enableTranslation) { _%>
-  created() {
-    const currentLanguage = Object.keys(this.languages).includes(navigator.language) ? navigator.language : this.currentLanguage;
-    this.translationService.refreshTranslation(currentLanguage);
-  },
-<%_ } _%>
   methods: {
-<%_ if (enableTranslation) { _%>
-    changeLanguage(newLanguage: string) : void {
-      this.translationService.refreshTranslation(newLanguage);
-    },
-    isActiveLanguage(key: string) : boolean {
-      return key === this.currentLanguage;
-    },
-<%_ } _%>
     subIsActive(input) {
       const paths = Array.isArray(input) ? input : [input];
       return paths.some(path => {

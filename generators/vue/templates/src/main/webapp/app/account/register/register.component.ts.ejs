@@ -1,4 +1,4 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
@@ -44,6 +44,7 @@ export default defineComponent({
   setup(prop) {
     const loginService = inject<LoginService>('loginService');
     const registerService = inject('registerService', () => new RegisterService(), true);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const error: Ref<string> = ref('');
     const errorEmailExists: Ref<string> = ref('');
@@ -63,6 +64,7 @@ export default defineComponent({
 
     return {
       openLogin,
+      currentLanguage,
       registerService,
       error,
       errorEmailExists,
@@ -81,11 +83,7 @@ export default defineComponent({
       this.error = null;
       this.errorUserExists = null;
       this.errorEmailExists = null;
-<%_ if (enableTranslation) { _%>
-      this.registerAccount.langKey = this.$store.getters.currentLanguage;
-<%_ } else { _%>
-      this.registerAccount.langKey = 'en';
-<%_ } _%>
+      this.registerAccount.langKey = this.currentLanguage;
       this.registerService
         .processRegistration(this.registerAccount)
         .then(() => {

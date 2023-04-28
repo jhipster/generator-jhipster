@@ -1,11 +1,10 @@
 import { Module } from 'vuex';
+import languages from '@/shared/config/languages';
 
 export const translationStore: Module<any, any> = {
     state: {
-        currentLanguage: localStorage.getItem("currentLanguage") || '<%= nativeLanguage %>',
-        languages: {
-            // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
-        }
+        currentLanguage: undefined,
+        languages: languages(),
     },
     getters: {
         currentLanguage: state => state.currentLanguage,

@@ -727,6 +727,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/config/languages.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
@@ -1664,6 +1667,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/shared/config/languages.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
@@ -2243,6 +2249,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/config/dayjs.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/config/languages.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/config/store/account-store.ts": {

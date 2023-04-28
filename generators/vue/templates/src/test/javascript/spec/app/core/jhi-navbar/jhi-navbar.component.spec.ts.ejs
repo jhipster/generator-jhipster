@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import type JhiNavbarComponent from '@/core/jhi-navbar/jhi-navbar.component';
@@ -34,7 +35,7 @@ describe('JhiNavbar', () => {
   let router: VueRouter;
   const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
-  const translationService = { refreshTranslation: jest.fn() };
+  const changeLanguage = jest.fn();
 <%_ } _%>
 
   beforeEach(() => {
@@ -58,19 +59,15 @@ describe('JhiNavbar', () => {
       localVue,
       provide: {
         loginService,
+        currentLanguage: computed(() => 'foo'),
 <%_ if (enableTranslation) { _%>
-        translationService,
+        changeLanguage,
 <%_ } _%>
         accountService,
       },
     });
     jhiNavbar = wrapper.vm;
   });
-<%_ if (enableTranslation) { _%>
-  it('should refresh translations', () => {
-    expect(translationService.refreshTranslation).toHaveBeenCalled();
-  });
-<%_ } _%>
 
   it('should not have user data set', () => {
     expect(jhiNavbar.authenticated).toBeFalsy();
@@ -138,14 +135,12 @@ describe('JhiNavbar', () => {
   it('should call translationService when changing language', () => {
     jhiNavbar.changeLanguage('fr');
 
-    expect(translationService.refreshTranslation).toHaveBeenCalled();
+    expect(changeLanguage).toHaveBeenCalled();
   });
 
   it('should check for correct language', () => {
-    store.commit('currentLanguage', 'fr');
-
     expect(jhiNavbar.isActiveLanguage('en')).toBeFalsy();
-    expect(jhiNavbar.isActiveLanguage('fr')).toBeTruthy();
+    expect(jhiNavbar.isActiveLanguage('foo')).toBeTruthy();
   });
 <%_ } _%>
 });
