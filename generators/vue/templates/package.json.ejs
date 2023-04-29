@@ -22,9 +22,6 @@
   "description": "<%= projectDescription %>",
   "private": true,
   "license": "UNLICENSED",
-  "cacheDirectories": [
-    "node_modules"
-  ],
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
@@ -154,12 +151,6 @@
     "webapp:test": "<%= clientPackageManager %> run test --",
     "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
     "webpack": "webpack --config webpack/webpack.common.js"
-  },
-<%_ // https://github.com/vuejs/vue-jest/issues/480#issuecomment-1330479635 _%>
-  "overrides": {
-    "@babel/core": "7.17.9",
-    "@babel/generator": "7.17.9",
-    "istanbul-lib-instrument": "5.2.0"
   },
   "browserslist": [
     "> 1%",

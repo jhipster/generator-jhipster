@@ -41,6 +41,8 @@ module.exports = {
     url: 'https://jhipster.tech',
   },
   snapshotSerializers: ['jest-serializer-vue'],
+  // Use c8 due to https://github.com/vuejs/vue-jest/issues/480#issuecomment-1330479635
+  coverageProvider: 'v8',
   globals: {
 <%_ if (enableTranslation) { _%>
     I18N_HASH: 'generated_hash',
