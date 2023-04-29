@@ -33,11 +33,11 @@ export default defineComponent({
         if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
           const jwt = bearerToken.slice(7, bearerToken.length);
           if (rememberMe.value) {
-            localStorage.setItem('-authenticationToken', jwt);
-            sessionStorage.removeItem('-authenticationToken');
+            localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+            sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
           } else {
-            sessionStorage.setItem('-authenticationToken', jwt);
-            localStorage.removeItem('-authenticationToken');
+            sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+            localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
           }
         }
 <%_ } else { _%>
