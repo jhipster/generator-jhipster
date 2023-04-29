@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
@@ -73,8 +73,6 @@ export default defineComponent({
     };
 <%_ } _%>
 
-    const vue = getCurrentInstance().proxy;
-
     const retrieve<%= entityAngularName %>s = async () => {
       isFetching.value = true;
       try {
@@ -141,7 +139,6 @@ export default defineComponent({
     const closeDialog = () => {
       removeEntity.value.hide();
     };
-    const bvToast = vue.$bvToast;
     const remove<%= entityAngularName %> = async () => {
       try {
         await <%= entityInstance %>Service().delete(removeId.value);
@@ -150,13 +147,7 @@ export default defineComponent({
   <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
   <%_ } _%>
-        bvToast.toast(message, {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
+        alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;
   <%_ if (paginationInfiniteScroll) { _%>
         clear();

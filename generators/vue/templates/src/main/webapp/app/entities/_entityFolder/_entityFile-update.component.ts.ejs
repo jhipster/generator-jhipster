@@ -189,18 +189,13 @@ _%>
         this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
           this.$router.go(-1);
-        <%_ if (enableTranslation) { _%>
-          const message = this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id });
-        <%_ } else {_%>
-          const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
-        <%_ } _%>
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          })
+          this.alertService.showInfo(
+<%_ if (enableTranslation) { _%>
+            this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id })
+<%_ } else {_%>
+            'A <%= entityAngularName %> is updated with identifier ' + param.id
+<%_ } _%>
+          );
         }).catch(error => {
             this.isSaving = false;
             this.alertService.showHttpError(error.response);
@@ -209,18 +204,13 @@ _%>
         this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
           this.$router.go(-1);
-        <%_ if (enableTranslation) { _%>
-            const message = this.t$('<%= i18nAlertHeaderPrefix %>.created', { 'param' : param.id });
-        <%_ } else {_%>
-          const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
-        <%_ } _%>
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+          this.alertService.showSuccess(
+<%_ if (enableTranslation) { _%>
+            this.t$('<%= i18nAlertHeaderPrefix %>.created', { param: param.id }).toString()
+<%_ } else {_%>
+            'A <%= entityAngularName %> is created with identifier ' + param.id
+<%_ } _%>
+          );
         }).catch(error => {
             this.isSaving = false;
             this.alertService.showHttpError(error.response);

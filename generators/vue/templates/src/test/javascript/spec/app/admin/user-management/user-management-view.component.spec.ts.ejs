@@ -4,9 +4,9 @@ _%>
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
+import AlertService from '@/shared/alert/alert.service';
 import UserManagementView from '@/admin/user-management/user-management-view.vue';
 import type UserManagementViewComponent from '@/admin/user-management/user-management-view.component';
 import { Authority } from '@/shared/security/authority';
@@ -14,7 +14,6 @@ import { Authority } from '@/shared/security/authority';
 type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementViewComponent>;
 
 const localVue = createLocalVue();
-localVue.use(ToastPlugin);
 
 localVue.use(VueRouter);
 
@@ -23,6 +22,19 @@ const axiosStub = {
 };
 
 describe('UserManagementView Component', () => {
+  let alertService: AlertService;
+
+  beforeEach(() => {
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: jest.fn() } as any,
+<%_ } _%>
+      bvToast: {
+        toast: jest.fn(),
+      } as any,
+    });
+  });
+
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
       // GIVEN
@@ -56,6 +68,9 @@ describe('UserManagementView Component', () => {
         },
         localVue,
         router,
+        provide: {
+          alertService,
+        },
       });
       const userManagementView = wrapper.vm;
   

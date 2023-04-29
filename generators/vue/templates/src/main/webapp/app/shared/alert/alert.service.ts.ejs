@@ -44,13 +44,29 @@ export default class AlertService {
 <%_ } _%>
   }
 
-  public showError(message: string, params?: any) {
-<%_ if (enableTranslation) { _%>
-    const alertMessage = this.i18n.t(message, params);
-<%_ } else {_%>
-    const alertMessage = message;
-<%_ } _%>
-    this.bvToast.toast(alertMessage.toString(), {
+  public showInfo(toastMessage: string, toastOptions?: any) {
+    this.bvToast.toast(toastMessage, {
+      toaster: 'b-toaster-top-center',
+      title: 'Info',
+      variant: 'info',
+      solid: true,
+      autoHideDelay: 5000,
+      ...toastOptions,
+    });
+  }
+
+  public showSuccess(toastMessage: string) {
+    this.bvToast.toast(toastMessage, {
+      toaster: 'b-toaster-top-center',
+      title: 'Success',
+      variant: 'success',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  }
+
+  public showError(toastMessage: string) {
+    this.bvToast.toast(toastMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
       variant: 'danger',
@@ -60,45 +76,53 @@ export default class AlertService {
   }
 
   public showHttpError(httpErrorResponse: any) {
+    let errorMessage: string | null = null;
     switch (httpErrorResponse.status) {
       case 0:
-        this.showError(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>);
+        errorMessage = this.i18n.t('error.server.not.reachable').toString();
         break;
 
       case 400: {
         const arr = Object.keys(httpErrorResponse.headers);
-        let errorHeader: string | null = null;
 <%_ if (enableTranslation) { _%>
         let entityKey: string | null = null;
 <%_ } _%>
         for (const entry of arr) {
           if (entry.toLowerCase().endsWith('app-error')) {
-            errorHeader = httpErrorResponse.headers[entry];
+            errorMessage = httpErrorResponse.headers[entry];
 <%_ if (enableTranslation) { _%>
             } else if (entry.toLowerCase().endsWith('app-params')) {
               entityKey = httpErrorResponse.headers[entry];
 <%_ } _%>
             }
         }
-        if (errorHeader) {
 <%_ if (enableTranslation) { _%>
-          const alertData = entityKey ? { entityName: this.i18n.t(`global.menu.entities.${entityKey}`) } : undefined;
-<%_ } _%>
-          this.showError(errorHeader<% if (enableTranslation) { %>, alertData<% } %>);
-        } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {
-          this.showError(<% if (enableTranslation) { %>httpErrorResponse.data.message<% } else { %>'Validation error'<% } %>);
-        } else {
-          this.showError(httpErrorResponse.data.message);
+        if (errorMessage && entityKey) {
+          errorMessage = this.i18n.t(errorMessage, { entityName: this.i18n.t(`global.menu.entities.${entityKey}`) }).toString();
+        } else if (!errorMessage) {
+          errorMessage = this.i18n.t(httpErrorResponse.data.message).toString();
         }
+<%_ } else { _%>
+        if (!errorMessage && httpErrorResponse.data?.fieldErrors) {
+          errorMessage = 'Validation error';
+        } else if (!errorMessage) {
+          errorMessage = httpErrorResponse.data.message;
+        }
+<%_ } _%>
         break;
       }
 
       case 404:
-        this.showError(<% if (enableTranslation) { %>'error.http.404'<% } else { %>'Not found'<% } %>);
+        errorMessage = this.i18n.t('error.http.404').toString();
         break;
 
       default:
-        this.showError(httpErrorResponse.data.message);
+<%_ if (enableTranslation) { _%>
+        errorMessage = this.i18n.t(httpErrorResponse.data.message).toString();
+<%_ } else { _%>
+        errorMessage = httpErrorResponse.data.message;
+<%_ } _%>
     }
+    this.showError(errorMessage);
   }
 }

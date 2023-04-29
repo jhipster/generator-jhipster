@@ -5,8 +5,8 @@ import { ref } from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
+import AlertService from '@/shared/alert/alert.service';
 import UserManagement from '@/admin/user-management/user-management.vue';
 import type UserManagementComponent from '@/admin/user-management/user-management.component';
 
@@ -14,7 +14,6 @@ type UserManagementComponentType = Vue & InstanceType<typeof UserManagementCompo
 
 const localVue = createLocalVue();
 
-localVue.use(ToastPlugin);
 localVue.directive('b-modal', {});
 
 const axiosStub = {
@@ -25,11 +24,21 @@ const axiosStub = {
 
 describe('UserManagement Component', () => {
   let userManagement: UserManagementComponentType;
+  let alertService: AlertService;
 
   beforeEach(() => {
     axiosStub.put.reset();
     axiosStub.get.reset();
     axiosStub.get.resolves({ headers: {} });
+
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: jest.fn() } as any,
+<%_ } _%>
+      bvToast: {
+        toast: jest.fn(),
+      } as any,
+    });
 
     const wrapper = shallowMount<UserManagementComponentType>(UserManagement, {
       localVue,
@@ -42,6 +51,7 @@ describe('UserManagement Component', () => {
         'font-awesome-icon': true,
       },
       provide: {
+        alertService,
         currentUsername: ref(''),
       },
     });
