@@ -251,6 +251,18 @@ spec:
         #  - name: java-truststore
         #    mountPath: /etc/pki/java
     <%_ } _%>
+        ## GO ##
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-postgresql
+              key: postgresql-password
+        - name: DB_URL
+          value: postgresql://<%= app.baseName.toLowerCase() %>:$(DB_PASSWORD)@<%= app.baseName.toLowerCase() %>-postgresql.<%= kubernetesNamespace %>.svc.cluster.local:5432/<%= app.baseName.toLowerCase() %>
+        - name: KEYCLOAK_URL
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+        - name: SERVICE_REGISTRY_URL
+          value: http://admin:$(JHIPSTER_REGISTRY_PASSWORD)@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/apps/
         resources:
           requests:
             memory: "1Gi"
