@@ -19,6 +19,9 @@ import { useAlertService } from '@/shared/alert/alert.service';
 export default defineComponent({
   name: '<%= entityAngularName %>',
   setup() {
+<%_ if (enableTranslation) { _%>
+    const { t: t$} = useI18n();
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
     const dateFormat = useDateFormat();
 <%_ } _%>
@@ -143,7 +146,7 @@ export default defineComponent({
       try {
         await <%= entityInstance %>Service().delete(removeId.value);
   <%_ if (enableTranslation) { _%>
-        const message = vue.$t('<%= i18nAlertHeaderPrefix %>.deleted', { 'param' : removeId.value });
+        const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { 'param' : removeId.value });
   <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
   <%_ } _%>
@@ -262,7 +265,7 @@ export default defineComponent({
       infiniteScrollEl,
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-      t$: useI18n().t,
+      t$,
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
       ...dataUtils,
