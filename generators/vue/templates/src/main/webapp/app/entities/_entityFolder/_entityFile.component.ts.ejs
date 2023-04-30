@@ -146,11 +146,11 @@ export default defineComponent({
       try {
         await <%= entityInstance %>Service().delete(removeId.value);
   <%_ if (enableTranslation) { _%>
-        const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { 'param' : removeId.value });
+        const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
   <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
   <%_ } _%>
-        bvToast.toast(message.toString(), {
+        bvToast.toast(message, {
           toaster: 'b-toaster-top-center',
           title: 'Info',
           variant: 'danger',
