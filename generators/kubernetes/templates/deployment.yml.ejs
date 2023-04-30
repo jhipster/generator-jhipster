@@ -16,6 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (app.logManagementTypeEck) { _%>
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-logs-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName) { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
 apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
@@ -48,10 +65,18 @@ spec:
       initContainers:
         - name: init-ds
           image: busybox:latest
+          <%_ if (app.logManagementTypeEck) { _%>
+          volumeMounts:
+            - name: <%= app.baseName.toLowerCase() %>-logs-pv
+              mountPath: /var/logs
+          <%_ } _%>
           command:
             - '/bin/sh'
             - '-c'
             - |
+<%_ if (app.logManagementTypeEck) { _%>
+                chmod -R 777 /var/logs
+<%_ } _%>
                 while true
                 do
 <%_ if (app.prodDatabaseTypeMysql) { _%>
@@ -84,7 +109,7 @@ spec:
         image: <%= app.targetImageName %>
 <%_ if (app.logManagementTypeEck) { _%>
         volumeMounts:
-          - name: logs_pvc
+          - name: <%= app.baseName.toLowerCase() %>-logs-pv
             mountPath: /var/logs
 <%_ } _%>
         env:
@@ -287,9 +312,9 @@ spec:
           initialDelaySeconds: 120
 <%_ if (app.logManagementTypeEck) { _%>
       volumes:
-      - name: logs_pv
+      - name: <%= app.baseName.toLowerCase() %>-logs-pv
         persistentVolumeClaim:
-          claimName: logs_pvc
+          claimName: <%= app.baseName.toLowerCase() %>-logs-pvc
 <%_ } _%>
 
           

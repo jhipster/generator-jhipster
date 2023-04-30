@@ -78,7 +78,7 @@ default() {
 <%_ } _%> 
 <%_ if (useKeycloak) { _%>    
     kubectl apply -f keycloak-${suffix}/
-    until [ $(curl -LI http://keycloak.${suffix}.<%= ingressDomain %>/realms/master -o /dev/null -w '%{http_code}\n' -s) == 200 ]; do
+    until [ $(curl -LI http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/master -o /dev/null -w '%{http_code}\n' -s) == 200 ]; do
         echo "Waiting for the keycloak server to get initialised";
         sleep 5;
     done
