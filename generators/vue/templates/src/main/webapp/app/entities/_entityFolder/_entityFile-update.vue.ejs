@@ -60,7 +60,8 @@ _%>
                                     <font-awesome-icon icon="times"></font-awesome-icon>
                                 </button>
                             </div>
-                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" v-text="t$('entity.action.addimage')"<% } else { %>false)" v-text="t$('entity.action.addblob')"<% } %>/>
+                            <label for="file_<%= fieldName %>" <% if (fieldTypeBlobContent === 'image') { %>v-text="t$('entity.action.addimage')"<% } else { %>v-text="t$('entity.action.addblob')"<% } %> class="btn btn-primary pull-right"></label>
+                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" style="display: none;" data-cy="<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% } else { %>false)"<% } %>/>
                         </div>
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>

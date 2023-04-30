@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { inspect } from 'node:util';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import { replaceTranslationTags } from './translate-vue.mjs';
+import { replaceTranslationTags, replaceTranslations, removeDeclarations } from './translate-vue.mjs';
 
 const FULL_BODY = `
-<input v-text="t$('entity.action.cancel')"/>fooo<bar>
 <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" >Did you forget your password?</b-link>
@@ -49,18 +49,89 @@ const FULL_BODY = `
   </template>
 </b-modal>
 
-<span v-bind:value="t$('sessions.title')"></span>
 <label class="form-control-label" v-text="t$('entity.action.cancel')" for="entity.action.cancel">Relationship</label>
        <label class="form-control-label" v-text="t$('jhipsterVueApp.mapsIdGrandchildEntityWithoutDTO.date')" for="maps-id-grandchild-entity-without-dto-date">Date</label>
 
 `;
+const getWebappTranslation = (s, data) => `getWebappTranslation('${s}'${data ? `, ${inspect(data)}` : ''})`;
 
 describe('generator - vue - transform', () => {
+  describe('removeDeclarations', () => {
+    it('should remove i18n declarations', () => {
+      expect(
+        removeDeclarations({
+          content: `
+import { useI18n } from 'vue-i18n-bridge';
+return {
+  t$,
+  foo,
+  t$: useI18n().t,
+}
+`,
+        })
+      ).toMatchInlineSnapshot(`
+"
+return {
+  foo,
+}
+"
+`);
+    });
+  });
+  describe('replaceTranslations', () => {
+    it('should replace t$ and interpolate at ts file', () => {
+      expect(
+        replaceTranslations({
+          getWebappTranslation,
+          type: 'ts',
+          content: `
+t$('msg').toString();
+t$('msg', {exp:foo}).toString();
+t$('msg', { num : 1 }).toString();
+t$('msg', {  str  :  'a'  }).toString();
+t$('msg', {  exp:foo,num : 1 , str  :  'a'  }).toString();
+`,
+        })
+      ).toMatchInlineSnapshot(`
+"
+'getWebappTranslation('msg')';
+\`getWebappTranslation('msg', { exp: '\${foo}' })\`;
+'getWebappTranslation('msg', { num: 1 })';
+'getWebappTranslation('msg', { str: 'a' })';
+\`getWebappTranslation('msg', { exp: '\${foo}', num: 1, str: 'a' })\`;
+"
+`);
+    });
+    it('should replace t$ and interpolate at vue file', () => {
+      expect(
+        replaceTranslations({
+          type: 'vue',
+          getWebappTranslation,
+          content: `
+t$('msg')
+t$('msg', {exp:foo})
+t$('msg', { num : 1 })
+t$('msg', {  str  :  'a'  })
+t$('msg', {  exp:foo,num : 1 , str  :  'a'  })
+`,
+        })
+      ).toMatchInlineSnapshot(`
+"
+getWebappTranslation('msg')
+getWebappTranslation('msg', { exp: '{{ foo }}' })
+getWebappTranslation('msg', { num: 1 })
+getWebappTranslation('msg', { str: 'a' })
+getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
+"
+`);
+    });
+  });
   describe('replaceTranslationTags', () => {
     describe('with nested tag', () => {
       it('should throw', () => {
         expect(() =>
           replaceTranslationTags({
+            getWebappTranslation,
             body: '<div v-text="t$(\'entity.action.cancel\')" foo=")"><div>fooo</div>fooo</div>',
             enableTranslation: false,
           })
@@ -69,38 +140,37 @@ describe('generator - vue - transform', () => {
     });
     describe('with translation disabled', () => {
       it('should return the body without translation attributes', () => {
-        expect(replaceTranslationTags({ body: FULL_BODY, enableTranslation: false })).toMatchInlineSnapshot(`
+        expect(replaceTranslationTags({ getWebappTranslation, body: FULL_BODY, enableTranslation: false })).toMatchInlineSnapshot(`
 "
-<input/>fooo<bar>
-<span><strong>Your user account has been activated.</strong> Please </span>
+<span>getWebappTranslation('activate.messages.success')</span>
 <b-link :to="'/account/reset/request'" class="alert-link"
- data-cy="forgetYourPasswordSelector" >Did you forget your password?</b-link>
-<b-form-group label-for="password">
+ data-cy="forgetYourPasswordSelector" >getWebappTranslation('login.password.forgot')</b-link>
+<b-form-group label="getWebappTranslation('login.form.password')" label-for="password">
   <b-form-input
     id="password"
     type="password"
     name="password"
+    placeholder="getWebappTranslation('login.form['password.placeholder']')"
     v-model="password"
     data-cy="password"
   >
   </b-form-input>
 </b-form-group>
 
-<b-modal ref="removeUser" id="removeUser" @ok="deleteUser()">
+<b-modal ref="removeUser" id="removeUser" title="getWebappTranslation('entity.delete.title')" @ok="deleteUser()">
   <div class="modal-body">
-    <p id="jhi-delete-user-heading">Are you sure you want to delete this user?</p>
+    <p id="jhi-delete-user-heading">getWebappTranslation('userManagement.delete.question', { login: '{{ removeId }}' })</p>
   </div>
   <template #modal-footer>
     <div>
-      <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">Delete</button>
+      <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">getWebappTranslation('entity.action.cancel')</button>
+      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">getWebappTranslation('entity.action.delete')</button>
     </div>
   </template>
 </b-modal>
 
-<span></span>
-<label class="form-control-label" for="entity.action.cancel">Relationship</label>
-       <label class="form-control-label" for="maps-id-grandchild-entity-without-dto-date">Date</label>
+<label class="form-control-label" for="entity.action.cancel">getWebappTranslation('entity.action.cancel')</label>
+       <label class="form-control-label" for="maps-id-grandchild-entity-without-dto-date">getWebappTranslation('jhipsterVueApp.mapsIdGrandchildEntityWithoutDTO.date')</label>
 
 "
 `);
@@ -109,9 +179,8 @@ describe('generator - vue - transform', () => {
 
     describe('with translation enabled', () => {
       it('should return the body without translation tags contents', () => {
-        expect(replaceTranslationTags({ body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(`
+        expect(replaceTranslationTags({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(`
 "
-<input v-text="t$('entity.action.cancel')"/>fooo<bar>
 <span v-html="t$('activate.messages.success')"></span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" ></b-link>
@@ -139,7 +208,6 @@ describe('generator - vue - transform', () => {
   </template>
 </b-modal>
 
-<span v-bind:value="t$('sessions.title')"></span>
 <label class="form-control-label" v-text="t$('entity.action.cancel')" for="entity.action.cancel"></label>
        <label class="form-control-label" v-text="t$('jhipsterVueApp.mapsIdGrandchildEntityWithoutDTO.date')" for="maps-id-grandchild-entity-without-dto-date"></label>
 

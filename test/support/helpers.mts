@@ -4,6 +4,7 @@ import type YeomanGenerator from 'yeoman-generator';
 import { fn, type Mock } from 'jest-mock';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
+import _ from 'lodash';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { BaseEntity } from '../../generators/base-application/index.mjs';
@@ -13,6 +14,8 @@ import getGenerator from './get-generator.mjs';
 import deploymentTestSamples from './deployment-samples.mjs';
 import { normalizePathEnd } from '../../generators/base/support/index.mjs';
 import BaseGenerator from '../../generators/base/index.mjs';
+
+const { set } = _;
 
 type JHipsterRunResult<GeneratorType extends YeomanGenerator = YeomanGenerator> = RunResult<GeneratorType> & {
   /**
@@ -83,6 +86,8 @@ export const createBlueprintFiles = (
 
 class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunContext<GeneratorType> {
   public sharedSource: Record<string, Mock>;
+  private sharedApplication: Record<string, any>;
+  private sharedControl: Record<string, any>;
   private workspaceApplications: string[] = [];
   private commonWorkspacesConfig: Record<string, unknown>;
   private generateApplicationsSet = false;
@@ -138,7 +143,6 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunConte
   }
 
   withMockedSource(): this {
-    const applicationId = 'test-application';
     this.sharedSource = new Proxy(
       {},
       {
@@ -153,14 +157,27 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator> extends RunConte
         },
       }
     );
-    (this as any).envOptions = {
-      ...this.envOptions,
-      sharedOptions: { sharedData: { applications: { [applicationId]: { sharedSource: this.sharedSource } } } },
-    };
 
-    return this.withOptions({
-      applicationId,
-    });
+    return this.withSharedApplication({ sharedSource: this.sharedSource });
+  }
+
+  withControl(sharedControl: Record<string, any>): this {
+    this.sharedControl = {};
+    Object.assign(this.sharedControl, sharedControl);
+    return this.withSharedApplication({ sharedData: this.sharedControl });
+  }
+
+  private withSharedApplication(sharedApplication: Record<string, any>): this {
+    if (!this.sharedApplication) {
+      const applicationId = 'test-application';
+      this.sharedApplication = { ...sharedApplication };
+      set((this as any).envOptions, `sharedOptions.sharedData.applications.${applicationId}`, this.sharedApplication);
+      return this.withOptions({
+        applicationId,
+      });
+    }
+    Object.assign(this.sharedApplication, sharedApplication);
+    return this;
   }
 
   async run(): Promise<RunResult<GeneratorType>> {

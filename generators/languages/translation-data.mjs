@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { inspect } from 'node:util';
 import _ from 'lodash';
 import { entityClientI18nFiles } from './entity-files.mjs';
 import { clientI18nFiles } from './files.mjs';
@@ -44,6 +45,10 @@ export default class TranslationData {
       rootTemplatesPath,
       context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: 'en' },
     });
+
+    // Add entities to menu translation.
+    this.translations.global.menu.entities[entity.entityTranslationKeyMenu] = entity.entityClassHumanized;
+
     if (nativeLanguage && nativeLanguage !== 'en') {
       translationFiles.push(
         ...(await this.generator.writeFiles({
@@ -112,7 +117,8 @@ export default class TranslationData {
     }
     if (translatedValue === undefined) {
       const errorMessage = `Translation missing for ${translationKey}`;
-      this.logger.warn(`${errorMessage} at ${JSON.stringify(this.translations)}`);
+      this.generator.logger.warn(errorMessage);
+      this.generator.logger.debug(`${errorMessage} at ${inspect(this.translations, { depth: null })}`);
       return errorMessage;
     }
     if (!data) {
