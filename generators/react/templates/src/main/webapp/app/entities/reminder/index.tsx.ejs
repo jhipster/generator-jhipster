@@ -1,0 +1,36 @@
+import React, { useEffect } from 'react';
+import { Route } from 'react-router-dom';
+
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+
+import Reminder from './reminder';
+import ReminderDetail from './reminder-detail';
+import ReminderUpdate from './reminder-update';
+import ReminderDeleteDialog from './reminder-delete-dialog';
+import { useAppSelector } from 'app/config/store';
+import { REDIRECT_URL } from 'app/shared/util/url-utils';
+
+export const ReminderRoutes = () => {
+  const account = useAppSelector(state => state.authentication.account);
+  useEffect(() => {
+    const redirectURL = localStorage.getItem(REDIRECT_URL);
+    if (redirectURL) {
+      localStorage.removeItem(REDIRECT_URL);
+      location.href = `${location.origin}${redirectURL}`;
+    }
+  });
+
+  return (
+  <ErrorBoundaryRoutes>
+    <Route index element={<Reminder />} />
+    <Route path="new" element={<ReminderUpdate />} />
+    <Route path=":id">
+      <Route index element={<ReminderDetail />} />
+      <Route path="edit" element={<ReminderUpdate />} />
+      <Route path="delete" element={<ReminderDeleteDialog />} />
+    </Route>
+  </ErrorBoundaryRoutes>
+);
+  }
+
+export default ReminderRoutes;

@@ -70,7 +70,8 @@ const { DefinePlugin } = require('webpack');
 <&_ if (fragment.pluginsSection) { -&>
 <%_ if (applicationTypeMicroservice) { _%>
       new DefinePlugin({
-        <%= this._.upperCase(baseName) %>_I18N_RESOURCES_PREFIX: JSON.stringify(''),
+        <%# added .replace with regular expression @cmi-tic-harika %>
+        <%= this._.upperCase(baseName).replace(/\s/g, ',') %>_I18N_RESOURCES_PREFIX: JSON.stringify(''),
       }),
 <%_ } _%>
 <&_ } -&>

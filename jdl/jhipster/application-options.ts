@@ -80,6 +80,7 @@ const optionNames = {
   CLIENT_THEME: 'clientTheme',
   CLIENT_THEME_VARIANT: 'clientThemeVariant',
   WITH_ADMIN_UI: 'withAdminUi',
+  WITH_EXAMPLE: 'withExample', // adding new option for withExample @cmi-tic-harika
   CREATION_TIMESTAMP: 'creationTimestamp',
   DATABASE_TYPE: 'databaseType',
   DEV_DATABASE_TYPE: 'devDatabaseType',
@@ -237,6 +238,7 @@ export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
     no: NO_WEBSOCKET,
   },
   [optionNames.WITH_ADMIN_UI]: true,
+  [optionNames.WITH_EXAMPLE]: true, // setting default value for withExample @cmi-tic-harika
   [optionNames.ENABLE_GRADLE_ENTERPRISE]: false,
   [optionNames.GRADLE_ENTERPRISE_HOST]: '',
   ...jhipsterDefinition.optionsValues,
@@ -292,6 +294,7 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
   [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
+  [optionNames.WITH_EXAMPLE]: { type: ApplicationOptionTypes.BOOLEAN }, // declaring option type of withExample @cmi-tic-harika
   [optionNames.ENABLE_GRADLE_ENTERPRISE]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GRADLE_ENTERPRISE_HOST]: { type: ApplicationOptionTypes.STRING },
   ...jhipsterDefinition.optionsTypes,

@@ -15,11 +15,14 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+ adding reminder @cmi-tic-harika 
 -%>
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route<%_ if (withExample) { %>, Routes<% } %> } from 'react-router-dom';
 
+<%_ if(!withExample) {_%>
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+<%_ } _%>
 
 <%_ if (microfrontend || applicationTypeGateway) { _%>
 import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
@@ -31,6 +34,10 @@ import getStore from 'app/config/store';
 import entitiesReducers from './reducers';
 <%_ } _%>
 
+<%_ if(withExample) { _%>
+  import Reminder from './reminder';
+<%_ } _%>
+
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -40,10 +47,19 @@ export default () => {
 <%_ } _%>
   return (
     <div>
-      <ErrorBoundaryRoutes>
+      <%_ if(withExample) { _%>
         {/* prettier-ignore */}
+        <Routes>
+          <Route path="reminder/*" element={<Reminder />} />
+        </Routes>
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
-      </ErrorBoundaryRoutes>
+      <%_ } _%>
+      <%_ if(!withExample) { _%>
+        <ErrorBoundaryRoutes>
+          {/* prettier-ignore */}
+          {/* jhipster-needle-add-route-path - JHipster will add routes here */}
+        </ErrorBoundaryRoutes>
+      <%_ } _%>
     </div>
   );
 };

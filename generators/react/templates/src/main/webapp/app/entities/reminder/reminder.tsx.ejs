@@ -1,0 +1,138 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Button, Table } from 'reactstrap';
+import { TextFormat } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { IReminder } from 'app/shared/model/reminder.model';
+import { getEntities } from './reminder.reducer';
+
+export const Reminder = () => {
+  const dispatch = useAppDispatch();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const reminderList = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.entities);
+  const loading = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.loading);
+
+  useEffect(() => {
+    dispatch(getEntities({}));
+  }, []);
+
+  const handleSyncList = () => {
+    dispatch(getEntities({}));
+  };
+
+  return (
+    <div style={{margin:25}}>
+      <h2 id="reminder-heading" data-cy="ReminderHeading" style={{color:'#012C78'}}>
+        Reminders
+        <div className="d-flex justify-content-end">
+          <Button 
+            className="me-2" 
+            color="info" 
+            onClick={handleSyncList} 
+            disabled={loading} 
+            style={{backgroundColor:'#CADCFC', borderColor:'#CADCFC'}}
+            >
+            <FontAwesomeIcon icon="sync" spin={loading} style={{color:'#012C78'}}/> &nbsp;
+            <span style={{color:'#012C78'}}>Refresh List</span>
+          </Button>
+          <Link to="/reminder/new" 
+            className="btn btn-primary jh-create-entity" 
+            id="jh-create-entity" 
+            data-cy="entityCreateButton"
+            style={{backgroundColor:'#CADCFC', borderColor:'#CADCFC'}}
+              >
+                <FontAwesomeIcon icon="plus" style={{color:'#012C78'}}/>
+                &nbsp; <span style={{color:'#012C78'}}>Create new Reminder</span>
+          </Link>
+        </div>
+      </h2>
+      <div className="table-responsive">
+        {reminderList && reminderList.length > 0 ? (
+          <Table responsive>
+            <thead>
+              <tr>
+                <th style={{color:'#012C78'}}>Id</th>
+                <th style={{color:'#012C78'}}>Name</th>
+                <th style={{color:'#012C78'}}>Event</th>
+                <th style={{color:'#012C78'}}>Date</th>
+                <th style={{color:'#012C78'}}>Created By</th>
+                <th style={{color:'#012C78'}}>Updated By</th>
+                <th style={{color:'#012C78'}}>Created At</th>
+                <th style={{color:'#012C78'}}>Updated At</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {reminderList.map((reminder, i) => (
+                <tr key={`entity-${i}`} data-cy="entityTable">
+                  <td>
+                    <Button 
+                      tag={Link} 
+                      to={`/reminder/${reminder.id}`} 
+                      color="link" 
+                      size="sm" 
+                      style={{color:'#012C78',textAlign:'left', padding:0}}>
+                      {reminder.id}
+                    </Button>
+                  </td>
+                  <td>{reminder.name}</td>
+                  <td>{reminder.event}</td>
+                  <td>{reminder.date ? <TextFormat type="date" value={reminder.date} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
+                  <td>{reminder.createdBy}</td>
+                  <td>{reminder.updatedBy}</td>
+                  <td>{reminder.createdAt}</td>
+                  <td>{reminder.updatedAt}</td>
+                  <td className="text-end">
+                    <div className="btn-group flex-btn-group-container">
+                      <Button 
+                        tag={Link} 
+                        to={`/reminder/${reminder.id}`} 
+                        size="sm" 
+                        data-cy="entityDetailsButton"
+                        style={{borderColor:'#EDEDED', backgroundColor:'#EDEDED'}}
+                        >
+                        <FontAwesomeIcon icon="eye" style={{color:'#012C78'}}/> 
+                        <span className="d-none d-md-inline" style={{color:'#012C78'}}>View</span>
+                      </Button>
+                      <Button 
+                        tag={Link} 
+                        to={`/reminder/${reminder.id}/edit`} 
+                        size="sm" 
+                        data-cy="entityEditButton"
+                        style={{borderColor:'#0026ff', backgroundColor:'#0026ff'}}
+                        >
+                        <FontAwesomeIcon icon="pencil-alt"/> 
+                        <span className="d-none d-md-inline" >Edit</span>
+                      </Button>
+                      <Button 
+                        tag={Link} 
+                        to={`/reminder/${reminder.id}/delete`} 
+                        size="sm" 
+                        data-cy="entityDeleteButton"
+                        style={{borderColor:'#990000', backgroundColor:'#990000'}}
+                        >
+                        <FontAwesomeIcon icon="trash" /> 
+                        <span className="d-none d-md-inline" >Delete</span>
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          !loading && <div className="alert alert-warning">No Reminders found</div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Reminder;

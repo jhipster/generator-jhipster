@@ -1,0 +1,658 @@
+package <%= packageName %>.web.rest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+
+import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.domain.Reminder;
+import <%= packageName %>.repository.EntityManager;
+import <%= packageName %>.repository.ReminderRepository;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+/**
+ * Integration tests for the {@link ReminderResource} REST controller.
+ */
+@IntegrationTest
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
+@WithMockUser
+class ReminderResourceIT {
+
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EVENT = "AAAAAAAAAA";
+    private static final String UPDATED_EVENT = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_UPDATED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_UPDATED_BY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CREATED_AT = "AAAAAAAAAA";
+    private static final String UPDATED_CREATED_AT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_UPDATED_AT = "AAAAAAAAAA";
+    private static final String UPDATED_UPDATED_AT = "BBBBBBBBBB";
+
+    private static final String ENTITY_API_URL = "/api/reminders";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    @Autowired
+    private ReminderRepository reminderRepository;
+
+    @Autowired
+    private EntityManager em;
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    private Reminder reminder;
+
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Reminder createEntity(EntityManager em) {
+        Reminder reminder = new Reminder()
+            .name(DEFAULT_NAME)
+            .event(DEFAULT_EVENT)
+            .date(DEFAULT_DATE)
+            .createdBy(DEFAULT_CREATED_BY)
+            .updatedBy(DEFAULT_UPDATED_BY)
+            .createdAt(DEFAULT_CREATED_AT)
+            .updatedAt(DEFAULT_UPDATED_AT);
+        return reminder;
+    }
+
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Reminder createUpdatedEntity(EntityManager em) {
+        Reminder reminder = new Reminder()
+            .name(UPDATED_NAME)
+            .event(UPDATED_EVENT)
+            .date(UPDATED_DATE)
+            .createdBy(UPDATED_CREATED_BY)
+            .updatedBy(UPDATED_UPDATED_BY)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
+        return reminder;
+    }
+
+    public static void deleteEntities(EntityManager em) {
+        try {
+            em.deleteAll(Reminder.class).block();
+        } catch (Exception e) {
+            // It can fail, if other entities are still referring this - it will be removed later.
+        }
+    }
+
+    @AfterEach
+    public void cleanup() {
+        deleteEntities(em);
+    }
+
+    @BeforeEach
+    public void setupCsrf() {
+        webTestClient = webTestClient.mutateWith(csrf());
+    }
+
+    @BeforeEach
+    public void initTest() {
+        deleteEntities(em);
+        reminder = createEntity(em);
+    }
+
+    @Test
+    void createReminder() throws Exception {
+        int databaseSizeBeforeCreate = reminderRepository.findAll().collectList().block().size();
+        // Create the Reminder
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeCreate + 1);
+        Reminder testReminder = reminderList.get(reminderList.size() - 1);
+        assertThat(testReminder.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testReminder.getEvent()).isEqualTo(DEFAULT_EVENT);
+        assertThat(testReminder.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testReminder.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertThat(testReminder.getUpdatedBy()).isEqualTo(DEFAULT_UPDATED_BY);
+        assertThat(testReminder.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
+        assertThat(testReminder.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+    }
+
+    @Test
+    void createReminderWithExistingId() throws Exception {
+        // Create the Reminder with an existing ID
+        reminder.setId("existing_id");
+
+        int databaseSizeBeforeCreate = reminderRepository.findAll().collectList().block().size();
+
+        // An entity with an existing ID cannot be created, so this API call must fail
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = reminderRepository.findAll().collectList().block().size();
+        // set the field null
+        reminder.setName(null);
+
+        // Create the Reminder, which fails.
+
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    void checkEventIsRequired() throws Exception {
+        int databaseSizeBeforeTest = reminderRepository.findAll().collectList().block().size();
+        // set the field null
+        reminder.setEvent(null);
+
+        // Create the Reminder, which fails.
+
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    void checkDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = reminderRepository.findAll().collectList().block().size();
+        // set the field null
+        reminder.setDate(null);
+
+        // Create the Reminder, which fails.
+
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    void checkCreatedByIsRequired() throws Exception {
+        int databaseSizeBeforeTest = reminderRepository.findAll().collectList().block().size();
+        // set the field null
+        reminder.setCreatedBy(null);
+
+        // Create the Reminder, which fails.
+
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    void checkCreatedAtIsRequired() throws Exception {
+        int databaseSizeBeforeTest = reminderRepository.findAll().collectList().block().size();
+        // set the field null
+        reminder.setCreatedAt(null);
+
+        // Create the Reminder, which fails.
+
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    void getAllRemindersAsStream() {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        List<Reminder> reminderList = webTestClient
+            .get()
+            .uri(ENTITY_API_URL)
+            .accept(MediaType.APPLICATION_NDJSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentTypeCompatibleWith(MediaType.APPLICATION_NDJSON)
+            .returnResult(Reminder.class)
+            .getResponseBody()
+            .filter(reminder::equals)
+            .collectList()
+            .block(Duration.ofSeconds(5));
+
+        assertThat(reminderList).isNotNull();
+        assertThat(reminderList).hasSize(1);
+        Reminder testReminder = reminderList.get(0);
+        assertThat(testReminder.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testReminder.getEvent()).isEqualTo(DEFAULT_EVENT);
+        assertThat(testReminder.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testReminder.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertThat(testReminder.getUpdatedBy()).isEqualTo(DEFAULT_UPDATED_BY);
+        assertThat(testReminder.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
+        assertThat(testReminder.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+    }
+
+    @Test
+    void getAllReminders() {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        // Get all the reminderList
+        webTestClient
+            .get()
+            .uri(ENTITY_API_URL + "?sort=id,desc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .jsonPath("$.[*].id")
+            .value(hasItem(reminder.getId()))
+            .jsonPath("$.[*].name")
+            .value(hasItem(DEFAULT_NAME))
+            .jsonPath("$.[*].event")
+            .value(hasItem(DEFAULT_EVENT))
+            .jsonPath("$.[*].date")
+            .value(hasItem(DEFAULT_DATE.toString()))
+            .jsonPath("$.[*].createdBy")
+            .value(hasItem(DEFAULT_CREATED_BY))
+            .jsonPath("$.[*].updatedBy")
+            .value(hasItem(DEFAULT_UPDATED_BY))
+            .jsonPath("$.[*].createdAt")
+            .value(hasItem(DEFAULT_CREATED_AT))
+            .jsonPath("$.[*].updatedAt")
+            .value(hasItem(DEFAULT_UPDATED_AT));
+    }
+
+    @Test
+    void getReminder() {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        // Get the reminder
+        webTestClient
+            .get()
+            .uri(ENTITY_API_URL_ID, reminder.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .jsonPath("$.id")
+            .value(is(reminder.getId()))
+            .jsonPath("$.name")
+            .value(is(DEFAULT_NAME))
+            .jsonPath("$.event")
+            .value(is(DEFAULT_EVENT))
+            .jsonPath("$.date")
+            .value(is(DEFAULT_DATE.toString()))
+            .jsonPath("$.createdBy")
+            .value(is(DEFAULT_CREATED_BY))
+            .jsonPath("$.updatedBy")
+            .value(is(DEFAULT_UPDATED_BY))
+            .jsonPath("$.createdAt")
+            .value(is(DEFAULT_CREATED_AT))
+            .jsonPath("$.updatedAt")
+            .value(is(DEFAULT_UPDATED_AT));
+    }
+
+    @Test
+    void getNonExistingReminder() {
+        // Get the reminder
+        webTestClient
+            .get()
+            .uri(ENTITY_API_URL_ID, Long.MAX_VALUE)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isNotFound();
+    }
+
+    @Test
+    void putExistingReminder() throws Exception {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+
+        // Update the reminder
+        Reminder updatedReminder = reminderRepository.findById(reminder.getId()).block();
+        updatedReminder
+            .name(UPDATED_NAME)
+            .event(UPDATED_EVENT)
+            .date(UPDATED_DATE)
+            .createdBy(UPDATED_CREATED_BY)
+            .updatedBy(UPDATED_UPDATED_BY)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
+
+        webTestClient
+            .put()
+            .uri(ENTITY_API_URL_ID, updatedReminder.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(updatedReminder))
+            .exchange()
+            .expectStatus()
+            .isOk();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+        Reminder testReminder = reminderList.get(reminderList.size() - 1);
+        assertThat(testReminder.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testReminder.getEvent()).isEqualTo(UPDATED_EVENT);
+        assertThat(testReminder.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testReminder.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testReminder.getUpdatedBy()).isEqualTo(UPDATED_UPDATED_BY);
+        assertThat(testReminder.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testReminder.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+    }
+
+    @Test
+    void putNonExistingReminder() throws Exception {
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+        reminder.setId(UUID.randomUUID().toString());
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        webTestClient
+            .put()
+            .uri(ENTITY_API_URL_ID, reminder.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    void putWithIdMismatchReminder() throws Exception {
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+        reminder.setId(UUID.randomUUID().toString());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        webTestClient
+            .put()
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    void putWithMissingIdPathParamReminder() throws Exception {
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+        reminder.setId(UUID.randomUUID().toString());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        webTestClient
+            .put()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isEqualTo(405);
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    void partialUpdateReminderWithPatch() throws Exception {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+
+        // Update the reminder using partial update
+        Reminder partialUpdatedReminder = new Reminder();
+        partialUpdatedReminder.setId(reminder.getId());
+
+        partialUpdatedReminder.event(UPDATED_EVENT).createdAt(UPDATED_CREATED_AT).updatedAt(UPDATED_UPDATED_AT);
+
+        webTestClient
+            .patch()
+            .uri(ENTITY_API_URL_ID, partialUpdatedReminder.getId())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(partialUpdatedReminder))
+            .exchange()
+            .expectStatus()
+            .isOk();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+        Reminder testReminder = reminderList.get(reminderList.size() - 1);
+        assertThat(testReminder.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testReminder.getEvent()).isEqualTo(UPDATED_EVENT);
+        assertThat(testReminder.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testReminder.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertThat(testReminder.getUpdatedBy()).isEqualTo(DEFAULT_UPDATED_BY);
+        assertThat(testReminder.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testReminder.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+    }
+
+    @Test
+    void fullUpdateReminderWithPatch() throws Exception {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+
+        // Update the reminder using partial update
+        Reminder partialUpdatedReminder = new Reminder();
+        partialUpdatedReminder.setId(reminder.getId());
+
+        partialUpdatedReminder
+            .name(UPDATED_NAME)
+            .event(UPDATED_EVENT)
+            .date(UPDATED_DATE)
+            .createdBy(UPDATED_CREATED_BY)
+            .updatedBy(UPDATED_UPDATED_BY)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
+
+        webTestClient
+            .patch()
+            .uri(ENTITY_API_URL_ID, partialUpdatedReminder.getId())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(partialUpdatedReminder))
+            .exchange()
+            .expectStatus()
+            .isOk();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+        Reminder testReminder = reminderList.get(reminderList.size() - 1);
+        assertThat(testReminder.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testReminder.getEvent()).isEqualTo(UPDATED_EVENT);
+        assertThat(testReminder.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testReminder.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testReminder.getUpdatedBy()).isEqualTo(UPDATED_UPDATED_BY);
+        assertThat(testReminder.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testReminder.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+    }
+
+    @Test
+    void patchNonExistingReminder() throws Exception {
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+        reminder.setId(UUID.randomUUID().toString());
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        webTestClient
+            .patch()
+            .uri(ENTITY_API_URL_ID, reminder.getId())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    void patchWithIdMismatchReminder() throws Exception {
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+        reminder.setId(UUID.randomUUID().toString());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        webTestClient
+            .patch()
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    void patchWithMissingIdPathParamReminder() throws Exception {
+        int databaseSizeBeforeUpdate = reminderRepository.findAll().collectList().block().size();
+        reminder.setId(UUID.randomUUID().toString());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        webTestClient
+            .patch()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(reminder))
+            .exchange()
+            .expectStatus()
+            .isEqualTo(405);
+
+        // Validate the Reminder in the database
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    void deleteReminder() {
+        // Initialize the database
+        reminder.setId(UUID.randomUUID().toString());
+        reminderRepository.save(reminder).block();
+
+        int databaseSizeBeforeDelete = reminderRepository.findAll().collectList().block().size();
+
+        // Delete the reminder
+        webTestClient
+            .delete()
+            .uri(ENTITY_API_URL_ID, reminder.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isNoContent();
+
+        // Validate the database contains one less item
+        List<Reminder> reminderList = reminderRepository.findAll().collectList().block();
+        assertThat(reminderList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+}

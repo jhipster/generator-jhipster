@@ -34,7 +34,7 @@ const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, H2_DISK, POSTGRESQL } = datab
 const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
-const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
+const { ANGULAR, REACT, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes; // adding react framework @cmi-tic-harika
 const { EHCACHE, HAZELCAST } = cacheTypes;
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
@@ -53,6 +53,7 @@ const {
   CLIENT_THEME,
   CLIENT_THEME_VARIANT,
   WITH_ADMIN_UI,
+  WITH_EXAMPLE, // adding withExample @cmi-tic-harika
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
   DTO_SUFFIX,
@@ -91,6 +92,7 @@ const commonDefaultOptions = {
   [MESSAGE_BROKER]: MESSAGE_BROKER_NO,
   [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
+  [WITH_EXAMPLE]: false,
 };
 
 export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}) {
@@ -232,6 +234,7 @@ export function getServerConfigForGatewayApplication(customOptions: any = {}): a
     [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
+  
   options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
 

@@ -797,6 +797,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.withAdminUi !== undefined) {
       this.jhipsterConfig.withAdminUi = options.withAdminUi;
     }
+    // adding withExample param in server-side @cmi-tic-harika
+    if (options.withExample !== undefined) {
+      this.jhipsterConfig.withExample = options.withExample;
+    }
     if (options.skipClient) {
       this.skipClient = this.jhipsterConfig.skipClient = true;
     }
@@ -990,6 +994,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.pages = config.pages;
     dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
     dest.withAdminUi = config.withAdminUi;
+    // declaring withExample param in clint-side @cmi-tic-harika
+    dest.withExample = config.withExample,
     dest.gatewayServerPort = config.gatewayServerPort;
 
     dest.capitalizedBaseName = config.capitalizedBaseName;
@@ -1079,6 +1085,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.generateBuiltInUserEntity = dest.generateUserManagement || usesSyncWithIdp;
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && dest.databaseType !== CASSANDRA;
+
+    // declaring withExample param in server-side @cmi-tic-harika
+    dest.withExample = dest.withExample;
   }
 
   /**
@@ -1184,6 +1193,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     dest.logManagementType = config.logManagementType;
+    // adding withExample param in server-side @cmi-tic-harika
+    dest.withExample = config.withExample;
   }
 
   loadServerAndPlatformConfig(dest = this) {

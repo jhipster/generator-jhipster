@@ -15,6 +15,8 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+
+ making changes for withExample @cmi-tic-harika
 -%>
 import React from 'react';
 import { Translate } from 'react-jhipster';
@@ -25,26 +27,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const BrandIcon = props => (
   <div {...props} className="brand-icon">
+    <%_ if(!withExample) { _%>
     <img
       src="content/images/logo-jhipster.png"
       alt="Logo"
     />
+    <%_ } _%>
   </div>
 );
 
 export const Brand = () => (
 <NavbarBrand tag={Link} to="/" className="brand-logo">
   <BrandIcon />
+  <%_ if(!withExample) { _%>
   <span className="brand-title"><Translate contentKey="global.title"><%= capitalizedBaseName %></Translate></span>
   <span className="navbar-version">{VERSION}</span>
+  <%_ } _%>
+  <%_ if(withExample) { _%>
+    <span className="brand-title" style={{color:'#012C78'}}>WDA of <%= capitalizedBaseName %></span>
+  <%_ } _%>
 </NavbarBrand>
 );
 
 export const Home = () => (
   <NavItem>
     <NavLink tag={Link} to="/" className="d-flex align-items-center">
+      <%_ if(!withExample) { _%>
       <FontAwesomeIcon icon="home" />
       <span><Translate contentKey="global.menu.home">Home</Translate></span>
+      <%_ } _%>
+      <%_ if(withExample) { _%>
+      <FontAwesomeIcon icon="home" style={{color:'#012C78'}} />
+      <span style={{color:'#012C78'}}><Translate contentKey="global.menu.home">Home</Translate></span>
+      <%_ } _%>
     </NavLink>
   </NavItem>
 );

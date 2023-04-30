@@ -38,7 +38,7 @@ export const sqlFiles = {
   ],
   reactiveCommon: [
     {
-      condition: generator => generator.reactive,
+      condition: generator => generator.reactive || generator.applicationTypeMicroservice,// generating files for microservice app also @cmi-tic-harika,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/rowmapper/ColumnConverter_reactive.java', 'repository/EntityManager_reactive.java'],

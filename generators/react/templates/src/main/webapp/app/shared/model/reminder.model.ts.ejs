@@ -1,0 +1,14 @@
+import dayjs from 'dayjs';
+
+export interface IReminder {
+  id?: string;
+  name?: string;
+  event?: string;
+  date?: string;
+  createdBy?: string;
+  updatedBy?: string | null;
+  createdAt?: string;
+  updatedAt?: string | null;
+}
+
+export const defaultValue: Readonly<IReminder> = {};

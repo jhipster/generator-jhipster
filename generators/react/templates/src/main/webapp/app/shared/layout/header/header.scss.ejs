@@ -15,6 +15,8 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+
+ changing background color of top nav @cmi-tic-harika
 -%>
 $header-color: #fff;
 $header-color-secondary: #bbb;
@@ -57,7 +59,12 @@ Navbar styles
 ========================================================================== */
 <%_ if (clientThemeNone) { _%>
 .jh-navbar {
+  <%_ if(!withExample) { _%>
   background-color: #353d47;
+  <%_ } _%>
+  <%_ if(withExample) { _%>
+    background-color: #CADCFC;;
+  <%_ } _%>
   padding: 0.2em 1em;
   .profile-image {
     margin: -10px 0px;

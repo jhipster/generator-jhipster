@@ -1,0 +1,206 @@
+package <%= packageName %>.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.time.LocalDate;
+import javax.validation.constraints.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+/**
+ * A Reminder.
+ */
+@Table("reminder")
+@JsonIgnoreProperties(value = { "new" })
+@SuppressWarnings("common-java:DuplicatedBlocks")
+public class Reminder implements Serializable, Persistable<String> {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column("id")
+    private String id;
+
+    @NotNull(message = "must not be null")
+    @Column("name")
+    private String name;
+
+    @NotNull(message = "must not be null")
+    @Column("event")
+    private String event;
+
+    @NotNull(message = "must not be null")
+    @Column("date")
+    private LocalDate date;
+
+    @NotNull(message = "must not be null")
+    @Column("created_by")
+    private String createdBy;
+
+    @Column("updated_by")
+    private String updatedBy;
+
+    @NotNull(message = "must not be null")
+    @Column("created_at")
+    private String createdAt;
+
+    @Column("updated_at")
+    private String updatedAt;
+
+    @Transient
+    private boolean isPersisted;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public String getId() {
+        return this.id;
+    }
+
+    public Reminder id(String id) {
+        this.setId(id);
+        return this;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Reminder name(String name) {
+        this.setName(name);
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEvent() {
+        return this.event;
+    }
+
+    public Reminder event(String event) {
+        this.setEvent(event);
+        return this;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public LocalDate getDate() {
+        return this.date;
+    }
+
+    public Reminder date(LocalDate date) {
+        this.setDate(date);
+        return this;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public Reminder createdBy(String createdBy) {
+        this.setCreatedBy(createdBy);
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return this.updatedBy;
+    }
+
+    public Reminder updatedBy(String updatedBy) {
+        this.setUpdatedBy(updatedBy);
+        return this;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public String getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public Reminder createdAt(String createdAt) {
+        this.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public Reminder updatedAt(String updatedAt) {
+        this.setUpdatedAt(updatedAt);
+        return this;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Transient
+    @Override
+    public boolean isNew() {
+        return !this.isPersisted;
+    }
+
+    public Reminder setIsPersisted() {
+        this.isPersisted = true;
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Reminder)) {
+            return false;
+        }
+        return id != null && id.equals(((Reminder) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "Reminder{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", event='" + getEvent() + "'" +
+            ", date='" + getDate() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatedAt='" + getUpdatedAt() + "'" +
+            "}";
+    }
+}

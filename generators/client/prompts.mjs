@@ -64,6 +64,26 @@ export async function askForClient({ control }) {
   }
 }
 
+// adding askForExample prompt inclient-side prompts @cmi-tic-harika
+export async function askForExample({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
+
+  // if (!this.jhipsterConfig.clientFramework === REACT && !post) return;
+
+  const config = this.jhipsterConfigWithDefaults;
+  await this.prompt(
+    {
+      type: 'confirm',
+      name: 'withExample',
+      // restricting example question only for gateway/microservice and REACT FRAMEWORK & POSTGRESS DB @cmi-tic-harika
+      when: this.jhipsterConfig.applicationType !== 'monolith' && this.jhipsterConfig.clientFramework === REACT && (this.jhipsterConfig.devDatabaseType) === 'postgresql',
+      message: 'Do you want to generate an example for your react application?',
+      default: config.withExample,
+    },
+    this.config
+  );
+}
+
 export async function askForClientTheme({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 

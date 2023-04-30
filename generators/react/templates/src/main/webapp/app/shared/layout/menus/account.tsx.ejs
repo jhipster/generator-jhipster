@@ -15,6 +15,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+ changes when withExample is true @cmi-tic-harika
 -%>
 import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
@@ -38,7 +39,14 @@ const accountMenuItemsAuthenticated = () => (
     <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
   <%_ } _%>
 <%_ } _%>
+<%_ if(withExample) { _%>
+  <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
+    <span style={{color:'#012C78'}}>Sign out</span>
+  </MenuItem>
+  <%_ } _%>
+  <%_ if(!withExample) { _%>
     <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout"><Translate contentKey="global.menu.account.logout">Sign out</Translate></MenuItem>
+    <%_ } _%>
   </>
   );
 
@@ -46,7 +54,11 @@ const accountMenuItems = () => (
   <>
 <%_ if (!authenticationTypeOauth2) { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
-<%_ } else { _%>
+<%_ } else if(withExample) { _%>
+  <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login" style={{color:'#012C78'}}>
+    <FontAwesomeIcon icon="sign-in-alt" style={{color:'#012C78'}}/> <Translate contentKey="global.menu.account.login">Sign in</Translate>
+  </DropdownItem>
+  <%_ } else { _%>
     <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>

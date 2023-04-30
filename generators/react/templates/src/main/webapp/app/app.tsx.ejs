@@ -15,13 +15,16 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+ changes done when withExample is true @cmi-tic-harika
 -%>
 import 'react-toastify/dist/ReactToastify.css';
 import './app.scss';
 import 'app/config/dayjs';
 
 import React, { useEffect } from 'react';
+<%_ if(!withExample) {_%>
 import { Card } from 'reactstrap';
+<%_ } _%>
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -29,7 +32,9 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
 import Header from 'app/shared/layout/header/header';
+<%_ if(!withExample) {_%>
 import Footer from 'app/shared/layout/footer/footer';
+<%_ } _%>
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
@@ -72,12 +77,19 @@ export const App = () => {
           />
         </ErrorBoundary>
         <div className="container-fluid view-container" id="app-view-container">
+          <%_ if(withExample) { _%>
+            <ErrorBoundary>
+              <AppRoutes />
+            </ErrorBoundary>
+          <%_ } _%>
+          <%_ if(!withExample) { _%>
           <Card className="jh-card">
             <ErrorBoundary>
               <AppRoutes/>
             </ErrorBoundary>
           </Card>
           <Footer/>
+          <%_ } _%>
         </div>
       </div>
     </BrowserRouter>

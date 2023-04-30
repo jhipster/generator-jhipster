@@ -1,0 +1,74 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Translate } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntity, deleteEntity } from './reminder.reducer';
+
+export const ReminderDeleteDialog = () => {
+  const dispatch = useAppDispatch();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { id } = useParams<'id'>();
+
+  const [loadModal, setLoadModal] = useState(false);
+
+  useEffect(() => {
+    dispatch(getEntity(id));
+    setLoadModal(true);
+  }, []);
+
+  const reminderEntity = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.entity);
+  const updateSuccess = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.updateSuccess);
+
+  const handleClose = () => {
+    navigate('/reminder');
+  };
+
+  useEffect(() => {
+    if (updateSuccess && loadModal) {
+      handleClose();
+      setLoadModal(false);
+    }
+  }, [updateSuccess]);
+
+  const confirmDelete = () => {
+    dispatch(deleteEntity(reminderEntity.id));
+  };
+
+  return (
+    <Modal isOpen toggle={handleClose}>
+      <ModalHeader toggle={handleClose} data-cy="reminderDeleteDialogHeading">
+        Confirm delete operation
+      </ModalHeader>
+      <ModalBody id="<%= baseName.toLowerCase() %>App.reminder.delete.question">
+        {/* <Translate contentKey="<%= baseName.toLowerCase() %>App.reminder.delete.question" interpolate={{ id: reminderEntity.id }}> */}
+          Are you sure you want to delete this Reminder?
+        {/* </Translate> */}
+      </ModalBody>
+      <ModalFooter>
+        <Button color="secondary" onClick={handleClose}>
+          <FontAwesomeIcon icon="ban" />
+          &nbsp;
+         Cancel
+        </Button>
+        <Button 
+          id="jhi-confirm-delete-reminder" 
+          data-cy="entityConfirmDeleteButton" 
+          color="danger" 
+          onClick={confirmDelete}
+          style={{backgroundColor:'#990000', borderColor:'#990000'}}
+          >
+          <FontAwesomeIcon icon="trash" />
+          &nbsp; 
+          <span >Delete</span>
+          </Button>
+      </ModalFooter>
+    </Modal>
+  );
+};
+
+export default ReminderDeleteDialog;

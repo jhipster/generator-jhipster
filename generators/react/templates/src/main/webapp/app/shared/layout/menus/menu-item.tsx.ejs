@@ -35,7 +35,12 @@ const MenuItem = (props: IMenuItem) => {
 
   return (
     <DropdownItem tag={Link} to={to} id={id} data-cy={props['data-cy']}>
+      <%_ if(withExample) { _%>
+        <FontAwesomeIcon icon={icon} fixedWidth style={{color:'#012C78'}}/> {children}
+      <%_ } _%>
+      <%_ if(!withExample) { _%>
       <FontAwesomeIcon icon={icon} fixedWidth /> {children}
+      <%_ } _%>
     </DropdownItem>
   );
 };

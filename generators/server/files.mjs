@@ -290,6 +290,35 @@ const gatewayFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/filter/ModifyServersOpenApiFilterTest.java'],
     },
+    // adding BE files for usecase only when it is gateway or microservice application @cmi-tic-harika
+    {
+      condition: generator => (generator.clientFrameworkReact && (generator.applicationTypeGateway && generator.withExample)) || (generator.applicationTypeMicroservice),
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        'domain/Reminder.java',
+        'domain/ReminderCallback.java',
+        'repository/ReminderRepository.java',
+        'repository/ReminderRepositoryInternalImpl.java',
+        'repository/ReminderSqlHelper.java',
+        'repository/rowmapper/ReminderRowMapper.java',
+        'web/rest/ReminderResource.java'       
+    ],
+    },
+    {
+      condition: generator => (generator.clientFrameworkReact && (generator.applicationTypeGateway && generator.withExample)) || (generator.applicationTypeMicroservice),
+      path: `${SERVER_MAIN_RES_DIR}`,
+      templates: [    
+        'config/liquibase/changelog/20230228095256_added_entity_Reminder.xml',
+        'config/liquibase/fake-data/reminder.csv'
+    ],
+    },
+    {
+      condition: generator => (generator.clientFrameworkReact && (generator.applicationTypeGateway && generator.withExample)) || (generator.applicationTypeMicroservice),
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/ReminderResourceIT.java'],
+    },
   ],
 };
 

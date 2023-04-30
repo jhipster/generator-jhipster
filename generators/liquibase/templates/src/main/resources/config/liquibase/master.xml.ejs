@@ -77,6 +77,10 @@
 <%_ } _%>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <!-- adding the file when withExample is true @cmi-tic-harika -->
+    <%_ if(withExample) { _%>
+      <include file="config/liquibase/changelog/20230228095256_added_entity_Reminder.xml" relativeToChangelogFile="false"/>
+    <%_ } _%>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

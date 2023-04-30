@@ -15,6 +15,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+ adding reminder for example @cmi-tic-harika
 -%>
 import React<%_ if (applicationTypeMicroservice) { %>, { useEffect, useState } <% } %> from 'react';
 import { Translate } from 'react-jhipster';
@@ -37,6 +38,11 @@ const EntitiesMenu = () => {
   return (
     <>
       {/* prettier-ignore */}
+      <%_ if(withExample) {_%>
+        <MenuItem icon="asterisk" to="/reminder">
+          Reminder
+        </MenuItem>
+        <%_ }_%>
       {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
     </>
   );

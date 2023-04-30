@@ -1,0 +1,86 @@
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Row, Col } from 'reactstrap';
+import { TextFormat } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { getEntity } from './reminder.reducer';
+import './reminder-detail.scss';
+
+export const ReminderDetail = () => {
+  const dispatch = useAppDispatch();
+
+  const { id } = useParams<'id'>();
+
+  useEffect(() => {
+    dispatch(getEntity(id));
+  }, []);
+
+  const reminderEntity = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.entity);
+  return (
+    <Row className="justify-content-center">
+      <Col md="8">
+        <h2 style={{color:'#012C78', marginTop:25, marginBottom:25}}>Reminder</h2>
+        <dl className="jh-entity-details">
+          <dt>
+            <span id="id" style={{color:'#012C78'}}>Id</span>
+          </dt>
+          <dd>{reminderEntity.id}</dd>
+          <dt>
+            <span id="name" style={{color:'#012C78'}}>Name</span>
+          </dt>
+          <dd>{reminderEntity.name}</dd>
+          <dt>
+            <span id="event" style={{color:'#012C78'}}>Event</span>
+          </dt>
+          <dd>{reminderEntity.event}</dd>
+          <dt>
+            <span id="date" style={{color:'#012C78'}}>Date</span>
+          </dt>
+          <dd>{reminderEntity.date ? <TextFormat value={reminderEntity.date} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <span id="createdBy" style={{color:'#012C78'}}>Created By</span>
+          </dt>
+          <dd>{reminderEntity.createdBy}</dd>
+          <dt>
+            <span id="updatedBy" style={{color:'#012C78'}}>Updated By</span>
+          </dt>
+          <dd>{reminderEntity.updatedBy ? reminderEntity.updatedBy : <br/>}</dd>
+          <dt>
+            <span id="createdAt" style={{color:'#012C78'}}>Created At</span>
+          </dt>
+          <dd>{reminderEntity.createdAt}</dd>
+          <dt>
+            <span id="updatedAt" style={{color:'#012C78'}}>Updated At</span>
+          </dt>
+          <dd>{reminderEntity.updatedAt ? reminderEntity.updatedAt : <br/>}</dd>
+        </dl>
+        <Button 
+          tag={Link} 
+          to="/reminder" 
+          replace color="info" 
+          data-cy="entityDetailsBackButton"
+          style={{borderColor:'#EDEDED', backgroundColor:'#EDEDED'}}
+          >
+          <FontAwesomeIcon icon="arrow-left" style={{color:'#012C78'}}/> &nbsp;
+          <span className="d-none d-md-inline" style={{color:'#012C78'}}>Back</span>
+        </Button>
+        &nbsp;&nbsp;&nbsp;
+        <Button 
+          tag={Link} 
+          to={`/reminder/${reminderEntity.id}/edit`} 
+          replace color="primary" 
+          style={{borderColor:'#0026ff', backgroundColor:'#0026ff'}}
+          >
+          <FontAwesomeIcon icon="pencil-alt"/> &nbsp;
+          <span className="d-none d-md-inline">Edit</span>
+        </Button>
+      </Col>
+    </Row>
+  );
+};
+
+export default ReminderDetail;

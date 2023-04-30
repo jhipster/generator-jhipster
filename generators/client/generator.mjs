@@ -20,7 +20,8 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
+// adding askForExample prompt @cmi-tic-harika
+import { askForAdminUi, askForExample, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
 import { writeEnumerationFiles } from './entity-files.mjs';
@@ -57,6 +58,8 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       askForClient,
       askForAdminUi,
+      // calling askForExample prompt @cmi-tic-harika
+      askForExample,
       askForClientTheme,
       askForClientThemeVariant,
     });

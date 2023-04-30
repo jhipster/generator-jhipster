@@ -1,0 +1,42 @@
+package <%= packageName %>.repository;
+
+import <%= packageName %>.domain.Reminder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+/**
+ * Spring Data R2DBC repository for the Reminder entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface ReminderRepository extends ReactiveCrudRepository<Reminder, String>, ReminderRepositoryInternal {
+    @Override
+    <S extends Reminder> Mono<S> save(S entity);
+
+    @Override
+    Flux<Reminder> findAll();
+
+    @Override
+    Mono<Reminder> findById(String id);
+
+    @Override
+    Mono<Void> deleteById(String id);
+}
+
+interface ReminderRepositoryInternal {
+    <S extends Reminder> Mono<S> save(S entity);
+
+    Flux<Reminder> findAllBy(Pageable pageable);
+
+    Flux<Reminder> findAll();
+
+    Mono<Reminder> findById(String id);
+    // this is not supported at the moment because of https://github.com/jhipster/generator-jhipster/issues/18269
+    // Flux<Reminder> findAllBy(Pageable pageable, Criteria criteria);
+
+}

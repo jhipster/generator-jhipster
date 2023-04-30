@@ -1,0 +1,195 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Button, Row, Col, FormText } from 'reactstrap';
+import { translate, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { IReminder } from 'app/shared/model/reminder.model';
+import { getEntity, updateEntity, createEntity, reset } from './reminder.reducer';
+import './reminder-update.scss';
+
+export const ReminderUpdate = () => {
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const { id } = useParams<'id'>();
+  const isNew = id === undefined;
+
+  const reminderEntity = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.entity);
+  const loading = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.loading);
+  const updating = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.updating);
+  const updateSuccess = useAppSelector(state => state.<%= baseName.toLowerCase() %>.reminder.updateSuccess);
+
+  const handleClose = () => {
+    navigate('/reminder');
+  };
+
+  useEffect(() => {
+    if (isNew) {
+      dispatch(reset());
+    } else {
+      dispatch(getEntity(id));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      handleClose();
+    }
+  }, [updateSuccess]);
+
+  const saveEntity = values => {
+    const entity = {
+      ...reminderEntity,
+      ...values,
+    };
+
+    if (isNew) {
+      dispatch(createEntity(entity));
+    } else {
+      dispatch(updateEntity(entity));
+    }
+  };
+
+  const defaultValues = () =>
+    isNew
+      ? {}
+      : {
+          ...reminderEntity,
+        };
+
+  return (
+    <div>
+      <Row className="justify-content-center">
+        <Col md="8">
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 }}>
+            <h2 style={{ color: '#012C78' }}>Create or edit a Reminder</h2>
+            <FontAwesomeIcon icon="bell" style={{ paddingLeft: 10, fontSize: 25, color: '#012C78' }}></FontAwesomeIcon>
+          </div>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col md="8">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+              {!isNew ? (
+                <ValidatedField
+                  name="id"
+                  className="labelColor"
+                  style={{ color: 'grey' }}
+                  required
+                  readOnly
+                  id="reminder-id"
+                  label="Id"
+                  validate={{ required: true }}
+                />
+              ) : null}
+              <ValidatedField
+                label={'Name'}
+                className="labelColor"
+                id="reminder-name"
+                name="name"
+                data-cy="name"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={'Event'}
+                className="labelColor"
+                id="reminder-event"
+                name="event"
+                data-cy="event"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={'Date'}
+                className="labelColor"
+                id="reminder-date"
+                name="date"
+                data-cy="date"
+                type="date"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={'Created By'}
+                className="labelColor"
+                id="reminder-createdBy"
+                name="createdBy"
+                data-cy="createdBy"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField 
+                label={'Updated By'}
+                className="labelColor"
+                id="reminder-updatedBy" 
+                name="updatedBy" 
+                data-cy="updatedBy" 
+                type="text" 
+              />
+              <ValidatedField
+                label={'Created At'}
+                className="labelColor"
+                id="reminder-createdAt"
+                name="createdAt"
+                data-cy="createdAt"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField 
+                label={'Updated At'}
+                className="labelColor"
+                id="reminder-updatedAt" 
+                name="updatedAt" 
+                data-cy="updatedAt" 
+                type="text" />
+              <Button 
+                tag={Link} 
+                id="cancel-save" 
+                data-cy="entityCreateCancelButton" 
+                to="/reminder" 
+                replace color="info"
+                style={{borderColor:'#EDEDED', backgroundColor:'#EDEDED'}}
+                >
+                <FontAwesomeIcon icon="arrow-left" style={{color:'#012C78'}}/>
+                &nbsp;&nbsp;&nbsp;
+                <span className="d-none d-md-inline" style={{color:'#012C78'}}>Back</span>
+              </Button>
+              &nbsp;&nbsp;&nbsp;
+              <Button 
+                color="primary" 
+                id="save-entity" 
+                data-cy="entityCreateSaveButton" 
+                type="submit" 
+                disabled={updating}
+                style={{borderColor:'#0026ff', backgroundColor:'#0026ff'}}
+                >
+                <FontAwesomeIcon icon="save" />
+                &nbsp;
+                <span >Save</span>
+              </Button>
+            </ValidatedForm>
+          )}
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+export default ReminderUpdate;

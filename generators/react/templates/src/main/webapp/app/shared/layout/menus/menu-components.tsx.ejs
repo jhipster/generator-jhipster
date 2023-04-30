@@ -23,11 +23,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const NavDropdown = props => (
 <UncontrolledDropdown nav inNavbar id={props.id} data-cy={props["data-cy"]}>
+  <%_ if(withExample) { _%>
+    <DropdownToggle nav caret className="d-flex align-items-center" style={{ color: '#012C78' }}>
+      <FontAwesomeIcon icon={props.icon} style={{ color: '#012C78' }} />
+      <span>{props.name}</span>
+    </DropdownToggle>
+    <DropdownMenu end style={{...props.styles, backgroundColor:'#CADCFC', borderColor:'#CADCFC'}}>
+  <%_ } _%>
+  <%_ if(!withExample) { _%>
   <DropdownToggle nav caret className="d-flex align-items-center">
     <FontAwesomeIcon icon={props.icon} />
     <span>{props.name}</span>
   </DropdownToggle>
   <DropdownMenu end style={props.style}>
+    <%_ } _%>
     {props.children}
   </DropdownMenu>
 </UncontrolledDropdown>

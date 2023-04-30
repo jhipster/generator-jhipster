@@ -68,6 +68,7 @@ const {
   TEST_FRAMEWORKS,
   WEBSOCKET,
   WITH_ADMIN_UI,
+  WITH_EXAMPLE, // declaring new param withExample @cmi-tic-harika
   ENABLE_GRADLE_ENTERPRISE,
   GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
@@ -105,6 +106,7 @@ const applicationConfigTokens: Pick<ITokenConfig, 'name' | 'pattern'>[] = [
   { name: 'CLIENT_THEME_VARIANT', pattern: CLIENT_THEME_VARIANT },
   { name: 'CLIENT_THEME', pattern: CLIENT_THEME },
   { name: 'WITH_ADMIN_UI', pattern: WITH_ADMIN_UI },
+  { name: 'WITH_EXAMPLE', pattern: WITH_EXAMPLE }, // adding new param withExample @cmi-tic-harika
   { name: 'NATIVE_LANGUAGE', pattern: NATIVE_LANGUAGE },
   { name: 'FRONT_END_BUILDER', pattern: 'frontendBuilder' }, // TODO always valid?
   { name: 'SKIP_USER_MANAGEMENT', pattern: SKIP_USER_MANAGEMENT },

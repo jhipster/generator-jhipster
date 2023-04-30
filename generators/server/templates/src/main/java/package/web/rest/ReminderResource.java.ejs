@@ -1,0 +1,243 @@
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.domain.Reminder;
+import <%= packageName %>.repository.ReminderRepository;
+import <%= packageName %>.web.rest.errors.BadRequestAlertException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.reactive.ResponseUtil;
+
+/**
+ * REST controller for managing {@link <%= packageName %>.domain.Reminder}.
+ */
+@RestController
+@RequestMapping("/api")
+@Transactional
+public class ReminderResource {
+
+    private final Logger log = LoggerFactory.getLogger(ReminderResource.class);
+
+    private static final String ENTITY_NAME = "reminder";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
+
+    private final ReminderRepository reminderRepository;
+
+    public ReminderResource(ReminderRepository reminderRepository) {
+        this.reminderRepository = reminderRepository;
+    }
+
+    /**
+     * {@code POST  /reminders} : Create a new reminder.
+     *
+     * @param reminder the reminder to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reminder, or with status {@code 400 (Bad Request)} if the reminder has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/reminders")
+    public Mono<ResponseEntity<Reminder>> createReminder(@Valid @RequestBody Reminder reminder) throws URISyntaxException {
+        log.debug("REST request to save Reminder : {}", reminder);
+        if (reminder.getId() != null) {
+            throw new BadRequestAlertException("A new reminder cannot already have an ID", ENTITY_NAME, "idexists");
+        } else {
+            reminder.setId(UUID.randomUUID().toString());
+        }
+        return reminderRepository
+            .save(reminder)
+            .map(result -> {
+                try {
+                    return ResponseEntity
+                        .created(new URI("/api/reminders/" + result.getId()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
+                        .body(result);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+    }
+
+    /**
+     * {@code PUT  /reminders/:id} : Updates an existing reminder.
+     *
+     * @param id the id of the reminder to save.
+     * @param reminder the reminder to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reminder,
+     * or with status {@code 400 (Bad Request)} if the reminder is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the reminder couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/reminders/{id}")
+    public Mono<ResponseEntity<Reminder>> updateReminder(
+        @PathVariable(value = "id", required = false) final String id,
+        @Valid @RequestBody Reminder reminder
+    ) throws URISyntaxException {
+        log.debug("REST request to update Reminder : {}, {}", id, reminder);
+        if (reminder.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, reminder.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        return reminderRepository
+            .existsById(id)
+            .flatMap(exists -> {
+                if (!exists) {
+                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+                }
+
+                return reminderRepository
+                    .save(reminder.setIsPersisted())
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                    .map(result ->
+                        ResponseEntity
+                            .ok()
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId()))
+                            .body(result)
+                    );
+            });
+    }
+
+    /**
+     * {@code PATCH  /reminders/:id} : Partial updates given fields of an existing reminder, field will ignore if it is null
+     *
+     * @param id the id of the reminder to save.
+     * @param reminder the reminder to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reminder,
+     * or with status {@code 400 (Bad Request)} if the reminder is not valid,
+     * or with status {@code 404 (Not Found)} if the reminder is not found,
+     * or with status {@code 500 (Internal Server Error)} if the reminder couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/reminders/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    public Mono<ResponseEntity<Reminder>> partialUpdateReminder(
+        @PathVariable(value = "id", required = false) final String id,
+        @NotNull @RequestBody Reminder reminder
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update Reminder partially : {}, {}", id, reminder);
+        if (reminder.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, reminder.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        return reminderRepository
+            .existsById(id)
+            .flatMap(exists -> {
+                if (!exists) {
+                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+                }
+
+                Mono<Reminder> result = reminderRepository
+                    .findById(reminder.getId())
+                    .map(existingReminder -> {
+                        if (reminder.getName() != null) {
+                            existingReminder.setName(reminder.getName());
+                        }
+                        if (reminder.getEvent() != null) {
+                            existingReminder.setEvent(reminder.getEvent());
+                        }
+                        if (reminder.getDate() != null) {
+                            existingReminder.setDate(reminder.getDate());
+                        }
+                        if (reminder.getCreatedBy() != null) {
+                            existingReminder.setCreatedBy(reminder.getCreatedBy());
+                        }
+                        if (reminder.getUpdatedBy() != null) {
+                            existingReminder.setUpdatedBy(reminder.getUpdatedBy());
+                        }
+                        if (reminder.getCreatedAt() != null) {
+                            existingReminder.setCreatedAt(reminder.getCreatedAt());
+                        }
+                        if (reminder.getUpdatedAt() != null) {
+                            existingReminder.setUpdatedAt(reminder.getUpdatedAt());
+                        }
+
+                        return existingReminder;
+                    })
+                    .flatMap(reminderRepository::save);
+
+                return result
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                    .map(res ->
+                        ResponseEntity
+                            .ok()
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId()))
+                            .body(res)
+                    );
+            });
+    }
+
+    /**
+     * {@code GET  /reminders} : get all the reminders.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reminders in body.
+     */
+    @GetMapping("/reminders")
+    public Mono<List<Reminder>> getAllReminders() {
+        log.debug("REST request to get all Reminders");
+        return reminderRepository.findAll().collectList();
+    }
+
+    /**
+     * {@code GET  /reminders} : get all the reminders as a stream.
+     * @return the {@link Flux} of reminders.
+     */
+    @GetMapping(value = "/reminders", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Flux<Reminder> getAllRemindersAsStream() {
+        log.debug("REST request to get all Reminders as a stream");
+        return reminderRepository.findAll();
+    }
+
+    /**
+     * {@code GET  /reminders/:id} : get the "id" reminder.
+     *
+     * @param id the id of the reminder to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reminder, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/reminders/{id}")
+    public Mono<ResponseEntity<Reminder>> getReminder(@PathVariable String id) {
+        log.debug("REST request to get Reminder : {}", id);
+        Mono<Reminder> reminder = reminderRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(reminder);
+    }
+
+    /**
+     * {@code DELETE  /reminders/:id} : delete the "id" reminder.
+     *
+     * @param id the id of the reminder to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/reminders/{id}")
+    public Mono<ResponseEntity<Void>> deleteReminder(@PathVariable String id) {
+        log.debug("REST request to delete Reminder : {}", id);
+        return reminderRepository
+            .deleteById(id)
+            .then(
+                Mono.just(
+                    ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build()
+                )
+            );
+    }
+}
