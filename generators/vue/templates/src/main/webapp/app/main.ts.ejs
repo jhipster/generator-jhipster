@@ -11,7 +11,6 @@ import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from '
 import { initBootstrapVue } from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import JhiSortIndicatorComponent from './shared/sort/jhi-sort-indicator.vue';
-import InfiniteLoading from 'vue-infinite-loading';
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
@@ -34,7 +33,6 @@ initBootstrapVue(Vue);
 
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
-Vue.component('infinite-loading', InfiniteLoading);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(Vue);
 <%_ } _%>

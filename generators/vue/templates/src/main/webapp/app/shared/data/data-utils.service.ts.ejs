@@ -147,7 +147,7 @@ const useDataUtils = () => ({
   parseLinks(header) {
     const links = {};
 
-    if (header === null || header.indexOf(',') === -1) {
+    if ((header?.indexOf(',') ?? -1) === -1) {
       return links;
     }
     // Split parts by comma

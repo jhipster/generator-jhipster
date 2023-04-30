@@ -155,19 +155,12 @@
                 </tbody>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationInfiniteScroll) { _%>
-                <infinite-loading
-                    ref="infiniteLoading"
-                    v-if="totalItems > itemsPerPage"
-                    :identifier="infiniteId"
-                    slot="append"
-                    @infinite="loadMore"
-                    force-use-infinite-wrapper=".el-table__body-wrapper"
-                    :distance='20'>
-                </infinite-loading>
+                <span ref="infiniteScrollEl"></span>
   <%_ } _%>
 <%_ } _%>
             </table>
         </div>
+<%_ if (!readOnly) { _%>
         <b-modal ref="removeEntity" id="removeEntity" >
             <template #modal-title>
                 <span id="<%= i18nKeyPrefix %>.delete.question" data-cy="<%= entityInstance %>DeleteDialogHeading" v-text="t$('entity.delete.title')">Confirm delete operation</span>
@@ -182,6 +175,7 @@
                 </div>
             </template>
         </b-modal>
+<%_ } _%>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
         <div v-show="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length > 0">
@@ -189,7 +183,7 @@
                 <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
             </div>
             <div class="row justify-content-center">
-                <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
+                <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage"></b-pagination>
             </div>
         </div>
   <%_ } _%>
