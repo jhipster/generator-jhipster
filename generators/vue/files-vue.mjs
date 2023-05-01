@@ -113,6 +113,7 @@ export const vueFiles = {
         'core/ribbon/ribbon.component.ts',
         'shared/composables/date-format.ts',
         'shared/composables/index.ts',
+        'shared/composables/validation.ts',
         'shared/computables/arrays.ts',
         'shared/computables/index.ts',
         'shared/sort/jhi-sort-indicator.component.ts',

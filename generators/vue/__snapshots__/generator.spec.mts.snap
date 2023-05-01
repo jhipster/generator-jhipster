@@ -206,6 +206,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "src/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
@@ -709,6 +712,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
@@ -1185,6 +1191,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
@@ -1644,6 +1653,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/composables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/composables/validation.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/computables/arrays.ts": {
@@ -2227,6 +2239,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp2/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
@@ -2718,6 +2733,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
@@ -3162,6 +3180,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/composables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/composables/validation.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/computables/arrays.ts": {
