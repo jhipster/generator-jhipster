@@ -21,15 +21,12 @@ import { clientSrcBlock } from './utils.mjs';
 export const files = {
   common: [
     {
-      templates: ['.eslintignore', 'README.md.jhi.client'],
+      templates: ['.eslintignore', 'README.md.jhi.client',
+      'src/main/webapp/content/images/TIC.png'], // added logo @cmi-tic-harika
     },
     {
       condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
       templates: ['webpack/webpack.microfrontend.js.jhi'],
-    },
-    {
-      condition: generator => (generator.clientFrameworkReact && (generator.applicationTypeGateway && generator.withExample)),
-      templates: ['src/main/webapp/content/images/TIC.png'], // added logo @cmi-tic-harika
     },
     {
       ...clientSrcBlock,

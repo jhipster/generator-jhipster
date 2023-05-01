@@ -61,20 +61,9 @@ export const Home = () => {
 
   return (
     <Row>
-      <%_ if(withExample) { _%>
-        <span></span>
-      <%_ } else { _%>
-      <Col md="3" className="pad">
-        <span className="hipster rounded" />
-      </Col>
-      <Col md="9">
-        <h2><Translate contentKey="home.title">Welcome, <%= backendType %> Hipster!</Translate></h2>
-        <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
-        <%_ } _%>
         {
           (account?.login) ? (
             <div>
-              <%_ if(withExample) { _%>
                   <h1 style={{ textAlign: 'center', padding: 50, color: '#012C78' }}>Welcome to <%= capitalizedBaseName %> home page</h1>
                   <Alert style={{ backgroundColor: '#EDEDED', borderColor: '#EDEDED' }}>
                     <span style={{ color: '#012C78' }}>
@@ -84,6 +73,7 @@ export const Home = () => {
                   </span>
                   </Alert>
                     <br></br>
+                    <%_ if(withExample) { _%>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                       Here is an example of reminder application, you can click the icon to add your own reminder
                       <div>
@@ -94,32 +84,27 @@ export const Home = () => {
                         </Link>
                       </div>
                     </div>
-              <%_ } else { _%>
-              <Alert color="success">
-                <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>You are logged in as user {account.login}.</Translate>
-              </Alert>
               <%_ } _%>
             </div>
           ) : (
             <div>
-              <%_ if(withExample) { _%>
                 <h1 style={{ textAlign: 'center', padding: 50, color: '#012C78' }}>Welcome to <%= capitalizedBaseName %> home page</h1> 
                 <div
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginLeft: 150,
-                  marginRight: 150,
+                  marginLeft: '8%',
+                  marginRight: '8%',
                   marginTop: 0,
                   marginBottom: 50,
                   color: '#012C78',
                 }}
               >
                 <div>
-                  <img src="content/images/TIC.png" style={{ width: '650px', height: '650px' }}></img>
+                  <img src="content/images/TIC.png" style={{  width: '100%', height: '100%', marginRight:'3%' }}></img>
                 </div>
-                <div style={{marginTop:100}}>
+                <div style={{marginTop:100, marginLeft:'3%', marginRight:'3%'}}>
                   <h5>
                     Click here to <span></span>
                     <a href={getLoginUrl()} style={{ color: '#012C78' }}>
@@ -143,76 +128,8 @@ export const Home = () => {
                   </h5>
                 </div>
               </div>
-              <%_ } else { _%>
-              <Alert color="warning">
-                <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
-                <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
-<%_ if (authenticationTypeOauth2) { _%>
-                <a href={getLoginUrl()} className="alert-link">
-                  <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
-                </a>
-<%_ } else { _%>
-                <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link"> sign in</Translate></Link>
-<%_ } _%>
-                <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
-                  <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                  <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
-                </Translate>
-              </Alert>
-              
-
-<%_ if (generateUserManagement) { _%>
-              <Alert color="warning">
-                <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
-                <Link to="/account/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
-              </Alert>
-<%_ } _%>
-<%_ } _%>
-            </div>
-          )
-        }
-        <%_ if(withExample) { _%>
-          <span></span>
-        <%_ } else { _%>
-        <p>
-          <Translate contentKey="home.question">If you have any question on JHipster:</Translate>
-        </p>
-
-        <ul>
-          <li>
-            <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">
-              <Translate contentKey="home.link.homepage">JHipster homepage</Translate>
-            </a>
-          </li>
-          <li>
-            <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">
-              <Translate contentKey="home.link.stackoverflow">JHipster on Stack Overflow</Translate>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer">
-              <Translate contentKey="home.link.bugtracker">JHipster bug tracker</Translate>
-            </a>
-          </li>
-          <li>
-            <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">
-              <Translate contentKey="home.link.chat">JHipster public chat room</Translate>
-            </a>
-          </li>
-          <li>
-            <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">
-              <Translate contentKey="home.link.follow">follow @jhipster on Twitter</Translate>
-            </a>
-          </li>
-        </ul>
-
-        <p>
-          <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>
-          {' '}
-          <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
-        </p>
-      </Col>
-        <%_ } _%>
+              </div>
+          )}
     </Row>
   );
 };
