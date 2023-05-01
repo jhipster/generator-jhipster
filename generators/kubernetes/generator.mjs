@@ -24,7 +24,7 @@ import BaseDockerGenerator from '../base-docker/index.mjs';
 
 import prompts from './prompts.mjs';
 import { writeFiles } from './files.mjs';
-import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+import { buildToolTypes, messageBrokerTypes, logManagementTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 import statistics from '../statistics.mjs';
 
@@ -40,6 +40,7 @@ import jdlToJsonFieldConverter from '../../jdl/converters/jdl-to-json/jdl-to-jso
 
 const { KAFKA, RABBITMQ } = messageBrokerTypes; // added rabbitmq option cmi-tic-varun
 const { MAVEN } = buildToolTypes;
+const { ECK } = logManagementTypes;
 
 /**
  * @class
@@ -113,6 +114,9 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
           }
           if (element.messageBroker === RABBITMQ) {
             this.useRabbitMQ = true;
+          }
+          if (element.logManagementType === ECK) {
+            this.useECK = true;
           }
         });
 

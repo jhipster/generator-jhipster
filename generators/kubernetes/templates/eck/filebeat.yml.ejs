@@ -2,37 +2,94 @@ apiVersion: beat.k8s.elastic.co/v1beta1
 kind: Beat
 metadata:
   name: quickstart
-  # namespace: default
 spec:
   type: filebeat
   version: 8.7.0
-  # elasticsearchRef:
-  #   name: quickstart
+  elasticsearchRef:
+    name: quickstart
+  kibanaRef:
+    name: quickstart
   config:
-    filebeat.inputs:
-    - type: filestream
-      paths:
-      - /var/logs/*.log
-    # output.elasticsearch.index: "wda-%{[agent.version]}"
-    # setup.template.name: "wda"
-    # setup.template.pattern: "wda-%{[agent.version]}"
-    output.elasticsearch:
-      hosts: ["https://localhost:9200"]
-      username: "elastic"
-      password: "9UOk32d2Hm639Sdm57SlD8Ii"
+    filebeat:
+      autodiscover:
+        providers:
+        - type: kubernetes
+          node: ${NODE_NAME}
+          hints:
+            enabled: true
+            default_config:
+              type: container
+              paths:
+              - /var/log/containers/*${data.kubernetes.container.id}.log
+    processors:
+    - add_cloud_metadata: {}
+    - add_host_metadata: {}
   daemonSet:
     podTemplate:
       spec:
+        serviceAccountName: filebeat
+        automountServiceAccountToken: true
+        terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirstWithHostNet
-        hostNetwork: true
-        securityContext:
-          runAsUser: 0
+        hostNetwork: true # Allows to provide richer host metadata
         containers:
         - name: filebeat
+          securityContext:
+            runAsUser: 0
           volumeMounts:
-          - name: my-pv
-            mountPath: /var/logs
+          - name: varlogcontainers
+            mountPath: /var/log/containers
+          - name: varlogpods
+            mountPath: /var/log/pods
+          - name: varlibdockercontainers
+            mountPath: /var/lib/docker/containers
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
         volumes:
-        - name: my-pv
-          persistentVolumeClaim:
-            claimName: my-pvc
+        - name: varlogcontainers
+          hostPath:
+            path: /var/log/containers
+        - name: varlogpods
+          hostPath:
+            path: /var/log/pods
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: filebeat
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources:
+  - namespaces
+  - pods
+  - nodes
+  verbs:
+  - get
+  - watch
+  - list
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: filebeat
+subjects:
+- kind: ServiceAccount
+  name: filebeat
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroup: rbac.authorization.k8s.io
+...

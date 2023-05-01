@@ -103,6 +103,9 @@ default() {
 <%_ if (istio) { _%>
     kubectl apply -f istio-${suffix}/
 <%_ } _%>
+<%_ if (useECK) { _%>
+    kubectl apply -f eck-${suffix}/
+<%_ } _%>
 }
 
 kustomize() {

@@ -22,7 +22,6 @@ import {
   applicationTypes,
   authenticationTypes,
   databaseTypes,
-  logManagementTypes,
   monitoringTypes,
   searchEngineTypes,
   serviceDiscoveryTypes,
@@ -33,7 +32,6 @@ const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { ECK } = logManagementTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
@@ -43,17 +41,12 @@ export default {
 
 export function writeFiles() {
   const suffix = 'k8s';
-  var addFilebeat = false;
   return {
     writeDeployments() {
       for (let i = 0; i < this.appConfigs.length; i++) {
         const appName = this.appConfigs[i].baseName.toLowerCase();
         const appOut = appName.concat('-', suffix);
         this.app = this.appConfigs[i];
-        this.logger.info("app.logManagementType: " + this.app.logManagementType);
-        if (this.app.logManagementType === ECK) {
-          addFilebeat = true;
-        }
         this.writeFile('deployment.yml.ejs', `${appOut}/${appName}-deployment.yml`);
         this.writeFile('service.yml.ejs', `${appOut}/${appName}-service.yml`);
         // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
@@ -87,9 +80,9 @@ export function writeFiles() {
       }
     },
 
-    writeFilebeat() {
-      if (addFilebeat) {
-        const filebeatOut = 'filebeat'.concat('-', suffix);
+    writeECK() {
+      if (this.useECK) {
+        const filebeatOut = 'eck'.concat('-', suffix);
         this.writeFile('eck/filebeat.yml.ejs', `${filebeatOut}/filebeat.yml`);
       }
     },

@@ -42,6 +42,9 @@ logSummary() {
 
 default() {
     suffix=k8s
+<%_ if (useECK) { _%>
+    kubectl delete -f eck-${suffix}/
+<%_ } _%>
 <%_ if (istio && kubernetesServiceTypeIngress) { _%>
     kubectl delete -f istio-${suffix}/
 <%_ } _%> 

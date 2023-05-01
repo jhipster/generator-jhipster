@@ -151,16 +151,6 @@
         <version>2.0.1.Final</version>
         </dependency>
 <%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
-    <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-commons</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-    </dependency>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
         <dependency>
             <groupId>org.openapitools</groupId>
