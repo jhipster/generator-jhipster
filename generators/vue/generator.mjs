@@ -50,10 +50,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
+        await this.composeWithJHipster(GENERATOR_LANGUAGES);
       },
     });
   }
@@ -104,10 +101,13 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.asWritingEntitiesTaskGroup({
       writeEntitiesFiles,
       writeEntityFiles,
-      queueTranslateTransform({ control, application }) {
+      async queueTranslateTransform({ control, application }) {
         const { enableTranslation, clientSrcDir } = application;
+        if (!application.enableTranslation) {
+          await control.loadClientTranslations?.();
+        }
         const { getWebappTranslation } = control;
-        this.queueTransformStream(translateVueFilesTransform({ enableTranslation, getWebappTranslation }), {
+        this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
           name: 'translating webapp',
           streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
         });

@@ -80,6 +80,7 @@ describe(`generator - ${clientFramework}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 

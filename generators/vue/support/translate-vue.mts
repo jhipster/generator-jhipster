@@ -18,30 +18,42 @@
  */
 import { passthrough } from 'p-transform';
 import { Minimatch } from 'minimatch';
+import CoreGenerator from '../../base-core/index.mjs';
 
-const asTranslationAttribute = (s: string) => `(?:${s}="t\\$\\(.*?\\)")`;
+type GetWebappTranslation = (s: string, data?: Record<string, any>) => string;
 
-const TRANSLATIONS_ATTRIBUTES = ['v-bind:placeholder', 'v-bind:title', 'v-bind:label', 'v-bind:value']
-  .map(asTranslationAttribute)
-  .join('|');
-
-function removeTranslationAttributes(body: string) {
-  return body.replace(new RegExp(`[\\s\\n]*(?:${TRANSLATIONS_ATTRIBUTES})`, 'g'), '');
-}
-
-function removeVTextTranslationAttributes(body: string) {
-  return body.replaceAll(
-    /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>input)(?:[^>]*)) v-(?:text|html)="t\$\((?<translate>[^)]*)\)"(?<afterTranslateTag>[^>]*\/>))/g,
-    (_complete, ...args) => {
-      const groups: Record<string, string> = args.pop();
-      return `${groups.beforeTranslateTag}${groups.afterTranslateTag}`;
+function replaceTranslationAttributes({ content, getWebappTranslation }: { content: string; getWebappTranslation: GetWebappTranslation }) {
+  return content.replaceAll(/v-bind:(?<tag>(?:placeholder|title|label))="(?<translate>t\$\([^"]+\))"/g, (_complete, ...args) => {
+    const groups: Record<string, string> = args.pop();
+    if (groups.translate.includes('+')) {
+      return '';
     }
-  );
+    const translated = replaceTranslations({ content: groups.translate, type: 'vue', getWebappTranslation });
+    return `${groups.tag}="${translated}"`;
+  });
 }
 
-export function replaceTranslationTags({ body, enableTranslation }: { body: string; enableTranslation: boolean }) {
+export function removeDeclarations({ content }: { content: string }) {
+  return content
+    .replaceAll(/\nimport {\s*useI18n\s*} from 'vue-i18n-bridge';/g, '')
+    .replaceAll(/\n\s*t\$,/g, '')
+    .replaceAll(/\n\s*t\$:\s*useI18n\(\).t,/g, '');
+}
+
+export function replaceTranslationTags(
+  this: CoreGenerator | void,
+  {
+    body,
+    enableTranslation,
+    getWebappTranslation,
+  }: {
+    body: string;
+    enableTranslation: boolean;
+    getWebappTranslation: GetWebappTranslation;
+  }
+) {
   body = body.replaceAll(
-    /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>a|b-(?:badge|link|button|alert)|button|div|h[1-9]|input|label|p|router-link|small|span|t[hd])(?:[^>]*)) v-(?:text|html)="t\$\((?<translate>[^)]*)\)"(?<afterTranslateTag>(?:(?!\/?>)[^/>])*>))(?<tagContent>(?:(?!<\/\k<tagName>(?:>|\s|\n)).|\n)+)/g,
+    /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>a|b-(?:badge|link|button|alert)|button|div|h[1-9]|input|label|p|router-link|small|span|t[hd])(?:[^>]*)) v-(?:text|html)="(?<translate>t\$\([^)]*\))"(?<afterTranslateTag>(?:(?!\/?>)[^/>])*>))(?<tagContent>(?:(?!<\/\k<tagName>(?:>|\s|\n)).|\n)*)/g,
     (_complete, ...args) => {
       const groups: Record<string, string> = args.pop();
       if (new RegExp(`<${groups.tagName}[\\s>]`, 'g').test(groups.tagContent)) {
@@ -50,28 +62,118 @@ export function replaceTranslationTags({ body, enableTranslation }: { body: stri
       if (enableTranslation) {
         return groups.tagWithAttributes;
       }
+      if (groups.translate) {
+        if (groups.translate.includes('+')) {
+          this?.log.info(`Ignoring dynamic translation ${groups.translate}`);
+        } else {
+          const translated = replaceTranslations({
+            type: 'vue',
+            content: groups.translate,
+            getWebappTranslation,
+          });
+          if (translated !== groups.translate) {
+            return `${groups.beforeTranslateTag}${groups.afterTranslateTag}${translated}`;
+          }
+          throw new Error(`${translated}, ${groups.translate}`);
+        }
+      }
       return `${groups.beforeTranslateTag}${groups.afterTranslateTag}${groups.tagContent}`;
     }
   );
   if (enableTranslation) {
     return body;
   }
-  return removeVTextTranslationAttributes(removeTranslationAttributes(body));
+  return replaceTranslationAttributes({ content: body, getWebappTranslation });
 }
 
-const minimatch = new Minimatch('**/*.vue');
+export function replaceTranslations({
+  content,
+  type,
+  getWebappTranslation,
+}: {
+  content: string;
+  type: 'vue' | 'ts';
+  getWebappTranslation: GetWebappTranslation;
+}) {
+  const regex =
+    type === 'ts'
+      ? /(?:this.)?t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
+      : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
+  return content.replaceAll(regex, (_complete, ...args) => {
+    const groups: Record<string, string> = args.pop();
+    const key = groups.key.substring(1, groups.key.length - 1).replaceAll("\\'", "'");
+    let data;
+    if (groups.data) {
+      const interpolateMatches = groups.data.matchAll(/(?<field>[^{\s:,}]+)(?:\s*:\s*(?<value>[^,}]+))?/g);
+      data = {};
+      let templateLiteral = false;
+      for (const interpolateMatch of interpolateMatches) {
+        let { field, value }: { field?: string; value?: string | number } = interpolateMatch.groups || {};
+        if (/^'.*'$/.test(field) || /^".*"$/.test(field)) {
+          // unwrap field
+          field = field.substring(1, field.length - 1);
+        }
+        if (value === undefined) {
+          value = field;
+        }
+        value = value.trim();
+        if (/^\d+$/.test(value)) {
+          // convert integer
+          value = parseInt(value, 10);
+        } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
+          // extract string value
+          value = value.substring(1, value.length - 1);
+        } else {
+          // wrap expression
+          if (type === 'vue') {
+            value = `{{ ${value} }}`;
+          } else {
+            value = `\${${value}}`;
+          }
+          templateLiteral = true;
+        }
+        data[field] = value;
+      }
+      if (templateLiteral && type === 'ts') {
+        return `\`${getWebappTranslation(key, data)}\``;
+      }
+    }
+    if (type === 'vue') {
+      return getWebappTranslation(key, data);
+    }
+    return `'${getWebappTranslation(key, data)}'`;
+  });
+}
+
+const minimatch = new Minimatch('**/*.{vue,ts}');
 export const isTranslatedVueFile = file => minimatch.match(file.path);
 
-const translateVueFilesTransform = ({
-  enableTranslation,
-  getWebappTranslation: _getWebappTranslation,
-}: {
-  enableTranslation: boolean;
-  getWebappTranslation: any;
-}) => {
+function translateVueFilesTransform(
+  this: CoreGenerator | void,
+  {
+    enableTranslation,
+    getWebappTranslation,
+  }: {
+    enableTranslation: boolean;
+    getWebappTranslation: GetWebappTranslation;
+  }
+) {
   return passthrough(file => {
-    file.contents = Buffer.from(replaceTranslationTags({ body: file.contents.toString(), enableTranslation }));
+    let newContent;
+    if (file.path.endsWith('.vue')) {
+      newContent = replaceTranslationTags.call(this, { body: file.contents.toString(), enableTranslation, getWebappTranslation });
+    } else if (!enableTranslation && file.path.endsWith('.ts')) {
+      newContent = replaceTranslations({ type: 'ts', content: file.contents.toString(), getWebappTranslation });
+      newContent = removeDeclarations({ content: newContent });
+    }
+    if (newContent) {
+      if (!enableTranslation && newContent.includes('t$')) {
+        throw new Error(`Could not translate ${file.path}:
+${newContent}`);
+      }
+      file.contents = Buffer.from(newContent);
+    }
   }, 'jhipster:translate-vue-files');
-};
+}
 
 export default translateVueFilesTransform;
