@@ -1,18 +1,11 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import HealthModal from '@/admin/health/health-modal.vue';
 import type HealthModalComponent from '@/admin/health/health-modal.component';
 
 type HealthModalComponentType = Vue & InstanceType<typeof HealthModalComponent>;
 
 const localVue = createLocalVue();
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
-localVue.component('font-awesome-icon', {});
 const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 
 describe('Health Modal Component', () => {
@@ -20,12 +13,12 @@ describe('Health Modal Component', () => {
 
   beforeEach(() => {
     const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
+      stubs: {
+        'font-awesome-icon': true,
+      },
       propsData: {
         currentHealth: {},
       },
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       provide: {
         healthService,
@@ -71,9 +64,6 @@ describe('Health Modal Component for diskSpace', () => {
       propsData: {
         currentHealth: { name: 'diskSpace' },
       },
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       provide: {
         healthService,

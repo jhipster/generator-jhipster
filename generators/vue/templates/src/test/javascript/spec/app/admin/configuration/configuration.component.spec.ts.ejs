@@ -2,9 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import Configuration from '@/admin/configuration/configuration.vue';
 import type ConfigurationComponent from '@/admin/configuration/configuration.component';
 
@@ -12,9 +9,6 @@ type ConfigurationComponentType = Vue & InstanceType<typeof ConfigurationCompone
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -29,9 +23,6 @@ describe('Configuration Component', () => {
       { beans: [{prefix: 'A'}, {prefix: 'B'}] }
     ], propertySources: [{ properties: { key1: {value: 'value'} }}] } });
     const wrapper = shallowMount<ConfigurationComponentType>(Configuration, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
     });
     configuration = wrapper.vm;

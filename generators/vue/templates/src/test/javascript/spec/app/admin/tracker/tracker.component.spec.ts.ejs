@@ -1,13 +1,9 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as sinon from 'sinon';
 import { Subject, Subscription } from 'rxjs';
 import VueRouter from 'vue-router';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import <%=jhiPrefixCapitalized%>Tracker from '@/admin/tracker/tracker.vue';
 import <%=jhiPrefixCapitalized%>TrackerComponent from '@/admin/tracker/tracker.component';
 import TrackerService from '@/admin/tracker/tracker.service';
@@ -16,11 +12,6 @@ type <%=jhiPrefixCapitalized%>TrackerComponentType = Vue & InstanceType<typeof <
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
-
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
-localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -48,11 +39,11 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
     router = new VueRouter();
 
     wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponentType>(<%=jhiPrefixCapitalized%>Tracker, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       router,
+      stubs: {
+        'font-awesome-icon': true,
+      },
       provide: {
         trackerService: trackerServiceStub,
       },

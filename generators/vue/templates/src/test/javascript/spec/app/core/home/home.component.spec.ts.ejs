@@ -3,17 +3,10 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Home from '@/core/home/home.vue';
 import type HomeComponent from '@/core/home/home.component';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 
 type HomeComponentType = Vue & InstanceType<typeof HomeComponent>;
 
 const localVue = createLocalVue();
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
-localVue.component('router-link', {});
 
 describe('Home', () => {
   let home: HomeComponentType;
@@ -31,10 +24,10 @@ describe('Home', () => {
     authenticated = ref(false);
     currentUsername = ref('');
     const wrapper = shallowMount<HomeComponentType>(Home, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
+      stubs: {
+        'router-link': true,
+      },  
       provide: {
         loginService,
         authenticated,

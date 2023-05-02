@@ -28,9 +28,6 @@ import VueRouter from 'vue-router';
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -53,17 +50,9 @@ type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%=
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 const router = new Router();
 localVue.use(Router);
 localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
@@ -86,11 +75,15 @@ describe('Component Tests', () => {
       });
 
       mountOptions = {
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
         localVue,
         router,
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>

@@ -7,9 +7,6 @@ import { createTestingPinia } from '@pinia/testing';
 import { PiniaVuePlugin } from 'pinia';
 
 import { useStore } from '@/store';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import { createRouter } from '@/router';
 import LoginService from '@/account/login.service';
 
@@ -19,19 +16,6 @@ const localVue = createLocalVue();
 localVue.use(PiniaVuePlugin);
 const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
-localVue.component('font-awesome-icon', {});
-localVue.component('b-navbar', {});
-localVue.component('b-navbar-nav', {});
-localVue.component('b-dropdown-item', {});
-localVue.component('b-collapse', {});
-localVue.component('b-nav-item', {});
-localVue.component('b-nav-item-dropdown', {});
-localVue.component('b-navbar-toggle', {});
-localVue.component('b-navbar-brand', {});
-localVue.component('b-navbar-nav', {});
 
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
@@ -55,12 +39,20 @@ describe('JhiNavbar', () => {
     loginService = { login: jest.fn(), logout: jest.fn() };
 <%_ } _%>
     const wrapper = shallowMount<JhiNavbarComponentType>(JhiNavbar, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       pinia,
       router,
       localVue,
+      stubs: {
+        'font-awesome-icon': true,
+        'b-navbar': true,
+        'b-navbar-nav': true,
+        'b-dropdown-item': true,
+        'b-collapse': true,
+        'b-nav-item': true,
+        'b-nav-item-dropdown': true,
+        'b-navbar-toggle': true,
+        'b-navbar-brand': true,
+      },  
       provide: {
         loginService,
         currentLanguage: computed(() => 'foo'),

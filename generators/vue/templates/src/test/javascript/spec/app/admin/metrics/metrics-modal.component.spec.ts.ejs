@@ -1,8 +1,5 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
 import type MetricsModalComponent from '@/admin/metrics/metrics-modal.component';
 
@@ -10,9 +7,6 @@ type MetricsModalComponentType = Vue & InstanceType<typeof MetricsModalComponent
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 describe('Metrics Component', () => {
   let metricsModal: MetricsModalComponentType;
@@ -20,9 +14,6 @@ describe('Metrics Component', () => {
 
   beforeEach(() => {
     wrapper = shallowMount<MetricsModalComponentType>(MetricsModal, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       propsData: {
         threadDump: [

@@ -1,9 +1,5 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import GatewayVue from '@/admin/gateway/gateway.vue';
 import type GatewayComponent from '@/admin/gateway/gateway.component';
 import GatewayService from '@/admin/gateway/gateway.service';
@@ -11,11 +7,6 @@ import GatewayService from '@/admin/gateway/gateway.service';
 type GatewayComponentType = Vue & InstanceType<typeof GatewayComponent>;
 
 const localVue = createLocalVue();
-
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
-localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('Gateway Component', () => {
   let wrapper: Wrapper<GatewayComponentType>;
@@ -25,10 +16,10 @@ describe('Gateway Component', () => {
     const gatewayService = new GatewayService();
     jest.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
     wrapper = shallowMount<GatewayComponentType>(GatewayVue, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
+      stubs: {
+        'font-awesome-icon': true,
+      },
       provide: { gatewayService },
     });
     comp = wrapper.vm;
