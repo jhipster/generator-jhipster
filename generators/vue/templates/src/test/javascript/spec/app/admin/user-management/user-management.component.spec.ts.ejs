@@ -5,7 +5,6 @@ import { ref } from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ToastPlugin } from 'bootstrap-vue';
 
 <%_ if (enableTranslation) { _%>
@@ -22,9 +21,6 @@ localVue.use(ToastPlugin);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-localVue.component('font-awesome-icon', FontAwesomeIcon);
-localVue.component('router-link', {});
-localVue.component('jhi-sort-indicator', {});
 localVue.directive('b-modal', {});
 
 const axiosStub = {
@@ -50,6 +46,9 @@ describe('UserManagement Component', () => {
         bPagination: true,
         jhiItemCount: true,
         bModal: true,
+        'router-link': true,
+        'jhi-sort-indicator': true,
+        'font-awesome-icon': true,
       },
       provide: {
         currentUsername: ref(''),

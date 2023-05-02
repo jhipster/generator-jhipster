@@ -39,14 +39,7 @@ localVue.use(ToastPlugin);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-<%_ if (!paginationNo) { _%>
-localVue.component('jhi-sort-indicator', {});
-<%_ } _%>
 localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
 
 const bModalStub = {
   render: () => {},
@@ -70,7 +63,20 @@ describe('Component Tests', () => {
         i18n,
 <%_ } _%>
         localVue,
-        stubs: {<%_ if (!paginationNo) { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
+        stubs: {
+<%_ if (!paginationNo) { _%>
+          jhiItemCount: true,
+          bPagination: true,
+<%_ } _%>
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+<%_ if (!paginationNo) { _%>
+          'jhi-sort-indicator': true,
+<%_ } _%>
+          'b-button': true,
+          'router-link': true,
+        },
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
         }

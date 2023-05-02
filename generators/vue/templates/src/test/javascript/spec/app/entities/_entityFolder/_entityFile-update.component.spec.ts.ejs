@@ -59,11 +59,6 @@ const i18n = initI18N(localVue);
 const router = new Router();
 localVue.use(Router);
 localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
@@ -91,6 +86,13 @@ describe('Component Tests', () => {
 <%_ } _%>
         localVue,
         router,
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>

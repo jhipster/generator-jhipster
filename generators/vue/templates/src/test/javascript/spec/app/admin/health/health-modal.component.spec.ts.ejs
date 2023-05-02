@@ -12,7 +12,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-localVue.component('font-awesome-icon', {});
 const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 
 describe('Health Modal Component', () => {
@@ -20,6 +19,9 @@ describe('Health Modal Component', () => {
 
   beforeEach(() => {
     const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
+      stubs: {
+        'font-awesome-icon': true,
+      },
       propsData: {
         currentHealth: {},
       },

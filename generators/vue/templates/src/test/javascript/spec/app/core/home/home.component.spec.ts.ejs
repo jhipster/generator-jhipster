@@ -13,7 +13,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-localVue.component('router-link', {});
 
 describe('Home', () => {
   let home: HomeComponentType;
@@ -35,6 +34,9 @@ describe('Home', () => {
       i18n,
 <%_ } _%>
       localVue,
+      stubs: {
+        'router-link': true,
+      },  
       provide: {
         loginService,
         authenticated,

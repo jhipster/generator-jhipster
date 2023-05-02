@@ -1,5 +1,4 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
@@ -15,7 +14,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('Gateway Component', () => {
   let wrapper: Wrapper<GatewayComponentType>;
@@ -29,6 +27,9 @@ describe('Gateway Component', () => {
       i18n,
 <%_ } _%>
       localVue,
+      stubs: {
+        'font-awesome-icon': true,
+      },
       provide: { gatewayService },
     });
     comp = wrapper.vm;

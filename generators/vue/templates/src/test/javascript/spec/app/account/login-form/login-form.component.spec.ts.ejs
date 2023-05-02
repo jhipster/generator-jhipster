@@ -18,14 +18,6 @@ type LoginFormComponentType = Vue & InstanceType<typeof LoginFormComponent>;
 const localVue = createLocalVue();
 localVue.use(VueRouter);
 
-localVue.component('b-alert', {});
-localVue.component('b-button', {});
-localVue.component('b-form', {});
-localVue.component('b-form-input', {});
-localVue.component('b-form-group', {});
-localVue.component('b-form-checkbox', {});
-localVue.component('b-link', {});
-
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
@@ -56,6 +48,15 @@ describe('LoginForm Component', () => {
 
     const wrapper = shallowMount<LoginFormComponentType>(LoginForm,
       {
+        stubs: {
+          'b-alert': true,
+          'b-button': true,
+          'b-form': true,
+          'b-form-input': true,
+          'b-form-group': true,
+          'b-form-checkbox': true,
+          'b-link': true,
+        },
         pinia,
         <%_ if (enableTranslation) { _%>
         i18n,

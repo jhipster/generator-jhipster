@@ -41,8 +41,6 @@ localVue.use(VueRouter);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
@@ -68,6 +66,10 @@ describe('Component Tests', () => {
 <%_ } _%>
         localVue,
         router,
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
         },
