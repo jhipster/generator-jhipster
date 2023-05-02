@@ -1,10 +1,11 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
+import LoginService from '@/account/login.service';
 import AccountService from '@/account/account.service';
 import { useStore } from '@/store';
 import LoginForm from '@/account/login-form/login-form.vue';
@@ -13,7 +14,13 @@ import type LoginFormComponent from '@/account/login-form/login-form.component';
 type LoginFormComponentType = Vue & InstanceType<typeof LoginFormComponent>;
 
 const localVue = createLocalVue();
-localVue.use(VueRouter);
+
+let route: Partial<Route>;
+const routerGoMock = jest.fn();
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
 
 const pinia = createTestingPinia();
 localVue.use(PiniaVuePlugin);
@@ -26,38 +33,32 @@ const axiosStub = {
 
 describe('LoginForm Component', () => {
   let loginForm: LoginFormComponentType;
-  let router: VueRouter;
 
   beforeEach(() => {
+    route = {};
     axiosStub.get.resolves({});
     axiosStub.post.reset();
-    router = new VueRouter({
-      routes: [
-        {
-          path: '/',
-        },
-      ],
-    });
-    router.push('/');
 
-    const wrapper = shallowMount<LoginFormComponentType>(LoginForm,
-      {
-        stubs: {
-          'b-alert': true,
-          'b-button': true,
-          'b-form': true,
-          'b-form-input': true,
-          'b-form-group': true,
-          'b-form-checkbox': true,
-          'b-link': true,
-        },
-        pinia,
-        localVue,
-        router,
-        provide: {
-          accountService: new AccountService(store)
-        }
-      });
+    const loginService = new LoginService({ emit: jest.fn() });
+
+    const mountOptions: MountOptions<LoginFormComponentType> = {
+      stubs: {
+        'b-alert': true,
+        'b-button': true,
+        'b-form': true,
+        'b-form-input': true,
+        'b-form-group': true,
+        'b-form-checkbox': true,
+        'b-link': true,
+      },
+      pinia,
+      localVue,
+      provide: {
+        loginService,
+        accountService: new AccountService(store)
+      }
+    };
+    const wrapper = shallowMount<LoginFormComponentType>(LoginForm, mountOptions);
     loginForm = wrapper.vm;
   });
 

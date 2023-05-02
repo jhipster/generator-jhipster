@@ -1,6 +1,5 @@
 import { ref, Ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import * as sinon from 'sinon';
 import VueRouter from 'vue-router';
 import { Subject } from 'rxjs';
 
@@ -11,26 +10,26 @@ localVue.use(VueRouter);
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
-  let routerStub: any;
   let TrackerApp: any;
   let authenticated: Ref<boolean>;
 
   let mockStomp: any;
+  let router: VueRouter;
 
   beforeEach(() => {
-    routerStub = new VueRouter();
-    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/' }));
-    routerStub.afterEach = sinon.spy();
+    router = new VueRouter();
+    jest.spyOn(router, 'currentRoute', 'get').mockReturnValue({ fullPath: '/' } as any);
+    router.afterEach = jest.fn();
     authenticated = ref(false);
 
     const watch$ = new Subject<any>();
 
     mockStomp = {
-      publish: sinon.stub(),
-      watch: sinon.stub().callsFake(() => watch$),
-      configure: sinon.stub(),
-      activate: sinon.stub(),
-      deactivate: sinon.stub(),
+      publish: jest.fn(),
+      watch: jest.fn().mockReturnValue(watch$),
+      configure: jest.fn(),
+      activate: jest.fn(),
+      deactivate: jest.fn(),
       connectionState$: new Subject<any>(),
     };
 
@@ -47,40 +46,38 @@ describe('Tracker Service', () => {
   });
 
   it('Should subscribe router activity', async () => {
-    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
-    expect(routerStub.afterEach.calledOnce).toBeTruthy();
+    shallowMount(TrackerApp, { localVue, router, provide: { authenticated } });
+    expect(router.afterEach).toBeCalledTimes(1);
   });
 
   it('Should call activate on authenticated', async () => {
     // WHEN
     authenticated.value = true;
-    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
+    shallowMount(TrackerApp, { localVue, router, provide: { authenticated } });
     await localVue.nextTick();
 
     // THEN
-    expect(mockStomp.activate.calledOnce).toBeTruthy();
+    expect(mockStomp.activate).toBeCalledTimes(1);
   });
 
   it('Should send activity on connected', async () => {
     // GIVEN
-    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/admin' }));
-    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
+    jest.spyOn(router, 'currentRoute', 'get').mockReturnValue({ fullPath: '/admin' } as any);
+    shallowMount(TrackerApp, { localVue, router, provide: { authenticated } });
 
     // WHEN
     mockStomp.connectionState$.next(1);
     await localVue.nextTick();
 
     // THEN
-    expect(mockStomp.publish.callCount).toBe(1);
-    expect(
-      mockStomp.publish.calledOnceWithExactly({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) })
-    ).toBeTruthy();
+    expect(mockStomp.publish).toBeCalledTimes(1);
+    expect(mockStomp.publish).toBeCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
   it('Should disconnect on logout', async () => {
     // GIVEN
     authenticated.value = true;
-    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
+    shallowMount(TrackerApp, { localVue, router, provide: { authenticated } });
     await localVue.nextTick();
 
     // WHEN
@@ -88,6 +85,6 @@ describe('Tracker Service', () => {
     await localVue.nextTick();
 
     // THEN
-    expect(mockStomp.deactivate.calledOnce).toBeTruthy();
+    expect(mockStomp.deactivate).toBeCalledTimes(1);
   });
 });

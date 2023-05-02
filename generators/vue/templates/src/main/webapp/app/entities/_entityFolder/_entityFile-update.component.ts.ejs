@@ -59,6 +59,8 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
+    const previousState = () => router.go(-1);
+
     const retrieve<%= entityAngularName %> = async <%= entityInstance %>Id => {
       try {
         const res = await <%= entityInstance %>Service().find(<%= entityInstance %>Id);
@@ -76,7 +78,7 @@ _%>
       }
     };
 
-    if (route.params.<%= entityInstance %>Id) {
+    if (route.params?.<%= entityInstance %>Id) {
       retrieve<%= entityAngularName %>(route.params.<%= entityInstance %>Id);
     }
 <%_ if (relationships.length > 0) { _%>
@@ -145,8 +147,8 @@ _%>
     return {
       <%= entityInstance %>Service,
       alertService,
-      router,
       <%= entityInstance %>,
+      previousState,
     <%_ enumImports.forEach( (importedPath, importedType) => { _%>
       <%- this._.lowerFirst(importedType) %>Values,
     <%_ }); _%>
@@ -188,7 +190,7 @@ _%>
     if (this.<%= entityInstance %>.id) {
         this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
-          this.$router.go(-1);
+          this.previousState();
           this.alertService.showInfo(
 <%_ if (enableTranslation) { _%>
             this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id })
@@ -203,7 +205,7 @@ _%>
       } else {
         this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
-          this.$router.go(-1);
+          this.previousState();
           this.alertService.showSuccess(
 <%_ if (enableTranslation) { _%>
             this.t$('<%= i18nAlertHeaderPrefix %>.created', { param: param.id }).toString()
@@ -216,10 +218,6 @@ _%>
             this.alertService.showHttpError(error.response);
         });
       }
-    },
-
-    previousState() : void {
-      this.$router.go(-1);
     },
 
   <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>

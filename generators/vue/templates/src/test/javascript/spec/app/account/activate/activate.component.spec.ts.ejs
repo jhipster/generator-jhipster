@@ -1,18 +1,18 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import VueRouter from 'vue-router';
 
 import Activate from '@/account/activate/activate.vue';
 import type ActivateComponent from '@/account/activate/activate.component';
-import ActivateService from '@/account/activate/activate.service';
 import LoginService from '@/account/login.service';
 
 type ActivateComponentType = Vue & InstanceType<typeof ActivateComponent>;
 
-const localVue = createLocalVue();
+const route = { query: { key: 'key' } };
 
-localVue.use(VueRouter);
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+}));
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -22,25 +22,26 @@ const axiosStub = {
 describe('Activate Component', () => {
   let activate: ActivateComponentType;
   let loginService: LoginService;
+  let mountOptions: MountOptions<ActivateComponentType>;
 
   beforeEach(() => {
-    axiosStub.get.resolves({});
-    const router = new VueRouter();
-    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: jest.fn() }<% } %>);
-
-    const wrapper = shallowMount<ActivateComponentType>(Activate, {
-      localVue,
-      router,
+    loginService = new LoginService({ emit: jest.fn() });
+    mountOptions = {
       provide: {
         loginService,
       },
-    });
-    activate = wrapper.vm;
+    };
+  });
+
+  afterAll(() => {
+    sinon.restore();
   });
 
   it('should display error when activation fails', async () => {
     axiosStub.get.rejects({});
-    activate.$router.push({ query: { key: 'invalid-key' } });
+
+    const wrapper = shallowMount<ActivateComponentType>(Activate as any, mountOptions);
+    activate = wrapper.vm;
     await activate.$nextTick();
 
     expect(activate.error).toBeTruthy();
@@ -50,7 +51,8 @@ describe('Activate Component', () => {
   it('should display success when activation succeeds', async () => {
     axiosStub.get.resolves({});
 
-    activate.$router.push({ query: { key: 'valid-key' } });
+    const wrapper = shallowMount<ActivateComponentType>(Activate as any, mountOptions);
+    activate = wrapper.vm;
     await activate.$nextTick();
 
     expect(activate.error).toBeFalsy();

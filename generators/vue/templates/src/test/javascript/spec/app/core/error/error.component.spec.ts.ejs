@@ -1,6 +1,6 @@
 import { Ref, ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 
 import Error from '@/core/error/error.vue';
 import type ErrorComponent from '@/core/error/error.component';
@@ -10,31 +10,23 @@ import LoginService from '@/account/login.service';
 type ErrorComponentType = Vue & InstanceType<typeof ErrorComponent>;
 
 const localVue = createLocalVue();
-localVue.use(VueRouter);
+
+let route: Partial<Route>;
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+}));
+
 const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {
   let error: ErrorComponentType;
   let loginService: LoginService;
-  let router: VueRouter;
   let authenticated: Ref<boolean>;
 
   beforeEach(() => {
+    route = {};
     authenticated = ref(false);
-    router = new VueRouter({
-      routes: [
-        {
-          path: '/forbidden',
-          name: 'Forbidden',
-          meta: { error403: true },
-        },
-        {
-          path: '/not-found',
-          name: 'NotFound',
-          meta: { error404: true },
-        },
-      ],
-    });
 <%_ if (authenticationTypeJwt) { _%>
     loginService = new LoginService({ emit: jest.fn() });
     jest.spyOn(loginService, 'openLogin');
@@ -48,14 +40,12 @@ describe('Error component', () => {
   });
 
   it('should have retrieve custom error on routing', () => {
-    router.addRoute({
+    route = {
       path: '/custom-error',
       name: 'CustomMessage',
       meta: { errorMessage: customErrorMsg },
-    });
-    router.push('/custom-error');
+    };
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-      router,
       localVue,
       provide: {
         loginService,
@@ -75,9 +65,10 @@ describe('Error component', () => {
   });
 
   it('should have set forbidden error on routing', () => {
-    router.push('/forbidden');
+    route = {
+      meta: { error403: true },
+    };
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-      router,
       localVue,
       provide: {
         loginService,
@@ -97,9 +88,10 @@ describe('Error component', () => {
   });
 
   it('should have set not found error on routing', () => {
-    router.push('/not-found');
+    route = {
+      meta: { error404: true },
+    };
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-      router,
       localVue,
       provide: {
         loginService,
@@ -119,13 +111,7 @@ describe('Error component', () => {
   });
 
   it('should have set default on no error', () => {
-    router.addRoute({
-      path: '/no-error',
-      name: 'NoError',
-    });
-    router.push('/no-error');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-      router,
       localVue,
       provide: {
         loginService,

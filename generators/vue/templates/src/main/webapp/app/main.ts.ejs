@@ -112,7 +112,7 @@ new Vue({
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
         const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
         if (!value) {
-          if (router.currentRoute.path !== '/forbidden') {
+          if (from.path !== '/forbidden') {
             next({ path: '/forbidden' });
             return;
           }

@@ -20,8 +20,7 @@
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
@@ -50,14 +49,18 @@ type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%=
 
 const localVue = createLocalVue();
 
-const router = new Router();
-localVue.use(Router);
+let route: Partial<Route>;
+const routerGoMock = jest.fn();
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
   let mountOptions: MountOptions<<%= entityAngularName %>UpdateComponentType>;
-  let router: VueRouter;
   let alertService: AlertService;
 
   describe('<%= entityAngularName %> Management Update Component', () => {
@@ -65,14 +68,8 @@ describe('Component Tests', () => {
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
+      route = {};
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
-      router = new VueRouter({
-        routes: [
-          {
-            path: '/<%= entityApiUrl %>/:<%= entityInstance %>Id',
-          },
-        ],
-      });
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
@@ -85,7 +82,6 @@ describe('Component Tests', () => {
 
       mountOptions = {
         localVue,
-        router,
         stubs: {
           'font-awesome-icon': true,
           'b-input-group': true,
@@ -111,6 +107,10 @@ describe('Component Tests', () => {
 <%_ } _%>
         },
       };
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
 
 <%_ if (anyFieldIsTimeDerived) { _%>
@@ -178,7 +178,11 @@ describe('Component Tests', () => {
         <%= entityInstance %>ServiceStub.retrieve.resolves([<%= entityInstance %>Sample]);
 
         // WHEN
-        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
+        route = {
+          params: {
+            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
         const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
         comp = wrapper.vm;
         await comp.$nextTick();
@@ -191,8 +195,6 @@ describe('Component Tests', () => {
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
-        router.push('/');
-        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
         const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
         comp = wrapper.vm;
         await comp.$nextTick();
@@ -200,7 +202,7 @@ describe('Component Tests', () => {
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

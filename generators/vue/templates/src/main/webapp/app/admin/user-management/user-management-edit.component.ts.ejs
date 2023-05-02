@@ -7,7 +7,7 @@ import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
 import { useAlertService } from '@/shared/alert/alert.service';
-import { useRoute } from 'vue-router/composables';
+import { useRoute, useRouter } from 'vue-router/composables';
 <%_ if (enableTranslation) { _%>
 import languages from '@/shared/config/languages';
 <%_ } _%>
@@ -46,9 +46,11 @@ export default defineComponent({
   validations,
   setup() {
     const route = useRoute();
+    const router = useRouter();
 
     const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
+    const previousState = () => router.go(-1);
 
     const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
     const isSaving: Ref<boolean> = ref(false);
@@ -65,7 +67,7 @@ export default defineComponent({
     };
 
     initAuthorities();
-    const userId = route.params.userId;
+    const userId = route.params?.userId;
     if (userId) {
       loadUser(userId);
     }
@@ -76,6 +78,7 @@ export default defineComponent({
       isSaving,
       authorities,
       userManagementService,
+      previousState,
       v$: useVuelidate(),
 <%_ if (enableTranslation) { _%>
       languages: languages(),
@@ -84,9 +87,6 @@ export default defineComponent({
     };
   },
   methods: {
-    previousState(): void {
-      this.$router.go(-1);
-    },
     save(): void {
       this.isSaving = true;
       if (this.userAccount.id) {
@@ -118,7 +118,7 @@ export default defineComponent({
 
     returnToList(): void {
       this.isSaving = false;
-      this.$router.go(-1);
+      this.previousState();
     },
 
     getToastMessageFromHeader(res: any): string {

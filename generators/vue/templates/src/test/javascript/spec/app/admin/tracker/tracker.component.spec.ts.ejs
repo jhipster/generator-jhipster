@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import * as sinon from 'sinon';
 import { Subject, Subscription } from 'rxjs';
-import VueRouter from 'vue-router';
+import VueRouter, { Route } from 'vue-router';
 
 import <%=jhiPrefixCapitalized%>Tracker from '@/admin/tracker/tracker.vue';
 import <%=jhiPrefixCapitalized%>TrackerComponent from '@/admin/tracker/tracker.component';
@@ -11,7 +11,14 @@ import TrackerService from '@/admin/tracker/tracker.service';
 type <%=jhiPrefixCapitalized%>TrackerComponentType = Vue & InstanceType<typeof <%=jhiPrefixCapitalized%>TrackerComponent>;
 
 const localVue = createLocalVue();
-localVue.use(VueRouter);
+
+let route: Partial<Route>;
+let router: VueRouter;
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => router,
+}));
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -25,7 +32,6 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
   let subscription: Subscription;
   let subscriptionSpy;
   let trackerServiceStub: any;
-  let router: VueRouter;
 
   beforeEach(() => {
     axiosStub.get.resolves({ data: {} });
@@ -36,11 +42,11 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
       subscriptionSpy = sinon.spy(subscription, 'unsubscribe');
       return subscription;
     });
+    route = {};
     router = new VueRouter();
 
     wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponentType>(<%=jhiPrefixCapitalized%>Tracker, {
       localVue,
-      router,
       stubs: {
         'font-awesome-icon': true,
       },

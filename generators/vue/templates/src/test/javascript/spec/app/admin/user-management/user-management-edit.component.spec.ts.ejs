@@ -4,7 +4,7 @@ _%>
 import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
@@ -13,7 +13,14 @@ import type UserManagementEditComponent from '@/admin/user-management/user-manag
 type UserManagementEditComponentType = Vue & InstanceType<typeof UserManagementEditComponent>;
 
 const localVue = createLocalVue();
-localVue.use(VueRouter);
+
+let route: Partial<Route>;
+const routerGoMock = jest.fn();
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
 
 describe('UserManagementEdit Component', () => {
   const axiosStub = {
@@ -21,19 +28,11 @@ describe('UserManagementEdit Component', () => {
     post: sinon.stub(axios, 'post'),
     put: sinon.stub(axios, 'put'),
   };
-  let router: VueRouter;
   let mountOptions: MountOptions<UserManagementEditComponentType>;
   let alertService: AlertService;
 
   beforeEach(() => {
-    router = new VueRouter({
-      routes: [
-        {
-          path: '/:userId',
-          name: 'User',
-        },
-      ],
-    });
+    route = {};
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
       i18n: { t: jest.fn() } as any,
@@ -50,7 +49,6 @@ describe('UserManagementEdit Component', () => {
       provide: {
         alertService,
       },
-      router,
       localVue,
   };
 
@@ -66,7 +64,11 @@ describe('UserManagementEdit Component', () => {
 <%_ if (generateBuiltInAuthorityEntity) { _%>
       axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
 <%_ } _%>
-      router.push('/' + <%- tsKeyId %>);
+      route = {
+        params: {
+          userId: '' + <%- tsKeyId %>,
+        },
+      };
       const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
       const userManagementEdit = wrapper.vm;
 
@@ -85,7 +87,9 @@ describe('UserManagementEdit Component', () => {
 <%_ if (generateBuiltInAuthorityEntity) { _%>
       axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
 <%_ } _%>
-      router.push('/');
+      route = {
+        params: {},
+      };
       const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
       const userManagementEdit = wrapper.vm;
 
@@ -117,7 +121,11 @@ describe('UserManagementEdit Component', () => {
 <%_ if (generateBuiltInAuthorityEntity) { _%>
       axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
 <%_ } _%>
-      router.push('/' + <%- tsKeyId %>);
+      route = {
+        params: {
+          userId: '' + <%- tsKeyId %>,
+        },
+      };
       const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
       const userManagementEdit = wrapper.vm;
       await userManagementEdit.$nextTick();
@@ -143,7 +151,9 @@ describe('UserManagementEdit Component', () => {
 <%_ if (generateBuiltInAuthorityEntity) { _%>
       axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
 <%_ } _%>
-      router.push('/');
+      route = {
+        params: {},
+      };
       const wrapper = shallowMount<UserManagementEditComponentType>(UserManagementEdit, mountOptions);
       const userManagementEdit = wrapper.vm;
       await userManagementEdit.$nextTick();
