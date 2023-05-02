@@ -37,7 +37,7 @@ services:
       - 127.0.0.1:9080:9080
       - 127.0.0.1:9443:9443
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:9080/realms/jhipster']
+      test: ['CMD',  'echo', '-n', 'GET', '/', 'HTTP/1.0\r\n\r\n', '|', 'nc', 'localhost/realms/jhipster', '9080', '$? eq 0']
       interval: 5s
       timeout: 5s
       retries: 20
