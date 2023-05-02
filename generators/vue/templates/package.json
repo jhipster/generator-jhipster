@@ -5,7 +5,7 @@
     "@fortawesome/vue-fontawesome": "2.0.9",
     "@vuelidate/validators": "2.0.2",
     "@vuelidate/core": "2.0.2",
-    "@vueuse/core": "10.1.0",
+    "@vueuse/core": "10.1.2",
     "axios": "1.4.0",
     "bootstrap": "4.6.2",
     "bootstrap-vue": "2.23.1",
