@@ -7,9 +7,6 @@ import { createTestingPinia } from '@pinia/testing';
 import { PiniaVuePlugin } from 'pinia';
 
 import { useStore } from '@/store';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import { createRouter } from '@/router';
 import LoginService from '@/account/login.service';
 
@@ -19,9 +16,6 @@ const localVue = createLocalVue();
 localVue.use(PiniaVuePlugin);
 const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
@@ -45,9 +39,6 @@ describe('JhiNavbar', () => {
     loginService = { login: jest.fn(), logout: jest.fn() };
 <%_ } _%>
     const wrapper = shallowMount<JhiNavbarComponentType>(JhiNavbar, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       pinia,
       router,
       localVue,

@@ -5,9 +5,6 @@ import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
 import { useStore } from '@/store';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import Settings from '@/account/settings/settings.vue';
 import type SettingsComponent from '@/account/settings/settings.component';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
@@ -16,9 +13,6 @@ type SettingsComponentType = Vue & InstanceType<typeof SettingsComponent>;
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 const pinia = createTestingPinia({ stubActions: false });
 localVue.use(PiniaVuePlugin);
 const store = useStore();
@@ -44,9 +38,6 @@ describe('Settings Component', () => {
     const wrapper = shallowMount<SettingsComponentType>(Settings,
       {
         pinia,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
         localVue
       });
     settings = wrapper.vm;

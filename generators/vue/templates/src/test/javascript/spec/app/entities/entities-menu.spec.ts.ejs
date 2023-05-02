@@ -7,7 +7,6 @@ import { initI18N } from '@/shared/config/config';
 type EntitiesMenuComponentType = Vue & InstanceType<typeof EntitiesMenuComponent>;
 
 const localVue = createLocalVue();
-const i18n = initI18N(localVue);
 
 describe('EntitiesMenu', () => {
   let translationService;
@@ -19,7 +18,6 @@ describe('EntitiesMenu', () => {
   describe('using microfrontendI18n', () => {
     beforeEach(() => {
       shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
-        i18n,
         localVue,
         stubs: {
           'b-dropdown-item': true,
@@ -41,7 +39,6 @@ describe('EntitiesMenu', () => {
   describe('not using microfrontendI18n', () => {
     beforeEach(() => {
       shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
-        i18n,
         localVue,
         stubs: {
           'b-dropdown-item': true,

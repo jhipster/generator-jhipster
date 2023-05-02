@@ -3,9 +3,6 @@ import axios from 'axios';
 import sinon from 'sinon';
 import VueRouter from 'vue-router';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import Activate from '@/account/activate/activate.vue';
 import type ActivateComponent from '@/account/activate/activate.component';
 import ActivateService from '@/account/activate/activate.service';
@@ -15,9 +12,6 @@ type ActivateComponentType = Vue & InstanceType<typeof ActivateComponent>;
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 localVue.use(VueRouter);
 
 const axiosStub = {
@@ -35,9 +29,6 @@ describe('Activate Component', () => {
     loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: jest.fn() }<% } %>);
 
     const wrapper = shallowMount<ActivateComponentType>(Activate, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       router,
       provide: {

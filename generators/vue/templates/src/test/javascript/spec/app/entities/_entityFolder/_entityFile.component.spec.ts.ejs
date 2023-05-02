@@ -24,9 +24,6 @@ import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import <%= entityAngularName %> from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
 import type <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -36,9 +33,6 @@ type <%= entityAngularName %>ComponentType = Vue & InstanceType<typeof <%= entit
 const localVue = createLocalVue();
 localVue.use(ToastPlugin);
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 localVue.directive('b-modal', {});
 
 const bModalStub = {
@@ -59,9 +53,6 @@ describe('Component Tests', () => {
       <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {} });
 
       mountOptions = {
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
         localVue,
         stubs: {
 <%_ if (!paginationNo) { _%>

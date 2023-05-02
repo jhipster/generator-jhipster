@@ -5,9 +5,6 @@ import VueRouter from 'vue-router';
 import { Subject } from 'rxjs';
 
 import TrackerService, { useTrackerService } from '@/admin/tracker/tracker.service';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);

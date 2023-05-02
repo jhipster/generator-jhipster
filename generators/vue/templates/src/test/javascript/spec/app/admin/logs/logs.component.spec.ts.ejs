@@ -5,17 +5,11 @@ import Logs from '@/admin/logs/logs.vue';
 import type LogsComponent from '@/admin/logs/logs.component';
 import LogsService from '@/admin/logs/logs.service';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 
 type LogsComponentType = Vue & InstanceType<typeof LogsComponent>;
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -28,9 +22,6 @@ describe('Logs Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({});
     const wrapper = shallowMount<LogsComponentType>(Logs, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
     });
     logs = wrapper.vm;

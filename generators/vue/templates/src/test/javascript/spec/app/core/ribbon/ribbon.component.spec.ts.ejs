@@ -5,9 +5,6 @@ import type RibbonComponent from '@/core/ribbon/ribbon.component';
 import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 import { AccountStore, useStore } from '@/store';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 
 type RibbonComponentType = Vue & InstanceType<typeof RibbonComponent>;
 
@@ -15,9 +12,6 @@ const localVue = createLocalVue();
 const pinia = createTestingPinia({ stubActions: false });
 localVue.use(PiniaVuePlugin);
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 describe('Ribbon', () => {
   let ribbon: RibbonComponentType;
@@ -25,9 +19,6 @@ describe('Ribbon', () => {
 
   beforeEach(async () => {
     const wrapper = shallowMount<RibbonComponentType>(Ribbon, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       pinia,
       localVue
     });

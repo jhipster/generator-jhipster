@@ -7,9 +7,6 @@ import sinon from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import UserManagementView from '@/admin/user-management/user-management-view.vue';
 import type UserManagementViewComponent from '@/admin/user-management/user-management-view.component';
 import { Authority } from '@/shared/security/authority';
@@ -19,9 +16,6 @@ type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementV
 const localVue = createLocalVue();
 localVue.use(ToastPlugin);
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 localVue.use(VueRouter);
 
 const axiosStub = {
@@ -62,9 +56,6 @@ describe('UserManagementView Component', () => {
         },
         localVue,
         router,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
       });
       const userManagementView = wrapper.vm;
   

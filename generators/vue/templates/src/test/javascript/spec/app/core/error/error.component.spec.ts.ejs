@@ -5,18 +5,12 @@ import VueRouter from 'vue-router';
 import Error from '@/core/error/error.vue';
 import type ErrorComponent from '@/core/error/error.component';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import LoginService from '@/account/login.service';
 
 type ErrorComponentType = Vue & InstanceType<typeof ErrorComponent>;
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {
@@ -61,9 +55,6 @@ describe('Error component', () => {
     });
     router.push('/custom-error');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       router,
       localVue,
       provide: {
@@ -86,9 +77,6 @@ describe('Error component', () => {
   it('should have set forbidden error on routing', () => {
     router.push('/forbidden');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       router,
       localVue,
       provide: {
@@ -111,9 +99,6 @@ describe('Error component', () => {
   it('should have set not found error on routing', () => {
     router.push('/not-found');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       router,
       localVue,
       provide: {
@@ -140,9 +125,6 @@ describe('Error component', () => {
     });
     router.push('/no-error');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       router,
       localVue,
       provide: {

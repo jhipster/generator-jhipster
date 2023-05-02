@@ -4,9 +4,6 @@ import axios from 'axios';
 import sinon from 'sinon';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import Register from '@/account/register/register.vue';
 import type RegisterComponent from '@/account/register/register.component';
 import RegisterService from '@/account/register/register.service';
@@ -16,9 +13,6 @@ type RegisterComponentType = Vue & InstanceType<typeof RegisterComponent>;
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -42,9 +36,6 @@ describe('Register Component', () => {
     jest.spyOn(loginService, 'openLogin');
 
     const wrapper = shallowMount<RegisterComponentType>(Register, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       provide: {
         loginService,

@@ -7,9 +7,6 @@ import sinon from 'sinon';
 import VueRouter from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
 import type UserManagementEditComponent from '@/admin/user-management/user-management-edit.component';
 
@@ -18,10 +15,6 @@ type UserManagementEditComponentType = Vue & InstanceType<typeof UserManagementE
 const localVue = createLocalVue();
 localVue.use(VueRouter);
 localVue.use(ToastPlugin);
-
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 
 describe('UserManagementEdit Component', () => {
   const axiosStub = {
@@ -46,9 +39,6 @@ describe('UserManagementEdit Component', () => {
         'font-awesome-icon': true,
       },
       router,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
   };
 

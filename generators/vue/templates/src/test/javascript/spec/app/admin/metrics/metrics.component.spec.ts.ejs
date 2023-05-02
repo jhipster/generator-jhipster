@@ -2,9 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import Metrics from '@/admin/metrics/metrics.vue';
 import type MetricsComponent from '@/admin/metrics/metrics.component';
 import MetricsService from '@/admin/metrics/metrics.service';
@@ -13,9 +10,6 @@ type MetricsComponentType = Vue & InstanceType<typeof MetricsComponent>;
 
 const localVue = createLocalVue();
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 localVue.directive('b-modal', {});
 localVue.directive('b-progress', {});
 localVue.directive('b-progress-bar', {});
@@ -232,9 +226,6 @@ describe('Metrics Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({ data: { timers: [], gauges: []} });
     const wrapper = shallowMount<MetricsComponentType>(Metrics, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       stubs: {
         bModal: true,

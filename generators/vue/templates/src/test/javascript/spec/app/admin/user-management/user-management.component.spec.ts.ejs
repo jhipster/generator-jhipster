@@ -7,9 +7,6 @@ import axios from 'axios';
 import sinon from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import UserManagement from '@/admin/user-management/user-management.vue';
 import type UserManagementComponent from '@/admin/user-management/user-management.component';
 
@@ -18,9 +15,6 @@ type UserManagementComponentType = Vue & InstanceType<typeof UserManagementCompo
 const localVue = createLocalVue();
 
 localVue.use(ToastPlugin);
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 localVue.directive('b-modal', {});
 
 const axiosStub = {
@@ -38,9 +32,6 @@ describe('UserManagement Component', () => {
     axiosStub.get.resolves({ headers: {} });
 
     const wrapper = shallowMount<UserManagementComponentType>(UserManagement, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       stubs: {
         bPagination: true,

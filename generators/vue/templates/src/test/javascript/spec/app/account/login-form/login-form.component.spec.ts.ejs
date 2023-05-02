@@ -7,9 +7,6 @@ import { createTestingPinia } from '@pinia/testing';
 
 import AccountService from '@/account/account.service';
 import { useStore } from '@/store';
-<%_ if (enableTranslation) { _%>
-import { initI18N } from '@/shared/config/config';
-<%_ } _%>
 import LoginForm from '@/account/login-form/login-form.vue';
 import type LoginFormComponent from '@/account/login-form/login-form.component';
 
@@ -18,9 +15,6 @@ type LoginFormComponentType = Vue & InstanceType<typeof LoginFormComponent>;
 const localVue = createLocalVue();
 localVue.use(VueRouter);
 
-<%_ if (enableTranslation) { _%>
-const i18n = initI18N(localVue);
-<%_ } _%>
 const pinia = createTestingPinia();
 localVue.use(PiniaVuePlugin);
 const store = useStore();
@@ -58,9 +52,6 @@ describe('LoginForm Component', () => {
           'b-link': true,
         },
         pinia,
-        <%_ if (enableTranslation) { _%>
-        i18n,
-        <%_ } _%>
         localVue,
         router,
         provide: {
