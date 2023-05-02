@@ -1,34 +1,30 @@
-import { createLocalVue } from '@vue/test-utils';
+import { ref, Ref } from 'vue';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import * as sinon from 'sinon';
 import VueRouter from 'vue-router';
 import { Subject } from 'rxjs';
 
-import { useStore } from '@/store';
-import TrackerService from '@/admin/tracker/tracker.service';
+import TrackerService, { useTrackerService } from '@/admin/tracker/tracker.service';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
-import { defaultAccountState } from '@/shared/config/store/account-store';
 
 const localVue = createLocalVue();
-const store = useStore();
+localVue.use(VueRouter);
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
   let routerStub: any;
+  let TrackerApp: any;
+  let authenticated: Ref<boolean>;
 
   let mockStomp: any;
 
   beforeEach(() => {
-    store.replaceState({
-      ...store.state,
-      accountStore: { ...defaultAccountState },
-    });
-    routerStub = sinon.createStubInstance<VueRouter>(VueRouter);
+    routerStub = new VueRouter();
     sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/' }));
     routerStub.afterEach = sinon.spy();
-
-    trackerService = new TrackerService(routerStub, store);
+    authenticated = ref(false);
 
     const watch$ = new Subject<any>();
 
@@ -38,20 +34,30 @@ describe('Tracker Service', () => {
       configure: sinon.stub(),
       activate: sinon.stub(),
       deactivate: sinon.stub(),
-      connected$: new Subject<any>(),
+      connectionState$: new Subject<any>(),
     };
 
-    trackerService.stomp = mockStomp;
-    trackerService['buildUrl'] = () => '';
+    TrackerApp = {
+      name: 'TrackerApp',
+      template: `
+        <div></div>
+      `,
+      setup() {
+        trackerService = useTrackerService({ stomp: mockStomp });
+        trackerService['buildUrl'] = () => '';
+      },
+    };
   });
 
   it('Should subscribe router activity', async () => {
+    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
     expect(routerStub.afterEach.calledOnce).toBeTruthy();
   });
 
   it('Should call activate on authenticated', async () => {
     // WHEN
-    store.commit('authenticated', {});
+    authenticated.value = true;
+    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
     await localVue.nextTick();
 
     // THEN
@@ -61,9 +67,11 @@ describe('Tracker Service', () => {
   it('Should send activity on connected', async () => {
     // GIVEN
     sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/admin' }));
+    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
 
     // WHEN
-    mockStomp.connected$.next({});
+    mockStomp.connectionState$.next(1);
+    await localVue.nextTick();
 
     // THEN
     expect(mockStomp.publish.callCount).toBe(1);
@@ -74,11 +82,12 @@ describe('Tracker Service', () => {
 
   it('Should disconnect on logout', async () => {
     // GIVEN
-    store.commit('authenticated', {});
+    authenticated.value = true;
+    shallowMount(TrackerApp, { localVue, router: routerStub, provide: { authenticated } });
     await localVue.nextTick();
 
     // WHEN
-    store.commit('logout');
+    authenticated.value = false;
     await localVue.nextTick();
 
     // THEN

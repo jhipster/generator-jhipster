@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueRouter from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -24,7 +23,6 @@ localVue.use(ToastPlugin);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('UserManagementEdit Component', () => {
@@ -46,7 +44,6 @@ describe('UserManagementEdit Component', () => {
       ],
     });
     mountOptions = {
-      store,
       router,
 <%_ if (enableTranslation) { _%>
       i18n,

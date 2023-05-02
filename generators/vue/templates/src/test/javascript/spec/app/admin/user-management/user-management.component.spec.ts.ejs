@@ -1,13 +1,13 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
+import { ref } from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ToastPlugin } from 'bootstrap-vue';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -22,7 +22,6 @@ localVue.use(ToastPlugin);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 localVue.component('router-link', {});
 localVue.component('jhi-sort-indicator', {});
@@ -37,20 +36,12 @@ const axiosStub = {
 describe('UserManagement Component', () => {
   let userManagement: UserManagementComponentType;
 
-  const account = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@jhipster.org'
-  };
-
   beforeEach(() => {
     axiosStub.put.reset();
     axiosStub.get.reset();
     axiosStub.get.resolves({ headers: {} });
 
-    store.commit('authenticated', account);
     const wrapper = shallowMount<UserManagementComponentType>(UserManagement, {
-      store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
@@ -58,7 +49,10 @@ describe('UserManagement Component', () => {
       stubs: {
         bPagination: true,
         jhiItemCount: true,
-        bModal: true
+        bModal: true,
+      },
+      provide: {
+        currentUsername: ref(''),
       },
     });
     userManagement = wrapper.vm;

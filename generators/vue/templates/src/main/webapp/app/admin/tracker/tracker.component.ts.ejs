@@ -1,4 +1,4 @@
-import <% if (authenticationUsesCsrf) { %>Vue, <% } %>{ defineComponent, inject, ref, Ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, inject, ref, Ref, onMounted, onUnmounted } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { useDateFormat } from '@/shared/composables'
 import TrackerService from './tracker.service';
+import { useRoute } from 'vue-router/composables';
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>TrackerComponent',
@@ -13,7 +14,8 @@ export default defineComponent({
     const { formatDateShort: formatDate } = useDateFormat();
     const trackerService = inject<TrackerService>('trackerService');
     const activities: Ref<any[]> = ref([]);
-    const subscription: Ref<Subscription> = ref(null);
+    const route = useRoute();
+    let subscription: Subscription;
 
     const showActivity = (activity: any) => {
       let existingActivity = false;
@@ -34,15 +36,17 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      subscription.value = trackerService.subscribe(activity => {
+      subscription = trackerService.subscribe(activity => {
         showActivity(activity);
       });
+      // Make sure current session shows on the list
+      trackerService.sendActivity(route.fullPath);
     });
 
     onUnmounted(() => {
-      if (subscription.value) {
-        subscription.value.unsubscribe();
-        subscription.value = null;
+      if (subscription) {
+        subscription.unsubscribe();
+        subscription = null;
       }
     });
 

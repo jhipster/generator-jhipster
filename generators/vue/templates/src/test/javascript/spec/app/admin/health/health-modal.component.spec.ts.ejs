@@ -1,6 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -13,7 +12,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', {});
 const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 

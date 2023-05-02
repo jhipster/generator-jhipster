@@ -24,7 +24,6 @@ import Router from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-import { useStore } from '@/store';
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
@@ -57,7 +56,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 const router = new Router();
 localVue.use(Router);
 localVue.use(ToastPlugin);
@@ -88,7 +86,6 @@ describe('Component Tests', () => {
       });
 
       mountOptions = {
-        store,
 <%_ if (enableTranslation) { _%>
         i18n,
 <%_ } _%>

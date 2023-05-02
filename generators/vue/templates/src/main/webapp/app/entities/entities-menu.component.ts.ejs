@@ -4,6 +4,7 @@ import {
   inject,
   onMounted,
   watch,
+  ComputedRef,
 <%_ } _%>
 } from 'vue';
 <%_ if (enableTranslation) { _%>
@@ -21,10 +22,11 @@ export default defineComponent({
   <%_ if (applicationTypeMicroservice) { _%>
     const microfrontendI18n = inject('microfrontendI18n', true);
     const translationService = inject<TranslationService>('translationService');
+    const currentLanguage = inject<ComputedRef<string>>('currentLanguage');
 
     const loadLanguage = () => {
       if (microfrontendI18n) {
-        translationService.loadTranslations('<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
+        translationService.loadTranslations(currentLanguage.value, '<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
       }
     };
 

@@ -1,19 +1,9 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { accountStore } from '@/shared/config/store/account-store';
+import { useAccountStore as useStore } from '@/shared/config/store/account-store';
+export type AccountStore = ReturnType<typeof useStore>;
+export { useStore };
 <%_ if (enableTranslation) { _%>
-import { translationStore } from '@/shared/config/store/translation-store';
+
+import { useTranslationStore } from '@/shared/config/store/translation-store';
+export type TranslationStore = ReturnType<typeof useTranslationStore>;
+export { useTranslationStore };
 <%_ } _%>
-
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
-  modules: {
-    accountStore,
-<%_ if (enableTranslation) { _%>
-      translationStore,
-<%_ } _%>
-  },
-});
-
-export const useStore = () => store;

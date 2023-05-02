@@ -15,8 +15,8 @@ export default defineComponent({
     const error: Ref<string> = ref(null);
     const sessions: Ref<any[]> = ref([]);
 
-    const authenticated = computed(() => store.getters.authenticated);
-    const username = computed(() => store.getters.account?.login ?? '');
+    const authenticated = computed(() => store.authenticated);
+    const username = computed(() => store.account?.login ?? '');
 
     return {
       success,

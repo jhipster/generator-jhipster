@@ -2,12 +2,10 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import VueRouter from 'vue-router';
+import { PiniaVuePlugin } from 'pinia';
+import { createTestingPinia } from '@pinia/testing';
 
 import AccountService from '@/account/account.service';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
-
 import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
@@ -31,6 +29,8 @@ localVue.component('b-link', {});
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
+const pinia = createTestingPinia();
+localVue.use(PiniaVuePlugin);
 const store = useStore();
 
 const axiosStub = {
@@ -56,14 +56,14 @@ describe('LoginForm Component', () => {
 
     const wrapper = shallowMount<LoginFormComponentType>(LoginForm,
       {
-        store,
+        pinia,
         <%_ if (enableTranslation) { _%>
         i18n,
         <%_ } _%>
         localVue,
         router,
         provide: {
-          accountService: new AccountService(store<% if (enableTranslation) { %>, new TranslationService(store, i18n)<% } %>)
+          accountService: new AccountService(store)
         }
       });
     loginForm = wrapper.vm;

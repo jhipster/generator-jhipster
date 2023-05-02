@@ -87,7 +87,7 @@ const noLanguageFiles = languageValue => {
 const containsLanguageInVueStore = languageValue => {
   it(`add language ${languageValue} into translation-store.ts, webpack.common.js`, () => {
     const langKey = languageValue.includes('-') ? `'${languageValue}'` : `${languageValue}`;
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`, `${langKey}: { name:`);
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/languages.ts`, `${langKey}: { name:`);
     runResult.assertFileContent(
       `${CLIENT_WEBPACK_DIR}webpack.common.js`,
       `{ pattern: './src/main/webapp/i18n/${languageValue}/*.json', fileName: './i18n/${languageValue}.json' }`

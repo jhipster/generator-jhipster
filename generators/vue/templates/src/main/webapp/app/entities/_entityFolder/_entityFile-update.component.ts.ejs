@@ -1,9 +1,10 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router/composables';
 import { useVuelidate } from '@vuelidate/core'
+
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
@@ -53,7 +54,7 @@ export default defineComponent({
     const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
     <%_ }); _%>
     const isSaving = ref(false);
-    const currentLanguage = ref('');
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const route = useRoute();
     const router = useRouter();
@@ -167,13 +168,6 @@ _%>
     };
   },
   created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
     <%_ if (relationshipsContainManyToOne) { _%>
     <%_
       for (relationship of relationships) {

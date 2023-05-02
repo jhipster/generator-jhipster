@@ -45,15 +45,16 @@
     "sockjs-client": "1.5.2",
     "rxjs": "7.4.0",
 <%_ } _%>
+    "pinia": "<%= nodeDependencies.pinia %>",
     "vue": "<%= nodeDependencies['vue'] %>",
 <%_ if (enableTranslation) { _%>
     "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
     "vue-i18n-bridge": "<%= nodeDependencies['vue-i18n-bridge'] %>",
 <%_ } _%>
-    "vue-router": "<%= nodeDependencies['vue-router'] %>",
-    "vuex": "<%= nodeDependencies['vuex'] %>"
+    "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
+    "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@rushstack/eslint-patch": "<%= nodeDependencies['@rushstack/eslint-patch'] %>",
     "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",

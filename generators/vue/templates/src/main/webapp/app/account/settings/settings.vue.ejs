@@ -89,6 +89,7 @@
               </small>
             </div>
           </div>
+<%_ if (enableTranslation) { _%>
           <div class="form-group" v-if="languages && Object.keys(languages).length > 1">
             <label for="langKey" v-text="t$('settings.form.language')">Language</label>
             <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
@@ -96,6 +97,7 @@
               </option>
             </select>
           </div>
+<%_ } _%>
           <button type="submit" :disabled="v$.settingsAccount.$invalid" class="btn btn-primary"
             v-text="t$('settings.form.button')" data-cy="submit">
             Save

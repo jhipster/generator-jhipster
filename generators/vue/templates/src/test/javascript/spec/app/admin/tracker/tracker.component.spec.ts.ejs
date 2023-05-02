@@ -3,8 +3,8 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as sinon from 'sinon';
 import { Subject, Subscription } from 'rxjs';
+import VueRouter from 'vue-router';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -15,11 +15,11 @@ import TrackerService from '@/admin/tracker/tracker.service';
 type <%=jhiPrefixCapitalized%>TrackerComponentType = Vue & InstanceType<typeof <%=jhiPrefixCapitalized%>TrackerComponent>;
 
 const localVue = createLocalVue();
+localVue.use(VueRouter);
 
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 const axiosStub = {
@@ -34,6 +34,7 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
   let subscription: Subscription;
   let subscriptionSpy;
   let trackerServiceStub: any;
+  let router: VueRouter;
 
   beforeEach(() => {
     axiosStub.get.resolves({ data: {} });
@@ -44,13 +45,14 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
       subscriptionSpy = sinon.spy(subscription, 'unsubscribe');
       return subscription;
     });
+    router = new VueRouter();
 
     wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponentType>(<%=jhiPrefixCapitalized%>Tracker, {
-      store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
       localVue,
+      router,
       provide: {
         trackerService: trackerServiceStub,
       },

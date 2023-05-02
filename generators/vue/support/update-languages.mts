@@ -45,12 +45,12 @@ function generateDateTimeFormat(language: string, index: number, length: number)
 function updateLanguagesInPipeTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
   const { clientSrcDir, languagesDefinition = [] } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
-  const newContent = `languages: {
-        ${generateLanguagesWebappOptions(languagesDefinition).join(',\n        ')}
-        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
+  const newContent = `$1{
+  ${generateLanguagesWebappOptions(languagesDefinition).join(',\n  ')},
+  // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
     }`;
-  this.editFile(`${clientSrcDir}app/shared/config/store/translation-store.ts`, { ignoreNonExisting }, content =>
-    content.replace(/languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g, newContent)
+  this.editFile(`${clientSrcDir}app/shared/config/languages.ts`, { ignoreNonExisting }, content =>
+    content.replace(/(languages =.*)\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g, newContent)
   );
 }
 

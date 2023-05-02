@@ -1,8 +1,8 @@
+import { computed } from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import { useStore } from '@/store';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
@@ -19,7 +19,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -43,13 +42,13 @@ describe('Register Component', () => {
     jest.spyOn(loginService, 'openLogin');
 
     const wrapper = shallowMount<RegisterComponentType>(Register, {
-      store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
       localVue,
       provide: {
         loginService,
+        currentLanguage: computed(() => '<%= nativeLanguage %>'),
       },
     });
     register = wrapper.vm;

@@ -25,7 +25,6 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -42,7 +41,6 @@ localVue.use(VueRouter);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', {});
 localVue.component('router-link', {});
 
@@ -65,7 +63,6 @@ describe('Component Tests', () => {
       });
 
       mountOptions = {
-        store,
 <%_ if (enableTranslation) { _%>
         i18n,
 <%_ } _%>

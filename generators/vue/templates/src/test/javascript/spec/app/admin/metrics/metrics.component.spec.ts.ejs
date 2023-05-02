@@ -3,7 +3,6 @@ import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -19,7 +18,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 localVue.component('metrics-modal', MetricsModal);
 localVue.directive('b-modal', {});
@@ -238,7 +236,6 @@ describe('Metrics Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({ data: { timers: [], gauges: []} });
     const wrapper = shallowMount<MetricsComponentType>(Metrics, {
-      store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>

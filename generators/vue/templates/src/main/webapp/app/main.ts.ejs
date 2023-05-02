@@ -1,9 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue, { provide } from 'vue';
-import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
+import Vue, { provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
+import { createPinia, PiniaVuePlugin } from 'pinia'
 
-import { useStore } from '@/store';
+import { useStore<% if (enableTranslation) { %>, useTranslationStore<% } %> } from '@/store';
+import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
 import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
@@ -24,6 +25,9 @@ import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 /* tslint:disable */
 
+Vue.use(PiniaVuePlugin)
+const pinia = createPinia()
+
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -36,10 +40,8 @@ Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(Vue);
 <%_ } _%>
-const store = useStore();
 
-/* tslint:disable */
-<% if (!authenticationTypeOauth2) { %>const vue = <% } %>new Vue({
+new Vue({
   el: '#app',
   components: { App },
   template: '<App/>',
@@ -52,10 +54,51 @@ const store = useStore();
   setup() {
     provide('loginService', new LoginService());
 <%_ } _%>
+    const store = useStore();
+    const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
-    const translationService = new TranslationService(store, i18n);
+    const translationStore = useTranslationStore();
+    const translationService = new TranslationService(i18n);
+
+    const currentLanguage = computed(() => translationStore.currentLanguage);
+    const changeLanguage = async (newLanguage: string) => {
+      if (currentLanguage.value !== newLanguage) {
+        await translationService.refreshTranslation(newLanguage);
+        translationStore.setCurrentLanguage(newLanguage);
+      }
+    };
+
+    provide('currentLanguage', currentLanguage);
+    provide('changeLanguage', changeLanguage);
+
+    watch(
+      () => store.account,
+      async value => {
+        if (!translationService.getLocalStoreLanguage()) {
+          await changeLanguage(value.langKey);
+        }
+      }
+    );
+
+    watch(
+      () => translationStore.currentLanguage,
+      value => {
+        translationService.setLocale(value);
+      }
+    );
+
+    onMounted(async () => {
+      const lang = [
+      translationService.getLocalStoreLanguage(),
+        store.account?.langKey,
+        navigator.language,
+        '<%- nativeLanguage %>'
+      ].find(lang => lang && translationService.isLanguageSupported(lang));
+      await changeLanguage(lang);
+    });
+<%_ } else { _%>
+    provide('currentLanguage', computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
-    const accountService = new AccountService(store<%_ if (enableTranslation) { _%>, translationService<%_ } _%>);
 
     router.beforeResolve(async (to, from, next) => {
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -63,7 +106,7 @@ const store = useStore();
       loginService.hideLogin();
 
 <%_ } _%>
-      if (!store.getters.authenticated) {
+      if (!store.authenticated) {
         await accountService.update();
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
@@ -84,7 +127,7 @@ const store = useStore();
         const status = error.status || error.response.status;
         if (status === 401) {
           // Store logged out state.
-          store.commit('logout');
+          store.logout();
           if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
             // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
@@ -102,6 +145,9 @@ const store = useStore();
       }
     );
 
+    provide('authenticated', computed(() => store.authenticated));
+    provide('currentUsername', computed(() => store.account?.login));
+
 <%_ if (enableTranslation) { _%>
     provide('translationService', translationService);
 <%_ } _%>
@@ -115,5 +161,5 @@ const store = useStore();
     provide('microfrontendI18n', false);
 <%_ } _%>
   },
-  store,
+  pinia,
 });

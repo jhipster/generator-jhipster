@@ -1,7 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { useStore } from '@/store';
 <%_ if (enableTranslation) { _%>
 import { initI18N } from '@/shared/config/config';
 <%_ } _%>
@@ -16,7 +15,6 @@ const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
 const i18n = initI18N(localVue);
 <%_ } _%>
-const store = useStore();
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('Gateway Component', () => {
@@ -27,7 +25,6 @@ describe('Gateway Component', () => {
     const gatewayService = new GatewayService();
     jest.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
     wrapper = shallowMount<GatewayComponentType>(GatewayVue, {
-      store,
 <%_ if (enableTranslation) { _%>
       i18n,
 <%_ } _%>
