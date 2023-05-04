@@ -31,8 +31,8 @@
 #  <%_ if (kubernetesStorageClassName) { _%>
 #  storageClassName: <%= kubernetesStorageClassName %>
 #  <%_ } _%>
-#---
 #<%_ } _%>
+
 apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
