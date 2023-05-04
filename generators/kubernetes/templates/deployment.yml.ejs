@@ -16,23 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (app.logManagementTypeEck) { _%>
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: <%= app.baseName.toLowerCase() %>-logs-pvc
-  namespace: <%= kubernetesNamespace %>
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
-  <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
-  <%_ } _%>
----
-<%_ } _%>
+#<%_ if (app.logManagementTypeEck) { _%>
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: <%= app.baseName.toLowerCase() %>-logs-pvc
+#  namespace: <%= kubernetesNamespace %>
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 2Gi
+#  <%_ if (kubernetesStorageClassName) { _%>
+#  storageClassName: <%= kubernetesStorageClassName %>
+#  <%_ } _%>
+#---
+#<%_ } _%>
 apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
@@ -66,16 +66,16 @@ spec:
         - name: init-ds
           image: busybox:latest
           <%_ if (app.logManagementTypeEck) { _%>
-          volumeMounts:
-            - name: <%= app.baseName.toLowerCase() %>-logs-pv
-              mountPath: /var/logs
+          #volumeMounts:
+          #  - name: <%= app.baseName.toLowerCase() %>-logs-pv
+          #    mountPath: /var/logs
           <%_ } _%>
           command:
             - '/bin/sh'
             - '-c'
             - |
 <%_ if (app.logManagementTypeEck) { _%>
-                chmod -R 777 /var/logs
+        
 <%_ } _%>
                 while true
                 do
@@ -108,9 +108,9 @@ spec:
       - name: <%= app.baseName.toLowerCase() %>-app
         image: <%= app.targetImageName %>
 <%_ if (app.logManagementTypeEck) { _%>
-        volumeMounts:
-          - name: <%= app.baseName.toLowerCase() %>-logs-pv
-            mountPath: /var/logs
+        #volumeMounts:
+        #  - name: <%= app.baseName.toLowerCase() %>-logs-pv
+        #    mountPath: /var/logs
 <%_ } _%>
         env:
         - name: SPRING_PROFILES_ACTIVE
@@ -311,10 +311,10 @@ spec:
             port: http
           initialDelaySeconds: 120
 <%_ if (app.logManagementTypeEck) { _%>
-      volumes:
-      - name: <%= app.baseName.toLowerCase() %>-logs-pv
-        persistentVolumeClaim:
-          claimName: <%= app.baseName.toLowerCase() %>-logs-pvc
+      #volumes:
+      #- name: <%= app.baseName.toLowerCase() %>-logs-pv
+      #  persistentVolumeClaim:
+      #    claimName: <%= app.baseName.toLowerCase() %>-logs-pvc
 <%_ } _%>
 
           
