@@ -63,7 +63,10 @@ export const downloadJdlFile = async (jdlFile: string, { skipSampleRepository }:
     return await downloadFile(url, jdlFile);
   } catch (error) {
     logger.info((error as any).message);
-    url = new URL(jdlFile, 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/').toString();
+    // TODO replace when any v8 is released.
+    // const majorVersion = packageJson.version.split('.', 2)[0];
+    const majorVersion = '8';
+    url = new URL(jdlFile, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${majorVersion}/`).toString();
     return downloadFile(url, jdlFile);
   }
 };
