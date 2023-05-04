@@ -36,7 +36,6 @@ Options:
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
-  --skip-jhipster-dependencies             Don't write jhipster dependencies.
   --legacy-db-names                        Generate database names with jhipster 6 compatibility.
   --ignore-errors                          Don't fail on prettier errors.
   -n, --native-language [value]            Set application native language

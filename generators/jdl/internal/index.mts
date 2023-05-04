@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+export * from './application.mjs';
+export * from './utils.mjs';

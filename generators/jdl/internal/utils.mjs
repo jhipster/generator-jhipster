@@ -16,5 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+import { existsSync } from 'fs';
+import { join } from 'path';
+
+/**
+ * Check if .yo-rc.json exists inside baseName folder.
+ * @param {string} baseName
+ * @return {boolean}
+ */
+export const baseNameConfigExists = baseName => existsSync(baseName === undefined ? '.yo-rc.json' : join(baseName, '.yo-rc.json'));
+
+/**
+ * Check if every application is new.
+ * @param {any} importState
+ * @return {boolean}
+ */
+export const allNewApplications = applications => {
+  if (applications.length === 1) return !baseNameConfigExists();
+  return !applications.find(application => baseNameConfigExists(application.config.baseName));
+};
