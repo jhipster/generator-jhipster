@@ -45,6 +45,8 @@ export const CommonDBTypes = {
   TEXT_BLOB: 'TextBlob',
   INSTANT: 'Instant',
   DURATION: 'Duration',
+  BYTES: 'byte[]', // Supported by mongodb at CI samples
+  BYTE_BUFFER: 'ByteBuffer', // Supported by cassandra at CI samples
 };
 
 export const RelationalOnlyDBTypes = {

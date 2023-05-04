@@ -59,25 +59,20 @@ describe('jdl - JSONToJDLConverter', () => {
     blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
     buildTool maven
     cacheProvider hazelcast
-    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages []
     messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType mysql
-    reactive false
     searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
@@ -85,7 +80,6 @@ describe('jdl - JSONToJDLConverter', () => {
     skipUserManagement true
     testFrameworks []
     websocket no
-    withAdminUi false
   }
 }
 
@@ -110,25 +104,20 @@ describe('jdl - JSONToJDLConverter', () => {
     baseName truc
     buildTool maven
     cacheProvider hazelcast
-    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages []
     messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType mysql
-    reactive false
     searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
@@ -136,7 +125,6 @@ describe('jdl - JSONToJDLConverter', () => {
     skipUserManagement true
     testFrameworks []
     websocket no
-    withAdminUi false
   }
 
   entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
@@ -232,25 +220,20 @@ paginate Country with pager
     baseName app1
     buildTool maven
     cacheProvider hazelcast
-    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages []
     messageBroker no
     nativeLanguage en
     packageName com.mycompany.app1
     prodDatabaseType mysql
-    reactive false
     searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
@@ -258,7 +241,6 @@ paginate Country with pager
     skipUserManagement true
     testFrameworks []
     websocket no
-    withAdminUi false
   }
 
   entities Region
@@ -270,25 +252,20 @@ application {
     baseName app2
     buildTool maven
     cacheProvider hazelcast
-    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages []
     messageBroker no
     nativeLanguage en
     packageName com.mycompany.app2
     prodDatabaseType mysql
-    reactive false
     searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
@@ -296,7 +273,6 @@ application {
     skipUserManagement true
     testFrameworks []
     websocket no
-    withAdminUi false
   }
 
   entities Country, Location
@@ -308,25 +284,20 @@ application {
     baseName app3
     buildTool maven
     cacheProvider hazelcast
-    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages []
     messageBroker no
     nativeLanguage en
     packageName com.mycompany.app3
     prodDatabaseType mysql
-    reactive false
     searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
@@ -334,7 +305,6 @@ application {
     skipUserManagement true
     testFrameworks []
     websocket no
-    withAdminUi false
   }
 }
 
