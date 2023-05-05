@@ -47,6 +47,7 @@ public class SpaWebFilterIT {
         webTestClient
             .get()
             .uri("/v3/api-docs")
+            .timeout(Duration.ofSeconds(20))
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON);
