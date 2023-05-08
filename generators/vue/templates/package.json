@@ -22,7 +22,7 @@
     "@pinia/testing": "0.0.16",
     "@rushstack/eslint-patch": "1.2.0",
     "@types/jest": "29.5.1",
-    "@types/node": "16.18.25",
+    "@types/node": "16.18.26",
     "@types/sinon": "10.0.14",
     "@vue/eslint-config-prettier": "7.1.0",
     "@vue/eslint-config-typescript": "10.0.0",
