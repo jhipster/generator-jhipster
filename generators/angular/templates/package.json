@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@angular/cli": "15.2.7",
-    "@angular-architects/module-federation-runtime": "15.0.3",
+    "@angular-architects/module-federation-runtime": "16.0.3",
     "@angular-builders/custom-webpack": "15.0.0",
     "@angular-builders/jest": "15.0.0",
     "@angular-eslint/eslint-plugin": "15.2.1",
