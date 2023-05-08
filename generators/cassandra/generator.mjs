@@ -32,11 +32,25 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      checkEntities({ entityConfig }) {
+        if (entityConfig.pagination && entityConfig.pagination !== 'no') {
+          throw new Error("Pagination isn't allowed when the app uses Cassandra.");
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+  }
+
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       cleanupCassandraFilesTask,
       writeCassandraFilesTask,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -44,10 +58,10 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       cleanupCassandraEntityFilesTask,
       writeCassandraEntityFilesTask,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {

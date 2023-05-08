@@ -50,7 +50,6 @@ describe('jdl - ApplicationConverter', () => {
           ]);
           expectedApplication = [
             createJDLApplication({
-              applicationType: MONOLITH,
               baseName: 'mono',
             }),
           ];
@@ -151,7 +150,6 @@ describe('jdl - ApplicationConverter', () => {
             {}
           );
           const application = createJDLApplication({
-            applicationType: MONOLITH,
             baseName: 'mono',
           });
           application.addEntityNames(['A', 'B']);
@@ -205,7 +203,6 @@ describe('jdl - ApplicationConverter', () => {
             {}
           );
           const application = createJDLApplication({
-            applicationType: MONOLITH,
             baseName: 'mono',
           });
           application.addEntityNames(['B']);

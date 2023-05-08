@@ -893,46 +893,7 @@ ${entities}`
       });
 
       it('should return the blueprints attributes in the application', () => {
-        expect(importState.exportedApplications).to.deep.equal([
-          {
-            entities: [],
-            'generator-jhipster': {
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
-              baseName: 'appWithBlueprints',
-              blueprints: [{ name: 'generator-jhipster-vuejs' }, { name: 'generator-jhipster-dotnetcore' }],
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angular',
-              clientTheme: 'none',
-              clientThemeVariant: '',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
-              dtoSuffix: 'DTO',
-              enableGradleEnterprise: false,
-              enableHibernateCache: true,
-              enableSwaggerCodegen: false,
-              enableTranslation: true,
-              entitySuffix: '',
-              gradleEnterpriseHost: '',
-              jhiPrefix: 'jhi',
-              languages: [],
-              messageBroker: 'no',
-              nativeLanguage: 'en',
-              packageFolder: 'com/mycompany/myapp',
-              packageName: 'com.mycompany.myapp',
-              prodDatabaseType: 'postgresql',
-              searchEngine: 'no',
-              reactive: false,
-              serverPort: 8080,
-              serviceDiscoveryType: 'no',
-              skipUserManagement: false,
-              testFrameworks: [],
-              websocket: 'no',
-              withAdminUi: true,
-            },
-          },
-        ]);
+        jestExpect(importState.exportedApplications).toMatchSnapshot();
       });
 
       it('should warn about not performing jdl validation', () => {

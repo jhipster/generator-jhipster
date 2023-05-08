@@ -1181,8 +1181,6 @@ entity Customer {
             .run();
         });
 
-        after(() => runResult.cleanup());
-
         it('should create entity config file', () => {
           runResult.assertFile([join('.jhipster', 'Smarty.json')]);
         });
