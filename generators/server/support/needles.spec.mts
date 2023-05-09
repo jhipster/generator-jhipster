@@ -77,7 +77,7 @@ describe('generator - server - support - needles', () => {
           snapshot = runResult.getSnapshot(file => fileRegexp.test(file.path));
         });
 
-        it.skip('should match snapshot', () => {
+        it('should match snapshot', () => {
           expect(snapshot).toMatchInlineSnapshot(`
 {
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
