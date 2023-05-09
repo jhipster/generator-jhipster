@@ -137,16 +137,6 @@
     "serve": "<%= clientPackageManager %> run start --",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-<%_ if (cypressTests) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
-<%_ } _%>
-<%_ if (cypressTests) { _%>
-    "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
-    "e2e:cypress": "cypress run --e2e --browser chrome",
-    "e2e:cypress:record": "<%= clientPackageManager %> run e2e:cypress -- --record",
-    "cypress": "cypress open --e2e",
-<%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= clientTestDir %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "pretest": "<%= clientPackageManager %> run lint",

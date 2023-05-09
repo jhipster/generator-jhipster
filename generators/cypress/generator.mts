@@ -197,6 +197,14 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
+          scripts: {
+            e2e: 'npm run e2e:cypress:headed --',
+            'e2e:headless': 'npm run e2e:cypress --',
+            'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
+            'e2e:cypress': 'cypress run --e2e --browser chrome',
+            'e2e:cypress:record': 'npm run e2e:cypress -- --record',
+            cypress: 'cypress open --e2e',
+          },
         });
       },
 
