@@ -104,7 +104,7 @@
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
     "mem-fs": "3.0.0",
-    "mem-fs-editor": "10.0.1",
+    "mem-fs-editor": "10.0.2",
     "minimatch": "9.0.0",
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
@@ -126,7 +126,7 @@
     "winston": "3.8.2",
     "yaml": "2.2.2",
     "yeoman-environment": "3.16.2",
-    "yeoman-generator": "6.0.0-beta.0"
+    "yeoman-generator": "6.0.0-beta.1"
   },
   "devDependencies": {
     "@node-loaders/auto": "0.7.0",

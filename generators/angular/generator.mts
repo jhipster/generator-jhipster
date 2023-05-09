@@ -121,7 +121,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
       writeFiles,
       queueTranslateTransform({ control, application }) {
         if (!application.enableTranslation) {
-          (this as any).queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation), {
+          this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation), {
             name: 'translating webapp',
             streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
           });
