@@ -792,7 +792,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       packageJsonE2eScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
-        if (scriptsStorage.get('e2e')) {
+        // TODO add e2eTests property to application.
+        if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
           const applicationEndpoint = application.applicationTypeMicroservice
             ? `http-get://localhost:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
