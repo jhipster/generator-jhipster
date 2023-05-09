@@ -1,10 +1,14 @@
-import { defineComponent } from 'vue';
+import { defineComponent, provide } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import Ribbon from '@/core/ribbon/ribbon.vue';
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 <%_ if (!authenticationTypeOauth2) { _%>
 import LoginForm from '@/account/login-form/login-form.vue';
 <%_ } %>
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import '@/shared/config/dayjs';
 
@@ -17,5 +21,14 @@ export default defineComponent({
     'login-form': LoginForm,
 <%_ } _%>
     'jhi-footer': JhiFooter,
+  },
+  setup() {
+    provide('alertService', useAlertService());
+
+    return {
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
   },
 });

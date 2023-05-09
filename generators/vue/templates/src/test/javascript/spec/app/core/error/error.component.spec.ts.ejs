@@ -1,30 +1,26 @@
+import { Ref, ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import VueRouter from 'vue-router';
 
 import Error from '@/core/error/error.vue';
 import type ErrorComponent from '@/core/error/error.component';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import LoginService from '@/account/login.service';
 
 type ErrorComponentType = Vue & InstanceType<typeof ErrorComponent>;
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
 const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {
   let error: ErrorComponentType;
   let loginService: LoginService;
   let router: VueRouter;
+  let authenticated: Ref<boolean>;
 
   beforeEach(() => {
+    authenticated = ref(false);
     router = new VueRouter({
       routes: [
         {
@@ -40,9 +36,12 @@ describe('Error component', () => {
       ],
     });
 <%_ if (authenticationTypeJwt) { _%>
-    loginService = { openLogin: jest.fn() };
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
 <%_ } else if (authenticationTypeSession) { _%>
-    loginService = { openLogin: jest.fn(), logout: jest.fn() };
+    loginService = new LoginService({ emit: jest.fn() });
+    jest.spyOn(loginService, 'openLogin');
+    jest.spyOn(loginService, 'logout');
 <%_ } else if (authenticationTypeOauth2) { _%>
     loginService = { login: jest.fn(), logout: jest.fn() };
 <%_ } _%>
@@ -56,14 +55,11 @@ describe('Error component', () => {
     });
     router.push('/custom-error');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      store,
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;
@@ -81,14 +77,11 @@ describe('Error component', () => {
   it('should have set forbidden error on routing', () => {
     router.push('/forbidden');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      store,
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;
@@ -106,14 +99,11 @@ describe('Error component', () => {
   it('should have set not found error on routing', () => {
     router.push('/not-found');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      store,
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;
@@ -135,14 +125,11 @@ describe('Error component', () => {
     });
     router.push('/no-error');
     const wrapper = shallowMount<ErrorComponentType>(Error, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      store,
       router,
       localVue,
       provide: {
-        loginService: () => loginService,
+        loginService,
+        authenticated,
       },
     });
     error = wrapper.vm;

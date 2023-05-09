@@ -4,27 +4,17 @@ _%>
 import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
-import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
-import type UserManagementEditComponent from '@/admin/user-management/user-management-edit.component';
 import VueRouter from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
+
+import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
+import type UserManagementEditComponent from '@/admin/user-management/user-management-edit.component';
 
 type UserManagementEditComponentType = Vue & InstanceType<typeof UserManagementEditComponent>;
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
 localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 describe('UserManagementEdit Component', () => {
   const axiosStub = {
@@ -45,13 +35,12 @@ describe('UserManagementEdit Component', () => {
       ],
     });
     mountOptions = {
-      store,
+      stubs: {
+        'font-awesome-icon': true,
+      },
       router,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
-    };
+  };
 
     axiosStub.get.reset();
     axiosStub.post.reset();

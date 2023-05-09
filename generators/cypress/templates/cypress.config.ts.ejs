@@ -18,7 +18,7 @@
 -%>
 import { defineConfig } from 'cypress';
 
-export const defaultConfig = {
+export default defineConfig({
   video: false,
   fixturesFolder: '<%= cypressDir %>fixtures',
   screenshotsFolder: '<%= cypressTemporaryDir %>screenshots',
@@ -50,7 +50,6 @@ export const defaultConfig = {
     baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
     specPattern: '<%= cypressDir %>e2e/**/*.cy.ts',
     supportFile: '<%= cypressDir %>support/index.ts',
+    experimentalRunAllSpecs: true,
   },
-};
-
-export default defineConfig(defaultConfig);
+});

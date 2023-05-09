@@ -20,7 +20,7 @@
 let aws;
 let uuidV4;
 
-const Eb = function Eb(Aws, generator) {
+const Eb = function Eb(Aws) {
   aws = Aws;
   try {
     const { v4 } = require('uuid'); // eslint-disable-line

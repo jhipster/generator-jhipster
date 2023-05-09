@@ -140,13 +140,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
-      loadUser({ application }) {
+      loadUser({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity) {
           if (this.sharedData.hasEntity('User')) {
             throw new Error("Fail to bootstrap 'User', already exists.");
           }
 
-          const user = createUserEntity.call(this, {}, application);
+          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'User');
+          const customUserData = customUser ? customUser.entityStorage.getAll() : {};
+          const user = createUserEntity.call(this, customUserData, application);
           this.sharedData.setEntity('User', user);
           (application as any).user = user;
         }
@@ -154,11 +156,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       loadingEntities({ entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {
           if (this.sharedData.hasEntity(entityName)) {
-            throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
+            const existingEntity = this.sharedData.getEntity(entityName);
+            if (!existingEntity.builtIn) {
+              throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
+            }
+          } else {
+            const entity = entityStorage.getAll();
+            entity.name = entity.name ?? entityName;
+            this.sharedData.setEntity(entityName, entity);
           }
-          const entity = entityStorage.getAll();
-          entity.name = entity.name ?? entityName;
-          this.sharedData.setEntity(entityName, entity);
         }
 
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);

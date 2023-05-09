@@ -1,9 +1,16 @@
-import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
+import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
+import { useVuelidate } from '@vuelidate/core'
+import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
-import AlertService from '@/shared/alert/alert.service';
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { useAlertService } from '@/shared/alert/alert.service';
 import { useRoute } from 'vue-router/composables';
+<%_ if (enableTranslation) { _%>
+import languages from '@/shared/config/languages';
+<%_ } _%>
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -40,20 +47,19 @@ export default defineComponent({
   setup() {
     const route = useRoute();
 
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
     const isSaving: Ref<boolean> = ref(false);
     const authorities: Ref<string[]> = ref([]);
-    const languages: Ref<string[]> = ref([]);
 
     const initAuthorities = async () => {
       const response = await userManagementService.retrieveAuthorities();
       authorities.value = response.data;
     };
 
-    const loadUser = async (userId: <%- user.primaryKey.tsType _%>) => {
+    const loadUser = async (userId: string) => {
       const response = await userManagementService.get(userId);
       userAccount.value = response.data;
     };
@@ -61,11 +67,7 @@ export default defineComponent({
     initAuthorities();
     const userId = route.params.userId;
     if (userId) {
-<%_ if (user.primaryKey.tsType === 'number') { _%>
-      loadUser(Number(userId));
-<%_ } else { _%>
       loadUser(userId);
-<%_ } _%>
     }
 
     return {
@@ -73,8 +75,12 @@ export default defineComponent({
       userAccount,
       isSaving,
       authorities,
-      languages,
       userManagementService,
+      v$: useVuelidate(),
+<%_ if (enableTranslation) { _%>
+      languages: languages(),
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {
@@ -98,7 +104,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService().showHttpError(this, error.response);
+            this.alertService.showHttpError(error.response);
           });
       } else {
 <%_ if (!enableTranslation) { _%>
@@ -118,7 +124,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService().showHttpError(this.$root, error.response);
+            this.alertService.showHttpError(error.response);
           });
       }
     },
@@ -134,7 +140,7 @@ export default defineComponent({
   const headerParams = `X-${frontendAppName}-params`.toLowerCase();
   if (enableTranslation) {
 _%>
-      return this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
+      return this.t$(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
 <%_ } else {_%>
       return res.headers['<%=headerAlert%>'];
 <%_ } _%>

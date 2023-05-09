@@ -30,7 +30,7 @@ application {
     prodDatabaseType mariadb
     serviceDiscoveryType eureka
     testFrameworks [cypress]
-    microfrontends [blog, notification, store]
+    microfrontends [blog, notification]
   }
   entities UserData, Product
 }

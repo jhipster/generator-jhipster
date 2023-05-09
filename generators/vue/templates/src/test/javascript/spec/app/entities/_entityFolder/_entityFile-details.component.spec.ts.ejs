@@ -22,10 +22,9 @@ _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import <%= entityAngularName %>Detail from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
 import type <%= entityAngularName %>DetailsComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -33,15 +32,8 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
 type <%= entityAngularName %>DetailsComponentType = Vue & InstanceType<typeof <%= entityAngularName %>DetailsComponent>;
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 localVue.use(VueRouter);
-
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
@@ -62,12 +54,12 @@ describe('Component Tests', () => {
       });
 
       mountOptions = {
-        store,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
         localVue,
         router,
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
         },

@@ -10,6 +10,7 @@ export type ApplicationWithConfig = {
 
 export interface JHipsterGeneratorOptions extends GeneratorOptions {
   applicationWithConfig?: ApplicationWithConfig;
+  positionalArguments: unknown[];
 }
 
 export interface JHipsterGeneratorFeatures extends GeneratorFeatures {

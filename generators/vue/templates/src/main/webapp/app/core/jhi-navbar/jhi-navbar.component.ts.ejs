@@ -1,8 +1,11 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import LoginService from '@/account/login.service';
 import type AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import languages from '@/shared/config/languages';
 <%_ } _%>
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
@@ -20,96 +23,91 @@ export default defineComponent({
 <%_ } _%>
   },
   setup() {
-    const loginService = inject('loginService', () => new LoginService());
-    const accountService = inject<() => AccountService>('accountService');
+    const loginService = inject<LoginService>('loginService');
+    const accountService = inject<AccountService>('accountService');
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 <%_ if (enableTranslation) { _%>
-    const translationService = inject<() => TranslationService>('translationService');
+    const changeLanguage = inject<(string) => Promise<void>>('changeLanguage');
+
+    const isActiveLanguage = (key: string) => {
+      return key === currentLanguage.value;
+    };
 <%_ } _%>
 
     const router = useRouter();
     const store = useStore();
 
     const version = 'v' + VERSION;
-    const currentLanguage = computed(() => store.getters.currentLanguage);
-    const languages = computed(() => store.getters.languages);
     const hasAnyAuthorityValues: Ref<any> = ref({});
 
-    const openAPIEnabled = computed(() => store.getters.activeProfiles.indexOf('api-docs') > -1);
-    const inProduction = computed(() => store.getters.activeProfiles.indexOf('prod') > -1);
-    const authenticated = computed(() => store.getters.authenticated);
+    const openAPIEnabled = computed(() => store.activeProfiles.indexOf('api-docs') > -1);
+    const inProduction = computed(() => store.activeProfiles.indexOf('prod') > -1);
+    const authenticated = computed(() => store.authenticated);
+
+    const openLogin = () => {
+<%_ if (!authenticationTypeOauth2) { _%>
+      loginService.openLogin();
+<%_ } else { %>
+      loginService.login();
+<%_ } _%>
+    };
+
+    const subIsActive = (input: string | string[]) => {
+      const paths = Array.isArray(input) ? input : [input];
+      return paths.some(path => {
+        return router.currentRoute.path.indexOf(path) === 0; // current path starts with this path string
+      });
+    };
+
+    const logout = async () => {
+<%_ if (authenticationTypeJwt) { _%>
+      localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+      sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+      store.logout();
+      if (router.currentRoute.path !== '/') {
+        router.push('/');
+      }
+<%_ } else { _%>
+      const response = await loginService.logout();
+      store.logout();
+  <%_ if (authenticationTypeOauth2) { _%>
+      window.location.href = response.data.logoutUrl;
+      const next = response.data?.logoutUrl ?? '/';
+      if (router.currentRoute.path !== next) {
+        router.push(next);
+      }
+  <%_ } else { _%>
+      if (router.currentRoute.path !== '/') {
+        router.push('/');
+      }
+  <%_ } _%>
+<%_ } _%>
+    },
 
     return {
-      router,
+      logout,
+      subIsActive,
       accountService,
-      loginService,
+      openLogin,
 <%_ if (enableTranslation) { _%>
-      translationService,
+      changeLanguage,
+      languages: languages(),
+      isActiveLanguage,
 <%_ } _%>
       version,
       currentLanguage,
-      languages,
       hasAnyAuthorityValues,
       openAPIEnabled,
       inProduction,
       authenticated,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
-<%_ if (enableTranslation) { _%>
-  created() {
-    const currentLanguage = Object.keys(this.languages).includes(navigator.language) ? navigator.language : this.currentLanguage;
-    this.translationService().refreshTranslation(currentLanguage);
-  },
-<%_ } _%>
   methods: {
-<%_ if (enableTranslation) { _%>
-    changeLanguage(newLanguage: string) : void {
-      this.translationService().refreshTranslation(newLanguage);
-    },
-    isActiveLanguage(key: string) : boolean {
-      return key === this.currentLanguage;
-    },
-<%_ } _%>
-    subIsActive(input) {
-      const paths = Array.isArray(input) ? input : [input];
-      return paths.some(path => {
-        return this.$route.path.indexOf(path) === 0; // current path starts with this path string
-      });
-    },
-    logout(): Promise<any> {
-<%_ if (!authenticationTypeJwt) { _%>
-      return this.loginService().logout().then(response => {
-        this.$store.commit('logout');
-  <%_ if (authenticationTypeOauth2) { _%>
-        window.location.href = response.data.logoutUrl;
-        const next = response.data?.logoutUrl ?? '/';
-        if (this.$route.path !== next) {
-          return this.$router.push(next);
-        }
-  <%_ } else { _%>
-        if (this.$route.path !== '/') {
-          return this.$router.push('/');
-        }
-  <%_ } _%>
-      });
-<%_ } else { _%>
-      localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-      sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-      this.$store.commit('logout');
-      if (this.$route.path !== '/') {
-        return this.$router.push('/');
-      }
-<%_ } _%>
-      return Promise.resolve(this.$router.currentRoute);
-    },
-    openLogin(): void {
-<%_ if (!authenticationTypeOauth2) { _%>
-      this.loginService().openLogin(this.$root);
-<%_ } else { %>
-      this.loginService().login();
-<%_ } _%>
-    },
     hasAnyAuthority(authorities: any): boolean {
-      this.accountService()
+      this.accountService
         .hasAnyAuthorityAndCheckAuth(authorities)
         .then(value => {
           if (this.hasAnyAuthorityValues[authorities] !== value) {

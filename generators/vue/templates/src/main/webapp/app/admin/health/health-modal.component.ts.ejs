@@ -1,4 +1,7 @@
 import { defineComponent, inject } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import HealthService from './health.service';
 
 export default defineComponent({
@@ -7,18 +10,21 @@ export default defineComponent({
     currentHealth: {},
   },
   setup() {
-    const healthService = inject('healthService', () => new HealthService());
+    const healthService = inject('healthService', () => new HealthService(), true);
 
     return {
       healthService,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {
     baseName(name: string): any {
-      return this.healthService().getBaseName(name);
+      return this.healthService.getBaseName(name);
     },
     subSystemName(name: string): any {
-      return this.healthService().getSubSystemName(name);
+      return this.healthService.getSubSystemName(name);
     },
     readableValue(value: any): string {
       if (this.currentHealth.name === 'diskSpace') {

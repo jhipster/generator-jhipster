@@ -1,5 +1,15 @@
 import { defineComponent } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>Footer',
+  setup() {
+    return {
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
 });

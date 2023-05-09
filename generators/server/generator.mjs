@@ -102,6 +102,7 @@ import { stringifyApplicationData } from '../base-application/support/index.mjs'
 import { createBase64Secret, createSecret, normalizePathEnd, createNeedleCallback } from '../base/support/index.mjs';
 import command from './command.mjs';
 import { addJavaAnnotation } from '../java/support/index.mjs';
+import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -181,10 +182,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             return defaultInstallTask();
           }
 
+          const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
           try {
-            await this.spawnCommand('./npmw', ['install'], { preferLocal: true });
+            await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
           } catch (error) {
-            this.logger.error(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
+            this.logger.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
           }
           return true;
         }.bind(this),
@@ -568,6 +570,22 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             );
             field.fieldValidate = false;
             field.fieldValidateRules = [];
+          }
+          if (entityConfig.pagination && entityConfig.pagination !== NO_PAGINATION && isReservedPaginationWords(field.fieldName)) {
+            throw new Error(
+              `Field name '${field.fieldName}' found in ${entityConfig.name} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+            );
+          }
+          // Field type check should be ignored for entities of others microservices.
+          if (!field.fieldValues && (!entityConfig.microserviceName || entityConfig.microserviceName === application.baseName)) {
+            if (
+              !Object.values(CommonDBTypes).includes(field.fieldType) &&
+              (application.databaseType !== SQL || !Object.values(RelationalOnlyDBTypes).includes(field.fieldType))
+            ) {
+              throw new Error(
+                `The type '${field.fieldType}' is an unknown field type for field '${field.fieldName}' of entity '${entityConfig.name}' using '${application.databaseType}' database.`
+              );
+            }
           }
         });
         entityConfig.fields = fields;

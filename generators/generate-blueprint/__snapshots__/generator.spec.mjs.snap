@@ -449,6 +449,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java/templates/template-file-java.ejs": {
     "stateCleared": "modified",
   },
+  "generators/jdl/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/templates/template-file-jdl.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/kafka/generator.mjs": {
     "stateCleared": "modified",
   },

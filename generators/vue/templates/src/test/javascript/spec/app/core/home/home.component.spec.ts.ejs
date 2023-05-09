@@ -1,22 +1,17 @@
+import { ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Home from '@/core/home/home.vue';
 import type HomeComponent from '@/core/home/home.component';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 
 type HomeComponentType = Vue & InstanceType<typeof HomeComponent>;
 
 const localVue = createLocalVue();
-config.initVueApp(localVue);
-const store = useStore();
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-localVue.component('router-link', {});
 
 describe('Home', () => {
   let home: HomeComponentType;
+  let authenticated;
+  let currentUsername;
 <%_ if (authenticationTypeJwt) { _%>
   const loginService = { openLogin: jest.fn() };
 <%_ } else if (authenticationTypeSession) { _%>
@@ -26,15 +21,18 @@ describe('Home', () => {
 <%_ } _%>
 
   beforeEach(() => {
+    authenticated = ref(false);
+    currentUsername = ref('');
     const wrapper = shallowMount<HomeComponentType>(Home, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      store,
       localVue,
+      stubs: {
+        'router-link': true,
+      },  
       provide: {
-        loginService: () => loginService
-      }
+        loginService,
+        authenticated,
+        currentUsername,
+      },
     });
     home = wrapper.vm;
   });
@@ -45,7 +43,8 @@ describe('Home', () => {
   });
 
   it('should have user data set after authentication', () => {
-    store.commit('authenticated', {login: 'test'});
+    authenticated.value = true;
+    currentUsername.value = 'test';
 
     expect(home.authenticated).toBeTruthy();
     expect(home.username).toBe('test');

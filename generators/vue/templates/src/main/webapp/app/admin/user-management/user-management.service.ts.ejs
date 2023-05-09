@@ -7,7 +7,7 @@ import { IUser } from '@/shared/model/user.model';
 
 export default class UserManagementService {
 
-  public get(userId: <%- user.primaryKey.tsType %>): Promise<any> {
+  public get(userId: string): Promise<any> {
     return axios.get(`api/admin/users/${userId}`);
   }
 

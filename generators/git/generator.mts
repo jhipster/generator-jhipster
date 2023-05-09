@@ -55,7 +55,7 @@ export default class InitGenerator extends BaseGenerator {
         }
       },
       async initializeMonorepository() {
-        if (!this.skipGit && this.options.monorepository) {
+        if (!this.skipGit && this.jhipsterConfig.monorepository) {
           await this.initializeGitRepository();
         }
       },
@@ -82,7 +82,7 @@ export default class InitGenerator extends BaseGenerator {
     return this.asEndTaskGroup({
       /** Initial commit to git repository after package manager install for package-lock.json */
       async initGitRepo() {
-        if (!this.skipGit && !this.options.monorepository) {
+        if (!this.skipGit && !this.jhipsterConfig.monorepository) {
           await this.initializeGitRepository();
         }
       },

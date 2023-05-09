@@ -40,13 +40,13 @@ FROM memcached:1.6.19-alpine
 
 FROM redis:7.0.11
 
-FROM confluentinc/cp-kafka:7.3.3
+FROM confluentinc/cp-kafka:7.4.0
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.3.3
+FROM confluentinc/cp-zookeeper:7.4.0
 LABEL ALIAS=zookeeper
 
-FROM apachepulsar/pulsar:2.11.0
+FROM apachepulsar/pulsar:3.0.0
 LABEL ALIAS=pulsar
 
 FROM sonarqube:10.0.0-community
@@ -55,7 +55,7 @@ LABEL ALIAS=sonar
 FROM docker.io/bitnami/consul:1.15.2
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v2.43.0
+FROM prom/prometheus:v2.43.1
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.25.0
@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:9.4.7
+FROM grafana/grafana:9.5.1
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

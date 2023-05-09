@@ -1,15 +1,12 @@
+import { ref } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import EntitiesMenu from '@/entities/entities-menu.vue';
 import type EntitiesMenuComponent from '@/entities/entities-menu.component';
-import * as config from '@/shared/config/config';
+import { initI18N } from '@/shared/config/config';
 
 type EntitiesMenuComponentType = Vue & InstanceType<typeof EntitiesMenuComponent>;
 
 const localVue = createLocalVue();
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-localVue.component('b-dropdown-item', {});
-localVue.component('font-awesome-icon', {});
 
 describe('EntitiesMenu', () => {
   let translationService;
@@ -21,11 +18,15 @@ describe('EntitiesMenu', () => {
   describe('using microfrontendI18n', () => {
     beforeEach(() => {
       shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
-        i18n,
         localVue,
+        stubs: {
+          'b-dropdown-item': true,
+          'font-awesome-icon': true,
+        },    
         provide: {
-          translationService: () => translationService,
+          translationService,
           microfrontendI18n: true,
+          currentLanguage: ref('<%- nativeLanguage %>'),
         },
       });
     });
@@ -38,10 +39,13 @@ describe('EntitiesMenu', () => {
   describe('not using microfrontendI18n', () => {
     beforeEach(() => {
       shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
-        i18n,
         localVue,
+        stubs: {
+          'b-dropdown-item': true,
+          'font-awesome-icon': true,
+        },    
         provide: {
-          translationService: () => translationService,
+          translationService,
           microfrontendI18n: false,
         },
       });

@@ -1,31 +1,22 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import AccountService from '@/account/account.service';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
+import VueRouter from 'vue-router';
+import { PiniaVuePlugin } from 'pinia';
+import { createTestingPinia } from '@pinia/testing';
 
+import AccountService from '@/account/account.service';
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import LoginForm from '@/account/login-form/login-form.vue';
 import type LoginFormComponent from '@/account/login-form/login-form.component';
 
 type LoginFormComponentType = Vue & InstanceType<typeof LoginFormComponent>;
 
 const localVue = createLocalVue();
-localVue.component('b-alert', {});
-localVue.component('b-button', {});
-localVue.component('b-form', {});
-localVue.component('b-form-input', {});
-localVue.component('b-form-group', {});
-localVue.component('b-form-checkbox', {});
-localVue.component('b-link', {});
+localVue.use(VueRouter);
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
+const pinia = createTestingPinia();
+localVue.use(PiniaVuePlugin);
 const store = useStore();
 
 const axiosStub = {
@@ -35,20 +26,36 @@ const axiosStub = {
 
 describe('LoginForm Component', () => {
   let loginForm: LoginFormComponentType;
+  let router: VueRouter;
 
   beforeEach(() => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
+    router = new VueRouter({
+      routes: [
+        {
+          path: '/',
+        },
+      ],
+    });
+    router.push('/');
 
     const wrapper = shallowMount<LoginFormComponentType>(LoginForm,
       {
-        store,
-        <%_ if (enableTranslation) { _%>
-        i18n,
-        <%_ } _%>
+        stubs: {
+          'b-alert': true,
+          'b-button': true,
+          'b-form': true,
+          'b-form-input': true,
+          'b-form-group': true,
+          'b-form-checkbox': true,
+          'b-link': true,
+        },
+        pinia,
         localVue,
+        router,
         provide: {
-          accountService: () => new AccountService(store<% if (enableTranslation) { %>, new TranslationService(store, i18n)<% } %><% if (authenticationTypeSession) { %>, { get: () => {} }<% } %>)
+          accountService: new AccountService(store)
         }
       });
     loginForm = wrapper.vm;

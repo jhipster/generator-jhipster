@@ -1,0 +1,14 @@
+<%_ if (enableTranslation) { _%>
+const Vue = require('vue');
+const { initI18N } = require('@/shared/config/config');
+<%_ } _%>
+const axios = require('axios');
+
+// Make sure axios is never executed.
+axios.interceptors.request.use(request => {
+  throw new Error(`Error axios should be mocked ${request.url}`);
+});
+<%_ if (enableTranslation) { _%>
+
+initI18N(Vue);
+<%_ } _%>

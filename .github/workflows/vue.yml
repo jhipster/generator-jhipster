@@ -158,7 +158,7 @@ jobs:
         if: matrix.workspaces == 'true'
         run: |
           git add .
-          git commit -m "Commit workspaces"
+          git commit --allow-empty -m "Commit workspaces"
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------

@@ -203,16 +203,8 @@ export const buildCommands = async ({
           return;
         }
 
-        const jdlCommand = cmdName === 'jdl';
-        if (!cliOnly || jdlCommand) {
-          let generator;
-          if (jdlCommand) {
-            generator = 'app';
-          } else if (blueprint) {
-            generator = `${packageNameToNamespace(blueprint)}:${cmdName}`;
-          } else {
-            generator = cmdName;
-          }
+        if (!cliOnly) {
+          const generator = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : cmdName;
           const generatorMeta = env.getGeneratorMeta(generator.includes(':') ? generator : `${JHIPSTER_NS}:${generator}`);
           if (!generatorMeta) {
             return;
@@ -221,7 +213,7 @@ export const buildCommands = async ({
           await addCommandRootGeneratorOptions(command, generatorMeta);
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
-          const boostrapGen = [...(jdlCommand ? ['workspaces'] : []), 'bootstrap', generator];
+          const boostrapGen = ['bootstrap', generator];
           const allDependencies = await buildAllDependencies(boostrapGen, { env });
           for (const [metaName, generatorMeta] of Object.entries(allDependencies)) {
             await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
@@ -258,6 +250,7 @@ export const buildCommands = async ({
           ...useOptions,
           commandName: cmdName,
           blueprints: envBuilder.getBlueprintsOption(),
+          positionalArguments: args,
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console

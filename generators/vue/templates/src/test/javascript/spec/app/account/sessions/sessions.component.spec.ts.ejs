@@ -2,8 +2,9 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
+import { PiniaVuePlugin } from 'pinia';
+import { createTestingPinia } from '@pinia/testing';
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import type SessionsComponent from '@/account/sessions/sessions.component';
 import Sessions from '@/account/sessions/sessions.vue';
 import router from '@/router';
@@ -15,10 +16,8 @@ type SessionsComponentType = Vue & InstanceType<typeof SessionsComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
+const pinia = createTestingPinia({ stubActions: false });
+localVue.use(PiniaVuePlugin);
 const store = useStore();
 
 const axiosStub = {
@@ -34,16 +33,13 @@ describe('Sessions Component', () => {
     axiosStub.get.resolves({ data: [] });
     axiosStub.delete.reset();
 
-    store.commit('authenticated', {
-      login: 'username'
+    store.setAuthentication({
+      login: 'username',
     });
 
     const wrapper = shallowMount<SessionsComponentType>(Sessions, {
-      store,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      localVue
+      pinia,
+      localVue,
     });
     sessions = wrapper.vm;
   });

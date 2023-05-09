@@ -4,11 +4,9 @@ _%>
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import UserManagementView from '@/admin/user-management/user-management-view.vue';
 import type UserManagementViewComponent from '@/admin/user-management/user-management-view.component';
 import { Authority } from '@/shared/security/authority';
@@ -16,15 +14,8 @@ import { Authority } from '@/shared/security/authority';
 type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementViewComponent>;
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', FontAwesomeIcon);
-localVue.component('b-badge', {});
-localVue.component('router-link', {});
 localVue.use(VueRouter);
 
 const axiosStub = {
@@ -58,12 +49,13 @@ describe('UserManagementView Component', () => {
       router.push('/' + <%- tsKeyId %>);
 
       const wrapper = shallowMount<UserManagementViewComponentType>(UserManagementView, {
-        store,
+        stubs: {
+          'b-badge': true,
+          'router-link': true,
+          'font-awesome-icon': true,
+        },
         localVue,
         router,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
       });
       const userManagementView = wrapper.vm;
   

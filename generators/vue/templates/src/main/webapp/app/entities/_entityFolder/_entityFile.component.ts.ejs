@@ -1,37 +1,48 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, getCurrentInstance, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { useIntersectionObserver } from '@vueuse/core';
+<%_ } _%>
+
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+import { useDateFormat } from '@/shared/composables'
+<%_ } _%>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%= entityAngularName %>',
-  mixins: [Vue2Filters.mixin],
   setup() {
+<%_ if (enableTranslation) { _%>
+    const { t: t$} = useI18n();
+<%_ } _%>
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+    const dateFormat = useDateFormat();
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
     const dataUtils = useDataUtils();
 <%_ } _%>
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
 <%_ if (searchEngineAny) { _%>
     const currentSearch = ref('');
 <%_ } _%>
-    const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
 <%_ if (!paginationNo) { _%>
     const itemsPerPage = ref(20);
     const queryCount: Ref<number> = ref(null);
     const page: Ref<number> = ref(1);
-    const previousPage: Ref<number> = ref(1);
     const propOrder = ref('id');
     const reverse = ref(false);
     const totalItems = ref(0);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
-    const infiniteId = ref(+new Date());
     const links: Ref<any> = ref({});
 <%_ } _%>
 
@@ -39,218 +50,226 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
-    return {
-      <%= entityInstance %>Service,
-      alertService,
+    const clear = () => {
 <%_ if (searchEngineAny) { _%>
-      currentSearch,
+      currentSearch.value = '';
 <%_ } _%>
-      removeId,
 <%_ if (!paginationNo) { _%>
-      itemsPerPage,
-      queryCount,
-      page,
-      previousPage,
-      propOrder,
-      reverse,
-      totalItems,
+      page.value = 1;
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
-      infiniteId,
-      links,
-<%_ } _%>
-      <%= entityInstancePlural %>,
-      isFetching,
-<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
-      ...dataUtils,
+      links.value = {};
+      <%= entityInstancePlural %>.value = [];
 <%_ } _%>
     };
-  },
-  mounted(): void {
-    this.retrieveAll<%= entityAngularName %>s();
-  },
-  methods: {
-<%_ if (searchEngineAny) { _%>
-    search(query) : void {
-      if (!query) {
-        return this.clear();
-      }
-      this.currentSearch = query;
-      this.retrieveAll<%= entityAngularName %>s();
-    },
-<%_ } _%>
-    clear() : void {
-<%_ if (searchEngineAny) { _%>
-      this.currentSearch = '';
-<%_ } _%>
 <%_ if (!paginationNo) { _%>
-      this.page = 1;
+
+    const sort = (): Array<any> => {
+      const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
+      if (propOrder.value !== 'id') {
+        result.push('id');
+      }
+      return result;
+    };
 <%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-      this.links = {};
-      this.infiniteId += 1;
-      this.<%= entityInstancePlural %> = [];
-<%_ } _%>
-      this.retrieveAll<%= entityAngularName %>s();
-    },
-<%_ if (paginationInfiniteScroll) { _%>
-    reset(): void {
-      this.page = 1;
-      this.infiniteId += 1;
-      this.<%= entityInstancePlural %> = [];
-      this.retrieveAll<%= entityAngularName %>s();
-    },
-<%_ } _%>
-    retrieveAll<%= entityAngularName %>s() :void {
-      this.isFetching = true;
+
+    const vue = getCurrentInstance().proxy;
+
+    const retrieve<%= entityAngularName %>s = async () => {
+      isFetching.value = true;
+      try {
 <%_ if (!paginationNo) { _%>
-      const paginationQuery = {
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort()
-      };
+        const paginationQuery = {
+          page: page.value - 1,
+          size: itemsPerPage.value,
+          sort: sort(),
+        };
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
-      if (this.currentSearch) {
-        this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>).then(res => {
-  <%_ if (paginationNo) { _%>
-          this.<%= entityInstancePlural %> = res;
-  <%_ } else if (!paginationInfiniteScroll) { _%>
-          this.<%= entityInstancePlural %> = res.data;
-  <%_ } else if (paginationInfiniteScroll) { _%>
-          if (res.data && res.data.length > 0) {
-            for (let i = 0; i < res.data.length; i++) {
-              this.<%= entityInstancePlural %>.push(res.data[i]);
-            }
-            if (res.headers && res.headers['link']) {
-              this.links = this.parseLinks(res.headers['link']);
-            }
-          }
-  <%_ } _%>
-  <%_ if (!paginationNo) { _%>
-          this.totalItems = Number(res.headers['x-total-count']);
-          this.queryCount = this.totalItems;
-  <%_ } _%>
-          this.isFetching = false;
-  <%_ if (paginationInfiniteScroll) { _%>
-          if ((<any>this.$refs.infiniteLoading)) {
-            (<any>this.$refs.infiniteLoading).stateChanger.loaded();
-            if (JSON.stringify(this.links) !== JSON.stringify({}) && this.page > this.links['last']) {
-              (<any>this.$refs.infiniteLoading).stateChanger.complete();
-            }
-          }
-  <%_ } _%>
-        }, err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this,err.response);
-      });
-        return;
-      }
-<%_ } _%>
-      this.<%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>).then(res => {
-<%_ if (!paginationInfiniteScroll) { _%>
-        this.<%= entityInstancePlural %> = res.data;
+        const res = currentSearch.value ?
+          (await <%= entityInstance %>Service().search(currentSearch.value<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>)) :
+          (await <%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>));
 <%_ } else { _%>
-        if (res.data && res.data.length > 0) {
-          for (let i = 0; i < res.data.length; i++) {
-            this.<%= entityInstancePlural %>.push(res.data[i]);
-          }
-          if (res.headers && res.headers['link']) {
-            this.links = this.parseLinks(res.headers['link']);
-          }
-        }
+        const res = await <%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>);
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-        this.totalItems = Number(res.headers['x-total-count']);
-        this.queryCount = this.totalItems;
+        totalItems.value = Number(res.headers['x-total-count']);
+        queryCount.value = totalItems.value;
 <%_ } _%>
-        this.isFetching = false;
 <%_ if (paginationInfiniteScroll) { _%>
-        if ((<any>this.$refs.infiniteLoading)) {
-          (<any>this.$refs.infiniteLoading).stateChanger.loaded();
-          if (JSON.stringify(this.links) !== JSON.stringify({}) && this.page > this.links['last']) {
-            (<any>this.$refs.infiniteLoading).stateChanger.complete();
-          }
-        }
+        links.value = dataUtils.parseLinks(res.headers?.['link']);
+        <%= entityInstancePlural %>.value.push(...(res.data ?? []));
+<%_ } else { _%>
+        <%= entityInstancePlural %>.value = res.data;
 <%_ } _%>
-      }, err => {
-        this.isFetching = false;
-        this.alertService().showHttpError(this,err.response);
-      });
-    },
-    handleSyncList(): void {
-      this.clear();
-    },
-<%_ if (!readOnly) { _%>
-    prepareRemove(instance: I<%= entityAngularName %>) : void {
-      this.removeId = instance.id;
-      if (<any>this.$refs.removeEntity) {
-        (<any>this.$refs.removeEntity).show();
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
       }
-    },
-    remove<%= entityAngularName %>() : void {
-      this.<%= entityInstance %>Service().delete(this.removeId).then(() => {
+    };
+
+    const handleSyncList = () => {
+<%_ if (paginationInfiniteScroll) { _%>
+      clear();
+<%_ } else { _%>
+      retrieve<%= entityAngularName %>s();
+<%_ } _%>
+    };
+
+    onMounted(async () => {
+      await retrieve<%= entityAngularName %>s();
+    });
+
+<%_ if (searchEngineAny) { _%>
+    const search = (query) => {
+      if (!query) {
+        return clear();
+      }
+      currentSearch.value = query;
+      retrieve<%= entityAngularName %>s();
+    };
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+
+    const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: I<%= entityAngularName %>) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const bvToast = vue.$bvToast;
+    const remove<%= entityAngularName %> = async () => {
+      try {
+        await <%= entityInstance %>Service().delete(removeId.value);
   <%_ if (enableTranslation) { _%>
-        const message = this.$t('<%= i18nAlertHeaderPrefix %>.deleted', { 'param' : this.removeId });
+        const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
   <%_ } else {_%>
-        const message = 'A <%= entityAngularName %> is deleted with identifier ' + this.removeId;
+        const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
   <%_ } _%>
-        this.$bvToast.toast(message.toString(), {
+        bvToast.toast(message, {
           toaster: 'b-toaster-top-center',
           title: 'Info',
           variant: 'danger',
           solid: true,
           autoHideDelay: 5000,
         });
-        this.removeId = null;
+        removeId.value = null;
   <%_ if (paginationInfiniteScroll) { _%>
-        this.reset();
+        clear();
   <%_ } else {_%>
-        this.retrieveAll<%= entityAngularName %>s();
+        retrieve<%= entityAngularName %>s();
   <%_ } _%>
-        this.closeDialog();
-      }).catch(error => {
-        this.alertService().showHttpError(this,error.response);
-      });
-    },
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-    loadMore($state): void {
-      if (!this.isFetching) {
-        this.page++;
-        this.transition();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    },
+    };
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-    sort() : Array<any> {
-      const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
-      if (this.propOrder !== 'id') {
-        result.push('id');
+
+    const changeOrder = (newOrder: string) => {
+      if (propOrder.value === newOrder) {
+        reverse.value = !reverse.value;
+      } else {
+        reverse.value = false;
       }
-      return result;
-    },
-    loadPage(page: number) : void {
-      if (page !== this.previousPage) {
-        this.previousPage = page;
-        this.transition();
+      propOrder.value = newOrder;
+    };
+  <%_ if (paginationInfiniteScroll) { _%>
+
+    // Whenever order changes, reset the pagination
+    watch([propOrder, reverse], () => {
+      clear();
+    });
+
+    // Whenever the data resets or page changes, switch to the new page.
+    watch([<%= entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
+      if (data.length === 0 || page !== prevPage) {
+        await retrieve<%= entityAngularName %>s();
       }
-    },
-    transition() : void {
-      this.retrieveAll<%= entityAngularName %>s();
-    },
-    changeOrder(propOrder) : void {
-      this.propOrder = propOrder;
-      this.reverse = !this.reverse;
-  <%_ if (!paginationInfiniteScroll) { _%>
-      this.transition();
+    });
+
+    const infiniteScrollEl = ref<HTMLElement>(null);
+    const intersectionObserver = useIntersectionObserver(
+      infiniteScrollEl,
+      intersection => {
+        if (intersection[0].isIntersecting && !isFetching.value) {
+          page.value++;
+        }
+      },
+      {
+        threshold: 0.5,
+        immediate: false,
+      }
+    );
+    watchEffect(() => {
+      if (links.value.next) {
+        intersectionObserver.resume();
+      } else if (intersectionObserver.isActive) {
+        intersectionObserver.pause();
+      }
+    });
   <%_ } else { _%>
-      this.reset();
+
+    // Whenever order changes, reset the pagination
+    watch([propOrder, reverse], async () => {
+      if (page.value === 1) {
+        // first page, retrieve new data
+        await retrieve<%= entityAngularName %>s();
+      } else {
+        // reset the pagination
+        clear();
+      }
+    });
+
+    // Whenever page changes, switch to the new page.
+    watch(page, async () => {
+      await retrieve<%= entityAngularName %>s();
+    });
   <%_ } _%>
-    },
 <%_ } _%>
-    closeDialog() : void {
-      (<any>this.$refs.removeEntity).hide();
-    },
+
+    return {
+      <%= entityInstancePlural %>,
+      handleSyncList,
+      isFetching,
+      retrieve<%= entityAngularName %>s,
+      clear,
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+      ...dateFormat,
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+      currentSearch,
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      remove<%= entityAngularName %>,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+      itemsPerPage,
+      queryCount,
+      page,
+      propOrder,
+      reverse,
+      totalItems,
+      changeOrder,
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      infiniteScrollEl,
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      t$,
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
+      ...dataUtils,
+<%_ } _%>
+    };
   },
 });

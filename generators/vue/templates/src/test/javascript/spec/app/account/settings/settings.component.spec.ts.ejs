@@ -1,9 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
+import { PiniaVuePlugin } from 'pinia';
+import { createTestingPinia } from '@pinia/testing';
 
 import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import Settings from '@/account/settings/settings.vue';
 import type SettingsComponent from '@/account/settings/settings.component';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
@@ -12,10 +13,8 @@ type SettingsComponentType = Vue & InstanceType<typeof SettingsComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
+const pinia = createTestingPinia({ stubActions: false });
+localVue.use(PiniaVuePlugin);
 const store = useStore();
 
 const axiosStub = {
@@ -35,13 +34,10 @@ describe('Settings Component', () => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
 
-    store.commit('authenticated', account);
+    store.setAuthentication(account);
     const wrapper = shallowMount<SettingsComponentType>(Settings,
       {
-        store,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
+        pinia,
         localVue
       });
     settings = wrapper.vm;

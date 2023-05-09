@@ -1,48 +1,40 @@
-import { defineComponent, inject, Ref, ref } from 'vue';
+import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
 import LoginService from '@/account/login.service';
-import {
-  useRoute,
-<%_ if (!authenticationTypeOauth2) { _%>
-  useRouter,
-<%_ } %>
-} from 'vue-router/composables';
-import { useStore } from '@/store';
+import { useRoute } from 'vue-router/composables';
 
 export default defineComponent({
   name: 'Error',
   setup() {
-    const loginService = inject('loginService', () => new LoginService());
+    const loginService = inject<LoginService>('loginService');
+    const authenticated = inject<ComputedRef<boolean>>('authenticated');
     const errorMessage: Ref<string> = ref(null);
     const error403: Ref<boolean> = ref(false);
     const error404: Ref<boolean> = ref(false);
-<%_ if (!authenticationTypeOauth2) { _%>
-    const router = useRouter();
-<%_ } %>
     const route = useRoute();
-    const store = useStore();
 
     if (route.meta) {
       errorMessage.value = route.meta.errorMessage ?? null;
       error403.value = route.meta.error403 ?? false;
       error404.value = route.meta.error404 ?? false;
-      if (!store.getters.authenticated && error403.value) {
+      if (!authenticated.value && error403.value) {
 <%_ if (!authenticationTypeOauth2) { _%>
-        loginService().openLogin(router.app.$root);
+        loginService.openLogin();
 <%_ } else { %>
-        loginService().login();
+        loginService.login();
 <%_ } %>
       }
     }
 
     return {
-      store,
-<%_ if (!authenticationTypeOauth2) { _%>
-      router,
-<%_ } %>
-      loginService,
       errorMessage,
       error403,
       error404,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

@@ -1,35 +1,27 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import HealthModal from '@/admin/health/health-modal.vue';
 import type HealthModalComponent from '@/admin/health/health-modal.component';
 
 type HealthModalComponentType = Vue & InstanceType<typeof HealthModalComponent>;
 
 const localVue = createLocalVue();
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', {});
-const healthsService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
+const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;
 
   beforeEach(() => {
     const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
+      stubs: {
+        'font-awesome-icon': true,
+      },
       propsData: {
         currentHealth: {},
       },
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       provide: {
-        healthService: () => healthsService,
+        healthService,
       },
     });
     healthModal = wrapper.vm;
@@ -39,13 +31,13 @@ describe('Health Modal Component', () => {
     it('should use healthService', () => {
       healthModal.baseName('base');
 
-      expect(healthsService.getBaseName).toHaveBeenCalled();
+      expect(healthService.getBaseName).toHaveBeenCalled();
     });
 
     it('should use healthService', () => {
       healthModal.subSystemName('base');
 
-      expect(healthsService.getSubSystemName).toHaveBeenCalled();
+      expect(healthService.getSubSystemName).toHaveBeenCalled();
     });
   });
 
@@ -72,12 +64,9 @@ describe('Health Modal Component for diskSpace', () => {
       propsData: {
         currentHealth: { name: 'diskSpace' },
       },
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       provide: {
-        healthService: () => healthsService,
+        healthService,
       },
     });
     healthModal = wrapper.vm;

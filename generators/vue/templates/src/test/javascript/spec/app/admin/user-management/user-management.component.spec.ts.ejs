@@ -1,14 +1,12 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
+import { ref } from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ToastPlugin } from 'bootstrap-vue';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import UserManagement from '@/admin/user-management/user-management.vue';
 import type UserManagementComponent from '@/admin/user-management/user-management.component';
 
@@ -17,14 +15,6 @@ type UserManagementComponentType = Vue & InstanceType<typeof UserManagementCompo
 const localVue = createLocalVue();
 
 localVue.use(ToastPlugin);
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', FontAwesomeIcon);
-localVue.component('router-link', {});
-localVue.component('jhi-sort-indicator', {});
 localVue.directive('b-modal', {});
 
 const axiosStub = {
@@ -36,28 +26,23 @@ const axiosStub = {
 describe('UserManagement Component', () => {
   let userManagement: UserManagementComponentType;
 
-  const account = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@jhipster.org'
-  };
-
   beforeEach(() => {
     axiosStub.put.reset();
     axiosStub.get.reset();
     axiosStub.get.resolves({ headers: {} });
 
-    store.commit('authenticated', account);
     const wrapper = shallowMount<UserManagementComponentType>(UserManagement, {
-      store,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       stubs: {
         bPagination: true,
         jhiItemCount: true,
-        bModal: true
+        bModal: true,
+        'router-link': true,
+        'jhi-sort-indicator': true,
+        'font-awesome-icon': true,
+      },
+      provide: {
+        currentUsername: ref(''),
       },
     });
     userManagement = wrapper.vm;

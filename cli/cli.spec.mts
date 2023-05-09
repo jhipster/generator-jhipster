@@ -106,21 +106,21 @@ describe('cli', () => {
   });
 
   it('--help should run without errors', done => {
-    exec(`${jhipsterCli} --help`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --help`, error => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('--version should run without errors', done => {
-    exec(`${jhipsterCli} --version`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --version`, error => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('should return error on unknown command', function (done) {
-    exec(`${jhipsterCli} junkcmd`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} junkcmd`, (error, _stdout, stderr) => {
       expect(error).not.toBeNull();
       expect(error?.code).toBe(1);
       expect(stderr).toMatch('is not a known command');
@@ -332,7 +332,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options, env) => {
+        const cb = (args, options) => {
           expect(args).toEqual([['Foo', 'Bar']]);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -351,7 +351,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options, env) => {
+        const cb = (args, options) => {
           expect(args).toEqual([]);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -441,7 +441,7 @@ describe('cli', () => {
       describe('using blueprint with sharedOptions', () => {
         let stdout;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
@@ -492,7 +492,7 @@ describe('cli', () => {
       describe('using blueprint with cli option', () => {
         let stdout;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
@@ -615,7 +615,7 @@ describe('cli', () => {
         let stdout;
         let exitCode;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
@@ -644,7 +644,7 @@ describe('cli', () => {
         let stdout;
         let exitCode;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();

@@ -20,12 +20,7 @@
 import JSONEntity from '../../jhipster/json-entity.js';
 import formatComment from '../../utils/format-utils.js';
 import getTableNameFromEntityName from '../../jhipster/entity-table-name-creator.js';
-import logger from '../../utils/objects/logger.js';
 import { JDLEntity } from '../../models/index.mjs';
-
-const USER = 'user';
-const AUTHORITY = 'authority';
-const builtInEntities = new Set([USER, AUTHORITY]);
 
 export default {
   convert,

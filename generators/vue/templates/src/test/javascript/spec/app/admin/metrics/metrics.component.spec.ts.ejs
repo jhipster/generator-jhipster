@@ -1,12 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import Metrics from '@/admin/metrics/metrics.vue';
-import MetricsModal from '@/admin/metrics/metrics-modal.vue';
 import type MetricsComponent from '@/admin/metrics/metrics.component';
 import MetricsService from '@/admin/metrics/metrics.service';
 
@@ -14,13 +10,6 @@ type MetricsComponentType = Vue & InstanceType<typeof MetricsComponent>;
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', FontAwesomeIcon);
-localVue.component('metrics-modal', MetricsModal);
 localVue.directive('b-modal', {});
 localVue.directive('b-progress', {});
 localVue.directive('b-progress-bar', {});
@@ -237,19 +226,17 @@ describe('Metrics Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({ data: { timers: [], gauges: []} });
     const wrapper = shallowMount<MetricsComponentType>(Metrics, {
-      store,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
       localVue,
       stubs: {
         bModal: true,
         bProgress: true,
-        bProgressBar: true
+        bProgressBar: true,
+        'font-awesome-icon': true,
+        'metrics-modal': true,
       },
       provide: {
-        metricsService: () => new MetricsService()
-      }
+        metricsService: new MetricsService(),
+      },
     });
     metricsComponent = wrapper.vm;
   });

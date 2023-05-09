@@ -24,36 +24,25 @@ import Router from 'vue-router';
 import { ToastPlugin } from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 
-<%_ let dayJsIncluded = false;
-  for (field of fields.filter(field => !field.id)) { _%>
-  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
-      dayJsIncluded = true; _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-  <%_ } _%>
+import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
-
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
 import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
-<%_ const importEntitiesSeen = [entityAngularName];
-  for (relationship of relationships) { _%>
-  <%_ if (!relationship.otherEntityIsEmbedded) {
-    const otherEntityAngularName = relationship.otherEntityAngularName;
-    const otherEntityFileName = relationship.otherEntityFileName;
-    const otherEntityFolderName = relationship.otherEntityFileName;
-    const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder; _%>
-    <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
-      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+<%_
+  const allRelationshipsThatNeedSelectOptions = Object
+    .values(relationshipsByOtherEntity)
+    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .filter(relationships => relationships.length > 0);
+_%>
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
 import UserService from '@/entities/user/user.service';
-      <% } else if (!relationship.otherEntityUser) { %>
-import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
-      <%_ } _%>
-    <%_ } _%>
-    <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } else { _%>
+import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
 
@@ -61,19 +50,9 @@ type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%=
 
 const localVue = createLocalVue();
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
 const router = new Router();
 localVue.use(Router);
 localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
@@ -96,43 +75,35 @@ describe('Component Tests', () => {
       });
 
       mountOptions = {
-        store,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
         localVue,
         router,
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-<%_
-  const entitiesSeen = [entityAngularName];
-  for (relationship of relationships) { _%>
-  <%_ if (!relationship.otherEntityIsEmbedded) {
-      const otherEntityName = relationship.otherEntityName;
-      const otherEntityAngularName = relationship.otherEntityAngularName; _%>
-    <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-          userService: () => new UserService(),
-      <%_ } else { _%>
-          <%= otherEntityName %>Service: () =>
-            sinon.createStubInstance<<%= otherEntityAngularName %>Service>(<%= otherEntityAngularName %>Service, {
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+          userService: () =>
+            sinon.createStubInstance<UserService>(UserService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
-      <%_ } _%>
-    <%_ } _%>
-    <%_ entitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } else { _%>
+          <%= relationship.otherEntity.entityInstance %>Service: () =>
+            sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
   <%_ } _%>
 <%_ } _%>
         },
       };
     });
 
-<%_
-  let dateTestsIncluded = false;
-  for (field of fields.filter(field => !field.id)) {
-    if (field.fieldTypeTimed && !dateTestsIncluded) {
-      dateTestsIncluded = true;
-_%>
+<%_ if (anyFieldIsTimeDerived) { _%>
     describe('load', () => {
       beforeEach(() => {
         const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
@@ -153,7 +124,6 @@ _%>
         expect(comp.convertDateTimeFromServer(null)).toBeNull();
       });
     });
-  <%_ } _%>
 <%_ } _%>
 
     describe('save', () => {

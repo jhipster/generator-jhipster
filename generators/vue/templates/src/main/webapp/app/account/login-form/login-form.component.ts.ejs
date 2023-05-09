@@ -1,5 +1,10 @@
 import axios from 'axios';
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n-bridge';
+<%_ } _%>
+import AccountService from '../account.service';
+import { useRoute, useRouter } from 'vue-router/composables';
 
 export default defineComponent({
   components: {
@@ -9,64 +14,62 @@ export default defineComponent({
       },
     },
   },
-  setup(props, { emit }) {
+  setup() {
     const authenticationError: Ref<boolean> = ref(false);
     const login: Ref<string> = ref(null);
     const password: Ref<string> = ref(null);
     const rememberMe: Ref<boolean> = ref(false);
+    const router = useRouter();
+    const route = useRoute();
 
-    const accountService = inject('accountService');
+    const accountService = inject<AccountService>('accountService');
+
+    const doLogin = async () => {
+<%_ if (authenticationTypeJwt) { _%>
+      const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
+      try {
+        const result = await axios.post('api/authenticate', data);
+        const bearerToken = result.headers.authorization;
+        if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
+          const jwt = bearerToken.slice(7, bearerToken.length);
+          if (rememberMe.value) {
+            localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+            sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+          } else {
+            sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+            localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+          }
+        }
+<%_ } else { _%>
+      const data = `username=${encodeURIComponent(login.value)}&password=${encodeURIComponent(password.value)}&remember-me=${rememberMe.value}&submit=Login`;
+      try {
+        await axios.post('api/authentication', data, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        });
+<%_ } _%>
+
+        authenticationError.value = false;
+        router.app.$emit('bv::hide::modal', 'login-page');
+        await accountService.retrieveAccount();
+        if (route.path === '/forbidden') {
+          router.go(-1);
+        }
+      } catch (_error) {
+        authenticationError.value = true;
+      }
+    };
     return {
-      emit,
       authenticationError,
       login,
       password,
       rememberMe,
       accountService,
+      doLogin,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
-  },
-  methods: {
-    doLogin(): void {
-<%_ if (authenticationTypeJwt) { _%>
-      const data = { username: this.login, password: this.password, rememberMe: this.rememberMe };
-      axios
-        .post('api/authenticate', data)
-        .then(result => {
-          const bearerToken = result.headers.authorization;
-          if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
-            const jwt = bearerToken.slice(7, bearerToken.length);
-            if (this.rememberMe) {
-              localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
-              sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-            } else {
-              sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
-              localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-            }
-          }
-
-          this.authenticationError = false;
-          this.$root.$emit('bv::hide::modal', 'login-page');
-          this.accountService().retrieveAccount();
-        })
-        .catch(error => {
-          this.authenticationError = true;
-          return error;
-        });
-<%_ } else { _%>
-      const data = `username=${encodeURIComponent(this.login)}&password=${encodeURIComponent(this.password)}&remember-me=${this.rememberMe}&submit=Login`;
-      axios
-        .post('api/authentication', data, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(() => {
-          this.authenticationError = false;
-          this.$root.$emit('bv::hide::modal', 'login-page');
-          this.accountService().retrieveAccount();
-        }).catch(()=> {
-          this.authenticationError = true;
-        });
-  <%_ } _%>
-    },
   },
 });

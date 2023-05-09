@@ -49,7 +49,8 @@ export const getCommand = (cmd, args = []) => {
 export const doneFactory = (successMsg, sponsorMsg) => {
   return errorOrMsg => {
     if (errorOrMsg instanceof Error) {
-      logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
+      logger.error(`ERROR! ${errorOrMsg.message}`);
+      logger.log(errorOrMsg);
     } else if (errorOrMsg) {
       logger.error(`ERROR! ${errorOrMsg}`);
     } else if (successMsg) {

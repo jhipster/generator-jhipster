@@ -278,7 +278,7 @@ describe('cli - EnvironmentBuilder', () => {
       let oldArgv;
 
       before(async () => {
-        const result = await helpers
+        await helpers
           .prepareTemporaryDir()
           .withFiles(createBlueprintFiles('generator-jhipster-cli', { generator: ['foo'] }))
           .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: ['foo', 'bar'] }))

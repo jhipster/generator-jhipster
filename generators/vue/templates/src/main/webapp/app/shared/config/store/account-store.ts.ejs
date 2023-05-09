@@ -1,4 +1,4 @@
-import { Module } from 'vuex';
+import { defineStore } from 'pinia'
 
 export interface AccountStateStorable {
   logon: boolean;
@@ -18,38 +18,33 @@ export const defaultAccountState: AccountStateStorable = {
   activeProfiles: '',
 };
 
-export const accountStore: Module<AccountStateStorable, any> = {
-  state: { ...defaultAccountState },
+export const useAccountStore = defineStore('main', {
+  state: (): AccountStateStorable => ({ ...defaultAccountState }),
   getters: {
-    logon: state => state.logon,
     account: state => state.userIdentity,
-    authenticated: state => state.authenticated,
-    profilesLoaded: state => state.profilesLoaded,
-    activeProfiles: state => state.activeProfiles,
-    ribbonOnProfiles: state => state.ribbonOnProfiles,
   },
-  mutations: {
-    authenticate(state, promise) {
-      state.logon = promise;
+  actions: {
+    authenticate(promise) {
+      this.logon = promise;
     },
-    authenticated(state, identity) {
-      state.userIdentity = identity;
-      state.authenticated = true;
-      state.logon = null;
+    setAuthentication(identity) {
+      this.userIdentity = identity;
+      this.authenticated = true;
+      this.logon = null;
     },
-    logout(state) {
-      state.userIdentity = null;
-      state.authenticated = false;
-      state.logon = null;
+    logout() {
+      this.userIdentity = null;
+      this.authenticated = false;
+      this.logon = null;
     },
-    profilesLoaded(state) {
-      state.profilesLoaded = true;
+    setProfilesLoaded() {
+      this.profilesLoaded = true;
     },
-    setActiveProfiles(state, profile) {
-      state.activeProfiles = profile;
+    setActiveProfiles(profile) {
+      this.activeProfiles = profile;
     },
-    setRibbonOnProfiles(state, ribbon) {
-      state.ribbonOnProfiles = ribbon;
+    setRibbonOnProfiles(ribbon) {
+      this.ribbonOnProfiles = ribbon;
     },
   },
-};
+});

@@ -33,16 +33,12 @@ import {
   generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
-import { isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
+import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
- */
 export default class VueGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
@@ -54,16 +50,13 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
+        await this.composeWithJHipster(GENERATOR_LANGUAGES);
       },
     });
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -78,7 +71,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -90,14 +83,14 @@ export default class VueGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -105,18 +98,28 @@ export default class VueGenerator extends BaseApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       writeEntitiesFiles,
       writeEntityFiles,
-      queueTranslateTransform({ control, application }) {
+      async queueTranslateTransform({ control, application }) {
+        const { enableTranslation, clientSrcDir } = application;
         if (!application.enableTranslation) {
-          this.queueTransformStream(translateVueFilesTransform(control.getWebappTranslation), {
-            name: 'translating webapp',
-            streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
+          await control.loadClientTranslations?.();
+        }
+        const { getWebappTranslation } = control;
+        this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
+          name: 'translating webapp',
+          streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
+        });
+        if (enableTranslation) {
+          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
+          this.queueTransformStream(transform, {
+            name: 'converting translations',
+            streamOptions: { filter: file => isFilePending(file) && isTranslationFile(file) },
           });
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
@@ -124,9 +127,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
   }
 
   get postWritingEntities() {
-    return {
+    return this.asPostWritingEntitiesTaskGroup({
       postWriteEntityFiles,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
@@ -147,7 +150,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**
@@ -189,10 +192,10 @@ export default class VueGenerator extends BaseApplicationGenerator {
     entityName = this.entityAngularName,
     entityFolderName = this.entityFolderName,
     entityFileName = this.entityFileName,
-    entityUrl = this.entityUrl,
-    microserviceName = this.microserviceName,
+    _entityUrl = this.entityUrl,
+    _microserviceName = this.microserviceName,
     readOnly = this.readOnly,
-    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
+    _pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
   ) {
     this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
     this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
