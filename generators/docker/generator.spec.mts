@@ -30,6 +30,7 @@ import { matchConsul, matchEureka } from './__test-support/service-discovery-mat
 import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { buildServerMatrix } from '../../test/support/server-samples.mjs';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.mjs';
+import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const { snakeCase } = lodash;
 
@@ -77,10 +78,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { searchEngine, serviceDiscoveryType } = sampleConfig;

@@ -18,11 +18,9 @@
  */
 import PQueue from 'p-queue';
 import PTransform from 'p-transform';
-import memFsEditorState from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import TemplateFileFs from './template-file-fs.mjs';
-
-const { isFilePending } = memFsEditorState;
 
 export default class MultiStepTransform extends PTransform {
   twoStepTemplateQueue: PQueue;

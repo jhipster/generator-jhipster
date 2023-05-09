@@ -27,8 +27,7 @@ import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import { statSync, rmSync } from 'fs';
 import { lt as semverLessThan } from 'semver';
-import type Storage from 'yeoman-generator/lib/util/storage.js';
-
+import type { Storage } from 'yeoman-generator';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
@@ -51,7 +50,7 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
 import command from './command.mjs';
 
-const { merge, kebabCase } = _;
+const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
@@ -98,7 +97,6 @@ export default class CoreGenerator extends YeomanGenerator {
 
   readonly sharedData!: SharedData<BaseApplication>;
   readonly logger: Logger;
-  declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
   /**
    * @deprecated
@@ -111,8 +109,17 @@ export default class CoreGenerator extends YeomanGenerator {
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
 
+  // TODO switch to Environment type
+  declare env: any;
+
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+    super(args, options, {
+      skipParseOptions: true,
+      tasksMatchingPriority: true,
+      taskPrefix: PRIORITY_PREFIX,
+      unique: 'namespace',
+      ...features,
+    });
 
     this.option('skip-prompts', {
       description: 'Skip prompts',
@@ -160,7 +167,7 @@ export default class CoreGenerator extends YeomanGenerator {
 
     this.parseJHipsterOptions(command.options);
 
-    this.registerPriorities(CUSTOM_PRIORITIES as any);
+    this.registerPriorities(CUSTOM_PRIORITIES);
 
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
@@ -238,7 +245,7 @@ export default class CoreGenerator extends YeomanGenerator {
   getTaskNames(): string[] {
     let priorities = super.getTaskNames();
     if (this.options.skipPriorities) {
-      priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
+      priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;
   }
@@ -572,7 +579,7 @@ export default class CoreGenerator extends YeomanGenerator {
     help,
   }: {
     jhipsterOldVersion: string | null;
-    help: boolean;
+    help?: boolean;
   }): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);

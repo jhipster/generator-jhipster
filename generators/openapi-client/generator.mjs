@@ -34,9 +34,9 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
     this.option(OpenAPIOptionsNames.REGEN, {
-      desc: 'Regenerates all saved clients',
+      description: 'Regenerates all saved clients',
       type: Boolean,
-      defaults: OpenAPIDefaultValues.REGEN,
+      default: OpenAPIDefaultValues.REGEN,
     });
   }
 

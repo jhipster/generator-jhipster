@@ -24,6 +24,7 @@ import { fileURLToPath } from 'url';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
+import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const {
   CommonDBTypes: { UUID },
@@ -86,10 +87,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
 
   describe('with', () => {
     describe('default config', () => {

@@ -24,6 +24,7 @@ import ChildProcess from 'child_process';
 import util from 'util';
 import chalk from 'chalk';
 import glob from 'glob';
+import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 
@@ -58,15 +59,15 @@ export default class HerokuGenerator extends BaseGenerator {
     super(args, options, features);
 
     this.option('skip-build', {
-      desc: 'Skips building the application',
+      description: 'Skips building the application',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('skip-deploy', {
-      desc: 'Skips deployment to Heroku',
+      description: 'Skips deployment to Heroku',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     if (this.options.help) {
@@ -120,7 +121,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get prompting() {
     return {
-      askForApp() {
+      askForApp: runAsync(function () {
         const done = this.async();
 
         if (this.herokuAppName) {
@@ -169,7 +170,7 @@ export default class HerokuGenerator extends BaseGenerator {
             done();
           });
         }
-      },
+      }),
 
       askForHerokuDeployType() {
         if (this.abort) return null;
@@ -268,7 +269,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get configuring() {
     return {
-      checkInstallation() {
+      checkInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -279,7 +280,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
       saveConfig() {
         this.config.set({
@@ -303,7 +304,7 @@ export default class HerokuGenerator extends BaseGenerator {
         statistics.sendSubGenEvent('generator', GENERATOR_HEROKU);
       },
 
-      gitInit() {
+      gitInit: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -321,9 +322,9 @@ export default class HerokuGenerator extends BaseGenerator {
             this.logger.info(data.toString());
           });
         }
-      },
+      }),
 
-      installHerokuDeployPlugin() {
+      installHerokuDeployPlugin: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const cliPlugin = 'heroku-cli-deploy';
@@ -348,9 +349,9 @@ export default class HerokuGenerator extends BaseGenerator {
             });
           }
         });
-      },
+      }),
 
-      herokuCreate() {
+      herokuCreate: runAsync(function () {
         if (this.abort || this.herokuAppExists) return;
         const done = this.async();
 
@@ -446,9 +447,9 @@ export default class HerokuGenerator extends BaseGenerator {
             this.logger.info(output.trim());
           }
         });
-      },
+      }),
 
-      herokuAddonsCreate() {
+      herokuAddonsCreate: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -517,7 +518,7 @@ export default class HerokuGenerator extends BaseGenerator {
         }
 
         done();
-      },
+      }),
 
       configureJHipsterRegistry() {
         if (this.abort || this.herokuAppExists) return undefined;
@@ -637,7 +638,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
-      productionBuild() {
+      productionBuild: runAsync(function () {
         if (this.abort) return;
 
         if (this.herokuSkipBuild || this.herokuDeployType === 'git') {
@@ -661,7 +662,7 @@ export default class HerokuGenerator extends BaseGenerator {
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
+      }),
 
       async productionDeploy() {
         if (this.abort) return;

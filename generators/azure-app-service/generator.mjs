@@ -20,6 +20,7 @@
 import fs from 'fs';
 import { exec } from 'child_process';
 import chalk from 'chalk';
+import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 import statistics from '../statistics.mjs';
@@ -43,21 +44,21 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
     super(args, options, features);
 
     this.option('skip-build', {
-      desc: 'Skips building the application',
+      description: 'Skips building the application',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('skip-deploy', {
-      desc: 'Skips deployment to Azure App Service',
+      description: 'Skips deployment to Azure App Service',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('skip-insights', {
-      desc: 'Skips configuration of Azure Application Insights',
+      description: 'Skips configuration of Azure Application Insights',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.azureSpringCloudSkipBuild = this.options.skipBuild;
@@ -109,7 +110,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         }
       },
 
-      checkInstallation() {
+      checkInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -120,9 +121,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`)
           );
         });
-      },
+      }),
 
-      getAzureAppServiceDefaults() {
+      getAzureAppServiceDefaults: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         exec('az configure --list-defaults true', (err, stdout) => {
@@ -156,9 +157,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
-      askForazureAppServiceVariables() {
+      askForazureAppServiceVariables: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -203,9 +204,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           this.azureAppServiceName = props.azureAppServiceName;
           done();
         });
-      },
+      }),
 
-      askForAzureDeployType() {
+      askForAzureDeployType: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const prompts = [
@@ -231,7 +232,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           this.azureAppServiceDeploymentType = props.azureAppServiceDeploymentType;
           done();
         });
-      },
+      }),
     };
   }
 
@@ -263,7 +264,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         statistics.sendSubGenEvent('generator', 'azure-app-service');
       },
 
-      checkAzureGroupId() {
+      checkAzureGroupId: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         this.logger.log(chalk.bold(`\nChecking Azure resource group '${this.azureAppServiceResourceGroupName}'...`));
@@ -277,9 +278,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
-      azureAzureAppServicePlanCreate() {
+      azureAzureAppServicePlanCreate: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         this.logger.log(chalk.bold(`\nChecking Azure App Service plan '${this.azureAppServicePlan}'...`));
@@ -320,9 +321,9 @@ which is free for the first 30 days`);
             }
           }
         });
-      },
+      }),
 
-      azureAzureAppServiceCreate() {
+      azureAzureAppServiceCreate: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         this.logger.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
@@ -363,9 +364,9 @@ which is free for the first 30 days`);
             }
           }
         });
-      },
+      }),
 
-      azureAzureAppServiceConfig() {
+      azureAzureAppServiceConfig: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         this.logger.info(`Configuring Azure App Service '${this.azureAppServiceName}'...`);
@@ -380,7 +381,7 @@ which is free for the first 30 days`);
             done();
           }
         );
-      },
+      }),
 
       addAzureAppServiceMavenPlugin() {
         if (this.abort) return;
@@ -395,7 +396,7 @@ which is free for the first 30 days`);
         }
       },
 
-      checkAzureApplicationInsightsExtension() {
+      checkAzureApplicationInsightsExtension: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudSkipInsights) return;
         const done = this.async();
@@ -419,9 +420,9 @@ which is free for the first 30 days`);
             done();
           }
         });
-      },
+      }),
 
-      configureAzureApplicationInsights() {
+      configureAzureApplicationInsights: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudSkipInsights) return;
         const done = this.async();
@@ -454,9 +455,9 @@ which is free for the first 30 days`);
             }
           }
         );
-      },
+      }),
 
-      addAzureApplicationInsightsDependency() {
+      addAzureApplicationInsightsDependency: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudSkipInsights) return;
         const done = this.async();
@@ -464,7 +465,7 @@ which is free for the first 30 days`);
         this.addMavenDependency('com.microsoft.azure', 'applicationinsights-spring-boot-starter', AZURE_APP_INSIGHTS_STARTER_VERSION);
         this.logger.info(`The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`);
         done();
-      },
+      }),
     };
   }
 
@@ -513,7 +514,7 @@ which is free for the first 30 days`);
 
   get end() {
     return {
-      gitHubAction() {
+      gitHubAction: runAsync(function () {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'local') return;
 
@@ -578,9 +579,9 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
             });
           }
         });
-      },
+      }),
 
-      productionBuild() {
+      productionBuild: runAsync(function () {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'github-action') return;
         if (this.azureSpringCloudSkipBuild) return;
@@ -601,9 +602,9 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
+      }),
 
-      productionDeploy() {
+      productionDeploy: runAsync(function () {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'github-action') return;
         if (this.azureSpringCloudSkipDeploy) return;
@@ -624,7 +625,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
+      }),
     };
   }
 

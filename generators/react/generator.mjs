@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';

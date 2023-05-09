@@ -30,7 +30,7 @@ const { OptionNames } = applicationOptions;
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 export default class SpringServiceGenerator extends BaseGenerator {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('name', { type: String, required: true });
     this.name = this.options.name;
@@ -80,14 +80,11 @@ export default class SpringServiceGenerator extends BaseGenerator {
           },
         ];
         if (!this.defaultOption) {
-          const done = this.async();
-          this.prompt(prompts).then(props => {
+          return this.prompt(prompts).then(props => {
             this.useInterface = props.useInterface;
-            done();
           });
-        } else {
-          this.useInterface = true;
         }
+        this.useInterface = true;
       },
     };
   }

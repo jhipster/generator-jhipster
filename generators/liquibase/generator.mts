@@ -63,7 +63,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
   recreateInitialChangelog: boolean;
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('entities', {
       description: 'Which entities to generate a new changelog',
@@ -71,7 +71,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
       required: false,
     });
 
-    this.recreateInitialChangelog = this.options.recreateInitialChangelog;
+    this.recreateInitialChangelog = this.options.recreateInitialChangelog ?? false;
   }
 
   async beforeQueue() {

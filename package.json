@@ -82,9 +82,9 @@
     "@faker-js/faker": "7.6.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.2",
+    "@types/glob": "npm:noist@^1.0.0",
     "@types/lodash": "4.14.194",
-    "@types/yeoman-generator": "5.2.11",
-    "@types/yeoman-test": "4.0.3",
+    "@types/minimatch": "npm:noist@^1.0.0",
     "aws-sdk": "2.1374.0",
     "axios": "1.4.0",
     "chalk": "4.1.2",
@@ -103,7 +103,8 @@
     "isbinaryfile": "5.0.0",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
-    "mem-fs-editor": "9.7.0",
+    "mem-fs": "3.0.0",
+    "mem-fs-editor": "10.0.1",
     "minimatch": "9.0.0",
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
@@ -116,6 +117,7 @@
     "prettier-plugin-packagejson": "2.4.3",
     "progress": "2.0.3",
     "randexp": "0.5.3",
+    "run-async": "^3.0.0",
     "semver": "7.5.0",
     "shelljs": "0.8.5",
     "simple-git": "3.18.0",
@@ -124,7 +126,7 @@
     "winston": "3.8.2",
     "yaml": "2.2.2",
     "yeoman-environment": "3.16.2",
-    "yeoman-generator": "5.8.0"
+    "yeoman-generator": "6.0.0-beta.0"
   },
   "devDependencies": {
     "@node-loaders/auto": "0.7.0",
@@ -164,7 +166,7 @@
     "sort-keys": "5.0.0",
     "typescript": "5.0.4",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "7.4.0"
+    "yeoman-test": "8.0.0-beta.0"
   },
   "engines": {
     "node": "^16.13.0 || 18.13.0 || >=18.16.0",
@@ -178,13 +180,8 @@
   "overrides": {
     "@types/shelljs": {
       "@types/glob": {
-        "@types/minimatch": "3.0.5"
-      }
-    },
-    "@types/mem-fs-editor": {
-      "@types/glob": {
-        ".": "7.2.0",
-        "@types/minimatch": "3.0.5"
+        "@types/minimatch": "3.0.5",
+        ".": "7.2.0"
       }
     }
   }

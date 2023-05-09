@@ -30,7 +30,7 @@ const cliBlueprintFiles = {
     options: [
       {
         option: '--foo',
-        desc: 'foo description',
+        description: 'foo description',
       },
     ],
   },
@@ -47,7 +47,7 @@ const cliBlueprintFiles = {
       super(args, opts, features);
 
       this.option('foo-bar', {
-        desc: 'Sample option',
+        description: 'Sample option',
         type: Boolean,
       });
     }
@@ -85,7 +85,7 @@ const cliSharedBlueprintFiles = {
     constructor(args, options) {
       super(args, options);
       this.option('foo', {
-        desc: 'foo description',
+        description: 'foo description',
         type: Boolean,
       });
     }
@@ -161,7 +161,7 @@ describe('cli', () => {
 
       const BaseGenerator = (await import('../generators/base/index.mjs')).default;
       env = Environment.createEnv();
-      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, namespace: 'jhipster:foo' });
+      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, sharedData: {} });
       generator._options = {
         foo: {
           description: 'Foo',
@@ -257,19 +257,19 @@ describe('cli', () => {
         options: [
           {
             option: '--foo',
-            desc: 'Foo',
+            description: 'Foo',
           },
           {
             option: '--no-foo',
-            desc: 'No foo',
+            description: 'No foo',
           },
           {
             option: '--foo-bar',
-            desc: 'Foo bar',
+            description: 'Foo bar',
           },
           {
             option: '--no-foo-bar',
-            desc: 'No foo bar',
+            description: 'No foo bar',
           },
         ],
       };
@@ -554,7 +554,7 @@ describe('cli', () => {
         super(args, opts, features);
   
         this.option('foo-bar', {
-          desc: 'Sample option',
+          description: 'Sample option',
           type: Boolean,
         });
       }

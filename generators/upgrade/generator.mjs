@@ -76,34 +76,34 @@ export default class UpgradeGenerator extends BaseGenerator {
 
     // This adds support for a `--target-version` flag
     this.option('target-version', {
-      desc: 'Upgrade to a specific version instead of the latest',
+      description: 'Upgrade to a specific version instead of the latest',
       type: String,
     });
     // This adds support for a `--target-blueprint-versions` flag
     this.option('target-blueprint-versions', {
-      desc: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
+      description: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
       type: String,
     });
 
     // This adds support for a `--skip-install` flag
     this.option('skip-install', {
-      desc: 'Skips installing dependencies during the upgrade process',
+      description: 'Skips installing dependencies during the upgrade process',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     // This adds support for a `--silent` flag
     this.option('silent', {
-      desc: 'Hides output of the generation process',
+      description: 'Hides output of the generation process',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     // This adds support for a `--skip-checks` flag
     this.option('skip-checks', {
-      desc: 'Disable checks during project regeneration',
+      description: 'Disable checks during project regeneration',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     if (this.options.help) {

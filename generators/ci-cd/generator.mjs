@@ -42,42 +42,42 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     // Automatically configure Travis
     this.option('autoconfigure-travis', {
       type: Boolean,
-      defaults: false,
+      default: false,
       description: 'Automatically configure Travis',
     });
 
     // Automatically configure Jenkins
     this.option('autoconfigure-jenkins', {
       type: Boolean,
-      defaults: false,
+      default: false,
       description: 'Automatically configure Jenkins',
     });
 
     // Automatically configure Gitlab
     this.option('autoconfigure-gitlab', {
       type: Boolean,
-      defaults: false,
+      default: false,
       description: 'Automatically configure Gitlab',
     });
 
     // Automatically configure Azure
     this.option('autoconfigure-azure', {
       type: Boolean,
-      defaults: false,
+      default: false,
       description: 'Automatically configure Azure',
     });
 
     // Automatically configure GitHub Actions
     this.option('autoconfigure-github', {
       type: Boolean,
-      defaults: false,
+      default: false,
       description: 'Automatically configure GitHub Actions',
     });
 
     // Automatically configure CircleCI
     this.option('autoconfigure-circle', {
       type: Boolean,
-      defaults: false,
+      default: false,
       description: 'Automatically configure CircleCI',
     });
   }

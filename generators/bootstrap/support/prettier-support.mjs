@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import memFsEditor from 'mem-fs-editor';
+import { isFileStateDeleted } from 'mem-fs-editor/state';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
@@ -24,10 +24,7 @@ import { Minimatch } from 'minimatch';
 // eslint-disable-next-line import/no-unresolved
 import environmentTransform from 'yeoman-environment/transform';
 
-const { State } = memFsEditor;
 const { patternSpy } = environmentTransform;
-
-const { isFileStateDeleted } = State;
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFile = file => minimatch.match(file.path);

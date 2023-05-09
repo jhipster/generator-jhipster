@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 import chalk from 'chalk';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';

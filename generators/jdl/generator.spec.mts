@@ -24,7 +24,7 @@ import { SinonSpy } from 'sinon';
 
 import { RunResult } from 'yeoman-test';
 import Generator from './index.mjs';
-import { getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.mjs';
+import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 import * as GENERATORS from '../generator-list.mjs';
 import { GENERATOR_JDL } from '../generator-list.mjs';
@@ -53,10 +53,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'foo' });
-    expect(instance.features.unique).toBe('foo');
-  });
+  shouldSupportFeatures(Generator);
   describe('help', () => {
     it('should print expected information', async () => {
       expect(await getCommandHelpOutput(generator)).toMatchSnapshot();

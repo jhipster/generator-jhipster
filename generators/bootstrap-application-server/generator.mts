@@ -46,14 +46,16 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
 
-        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
-        const gradleLibsVersions = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/gradle/libs.versions.toml'));
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'))?.toString();
+        const gradleLibsVersions = this.readTemplate(
+          this.jhipsterTemplatePath('../../server/templates/gradle/libs.versions.toml')
+        )?.toString();
         application.packageInfoJavadocs = [];
         application.javaDependencies = this.prepareDependencies(
           {
             ...javaDependencies,
-            ...getPomVersionProperties(pomFile),
-            ...getGradleLibsVersionsProperties(gradleLibsVersions),
+            ...getPomVersionProperties(pomFile!),
+            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
           },
           // Gradle doesn't allows snakeCase
           value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
