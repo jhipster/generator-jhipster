@@ -270,9 +270,15 @@ export default class JdlGenerator extends BaseGenerator {
     await Promise.all(
       applications.map(async application => {
         const cwd = application.folder ? this.destinationPath(application.folder) : this.destinationPath();
-        const envBuilder = await this.createEnvBuilder(undefined, { cwd, sharedFs: application.sharedFs });
+        const envOptions: any = { cwd, sharedFs: application.sharedFs };
+        const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
+        // Install should happen at the root of the monorepository. Force skip install at childs.
+        if (this.options.monorepository) {
+          generatorOptions.skipInstall = true;
+        }
+        const envBuilder = await this.createEnvBuilder(undefined, envOptions);
         const env = envBuilder.getEnvironment();
-        await env.run(`${CLI_NAME}:${GENERATOR_APP}`, { ...this.options, ...options, skipPriorities: ['prompting'] });
+        await env.run(`${CLI_NAME}:${GENERATOR_APP}`, generatorOptions);
       })
     );
   }
