@@ -12,7 +12,7 @@
         <awaitility.version>4.2.0</awaitility.version>
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <gatling.version>3.9.4</gatling.version>
+        <gatling.version>3.9.5</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.3</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
