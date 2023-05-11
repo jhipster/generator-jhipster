@@ -36,6 +36,7 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   skipDbChangelog?: boolean;
   jdlFile?: string;
   recreateInitialChangelog?: boolean;
+  monorepository?: boolean;
 };
 
 export type JHipsterGeneratorFeatures = BaseFeatures & {
