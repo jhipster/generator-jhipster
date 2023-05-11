@@ -185,6 +185,37 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             yamlConfig.ports[0] = ports.join(':');
           }
 
+          if (yamlConfig.environment) {
+            yamlConfig.environment = yamlConfig.environment.map(envOption => {
+              // Doesn't applies to keycloak, jhipster-registry and consul.
+              // docker-compose changes the container name to `${lowercaseBaseName}-${databaseType}`.
+              // we need to update the environment urls to the new container host.
+              [
+                'SPRING_R2DBC_URL',
+                'SPRING_DATASOURCE_URL',
+                'SPRING_LIQUIBASE_URL',
+                'SPRING_NEO4J_URI',
+                'SPRING_DATA_MONGODB_URI',
+                'JHIPSTER_CACHE_REDIS_SERVER',
+                'SPRING_ELASTICSEARCH_URIS',
+              ].forEach(varName => {
+                if (envOption.startsWith(varName)) {
+                  envOption = envOption
+                    .replace('://', `://${lowercaseBaseName}-`)
+                    .replace('oracle:thin:@', `oracle:thin:@${lowercaseBaseName}-`);
+                }
+              });
+              ['JHIPSTER_CACHE_MEMCACHED_SERVERS', 'SPRING_COUCHBASE_CONNECTION_STRING', 'SPRING_CASSANDRA_CONTACTPOINTS'].forEach(
+                varName => {
+                  if (envOption.startsWith(varName)) {
+                    envOption = envOption.replace(`${varName}=`, `${varName}=${lowercaseBaseName}-`);
+                  }
+                }
+              );
+              return envOption;
+            });
+          }
+
           if (appConfig.applicationType === MONOLITH && this.monitoring === PROMETHEUS) {
             yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
