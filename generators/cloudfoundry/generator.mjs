@@ -19,7 +19,7 @@
 import os from 'os';
 import childProcess from 'child_process';
 import chalk from 'chalk';
-import glob from 'glob';
+import { glob } from 'glob';
 import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
