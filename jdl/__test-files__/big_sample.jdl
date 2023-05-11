@@ -67,6 +67,11 @@ entity Region {
   name String
 }
 
+entity AuthorityExtension {
+  name String
+  description String
+}
+
 relationship OneToOne {
   @id Department{location} to @id(42) Location
 }
@@ -95,6 +100,7 @@ relationship ManyToMany {
   JobHistory{job} to Job{history},
   JobHistory{emp(employee)} to Employee{jobHistory},
   Job{chore(title)} to Task{linkedJob(JobTitle)}
+  AuthorityExtension{authority(name)} to Authority with builtInEntity
 }
 
 paginate JobHistory, Employee with infinite-scroll

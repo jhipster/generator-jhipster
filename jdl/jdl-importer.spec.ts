@@ -59,10 +59,15 @@ entity A
 relationship OneToMany {
   A{user} to User with builtInEntity
 }
+entity AuthorityExtension
+relationship ManyToMany {
+  AuthorityExtension{authority} to Authority with builtInEntity
+}
 `,
           { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
         ).import();
         jestExpect(importState.exportedEntities[0].relationships[0].relationshipWithBuiltInEntity).toBe(true);
+        jestExpect(importState.exportedEntities[1].relationships[0].relationshipWithBuiltInEntity).toBe(true);
       });
     });
     describe('when not parsing applications', () => {

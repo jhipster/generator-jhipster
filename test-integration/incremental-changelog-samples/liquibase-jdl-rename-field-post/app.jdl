@@ -127,6 +127,11 @@ entity Region {
   name String
 }
 
+entity AuthorityExtension {
+  name String
+  description String
+}
+
 relationship OneToOne {
   Department{location} to Location,
   Employee{user(login)} to @Id User with builtInEntity
@@ -167,7 +172,8 @@ relationship ManyToMany {
   JobHistory{department} to Department{history},
   JobHistory{job} to Job{history},
   JobHistory{emp(firstName)} to Employee{history},
-  Job{chore(title)} to Task{linkedJob(title)}
+  Job{chore(title)} to Task{linkedJob(title)},
+  AuthorityExtension{authority(name)} to Authority with builtInEntity
 }
 
 dto BankAccount, Employee, Department, Location, Country, Region, SilverBadge, GoldenBadge, Identifier with mapstruct
