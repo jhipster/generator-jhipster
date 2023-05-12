@@ -129,7 +129,7 @@
   "devDependencies": {
     "@node-loaders/auto": "0.7.0",
     "@node-loaders/esbuild": "1.0.1",
-    "@node-loaders/esbuildx": "0.3.1",
+    "@node-loaders/esbuildx": "1.1.0",
     "@node-loaders/jest-mock": "0.2.3",
     "@node-loaders/mock": "0.10.3",
     "@types/chai": "4.3.5",
