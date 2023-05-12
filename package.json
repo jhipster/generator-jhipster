@@ -127,7 +127,7 @@
     "yeoman-generator": "5.8.0"
   },
   "devDependencies": {
-    "@node-loaders/auto": "0.7.0",
+    "@node-loaders/auto": "1.0.1",
     "@node-loaders/esbuild": "1.0.1",
     "@node-loaders/esbuildx": "0.3.1",
     "@node-loaders/jest-mock": "0.2.3",
