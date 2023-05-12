@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { convertEntities } from './entity-converter.js';
 
 describe('jdl - EntityConverter', () => {

@@ -3,7 +3,7 @@ import shelljs from 'shelljs';
 import fse from 'fs-extra';
 import _ from 'lodash';
 import { fileURLToPath } from 'url';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.mjs';

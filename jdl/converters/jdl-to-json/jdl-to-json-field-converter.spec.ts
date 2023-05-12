@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../models/index.mjs';

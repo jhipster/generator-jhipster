@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
 import { DATABASE_MIGRATION as optionName } from './index.mjs';
 import optionDefinition from './database-migration.mjs';

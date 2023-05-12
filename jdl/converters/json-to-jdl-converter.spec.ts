@@ -20,7 +20,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert/strict';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';

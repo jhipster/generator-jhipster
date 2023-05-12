@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { passthrough, pipeline } from 'p-transform';
 
 import generatedAnnotationTransform from './generated-annotation-transform.mjs';

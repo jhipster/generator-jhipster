@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { parseFromContent } from '../readers/jdl-reader.js';
 import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../jhipster/index.mjs';

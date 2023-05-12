@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import path, { dirname } from 'path';
 import sinon from 'sinon';
 import { existsSync } from 'fs';

@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
 import { MESSAGE_BROKER } from './index.mjs';
 import optionDefinition from './message-broker.mjs';

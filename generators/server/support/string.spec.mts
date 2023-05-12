@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { hibernateSnakeCase } from './string.mjs';
 
 describe('generator - server - support - string', () => {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { convertRelationships } from './relationship-converter.js';
 
 describe('jdl - RelationshipConverter', () => {

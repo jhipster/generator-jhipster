@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { dryRunHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';

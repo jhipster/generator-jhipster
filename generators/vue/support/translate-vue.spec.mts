@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { replaceTranslationTags, replaceTranslations, removeDeclarations } from './translate-vue.mjs';
 

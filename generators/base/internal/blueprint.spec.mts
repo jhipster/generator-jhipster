@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { mergeBlueprints, normalizeBlueprintName, parseBluePrints, removeBlueprintDuplicates } from './blueprint.mjs';
 
 describe('generator - base - internal - blueprint', () => {

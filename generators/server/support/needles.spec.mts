@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { defaultHelpers as helpers } from '../../../test/support/helpers.mjs';
 import { GENERATOR_SERVER } from '../../generator-list.mjs';
