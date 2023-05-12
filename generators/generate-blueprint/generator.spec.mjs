@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
@@ -40,10 +40,7 @@ describe(`generator - ${generator}`, () => {
     const generatorList = await import('../generator-list.mjs');
     await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   describe('with', () => {

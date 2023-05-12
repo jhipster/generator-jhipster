@@ -28,6 +28,7 @@ import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norm
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
+import CoreGenerator from './generator-base.mjs';
 
 /**
  * Base class that contains blueprints support.
@@ -490,7 +491,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * @param {any} [extraOptions] - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
-  private async _composeBlueprint(blueprint, subGen, extraOptions = {}) {
+  private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(blueprint, subGen, extraOptions = {}): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks) {
       this._checkBlueprint(blueprint);
@@ -520,7 +521,7 @@ export default class JHipsterBaseBlueprintGenerator<
       jhipsterContext: this,
     };
 
-    const blueprintGenerator = await this.composeWith(generatorNamespace, finalOptions, true);
+    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any, true);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }

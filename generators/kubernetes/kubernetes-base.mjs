@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import runAsync from 'run-async';
 
 import shelljs from 'shelljs';
 import crypto from 'crypto';
@@ -49,17 +50,7 @@ const { INGRESS } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 const { K8S, HELM } = GeneratorTypes;
 
-export default {
-  checkKubernetes,
-  checkHelm,
-  loadConfig,
-  saveConfig,
-  setupKubernetesConstants,
-  setupHelmConstants,
-  derivedKubernetesPlatformProperties,
-};
-
-export function checkKubernetes() {
+export const checkKubernetes = runAsync(function () {
   if (this.skipChecks) return;
   const done = this.async();
 
@@ -72,9 +63,9 @@ export function checkKubernetes() {
     }
     done();
   });
-}
+});
 
-export function checkHelm() {
+export const checkHelm = runAsync(function () {
   if (this.skipChecks) return;
   const done = this.async();
 
@@ -91,7 +82,7 @@ export function checkHelm() {
       done();
     }
   );
-}
+});
 
 export function loadConfig() {
   loadFromYoRc.call(this);
@@ -164,3 +155,13 @@ export function setupHelmConstants() {
   this.HELM_MOGODB_REPLICASET = HELM_MOGODB_REPLICASET;
   this.HELM_COUCHBASE_OPERATOR = HELM_COUCHBASE_OPERATOR;
 }
+
+export default {
+  checkKubernetes,
+  checkHelm,
+  loadConfig,
+  saveConfig,
+  setupKubernetesConstants,
+  setupHelmConstants,
+  derivedKubernetesPlatformProperties,
+};

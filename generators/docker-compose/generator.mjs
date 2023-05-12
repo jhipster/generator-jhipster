@@ -21,6 +21,7 @@ import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import pathjs from 'path';
 import normalize from 'normalize-path';
+import runAsync from 'run-async';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -63,7 +64,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return {
       ...super.initializing,
 
-      checkDockerCompose() {
+      checkDockerCompose: runAsync(function () {
         if (this.skipChecks) return;
 
         const done = this.async();
@@ -92,7 +93,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           }
           done();
         });
-      },
+      }),
     };
   }
 

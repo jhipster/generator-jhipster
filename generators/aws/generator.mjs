@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 import prompts from './prompts.mjs';
@@ -37,10 +38,10 @@ export default class AwsGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      initAws() {
+      initAws: runAsync(function () {
         const done = this.async();
         this.awsFactory = new AwsFactory(this, done);
-      },
+      }),
       getGlobalConfig() {
         this.existingProject = false;
         this.baseName = this.jhipsterConfig.baseName;
@@ -103,11 +104,11 @@ export default class AwsGenerator extends BaseGenerator {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_AWS);
       },
-      createAwsFactory() {
+      createAwsFactory: runAsync(function () {
         const cb = this.async();
         this.awsFactory.init({ region: this.awsRegion });
         cb();
-      },
+      }),
       saveConfig() {
         this.jhipsterConfig.aws = {
           applicationName: this.applicationName,
@@ -128,7 +129,7 @@ export default class AwsGenerator extends BaseGenerator {
 
   get default() {
     return {
-      productionBuild() {
+      productionBuild: runAsync(function () {
         const cb = this.async();
         this.logger.log(chalk.bold('Building application'));
 
@@ -143,8 +144,8 @@ export default class AwsGenerator extends BaseGenerator {
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
-      createBucket() {
+      }),
+      createBucket: runAsync(function () {
         const cb = this.async();
         this.logger.log();
         this.logger.log(chalk.bold('Create S3 bucket'));
@@ -163,8 +164,8 @@ export default class AwsGenerator extends BaseGenerator {
             cb();
           }
         });
-      },
-      uploadWar() {
+      }),
+      uploadWar: runAsync(function () {
         const cb = this.async();
         this.logger.log();
         this.logger.log(chalk.bold('Upload WAR to S3'));
@@ -185,8 +186,8 @@ export default class AwsGenerator extends BaseGenerator {
             cb();
           }
         });
-      },
-      createDatabase() {
+      }),
+      createDatabase: runAsync(function () {
         const cb = this.async();
         this.logger.log();
         this.logger.log(chalk.bold('Create database'));
@@ -209,8 +210,8 @@ export default class AwsGenerator extends BaseGenerator {
             cb();
           }
         });
-      },
-      createDatabaseUrl() {
+      }),
+      createDatabaseUrl: runAsync(function () {
         const cb = this.async();
         this.logger.log();
         this.logger.log(chalk.bold('Waiting for database (This may take several minutes)'));
@@ -235,8 +236,8 @@ export default class AwsGenerator extends BaseGenerator {
             cb();
           }
         });
-      },
-      verifyRoles() {
+      }),
+      verifyRoles: runAsync(function () {
         const cb = this.async();
         this.logger.log();
         this.logger.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
@@ -248,8 +249,8 @@ export default class AwsGenerator extends BaseGenerator {
             cb();
           }
         });
-      },
-      createApplication() {
+      }),
+      createApplication: runAsync(function () {
         const cb = this.async();
         this.logger.log();
         this.logger.log(chalk.bold('Create/Update application'));
@@ -275,7 +276,7 @@ export default class AwsGenerator extends BaseGenerator {
             cb();
           }
         });
-      },
+      }),
     };
   }
 

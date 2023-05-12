@@ -19,8 +19,8 @@
 import { extname } from 'path';
 import { existsSync } from 'fs';
 import _ from 'lodash';
-import memFs, { type Store as MemFs } from 'mem-fs';
-import memFsEditor, { type Editor as MemFsEditor } from 'mem-fs-editor';
+import { create as createMemFs, type Store as MemFs } from 'mem-fs';
+import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
 import BaseGenerator from '../base/index.mjs';
 import command from './command.mjs';
@@ -122,7 +122,7 @@ export default class JdlGenerator extends BaseGenerator {
           this.jdlContents.push(this.inline);
         }
         for (const jdlFile of this.jdlFiles ?? []) {
-          this.jdlContents.push(this.readDestination(jdlFile));
+          this.jdlContents.push(this.readDestination(jdlFile)?.toString() ?? '');
         }
       },
     });
@@ -172,7 +172,7 @@ export default class JdlGenerator extends BaseGenerator {
           for (const app of this.applications) {
             app.folder = app.config.baseName;
             if (!this.interactive && !this.jsonOnly && !this.ignoreApplication) {
-              app.sharedFs = memFs.create();
+              app.sharedFs = createMemFs();
             }
           }
         }
@@ -288,7 +288,7 @@ export default class JdlGenerator extends BaseGenerator {
       const { folder = '', config, entities = [], sharedFs } = application;
 
       const appPath = folder ? `${folder}/` : folder;
-      const fs: MemFsEditor = sharedFs ? memFsEditor.create(sharedFs) : this.fs;
+      const fs: MemFsEditor = sharedFs ? createMemFsEditor(sharedFs) : this.fs;
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
         const oldConfig: any = fs.readJSON(configFile, {});

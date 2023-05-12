@@ -4,7 +4,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildClientSamples, checkEnforcements, entitiesClientSamples as entities } from '../../test/support/index.mjs';
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -87,10 +87,7 @@ describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'foo' });
-    expect(instance.features.unique).toBe('foo');
-  });
+  shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   checkEnforcements({ client: true }, GENERATOR_ANGULAR);

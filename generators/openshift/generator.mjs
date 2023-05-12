@@ -19,6 +19,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import chalk from 'chalk';
 import shelljs from 'shelljs';
+import runAsync from 'run-async';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -77,7 +78,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
 
       ...super.initializing,
 
-      checkOpenShift() {
+      checkOpenShift: runAsync(function () {
         if (this.skipChecks) return;
         const done = this.async();
 
@@ -91,7 +92,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
           }
           done();
         });
-      },
+      }),
 
       loadConfig() {
         loadFromYoRc.call(this);

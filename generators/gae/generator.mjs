@@ -22,6 +22,7 @@ import shelljs from 'shelljs';
 import fs from 'fs';
 import chalk from 'chalk';
 import _ from 'lodash';
+import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 import { GENERATOR_GAE } from '../generator-list.mjs';
@@ -53,7 +54,7 @@ export default class GaeGenerator extends BaseGenerator {
       sayHello() {
         this.logger.log(chalk.bold('Welcome to Google App Engine Generator'));
       },
-      checkInstallation() {
+      checkInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -64,9 +65,9 @@ export default class GaeGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
-      checkAppEngineJavaComponent() {
+      checkAppEngineJavaComponent: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const component = 'app-engine-java';
@@ -92,7 +93,7 @@ export default class GaeGenerator extends BaseGenerator {
             }
           }
         );
-      },
+      }),
 
       loadCommonConfig() {
         this.loadAppConfig();
@@ -188,7 +189,7 @@ export default class GaeGenerator extends BaseGenerator {
           dockerPrompts.loadConfigs.call(this);
         });
       },
-      askForProjectId() {
+      askForProjectId: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const prompts = [
@@ -215,9 +216,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gcpProjectId = props.gcpProjectId.trim();
           done();
         });
-      },
+      }),
 
-      askForLocation() {
+      askForLocation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -269,9 +270,9 @@ export default class GaeGenerator extends BaseGenerator {
             }
           }
         );
-      },
+      }),
 
-      askForServiceName() {
+      askForServiceName: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -296,9 +297,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gaeServiceName = props.gaeServiceName;
           done();
         });
-      },
+      }),
 
-      askForInstanceClass() {
+      askForInstanceClass: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -326,9 +327,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gaeInstanceClass = props.gaeInstanceClass;
           done();
         });
-      },
+      }),
 
-      askForScalingType() {
+      askForScalingType: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -354,9 +355,9 @@ export default class GaeGenerator extends BaseGenerator {
             done();
           });
         }
-      },
+      }),
 
-      askForInstances() {
+      askForInstances: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -423,9 +424,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gaeMinInstances = props.gaeMinInstances;
           done();
         });
-      },
+      }),
 
-      askIfCloudSqlIsNeeded() {
+      askIfCloudSqlIsNeeded: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const prompts = [];
@@ -447,9 +448,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gaeCloudSQLInstanceNeeded = props.gaeCloudSQLInstanceNeeded;
           done();
         });
-      },
+      }),
 
-      askForCloudSqlInstance() {
+      askForCloudSqlInstance: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (this.prodDatabaseType !== MYSQL && this.prodDatabaseType !== MARIADB && this.prodDatabaseType !== POSTGRESQL) return;
@@ -486,9 +487,9 @@ export default class GaeGenerator extends BaseGenerator {
             });
           }
         );
-      },
+      }),
 
-      promptForCloudSqlInstanceNameIfNeeded() {
+      promptForCloudSqlInstanceNameIfNeeded: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (this.gcpCloudSqlInstanceName) return;
@@ -509,9 +510,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gcpCloudSqlInstanceNameExists = false;
           done();
         });
-      },
+      }),
 
-      askForCloudSqlLogin() {
+      askForCloudSqlLogin: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (!this.gcpCloudSqlInstanceName) return;
@@ -543,9 +544,9 @@ export default class GaeGenerator extends BaseGenerator {
           this.gcpCloudSqlPassword = props.gcpCloudSqlPassword;
           done();
         });
-      },
+      }),
 
-      askForCloudSqlDatabaseName() {
+      askForCloudSqlDatabaseName: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (!this.gcpCloudSqlInstanceNameExists) return;
@@ -584,9 +585,9 @@ export default class GaeGenerator extends BaseGenerator {
             });
           }
         );
-      },
+      }),
 
-      promptForCloudSqlDatabaseNameIfNeeded() {
+      promptForCloudSqlDatabaseNameIfNeeded: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (this.gcpCloudSqlInstanceName !== 'new' && this.gcpCloudSqlDatabaseName) return;
@@ -607,7 +608,7 @@ export default class GaeGenerator extends BaseGenerator {
           this.gcpCloudSqlDatabaseNameExists = false;
           done();
         });
-      },
+      }),
     };
   }
 
@@ -621,7 +622,7 @@ export default class GaeGenerator extends BaseGenerator {
         statistics.sendSubGenEvent('generator', GENERATOR_GAE);
       },
 
-      configureProject() {
+      configureProject: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -642,9 +643,9 @@ export default class GaeGenerator extends BaseGenerator {
         } else {
           done();
         }
-      },
+      }),
 
-      createCloudSqlInstance() {
+      createCloudSqlInstance: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (!this.gcpCloudSqlInstanceName) return;
@@ -679,9 +680,9 @@ export default class GaeGenerator extends BaseGenerator {
 
           done();
         });
-      },
+      }),
 
-      createCloudSqlLogin() {
+      createCloudSqlLogin: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (!this.gcpCloudSqlInstanceName) return;
@@ -711,9 +712,9 @@ export default class GaeGenerator extends BaseGenerator {
             }
           }
         );
-      },
+      }),
 
-      createCloudSqlDatabase() {
+      createCloudSqlDatabase: runAsync(function () {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
         if (!this.gcpCloudSqlInstanceName) return;
@@ -730,7 +731,7 @@ export default class GaeGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
       saveConfig() {
         this.config.set({

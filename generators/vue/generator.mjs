@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import _ from 'lodash';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';

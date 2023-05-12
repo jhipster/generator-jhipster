@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import environmentTransfrom from 'yeoman-environment/transform';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseGenerator from '../base/index.mjs';
 import {

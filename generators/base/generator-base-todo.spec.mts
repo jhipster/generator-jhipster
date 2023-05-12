@@ -70,7 +70,8 @@ describe('generator - base', () => {
     let options;
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      base = new Base({ ...options, sharedData: {}, env: Environment.createEnv() });
+      const Dummy = helpers.createDummyGenerator(Base);
+      base = new Dummy({ ...options, sharedData: {}, env: Environment.createEnv() });
     });
     describe('when there is no configured lastLiquibaseTimestamp', () => {
       let firstChangelogDate;
@@ -179,7 +180,8 @@ describe('generator - base', () => {
       describe('with a future creationTimestamp option', () => {
         it('should throw', () => {
           options.creationTimestamp = '2030-01-01';
-          expect(() => new Base({ ...options, env: Environment.createEnv() })).to.throw(
+          const Dummy = helpers.createDummyGenerator(Base);
+          expect(() => new Dummy({ ...options, env: Environment.createEnv(), sharedData: {} })).to.throw(
             /^Creation timestamp should not be in the future: 2030-01-01\.$/
           );
         });

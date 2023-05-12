@@ -48,7 +48,7 @@ const NO_MESSAGE_BROKER = messageBrokers.NO;
 
 export default class SpringControllerGenerator extends BaseGenerator {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('name', { type: String, required: true });
     this.name = this.options.name;

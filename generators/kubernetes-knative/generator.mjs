@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import fs from 'fs';
+import runAsync from 'run-async';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -65,7 +66,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
       ...super.initializing,
       checkKubernetes,
       checkHelm,
-      checkKnative() {
+      checkKnative: runAsync(function () {
         if (this.skipChecks) return;
         const done = this.async();
         shelljs.exec(
@@ -81,7 +82,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
             done();
           }
         );
-      },
+      }),
       loadConfig,
       localInit() {
         this.deploymentApplicationType = 'microservice';

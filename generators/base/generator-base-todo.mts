@@ -27,10 +27,9 @@ import { exec } from 'child_process';
 import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-
+import YeomanGenerator, { type Storage } from 'yeoman-generator';
 import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import PrivateBase from './generator-base-definitions.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
   getDBTypeFromDBValue,
@@ -67,6 +66,7 @@ import {
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -93,12 +93,14 @@ const isWin32 = os.platform() === 'win32';
 
 /**
  * Class the contains the methods that should be refactored and converted to typescript.
- *
- * @class
- * @extends {PrivateBase}
- * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
  */
-export default class JHipsterBaseGenerator extends PrivateBase {
+export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHipsterGeneratorOptions, JHipsterGeneratorFeatures> {
+  abstract jhipsterConfig: any;
+  abstract needleApi: any;
+  abstract sharedData: any;
+  abstract configOptions: any;
+  abstract logger: any;
+
   /**
    * @private
    * Add a new element in the "global.json" translations.
@@ -218,12 +220,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
-   * @param {object} [args] - args to pass
+   * @param {object} args - args to pass
    * @param {object} [options] - options to pass
    * @param {object} [composeOptions] - compose options
    * @return {object} the composed generator
    */
-  composeWithJHipster(generator, args, options, { immediately = false } = {}) {
+  composeWithJHipster(generator: string, args?: any, options?: any, { immediately = false } = {}) {
     assert(typeof generator === 'string', 'generator should to be a string');
     if (!isAbsolute(generator)) {
       const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
@@ -232,7 +234,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         args = [];
       }
 
-      if (this.env.get(namespace)) {
+      if ((this as any).env.get(namespace)) {
         generator = namespace;
       } else {
         // Keep test compatibily were jhipster lookup does not run.
@@ -247,12 +249,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       }
     }
 
-    return this.env.composeWith(
+    return (this as any).env.composeWith(
       generator,
       args,
       {
         ...this.options,
-        destinationRoot: this._destinationRoot,
+        destinationRoot: (this as any)._destinationRoot,
         configOptions: this.configOptions,
         ...options,
       },
@@ -267,8 +269,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {Object} [options] - options to pass
    * @return {Promise<any>} the composed generator
    */
-  dependsOnJHipster(generator, args, options) {
-    return this.composeWithJHipster(generator, args, options, { immediately: true });
+  dependsOnJHipster(generator: string, args?: string[], options?: any) {
+    return (this as any).composeWithJHipster(generator, args, options, { immediately: true });
   }
 
   /**
@@ -303,7 +305,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
     const result = calculateDbName(entityName, columnOrRelationName, { prodDatabaseType, noSnakeCase, prefix, suffix });
-    this.validateResult(result);
+    (this as any).validateResult(result);
     return result.value;
   }
 
@@ -318,7 +320,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
     const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
-    this.validateResult(result);
+    (this as any).validateResult(result);
     return result.value;
   }
 
@@ -333,7 +335,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
     const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
-    this.validateResult(result);
+    (this as any).validateResult(result);
     return result.value;
   }
 
@@ -362,7 +364,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   checkForNewVersion() {
     try {
-      const done = this.async();
+      const done = (this as any).async();
       shelljs.exec(
         `npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`,
         { silent: true },
@@ -411,8 +413,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * get the java main class name.
    * @param {string} baseName of application
    */
-  getMainClassName(baseName = this.baseName) {
-    const main = _.upperFirst(this.getMicroserviceAppName(baseName));
+  getMainClassName(baseName = (this as any).baseName) {
+    const main = _.upperFirst((this as any).getMicroserviceAppName(baseName));
     const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
     return acceptableForJava.test(main) ? main : 'Application';
@@ -495,7 +497,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options;
     const { _: commonSpec = {} } = sections || {};
     const { transform: sectionTransform = [] } = commonSpec;
-    const startTime = new Date();
+    const startTime = new Date().getMilliseconds();
 
     /* Build lookup order first has preference.
      * Example
@@ -509,17 +511,17 @@ export default class JHipsterBaseGenerator extends PrivateBase {
      */
     let rootTemplatesAbsolutePath;
     if (!rootTemplatesPath) {
-      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders;
+      rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders;
     } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
-      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders
+      rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders
         .map(templateFolder => [].concat(rootTemplatesPath).map(relativePath => path.join(templateFolder, relativePath)))
         .flat();
     }
 
     const normalizeEjs = file => file.replace('.ejs', '');
-    const resolveCallback = (val, fallback) => {
+    const resolveCallback = (val, fallback?) => {
       if (val === undefined) {
         if (typeof fallback === 'function') {
           return resolveCallback(fallback);
@@ -578,7 +580,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }
 
       if (!ejsFile) {
-        await this.copyTemplateAsync(sourceFileFrom, targetFile);
+        await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
       } else {
         let useAsync = true;
         if (context.entityClass) {
@@ -587,7 +589,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
           const basename = path.basename(sourceFileFrom);
           const seed = `${context.entityClass}-${basename}${context.fakerSeed ?? ''}`;
-          Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach(entity => {
+          Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
             entity.resetFakerSeed(seed);
           });
           // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
@@ -603,15 +605,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         };
         const copyOptions = { noGlob: true };
         // TODO drop for v8 final release
-        const data = this.jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
+        const data = (this as any).jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          (this as any).renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         }
       }
       if (!isBinary && transform && transform.length) {
-        this.editFile(targetFile, ...transform);
+        (this as any).editFile(targetFile, ...transform);
       }
       return targetFile;
     };
@@ -628,7 +630,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         .filter(Boolean);
 
       parsedBlocks = parsedSections
-        .map(({ sectionName, sectionBlocks }) => {
+        .map(({ sectionName, sectionBlocks }: any) => {
           return sectionBlocks.map((block, blockIdx) => {
             const blockSpecPath = `${sectionName}[${blockIdx}]`;
             assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
@@ -706,7 +708,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             destinationFile = this.destinationPath(blockTo, path.join(resolveCallback(destinationFile || renameTo, normalizedFile)));
 
             const override = resolveCallback(fileSpec.override);
-            if (override !== undefined && !override && this.fs.exists(destinationFile)) {
+            if (override !== undefined && !override && (this as any).fs.exists(destinationFile)) {
               this.logger.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
@@ -741,7 +743,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    this.logger.debug(`Time taken to write files: ${new Date() - startTime}ms`);
+    this.logger.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -750,7 +752,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [options] - object to load from.
    * @param {Object} [dest] - object to write to.
    */
-  parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
+  parseCommonRuntimeOptions(options: any = this.options, dest = this.configOptions) {
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
@@ -780,7 +782,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Load common options to be stored.
    * @param {Object} [options] - options object to be loaded from.
    */
-  loadStoredAppOptions(options = this.options) {
+  loadStoredAppOptions(options: any = this.options) {
     // Parse options only once.
     if (this.configOptions.optionsParsed) return;
     this.configOptions.optionsParsed = true;
@@ -796,13 +798,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.withAdminUi = options.withAdminUi;
     }
     if (options.skipClient) {
-      this.skipClient = this.jhipsterConfig.skipClient = true;
+      (this as any).skipClient = this.jhipsterConfig.skipClient = true;
     }
     if (options.applicationType) {
       this.jhipsterConfig.applicationType = options.applicationType;
     }
     if (options.skipServer) {
-      this.skipServer = this.jhipsterConfig.skipServer = true;
+      (this as any).skipServer = this.jhipsterConfig.skipServer = true;
     }
     if (options.skipFakeData) {
       this.jhipsterConfig.skipFakeData = true;
@@ -942,7 +944,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadRuntimeOptions(config = this.configOptions, dest = this) {
+  loadRuntimeOptions(config = this.configOptions, dest: any = this) {
     dest.withEntities = config.withEntities;
     dest.isDebugEnabled = config.isDebugEnabled;
     dest.logo = config.logo;
@@ -957,8 +959,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    if (this.useVersionPlaceholders) {
+  loadAppConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
+    if ((this as any).useVersionPlaceholders) {
       dest.nodeVersion = 'NODE_VERSION';
     } else {
       dest.nodeVersion = NODE_VERSION;
@@ -993,7 +995,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.testFrameworks = config.testFrameworks || [];
 
-    dest.remotes = Object.entries(config.applications || {}).map(([baseName, config]) => ({ baseName, ...config })) || [];
+    dest.remotes =
+      Object.entries(config.applications || {}).map(([baseName, remoteConfig]) => ({ baseName, ...(remoteConfig as any) })) || [];
 
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
@@ -1009,7 +1012,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * @param {Object} dest - destination context to use default is context
    */
-  loadDerivedMicroserviceAppConfig(dest = this) {
+  loadDerivedMicroserviceAppConfig(dest: any = this) {
     dest.jhiPrefixCapitalized = _.upperFirst(dest.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(dest.jhiPrefix);
   }
@@ -1017,8 +1020,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * @param {Object} dest - destination context to use default is context
    */
-  loadDerivedAppConfig(dest = this) {
-    this.loadDerivedMicroserviceAppConfig(dest);
+  loadDerivedAppConfig(dest: any = this) {
+    (this as any).loadDerivedMicroserviceAppConfig(dest);
     dest.applicationTypeGateway = dest.applicationType === GATEWAY;
     dest.applicationTypeMonolith = dest.applicationType === MONOLITH;
     dest.applicationTypeMicroservice = dest.applicationType === MICROSERVICE;
@@ -1045,7 +1048,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         microfrontend.endpointPrefix = `services/${microfrontend.lowercaseBaseName}`;
       });
     } else if ((!dest.microfrontends || dest.microfrontends.length === 0) && dest.remotes) {
-      dest.remotes.forEach(app => this.loadDerivedAppConfig(app));
+      dest.remotes.forEach(app => (this as any).loadDerivedAppConfig(app));
       dest.microfrontends = dest.remotes.filter(r => r.clientFramework && r.clientFramework !== CLIENT_FRAMEWORK_NO);
     }
     dest.microfrontend =
@@ -1082,7 +1085,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+  loadClientConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
@@ -1096,7 +1099,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * @param {Object} dest - destination context to use default is context
    */
-  loadDerivedClientConfig(dest = this) {
+  loadDerivedClientConfig(dest: any = this) {
     dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
     dest.clientFrameworkReact = dest.clientFramework === REACT;
     dest.clientFrameworkVue = dest.clientFramework === VUE;
@@ -1115,7 +1118,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientThemeDark = dest.clientThemeVariant === 'dark';
 
     if (dest.baseName) {
-      dest.frontendAppName = this.getFrontendAppName(dest.baseName);
+      dest.frontendAppName = (this as any).getFrontendAppName(dest.baseName);
     }
   }
 
@@ -1126,7 +1129,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
     loadLanguagesConfig(dest, config);
   }
 
@@ -1137,7 +1140,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
     dest.serverPort = config.serverPort;
@@ -1178,7 +1181,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
   }
 
-  loadServerAndPlatformConfig(dest = this) {
+  loadServerAndPlatformConfig(dest: any = this) {
     if (!dest.serviceDiscoveryType) {
       dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
     }
@@ -1190,7 +1193,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadDerivedServerConfig(dest = this) {
+  loadDerivedServerConfig(dest: any = this) {
     if (!dest.packageFolder) {
       dest.packageFolder = `${dest.packageName.replace(/\./g, '/')}/`;
     }
@@ -1272,27 +1275,27 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       prepareSqlApplicationProperties(dest);
     }
 
-    this.loadServerAndPlatformConfig(dest);
+    (this as any).loadServerAndPlatformConfig(dest);
   }
 
   /**
    * @param {Object} config - config to load config from
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
-  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
-    this.loadDerivedPlatformConfig(dest);
+    (this as any).loadDerivedPlatformConfig(dest);
   }
 
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
-  loadDerivedPlatformConfig(dest = this) {
+  loadDerivedPlatformConfig(dest: any = this) {
     dest.monitoringELK = dest.monitoring === ELK;
     dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
-    this.loadServerAndPlatformConfig(dest);
+    (this as any).loadServerAndPlatformConfig(dest);
   }
 
   /**
@@ -1300,12 +1303,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Get all the generator configuration from the .yo-rc.json file
    * @param {string} yoRcPath - .yo-rc.json folder.
    */
-  getJhipsterConfig(yoRcPath) {
-    if (yoRcPath === undefined) {
-      const configRootPath =
-        this.configRootPath || (this.options && this.options.configRootPath) || (this.configOptions && this.configOptions.configRootPath);
-      yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
-    }
+  getJhipsterConfig(yoRcPath): Storage {
     return this.createStorage(yoRcPath, GENERATOR_JHIPSTER);
   }
 

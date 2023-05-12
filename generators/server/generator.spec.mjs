@@ -22,7 +22,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka, shouldComposeWithPulsar } from './__test-support/index.mjs';
@@ -40,10 +40,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, GENERATOR_SERVER);
 

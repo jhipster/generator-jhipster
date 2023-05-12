@@ -29,11 +29,11 @@ const cliBlueprintFiles = {
   'cli/commands.js': `export default {
   foo: {
     blueprint: 'generator-jhipster-cli',
-    desc: 'Create a new foo.',
+    description: 'Create a new foo.',
     options: [
       {
         option: '--foo',
-        desc: 'foo description',
+        description: 'foo description',
       },
     ],
   },
@@ -50,7 +50,7 @@ const cliBlueprintFiles = {
       super(args, opts, features);
 
       this.option('foo-bar', {
-        desc: 'Sample option',
+        description: 'Sample option',
         type: Boolean,
       });
     }
@@ -73,7 +73,7 @@ const cliSharedBlueprintFiles = {
   'cli/commands.js': `export default {
   bar: {
     blueprint: 'generator-jhipster-cli-shared',
-    desc: 'Create a new bar.',
+    description: 'Create a new bar.',
   },
 };
 `,
@@ -88,7 +88,7 @@ const cliSharedBlueprintFiles = {
     constructor(args, options) {
       super(args, options);
       this.option('foo', {
-        desc: 'foo description',
+        description: 'foo description',
         type: Boolean,
       });
     }

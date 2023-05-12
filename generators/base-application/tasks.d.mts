@@ -1,4 +1,4 @@
-import type Storage from 'yeoman-generator/lib/util/storage.js';
+import type { Storage } from 'yeoman-generator';
 import { ControlTaskParam, BaseGeneratorDefinition, SourceTaskParam, GenericSourceTypeDefinition } from '../base/tasks.mjs';
 import { CommonClientServerApplication } from './types.mjs';
 import { Entity, Field, Relationship } from './types/index.mjs';

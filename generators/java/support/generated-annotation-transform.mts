@@ -18,12 +18,8 @@
  */
 import { extname } from 'path';
 import { passthrough } from 'p-transform';
-import memFsEditor from 'mem-fs-editor';
+import { isFileStateDeleted } from 'mem-fs-editor/state';
 import addJavaAnnotation from './add-java-annotation.mjs';
-
-const {
-  State: { isFileStateDeleted },
-} = memFsEditor as any;
 
 const generatedAnnotationTransform = packageName => {
   return passthrough(file => {

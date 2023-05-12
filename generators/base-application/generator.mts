@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import type Storage from 'yeoman-generator/lib/util/storage.js';
+import type { Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';

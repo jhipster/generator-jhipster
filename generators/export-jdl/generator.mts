@@ -37,7 +37,7 @@ export default class extends BaseGenerator {
   jdlContent?: string;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('jdlFile', { type: String, required: false });
 

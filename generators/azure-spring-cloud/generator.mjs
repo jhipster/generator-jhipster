@@ -19,6 +19,8 @@
 import fs from 'fs';
 import { exec } from 'child_process';
 import chalk from 'chalk';
+import runAsync from 'run-async';
+
 import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.mjs';
@@ -41,15 +43,15 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
     super(args, options, features);
 
     this.option('skip-build', {
-      desc: 'Skips building the application',
+      description: 'Skips building the application',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('skip-deploy', {
-      desc: 'Skips deployment to Azure Spring Cloud',
+      description: 'Skips deployment to Azure Spring Cloud',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.azureSpringCloudSkipBuild = this.options.skipBuild;
@@ -98,7 +100,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
 
   get prompting() {
     return {
-      checkBuildTool() {
+      checkBuildTool: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         if (this.buildTool !== MAVEN) {
@@ -106,9 +108,9 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
           this.abort = true;
         }
         done();
-      },
+      }),
 
-      checkInstallation() {
+      checkInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -123,9 +125,9 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
           }
           done();
         });
-      },
+      }),
 
-      checkExtensionInstallation() {
+      checkExtensionInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -140,9 +142,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
           }
           done();
         });
-      },
+      }),
 
-      checkClusterAvailability() {
+      checkClusterAvailability: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -153,9 +155,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
           }
           done();
         });
-      },
+      }),
 
-      getAzureSpringCloudDefaults() {
+      getAzureSpringCloudDefaults: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         exec('az configure --list-defaults true', (err, stdout) => {
@@ -192,9 +194,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
           }
           done();
         });
-      },
+      }),
 
-      askForazureSpringCloudVariables() {
+      askForazureSpringCloudVariables: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -225,9 +227,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
           this.azureSpringCloudAppName = props.azureSpringCloudAppName;
           done();
         });
-      },
+      }),
 
-      askForAzureDeployType() {
+      askForAzureDeployType: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const prompts = [
@@ -253,7 +255,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
           this.azureSpringCloudDeploymentType = props.azureSpringCloudDeploymentType;
           done();
         });
-      },
+      }),
     };
   }
 
@@ -283,7 +285,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
         statistics.sendSubGenEvent('generator', GENERATOR_AZURE_SPRING_CLOUD);
       },
 
-      azureSpringCloudAppCreate() {
+      azureSpringCloudAppCreate: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         exec(
@@ -311,7 +313,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
             }
           }
         );
-      },
+      }),
     };
   }
 
@@ -361,7 +363,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
 
   get end() {
     return {
-      gitHubAction() {
+      gitHubAction: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudDeploymentType === 'local') return;
         const done = this.async();
@@ -423,9 +425,9 @@ for more detailed information.`
             });
           }
         });
-      },
+      }),
 
-      productionBuild() {
+      productionBuild: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudDeploymentType === 'github-action') return;
         if (this.azureSpringCloudSkipBuild) return;
@@ -446,9 +448,9 @@ for more detailed information.`
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
+      }),
 
-      productionDeploy() {
+      productionDeploy: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudDeploymentType === 'github-action') return;
         if (this.azureSpringCloudSkipDeploy) return;
@@ -476,7 +478,7 @@ for more detailed information.`
             done();
           }
         );
-      },
+      }),
     };
   }
 

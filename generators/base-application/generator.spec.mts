@@ -27,6 +27,7 @@ import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.mjs';
 import type { BaseApplication } from '../base-application/types.js';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const { snakeCase } = lodash;
 
@@ -39,10 +40,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
 
   // TODO test is broken due to @esbuild-kit/esm-loader
   describe.skip('EnvironmentBuilder', () => {

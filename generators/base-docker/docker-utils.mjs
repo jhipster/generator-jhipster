@@ -18,21 +18,12 @@
  */
 import shelljs from 'shelljs';
 import chalk from 'chalk';
-/**
- * This is the Generator base class.
- * This provides all the public API methods exposed via the module system.
- * The public API methods can be directly utilized as well using commonJS require.
- *
- * The method signatures in public API should not be changed without a major version change
- */
-export default {
-  checkDocker,
-};
+import runAsync from 'run-async';
 
 /**
  * Check that Docker exists.
  */
-export function checkDocker() {
+export const checkDocker = runAsync(function () {
   if (this.abort || this.skipChecks) return;
   const done = this.async();
 
@@ -64,4 +55,15 @@ export function checkDocker() {
     }
     done();
   });
-}
+});
+
+/**
+ * This is the Generator base class.
+ * This provides all the public API methods exposed via the module system.
+ * The public API methods can be directly utilized as well using commonJS require.
+ *
+ * The method signatures in public API should not be changed without a major version change
+ */
+export default {
+  checkDocker,
+};

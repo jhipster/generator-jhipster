@@ -20,6 +20,7 @@ import os from 'os';
 import childProcess from 'child_process';
 import chalk from 'chalk';
 import { glob } from 'glob';
+import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 
@@ -99,7 +100,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         this.writeFile('application-cloudfoundry.yml.ejs', `${SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
       },
 
-      checkInstallation() {
+      checkInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -113,7 +114,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
     };
   }
 
@@ -123,7 +124,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
   get default() {
     return {
-      cloudfoundryAppShow() {
+      cloudfoundryAppShow: runAsync(function () {
         if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
         const done = this.async();
 
@@ -136,9 +137,9 @@ export default class CloudfoundryGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
-      cloudfoundryAppCreate() {
+      cloudfoundryAppCreate: runAsync(function () {
         if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
         const done = this.async();
 
@@ -159,9 +160,9 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         } else {
           done();
         }
-      },
+      }),
 
-      productionBuild() {
+      productionBuild: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -179,7 +180,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         child.stdout.on('data', data => {
           this.logger.info(data.toString());
         });
-      },
+      }),
     };
   }
 
@@ -189,7 +190,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
   get end() {
     return {
-      cloudfoundryPush() {
+      cloudfoundryPush: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -t 120 -p';
@@ -219,7 +220,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         child.stdout.on('data', data => {
           this.logger.info(data.toString());
         });
-      },
+      }),
 
       restartApp() {
         if (this.abort || !this.cloudfoundry_remote_exists) return;

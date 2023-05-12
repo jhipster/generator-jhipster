@@ -329,14 +329,12 @@ const emptyPomFile = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 
 export const createPomStorage = (generator: CoreGenerator) => {
+  const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
-    loadFile: () =>
-      generator.readDestination('pom.xml', {
-        defaults: emptyPomFile,
-      }),
+    loadFile,
     saveFile: content => generator.writeDestination('pom.xml', formatFirstXmlLevel(content)),
   });
-  (generator.fs as any).store.on('change', filename => {
+  generator.fs.store.on('change', filename => {
     if (filename === generator.destinationPath('pom.xml')) {
       pomStorage.clearCache();
     }
