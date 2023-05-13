@@ -129,7 +129,7 @@
     "yeoman-generator": "6.0.0-beta.1"
   },
   "devDependencies": {
-    "@node-loaders/esbuildx": "1.1.0",
+    "@node-loaders/esbuildx": "1.2.0",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
     "@types/node": "16.18.29",
