@@ -248,7 +248,7 @@ export default class extends BaseGenerator {
             esmocha: 'esmocha generators --no-insight --forbid-only',
             pretest: 'npm run prettier:check && npm run lint',
             test: 'npm run esmocha',
-            'update-snapshot': 'npm run esmocha --update-snapshot',
+            'update-snapshot': 'npm run esmocha -- --update-snapshot',
           },
           dependencies: {
             chalk: `${packagejs.dependencies.chalk}`,
