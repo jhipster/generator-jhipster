@@ -118,7 +118,7 @@
     "progress": "2.0.3",
     "randexp": "0.5.3",
     "run-async": "3.0.0",
-    "semver": "7.5.0",
+    "semver": "7.5.1",
     "shelljs": "0.8.5",
     "simple-git": "3.18.0",
     "type-fest": "3.10.0",
