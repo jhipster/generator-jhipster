@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import { esmocha } from 'esmocha';
 import { Options } from 'yeoman-environment';
 import type YeomanGenerator from 'yeoman-generator';
-import { fn, type Mock } from 'jest-mock';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
 import _ from 'lodash';
@@ -85,7 +85,7 @@ export const createBlueprintFiles = (
 };
 
 class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> extends RunContext<GeneratorType> {
-  public sharedSource: Record<string, Mock>;
+  public sharedSource: Record<string, esmocha.Mock>;
   private sharedApplication: Record<string, any>;
   private sharedControl: Record<string, any>;
   private workspaceApplications: string[] = [];
@@ -148,7 +148,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
       {
         get(target, name) {
           if (!target[name]) {
-            target[name] = fn();
+            target[name] = esmocha.fn();
           }
           return target[name];
         },

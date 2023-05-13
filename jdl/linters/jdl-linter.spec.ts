@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { writeFileSync } from 'fs';
 import path from 'path';

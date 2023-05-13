@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-unused-expressions */
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { unaryOptions, binaryOptions } from '../jhipster/index.mjs';
 import JDLOptions from '../models/jdl-options.js';

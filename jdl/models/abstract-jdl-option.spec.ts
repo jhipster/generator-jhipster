@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 import { binaryOptions } from '../jhipster/index.mjs';
 

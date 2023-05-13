@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { convertEnums } from './enum-converter.js';
 
 describe('jdl - EnumConverter', () => {

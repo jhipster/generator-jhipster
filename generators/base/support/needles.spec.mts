@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jest from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 
 import { checkContentIn, insertContentBeforeNeedle, createNeedleCallback, createBaseNeedle } from './needles.mjs';
 
@@ -264,7 +263,7 @@ content to add2
 
     beforeEach(() => {
       generator = {
-        editFile: jest.fn(),
+        editFile: esmocha.fn(),
       };
     });
 

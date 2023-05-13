@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jestMock from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -56,10 +55,10 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('skipPriorities', () => {
-    const initializing = jestMock.fn();
-    const prompting = jestMock.fn();
-    const writing = jestMock.fn();
-    const postWriting = jestMock.fn();
+    const initializing = esmocha.fn();
+    const prompting = esmocha.fn();
+    const writing = esmocha.fn();
+    const postWriting = esmocha.fn();
 
     class CustomGenerator extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
