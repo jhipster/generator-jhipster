@@ -131,16 +131,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;Frozen
-2;South Real Crest
-3;male Wooden
-4;Marketing
-5;Maserati joule calculate
-6;Incredible Tactics Gasoline
-7;Gloves
-8;Money
-9;Associate experiences
-10;Southwest
+1;ubiquitous
+2;Awesome Hydrogen fluid
+3;New East
+4;pfft Gloves Marketing
+5;Minivan similique elaborate
+6;Officer
+7;Planner Gasoline
+8;sexy
+9;redefine
+10;Money
 ",
     "stateCleared": "modified",
   },
@@ -263,16 +263,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;Frozen
-2;South Real Crest
-3;male Wooden
-4;Marketing
-5;Maserati joule calculate
-6;Incredible Tactics Gasoline
-7;Gloves
-8;Money
-9;Associate experiences
-10;Southwest
+1;ubiquitous
+2;Awesome Hydrogen fluid
+3;New East
+4;pfft Gloves Marketing
+5;Minivan similique elaborate
+6;Officer
+7;Planner Gasoline
+8;sexy
+9;redefine
+10;Money
 ",
     "stateCleared": "modified",
   },
