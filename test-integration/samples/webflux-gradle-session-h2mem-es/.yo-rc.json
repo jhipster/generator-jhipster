@@ -11,7 +11,7 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Memory",
     "enableHibernateCache": false,
-    "enableSwaggerCodegen": true,
+    "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "fakerSeed": "1",
     "jhiPrefix": "jhi",
