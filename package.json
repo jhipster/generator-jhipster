@@ -160,7 +160,7 @@
     "sort-keys": "5.0.0",
     "typescript": "5.0.4",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "8.0.0-beta.2"
+    "yeoman-test": "8.0.0-beta.4"
   },
   "engines": {
     "node": "^16.13.0 || 18.13.0 || >=18.16.0",
