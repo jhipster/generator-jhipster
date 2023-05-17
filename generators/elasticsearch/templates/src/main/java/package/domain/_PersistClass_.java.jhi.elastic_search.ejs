@@ -29,6 +29,17 @@
     <%_ if (field.id && field.fieldName != 'id') { _%>
     @org.springframework.data.annotation.Id
     <%_ } _%>
+    <%_ if (!field.id) { _%>
+      <%_ if (field.fieldIsEnum) { _%>
+      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+      <%_ } else if (field.blobContentTypeText || field.fieldTypeString) { _%>
+      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+      <%_ } else if (field.fieldTypeBoolean) { _%>
+      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
+      <%_ } else if (field.fieldTypeInteger) { _%>
+      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+      <%_ } _%>
+    <%_ } _%>
   <&_ } -&>
 <%_ } -%>
 
