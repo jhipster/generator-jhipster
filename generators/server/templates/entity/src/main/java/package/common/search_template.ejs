@@ -37,13 +37,21 @@ if (paginationNo) { %>
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><%= viaService ? 'Service' : (searchEngineElasticsearch ? 'Search' : '') + 'Repository' %>.search(query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>));
   <%_ } else { _%>
+        try {
     <%_ if (viaService) { _%>
-        Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);
+            Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);
     <%_ } else { _%>
-        Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable);
+            Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable);
     <%_ } _%>
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>UriComponentsBuilder.fromHttpRequest(request)<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
-        return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dtoMapstruct) { %>)<% } %>);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>UriComponentsBuilder.fromHttpRequest(request)<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
+            return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dtoMapstruct) { %>)<% } %>);
+        } catch (RuntimeException e) {
+    <% if (searchEngineElasticsearch) { %>
+            throw ElasticsearchExceptionMapper.mapException(e);
+    <%_ } else { _%>
+            throw new RuntimeException(e);
+    <% } %>
+        }
   <%_ } _%>
 <% } -%>
     }
