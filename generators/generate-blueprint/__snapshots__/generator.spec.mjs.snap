@@ -176,18 +176,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/bootstrap/templates/template-file-bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/cassandra/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cassandra/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cassandra/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cassandra/templates/template-file-cassandra.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/ci-cd/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -675,6 +663,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-controller/templates/template-file-spring-controller.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-cassandra/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-cassandra/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-cassandra/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-cassandra/templates/template-file-spring-data-cassandra.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-data-neo4j/generator.mjs": {

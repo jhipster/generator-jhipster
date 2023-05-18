@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_CASSANDRA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_CASSANDRA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeCassandraFilesTask from './files.mjs';
 import cleanupCassandraFilesTask from './cleanup.mjs';
 import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.mjs';
@@ -28,7 +28,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_CASSANDRA);
+      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_CASSANDRA);
     }
   }
 

@@ -1,7 +1,7 @@
 import { dryRunHelpers as helpers } from '../../test/support/index.mjs';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { GENERATOR_CASSANDRA } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_CASSANDRA } from '../generator-list.mjs';
 
 const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 
@@ -11,7 +11,7 @@ describe('generator - app - database changelogs', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .runJHipster(GENERATOR_CASSANDRA)
+          .runJHipster(GENERATOR_SPRING_DATA_CASSANDRA)
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
           .withOptions({ withEntities: true, force: true, skipClient: true });
       });
