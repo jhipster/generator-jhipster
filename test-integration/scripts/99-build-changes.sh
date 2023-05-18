@@ -104,7 +104,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/server' \
   'generators/spring-cache' \
   'generators/spring-websocket' \
-  'generators/sql' \
+  'generators/spring-data-relational' \
   'generators/database-changelog' \
   'generators/database-changelog-liquibase' \
   || SERVER=true ANY=true

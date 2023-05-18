@@ -7,7 +7,7 @@ import {
   GENERATOR_GATLING,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
-  GENERATOR_SQL,
+  GENERATOR_SPRING_DATA_RELATIONAL,
 } from '../../generator-list.mjs';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
@@ -29,7 +29,7 @@ export const mockedGenerators = [
   'jhipster:pulsar',
   `jhipster:${GENERATOR_SPRING_CACHE}`,
   `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
-  `jhipster:${GENERATOR_SQL}`,
+  `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {

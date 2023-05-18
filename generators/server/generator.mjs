@@ -59,7 +59,7 @@ import {
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
-  GENERATOR_SQL,
+  GENERATOR_SPRING_DATA_RELATIONAL,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -268,7 +268,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
         if (databaseType === SQL) {
-          await this.composeWithJHipster(GENERATOR_SQL);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_RELATIONAL);
         } else if (databaseType === CASSANDRA) {
           await this.composeWithJHipster(GENERATOR_CASSANDRA);
         } else if (databaseType === COUCHBASE) {

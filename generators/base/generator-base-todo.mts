@@ -52,7 +52,7 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../spring-data-relational/support/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
