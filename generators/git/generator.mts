@@ -78,14 +78,24 @@ export default class InitGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get end() {
-    return this.asEndTaskGroup({
-      /** Initial commit to git repository after package manager install for package-lock.json */
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      /** Husky commit hook install at install priority requires git to be initilized */
       async initGitRepo() {
         if (!this.skipGit && !this.jhipsterConfig.monorepository) {
           await this.initializeGitRepository();
         }
       },
+    });
+  }
+
+  get [BaseGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get end() {
+    return this.asEndTaskGroup({
+      /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
         if (this.skipGit) return;
         if (!this.gitInitialized) {
@@ -116,7 +126,9 @@ export default class InitGenerator extends BaseGenerator {
           await git.add(['.']).commit(commitMsg);
           this.log.ok(`Application successfully committed to Git from ${repositoryRoot}.`);
         } catch (e) {
-          this.logger.warn(chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually.`));
+          this.logger.warn(
+            chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually. (${(e as any).message})`)
+          );
         }
       },
     });
