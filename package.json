@@ -85,7 +85,7 @@
     "@types/glob": "npm:noist@1.0.0",
     "@types/lodash": "4.14.194",
     "@types/minimatch": "npm:noist@1.0.0",
-    "aws-sdk": "2.1379.0",
+    "aws-sdk": "2.1380.0",
     "axios": "1.4.0",
     "chalk": "4.1.2",
     "chevrotain": "10.5.0",
