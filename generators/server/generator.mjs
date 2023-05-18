@@ -43,7 +43,7 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_SPRING_DATA_CASSANDRA,
   GENERATOR_COMMON,
-  GENERATOR_COUCHBASE,
+  GENERATOR_SPRING_DATA_COUCHBASE,
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
   GENERATOR_SPRING_DATA_ELASTICSEARCH,
@@ -272,7 +272,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else if (databaseType === CASSANDRA) {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_CASSANDRA);
         } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster(GENERATOR_COUCHBASE);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_COUCHBASE);
         } else if (databaseType === MONGODB) {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_MONGODB);
         } else if (databaseType === NEO4J) {

@@ -33,7 +33,7 @@ import {
   shouldComposeWithPulsar,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
-import { GENERATOR_COUCHBASE } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_COUCHBASE } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -51,7 +51,7 @@ const couchbaseSamples = extendMatrix(buildServerMatrix(), {
   searchEngine: ['no', 'couchbase'],
 });
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_COUCHBASE}`);
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_COUCHBASE}`);
 
 const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
 

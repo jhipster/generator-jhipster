@@ -9,7 +9,7 @@ import {
   GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SPRING_DATA_RELATIONAL,
   GENERATOR_SPRING_DATA_CASSANDRA,
-  GENERATOR_COUCHBASE,
+  GENERATOR_SPRING_DATA_COUCHBASE,
   GENERATOR_SPRING_DATA_MONGODB,
   GENERATOR_PULSAR,
   GENERATOR_MAVEN,
@@ -26,7 +26,7 @@ const { SQL, COUCHBASE } = databaseTypes;
 
 export const mockedGenerators = [
   `jhipster:${GENERATOR_COMMON}`,
-  `jhipster:${GENERATOR_COUCHBASE}`,
+  `jhipster:${GENERATOR_SPRING_DATA_COUCHBASE}`,
   `jhipster:${GENERATOR_CUCUMBER}`,
   `jhipster:${GENERATOR_DOCKER}`,
   `jhipster:${GENERATOR_GATLING}`,
@@ -88,11 +88,11 @@ const shouldComposeWithDatabasetype = (databaseType, testSample, runResultSuppli
     typeof testSample === 'boolean' ? testSample : testSample?.applicationWithEntities?.config?.databaseType === databaseType;
   if (shouldCompose) {
     it(`should compose with ${generator} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:${generator}`].calledOnce);
+      assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].calledOnce);
     });
   } else {
     it(`should not compose with ${generator} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:${generator}`].notCalled);
+      assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].notCalled);
     });
   }
 };

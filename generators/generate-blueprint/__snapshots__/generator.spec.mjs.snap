@@ -224,18 +224,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/common/templates/template-file-common.ejs": {
     "stateCleared": "modified",
   },
-  "generators/couchbase/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/couchbase/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/couchbase/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/couchbase/templates/template-file-couchbase.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/cucumber/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -651,6 +639,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-data-cassandra/templates/template-file-spring-data-cassandra.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-couchbase/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-couchbase/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-couchbase/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-couchbase/templates/template-file-spring-data-couchbase.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-data-elasticsearch/generator.mjs": {
