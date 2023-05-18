@@ -33,6 +33,7 @@ import {
   shouldComposeWithLiquibase,
   shouldComposeWithPulsar,
 } from '../server/__test-support/index.mjs';
+import { GENERATOR_SPRING_DATA_MONGODB } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -46,7 +47,7 @@ const generatorFile = join(__dirname, '../server/index.mjs');
 const { MONGODB: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:mongodb');
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`);
 
 const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 

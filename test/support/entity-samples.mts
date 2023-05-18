@@ -17,6 +17,7 @@ export const entityAnotherSimple = {
   fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
   dto: 'mapstruct',
   service: 'serviceImpl',
+  pagination: 'pagination',
   clientRootFolder: 'test-root',
 };
 
@@ -52,6 +53,7 @@ export const entitiesMicroservice = {
   fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
   microserviceName: 'microservice1',
   service: 'service',
+  pagination: 'infiniscroll',
 };
 
 export const entitySkipClient = {

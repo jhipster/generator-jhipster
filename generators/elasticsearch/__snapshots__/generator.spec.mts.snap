@@ -589,9 +589,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -829,33 +826,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129002000_added_entity_EntityWithCustomId.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/README.md": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/create-keyspace-prod.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/create-keyspace.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/drop-keyspace.cql": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
@@ -868,9 +838,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -880,19 +847,10 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {
@@ -1855,9 +1813,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2068,30 +2023,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000300_added_entity_Microservice.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129002000_added_entity_EntityWithCustomId.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/README.md": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/create-keyspace-prod.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/create-keyspace.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/drop-keyspace.cql": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
@@ -2107,9 +2038,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -2119,19 +2047,10 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {
@@ -2726,9 +2645,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2999,36 +2915,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000100_added_entity_Simple.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000200_added_entity_AnotherSimple.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129000300_added_entity_Microservice.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/20220129002000_added_entity_EntityWithCustomId.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/changelog/README.md": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/create-keyspace-prod.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/create-keyspace.cql": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/cql/drop-keyspace.cql": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
@@ -3050,9 +2936,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/CassandraKeyspaceIT.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -3062,19 +2945,10 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/CassandraTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedCassandra.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {

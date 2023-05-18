@@ -33,6 +33,7 @@ import {
   shouldComposeWithPulsar,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
+import { GENERATOR_SPRING_DATA_CASSANDRA } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -46,7 +47,7 @@ const generatorFile = join(__dirname, '../server/index.mjs');
 const { CASSANDRA: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:cassandra');
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`);
 
 const testSamples = buildServerSamples(commonConfig);
 

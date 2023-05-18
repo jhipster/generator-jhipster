@@ -8,28 +8,39 @@ import {
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SPRING_DATA_RELATIONAL,
+  GENERATOR_SPRING_DATA_CASSANDRA,
+  GENERATOR_COUCHBASE,
+  GENERATOR_SPRING_DATA_MONGODB,
+  GENERATOR_PULSAR,
+  GENERATOR_MAVEN,
+  GENERATOR_LIQUIBASE,
+  GENERATOR_LANGUAGES,
+  GENERATOR_KAFKA,
+  GENERATOR_GRADLE,
+  GENERATOR_DOCKER,
+  GENERATOR_COMMON,
 } from '../../generator-list.mjs';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
 export const mockedGenerators = [
-  'jhipster:cassandra',
-  'jhipster:common',
-  'jhipster:couchbase',
+  `jhipster:${GENERATOR_COMMON}`,
+  `jhipster:${GENERATOR_COUCHBASE}`,
   `jhipster:${GENERATOR_CUCUMBER}`,
-  'jhipster:docker',
+  `jhipster:${GENERATOR_DOCKER}`,
   `jhipster:${GENERATOR_GATLING}`,
-  'jhipster:gradle',
-  'jhipster:kafka',
-  'jhipster:languages',
-  'jhipster:liquibase',
-  'jhipster:maven',
-  'jhipster:mongodb',
-  'jhipster:pulsar',
+  `jhipster:${GENERATOR_GRADLE}`,
+  `jhipster:${GENERATOR_KAFKA}`,
+  `jhipster:${GENERATOR_LANGUAGES}`,
+  `jhipster:${GENERATOR_LIQUIBASE}`,
+  `jhipster:${GENERATOR_MAVEN}`,
+  `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`,
+  `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`,
+  `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
+  `jhipster:${GENERATOR_PULSAR}`,
   `jhipster:${GENERATOR_SPRING_CACHE}`,
   `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
-  `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
