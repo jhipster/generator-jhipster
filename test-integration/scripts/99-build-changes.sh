@@ -92,7 +92,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
   'generators/couchbase' \
   'generators/cucumber' \
-  'generators/elasticsearch' \
+  'generators/spring-data-elasticsearch' \
   'generators/gatling' \
   'generators/gradle' \
   'generators/kafka' \

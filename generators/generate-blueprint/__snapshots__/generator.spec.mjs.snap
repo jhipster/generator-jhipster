@@ -284,18 +284,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/docker/templates/template-file-docker.ejs": {
     "stateCleared": "modified",
   },
-  "generators/elasticsearch/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/elasticsearch/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/elasticsearch/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/elasticsearch/templates/template-file-elasticsearch.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/entities/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -663,6 +651,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-data-cassandra/templates/template-file-spring-data-cassandra.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-elasticsearch/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-elasticsearch/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-elasticsearch/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-data-elasticsearch/templates/template-file-spring-data-elasticsearch.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-data-mongodb/generator.mjs": {

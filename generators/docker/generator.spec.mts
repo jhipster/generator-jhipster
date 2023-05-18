@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import Generator from './index.mjs';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
-import { matchElasticSearchDocker } from '../elasticsearch/__test-support/elastic-search-matcher.mjs';
+import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
 import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';

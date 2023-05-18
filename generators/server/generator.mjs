@@ -46,7 +46,7 @@ import {
   GENERATOR_COUCHBASE,
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
-  GENERATOR_ELASTICSEARCH,
+  GENERATOR_SPRING_DATA_ELASTICSEARCH,
   GENERATOR_GATLING,
   GENERATOR_GRADLE,
   GENERATOR_JAVA,
@@ -285,7 +285,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_PULSAR);
         }
         if (searchEngine === ELASTICSEARCH) {
-          await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_ELASTICSEARCH);
         }
         if (testFrameworks?.includes(CUCUMBER)) {
           await this.composeWithJHipster(GENERATOR_CUCUMBER);
