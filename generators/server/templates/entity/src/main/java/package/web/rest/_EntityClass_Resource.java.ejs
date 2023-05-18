@@ -39,6 +39,9 @@ import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRe
 import <%= entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.errors.BadRequestAlertException;
+<%_ if (searchEngineElasticsearch) { _%>
+import <%= packageName %>.web.rest.errors.ElasticsearchExceptionMapper;
+<%_ } _%>
 <%_ if (dtoMapstruct) { _%>
 import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
   <%_ if (serviceNo) { _%>

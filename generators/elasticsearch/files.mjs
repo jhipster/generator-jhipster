@@ -24,7 +24,11 @@ export const files = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/ElasticsearchConfiguration.java'],
+      templates: [
+        'config/ElasticsearchConfiguration.java',
+        'web/rest/errors/ElasticsearchExceptionMapper.java',
+        'web/rest/errors/QuerySyntaxException.java',
+      ],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity || generator.authenticationTypeOauth2,
@@ -39,6 +43,7 @@ export const files = {
         'config/ElasticsearchTestConfiguration.java',
         'config/ElasticsearchTestContainer.java',
         'config/EmbeddedElasticsearch.java',
+        'web/rest/errors/ElasticsearchExceptionMapperTest.java',
       ],
     },
   ],

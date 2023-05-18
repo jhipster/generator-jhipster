@@ -302,6 +302,9 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/errors/EmailAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
@@ -318,6 +321,9 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/package-info.java": {
@@ -477,6 +483,9 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -769,6 +778,9 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -776,6 +788,9 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
@@ -914,6 +929,9 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -1158,6 +1176,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -1165,6 +1186,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
@@ -1288,6 +1312,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -1532,6 +1559,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -1539,6 +1569,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/package-info.java": {
@@ -1674,6 +1707,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -1945,6 +1981,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -1952,6 +1991,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
@@ -2081,6 +2123,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -2361,6 +2406,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -2368,6 +2416,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/package-info.java": {
@@ -2494,6 +2545,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -2798,6 +2852,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
@@ -2814,6 +2871,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
@@ -2985,6 +3045,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -3277,6 +3340,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -3284,6 +3350,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/package-info.java": {
@@ -3416,6 +3485,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -3729,6 +3801,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -3736,6 +3811,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
@@ -3874,6 +3952,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -4202,6 +4283,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -4209,6 +4293,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/package-info.java": {
@@ -4362,6 +4449,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -4684,6 +4774,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
@@ -4700,6 +4793,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
@@ -4847,6 +4943,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
@@ -5124,6 +5223,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
@@ -5131,6 +5233,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/QuerySyntaxException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/package-info.java": {
@@ -5254,6 +5359,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
