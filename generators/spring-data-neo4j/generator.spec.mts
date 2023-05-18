@@ -31,7 +31,7 @@ const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig }
 
 describe(`generator - ${databaseType}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.mjs')).GENERATOR_NEO4J).toBe(generator);
+    await expect((await import('../generator-list.mjs')).GENERATOR_SPRING_DATA_NEO4J).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

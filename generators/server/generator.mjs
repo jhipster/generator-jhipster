@@ -54,7 +54,7 @@ import {
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
   GENERATOR_MONGODB,
-  GENERATOR_NEO4J,
+  GENERATOR_SPRING_DATA_NEO4J,
   GENERATOR_PULSAR,
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
@@ -276,7 +276,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else if (databaseType === MONGODB) {
           await this.composeWithJHipster(GENERATOR_MONGODB);
         } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster(GENERATOR_NEO4J);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_NEO4J);
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
