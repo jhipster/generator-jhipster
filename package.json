@@ -85,6 +85,7 @@
     "@types/glob": "npm:noist@1.0.0",
     "@types/lodash": "4.14.194",
     "@types/minimatch": "npm:noist@1.0.0",
+    "@yeoman/types": "0.5.0",
     "aws-sdk": "2.1380.0",
     "axios": "1.4.0",
     "chalk": "4.1.2",
@@ -126,7 +127,7 @@
     "winston": "3.8.2",
     "yaml": "2.2.2",
     "yeoman-environment": "3.18.1",
-    "yeoman-generator": "6.0.0-beta.3"
+    "yeoman-generator": "6.0.0-beta.4"
   },
   "devDependencies": {
     "@node-loaders/esbuildx": "1.2.0",
@@ -160,7 +161,7 @@
     "sort-keys": "5.0.0",
     "typescript": "5.0.4",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "8.0.0-beta.4"
+    "yeoman-test": "8.0.0-beta.5"
   },
   "engines": {
     "node": "^16.13.0 || 18.13.0 || >=18.16.0",
