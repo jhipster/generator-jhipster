@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_MONGODB, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_MONGODB, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeMongodbFilesTask from './files.mjs';
 import cleanupMongodbFilesTask from './cleanup.mjs';
 import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.mjs';
@@ -28,7 +28,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_MONGODB);
+      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_MONGODB);
     }
   }
 

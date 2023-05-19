@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE, GENERATOR_NEO4J } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_NEO4J } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
@@ -28,7 +28,7 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_NEO4J);
+      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_NEO4J);
     }
   }
 

@@ -21,18 +21,19 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildServerMatrix, extendMatrix, entitiesSimple as entities, buildSamplesFromMatrix } from '../../test/support/index.mjs';
+import { buildSamplesFromMatrix, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import Generator from './generator.mjs';
+import Generator from '../server/index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {
   mockedGenerators as serverGenerators,
   shouldComposeWithKafka,
-  shouldComposeWithPulsar,
   shouldComposeWithLiquibase,
+  shouldComposeWithPulsar,
 } from '../server/__test-support/index.mjs';
+import { GENERATOR_SPRING_DATA_MONGODB } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -43,16 +44,12 @@ const generator = basename(__dirname);
 // compose with server generator, many conditionals at server generator
 const generatorFile = join(__dirname, '../server/index.mjs');
 
-const { COUCHBASE: databaseType } = databaseTypes;
+const { MONGODB: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const couchbaseSamples = extendMatrix(buildServerMatrix(), {
-  searchEngine: ['no', 'couchbase'],
-});
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`);
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:couchbase');
-
-const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
+const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   it('generator-list constant matches folder name', async () => {

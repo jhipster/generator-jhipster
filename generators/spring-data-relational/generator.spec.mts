@@ -15,11 +15,11 @@ import {
   shouldComposeWithPulsar,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
-import { GENERATOR_SERVER, GENERATOR_SQL } from '../generator-list.mjs';
+import { GENERATOR_SERVER, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SQL}`);
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

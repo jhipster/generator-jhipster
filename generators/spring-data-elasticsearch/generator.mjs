@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_ELASTICSEARCH, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_ELASTICSEARCH, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeElasticsearchFilesTask from './files.mjs';
 import cleanupElasticsearchFilesTask from './cleanup.mjs';
 import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.mjs';
@@ -28,7 +28,7 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ELASTICSEARCH);
+      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_ELASTICSEARCH);
     }
   }
 

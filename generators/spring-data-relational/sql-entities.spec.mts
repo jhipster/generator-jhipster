@@ -11,9 +11,9 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { mockedGenerators as serverGenerators } from '../server/__test-support/index.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_SERVER, GENERATOR_SQL } from '../generator-list.mjs';
+import { GENERATOR_SERVER, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SQL}`);
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`);
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

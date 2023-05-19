@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_COUCHBASE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_COUCHBASE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.mjs';
 import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.mjs';
 
@@ -27,7 +27,7 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_COUCHBASE);
+      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_COUCHBASE);
     }
   }
 

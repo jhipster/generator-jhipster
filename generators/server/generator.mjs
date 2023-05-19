@@ -41,25 +41,25 @@ import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_CASSANDRA,
+  GENERATOR_SPRING_DATA_CASSANDRA,
   GENERATOR_COMMON,
-  GENERATOR_COUCHBASE,
+  GENERATOR_SPRING_DATA_COUCHBASE,
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
-  GENERATOR_ELASTICSEARCH,
+  GENERATOR_SPRING_DATA_ELASTICSEARCH,
   GENERATOR_GATLING,
   GENERATOR_GRADLE,
   GENERATOR_JAVA,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
-  GENERATOR_MONGODB,
-  GENERATOR_NEO4J,
+  GENERATOR_SPRING_DATA_MONGODB,
+  GENERATOR_SPRING_DATA_NEO4J,
   GENERATOR_PULSAR,
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
-  GENERATOR_SQL,
+  GENERATOR_SPRING_DATA_RELATIONAL,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -268,15 +268,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
         if (databaseType === SQL) {
-          await this.composeWithJHipster(GENERATOR_SQL);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_RELATIONAL);
         } else if (databaseType === CASSANDRA) {
-          await this.composeWithJHipster(GENERATOR_CASSANDRA);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_CASSANDRA);
         } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster(GENERATOR_COUCHBASE);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_COUCHBASE);
         } else if (databaseType === MONGODB) {
-          await this.composeWithJHipster(GENERATOR_MONGODB);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_MONGODB);
         } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster(GENERATOR_NEO4J);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_NEO4J);
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
@@ -285,7 +285,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_PULSAR);
         }
         if (searchEngine === ELASTICSEARCH) {
-          await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);
+          await this.composeWithJHipster(GENERATOR_SPRING_DATA_ELASTICSEARCH);
         }
         if (testFrameworks?.includes(CUCUMBER)) {
           await this.composeWithJHipster(GENERATOR_CUCUMBER);

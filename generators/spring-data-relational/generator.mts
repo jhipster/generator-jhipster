@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_SQL, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE } from '../generator-list.mjs';
+import { GENERATOR_SPRING_DATA_RELATIONAL, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
@@ -41,7 +41,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SQL);
+      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_RELATIONAL);
     }
   }
 

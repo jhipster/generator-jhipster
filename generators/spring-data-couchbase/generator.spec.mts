@@ -21,18 +21,19 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { buildSamplesFromMatrix, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { buildServerMatrix, extendMatrix, entitiesSimple as entities, buildSamplesFromMatrix } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import Generator from '../server/index.mjs';
+import Generator from './generator.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {
   mockedGenerators as serverGenerators,
   shouldComposeWithKafka,
-  shouldComposeWithLiquibase,
   shouldComposeWithPulsar,
+  shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
+import { GENERATOR_SPRING_DATA_COUCHBASE } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
 
@@ -43,12 +44,16 @@ const generator = basename(__dirname);
 // compose with server generator, many conditionals at server generator
 const generatorFile = join(__dirname, '../server/index.mjs');
 
-const { MONGODB: databaseType } = databaseTypes;
+const { COUCHBASE: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:mongodb');
+const couchbaseSamples = extendMatrix(buildServerMatrix(), {
+  searchEngine: ['no', 'couchbase'],
+});
 
-const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
+const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_COUCHBASE}`);
+
+const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   it('generator-list constant matches folder name', async () => {
