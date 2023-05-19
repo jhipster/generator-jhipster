@@ -25,6 +25,11 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'generator',
     },
+    monorepository: {
+      type: Boolean,
+      description: 'Use monorepository',
+      scope: 'storage',
+    },
   },
 };
 

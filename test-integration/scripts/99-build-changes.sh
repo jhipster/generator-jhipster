@@ -119,6 +119,8 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application' \
   'generators/bootstrap-application-base' \
   'generators/common' \
+  'generators/git' \
+  'generators/jdl' \
   'generators/languages' \
   'jdl' \
   'lib' \

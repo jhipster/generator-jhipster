@@ -59,6 +59,7 @@ Options:
   --prettier-tab-width                     Default tab width for prettier
   --with-admin-ui                          Generate administrative user interface
   --skip-git                               Skip git repository initialization
+  --monorepository                         Use monorepository
   -h, --help                               display help for command
 "
 `;

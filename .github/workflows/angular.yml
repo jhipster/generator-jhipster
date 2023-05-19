@@ -172,7 +172,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         uses: ./generator-jhipster/.github/actions/compare-base
         with:
-          extra-args: '--skip-jhipster-dependencies ${{ matrix.extra-args }}'
+          extra-args: --skip-jhipster-dependencies ${{ matrix.extra-args }}
       - name: 'MERGE: compare changes'
         continue-on-error: true
         id: compare

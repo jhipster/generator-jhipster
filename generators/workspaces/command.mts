@@ -1,5 +1,5 @@
 import { JHipsterCommandDefinition } from '../base/api.mjs';
-import { GENERATOR_APP } from '../generator-list.mjs';
+import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -8,11 +8,6 @@ const command: JHipsterCommandDefinition = {
       description: 'Folders to use as monorepository workspace',
       default: [],
       scope: 'generator',
-    },
-    monorepository: {
-      type: Boolean,
-      description: 'Use monorepository',
-      scope: 'storage',
     },
     workspaces: {
       type: Boolean,
@@ -31,6 +26,7 @@ const command: JHipsterCommandDefinition = {
       hide: true,
     },
   },
+  import: [GENERATOR_GIT],
 };
 
 export default command;
