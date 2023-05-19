@@ -83,7 +83,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
   get composing() {
     return {
       async composeGit() {
-        if (this.jhipsterConfig.monorepository) {
+        if (this.options.monorepository || this.jhipsterConfig.monorepository) {
           await this.composeWithJHipster(GENERATOR_GIT);
         }
       },
