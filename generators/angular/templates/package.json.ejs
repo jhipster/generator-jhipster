@@ -125,6 +125,16 @@
     "webpack-notifier": "<%= nodeDependencies['webpack-notifier'] %>"
   },
   "overrides": {
+    "@ng-bootstrap/ng-bootstrap": {
+      "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
+      "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
+      "@angular/forms": "<%= nodeDependencies['@angular/common'] %>",
+      "@angular/localize": "<%= nodeDependencies['@angular/common'] %>"
+    },
+    "ngx-webstorage": {
+      "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
+      "@angular/core": "<%= nodeDependencies['@angular/common'] %>"
+    },
     "webpack": "<%= nodeDependencies['webpack'] %>"
   },
   "engines": {
