@@ -21,8 +21,6 @@ import path, { isAbsolute } from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
 import fs, { existsSync } from 'fs';
-import shelljs from 'shelljs';
-import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
 import { dirname, join } from 'path';
@@ -356,38 +354,6 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
    */
   success(msg) {
     this.log.ok(msg);
-  }
-
-  /**
-   * @private
-   * Checks if there is a newer JHipster version available.
-   */
-  checkForNewVersion() {
-    try {
-      const done = (this as any).async();
-      shelljs.exec(
-        `npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`,
-        { silent: true },
-        (code, stdout, stderr) => {
-          if (!stderr && semver.lt(packageJson.version, stdout)) {
-            this.logger.warn(
-              `${
-                chalk.yellow(' ______________________________________________________________________________\n\n') +
-                chalk.yellow('  JHipster update available: ') +
-                chalk.green.bold(stdout.replace('\n', '')) +
-                chalk.gray(` (current: ${packageJson.version})`)
-              }\n`
-            );
-            this.logger.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-            this.logger.log(chalk.yellow(' ______________________________________________________________________________\n'));
-          }
-          done();
-        }
-      );
-    } catch (err) {
-      this.logger.debug('Error:', err);
-      // fail silently as this function doesn't affect normal generator flow
-    }
   }
 
   /**

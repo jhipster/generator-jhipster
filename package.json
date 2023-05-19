@@ -102,6 +102,7 @@
     "insight": "0.11.1",
     "isbinaryfile": "5.0.0",
     "js-yaml": "4.1.0",
+    "latest-version": "7.0.0",
     "lodash": "4.17.21",
     "mem-fs": "3.0.0",
     "mem-fs-editor": "10.0.2",

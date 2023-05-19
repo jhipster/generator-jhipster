@@ -28,6 +28,8 @@ import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import { statSync, rmSync } from 'fs';
 import { lt as semverLessThan } from 'semver';
 import type { Storage } from 'yeoman-generator';
+import semver from 'semver';
+import latestVersion from 'latest-version';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
@@ -49,6 +51,7 @@ import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
 import command from './command.mjs';
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 
 const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -561,6 +564,29 @@ export default class CoreGenerator extends YeomanGenerator {
       } else {
         this.logger.warn(result.error);
       }
+    }
+  }
+
+  /**
+   * Checks if there is a newer JHipster version available.
+   */
+  protected async checkForNewVersion() {
+    try {
+      const latestJhipster = await latestVersion(GENERATOR_JHIPSTER);
+      if (semver.lt(packageJson.version, latestJhipster)) {
+        this.logger.warn(
+          `${
+            chalk.yellow(' ______________________________________________________________________________\n\n') +
+            chalk.yellow('  JHipster update available: ') +
+            chalk.green.bold(latestJhipster) +
+            chalk.gray(` (current: ${packageJson.version})`)
+          }\n`
+        );
+        this.logger.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+        this.logger.log(chalk.yellow(' ______________________________________________________________________________\n'));
+      }
+    } catch {
+      // Ignore error
     }
   }
 
