@@ -43,7 +43,7 @@
     "jest-sonar": "0.2.16",
     "jest-vue-preprocessor": "1.7.1",
     "merge-jsons-webpack-plugin": "2.0.1",
-    "mini-css-extract-plugin": "2.7.5",
+    "mini-css-extract-plugin": "2.7.6",
     "numeral": "2.0.6",
     "postcss-import": "15.1.0",
     "postcss-loader": "7.3.0",
