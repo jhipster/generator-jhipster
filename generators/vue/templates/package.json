@@ -32,7 +32,7 @@
     "autoprefixer": "10.4.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "11.0.0",
-    "css-loader": "6.7.3",
+    "css-loader": "6.7.4",
     "css-minimizer-webpack-plugin": "5.0.0",
     "folder-hash": "4.0.4",
     "html-webpack-plugin": "5.5.1",
