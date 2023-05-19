@@ -18,13 +18,6 @@ BaseGenerator.log = msg => {
 BaseGenerator.logger = new Logger({ adapter: new TestAdapter() });
 
 describe('generator - base', () => {
-  describe('checkForNewVersion', () => {
-    describe('when called', () => {
-      it('prints the new version info', () => {
-        expect(BaseGenerator.checkForNewVersion()).to.equal(undefined);
-      });
-    });
-  });
   describe('getFrontendAppName', () => {
     describe('when called with name having App', () => {
       it('returns the frontend app name', () => {

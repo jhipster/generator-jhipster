@@ -287,9 +287,9 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         checkNode(this.logger);
       },
 
-      checkForNewJHVersion() {
+      async checkForNewJHVersion() {
         if (!this.skipChecks) {
-          this.checkForNewVersion();
+          await this.checkForNewVersion();
         }
       },
 

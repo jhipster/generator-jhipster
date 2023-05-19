@@ -114,7 +114,7 @@ export default class BaseApplicationGenerator<
 
     if (this.options.applicationWithEntities) {
       // Write new definitions to memfs
-      (this as any).config.set({
+      this.config.set({
         ...this.config.getAll(),
         ...this.options.applicationWithEntities.config,
       });
@@ -122,7 +122,7 @@ export default class BaseApplicationGenerator<
         const entities = this.options.applicationWithEntities.entities.map(entity => {
           const entityName = _.upperFirst(entity.name);
           const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-          this.fs.writeJSON(file, { ...(this as any).fs.readJSON(file), ...entity });
+          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
           return entityName;
         });
         this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
@@ -506,7 +506,7 @@ export default class BaseApplicationGenerator<
       cancellable: true,
       method: () => {
         this.logger.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY}`);
-        const tasks = (this as any).extractTasksFromPriority(CONFIGURING_EACH_ENTITY, { skip: false });
+        const tasks = this.extractTasksFromPriority(CONFIGURING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToConfigure().forEach(({ entityName, entityStorage, entityConfig }) => {
           this.logger.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY} for ${entityName}`);
           const args = this.getArgsForPriority(CONFIGURING_EACH_ENTITY);
@@ -526,7 +526,7 @@ export default class BaseApplicationGenerator<
       cancellable: true,
       method: () => {
         this.logger.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
-        const tasks = (this as any).extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
+        const tasks = this.extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
         this.logger.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
         const args = this.getArgsForPriority(LOADING_ENTITIES);
         tasks.forEach(task => {
@@ -544,7 +544,7 @@ export default class BaseApplicationGenerator<
       cancellable: true,
       method: () => {
         this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY}`);
-        const tasks = (this as any).extractTasksFromPriority(PREPARING_EACH_ENTITY, { skip: false });
+        const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
@@ -563,7 +563,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePreparingEachEntityField',
       cancellable: true,
       method: () => {
-        const tasks = (this as any).extractTasksFromPriority(PREPARING_EACH_ENTITY_FIELD, { skip: false });
+        const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_FIELD, { skip: false });
         this.getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
@@ -582,7 +582,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePreparingEachEntityRelationship',
       cancellable: true,
       method: () => {
-        const tasks = (this as any).extractTasksFromPriority(PREPARING_EACH_ENTITY_RELATIONSHIP, { skip: false });
+        const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_RELATIONSHIP, { skip: false });
         this.getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.logger.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
@@ -601,7 +601,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePostPreparingEachEntity',
       cancellable: true,
       method: () => {
-        const tasks = (this as any).extractTasksFromPriority(POST_PREPARING_EACH_ENTITY, { skip: false });
+        const tasks = this.extractTasksFromPriority(POST_PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPostPrepare().forEach(({ description, ...data }) => {
           this.logger.debug(`Queueing entity tasks ${POST_PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(POST_PREPARING_EACH_ENTITY);
@@ -621,7 +621,7 @@ export default class BaseApplicationGenerator<
       cancellable: true,
       method: () => {
         if (this.options.skipWriting) return;
-        const tasks = (this as any).extractTasksFromPriority(WRITING_ENTITIES, { skip: false });
+        const tasks = this.extractTasksFromPriority(WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(WRITING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
@@ -638,7 +638,7 @@ export default class BaseApplicationGenerator<
       cancellable: true,
       method: () => {
         if (this.options.skipWriting) return;
-        const tasks = (this as any).extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
+        const tasks = this.extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(POST_WRITING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
