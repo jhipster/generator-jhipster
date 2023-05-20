@@ -1,22 +1,20 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
-<%_ if (enableTranslation) { _%>
+import { defineComponent, inject, onMounted, ref, Ref } from 'vue';
 import { useI18n } from 'vue-i18n-bridge';
-<%_ } _%>
 import LoginService from '@/account/login.service';
 import ActivateService from './activate.service';
-import { useRouter } from 'vue-router/composables';
+import { useRoute } from 'vue-router/composables';
 
 export default defineComponent({
   setup() {
     const activateService = inject('activateService', () => new ActivateService(), true);
     const loginService = inject<LoginService>('loginService');
-    const router = useRouter();
+    const route = useRoute();
 
     const success: Ref<boolean> = ref(false);
     const error: Ref<boolean> = ref(false);
 
-    router.beforeEach(async (to) => {
-      const key = Array.isArray(to.query.key) ? to.query.key[0] : to.query.key;
+    onMounted(async () => {
+      const key = Array.isArray(route.query.key) ? route.query.key[0] : route.query.key;
       try {
         await activateService.activateAccount(key);
         success.value = true;
@@ -32,14 +30,11 @@ export default defineComponent({
     };
 
     return {
-      router,
       activateService,
       openLogin,
       success,
       error,
-<%_ if (enableTranslation) { _%>
       t$: useI18n().t,
-<%_ } _%>
     };
   },
 });

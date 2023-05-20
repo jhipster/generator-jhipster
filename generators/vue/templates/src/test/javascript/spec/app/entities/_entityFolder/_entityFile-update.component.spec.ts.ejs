@@ -18,11 +18,9 @@
 -%>
 <%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
+import { shallowMount, createLocalVue, MountOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
@@ -31,6 +29,7 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
 
 <%_
   const allRelationshipsThatNeedSelectOptions = Object
@@ -50,33 +49,39 @@ type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%=
 
 const localVue = createLocalVue();
 
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
+let route: Partial<Route>;
+const routerGoMock = jest.fn();
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
-  let mountOptions: ThisTypedShallowMountOptions<<%= entityAngularName %>UpdateComponentType>;
-  let router: VueRouter;
+  let mountOptions: MountOptions<<%= entityAngularName %>UpdateComponentType>;
+  let alertService: AlertService;
 
   describe('<%= entityAngularName %> Management Update Component', () => {
     let comp: <%= entityAngularName %>UpdateComponentType;
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
+      route = {};
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
-      router = new VueRouter({
-        routes: [
-          {
-            path: '/<%= entityApiUrl %>/:<%= entityInstance %>Id',
-          },
-        ],
+
+      alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+        i18n: { t: jest.fn() } as any,
+<%_ } _%>
+        bvToast: {
+          toast: jest.fn(),
+        } as any,
       });
 
       mountOptions = {
         localVue,
-        router,
         stubs: {
           'font-awesome-icon': true,
           'b-input-group': true,
@@ -85,6 +90,7 @@ describe('Component Tests', () => {
           'b-form-input': true,
         },
         provide: {
+          alertService,
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
@@ -101,6 +107,10 @@ describe('Component Tests', () => {
 <%_ } _%>
         },
       };
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
 
 <%_ if (anyFieldIsTimeDerived) { _%>
@@ -168,7 +178,11 @@ describe('Component Tests', () => {
         <%= entityInstance %>ServiceStub.retrieve.resolves([<%= entityInstance %>Sample]);
 
         // WHEN
-        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
+        route = {
+          params: {
+            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
         const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
         comp = wrapper.vm;
         await comp.$nextTick();
@@ -181,8 +195,6 @@ describe('Component Tests', () => {
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
-        router.push('/');
-        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
         const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
         comp = wrapper.vm;
         await comp.$nextTick();
@@ -190,7 +202,7 @@ describe('Component Tests', () => {
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

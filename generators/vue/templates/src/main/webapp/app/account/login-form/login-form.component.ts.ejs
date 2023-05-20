@@ -1,28 +1,25 @@
 import axios from 'axios';
 import { defineComponent, inject, ref, Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router/composables';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
 import AccountService from '../account.service';
-import { useRoute, useRouter } from 'vue-router/composables';
+import LoginService from '../login.service';
 
 export default defineComponent({
-  components: {
-    watch: {
-      $route() {
-        (this.$root as any).$emit('bv::hide::modal', 'login-page');
-      },
-    },
-  },
   setup() {
     const authenticationError: Ref<boolean> = ref(false);
     const login: Ref<string> = ref(null);
     const password: Ref<string> = ref(null);
     const rememberMe: Ref<boolean> = ref(false);
-    const router = useRouter();
     const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1)
 
     const accountService = inject<AccountService>('accountService');
+    const loginService = inject<LoginService>('loginService');
 
     const doLogin = async () => {
 <%_ if (authenticationTypeJwt) { _%>
@@ -51,10 +48,10 @@ export default defineComponent({
 <%_ } _%>
 
         authenticationError.value = false;
-        router.app.$emit('bv::hide::modal', 'login-page');
+        loginService.hideLogin();
         await accountService.retrieveAccount();
         if (route.path === '/forbidden') {
-          router.go(-1);
+          previousState();
         }
       } catch (_error) {
         authenticationError.value = true;

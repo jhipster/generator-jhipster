@@ -4,9 +4,9 @@ _%>
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
-import VueRouter from 'vue-router';
+import VueRouter, { Route } from 'vue-router';
 
+import AlertService from '@/shared/alert/alert.service';
 import UserManagementView from '@/admin/user-management/user-management-view.vue';
 import type UserManagementViewComponent from '@/admin/user-management/user-management-view.component';
 import { Authority } from '@/shared/security/authority';
@@ -14,15 +14,35 @@ import { Authority } from '@/shared/security/authority';
 type UserManagementViewComponentType = Vue & InstanceType<typeof UserManagementViewComponent>;
 
 const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
 localVue.use(VueRouter);
+
+let route: Partial<Route>;
+let router: VueRouter;
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => router,
+}));
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
 };
 
 describe('UserManagementView Component', () => {
+  let alertService: AlertService;
+
+  beforeEach(() => {
+    route = {};
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: jest.fn() } as any,
+<%_ } _%>
+      bvToast: {
+        toast: jest.fn(),
+      } as any,
+    });
+  });
+
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
       // GIVEN
@@ -43,10 +63,11 @@ describe('UserManagementView Component', () => {
       };
       axiosStub.get.resolves({ data: userData });
 
-      const router = new VueRouter({
-        routes: [{ path: '/:userId' }],
-      });
-      router.push('/' + <%- tsKeyId %>);
+      route = {
+        params: {
+          userId: '' + <%- tsKeyId %>,
+        },
+      };
 
       const wrapper = shallowMount<UserManagementViewComponentType>(UserManagementView, {
         stubs: {
@@ -55,7 +76,9 @@ describe('UserManagementView Component', () => {
           'font-awesome-icon': true,
         },
         localVue,
-        router,
+        provide: {
+          alertService,
+        },
       });
       const userManagementView = wrapper.vm;
   

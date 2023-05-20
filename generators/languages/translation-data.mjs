@@ -21,6 +21,8 @@ import _ from 'lodash';
 import { entityClientI18nFiles } from './entity-files.mjs';
 import { clientI18nFiles } from './files.mjs';
 
+const { get } = _;
+
 export default class TranslationData {
   constructor(generator, control) {
     this.generator = generator;
@@ -110,10 +112,12 @@ export default class TranslationData {
    * @param [data] {object} - template data in case translated value is a template
    */
   getClientTranslation(translationKey, data) {
-    let translatedValue = _.get(this.translations, translationKey);
+    let translatedValue = get(this.translations, translationKey);
     if (translatedValue === undefined) {
-      const [last, second, ...others] = translationKey.split('.').reverse();
-      translatedValue = _.get(this.translations, `${others.reverse().join('.')}['${second}.${last}']`);
+      const [last, second, third, ...others] = translationKey.split('.').reverse();
+      translatedValue =
+        get(this.translations, `${[...others.reverse(), third].join('.')}['${second}.${last}']`) ??
+        get(this.translations, `${others.reverse().join('.')}['${third}.${second}.${last}']`);
     }
     if (translatedValue === undefined) {
       const errorMessage = `Translation missing for ${translationKey}`;

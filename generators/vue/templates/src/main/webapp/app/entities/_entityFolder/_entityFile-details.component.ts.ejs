@@ -29,6 +29,7 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
+    const previousState = () => router.go(-1);
     const <%= entityInstance %>: Ref<I<%= entityAngularName %>> = ref({});
 
     const retrieve<%= entityAngularName %> = async <%= entityInstance %>Id => {
@@ -40,13 +41,9 @@ export default defineComponent({
       }
     };
 
-    if (route.params.<%= entityInstance %>Id) {
+    if (route.params?.<%= entityInstance %>Id) {
       retrieve<%= entityAngularName %>(route.params.<%= entityInstance %>Id);
     }
-
-    const previousState = () => {
-      router.go(-1);
-    };
 
     return {
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>

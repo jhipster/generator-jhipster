@@ -2,7 +2,7 @@ import { computed } from 'vue';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import type JhiNavbarComponent from '@/core/jhi-navbar/jhi-navbar.component';
-import VueRouter from 'vue-router';
+import VueRouter, { Route } from 'vue-router';
 import { createTestingPinia } from '@pinia/testing';
 import { PiniaVuePlugin } from 'pinia';
 
@@ -17,10 +17,17 @@ localVue.use(PiniaVuePlugin);
 const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
 
+let route: Partial<Route>;
+let router: VueRouter;
+
+jest.mock('vue-router/composables', () => ({
+  useRoute: () => route,
+  useRouter: () => router,
+}));
+
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
   let loginService: LoginService;
-  let router: VueRouter;
   const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
   const changeLanguage = jest.fn();
@@ -40,7 +47,6 @@ describe('JhiNavbar', () => {
 <%_ } _%>
     const wrapper = shallowMount<JhiNavbarComponentType>(JhiNavbar, {
       pinia,
-      router,
       localVue,
       stubs: {
         'font-awesome-icon': true,

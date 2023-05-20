@@ -97,7 +97,7 @@ export function replaceTranslations({
 }) {
   const regex =
     type === 'ts'
-      ? /(?:this.)?t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
+      ? /(?:this.)?(t\$|i18n.t)\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
       : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();

@@ -133,19 +133,15 @@ export default defineComponent({
 <%_
   const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
   const headerParams = `X-${frontendAppName}-params`.toLowerCase();
-  if (enableTranslation) {
 _%>
-          const message = this.t$(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
-<%_ } else {_%>
-          const message = res.headers['<%=headerAlert%>'];
+          this.alertService.showInfo(
+<%_ if (enableTranslation) { _%>
+            this.t$(res.headers['<%=headerAlert%>'].toString(), { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) }),
+<%_ } else { _%>
+            res.headers['<%=headerAlert%>'].toString(),
 <%_ } _%>
-          this.$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'danger',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+            { variant: 'danger' },
+          );
           this.removeId = null;
           this.loadAll();
           this.closeDialog();

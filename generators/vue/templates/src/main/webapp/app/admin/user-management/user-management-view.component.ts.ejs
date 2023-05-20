@@ -2,7 +2,7 @@ import { defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n-bridge';
 <%_ } _%>
-import { useRoute, useRouter } from 'vue-router/composables';
+import { useRoute } from 'vue-router/composables';
 
 import { useDateFormat } from '@/shared/composables'
 import UserManagementService from './user-management.service';
@@ -12,7 +12,6 @@ export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>UserManagementView',
   setup() {
     const route = useRoute();
-    const router = useRouter();
     const { formatDateLong: formatDate } = useDateFormat();
 
     const alertService = inject('alertService', () => useAlertService(), true);
@@ -29,7 +28,7 @@ export default defineComponent({
       }
     }
 
-    loadUser(route.params.userId);
+    loadUser(route.params?.userId);
 
     return {
       formatDate,
