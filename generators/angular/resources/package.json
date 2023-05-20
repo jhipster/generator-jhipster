@@ -41,7 +41,7 @@
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "4.0.6",
     "rimraf": "5.0.0",
-    "ts-jest": "29.0.5",
+    "ts-jest": "29.1.0",
     "typescript": "4.9.5",
     "webpack": "5.82.1",
     "webpack-bundle-analyzer": "4.8.0",
