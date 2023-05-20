@@ -16,7 +16,7 @@ const createClientProject = () =>
 
 const createPage = runResult =>
   runResult
-    .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
+    .create('jhipster:page')
     .withAnswers({
       pageName,
     })

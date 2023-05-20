@@ -256,7 +256,7 @@ describe('generator - languages', () => {
           nativeLanguage: 'en',
         });
         await result
-          .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
+          .create('jhipster:languages')
           .withAnswers({
             languages: ['fr', 'de'],
           })
@@ -282,7 +282,7 @@ describe('generator - languages', () => {
           nativeLanguage: 'en',
         });
         await result
-          .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
+          .create('jhipster:languages')
           .withOptions({ languages: ['fr', 'de'], baseName: 'jhipster' })
           .run();
       });

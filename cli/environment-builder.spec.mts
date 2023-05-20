@@ -338,18 +338,4 @@ describe('cli - EnvironmentBuilder', () => {
       });
     });
   });
-
-  describe('yeoman-test integration', () => {
-    before(async () => {
-      await helpers.prepareTemporaryDir();
-      sinon.spy(EnvironmentBuilder.prototype, 'getEnvironment');
-    });
-    after(() => {
-      EnvironmentBuilder.prototype.getEnvironment.restore();
-    });
-    it('calls getEnvironment', async () => {
-      await helpers.run('jhipster:info', { cwd: process.cwd(), autoCleanup: false }, { createEnv: EnvironmentBuilder.createEnv });
-      expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
-    });
-  });
 });

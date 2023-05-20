@@ -24,6 +24,7 @@ import Environment from 'yeoman-environment';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { QueuedAdapter } from '@yeoman/adapter';
 
 import { CLI_NAME, logger } from './utils.mjs';
 import { packageNameToNamespace } from '../generators/base/support/index.mjs';
@@ -39,14 +40,16 @@ function loadYoRc(filePath = '.yo-rc.json') {
   return JSON.parse(readFileSync(filePath, { encoding: 'utf-8' }));
 }
 
-const createEnvironment = (args, options = {}, adapter) => {
+const createEnvironment = (options = {}) => {
+  options.adapter = options.adapter ?? new QueuedAdapter();
+
   // Remove after migration to environment 3.
   const configOptions = {};
   const sharedOptions = {
     ...options.sharedOptions,
     configOptions,
   };
-  return Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
+  return new Environment({ newErrorHandler: true, ...options, sharedOptions });
 };
 
 export default class EnvironmentBuilder {
@@ -58,8 +61,8 @@ export default class EnvironmentBuilder {
    * @param [adapter] - adapter passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder
    */
-  static create(args, options = {}, adapter) {
-    const env = createEnvironment(args, options, adapter);
+  static create(options = {}) {
+    const env = createEnvironment(options);
     env.setMaxListeners(0);
     return new EnvironmentBuilder(env);
   }

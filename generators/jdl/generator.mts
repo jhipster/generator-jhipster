@@ -221,14 +221,8 @@ export default class JdlGenerator extends BaseGenerator {
         } else if (this.applications.length === 1) {
           this.logger.debug('Generating 1 application');
           await this.composeWithJHipster(GENERATOR_APP, generationOptions);
-        } else if (this.interactive) {
-          this.logger.debug('Generating applications interactively');
-          await this.composeWithJHipster(GENERATOR_WORKSPACES, {
-            generateApplications: true,
-            workspacesFolders: this.applications.map(app => app.folder),
-          });
         } else {
-          this.logger.debug('Generating applications non interactively');
+          this.logger.debug(`Generating ${this.applications.length}applications`);
           await this.composeWithJHipster(GENERATOR_WORKSPACES, {
             workspacesFolders: this.applications.map(app => app.folder),
             generateApplications: async () => this.runNonInteractive(this.applications, generationOptions),
@@ -270,13 +264,13 @@ export default class JdlGenerator extends BaseGenerator {
     await Promise.all(
       applications.map(async application => {
         const cwd = application.folder ? this.destinationPath(application.folder) : this.destinationPath();
-        const envOptions: any = { cwd, sharedFs: application.sharedFs };
+        const envOptions: any = { cwd, sharedFs: application.sharedFs, adapter: this.env.adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
         // Install should happen at the root of the monorepository. Force skip install at childs.
         if (this.options.monorepository) {
           generatorOptions.skipInstall = true;
         }
-        const envBuilder = await this.createEnvBuilder(undefined, envOptions);
+        const envBuilder = await this.createEnvBuilder(envOptions);
         const env = envBuilder.getEnvironment();
         await env.run(`${CLI_NAME}:${GENERATOR_APP}`, generatorOptions);
       })

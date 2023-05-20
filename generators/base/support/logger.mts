@@ -17,31 +17,36 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import type TerminalAdapter from 'yeoman-environment/lib/adapter';
+import type { Logger as LoggerApi, InputOutputAdapter } from '@yeoman/types';
 import createDebug, { type Debugger } from 'debug';
 
 /**
  * formats the message to be displayed in the console.
  * @param message the info message to format.
  */
-const formatWarningMessageHeader = message => {
-  return `${chalk.yellow.bold('WARNING!')} ${message}`;
+const addPrefixToParameters = (prefix: string, ...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  args[0] = `${prefix} ${args[0]}`;
+  return args;
 };
 
-const formatErrorMessageHeader = message => {
-  return `${chalk.red.bold('ERROR!')} ${message}`;
+const formatWarningMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.yellow.bold('WARNING!'), ...args);
 };
 
-const formatFatalMessageHeader = message => {
-  return `${chalk.red.bold('FATAL!')} ${message}`;
+const formatErrorMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.red.bold('ERROR!'), ...args);
 };
 
-const formatInfoMessageHeader = (message?: string) => {
-  return message ? `${chalk.green('INFO!')} ${message}` : chalk.green('INFO!');
+const formatFatalMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.red.bold('FATAL!'), ...args);
+};
+
+const formatInfoMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.green('INFO!'), ...args);
 };
 
 export type LoggerOptions = {
-  adapter: TerminalAdapter;
+  adapter: InputOutputAdapter;
   namespace?: string;
   debugEnabled?: boolean;
 };
@@ -49,7 +54,7 @@ export type LoggerOptions = {
 export const CLI_LOGGER = 'jhipster:cli';
 
 export default class Logger {
-  adapter: TerminalAdapter;
+  adapter: InputOutputAdapter;
   debugger: Debugger;
 
   constructor({ adapter, namespace = 'jhipster', debugEnabled }: LoggerOptions) {
@@ -74,12 +79,11 @@ export default class Logger {
 
   warn(msg) {
     const warn = formatWarningMessageHeader(msg);
-    this.adapter.log(warn);
+    this.adapter.log(...warn);
   }
 
   info(...msgs) {
-    const info = formatInfoMessageHeader();
-    this.adapter.log(info, ...msgs);
+    this.adapter.log(...formatInfoMessageHeader(...msgs));
   }
 
   log(msg) {
