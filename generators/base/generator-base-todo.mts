@@ -247,17 +247,16 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
       }
     }
 
-    return (this as any).env.composeWith(
-      generator,
-      args,
-      {
+    return this.env.composeWith(generator, {
+      generatorArgs: args,
+      generatorOptions: {
         ...this.options,
         destinationRoot: (this as any)._destinationRoot,
         configOptions: this.configOptions,
         ...options,
       },
-      !immediately
-    );
+      schedule: !immediately,
+    });
   }
 
   /**
