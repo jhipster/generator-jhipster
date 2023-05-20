@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import YeomanNamespace from 'yeoman-environment/lib/util/namespace';
+import { requireNamespace } from '@yeoman/namespace';
 
 /**
  * @private
@@ -127,12 +127,11 @@ export function parseBlueprintInfo(blueprint) {
  */
 export function normalizeBlueprintName(blueprint) {
   try {
-    const parsed = YeomanNamespace.parse(blueprint);
-    if (parsed.unscoped.startsWith('generator-jhipster-')) {
-      return blueprint;
+    const ns = requireNamespace(blueprint);
+    if (ns.unscoped.startsWith('generator-jhipster-')) {
+      return ns.toString();
     }
-    const namespace = new YeomanNamespace(parsed);
-    return namespace.with({ unscoped: `generator-jhipster-${namespace.unscoped}` }).toString();
+    return ns.with({ unscoped: `generator-jhipster-${ns.unscoped}` }).toString();
     // eslint-disable-next-line no-empty
   } catch (e) {}
   if (blueprint && blueprint.startsWith('@')) {

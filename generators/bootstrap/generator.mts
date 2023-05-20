@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 import environmentTransfrom from 'yeoman-environment/transform';
+import { forceYoFiles } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
+import { createYoResolveTransform } from '@yeoman/conflicter';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -36,12 +38,7 @@ import { createSortConfigFilesTransform } from './support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
-const {
-  createConflicterCheckTransform,
-  createConflicterStatusTransform,
-  createYoRcTransform: createForceYoRcTransform,
-  createYoResolveTransform: createApplyYoResolveTransform,
-} = environmentTransfrom;
+const { createConflicterCheckTransform, createConflicterStatusTransform } = environmentTransfrom;
 
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -66,7 +63,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     this.parseCommonRuntimeOptions();
 
     // Force npm override later if needed
-    this.env.options.nodePackageManager = 'npm';
+    (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;
   }
 
@@ -190,8 +187,8 @@ export default class BootstrapGenerator extends BaseGenerator {
     const prettierTransformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
 
     const transformStreams = [
-      ...(skipYoResolve ? [] : [createApplyYoResolveTransform(env.conflicter)]),
-      createForceYoRcTransform(),
+      ...(skipYoResolve ? [] : [createYoResolveTransform()]),
+      forceYoFiles(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFilesTransform(),
       ...(this.skipPrettier ? [] : [createPrettierTransform(prettierOptions, this, prettierTransformOptions)]),
@@ -200,6 +197,6 @@ export default class BootstrapGenerator extends BaseGenerator {
       createConflicterStatusTransform(),
     ];
 
-    await env.fs.commit(transformStreams, stream);
+    await this.fs.commit(transformStreams, stream);
   }
 }
