@@ -32,7 +32,7 @@ export const javaDependencies: Record<string, string> = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.0.5',
+  'spring-boot': '3.0.7',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
