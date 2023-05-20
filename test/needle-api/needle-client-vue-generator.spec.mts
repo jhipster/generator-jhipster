@@ -50,7 +50,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         db: 'mysql',
         blueprint: 'myblueprint',
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:vue']])
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:vue' }]])
       .withAnswers({
         baseName: 'jhipster',
         clientFramework: VUE,

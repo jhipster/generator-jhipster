@@ -49,7 +49,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]])
       .run();
   }
 

@@ -52,7 +52,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
         blueprint: 'myblueprint2',
         skipServer: true,
       })
-      .withGenerators([[mockAngularBlueprintSubGen, 'jhipster-myblueprint2:angular']])
+      .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
       .run();
   });
 
@@ -79,7 +79,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
   it('should bail on any file change adding same needles again', async () => {
     await runResult
       .create('jhipster-myblueprint2:angular')
-      .withGenerators([[mockAngularBlueprintSubGen, 'jhipster-myblueprint2:angular']])
+      .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
       .withOptions({ force: false })
       .run();
   });
