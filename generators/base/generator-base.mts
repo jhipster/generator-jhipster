@@ -113,7 +113,7 @@ export default class CoreGenerator extends YeomanGenerator {
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
 
-  // TODO switch to Environment type
+  // TODO switch to FullEnvironment type
   declare env: any;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
@@ -178,7 +178,7 @@ export default class CoreGenerator extends YeomanGenerator {
 
     if (this.options.namespace !== 'jhipster:bootstrap') {
       // jhipster:bootstrap is always required. Run it once the enviroment starts.
-      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP), {
+      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
         once: 'queueJhipsterBootstrap',
         startQueue: false,
       });

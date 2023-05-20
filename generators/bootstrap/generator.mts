@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import environmentTransfrom from 'yeoman-environment/transform';
 import { forceYoFiles } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
-import { createYoResolveTransform } from '@yeoman/conflicter';
+import { createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -38,7 +37,6 @@ import { createSortConfigFilesTransform } from './support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
-const { createConflicterCheckTransform, createConflicterStatusTransform } = environmentTransfrom;
 
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -165,23 +163,7 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
     const { skipYoResolve } = this.options;
-    const env: any = this.env;
-
     const { ignoreErrors } = this.options;
-
-    const conflicterStatus = {
-      fileActions: [
-        {
-          key: 'i',
-          name: 'ignore, do not overwrite and remember (experimental)',
-          value: (file: any) => {
-            const { relativeFilePath } = file;
-            env.fs.append(`${this.env.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
-            return 'skip';
-          },
-        },
-      ],
-    };
 
     const prettierOptions = { packageJson: true, java: !this.jhipsterConfig.skipServer };
     const prettierTransformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
@@ -193,8 +175,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       createForceWriteConfigFilesTransform(),
       ...(this.skipPrettier ? [] : [createPrettierTransform(prettierOptions, this, prettierTransformOptions)]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
-      createConflicterCheckTransform(env.conflicter, conflicterStatus),
-      createConflicterStatusTransform(),
+      createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),
     ];
 
     await this.fs.commit(transformStreams, stream);
