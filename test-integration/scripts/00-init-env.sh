@@ -95,7 +95,7 @@ fi
 JHI_NODE_VERSION=$(grep -o "NODE_VERSION = '[^']*'" $JHI_HOME/generators/generator-constants.mts | cut -f2 -d "'")
 
 # npm version
-JHI_NPM_VERSION=$(grep -o '"npm": "[^"]*"' $JHI_HOME/generators/common/templates/package.json | cut -f4 -d '"')
+JHI_NPM_VERSION=$(grep -o '"npm": "[^"]*"' $JHI_HOME/generators/common/resources/package.json | cut -f4 -d '"')
 
 # generator-jhipster version
 JHI_VERSION=$(grep -o '"version": "[^"]*"' $JHI_HOME/package.json | cut -f4 -d '"')

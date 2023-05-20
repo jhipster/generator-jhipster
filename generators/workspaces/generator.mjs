@@ -164,11 +164,11 @@ export default class WorkspacesGenerator extends BaseGenerator {
         const {
           dependencies: { rxjs },
           devDependencies: { webpack: webpackVersion },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'));
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
 
         const {
           devDependencies: { concurrently },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json'));
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'));
 
         this.packageJson.merge({
           workspaces: {
