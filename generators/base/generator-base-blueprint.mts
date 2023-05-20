@@ -61,7 +61,10 @@ export default class JHipsterBaseBlueprintGenerator<
 
       try {
         // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
+        const blueprintedTemplatePath = this.jhipsterTemplatePath();
+        if (!this.jhipsterTemplatesFolders.includes(blueprintedTemplatePath)) {
+          this.jhipsterTemplatesFolders.push(blueprintedTemplatePath);
+        }
       } catch (error) {
         this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
         this.logger.log(error);

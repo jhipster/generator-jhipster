@@ -300,7 +300,7 @@ export default class CoreGenerator extends YeomanGenerator {
   jhipsterTemplatePath(...path: string[]) {
     let existingGenerator: string;
     try {
-      existingGenerator = this._jhipsterGenerator || requireNamespace(this.options.namespace).generator;
+      existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
     } catch (error) {
       if (this.options.namespace) {
         const split = this.options.namespace.split(':', 2);
@@ -310,7 +310,9 @@ export default class CoreGenerator extends YeomanGenerator {
       }
     }
     this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path);
+    return this._jhipsterGenerator
+      ? this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path)
+      : this.templatePath(...path);
   }
 
   /**
