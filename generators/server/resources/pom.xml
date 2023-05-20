@@ -18,7 +18,7 @@
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
-        <liquibase.version>4.20.0</liquibase.version>
+        <liquibase.version>4.22.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <r2dbc-mysql.version>1.0.1</r2dbc-mysql.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
