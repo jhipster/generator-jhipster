@@ -16,7 +16,7 @@ function gitMove(this: BaseGenerator, from: string, to: string) {
   const source = this.destinationPath(from);
   const dest = this.destinationPath(to);
   if (source && dest && shelljs.test('-f', source)) {
-    this.logger.info(`Renaming the file - ${source} to ${dest}`);
+    this.log.verboseInfo(`Renaming the file - ${source} to ${dest}`);
     return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
   }
   return true;

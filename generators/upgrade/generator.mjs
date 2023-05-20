@@ -126,8 +126,8 @@ export default class UpgradeGenerator extends BaseGenerator {
   get [BaseGenerator.INITIALIZING]() {
     return {
       displayLogo() {
-        this.logger.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
-        this.logger.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
+        this.log.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
+        this.log.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
       },
 
       parseBlueprints() {
@@ -143,7 +143,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
   _rmRf(file) {
     const absolutePath = path.resolve(file);
-    this.logger.info(`Removing ${absolutePath}`);
+    this.log.verboseInfo(`Removing ${absolutePath}`);
     shelljs.rm('-rf', absolutePath);
   }
 
@@ -177,7 +177,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _generate(jhipsterVersion, blueprintInfo) {
-    this.logger.info(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
+    this.log.verboseInfo(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
     let generatorCommand = 'yo jhipster';
     if (this.options.regenerateExecutable) {
       generatorCommand = this.options.regenerateExecutable;
@@ -194,7 +194,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     }
     const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
     const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
-    this.logger.info(regenerateCmd);
+    this.log.verboseInfo(regenerateCmd);
     try {
       childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
       this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
@@ -217,17 +217,17 @@ export default class UpgradeGenerator extends BaseGenerator {
   _regenerate(jhipsterVersion, blueprintInfo) {
     this._generate(jhipsterVersion, blueprintInfo);
     const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
-    this.logger.info(`Removing ${keystore}`);
+    this.log.verboseInfo(`Removing ${keystore}`);
     this._rmRf(keystore);
     this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
   }
 
   _retrieveLatestVersion(packageName) {
-    this.logger.info(`Looking for latest ${packageName} version...`);
+    this.log.verboseInfo(`Looking for latest ${packageName} version...`);
     const commandPrefix = 'npm show';
     const pkgInfo = shelljs.exec(`${commandPrefix} ${packageName} version`, { silent: this.silent });
     if (pkgInfo.stderr) {
-      this.logger.warn(pkgInfo.stderr);
+      this.log.warn(pkgInfo.stderr);
       throw new Error(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
     }
     const msg = pkgInfo.stdout;
@@ -235,12 +235,12 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _installNpmPackageLocally(npmPackage, version) {
-    this.logger.info(`Installing ${npmPackage} ${version} locally`);
+    this.log.verboseInfo(`Installing ${npmPackage} ${version} locally`);
     const commandPrefix = 'npm install';
     const devDependencyParam = '--save-dev';
     const noPackageLockParam = '--no-package-lock';
     const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --legacy-peer-deps`;
-    this.logger.info(generatorCommand);
+    this.log.verboseInfo(generatorCommand);
 
     const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
     if (npmIntall.code === 0) this.success(`Installed ${npmPackage}@${version}`);
@@ -257,14 +257,14 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       async assertGitPresent() {
         if (!(await this.createGit().version()).installed) {
-          this.logger.warn(`git is not found on your computer.\n, Install git: ${chalk.yellow('https://git-scm.com/')}`);
+          this.log.warn(`git is not found on your computer.\n, Install git: ${chalk.yellow('https://git-scm.com/')}`);
           throw new Error('Exiting the process.');
         }
       },
 
       checkLatestBlueprintVersions() {
         if (!this.blueprints || this.blueprints.length === 0) {
-          this.logger.warn('No blueprints detected, skipping check of last blueprint version');
+          this.log.warn('No blueprints detected, skipping check of last blueprint version');
           return undefined;
         }
 
@@ -277,7 +277,7 @@ export default class UpgradeGenerator extends BaseGenerator {
                   return elem.name === blueprint.name;
                 });
                 if (targetBlueprint && targetBlueprint.version && targetBlueprint.version !== 'latest') {
-                  this.logger.warn(`Blueprint ${targetBlueprint.name} will be upgraded to target version: ${targetBlueprint.version}`);
+                  this.log.warn(`Blueprint ${targetBlueprint.name} will be upgraded to target version: ${targetBlueprint.version}`);
                   blueprint.latestBlueprintVersion = targetBlueprint.version;
                   return false;
                 }
@@ -293,12 +293,12 @@ export default class UpgradeGenerator extends BaseGenerator {
                   this.success(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
                 } else if (this.force) {
                   this.newBlueprintVersionFound = true;
-                  this.logger.log(chalk.yellow('Forced re-generation'));
+                  this.log.log(chalk.yellow('Forced re-generation'));
                 } else {
                   if (this.newBlueprintVersionFound === undefined) {
                     this.newBlueprintVersionFound = false;
                   }
-                  this.logger.warn(
+                  this.log.warn(
                     `${chalk.green('No update available.')} Application has already been generated with latest version for blueprint: ${
                       blueprint.name
                     }`
@@ -319,16 +319,16 @@ export default class UpgradeGenerator extends BaseGenerator {
             this.originalTargetJhipsterVersion = this.targetJhipsterVersion;
             this.targetJhipsterVersion = packageJson.version;
           }
-          this.logger.warn(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
+          this.log.warn(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
           return;
         }
-        this.logger.info(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
+        this.log.verboseInfo(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
         const latestVersion = this._retrieveLatestVersion(GENERATOR_JHIPSTER);
         this.targetJhipsterVersion = latestVersion;
         if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
           this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
         } else if (this.force) {
-          this.logger.log(chalk.yellow('Forced re-generation'));
+          this.log.log(chalk.yellow('Forced re-generation'));
         } else if (!this.newBlueprintVersionFound) {
           throw new Error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
         }
@@ -350,7 +350,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
         if (gitStatus.code !== 0) throw new Error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
         if (gitStatus.stdout) {
-          this.logger.warn(gitStatus.stdout);
+          this.log.warn(gitStatus.stdout);
           throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
         }
       },
@@ -390,7 +390,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
         const installBlueprintsLocally = () => {
           if (!this.blueprints || this.blueprints.length < 1) {
-            this.logger.info('Skipping local blueprint installation since no blueprint has been detected');
+            this.log.verboseInfo('Skipping local blueprint installation since no blueprint has been detected');
             return Promise.resolve(false);
           }
 
@@ -460,7 +460,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       updateBlueprints() {
         if (!this.blueprints || this.blueprints.length < 1) {
-          this.logger.info('Skipping blueprint update since no blueprint has been detected');
+          this.log.verboseInfo('Skipping blueprint update since no blueprint has been detected');
           return undefined;
         }
 
@@ -500,7 +500,7 @@ export default class UpgradeGenerator extends BaseGenerator {
       },
 
       mergeChangesBack() {
-        this.logger.info(`Merging changes back to ${this.sourceBranch}...`);
+        this.log.verboseInfo(`Merging changes back to ${this.sourceBranch}...`);
         this.gitExec(['merge', '-q', UPGRADE_BRANCH], { silent: this.silent });
         this.success('Merge done!');
       },
@@ -510,7 +510,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (gitDiff.code !== 0) throw new Error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         if (gitDiff.stdout) {
           const installCommand = 'npm install';
-          this.logger.warn(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
+          this.log.warn(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
           this.skipInstall = true;
         }
       },
@@ -521,11 +521,11 @@ export default class UpgradeGenerator extends BaseGenerator {
     return {
       install() {
         if (!this.skipInstall) {
-          this.logger.info('Installing dependencies, please wait...');
-          this.logger.info('Removing the node_modules directory');
+          this.log.verboseInfo('Installing dependencies, please wait...');
+          this.log.verboseInfo('Removing the node_modules directory');
           this._rmRf('node_modules');
           const installCommand = 'npm install';
-          this.logger.info(installCommand);
+          this.log.verboseInfo(installCommand);
 
           const pkgInstall = shelljs.exec(installCommand, { silent: this.silent });
           if (pkgInstall.code !== 0) {
@@ -546,7 +546,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (gitDiff.code !== 0) throw new Error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         this.success(chalk.bold('Upgraded successfully.'));
         if (gitDiff.stdout) {
-          this.logger.warn(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
+          this.log.warn(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
         }
       },
     };

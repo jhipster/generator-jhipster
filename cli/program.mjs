@@ -87,7 +87,7 @@ const addCommandGeneratorOptions = async (command, generatorMeta, { root, bluepr
     if (!info) {
       throw error;
     }
-    logger.info(`${info}, error: ${error}`);
+    logger.verboseInfo(`${info}, error: ${error}`);
   }
 };
 
@@ -147,7 +147,7 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
 
   const suggestion = didYouMean(first, availableCommands);
   if (suggestion) {
-    logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+    logger.verboseInfo(`Did you mean ${chalk.yellow(suggestion)}?`);
   }
 
   const message = `${chalk.yellow(first)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`;

@@ -66,8 +66,8 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
-        this.logger.log(
+        this.log.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
+        this.log.log(
           chalk.white(
             `Files will be generated in folder: ${chalk.yellow(
               this.destinationRoot()
@@ -84,7 +84,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
 
         shelljs.exec('oc version', { silent: true }, (code, stdout, stderr) => {
           if (stderr) {
-            this.logger.warn(
+            this.log.warn(
               'oc 1.3 or later is not installed on your computer.\n' +
                 'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read' +
                 ' https://github.com/openshift/origin/\n'
@@ -208,71 +208,73 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     return {
       displayOpenshiftDeploymentProcedure() {
         if (this.hasWarning) {
-          this.logger.warn('OpenShift configuration generated, but no Jib cache found');
-          this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.logger.warn(this.warningMessage);
+          this.log.warn('OpenShift configuration generated, but no Jib cache found');
+          this.log.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.log.warn(this.warningMessage);
         } else {
-          this.logger.info(`\n${chalk.bold.green('OpenShift configuration successfully generated!')}`);
+          this.log.verboseInfo(`\n${chalk.bold.green('OpenShift configuration successfully generated!')}`);
         }
 
-        this.logger.warn(
+        this.log.warn(
           'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
           const targetImageName = this.appConfigs[i].targetImageName;
           if (originalImageName !== targetImageName) {
-            this.logger.info(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
+            this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
-          this.logger.info(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
+          this.log.verboseInfo(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.logger.log('\nYou can deploy all your apps by running: ');
-        this.logger.info(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
-        this.logger.info('OR');
-        this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
+        this.log.log('\nYou can deploy all your apps by running: ');
+        this.log.verboseInfo(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
+        this.log.verboseInfo('OR');
+        this.log.verboseInfo(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
         if (this.monitoring === PROMETHEUS) {
-          this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
+          this.log.verboseInfo(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
         }
         if (this.useKafka) {
-          this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
+          this.log.verboseInfo(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
         }
         for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
           const app = this.appConfigs[i];
           const appName = app.baseName.toLowerCase();
           if (app.searchEngine === ELASTICSEARCH) {
-            this.logger.info(
+            this.log.verboseInfo(
               `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`
             );
           }
           if (app.serviceDiscoveryType !== NO_SERVICE_DISCOVERY && regIndex++ === 0) {
-            this.logger.info(
+            this.log.verboseInfo(
               `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`
             );
             if (app.serviceDiscoveryType === EUREKA) {
-              this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`);
+              this.log.verboseInfo(
+                `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`
+              );
             } else {
-              this.logger.info(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
+              this.log.verboseInfo(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
             }
           }
           if (app.prodDatabaseType !== NO_DATABASE) {
-            this.logger.info(
+            this.log.verboseInfo(
               `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`
             );
           }
-          this.logger.info(
+          this.log.verboseInfo(
             `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`
           );
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
-          this.logger.info("\nUse these commands to find your application's IP addresses:");
+          this.log.verboseInfo("\nUse these commands to find your application's IP addresses:");
           for (let i = 0; i < this.appsFolders.length; i++) {
             if (this.appConfigs[i].applicationType === GATEWAY || this.appConfigs[i].applicationType === MONOLITH) {
-              this.logger.info(`  ${chalk.cyan(`oc get svc ${this.appConfigs[i].baseName}`)}`);
+              this.log.verboseInfo(`  ${chalk.cyan(`oc get svc ${this.appConfigs[i].baseName}`)}`);
             }
           }
-          this.logger.log();
+          this.log.log();
         }
       },
     };

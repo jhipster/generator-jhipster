@@ -6,7 +6,7 @@ import { basicHelpers as helpers, result as runResult } from '../../test/support
 
 import Base from './index.mjs';
 import { parseChangelog } from './support/timestamp.mjs';
-import Logger from './support/logger.mjs';
+import { createJHipsterLogger } from './support/logger.mjs';
 
 const BaseGenerator: any = Base.prototype;
 
@@ -15,7 +15,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-BaseGenerator.logger = new Logger({ adapter: new TestAdapter() });
+BaseGenerator.logger = createJHipsterLogger();
 
 describe('generator - base', () => {
   describe('getFrontendAppName', () => {

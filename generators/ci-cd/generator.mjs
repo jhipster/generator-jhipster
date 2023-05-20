@@ -93,7 +93,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
+        this.log.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
 
       getSharedConfig() {
@@ -254,7 +254,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
           } else if (this.buildTool === GRADLE) {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-            this.logger.warn('No support for Artifactory yet, when using Gradle.\n');
+            this.log.warn('No support for Artifactory yet, when using Gradle.\n');
           }
         }
 

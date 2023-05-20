@@ -223,22 +223,20 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   }
 
   printDestinationInfo(cwd = this.destinationPath()) {
-    this.logger.log(
+    this.log.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.logger.log(
+    this.log.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}
 
   Application files will be generated in folder: ${chalk.yellow(cwd)}`)
     );
     if (process.cwd() === this.getUserHome()) {
-      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.logger.log(
-        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
-      );
-      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.log.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.log.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
+      this.log.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.logger.log(
+    this.log.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }

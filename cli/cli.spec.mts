@@ -133,8 +133,8 @@ describe('cli', () => {
         await mockCli(['jhipster', 'jhipster', 'entitt']);
         assert.fail();
       } catch (error) {
-        expect(logger.info).toHaveBeenCalledWith(expect.stringMatching('Did you mean'));
-        expect(logger.info).toHaveBeenCalledWith(expect.stringMatching('entity'));
+        expect(logger.verboseInfo).toHaveBeenCalledWith(expect.stringMatching('Did you mean'));
+        expect(logger.verboseInfo).toHaveBeenCalledWith(expect.stringMatching('entity'));
       }
     });
 
