@@ -73,7 +73,7 @@ LABEL ALIAS=grafana-watcher
 FROM jenkins/jenkins:lts-jdk11
 LABEL ALIAS=jenkins
 
-FROM eclipse-temurin:17-jre-focal
+FROM eclipse-temurin:19-jre-focal
 LABEL ALIAS=java-jre
 
 FROM swaggerapi/swagger-editor:latest
