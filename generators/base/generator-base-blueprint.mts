@@ -521,7 +521,7 @@ export default class JHipsterBaseBlueprintGenerator<
       jhipsterContext: this,
     };
 
-    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any, true);
+    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any, false);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }
