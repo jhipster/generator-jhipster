@@ -16,15 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from '@yeoman/transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 import { Minimatch } from 'minimatch';
-// eslint-disable-next-line import/no-unresolved
-import environmentTransform from 'yeoman-environment/transform';
-
-const { patternSpy } = environmentTransform;
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFile = file => minimatch.match(file.path);
@@ -34,10 +31,10 @@ export const createPrettierTransform = function (options, generator, transformOp
     transformOptions = { ignoreErrors: transformOptions };
   }
   const { ignoreErrors = false, extensions } = transformOptions;
-  return patternSpy(
+  return passthrough(
     async file => {
       if (isFileStateDeleted(file)) {
-        return file;
+        return;
       }
       if (!file.contents) {
         throw new Error(`File content doesn't exist for ${file.relative}`);
@@ -62,7 +59,7 @@ export const createPrettierTransform = function (options, generator, transformOp
         fileContent = file.contents.toString('utf8');
         const data = prettier.format(fileContent, prettierOptions);
         file.contents = Buffer.from(data);
-        return file;
+        return;
       } catch (error) {
         let errorMessage;
         if (fileContent) {
@@ -77,12 +74,11 @@ At: ${fileContent
         }
         if (ignoreErrors) {
           generator.logger.warn(errorMessage);
-          return file;
+          return;
         }
         throw new Error(errorMessage);
       }
     },
-    `**/*.{${extensions}}`,
-    { dot: true }
-  ).name('jhipster:prettier');
+    { pattern: `**/*.{${extensions}}`, patternOptions: { dot: true } }
+  );
 };

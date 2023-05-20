@@ -223,7 +223,7 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
    * @param {object} [composeOptions] - compose options
    * @return {object} the composed generator
    */
-  composeWithJHipster(generator: string, args?: any, options?: any, { immediately = false } = {}) {
+  async composeWithJHipster(generator: string, args?: any, options?: any, { immediately = false } = {}) {
     assert(typeof generator === 'string', 'generator should to be a string');
     if (!isAbsolute(generator)) {
       const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;

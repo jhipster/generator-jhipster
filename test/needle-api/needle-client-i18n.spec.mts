@@ -53,7 +53,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']]);
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:languages' }]]);
   });
 
   it('Assert english global.json contain the new key', () => {

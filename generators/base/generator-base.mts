@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { basename, join as joinPath, dirname, relative } from 'path';
+import { requireNamespace } from '@yeoman/namespace';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -112,7 +113,7 @@ export default class CoreGenerator extends YeomanGenerator {
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
 
-  // TODO switch to Environment type
+  // TODO switch to FullEnvironment type
   declare env: any;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
@@ -177,21 +178,10 @@ export default class CoreGenerator extends YeomanGenerator {
 
     if (this.options.namespace !== 'jhipster:bootstrap') {
       // jhipster:bootstrap is always required. Run it once the enviroment starts.
-      (this.env as any).runLoop.add(
-        'environment:run',
-        async (done, stop) => {
-          try {
-            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
-            done();
-          } catch (error) {
-            stop(error);
-          }
-        },
-        {
-          once: 'queueJhipsterBootstrap',
-          run: false,
-        }
-      );
+      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
+        once: 'queueJhipsterBootstrap',
+        startQueue: false,
+      });
     }
 
     // Add base template folder.
@@ -310,7 +300,7 @@ export default class CoreGenerator extends YeomanGenerator {
   jhipsterTemplatePath(...path: string[]) {
     let existingGenerator: string;
     try {
-      existingGenerator = this._jhipsterGenerator || (this.env as any).requireNamespace(this.options.namespace).generator;
+      existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
     } catch (error) {
       if (this.options.namespace) {
         const split = this.options.namespace.split(':', 2);
@@ -320,7 +310,9 @@ export default class CoreGenerator extends YeomanGenerator {
       }
     }
     this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path);
+    return this._jhipsterGenerator
+      ? this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path)
+      : this.templatePath(...path);
   }
 
   /**
@@ -329,7 +321,7 @@ export default class CoreGenerator extends YeomanGenerator {
    */
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
-    const relativePath = relative((this.env as any).conflicter.cwd, destinationFile);
+    const relativePath = relative((this.env as any).logCwd, destinationFile);
     // Delete from memory fs to keep updated.
     this.fs.delete(destinationFile);
     try {
@@ -349,7 +341,7 @@ export default class CoreGenerator extends YeomanGenerator {
    */
   removeFolder(...path: string[]) {
     const destinationFolder = this.destinationPath(...path);
-    const relativePath = relative((this.env as any).conflicter.cwd, destinationFolder);
+    const relativePath = relative((this.env as any).logCwd, destinationFolder);
     // Delete from memory fs to keep updated.
     this.fs.delete(`${destinationFolder}/**`);
     try {

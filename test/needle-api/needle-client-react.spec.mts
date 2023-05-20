@@ -43,7 +43,7 @@ describe('needle API React: JHipster react generator with blueprint', () => {
         db: 'mysql',
         blueprint: 'myblueprint',
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:react']])
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])
       .withAnswers({
         baseName: 'jhipster',
         clientFramework: REACT,

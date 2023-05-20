@@ -240,7 +240,7 @@ class JHipsterTest extends YeomanTest {
         return {};
       }
     }
-    return this.run(blueprintNS).withGenerators([[BlueprintedGenerator, blueprintNS]]);
+    return this.run(blueprintNS).withGenerators([[BlueprintedGenerator, { namespace: blueprintNS }]]);
   }
 
   create<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(

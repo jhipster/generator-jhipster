@@ -64,7 +64,7 @@ describe(`generator - ${clientFramework}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
-          .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
           .withMockedGenerators(['jhipster:common']);
       });
 

@@ -8,3 +8,4 @@ jdl/**/.jhipster/**
 **/generated-serialized-grammar.js
 test/fixtures/**
 dist
+coverage

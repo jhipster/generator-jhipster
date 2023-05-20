@@ -38,7 +38,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           clientFramework: 'no',
           enableHibernateCache: true,
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:spring-cache']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:spring-cache' }]]);
     });
 
     it('Assert ehCache configuration has entry added', () => {
@@ -71,7 +71,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           clientFramework: 'no',
           enableHibernateCache: true,
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:spring-cache']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:spring-cache' }]]);
     });
 
     it('Assert caffeine configuration has entry added', () => {
@@ -104,7 +104,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           clientFramework: 'no',
           enableHibernateCache: true,
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:spring-cache']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:spring-cache' }]]);
     });
 
     it('Assert redis configuration has entry added', () => {

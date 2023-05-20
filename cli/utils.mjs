@@ -19,7 +19,7 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
 import _ from 'lodash';
-import TerminalAdapter from 'yeoman-environment/lib/adapter';
+import { TerminalAdapter } from '@yeoman/adapter';
 
 import { Logger, CLI_LOGGER } from '../generators/base/support/index.mjs';
 

@@ -127,7 +127,7 @@ describe('generator - maven - needles', () => {
           blueprint: 'myblueprint',
           clientFramework: 'no',
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:maven']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
     });
 
     it('Assert pom.xml has the dependency management added', () => {
@@ -254,7 +254,7 @@ describe('generator - maven - needles', () => {
         .withOptions({
           profile: 'prod',
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:maven']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
     });
 
     it('Assert pom.xml has the dependency management added', () => {
