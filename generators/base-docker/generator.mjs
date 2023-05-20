@@ -61,7 +61,7 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
   get initializing() {
     return {
       async setupServerConsts() {
-        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
         this.dockerContainers = this.prepareDependencies(
           {
             ...elasticDockerContainer,

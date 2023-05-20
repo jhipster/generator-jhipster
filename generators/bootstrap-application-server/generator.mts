@@ -46,9 +46,9 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
 
-        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'))?.toString();
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
-          this.jhipsterTemplatePath('../../server/templates/gradle/libs.versions.toml')
+          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml')
         )?.toString();
         application.packageInfoJavadocs = [];
         application.javaDependencies = this.prepareDependencies(
@@ -61,7 +61,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
         );
 
-        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
         application.dockerContainers = this.prepareDependencies(
           {
             ...dockerContainers,

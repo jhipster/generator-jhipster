@@ -72,7 +72,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json')
         );
       },
     });
