@@ -60,7 +60,7 @@
     "jest-sonar": "0.2.16",
     "json-loader": "0.5.7",
     "merge-jsons-webpack-plugin": "2.0.1",
-    "mini-css-extract-plugin": "2.7.5",
+    "mini-css-extract-plugin": "2.7.6",
     "postcss-loader": "7.3.0",
     "postcss-rtlcss": "4.0.6",
     "react-infinite-scroll-component": "6.1.0",
