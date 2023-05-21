@@ -124,9 +124,7 @@ export const getDatabaseTypeMavenDefinition: (
         ],
       },
       r2dbc: {
-        // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-        // dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb', version: javaDependencies['r2dbc-mariadb'] }],
-        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql', version: javaDependencies['r2dbc-mysql'] }],
+        dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' }],
       },
     },
     mssql: {

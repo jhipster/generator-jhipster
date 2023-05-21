@@ -49,9 +49,7 @@ dependencies {
   <%_ } _%>
   <%_ if (devDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
-    // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-    // implementation "org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>"
-    implementation "io.asyncer:r2dbc-mysql:<%- javaDependencies['r2dbc-mysql'] %>"
+    implementation "org.mariadb:r2dbc-mariadb"
     <%_ } _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>

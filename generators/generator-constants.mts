@@ -43,10 +43,6 @@ export const javaDependencies: Record<string, string> = {
    * Required due to java-driver-mapper-processor annotation processor.
    */
   cassandra: '4.15.0',
-  /**
-   * TODO drop once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-   */
-  'r2dbc-mariadb': '1.1.2',
 };
 Object.freeze(javaDependencies);
 
