@@ -19,7 +19,7 @@
     "vuex": "3.6.2"
   },
   "devDependencies": {
-    "@pinia/testing": "0.1.1",
+    "@pinia/testing": "0.1.2",
     "@rushstack/eslint-patch": "1.2.0",
     "@types/jest": "29.5.1",
     "@types/node": "16.18.31",
