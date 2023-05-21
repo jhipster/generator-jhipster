@@ -63,7 +63,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
             <li>
               <a
                 class="dropdown-item"
-                routerLink="entityPage"
+                routerLink="/entityPage"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
                 (click)="collapseNavbar()"
@@ -88,7 +88,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
             <li>
-              <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">
+              <a class="dropdown-item" routerLink="/routerName2" routerLinkActive="active" (click)="collapseNavbar()">
                 <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>
                 <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
               </a>
