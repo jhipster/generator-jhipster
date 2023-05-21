@@ -1056,6 +1056,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/app/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/app/core/error/error-loading.vue": {
+    "stateCleared": "modified",
+  },
   "src/app/core/error/error.component.ts": {
     "stateCleared": "modified",
   },
@@ -1515,6 +1518,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/core/error/error-loading.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/core/error/error.component.ts": {

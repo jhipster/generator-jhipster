@@ -19,7 +19,9 @@ export default defineComponent({
     'entities-menu': EntitiesMenu,
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
-    '<%= microfrontend.lowercaseBaseName %>-menu': defineAsyncComponent(() => import('@<%= microfrontend.lowercaseBaseName %>/entities-menu')),
+    '<%= microfrontend.lowercaseBaseName %>-menu': defineAsyncComponent(() => {
+      return import('@<%= microfrontend.lowercaseBaseName %>/entities-menu').catch(() => import('@/core/error/error-loading.vue'));
+    }),
   <%_ } _%>
 <%_ } _%>
   },
