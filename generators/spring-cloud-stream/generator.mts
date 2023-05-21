@@ -125,12 +125,12 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
         }
       },
       applyPulsarGradleScript({ source, application }) {
-        if (application.buildToolGradle) {
+        if (application.buildToolGradle && application.messageBrokerPulsar) {
           source.applyFromGradle?.({ script: 'gradle/pulsar.gradle' });
         }
       },
       addPulsarMavenDependencies({ application, source }) {
-        if (application.buildToolMaven) {
+        if (application.buildToolMaven && application.messageBrokerPulsar) {
           const { javaDependencies } = application;
           source.addMavenDefinition?.({
             properties: [{ property: 'spring-pulsar.version', value: javaDependencies?.['spring-pulsar'] }],

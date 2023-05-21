@@ -9,12 +9,7 @@ import Generator from '../server/index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
-import {
-  mockedGenerators,
-  shouldComposeWithKafka,
-  shouldComposeWithLiquibase,
-  shouldComposeWithPulsar,
-} from '../server/__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithSpringCloudStream, shouldComposeWithLiquibase } from '../server/__test-support/index.mjs';
 import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -64,8 +59,7 @@ describe(`generator - ${databaseType}`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-      shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithPulsar(sampleConfig, () => runResult);
+      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

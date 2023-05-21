@@ -11,8 +11,7 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import {
   mockedGenerators as serverGenerators,
-  shouldComposeWithKafka,
-  shouldComposeWithPulsar,
+  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.mjs';
 import { GENERATOR_SERVER, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
@@ -105,8 +104,7 @@ describe(`generator - ${databaseType}`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-      shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithPulsar(sampleConfig, () => runResult);
+      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(sampleConfig, () => runResult);
     });
   });

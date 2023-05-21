@@ -28,7 +28,7 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 
 import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.mjs';
-import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithPulsar } from '../server/__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -100,8 +100,7 @@ describe('generator - elasticsearch', () => {
               (sampleConfig.applicationType !== MICROSERVICE && !sampleConfig.skipUserManagement))
         );
       });
-      shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithPulsar(sampleConfig, () => runResult);
+      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
     });
   });
 });

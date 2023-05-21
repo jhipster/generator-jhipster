@@ -90,23 +90,22 @@ echo "::endgroup::"
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
-  'generators/spring-data-couchbase' \
   'generators/cucumber' \
-  'generators/spring-data-elasticsearch' \
   'generators/gatling' \
   'generators/gradle' \
-  'generators/spring-cloud-steam' \
+  'generators/liquibase' \
+  'generators/liquibase-changelogs' \
   'generators/maven' \
-  'generators/spring-data-mongodb' \
-  'generators/pulsar' \
   'generators/server' \
   'generators/spring-cache' \
+  'generators/spring-cloud-steam' \
   'generators/spring-data-cassandra' \
+  'generators/spring-data-couchbase' \
+  'generators/spring-data-elasticsearch' \
+  'generators/spring-data-mongodb' \
   'generators/spring-data-neo4j' \
   'generators/spring-data-relational' \
   'generators/spring-websocket' \
-  'generators/database-changelog' \
-  'generators/database-changelog-liquibase' \
   || SERVER=true ANY=true
 echo "::endgroup::"
 
