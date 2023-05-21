@@ -20,8 +20,8 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_SPRING_CLOUD_STREAM, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
-import cleanupKafkaFilesTask from './cleanup.mjs';
-import writeKafkaFilesTask from './files.mjs';
+import cleanupFilesTask from './cleanup.mjs';
+import writeFilesTask from './files.mjs';
 
 export default class KafkaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -36,7 +36,7 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
       preparing({ application }) {
         application.packageInfoJavadocs?.push({
           packageName: `${application.packageName}.broker`,
-          documentation: 'Kafta consumers and providers',
+          documentation: 'Spring cloud consumers and providers',
         });
       },
     });
@@ -48,8 +48,8 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanupKafkaFilesTask,
-      writeKafkaFilesTask,
+      cleanupFilesTask,
+      writeFilesTask,
     });
   }
 
@@ -59,24 +59,28 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      customizeApplication({ source, application }) {
-        source.addLogbackMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
-        source.addLogbackTestLog?.({ name: 'kafka', level: 'WARN' });
-        source.addLogbackTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
-        source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedKafka' });
+      customizeApplicationForKafka({ source, application }) {
+        if (application.messageBrokerKafka) {
+          source.addLogbackMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
+          source.addLogbackTestLog?.({ name: 'kafka', level: 'WARN' });
+          source.addLogbackTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
+          source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedKafka' });
 
-        source.addTestSpringFactory?.({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.KafkaTestContainersSpringContextCustomizerFactory`,
-        });
-      },
-      applyGradleScript({ source, application }) {
-        if (application.buildToolGradle) {
-          source.applyFromGradle?.({ script: 'gradle/kafka.gradle' });
+          source.addTestSpringFactory?.({
+            key: 'org.springframework.test.context.ContextCustomizerFactory',
+            value: `${application.packageName}.config.KafkaTestContainersSpringContextCustomizerFactory`,
+          });
         }
       },
-      addDependencies({ application, source }) {
-        if (application.buildToolMaven) {
+      applyKafkaGradleScript({ source, application }) {
+        if (application.buildToolGradle && application.messageBrokerKafka) {
+          if (application.messageBrokerKafka) {
+            source.applyFromGradle?.({ script: 'gradle/kafka.gradle' });
+          }
+        }
+      },
+      addKafkaMavenDependencies({ application, source }) {
+        if (application.buildToolMaven && application.messageBrokerKafka) {
           source.addMavenDependency?.([
             {
               groupId: 'org.springframework.cloud',
@@ -107,6 +111,42 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
               scope: 'test',
             },
           ]);
+        }
+      },
+      customizeApplicationForPulsar({ source, application }) {
+        if (application.messageBrokerPulsar) {
+          source.addLogbackMainLog?.({ name: 'org.apache.pulsar', level: 'INFO' });
+          source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedPulsar' });
+
+          source.addTestSpringFactory?.({
+            key: 'org.springframework.test.context.ContextCustomizerFactory',
+            value: `${application.packageName}.config.PulsarTestContainersSpringContextCustomizerFactory`,
+          });
+        }
+      },
+      applyPulsarGradleScript({ source, application }) {
+        if (application.buildToolGradle) {
+          source.applyFromGradle?.({ script: 'gradle/pulsar.gradle' });
+        }
+      },
+      addPulsarMavenDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          const { javaDependencies } = application;
+          source.addMavenDefinition?.({
+            properties: [{ property: 'spring-pulsar.version', value: javaDependencies?.['spring-pulsar'] }],
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-stream' },
+              {
+                groupId: 'org.springframework.pulsar',
+                artifactId: 'spring-pulsar-spring-cloud-stream-binder',
+                // eslint-disable-next-line no-template-curly-in-string
+                version: '${spring-pulsar.version}',
+              },
+              { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'pulsar', scope: 'test' },
+            ],
+          });
         }
       },
     });

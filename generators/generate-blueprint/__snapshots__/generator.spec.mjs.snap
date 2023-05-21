@@ -557,18 +557,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/project-name/templates/template-file-project-name.ejs": {
     "stateCleared": "modified",
   },
-  "generators/pulsar/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/pulsar/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/pulsar/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/pulsar/templates/template-file-pulsar.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/react/generator.mjs": {
     "stateCleared": "modified",
   },

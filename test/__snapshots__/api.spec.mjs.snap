@@ -47,7 +47,6 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_OPENSHIFT": "openshift",
   "GENERATOR_PAGE": "page",
   "GENERATOR_PROJECT_NAME": "project-name",
-  "GENERATOR_PULSAR": "pulsar",
   "GENERATOR_REACT": "react",
   "GENERATOR_SERVER": "server",
   "GENERATOR_SPRING_CACHE": "spring-cache",

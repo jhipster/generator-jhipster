@@ -11,7 +11,6 @@ import {
   GENERATOR_SPRING_DATA_CASSANDRA,
   GENERATOR_SPRING_DATA_COUCHBASE,
   GENERATOR_SPRING_DATA_MONGODB,
-  GENERATOR_PULSAR,
   GENERATOR_MAVEN,
   GENERATOR_LIQUIBASE,
   GENERATOR_LANGUAGES,
@@ -38,7 +37,6 @@ export const mockedGenerators = [
   `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`,
   `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`,
   `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
-  `jhipster:${GENERATOR_PULSAR}`,
   `jhipster:${GENERATOR_SPRING_CACHE}`,
   `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
 ];
@@ -73,11 +71,11 @@ export const shouldComposeWithPulsar = (sampleConfig, runResultSupplier) => {
   const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
   if (pulsarEnabled) {
     it(`should compose with ${PULSAR} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].calledOnce);
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].calledOnce);
     });
   } else {
     it(`should not compose with ${PULSAR} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].notCalled);
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].notCalled);
     });
   }
 };
