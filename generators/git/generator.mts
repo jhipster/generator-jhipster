@@ -108,7 +108,7 @@ export default class InitGenerator extends BaseGenerator {
           this.debug('Committing files to git');
           const git = this.createGit();
           const repositoryRoot = await git.revparse(['--show-toplevel']);
-          const result = await git.log(['--', '.yo-rc.json']).catch(() => {});
+          const result = await git.log(['-n', '1', '--', '.yo-rc.json']).catch(() => {});
           if (result && result.total > 0) {
             this.log.info(
               `Found .yo-rc.json in Git from ${repositoryRoot}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
