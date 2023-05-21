@@ -50,7 +50,7 @@ import {
   GENERATOR_GATLING,
   GENERATOR_GRADLE,
   GENERATOR_JAVA,
-  GENERATOR_KAFKA,
+  GENERATOR_SPRING_CLOUD_STREAM,
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
   GENERATOR_SPRING_DATA_MONGODB,
@@ -279,7 +279,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_NEO4J);
         }
         if (messageBroker === KAFKA) {
-          await this.composeWithJHipster(GENERATOR_KAFKA);
+          await this.composeWithJHipster(GENERATOR_SPRING_CLOUD_STREAM);
         }
         if (messageBroker === PULSAR) {
           await this.composeWithJHipster(GENERATOR_PULSAR);

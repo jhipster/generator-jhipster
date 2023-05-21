@@ -15,7 +15,7 @@ import {
   GENERATOR_MAVEN,
   GENERATOR_LIQUIBASE,
   GENERATOR_LANGUAGES,
-  GENERATOR_KAFKA,
+  GENERATOR_SPRING_CLOUD_STREAM,
   GENERATOR_GRADLE,
   GENERATOR_DOCKER,
   GENERATOR_COMMON,
@@ -31,7 +31,7 @@ export const mockedGenerators = [
   `jhipster:${GENERATOR_DOCKER}`,
   `jhipster:${GENERATOR_GATLING}`,
   `jhipster:${GENERATOR_GRADLE}`,
-  `jhipster:${GENERATOR_KAFKA}`,
+  `jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`,
   `jhipster:${GENERATOR_LANGUAGES}`,
   `jhipster:${GENERATOR_LIQUIBASE}`,
   `jhipster:${GENERATOR_MAVEN}`,
@@ -60,11 +60,11 @@ export const shouldComposeWithKafka = (sampleConfig, runResultSupplier) => {
   const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
   if (kafkaEnabled) {
     it(`should compose with ${KAFKA} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:kafka'].calledOnce);
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].calledOnce);
     });
   } else {
     it(`should not compose with ${KAFKA} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:kafka'].notCalled);
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].notCalled);
     });
   }
 };

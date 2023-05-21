@@ -19,7 +19,7 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_KAFKA, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import { GENERATOR_SPRING_CLOUD_STREAM, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import cleanupKafkaFilesTask from './cleanup.mjs';
 import writeKafkaFilesTask from './files.mjs';
 
@@ -27,7 +27,7 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_KAFKA);
+      await this.composeWithBlueprints(GENERATOR_SPRING_CLOUD_STREAM);
     }
   }
 

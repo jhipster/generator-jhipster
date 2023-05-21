@@ -95,7 +95,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/spring-data-elasticsearch' \
   'generators/gatling' \
   'generators/gradle' \
-  'generators/kafka' \
+  'generators/spring-cloud-steam' \
   'generators/maven' \
   'generators/spring-data-mongodb' \
   'generators/pulsar' \

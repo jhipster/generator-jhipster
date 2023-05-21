@@ -425,18 +425,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/jdl/templates/template-file-jdl.ejs": {
     "stateCleared": "modified",
   },
-  "generators/kafka/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/kafka/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/kafka/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/kafka/templates/template-file-kafka.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/kubernetes-helm/generator.mjs": {
     "stateCleared": "modified",
   },
@@ -615,6 +603,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-cache/templates/template-file-spring-cache.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/templates/template-file-spring-cloud-stream.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-controller/generator.mjs": {
