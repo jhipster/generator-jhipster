@@ -43,7 +43,7 @@ export const vueFiles = {
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationBlock,
-      templates: ['index.ts'],
+      templates: ['index.ts', 'core/error/error-loading.vue'],
     },
     {
       condition: generator => generator.microfrontend,

@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Router<% if (applicationTypeGateway && microfrontend) { %>, { RouteConfig }<% } %> from 'vue-router';
+import { createRouter as createVueRouter, createWebHistory<% if (applicationTypeGateway && microfrontend) { %>, RouteRecordRaw<% } %> } from 'vue-router';
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
@@ -10,10 +9,8 @@ import admin from '@/router/admin';
 import entities from '@/router/entities';
 import pages from '@/router/pages';
 
-Vue.use(Router);
-
-export const createRouter = () => new Router({
-  mode: 'history',
+export const createRouter = () =>   createVueRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -48,7 +45,7 @@ export const lazyRoutes = Promise.all([
   <%_ for (const remote of microfrontends) { _%>
   import('@<%= remote.lowercaseBaseName %>/entities-router')
     .then(<%= remote.lowercaseBaseName %>Router => {
-      router.addRoute(<%= remote.lowercaseBaseName %>Router.default as RouteConfig);
+      router.addRoute(<%= remote.lowercaseBaseName %>Router.default as RouteRecordRaw);
       return <%= remote.lowercaseBaseName %>Router.default;
     }).catch(() => {
       console.log("Error loading <%= remote.lowercaseBaseName %> menus. Make sure it's up.");
@@ -61,7 +58,7 @@ router.beforeResolve(async (to, from, next) => {
   if (!to.matched.length) {
 <%_ if (applicationTypeGateway && microfrontend) { _%>
     await lazyRoutes;
-    if (router.match(to.fullPath).matched.length > 0) {
+    if (router.resolve(to.fullPath).matched.length > 0) {
       next({ path: to.fullPath });
       return;
     }

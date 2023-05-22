@@ -160,7 +160,7 @@ describe(`generator - ${clientFramework}`, () => {
             );
             assertion(
               `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
-              '<b-dropdown-item  to="/admin/metrics" active-class="active">\n' +
+              '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
                 '            <font-awesome-icon icon="tachometer-alt" />\n' +
                 '            <span v-text="t$(\'global.menu.admin.metrics\')"></span>\n' +
                 '          </b-dropdown-item>\n' +
@@ -168,11 +168,11 @@ describe(`generator - ${clientFramework}`, () => {
                 '            <font-awesome-icon icon="heart" />\n' +
                 '            <span v-text="t$(\'global.menu.admin.health\')"></span>\n' +
                 '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item  to="/admin/configuration" active-class="active">\n' +
+                '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
                 '            <font-awesome-icon icon="cogs" />\n' +
                 '            <span v-text="t$(\'global.menu.admin.configuration\')"></span>\n' +
                 '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item  to="/admin/logs" active-class="active">\n' +
+                '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
                 '            <font-awesome-icon icon="tasks" />\n' +
                 '            <span v-text="t$(\'global.menu.admin.logs\')"></span>\n' +
                 '          </b-dropdown-item>'

@@ -1,12 +1,8 @@
 import { ref } from 'vue';
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import EntitiesMenu from '@/entities/entities-menu.vue';
-import type EntitiesMenuComponent from '@/entities/entities-menu.component';
-import { initI18N } from '@/shared/config/config';
 
-type EntitiesMenuComponentType = Vue & InstanceType<typeof EntitiesMenuComponent>;
-
-const localVue = createLocalVue();
+type EntitiesMenuComponentType = InstanceType<typeof EntitiesMenu>;
 
 describe('EntitiesMenu', () => {
   let translationService;
@@ -17,16 +13,17 @@ describe('EntitiesMenu', () => {
 
   describe('using microfrontendI18n', () => {
     beforeEach(() => {
-      shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
-        localVue,
-        stubs: {
-          'b-dropdown-item': true,
-          'font-awesome-icon': true,
-        },    
-        provide: {
-          translationService,
-          microfrontendI18n: true,
-          currentLanguage: ref('<%- nativeLanguage %>'),
+      shallowMount(EntitiesMenu, {
+        global: {
+          stubs: {
+            'b-dropdown-item': true,
+            'font-awesome-icon': true,
+          },    
+          provide: {
+            translationService,
+            microfrontendI18n: true,
+            currentLanguage: ref('<%- nativeLanguage %>'),
+          },
         },
       });
     });
@@ -38,15 +35,17 @@ describe('EntitiesMenu', () => {
 
   describe('not using microfrontendI18n', () => {
     beforeEach(() => {
-      shallowMount<EntitiesMenuComponentType>(EntitiesMenu, {
-        localVue,
-        stubs: {
-          'b-dropdown-item': true,
-          'font-awesome-icon': true,
-        },    
-        provide: {
-          translationService,
-          microfrontendI18n: false,
+      shallowMount(EntitiesMenu, {
+        global: {
+          stubs: {
+            'b-dropdown-item': true,
+            'font-awesome-icon': true,
+          },    
+          provide: {
+            translationService,
+            microfrontendI18n: false,
+            currentLanguage: ref('<%- nativeLanguage %>'),
+          },
         },
       });
     });

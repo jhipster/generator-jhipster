@@ -1,10 +1,11 @@
 import { defineComponent, computed } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useStore } from '@/store';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: 'Ribbon',
   setup(prop) {
     const store = useStore();

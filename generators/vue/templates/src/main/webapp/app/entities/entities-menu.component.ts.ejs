@@ -8,13 +8,14 @@ import {
 <%_ } _%>
 } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 <%_ if (enableTranslation && applicationTypeMicroservice) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: 'EntitiesMenu',
 <%_ if (enableTranslation) { _%>
   setup() {

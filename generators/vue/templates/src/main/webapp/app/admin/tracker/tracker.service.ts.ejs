@@ -1,5 +1,5 @@
 import { ComputedRef, inject, ref, watch } from 'vue';
-import { useRouter } from 'vue-router/composables';
+import { useRouter } from 'vue-router';
 import * as SockJS from 'sockjs-client';
 import { map } from 'rxjs';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
@@ -17,7 +17,7 @@ export const useTrackerService = ({ stomp }: { stomp?: RxStomp } = {}) => {
 
   watch(trackerService.status, value => {
     if (value === 'open') {
-      trackerService.sendActivity(router.currentRoute.fullPath);
+      trackerService.sendActivity(router.currentRoute.value.fullPath);
     }
   });
 

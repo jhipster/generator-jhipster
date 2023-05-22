@@ -61,7 +61,7 @@ describe('generator - vue - transform', () => {
       expect(
         removeDeclarations({
           content: `
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 return {
   t$,
   foo,

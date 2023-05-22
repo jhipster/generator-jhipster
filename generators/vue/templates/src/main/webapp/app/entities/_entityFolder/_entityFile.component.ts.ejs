@@ -1,6 +1,6 @@
 import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
 import { useIntersectionObserver } from '@vueuse/core';
@@ -17,6 +17,7 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%= entityAngularName %>',
   setup() {
 <%_ if (enableTranslation) { _%>

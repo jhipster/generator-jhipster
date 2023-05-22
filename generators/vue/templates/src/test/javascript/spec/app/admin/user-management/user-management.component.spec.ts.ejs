@@ -2,19 +2,14 @@
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
 import { ref } from 'vue';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
 import AlertService from '@/shared/alert/alert.service';
 import UserManagement from '@/admin/user-management/user-management.vue';
-import type UserManagementComponent from '@/admin/user-management/user-management.component';
 
-type UserManagementComponentType = Vue & InstanceType<typeof UserManagementComponent>;
-
-const localVue = createLocalVue();
-
-localVue.directive('b-modal', {});
+type UserManagementComponentType = InstanceType<typeof UserManagement>;
 
 const axiosStub = {
   delete: sinon.stub(axios, 'delete'),
@@ -40,19 +35,24 @@ describe('UserManagement Component', () => {
       } as any,
     });
 
-    const wrapper = shallowMount<UserManagementComponentType>(UserManagement, {
-      localVue,
-      stubs: {
-        bPagination: true,
-        jhiItemCount: true,
-        bModal: true,
-        'router-link': true,
-        'jhi-sort-indicator': true,
-        'font-awesome-icon': true,
-      },
-      provide: {
-        alertService,
-        currentUsername: ref(''),
+    const wrapper = shallowMount(UserManagement, {
+      global: {
+        stubs: {
+          bPagination: true,
+          jhiItemCount: true,
+          bModal: true,
+          'router-link': true,
+          'jhi-sort-indicator': true,
+          'font-awesome-icon': true,
+          'b-button': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          currentUsername: ref(''),
+        },
       },
     });
     userManagement = wrapper.vm;

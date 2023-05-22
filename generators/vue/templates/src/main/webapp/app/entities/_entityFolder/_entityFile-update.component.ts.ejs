@@ -1,8 +1,8 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { useRoute, useRouter } from 'vue-router/composables';
+import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core'
 
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -35,6 +35,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%= entityAngularName %>Update',
   setup() {
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());

@@ -1,14 +1,15 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { useRoute } from 'vue-router/composables';
+import { useRoute } from 'vue-router';
 
 import { useDateFormat } from '@/shared/composables'
 import UserManagementService from './user-management.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementView',
   setup() {
     const route = useRoute();

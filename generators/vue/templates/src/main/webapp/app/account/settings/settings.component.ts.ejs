@@ -1,6 +1,6 @@
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 import languages from '@/shared/config/languages';
 <%_ } _%>
 import { useVuelidate } from '@vuelidate/core'
@@ -31,6 +31,7 @@ const validations = {
 };
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: 'Settings',
   validations,
   setup() {
@@ -57,10 +58,10 @@ export default defineComponent({
     };
   },
   methods: {
-    save(): void {
+    save() {
       this.error = null;
       this.errorEmailExists = null;
-      axios
+      return axios
         .post('api/account', this.settingsAccount)
         .then(() => {
           this.error = null;
