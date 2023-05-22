@@ -1,6 +1,7 @@
+import { vitest } from 'vitest';
 import { ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
-import EntitiesMenu from '@/entities/entities-menu.vue';
+import EntitiesMenu from '../../<%- clientSrcDirRelativeToClientTestDir %>entities/entities-menu.vue';
 
 type EntitiesMenuComponentType = InstanceType<typeof EntitiesMenu>;
 
@@ -8,7 +9,7 @@ describe('EntitiesMenu', () => {
   let translationService;
 
   beforeEach(() => {
-    translationService = { loadTranslations: jest.fn() };
+    translationService = { loadTranslations: vitest.fn() };
   });
 
   describe('using microfrontendI18n', () => {

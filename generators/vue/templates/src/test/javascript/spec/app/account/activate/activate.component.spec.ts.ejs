@@ -1,15 +1,16 @@
+import { vitest } from 'vitest';
 import { shallowMount, ComponentMountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import Activate from '@/account/activate/activate.vue';
-import LoginService from '@/account/login.service';
+import Activate from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/activate/activate.vue';
+import LoginService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/login.service';
 
 type ActivateComponentType = InstanceType<typeof Activate>;
 
 const route = { query: { key: 'key' } };
 
-jest.mock('vue-router', () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
 }));
 
@@ -24,7 +25,7 @@ describe('Activate Component', () => {
   let mountOptions: ComponentMountingOptions<ActivateComponentType>;
 
   beforeEach(() => {
-    loginService = new LoginService({ emit: jest.fn() });
+    loginService = new LoginService({ emit: vitest.fn() });
     mountOptions = {
       global: {
         provide: {

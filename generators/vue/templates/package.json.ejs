@@ -56,14 +56,14 @@
   "devDependencies": {
     "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@rushstack/eslint-patch": "<%= nodeDependencies['@rushstack/eslint-patch'] %>",
-    "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "@types/sinon": "<%= nodeDependencies['@types/sinon'] %>",
     "@vue/compiler-sfc": "<%= nodeDependencies.vue %>",
+    "@vitejs/plugin-vue": "<%= nodeDependencies['@vitejs/plugin-vue'] %>",
+    "@vitest/coverage-c8": "<%= nodeDependencies.vitest %>",
     "@vue/eslint-config-prettier": "<%= nodeDependencies['@vue/eslint-config-prettier'] %>",
     "@vue/eslint-config-typescript": "<%= nodeDependencies['@vue/eslint-config-typescript'] %>",
     "@vue/test-utils": "<%= nodeDependencies['@vue/test-utils'] %>",
-    "@vue/vue3-jest": "<%= nodeDependencies['@vue/vue3-jest'] %>",
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
@@ -77,15 +77,11 @@
   <%_ }); _%>
 <%_ } _%>
     "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
-    "jest": "<%= nodeDependencies['jest'] %>",
-    "jest-environment-jsdom": "<%= nodeDependencies['jest-environment-jsdom'] %>",
-    "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
-    "jest-serializer-vue": "<%= nodeDependencies['jest-serializer-vue'] %>",
-    "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
 <%_ if (enableTranslation) { _%>
     "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
+    "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
     "mini-css-extract-plugin": "<%= nodeDependencies['mini-css-extract-plugin'] %>",
     "numeral": "<%= nodeDependencies['numeral'] %>",
     "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
@@ -105,12 +101,13 @@
     "sinon": "<%= nodeDependencies['sinon'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
     "terser-webpack-plugin": "<%= nodeDependencies['terser-webpack-plugin'] %>",
-    "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
     "ts-loader": "<%= nodeDependencies['ts-loader'] %>",
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
+    "vitest": "<%= nodeDependencies.vitest %>",
+    "vitest-sonar-reporter": "<%= nodeDependencies['vitest-sonar-reporter'] %>",
     "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
     "vue-style-loader": "<%= nodeDependencies['vue-style-loader'] %>",
     "webpack": "<%= nodeDependencies['webpack'] %>",
@@ -139,12 +136,11 @@
     "serve": "<%= clientPackageManager %> run start --",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= clientTestDir %>jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
+    "vitest-run": "vitest --run --coverage",
+    "vitest": "vitest",
     "pretest": "<%= clientPackageManager %> run lint",
-    "test": "<%= clientPackageManager %> run jest --",
-    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
-    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "test": "<%= clientPackageManager %> run vitest-run --",
+    "test:watch": "<%= clientPackageManager %> run vitest",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",
@@ -154,12 +150,6 @@
     "webapp:test": "<%= clientPackageManager %> run test --",
     "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
     "webpack": "webpack --config webpack/webpack.common.js"
-  },
-<%_ // https://github.com/vuejs/vue-jest/issues/480#issuecomment-1330479635 _%>
-  "overrides": {
-    "@babel/core": "7.17.9",
-    "@babel/generator": "7.17.9",
-    "istanbul-lib-instrument": "5.2.0"
   },
   "browserslist": [
     "> 1%",

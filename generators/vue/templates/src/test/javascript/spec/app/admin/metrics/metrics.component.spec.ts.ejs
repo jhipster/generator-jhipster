@@ -2,8 +2,8 @@ import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import Metrics from '@/admin/metrics/metrics.vue';
-import MetricsService from '@/admin/metrics/metrics.service';
+import Metrics from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/metrics/metrics.vue';
+import MetricsService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/metrics/metrics.service';
 
 type MetricsComponentType = InstanceType<typeof Metrics>;
 

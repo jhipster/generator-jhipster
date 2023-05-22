@@ -1,9 +1,12 @@
+<%_ if (authenticationUsesCsrf) { _%>
+import { vitest } from 'vitest';
+<%_ } _%>
 import axios from 'axios';
 import sinon from 'sinon';
 
 import { createTestingPinia } from '@pinia/testing';
-import AccountService from '@/account/account.service';
-import { AccountStore, useStore } from '@/store';
+import AccountService from '../../<%- clientSrcDirRelativeToClientTestDir %>account/account.service';
+import { AccountStore, useStore } from '../../<%- clientSrcDirRelativeToClientTestDir %>store';
 
 const resetStore = (store: AccountStore) => {
   store.$reset();

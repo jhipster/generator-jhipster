@@ -1,6 +1,7 @@
+import { vitest } from 'vitest';
 import { ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
-import Home from '@/core/home/home.vue';
+import Home from '../../../<%- clientSrcDirRelativeToClientTestDir %>core/home/home.vue';
 
 type HomeComponentType = InstanceType<typeof Home>;
 
@@ -9,11 +10,11 @@ describe('Home', () => {
   let authenticated;
   let currentUsername;
 <%_ if (authenticationTypeJwt) { _%>
-  const loginService = { openLogin: jest.fn() };
+  const loginService = { openLogin: vitest.fn() };
 <%_ } else if (authenticationTypeSession) { _%>
-  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
+  const loginService = { openLogin: vitest.fn(), logout: vitest.fn() };
 <%_ } else if (authenticationTypeOauth2) { _%>
-  const loginService = { login: jest.fn(), logout: jest.fn() };
+  const loginService = { login: vitest.fn(), logout: vitest.fn() };
 <%_ } _%>
 
   beforeEach(() => {

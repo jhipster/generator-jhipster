@@ -27,6 +27,7 @@ export const vueFiles = {
         'tsconfig.json',
         '.postcssrc.js',
         '.eslintrc.js',
+        'vitest.config.ts',
         'webpack/config.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
@@ -232,8 +233,7 @@ export const vueFiles = {
     {
       ...clientTestBlock,
       templates: [
-        'jest.conf.js',
-        'spec/setup.js',
+        'spec/setup.ts',
         'spec/tsconfig.json',
         'spec/app/account/account.service.spec.ts',
         'spec/app/core/home/home.component.spec.ts',

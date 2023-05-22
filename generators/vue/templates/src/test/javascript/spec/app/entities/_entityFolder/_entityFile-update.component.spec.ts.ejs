@@ -18,17 +18,18 @@
 -%>
 <%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
+import { vitest } from 'vitest';
 import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { RouteLocation } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
+import { DATE_TIME_LONG_FORMAT } from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/composables/date-format';
 <%_ } _%>
-import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
-import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
+import <%= entityAngularName %>Update from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
+import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
 
 <%_
   const allRelationshipsThatNeedSelectOptions = Object
@@ -38,18 +39,18 @@ import AlertService from '@/shared/alert/alert.service';
 _%>
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-import UserService from '@/entities/user/user.service';
+import UserService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/user/user.service';
   <%_ } else { _%>
-import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
+import <%= relationship.otherEntity.entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
 
 type <%= entityAngularName %>UpdateComponentType = InstanceType<typeof <%= entityAngularName %>Update>;
 
 let route: Partial<RouteLocation>;
-const routerGoMock = jest.fn();
+const routerGoMock = vitest.fn();
 
-jest.mock('vue-router', () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
@@ -70,10 +71,10 @@ describe('Component Tests', () => {
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: jest.fn() } as any,
+        i18n: { t: vitest.fn() } as any,
 <%_ } _%>
         bvToast: {
-          toast: jest.fn(),
+          toast: vitest.fn(),
         } as any,
       });
 
@@ -106,7 +107,7 @@ describe('Component Tests', () => {
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
+      vitest.resetAllMocks();
     });
 
 <%_ if (anyFieldIsTimeDerived) { _%>

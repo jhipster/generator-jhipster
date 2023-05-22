@@ -362,9 +362,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "test/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "test/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -434,13 +431,16 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "test/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "test/spec/setup.js": {
+  "test/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "test/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -874,9 +874,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "test/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "test/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -967,13 +964,16 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "test/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "test/spec/setup.js": {
+  "test/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "test/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -1353,9 +1353,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "test/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "test/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1434,13 +1431,16 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "test/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "test/spec/setup.js": {
+  "test/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "test/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -1826,9 +1826,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "src/test/javascript2/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1907,13 +1904,16 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/test/javascript2/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/spec/setup.js": {
+  "src/test/javascript2/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -2413,9 +2413,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp2/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "src/test/javascript2/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -2530,13 +2527,16 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/test/javascript2/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/spec/setup.js": {
+  "src/test/javascript2/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -2904,9 +2904,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "src/test/javascript/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -2973,13 +2970,16 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/spec/setup.js": {
+  "src/test/javascript/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -3353,9 +3353,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/jest.conf.js": {
-    "stateCleared": "modified",
-  },
   "src/test/javascript/spec/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3422,13 +3419,16 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/spec/setup.js": {
+  "src/test/javascript/spec/setup.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/spec/tsconfig.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {

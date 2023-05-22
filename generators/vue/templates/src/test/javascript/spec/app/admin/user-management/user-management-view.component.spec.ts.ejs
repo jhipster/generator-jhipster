@@ -1,21 +1,22 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
+import { vitest } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { RouteLocation, Router } from 'vue-router';
 
-import AlertService from '@/shared/alert/alert.service';
-import UserManagementView from '@/admin/user-management/user-management-view.vue';
-import { Authority } from '@/shared/security/authority';
+import AlertService from '../../../<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
+import UserManagementView from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/user-management/user-management-view.vue';
+import { Authority } from '../../../<%- clientSrcDirRelativeToClientTestDir %>shared/security/authority';
 
 type UserManagementViewComponentType = InstanceType<typeof UserManagementView>;
 
 let route: Partial<RouteLocation>;
 let router: Router;
 
-jest.mock('vue-router', () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => router,
 }));
@@ -31,10 +32,10 @@ describe('UserManagementView Component', () => {
     route = {};
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-      i18n: { t: jest.fn() } as any,
+      i18n: { t: vitest.fn() } as any,
 <%_ } _%>
       bvToast: {
-        toast: jest.fn(),
+        toast: vitest.fn(),
       } as any,
     });
   });

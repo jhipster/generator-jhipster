@@ -1,9 +1,10 @@
+import { vitest } from 'vitest';
 import { ref, Ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter, Router } from 'vue-router';
 import { Subject } from 'rxjs';
 
-import TrackerService, { useTrackerService } from '@/admin/tracker/tracker.service';
+import TrackerService, { useTrackerService } from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/tracker/tracker.service';
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
@@ -15,18 +16,18 @@ describe('Tracker Service', () => {
 
   beforeEach(() => {
     router = createRouter({ history: createMemoryHistory(), routes: [] });
-    jest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
-    router.afterEach = jest.fn();
+    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
+    router.afterEach = vitest.fn();
     authenticated = ref(false);
 
     const watch$ = new Subject<any>();
 
     mockStomp = {
-      publish: jest.fn(),
-      watch: jest.fn().mockReturnValue(watch$),
-      configure: jest.fn(),
-      activate: jest.fn(),
-      deactivate: jest.fn(),
+      publish: vitest.fn(),
+      watch: vitest.fn().mockReturnValue(watch$),
+      configure: vitest.fn(),
+      activate: vitest.fn(),
+      deactivate: vitest.fn(),
       connectionState$: new Subject<any>(),
     };
 
@@ -73,7 +74,7 @@ describe('Tracker Service', () => {
 
   it('Should send activity on connected', async () => {
     // GIVEN
-    jest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
+    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
     const wrapper = shallowMount(TrackerApp, {
       global: {
         plugins: [router],
