@@ -25,7 +25,7 @@ import { fileURLToPath } from 'url';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
-import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka, shouldComposeWithPulsar } from './__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.mjs';
 import { GENERATOR_SERVER } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -99,8 +99,7 @@ describe(`generator - ${generator}`, () => {
             .withMockedGenerators(mockedGenerators);
         });
 
-        shouldComposeWithKafka(false, () => runResult);
-        shouldComposeWithPulsar(false, () => runResult);
+        shouldComposeWithSpringCloudStream(false, () => runResult);
       });
       describe('kafka', () => {
         let runResult;
@@ -113,8 +112,7 @@ describe(`generator - ${generator}`, () => {
             .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
-        shouldComposeWithKafka(true, () => runResult);
-        shouldComposeWithPulsar(false, () => runResult);
+        shouldComposeWithSpringCloudStream(true, () => runResult);
       });
       describe('pulsar', () => {
         let runResult;
@@ -127,8 +125,7 @@ describe(`generator - ${generator}`, () => {
             .withSkipWritingPriorities()
             .withMockedGenerators(mockedGenerators);
         });
-        shouldComposeWithPulsar(true, () => runResult);
-        shouldComposeWithKafka(false, () => runResult);
+        shouldComposeWithSpringCloudStream(true, () => runResult);
       });
     });
 
