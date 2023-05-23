@@ -50,12 +50,11 @@ import {
   GENERATOR_GATLING,
   GENERATOR_GRADLE,
   GENERATOR_JAVA,
-  GENERATOR_KAFKA,
+  GENERATOR_SPRING_CLOUD_STREAM,
   GENERATOR_LANGUAGES,
   GENERATOR_MAVEN,
   GENERATOR_SPRING_DATA_MONGODB,
   GENERATOR_SPRING_DATA_NEO4J,
-  GENERATOR_PULSAR,
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
@@ -278,11 +277,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else if (databaseType === NEO4J) {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_NEO4J);
         }
-        if (messageBroker === KAFKA) {
-          await this.composeWithJHipster(GENERATOR_KAFKA);
-        }
-        if (messageBroker === PULSAR) {
-          await this.composeWithJHipster(GENERATOR_PULSAR);
+        if (messageBroker === KAFKA || messageBroker === PULSAR) {
+          await this.composeWithJHipster(GENERATOR_SPRING_CLOUD_STREAM);
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_ELASTICSEARCH);

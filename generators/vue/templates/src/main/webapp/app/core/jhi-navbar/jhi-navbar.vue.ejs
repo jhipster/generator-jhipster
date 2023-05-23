@@ -76,7 +76,7 @@
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-          <b-dropdown-item  to="/admin/metrics" active-class="active">
+          <b-dropdown-item to="/admin/metrics" active-class="active">
             <font-awesome-icon icon="tachometer-alt" />
             <span v-text="t$('global.menu.admin.metrics')">Metrics</span>
           </b-dropdown-item>
@@ -84,11 +84,11 @@
             <font-awesome-icon icon="heart" />
             <span v-text="t$('global.menu.admin.health')">Health</span>
           </b-dropdown-item>
-          <b-dropdown-item  to="/admin/configuration" active-class="active">
+          <b-dropdown-item to="/admin/configuration" active-class="active">
             <font-awesome-icon icon="cogs" />
             <span v-text="t$('global.menu.admin.configuration')">Configuration</span>
           </b-dropdown-item>
-          <b-dropdown-item  to="/admin/logs" active-class="active">
+          <b-dropdown-item to="/admin/logs" active-class="active">
             <font-awesome-icon icon="tasks" />
             <span v-text="t$('global.menu.admin.logs')">Logs</span>
           </b-dropdown-item>
@@ -133,17 +133,17 @@
             </span>
           </template>
 <%_ if (generateUserManagement) { _%>
-          <b-dropdown-item data-cy="settings" to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item data-cy="settings" to="/account/settings" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />
             <span v-text="t$('global.menu.account.settings')">Settings</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="passwordItem" to="/account/password" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item data-cy="passwordItem" to="/account/password" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="lock" />
             <span v-text="t$('global.menu.account.password')">Password</span>
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
-          <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item to="/account/sessions" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="cloud" />
             <span v-text="t$('global.menu.account.sessions')">Sessions</span>
           </b-dropdown-item>
@@ -157,7 +157,7 @@
             <span v-text="t$('global.menu.account.login')">Sign in</span>
           </b-dropdown-item>
 <%_ if (generateUserManagement) { _%>
-          <b-dropdown-item data-cy="register" to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated" active-class="active">
+          <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span v-text="t$('global.menu.account.register')">Register</span>
           </b-dropdown-item>
@@ -265,10 +265,10 @@
 
   .logo-img {
     height: 100%;
-    background: url("/content/images/logo-jhipster.png") no-repeat center
-      center;
+    background: url("/content/images/logo-jhipster.png") no-repeat center center;
     background-size: contain;
     width: 100%;
     filter: drop-shadow(0 0 0.05rem white);
+    margin: 0 5px;
   }
 </style>

@@ -1,26 +1,25 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount } from '@vue/test-utils';
 
-import GatewayVue from '@/admin/gateway/gateway.vue';
-import type GatewayComponent from '@/admin/gateway/gateway.component';
-import GatewayService from '@/admin/gateway/gateway.service';
+import Gateway from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/gateway/gateway.vue';
+import GatewayService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/gateway/gateway.service';
 
-type GatewayComponentType = Vue & InstanceType<typeof GatewayComponent>;
-
-const localVue = createLocalVue();
+type GatewayComponentType = InstanceType<typeof Gateway>;
 
 describe('Gateway Component', () => {
-  let wrapper: Wrapper<GatewayComponentType>;
+  let wrapper;
   let comp: GatewayComponentType;
 
   beforeEach(() => {
     const gatewayService = new GatewayService();
-    jest.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
-    wrapper = shallowMount<GatewayComponentType>(GatewayVue, {
-      localVue,
-      stubs: {
-        'font-awesome-icon': true,
-      },
-      provide: { gatewayService },
+    vitest.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
+    wrapper = shallowMount(Gateway, {
+      global: {
+        stubs: {
+          'font-awesome-icon': true,
+        },
+        provide: { gatewayService },
+      }
     });
     comp = wrapper.vm;
   });

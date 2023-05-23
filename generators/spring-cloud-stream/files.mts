@@ -68,9 +68,39 @@ export const kafkaFiles: WriteFileSection<any, any> = {
   ],
 };
 
-export default function writeKafkaFilesTask(this: KafkaGenerator, { application }) {
-  return this.writeFiles({
-    sections: kafkaFiles,
-    context: application,
-  });
+export const pulsarFiles: WriteFileSection<any, any> = {
+  config: [
+    {
+      condition: data => data.buildToolGradle,
+      templates: ['gradle/pulsar.gradle'],
+    },
+  ],
+  test: [
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: [
+        'broker/PulsarIT.java',
+        'config/BrokerConfiguration.java',
+        'config/EmbeddedPulsar.java',
+        'config/PulsarTestContainer.java',
+        'config/PulsarTestContainersSpringContextCustomizerFactory.java',
+      ],
+    },
+  ],
+};
+
+export default async function writeFilesTask(this: KafkaGenerator, { application }) {
+  if (application.messageBrokerKafka) {
+    await this.writeFiles({
+      sections: kafkaFiles,
+      context: application,
+    });
+  }
+  if (application.messageBrokerPulsar) {
+    await this.writeFiles({
+      sections: pulsarFiles,
+      context: application,
+    });
+  }
 }

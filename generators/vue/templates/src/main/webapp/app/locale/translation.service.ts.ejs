@@ -1,13 +1,13 @@
 import axios from 'axios';
-import VueI18n from 'vue-i18n';
+import { Composer } from 'vue-i18n';
 import dayjs from 'dayjs';
 import languages from '@/shared/config/languages';
 
 export default class TranslationService {
-  private i18n: VueI18n;
+  private i18n: Composer;
   private languages = languages();
 
-  constructor(i18n: VueI18n) {
+  constructor(i18n: Composer) {
     this.i18n = i18n;
   }
 <%_ if (microfrontend) { _%>
@@ -32,7 +32,7 @@ export default class TranslationService {
 
   public setLocale(lang: string) {
     dayjs.locale(lang);
-    this.i18n.locale = lang;
+    this.i18n.locale.value = lang;
     axios.defaults.headers.common['Accept-Language'] = lang;
     document.querySelector('html').setAttribute('lang', lang);
 <%_ if (enableI18nRTL) { _%>

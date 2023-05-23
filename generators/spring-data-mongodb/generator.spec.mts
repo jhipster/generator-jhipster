@@ -29,9 +29,8 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {
   mockedGenerators as serverGenerators,
-  shouldComposeWithKafka,
+  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
-  shouldComposeWithPulsar,
 } from '../server/__test-support/index.mjs';
 import { GENERATOR_SPRING_DATA_MONGODB } from '../generator-list.mjs';
 
@@ -83,8 +82,7 @@ describe(`generator - ${databaseType}`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-      shouldComposeWithKafka(sampleConfig, () => runResult);
-      shouldComposeWithPulsar(sampleConfig, () => runResult);
+      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

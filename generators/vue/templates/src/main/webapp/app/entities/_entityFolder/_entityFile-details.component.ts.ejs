@@ -1,8 +1,8 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { useRoute, useRouter } from 'vue-router/composables';
+import { useRoute, useRouter } from 'vue-router';
 
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
@@ -15,6 +15,7 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%= entityAngularName %>Details',
   setup() {
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>

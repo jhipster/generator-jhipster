@@ -1,12 +1,13 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
 import LogsService from './logs.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Logs',
   setup() {
     const logsService = inject('logsService', () => new LogsService(), true);

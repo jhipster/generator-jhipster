@@ -17,21 +17,22 @@
  limitations under the License.
 -%>
 {
-  "extends": "../../../../tsconfig",
+  "extends": "<%- applicationRootRelativeToClientTestDir %>tsconfig",
   "compilerOptions": {
-    "outDir": "../../../../<%= temporaryDir %>out-tsc/spec",
+    "outDir": "<%- applicationRootRelativeToClientTestDir %><%= temporaryDir %>out-tsc/spec",
 <%_ if (microfrontend && applicationTypeGateway) { _%>
     "paths": {
   <%_ for (const remote of microfrontends) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["../../../../<%= clientTestDir %>spec/app/microfrontends/*"],
+      "@<%= remote.lowercaseBaseName %>/*": ["<%- applicationRootRelativeToClientTestDir %><%= clientTestDir %>spec/app/microfrontends/*"],
   <%_ } _%>
       "@/*": ["*"]
     },
 <%_ } _%>
-    "types": ["jest", "node"]
+    "types": ["vitest/globals", "node"]
   },
   "include": [
-    "../../../../<%= clientSrcDir %>app",
+    "<%- applicationRootRelativeToClientTestDir %><%= clientSrcDir %>app",
+    "<%- applicationRootRelativeToClientTestDir %>vitest.config.ts",
     "./"
   ]
 }

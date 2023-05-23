@@ -1,18 +1,15 @@
+import { vitest } from 'vitest';
 import { computed } from 'vue';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
-import Register from '@/account/register/register.vue';
-import type RegisterComponent from '@/account/register/register.component';
-import RegisterService from '@/account/register/register.service';
-import LoginService from '@/account/login.service';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../../<%- clientSrcDirRelativeToClientTestDir %>constants';
+import Register from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/register/register.vue';
+import RegisterService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/register/register.service';
+import LoginService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/login.service';
 
-type RegisterComponentType = Vue & InstanceType<typeof RegisterComponent>;
-
-const localVue = createLocalVue();
-
+type RegisterComponentType = InstanceType<typeof Register>;
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -32,14 +29,15 @@ describe('Register Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
-    loginService = new LoginService({ emit: jest.fn() });
-    jest.spyOn(loginService, 'openLogin');
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
 
-    const wrapper = shallowMount<RegisterComponentType>(Register, {
-      localVue,
-      provide: {
-        loginService,
-        currentLanguage: computed(() => '<%= nativeLanguage %>'),
+    const wrapper = shallowMount(Register, {
+      global: {
+        provide: {
+          loginService,
+          currentLanguage: computed(() => '<%= nativeLanguage %>'),
+        },
       },
     });
     register = wrapper.vm;

@@ -1,6 +1,6 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import numeral from 'numeral';
 
@@ -9,6 +9,7 @@ import <%=jhiPrefixCapitalized%>MetricsModal from './metrics-modal.vue';
 import MetricsService from './metrics.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Metrics',
   components: {
     'metrics-modal': <%=jhiPrefixCapitalized%>MetricsModal,
@@ -38,8 +39,8 @@ export default defineComponent({
     this.refresh();
   },
   methods: {
-    refresh(): void {
-      this.metricsService
+    refresh() {
+      return this.metricsService
         .getMetrics()
         .then(resultsMetrics => {
           this.metrics = resultsMetrics.data;

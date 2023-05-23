@@ -1,6 +1,6 @@
 import { defineComponent, provide } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import Ribbon from '@/core/ribbon/ribbon.vue';
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
@@ -13,6 +13,7 @@ import { useAlertService } from '@/shared/alert/alert.service';
 import '@/shared/config/dayjs';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: 'App',
   components: {
     ribbon: Ribbon,

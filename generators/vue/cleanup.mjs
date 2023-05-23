@@ -53,5 +53,7 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientSrcDir}app/shared/config/formatter.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/shared/config/formatter.spec.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/date/filters.ts`);
+    this.removeFile(`${application.clientTestDir}jest.conf.js`);
+    this.removeFile(`${application.clientTestDir}spec/setup.js`);
   }
 }

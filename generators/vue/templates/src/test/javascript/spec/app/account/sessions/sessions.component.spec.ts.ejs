@@ -1,23 +1,19 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
-import { useStore } from '@/store';
-import type SessionsComponent from '@/account/sessions/sessions.component';
-import Sessions from '@/account/sessions/sessions.vue';
-import router from '@/router';
+import { useStore } from '../../../<%- clientSrcDirRelativeToClientTestDir %>store';
+import Sessions from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/sessions/sessions.vue';
+import router from '../../../<%- clientSrcDirRelativeToClientTestDir %>router';
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import TranslationService from '../../../<%- clientSrcDirRelativeToClientTestDir %>locale/translation.service';
 <%_ } _%>
 
-type SessionsComponentType = Vue & InstanceType<typeof SessionsComponent>;
-
-const localVue = createLocalVue();
+type SessionsComponentType = InstanceType<typeof Sessions>;
 
 const pinia = createTestingPinia({ stubActions: false });
-localVue.use(PiniaVuePlugin);
+
 const store = useStore();
 
 const axiosStub = {
@@ -37,9 +33,10 @@ describe('Sessions Component', () => {
       login: 'username',
     });
 
-    const wrapper = shallowMount<SessionsComponentType>(Sessions, {
-      pinia,
-      localVue,
+    const wrapper = shallowMount(Sessions, {
+      global: {
+        plugins: [pinia],
+      },
     });
     sessions = wrapper.vm;
   });
@@ -59,7 +56,7 @@ describe('Sessions Component', () => {
     axiosStub.delete.resolves();
 
     // When
-    sessions.invalidate('session');
+    await sessions.invalidate('session');
     await sessions.$nextTick();
 
     // Then
@@ -75,7 +72,7 @@ describe('Sessions Component', () => {
     axiosStub.delete.rejects();
 
     // When
-    sessions.invalidate('session');
+    await sessions.invalidate('session');
     await sessions.$nextTick();
 
     // Then

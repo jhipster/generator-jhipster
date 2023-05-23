@@ -1,12 +1,13 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import HealthService from './health.service';
 import <%=jhiPrefixCapitalized%>HealthModal from './health-modal.vue';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Health',
   components: {
     'health-modal': <%=jhiPrefixCapitalized%>HealthModal,

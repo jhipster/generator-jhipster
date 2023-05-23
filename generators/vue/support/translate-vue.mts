@@ -35,7 +35,7 @@ function replaceTranslationAttributes({ content, getWebappTranslation }: { conte
 
 export function removeDeclarations({ content }: { content: string }) {
   return content
-    .replaceAll(/\nimport {\s*useI18n\s*} from 'vue-i18n-bridge';/g, '')
+    .replaceAll(/\nimport {\s*useI18n\s*} from 'vue-i18n';/g, '')
     .replaceAll(/\n\s*t\$,/g, '')
     .replaceAll(/\n\s*t\$:\s*useI18n\(\).t,/g, '');
 }

@@ -1,6 +1,5 @@
 <%_ if (enableTranslation) { _%>
-import VueI18n, { DateTimeFormats } from 'vue-i18n';
-import { createI18n } from 'vue-i18n-bridge';
+import { createI18n, IntlDateTimeFormats } from 'vue-i18n';
 <%_ } _%>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -44,7 +43,7 @@ import { faUsersCog } from '@fortawesome/free-solid-svg-icons/faUsersCog';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 <%_ if (enableTranslation) { _%>
-const datetimeFormats: DateTimeFormats = {
+const datetimeFormats: IntlDateTimeFormats = {
   // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
 }
 <%_ } _%>
@@ -94,9 +93,8 @@ export function initFortAwesome(vue) {
 }
 
 <%_ if (enableTranslation) { _%>
-export function initI18N(vue, opts: any = {}) {
-  vue.use(VueI18n, { bridge: true });
-  const i18n = createI18n(
+export function initI18N(opts: any = {}) {
+  return createI18n(
     {
       missingWarn: false,
       fallbackWarn: false,
@@ -104,11 +102,8 @@ export function initI18N(vue, opts: any = {}) {
       datetimeFormats,
       silentTranslationWarn: true,
       ...opts,
-    },
-    VueI18n
-  ) as unknown as VueI18n;
-  vue.use(i18n);
-  return i18n;
+    }
+  );
 }
 
 <%_ } _%>

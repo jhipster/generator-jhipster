@@ -1,6 +1,6 @@
 import { computed, defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useVuelidate } from '@vuelidate/core'
 import { email, helpers, maxLength, minLength, required, sameAs } from '@vuelidate/validators';
@@ -11,6 +11,7 @@ import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 const loginPattern = helpers.regex(/<%- webappLoginRegExp %>/);
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: 'Register',
   validations() {
     return {

@@ -1,6 +1,6 @@
 import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import UserManagementService from './user-management.service';
 import { useAlertService } from '@/shared/alert/alert.service';
@@ -8,6 +8,7 @@ import { useAlertService } from '@/shared/alert/alert.service';
 import { useDateFormat } from '@/shared/composables'
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
   mounted(): void {
     this.loadAll();

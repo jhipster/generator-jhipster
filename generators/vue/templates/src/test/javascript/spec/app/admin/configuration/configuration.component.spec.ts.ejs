@@ -1,14 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import Configuration from '@/admin/configuration/configuration.vue';
-import type ConfigurationComponent from '@/admin/configuration/configuration.component';
+import Configuration from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/configuration/configuration.vue';
 
-type ConfigurationComponentType = Vue & InstanceType<typeof ConfigurationComponent>;
-
-const localVue = createLocalVue();
-
+type ConfigurationComponentType = InstanceType<typeof Configuration>;
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -22,9 +18,7 @@ describe('Configuration Component', () => {
     axiosStub.get.resolves({ data: { contexts: [
       { beans: [{prefix: 'A'}, {prefix: 'B'}] }
     ], propertySources: [{ properties: { key1: {value: 'value'} }}] } });
-    const wrapper = shallowMount<ConfigurationComponentType>(Configuration, {
-      localVue,
-    });
+    const wrapper = shallowMount(Configuration);
     configuration = wrapper.vm;
   });
 

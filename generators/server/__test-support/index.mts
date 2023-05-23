@@ -11,11 +11,10 @@ import {
   GENERATOR_SPRING_DATA_CASSANDRA,
   GENERATOR_SPRING_DATA_COUCHBASE,
   GENERATOR_SPRING_DATA_MONGODB,
-  GENERATOR_PULSAR,
   GENERATOR_MAVEN,
   GENERATOR_LIQUIBASE,
   GENERATOR_LANGUAGES,
-  GENERATOR_KAFKA,
+  GENERATOR_SPRING_CLOUD_STREAM,
   GENERATOR_GRADLE,
   GENERATOR_DOCKER,
   GENERATOR_COMMON,
@@ -31,14 +30,13 @@ export const mockedGenerators = [
   `jhipster:${GENERATOR_DOCKER}`,
   `jhipster:${GENERATOR_GATLING}`,
   `jhipster:${GENERATOR_GRADLE}`,
-  `jhipster:${GENERATOR_KAFKA}`,
+  `jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`,
   `jhipster:${GENERATOR_LANGUAGES}`,
   `jhipster:${GENERATOR_LIQUIBASE}`,
   `jhipster:${GENERATOR_MAVEN}`,
   `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`,
   `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`,
   `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
-  `jhipster:${GENERATOR_PULSAR}`,
   `jhipster:${GENERATOR_SPRING_CACHE}`,
   `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
 ];
@@ -56,28 +54,16 @@ export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
   }
 };
 
-export const shouldComposeWithKafka = (sampleConfig, runResultSupplier) => {
-  const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
-  if (kafkaEnabled) {
-    it(`should compose with ${KAFKA} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:kafka'].calledOnce);
-    });
-  } else {
-    it(`should not compose with ${KAFKA} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:kafka'].notCalled);
-    });
-  }
-};
-
-export const shouldComposeWithPulsar = (sampleConfig, runResultSupplier) => {
+export const shouldComposeWithSpringCloudStream = (sampleConfig, runResultSupplier) => {
   const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
-  if (pulsarEnabled) {
-    it(`should compose with ${PULSAR} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].calledOnce);
+  const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
+  if (pulsarEnabled || kafkaEnabled) {
+    it(`should compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].calledOnce);
     });
   } else {
-    it(`should not compose with ${PULSAR} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].notCalled);
+    it(`should not compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].notCalled);
     });
   }
 };

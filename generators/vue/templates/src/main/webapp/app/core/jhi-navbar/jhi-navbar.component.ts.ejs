@@ -1,6 +1,6 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { computed, <% if (applicationTypeGateway && microfrontend) { %>defineAsyncComponent, <% } %>defineComponent, inject, ref, Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n-bridge';
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import LoginService from '@/account/login.service';
 import type AccountService from '@/account/account.service';
@@ -10,15 +10,18 @@ import languages from '@/shared/config/languages';
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
 import { useStore } from '@/store';
-import { useRouter } from 'vue-router/composables';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: 'JhiNavbar',
   components: {
     'entities-menu': EntitiesMenu,
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
-    '<%= microfrontend.lowercaseBaseName %>-menu': () => import('@<%= microfrontend.lowercaseBaseName %>/entities-menu'),
+    '<%= microfrontend.lowercaseBaseName %>-menu': defineAsyncComponent(() => {
+      return import('@<%= microfrontend.lowercaseBaseName %>/entities-menu').catch(() => import('@/core/error/error-loading.vue'));
+    }),
   <%_ } _%>
 <%_ } _%>
   },
@@ -55,7 +58,7 @@ export default defineComponent({
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
       return paths.some(path => {
-        return router.currentRoute.path.indexOf(path) === 0; // current path starts with this path string
+        return router.currentRoute.value.path.indexOf(path) === 0; // current path starts with this path string
       });
     };
 
@@ -64,7 +67,7 @@ export default defineComponent({
       localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
       sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
       store.logout();
-      if (router.currentRoute.path !== '/') {
+      if (router.currentRoute.value.path !== '/') {
         router.push('/');
       }
 <%_ } else { _%>
@@ -73,12 +76,12 @@ export default defineComponent({
   <%_ if (authenticationTypeOauth2) { _%>
       window.location.href = response.data.logoutUrl;
       const next = response.data?.logoutUrl ?? '/';
-      if (router.currentRoute.path !== next) {
-        router.push(next);
+      if (router.currentRoute.value.path !== next) {
+        await router.push(next);
       }
   <%_ } else { _%>
-      if (router.currentRoute.path !== '/') {
-        router.push('/');
+      if (router.currentRoute.value.path !== '/') {
+        await router.push('/');
       }
   <%_ } _%>
 <%_ } _%>

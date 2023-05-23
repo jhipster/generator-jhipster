@@ -1,20 +1,14 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
-import MetricsModal from '@/admin/metrics/metrics-modal.vue';
-import type MetricsModalComponent from '@/admin/metrics/metrics-modal.component';
+import MetricsModal from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/metrics/metrics-modal.vue';
 
-type MetricsModalComponentType = Vue & InstanceType<typeof MetricsModalComponent>;
-
-const localVue = createLocalVue();
-
+type MetricsModalComponentType = InstanceType<typeof MetricsModal>;
 
 describe('Metrics Component', () => {
   let metricsModal: MetricsModalComponentType;
-  let wrapper: Wrapper<MetricsModalComponentType>;
 
   beforeEach(() => {
-    wrapper = shallowMount<MetricsModalComponentType>(MetricsModal, {
-      localVue,
+    const wrapper = shallowMount(MetricsModal, {
       propsData: {
         threadDump: [
           { name: 'test1', threadState: 'RUNNABLE' },

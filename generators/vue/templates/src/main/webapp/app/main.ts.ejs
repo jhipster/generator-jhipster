@@ -1,7 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue, { provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
-import { createPinia, PiniaVuePlugin } from 'pinia'
+import Vue, { createApp, provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
+import { createPinia } from 'pinia'
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 
 import { useStore<% if (enableTranslation) { %>, useTranslationStore<% } %> } from '@/store';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
@@ -23,29 +26,50 @@ import TranslationService from '@/locale/translation.service';
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
-/* tslint:disable */
 
-Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
-/* tslint:enable */
-Vue.config.productionTip = false;
-initFortAwesome(Vue);
 initBootstrapVue(Vue);
 
-Vue.component('jhi-item-count', JhiItemCountComponent);
-Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
+Vue.configureCompat({
+  MODE: 2,
+  ATTR_FALSE_VALUE: 'suppress-warning',
+  COMPONENT_FUNCTIONAL: 'suppress-warning',
+  COMPONENT_V_MODEL: 'suppress-warning',
+  CONFIG_OPTION_MERGE_STRATS: 'suppress-warning',
+  CONFIG_WHITESPACE: 'suppress-warning',
+  CUSTOM_DIR: 'suppress-warning',
+  GLOBAL_EXTEND: 'suppress-warning',
+  GLOBAL_MOUNT: 'suppress-warning',
+  GLOBAL_PRIVATE_UTIL: 'suppress-warning',
+  GLOBAL_PROTOTYPE: 'suppress-warning',
+  GLOBAL_SET: 'suppress-warning',
+  INSTANCE_ATTRS_CLASS_STYLE: 'suppress-warning',
+  INSTANCE_CHILDREN: 'suppress-warning',
+  INSTANCE_DELETE: 'suppress-warning',
+  INSTANCE_DESTROY: 'suppress-warning',
+  INSTANCE_EVENT_EMITTER: 'suppress-warning',
+  INSTANCE_EVENT_HOOKS: 'suppress-warning',
+  INSTANCE_LISTENERS: 'suppress-warning',
+  INSTANCE_SCOPED_SLOTS: 'suppress-warning',
+  INSTANCE_SET: 'suppress-warning',
+  OPTIONS_BEFORE_DESTROY: 'suppress-warning',
+  OPTIONS_DATA_MERGE: 'suppress-warning',
+  OPTIONS_DESTROYED: 'suppress-warning',
+  RENDER_FUNCTION: 'suppress-warning',
+  WATCH_ARRAY: 'suppress-warning',
+});
+
 <%_ if (enableTranslation) { _%>
-const i18n = initI18N(Vue);
+const i18n = initI18N();
 <%_ } _%>
 
-new Vue({
-  el: '#app',
+const app = createApp({
+  compatConfig: { MODE: 3 },
   components: { App },
   template: '<App/>',
-  router,
 <%_ if (!authenticationTypeOauth2) { _%>
   setup(_props, { emit }) {
     const loginService = new LoginService({ emit });
@@ -57,18 +81,18 @@ new Vue({
     const store = useStore();
     const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
+    const i18n = useI18n();
     const translationStore = useTranslationStore();
     const translationService = new TranslationService(i18n);
 
-    const currentLanguage = computed(() => translationStore.currentLanguage);
     const changeLanguage = async (newLanguage: string) => {
-      if (currentLanguage.value !== newLanguage) {
+      if (i18n.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
         translationStore.setCurrentLanguage(newLanguage);
       }
     };
 
-    provide('currentLanguage', currentLanguage);
+    provide('currentLanguage', i18n.locale);
     provide('changeLanguage', changeLanguage);
 
     watch(
@@ -161,5 +185,16 @@ new Vue({
     provide('microfrontendI18n', false);
 <%_ } _%>
   },
-  pinia,
 });
+
+initFortAwesome(app);
+
+app
+  .component('jhi-item-count', JhiItemCountComponent)
+  .component('jhi-sort-indicator', JhiSortIndicatorComponent)
+  .use(router)
+  .use(pinia)
+<%_ if (enableTranslation) { _%>
+  .use(i18n)
+<%_ } _%>
+  .mount('#app');
