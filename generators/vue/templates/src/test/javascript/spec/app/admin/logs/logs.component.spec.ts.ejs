@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import Logs from '@/admin/logs/logs.vue';
-import LogsService from '@/admin/logs/logs.service';
+import Logs from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/logs/logs.vue';
+import LogsService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/logs/logs.service';
 
 type LogsComponentType = InstanceType<typeof Logs>;
 

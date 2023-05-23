@@ -2,8 +2,8 @@ import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import Health from '@/admin/health/health.vue';
-import HealthService from '@/admin/health/health.service';
+import Health from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/health/health.vue';
+import HealthService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/health/health.service';
 
 type HealthComponentType = InstanceType<typeof Health>;
 

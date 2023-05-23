@@ -20,12 +20,13 @@
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 _%>
 /* tslint:disable max-line-length */
+import { vitest } from 'vitest';
 import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 
-import <%= entityAngularName %> from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
-import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import AlertService from '@/shared/alert/alert.service';
+import <%= entityAngularName %> from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
+import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
 
 type <%= entityAngularName %>ComponentType = InstanceType<typeof <%= entityAngularName %>>;
 
@@ -50,10 +51,10 @@ describe('Component Tests', () => {
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: jest.fn() } as any,
+        i18n: { t: vitest.fn() } as any,
 <%_ } _%>
         bvToast: {
-          toast: jest.fn(),
+          toast: vitest.fn(),
         } as any,
       });
 
