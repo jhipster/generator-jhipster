@@ -23,7 +23,7 @@ import { expect } from 'chai';
 import JDLRelationship from '../models/jdl-relationship.js';
 import { relationshipTypes, relationshipOptions } from '../jhipster/index.mjs';
 
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 
 describe('jdl - JDLRelationship', () => {
   describe('new', () => {
@@ -170,7 +170,7 @@ describe('jdl - JDLRelationship', () => {
         injectedFieldInTo: 'a',
         type: relationshipTypes.ONE_TO_ONE,
         options: {
-          global: { [JPA_DERIVED_IDENTIFIER]: true },
+          global: { [BUILT_IN_ENTITY]: true },
           destination: {},
           source: {},
         },
@@ -184,7 +184,7 @@ describe('jdl - JDLRelationship', () => {
     });
     context('when the option exists', () => {
       it('should return true', () => {
-        expect(relationship.hasGlobalOption(JPA_DERIVED_IDENTIFIER)).to.be.true;
+        expect(relationship.hasGlobalOption(BUILT_IN_ENTITY)).to.be.true;
       });
     });
   });
@@ -361,7 +361,7 @@ describe('jdl - JDLRelationship', () => {
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
             options: {
-              global: { [JPA_DERIVED_IDENTIFIER]: true },
+              global: { [BUILT_IN_ENTITY]: true },
               source: {},
               destination: {},
             },
@@ -372,7 +372,7 @@ describe('jdl - JDLRelationship', () => {
           expect(relationship.toString()).to.equal(
             `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
-              `${relationship.injectedFieldInTo}} with ${JPA_DERIVED_IDENTIFIER}
+              `${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
 }`
           );
         });
@@ -388,7 +388,7 @@ describe('jdl - JDLRelationship', () => {
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
             options: {
-              global: { [JPA_DERIVED_IDENTIFIER]: true },
+              global: { [BUILT_IN_ENTITY]: true },
               source: { id: true },
               destination: { id: true, idGenerator: 'sequence' },
             },
@@ -402,7 +402,7 @@ describe('jdl - JDLRelationship', () => {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to
   @id
   @idGenerator(sequence)
-  ${relationship.to}{${relationship.injectedFieldInTo}} with ${JPA_DERIVED_IDENTIFIER}
+  ${relationship.to}{${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
 }`
           );
         });

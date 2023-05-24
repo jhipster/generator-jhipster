@@ -25,7 +25,7 @@ import JDLRelationship from '../../models/jdl-relationship.js';
 const {
   Validations: { REQUIRED },
 } = validations;
-const { JPA_DERIVED_IDENTIFIER, BUILT_IN_ENTITY } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 
 let convertedRelationships;
@@ -148,11 +148,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
 function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship) {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-    if (optionName === JPA_DERIVED_IDENTIFIER) {
-      if (convertedRelationship.ownerSide) {
-        convertedRelationship.useJPADerivedIdentifier = optionValue;
-      }
-    } else if (optionName === BUILT_IN_ENTITY) {
+    if (optionName === BUILT_IN_ENTITY) {
       convertedRelationship.relationshipWithBuiltInEntity = optionValue;
     } else {
       convertedRelationship.options[optionName] = optionValue;
@@ -169,13 +165,7 @@ function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRel
 function setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship) {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-    if (optionName === JPA_DERIVED_IDENTIFIER) {
-      if (convertedRelationship.ownerSide) {
-        convertedRelationship.useJPADerivedIdentifier = optionValue;
-      }
-    } else {
-      convertedRelationship.options[optionName] = optionValue;
-    }
+    convertedRelationship.options[optionName] = optionValue;
   });
   relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
     convertedRelationship.options[optionName] = optionValue;
