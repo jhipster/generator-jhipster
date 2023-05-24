@@ -18,6 +18,7 @@
  */
 import { extname } from 'path';
 import { existsSync } from 'fs';
+import { QueuedAdapter } from '@yeoman/adapter';
 import _ from 'lodash';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
@@ -264,7 +265,8 @@ export default class JdlGenerator extends BaseGenerator {
     await Promise.all(
       applications.map(async application => {
         const cwd = application.folder ? this.destinationPath(application.folder) : this.destinationPath();
-        const envOptions: any = { cwd, sharedFs: application.sharedFs, adapter: this.env.adapter };
+        const adapter = (this.env.adapter as QueuedAdapter).newAdapter();
+        const envOptions: any = { cwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
         // Install should happen at the root of the monorepository. Force skip install at childs.
         if (this.options.monorepository) {
