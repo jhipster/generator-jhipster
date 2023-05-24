@@ -63,7 +63,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_CONTROLLER, { arguments: [this.name] });
+      await this.composeWithBlueprints(GENERATOR_SPRING_CONTROLLER, { generatorArgs: [this.name] });
     }
   }
 

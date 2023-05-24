@@ -105,7 +105,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
           await this.generateApplications.call(this);
         } else {
           for (const appName of this.workspacesFolders) {
-            await this.composeWithJHipster(this.generateWith, { destinationRoot: this.destinationPath(appName) });
+            await this.composeWithJHipster(this.generateWith, { generatorOptions: { destinationRoot: this.destinationPath(appName) } });
           }
         }
       },

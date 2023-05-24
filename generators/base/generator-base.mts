@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname, relative } from 'path';
+import { basename, join as joinPath, dirname, relative, isAbsolute, join } from 'path';
 import { requireNamespace } from '@yeoman/namespace';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
@@ -26,11 +26,12 @@ import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
-import { statSync, rmSync } from 'fs';
+import { statSync, rmSync, existsSync } from 'fs';
 import { lt as semverLessThan } from 'semver';
-import type { Storage } from 'yeoman-generator';
+import type { ComposeOptions, Storage } from 'yeoman-generator';
 import semver from 'semver';
 import latestVersion from 'latest-version';
+import assert from 'assert';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
@@ -313,6 +314,49 @@ export default class CoreGenerator extends YeomanGenerator {
     return this._jhipsterGenerator
       ? this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path)
       : this.templatePath(...path);
+  }
+
+  /**
+   * Compose with a jhipster generator using default jhipster config.
+   * @return {object} the composed generator
+   */
+  async composeWithJHipster(generator: string, options?: ComposeOptions) {
+    assert(typeof generator === 'string', 'generator should to be a string');
+    if (!isAbsolute(generator)) {
+      const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+      if (await this.env.get(namespace)) {
+        generator = namespace;
+      } else {
+        // Keep test compatibily were jhipster lookup does not run.
+        const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
+          const pathToLook = join(__dirname, `../${generator}${extension}`);
+          return existsSync(pathToLook) ? pathToLook : undefined;
+        });
+        if (!found) {
+          throw new Error(`Generator ${generator} was not found`);
+        }
+        generator = join(__dirname, `../${generator}${found}`);
+      }
+    }
+
+    return this.composeWith(generator, {
+      forwardOptions: true,
+      ...options,
+      generatorOptions: {
+        configOptions: this.configOptions,
+        ...options?.generatorOptions,
+      } as any,
+    });
+  }
+
+  /**
+   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
+   */
+  async dependsOnJHipster(generator: string, options?: ComposeOptions) {
+    return this.composeWithJHipster(generator, {
+      ...options,
+      schedule: false,
+    });
   }
 
   /**

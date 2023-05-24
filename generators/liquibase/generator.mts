@@ -337,9 +337,10 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
   _composeWithIncrementalChangelogProvider(entities: any[], databaseChangelog: any) {
     const skipWriting = entities!.length !== 0 && !entities!.includes(databaseChangelog.entityName);
     return this.composeWithJHipster(GENERATOR_LIQUIBASE_CHANGELOGS, {
-      databaseChangelog,
-      skipWriting,
-      configOptions: this.configOptions,
+      generatorOptions: {
+        databaseChangelog,
+        skipWriting,
+      } as any,
     });
   }
 
