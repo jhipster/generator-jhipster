@@ -48,7 +48,7 @@
     "sass-loader": "13.3.0",
     "sinon": "15.1.0",
     "terser-webpack-plugin": "5.3.9",
-    "ts-loader": "9.4.2",
+    "ts-loader": "9.4.3",
     "typescript": "5.0.4",
     "vitest": "0.31.1",
     "vitest-sonar-reporter": "0.4.1",
