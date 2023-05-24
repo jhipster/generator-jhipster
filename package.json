@@ -130,7 +130,7 @@
     "type-fest": "3.11.0",
     "uuid": "9.0.0",
     "winston": "3.8.2",
-    "yaml": "2.2.2",
+    "yaml": "2.3.0",
     "yeoman-environment": "3.18.3",
     "yeoman-generator": "6.0.0-beta.5"
   },
