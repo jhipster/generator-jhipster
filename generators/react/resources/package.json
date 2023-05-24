@@ -76,7 +76,7 @@
     "terser-webpack-plugin": "5.3.9",
     "thread-loader": "4.0.2",
     "ts-jest": "29.1.0",
-    "ts-loader": "9.4.2",
+    "ts-loader": "9.4.3",
     "typescript": "5.0.4",
     "webpack": "5.83.1",
     "webpack-cli": "5.1.1",
