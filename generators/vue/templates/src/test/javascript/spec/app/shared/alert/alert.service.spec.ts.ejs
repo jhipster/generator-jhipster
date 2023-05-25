@@ -1,17 +1,18 @@
-import AlertService from '@/shared/alert/alert.service';
+import { vitest } from 'vitest';
+import AlertService from '../../../<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
 
 describe('Alert Service test suite', () => {
 <%_ if (enableTranslation) { _%>
-  let translationStub: jest.Mock;
-<%_ } _%> 
-  let toastStub: jest.Mock;
+  let translationStub: vitest.Mock;
+<%_ } _%>
+  let toastStub: vitest.Mock;
   let alertService: AlertService;
 
   beforeEach(() => {
 <%_ if (enableTranslation) { _%>
-    translationStub = jest.fn();
-<%_ } _%> 
-    toastStub = jest.fn();
+    translationStub = vitest.fn();
+<%_ } _%>
+    toastStub = vitest.fn();
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
       i18n: { t: translationStub } as any,

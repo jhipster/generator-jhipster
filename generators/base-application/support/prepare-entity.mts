@@ -297,8 +297,6 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     idCount++;
   } else if (idRelationships.length > 0) {
     idRelationships.forEach(relationship => {
-      // deprecated property
-      relationship.useJPADerivedIdentifier = true;
       // relationships id data are not available at this point, so calculate it when needed.
       relationship.derivedPrimaryKey = {
         get derivedFields() {

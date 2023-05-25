@@ -50,7 +50,7 @@ describe('jdl - RelationshipConverter', () => {
                 },
                 cardinality: 'one-to-many',
                 options: {
-                  global: [{ optionName: 'jpaDerivedIdentifier', type: 'UNARY' }],
+                  global: [{ optionName: 'builtInEntity', type: 'UNARY' }],
                   source: [],
                   destination: [],
                 },
@@ -58,7 +58,7 @@ describe('jdl - RelationshipConverter', () => {
             ],
             options => {
               if (options.length !== 0) {
-                return { jpaDerivedIdentifier: true };
+                return { builtInEntity: true };
               }
               return {};
             }
@@ -79,7 +79,7 @@ describe('jdl - RelationshipConverter', () => {
     "options": {
       "destination": {},
       "global": {
-        "jpaDerivedIdentifier": true,
+        "builtInEntity": true,
       },
       "source": {},
     },
@@ -109,7 +109,7 @@ describe('jdl - RelationshipConverter', () => {
                 },
                 cardinality: 'one-to-many',
                 options: {
-                  global: [{ optionName: 'jpaDerivedIdentifier', type: 'UNARY' }],
+                  global: [{ optionName: 'builtInEntity', type: 'UNARY' }],
                   source: [],
                   destination: [],
                 },
@@ -117,7 +117,7 @@ describe('jdl - RelationshipConverter', () => {
             ],
             options => {
               if (options.length !== 0) {
-                return { jpaDerivedIdentifier: true };
+                return { builtInEntity: true };
               }
               return {};
             }
@@ -138,7 +138,7 @@ describe('jdl - RelationshipConverter', () => {
     "options": {
       "destination": {},
       "global": {
-        "jpaDerivedIdentifier": true,
+        "builtInEntity": true,
       },
       "source": {},
     },

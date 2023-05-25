@@ -23,7 +23,7 @@ import JDLRelationship from '../models/jdl-relationship.js';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 
 export default class RelationshipValidator extends Validator {
   constructor() {
@@ -34,7 +34,6 @@ export default class RelationshipValidator extends Validator {
     super.validate(jdlRelationship);
     checkType(jdlRelationship);
     checkInjectedFields(jdlRelationship);
-    checkForValidUseOfJPaDerivedIdentifier(jdlRelationship);
     checkForRequiredReflexiveRelationship(jdlRelationship);
     checkRelationshipType(jdlRelationship);
   }
@@ -49,12 +48,6 @@ function checkType(jdlRelationship: JDLRelationship) {
 function checkInjectedFields(jdlRelationship: JDLRelationship) {
   if (!(jdlRelationship.injectedFieldInFrom || jdlRelationship.injectedFieldInTo)) {
     throw new Error('At least one injected field is required.');
-  }
-}
-
-function checkForValidUseOfJPaDerivedIdentifier(jdlRelationship: JDLRelationship) {
-  if (jdlRelationship.type !== ONE_TO_ONE && jdlRelationship.hasGlobalOption(JPA_DERIVED_IDENTIFIER)) {
-    throw new Error(`Only a ${ONE_TO_ONE} relationship can have the '${JPA_DERIVED_IDENTIFIER}' option.`);
   }
 }
 

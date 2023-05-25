@@ -131,9 +131,11 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY, {
-        entityExisted,
-        configExisted,
-        arguments: [name],
+        generatorOptions: {
+          entityExisted,
+          configExisted,
+          arguments: [name],
+        },
       });
     }
 
@@ -297,12 +299,14 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
-          entities: this.options.singleEntity ? [this.context.name] : undefined,
-          regenerate: true,
-          writeEveryEntity: false,
-          composedEntities: [this.context.name],
-          skipDbChangelog: this.options.skipDbChangelog,
-          skipInstall: this.options.skipInstall,
+          generatorOptions: {
+            entities: this.options.singleEntity ? [this.context.name] : undefined,
+            regenerate: true,
+            writeEveryEntity: false,
+            composedEntities: [this.context.name],
+            skipDbChangelog: this.options.skipDbChangelog,
+            skipInstall: this.options.skipInstall,
+          },
         });
       },
     };

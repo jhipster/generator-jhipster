@@ -4,8 +4,8 @@ import * as sinon from 'sinon';
 import { Subject, Subscription } from 'rxjs';
 import { createMemoryHistory, createRouter, Router } from 'vue-router';
 
-import <%=jhiPrefixCapitalized%>Tracker from '@/admin/tracker/tracker.vue';
-import TrackerService from '@/admin/tracker/tracker.service';
+import <%=jhiPrefixCapitalized%>Tracker from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/tracker/tracker.vue';
+import TrackerService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/tracker/tracker.service';
 
 type <%=jhiPrefixCapitalized%>TrackerComponentType = InstanceType<typeof <%=jhiPrefixCapitalized%>Tracker>;
 

@@ -1,4 +1,5 @@
-import useDataUtils from '@/shared/data/data-utils.service';
+import { vitest } from 'vitest';
+import useDataUtils from '../../../<%- clientSrcDirRelativeToClientTestDir %>shared/data/data-utils.service';
 
 describe('Formatter i18n', () => {
   let dataUtilsService: ReturnType<typeof useDataUtils>;
@@ -34,9 +35,9 @@ describe('Formatter i18n', () => {
   });
 
   it('should open file', () => {
-    window.open = jest.fn().mockReturnValue({});
+    window.open = vitest.fn().mockReturnValue({});
     const objectURL = 'blob:http://localhost:9000/xxx';
-    URL.createObjectURL = jest.fn().mockImplementationOnce(() => {
+    URL.createObjectURL = vitest.fn().mockImplementationOnce(() => {
       return objectURL;
     });
 

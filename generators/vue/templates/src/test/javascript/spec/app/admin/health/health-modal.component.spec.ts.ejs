@@ -1,10 +1,11 @@
+import { vitest } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
-import HealthModal from '@/admin/health/health-modal.vue';
+import HealthModal from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/health/health-modal.vue';
 
 type HealthModalComponentType = InstanceType<typeof HealthModal>;
 
-const healthService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
+const healthService = { getBaseName: vitest.fn(), getSubSystemName: vitest.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;

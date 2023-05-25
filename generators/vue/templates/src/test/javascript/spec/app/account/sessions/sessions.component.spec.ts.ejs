@@ -3,11 +3,11 @@ import axios from 'axios';
 import sinon from 'sinon';
 
 import { createTestingPinia } from '@pinia/testing';
-import { useStore } from '@/store';
-import Sessions from '@/account/sessions/sessions.vue';
-import router from '@/router';
+import { useStore } from '../../../<%- clientSrcDirRelativeToClientTestDir %>store';
+import Sessions from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/sessions/sessions.vue';
+import router from '../../../<%- clientSrcDirRelativeToClientTestDir %>router';
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import TranslationService from '../../../<%- clientSrcDirRelativeToClientTestDir %>locale/translation.service';
 <%_ } _%>
 
 type SessionsComponentType = InstanceType<typeof Sessions>;

@@ -45,7 +45,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
+      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { generatorArgs: [this.name] });
     }
   }
 

@@ -364,7 +364,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_COMMON);
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES, {
-            regenerate: true,
+            generatorOptions: { regenerate: true },
           });
         }
         if (!skipServer) {
@@ -389,9 +389,12 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
         await Promise.all(
           this.jhipsterConfig.pages.map(page => {
-            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
-              skipInstall: true,
-              page,
+            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, {
+              generatorArgs: [page.name],
+              generatorOptions: {
+                skipInstall: true,
+                page,
+              },
             });
           })
         );

@@ -1,12 +1,13 @@
+import { vitest } from 'vitest';
 import { computed } from 'vue';
 import { shallowMount } from '@vue/test-utils';
-import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
+import JhiNavbar from '../../../<%- clientSrcDirRelativeToClientTestDir %>core/jhi-navbar/jhi-navbar.vue';
 import { Router } from 'vue-router';
 import { createTestingPinia } from '@pinia/testing';
 
-import { useStore } from '@/store';
-import { createRouter } from '@/router';
-import LoginService from '@/account/login.service';
+import { useStore } from '../../../<%- clientSrcDirRelativeToClientTestDir %>store';
+import { createRouter } from '../../../<%- clientSrcDirRelativeToClientTestDir %>router';
+import LoginService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/login.service';
 
 type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
 
@@ -16,23 +17,23 @@ const store = useStore();
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
   let loginService: LoginService;
-  const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+  const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
-  const changeLanguage = jest.fn();
+  const changeLanguage = vitest.fn();
 <%_ } _%>
   let router: Router;
 
   beforeEach(() => {
     router = createRouter();
 <%_ if (authenticationTypeJwt) { _%>
-    loginService = new LoginService({ emit: jest.fn() });
-    jest.spyOn(loginService, 'openLogin');
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
 <%_ } else if (authenticationTypeSession) { _%>
-    loginService = new LoginService({ emit: jest.fn() });
-    jest.spyOn(loginService, 'openLogin');
-    jest.spyOn(loginService, 'logout');
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
+    vitest.spyOn(loginService, 'logout');
 <%_ } else if (authenticationTypeOauth2) { _%>
-    loginService = { login: jest.fn(), logout: jest.fn() };
+    loginService = { login: vitest.fn(), logout: vitest.fn() };
 <%_ } _%>
     const wrapper = shallowMount(JhiNavbar, {
       global: {

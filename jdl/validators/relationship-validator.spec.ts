@@ -22,7 +22,7 @@ import JDLRelationship from '../models/jdl-relationship.js';
 import RelationshipValidator from '../validators/relationship-validator.js';
 import { relationshipOptions, relationshipTypes } from '../jhipster/index.mjs';
 
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 
 describe('jdl - RelationshipValidator', () => {
@@ -87,7 +87,7 @@ describe('jdl - RelationshipValidator', () => {
           expect(() => validator.validate(relationship)).to.throw(/^At least one injected field is required\.$/);
         });
       });
-      context(`when using the ${JPA_DERIVED_IDENTIFIER} option`, () => {
+      context(`when using the ${BUILT_IN_ENTITY} option`, () => {
         context(`in a ${ONE_TO_ONE} relationship`, () => {
           let relationship;
 
@@ -98,7 +98,7 @@ describe('jdl - RelationshipValidator', () => {
               type: ONE_TO_ONE,
               injectedFieldInTo: 'a',
               injectedFieldInFrom: 'b',
-              options: { [JPA_DERIVED_IDENTIFIER]: true },
+              options: { [BUILT_IN_ENTITY]: true },
             });
           });
 
@@ -118,16 +118,14 @@ describe('jdl - RelationshipValidator', () => {
                 injectedFieldInTo: 'a',
                 options: {
                   global: {
-                    [JPA_DERIVED_IDENTIFIER]: true,
+                    [BUILT_IN_ENTITY]: true,
                   },
                 },
               });
             });
 
-            it('should fail', () => {
-              expect(() => validator.validate(relationship)).to.throw(
-                /^Only a OneToOne relationship can have the 'jpaDerivedIdentifier' option\.$/
-              );
+            it('should not fail', () => {
+              expect(() => validator.validate(relationship)).not.to.throw();
             });
           });
         });

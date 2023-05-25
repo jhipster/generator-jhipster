@@ -1,16 +1,17 @@
+import { vitest } from 'vitest';
 import { Ref, ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import { RouteLocation } from 'vue-router';
 
-import Error from '@/core/error/error.vue';
+import Error from '../../../<%- clientSrcDirRelativeToClientTestDir %>core/error/error.vue';
 
-import LoginService from '@/account/login.service';
+import LoginService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/login.service';
 
 type ErrorComponentType = InstanceType<typeof Error>;
 
 let route: Partial<RouteLocation>;
 
-jest.mock('vue-router', () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
 }));
 
@@ -25,14 +26,14 @@ describe('Error component', () => {
     route = {};
     authenticated = ref(false);
 <%_ if (authenticationTypeJwt) { _%>
-    loginService = new LoginService({ emit: jest.fn() });
-    jest.spyOn(loginService, 'openLogin');
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
 <%_ } else if (authenticationTypeSession) { _%>
-    loginService = new LoginService({ emit: jest.fn() });
-    jest.spyOn(loginService, 'openLogin');
-    jest.spyOn(loginService, 'logout');
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
+    vitest.spyOn(loginService, 'logout');
 <%_ } else if (authenticationTypeOauth2) { _%>
-    loginService = { login: jest.fn(), logout: jest.fn() };
+    loginService = { login: vitest.fn(), logout: vitest.fn() };
 <%_ } _%>
   });
 

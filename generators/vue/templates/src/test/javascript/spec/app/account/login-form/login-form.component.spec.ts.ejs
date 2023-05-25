@@ -1,3 +1,4 @@
+import { vitest } from 'vitest';
 import { shallowMount, MountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
@@ -5,16 +6,16 @@ import { RouteLocation } from 'vue-router';
 import { PiniaVuePlugin } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
-import LoginService from '@/account/login.service';
-import AccountService from '@/account/account.service';
-import { useStore } from '@/store';
-import LoginForm from '@/account/login-form/login-form.vue';
+import LoginService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/login.service';
+import AccountService from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/account.service';
+import { useStore } from '../../../<%- clientSrcDirRelativeToClientTestDir %>store';
+import LoginForm from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/login-form/login-form.vue';
 
 type LoginFormComponentType = InstanceType<typeof LoginForm>;
 
 let route: Partial<RouteLocation>;
-const routerGoMock = jest.fn();
-jest.mock('vue-router', () => ({
+const routerGoMock = vitest.fn();
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
@@ -36,7 +37,7 @@ describe('LoginForm Component', () => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
 
-    const loginService = new LoginService({ emit: jest.fn() });
+    const loginService = new LoginService({ emit: vitest.fn() });
 
     const globalOptions: MountingOptions<LoginFormComponentType>['global'] = {
       stubs: {

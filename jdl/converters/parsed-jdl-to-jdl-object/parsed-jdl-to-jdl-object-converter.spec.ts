@@ -923,13 +923,11 @@ JDLDeployment {
           expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
         });
       });
-      context('when parsing a JDL relationship with JPA derived identifier enabled', () => {
+      context('when parsing a JDL relationship with built in entity enabled', () => {
         let jdlObject;
 
         before(() => {
-          const input = JDLReader.parseFromFiles([
-            path.join(__dirname, '..', '..', '__test-files__', 'relationship_jpa_derived_identifier.jdl'),
-          ]);
+          const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'relationship_built_in_entity.jdl')]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,
@@ -938,7 +936,7 @@ JDLDeployment {
 
         it('should set it', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.global).to.deep.equal({
-            jpaDerivedIdentifier: true,
+            builtInEntity: true,
           });
         });
       });

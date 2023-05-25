@@ -20,6 +20,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import { isFilePending } from 'mem-fs-editor/state';
 
+import { relative } from 'path';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
@@ -77,13 +78,32 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
-        application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+        application.clientWebappDir = `${application.clientSrcDir}app/`;
+        application.webappEnumerationsDir = `${application.clientWebappDir}shared/model/enumerations/`;
+        application.clientSpecDir = `${application.clientTestDir}spec/`;
+
+        // Can be dropped if tests are moved near implementation
+        application.applicationRootRelativeToClientTestDir = `${relative(application.clientSpecDir, '.')}/`;
+        application.clientSrcDirRelativeToClientTestDir = `${relative(application.clientSpecDir, application.clientWebappDir)}/`;
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntityForTemplates({ entity }) {
+        // Can be dropped if tests are moved near implementation
+        entity.relativeToEntityFolderName = relative(entity.entityFolderName, '.');
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get writing() {

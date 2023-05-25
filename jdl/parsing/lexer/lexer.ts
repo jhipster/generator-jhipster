@@ -105,7 +105,6 @@ createTokenFromConfig({ name: 'ENTITY', pattern: 'entity' });
 createTokenFromConfig({ name: 'ENUM', pattern: 'enum' });
 // Relationship-related
 createTokenFromConfig({ name: 'RELATIONSHIP', pattern: 'relationship' });
-createTokenFromConfig({ name: 'JPA_DERIVED_IDENTIFIER', pattern: 'jpaDerivedIdentifier' });
 createTokenFromConfig({ name: 'BUILT_IN_ENTITY', pattern: BUILT_IN_ENTITY });
 
 // Category For the relationship type key names

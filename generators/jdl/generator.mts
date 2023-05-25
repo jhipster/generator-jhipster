@@ -18,6 +18,7 @@
  */
 import { extname } from 'path';
 import { existsSync } from 'fs';
+import { QueuedAdapter } from '@yeoman/adapter';
 import _ from 'lodash';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
@@ -200,32 +201,38 @@ export default class JdlGenerator extends BaseGenerator {
           return;
         }
 
-        const generationOptions: any = { reproducible: this.reproducible, force: this.force };
+        const generatorOptions: any = { reproducible: this.reproducible, force: this.force };
 
         if (this.ignoreApplication || this.applications.length === 0) {
           if (this.applications.length === 0) {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(GENERATOR_ENTITIES, {
-              ...generationOptions,
-              entities: entities.map(entity => entity.name),
+              generatorOptions: {
+                ...generatorOptions,
+                entities: entities.map(entity => entity.name),
+              },
             });
           } else {
             for (const app of this.applications) {
               await this.composeWithJHipster(GENERATOR_ENTITIES, {
-                ...generationOptions,
-                entities: app.entities.map(entity => entity.name),
-                destinationRoot: app.folder ? this.destinationPath(app.folder) : undefined,
+                generatorOptions: {
+                  ...generatorOptions,
+                  entities: app.entities.map(entity => entity.name),
+                  destinationRoot: app.folder ? this.destinationPath(app.folder) : undefined,
+                },
               });
             }
           }
         } else if (this.applications.length === 1) {
           this.logger.debug('Generating 1 application');
-          await this.composeWithJHipster(GENERATOR_APP, generationOptions);
+          await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
         } else {
           this.logger.debug(`Generating ${this.applications.length}applications`);
           await this.composeWithJHipster(GENERATOR_WORKSPACES, {
-            workspacesFolders: this.applications.map(app => app.folder),
-            generateApplications: async () => this.runNonInteractive(this.applications, generationOptions),
+            generatorOptions: {
+              workspacesFolders: this.applications.map(app => app.folder),
+              generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
+            } as any,
           });
         }
       },
@@ -246,9 +253,11 @@ export default class JdlGenerator extends BaseGenerator {
             this.logger.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
             await this.composeWithJHipster(deploymentType, {
-              destinationRoot: this.destinationPath(deploymentType),
-              force: true,
-              skipPrompts: true,
+              generatorOptions: {
+                destinationRoot: this.destinationPath(deploymentType),
+                force: true,
+                skipPrompts: true,
+              } as any,
             });
           }
         }
@@ -264,7 +273,8 @@ export default class JdlGenerator extends BaseGenerator {
     await Promise.all(
       applications.map(async application => {
         const cwd = application.folder ? this.destinationPath(application.folder) : this.destinationPath();
-        const envOptions: any = { cwd, sharedFs: application.sharedFs, adapter: this.env.adapter };
+        const adapter = (this.env.adapter as QueuedAdapter).newAdapter();
+        const envOptions: any = { cwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
         // Install should happen at the root of the monorepository. Force skip install at childs.
         if (this.options.monorepository) {

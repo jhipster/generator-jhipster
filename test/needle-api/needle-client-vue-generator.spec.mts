@@ -12,8 +12,7 @@ const { VUE } = clientFrameworkTypes;
 const mockBlueprintSubGen: any = class extends VueGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
-    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-    if (!jhContext) {
+    if (!this.jhipsterContext) {
       throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
     this.sbsBlueprint = true;

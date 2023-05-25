@@ -1,20 +1,21 @@
 <%_
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
+import { vitest } from 'vitest';
 import { shallowMount, MountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { RouteLocation } from 'vue-router';
 
-import AlertService from '@/shared/alert/alert.service';
-import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
+import AlertService from '../../../<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
+import UserManagementEdit from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/user-management/user-management-edit.vue';
 
 type UserManagementEditComponentType = InstanceType<typeof UserManagementEdit>;
 
 let route: Partial<RouteLocation>;
-const routerGoMock = jest.fn();
+const routerGoMock = vitest.fn();
 
-jest.mock('vue-router', () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
@@ -32,10 +33,10 @@ describe('UserManagementEdit Component', () => {
     route = {};
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-      i18n: { t: jest.fn() } as any,
+      i18n: { t: vitest.fn() } as any,
 <%_ } _%>
       bvToast: {
-        toast: jest.fn(),
+        toast: vitest.fn(),
       } as any,
     });
 
