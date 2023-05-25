@@ -67,27 +67,28 @@ describe('jdl - RelationshipConverter', () => {
 
         it('should convert them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-[
-  JDLRelationship {
-    "commentInFrom": "/**\\nRequired\\n/",
-    "commentInTo": "/**\\nNot required\\n/",
-    "from": "Source",
-    "injectedFieldInFrom": "destination",
-    "injectedFieldInTo": "source",
-    "isInjectedFieldInFromRequired": true,
-    "isInjectedFieldInToRequired": false,
-    "options": {
-      "destination": {},
-      "global": {
-        "builtInEntity": true,
-      },
-      "source": {},
-    },
-    "to": "Destination",
-    "type": "OneToMany",
-  },
-]
-`);
+            [
+              JDLRelationship {
+                "commentInFrom": "/**\\nRequired\\n/",
+                "commentInTo": "/**\\nNot required\\n/",
+                "from": "Source",
+                "injectedFieldInFrom": "destination",
+                "injectedFieldInTo": "source",
+                "isInjectedFieldInFromRequired": true,
+                "isInjectedFieldInToRequired": false,
+                "options": {
+                  "destination": {},
+                  "global": {
+                    "builtInEntity": true,
+                  },
+                  "source": {},
+                },
+                "side": undefined,
+                "to": "Destination",
+                "type": "OneToMany",
+              },
+            ]
+          `);
         });
       });
       context('when there is no injected field in both sides', () => {
@@ -126,27 +127,28 @@ describe('jdl - RelationshipConverter', () => {
 
         it('should generate them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-[
-  JDLRelationship {
-    "commentInFrom": "/**\\nRequired\\n/",
-    "commentInTo": "/**\\nNot required\\n/",
-    "from": "Source",
-    "injectedFieldInFrom": "destination",
-    "injectedFieldInTo": "source",
-    "isInjectedFieldInFromRequired": true,
-    "isInjectedFieldInToRequired": false,
-    "options": {
-      "destination": {},
-      "global": {
-        "builtInEntity": true,
-      },
-      "source": {},
-    },
-    "to": "Destination",
-    "type": "OneToMany",
-  },
-]
-`);
+            [
+              JDLRelationship {
+                "commentInFrom": "/**\\nRequired\\n/",
+                "commentInTo": "/**\\nNot required\\n/",
+                "from": "Source",
+                "injectedFieldInFrom": "destination",
+                "injectedFieldInTo": "source",
+                "isInjectedFieldInFromRequired": true,
+                "isInjectedFieldInToRequired": false,
+                "options": {
+                  "destination": {},
+                  "global": {
+                    "builtInEntity": true,
+                  },
+                  "source": {},
+                },
+                "side": undefined,
+                "to": "Destination",
+                "type": "OneToMany",
+              },
+            ]
+          `);
         });
       });
     });

@@ -16,12 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'assert';
 import os from 'os';
 import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { addFakerToEntity, loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.mjs';
+import {
+  addFakerToEntity,
+  loadEntitiesAnnotations,
+  loadEntitiesOtherSide,
+  stringifyApplicationData,
+} from '../base-application/support/index.mjs';
 import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
@@ -35,7 +41,7 @@ import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
-const { upperFirst } = _;
+const { lowerFirst } = _;
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -131,6 +137,45 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           entityConfig.changelogDate = this.dateFormatForLiquibase();
         }
       },
+
+      configureRelationships({ entityName, entityStorage, entityConfig }) {
+        // Validate entity json relationship content
+        entityConfig.relationships.forEach((relationship: any) => {
+          const { otherEntityName, relationshipType } = relationship;
+
+          assert(
+            otherEntityName,
+            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+          );
+          assert(
+            relationshipType,
+            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+          );
+
+          if (!relationship.relationshipSide) {
+            // Try to create relationshipSide based on best bet.
+            if (relationship.ownerSide !== undefined) {
+              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
+            } else {
+              // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
+              const unidirectionalRelationship = !relationship.otherEntityRelationshipName;
+              const bidirectionalOneToManySide = !unidirectionalRelationship && relationship.relationshipType === 'one-to-many';
+              relationship.relationshipSide = unidirectionalRelationship || bidirectionalOneToManySide ? 'left' : 'right';
+            }
+          }
+
+          relationship.otherEntityName = lowerFirst(otherEntityName);
+          if (relationship.relationshipName === undefined) {
+            relationship.relationshipName = relationship.otherEntityName;
+            this.log.warn(
+              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
+                relationship
+              )}, using ${relationship.otherEntityName} as fallback`
+            );
+          }
+        });
+        entityStorage.save();
+      },
     });
   }
 
@@ -170,6 +215,17 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         loadEntitiesAnnotations(entities);
         this.validateResult(loadEntitiesOtherSide(entities));
+
+        for (const entity of entities) {
+          for (const relationship of entity.relationships) {
+            if (relationship.ownerSide === undefined) {
+              // ownerSide backward compatibility
+              relationship.ownerSide =
+                relationship.relationshipType === 'many-to-one' ||
+                (relationship.relationshipType !== 'one-to-many' && relationship.relationshipSide === 'left');
+            }
+          }
+        }
       },
     });
   }

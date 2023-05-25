@@ -952,27 +952,29 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                 },
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-many",
                 },
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "many-to-one",
                 },
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "many-to-many",
                 },
               ]
@@ -982,27 +984,29 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
-                  "ownerSide": false,
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "one-to-one",
                 },
                 {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "many-to-one",
                 },
                 {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "one-to-many",
                 },
                 {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
-                  "ownerSide": false,
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "many-to-many",
                 },
               ]
@@ -1049,8 +1053,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   },
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                 }
               `);
@@ -1092,8 +1096,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                   "relationshipWithBuiltInEntity": true,
                 }
@@ -1137,8 +1141,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                   "relationshipValidateRules": "required",
                 },
@@ -1149,8 +1153,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
-                  "ownerSide": false,
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "one-to-one",
                   "relationshipValidateRules": "required",
                 },
@@ -1195,8 +1199,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "javadoc": "A to B",
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                 },
               ]
@@ -1207,8 +1211,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "javadoc": "A to B but in the destination",
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
-                  "ownerSide": false,
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "one-to-one",
                 },
               ]
@@ -1247,8 +1251,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                 }
               `);
@@ -1289,6 +1293,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "b",
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-many",
                 }
               `);
@@ -1329,6 +1334,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                 {
                   "otherEntityName": "b",
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "many-to-one",
                 }
               `);
@@ -1368,8 +1374,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "many-to-many",
                 }
               `);
@@ -1414,8 +1420,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityField": "name",
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-one",
                 }
               `);
@@ -1426,8 +1432,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityField": "name",
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
-                  "ownerSide": false,
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "one-to-one",
                 }
               `);
@@ -1468,6 +1474,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "one-to-many",
                 }
               `);
@@ -1479,6 +1486,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "many-to-one",
                 }
               `);
@@ -1519,6 +1527,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "many-to-one",
                 }
               `);
@@ -1530,6 +1539,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "one-to-many",
                 }
               `);
@@ -1569,8 +1579,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityField": "name",
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
-                  "ownerSide": true,
                   "relationshipName": "b",
+                  "relationshipSide": "left",
                   "relationshipType": "many-to-many",
                 }
               `);
@@ -1581,8 +1591,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
                   "otherEntityField": "name",
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
-                  "ownerSide": false,
                   "relationshipName": "a",
+                  "relationshipSide": "right",
                   "relationshipType": "many-to-many",
                 }
               `);

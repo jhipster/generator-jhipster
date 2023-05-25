@@ -175,6 +175,10 @@ function dealWithRelationships(relationships: Relationship[] | undefined, entity
     return;
   }
   relationships.forEach(relationship => {
+    if (relationship.relationshipSide === 'right') {
+      // Right side will be merged into the left side.
+      return;
+    }
     const jdlRelationship = getRelationship(relationship, entityName);
     if (jdlRelationship) {
       jdlObject.addRelationship(jdlRelationship);
@@ -192,6 +196,7 @@ function getRelationship(relationship: Relationship, entityName: string) {
   const destinationEntity = entities.get(destinationEntityName);
 
   let relationshipConfiguration: JDLRelationshipModel = {
+    side: relationship.relationshipSide,
     from: entityName,
     to: destinationJDLEntity?.name ?? destinationEntityName,
     type,
@@ -224,31 +229,6 @@ function getRelationship(relationship: Relationship, entityName: string) {
     isInjectedFieldInToRequired: destinationSideAttributes.injectedFieldInDestinationIsRequired ?? false,
     commentInTo: destinationSideAttributes.commentForDestinationEntity,
   };
-  if (relationship.relationshipType === 'many-to-one') {
-    if (destinationSideAttributes.injectedFieldInDestinationEntity) {
-      // This is a bidirectional relationship so consider it as a OneToMany
-      return new JDLRelationship({
-        type: JDL_RELATIONSHIP_ONE_TO_MANY,
-        from: relationshipConfiguration.to,
-        to: relationshipConfiguration.from,
-        commentInFrom: relationshipConfiguration.commentInTo,
-        commentInTo: relationshipConfiguration.commentInFrom,
-        injectedFieldInFrom: relationshipConfiguration.injectedFieldInTo,
-        injectedFieldInTo: relationshipConfiguration.injectedFieldInFrom,
-        isInjectedFieldInFromRequired: relationshipConfiguration.isInjectedFieldInToRequired,
-        isInjectedFieldInToRequired: relationshipConfiguration.isInjectedFieldInFromRequired,
-        options: {
-          global: relationshipConfiguration.options.global,
-          destination: relationshipConfiguration.options.source,
-          source: relationshipConfiguration.options.destination,
-        },
-      });
-    }
-  }
-  // Only one side of the relationship with every information is added to the jdl
-  if (!relationship.ownerSide && relationship.relationshipType !== 'many-to-one') {
-    return undefined;
-  }
   return new JDLRelationship(relationshipConfiguration);
 }
 
