@@ -664,81 +664,81 @@ paginate * with infinite-scroll
 
       it('should set them', () => {
         jestExpect(entityA).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-  ],
-  "entityTableName": "a",
-  "fields": [],
-  "name": "A",
-  "pagination": "pagination",
-  "relationships": [],
-}
-`);
+          {
+            "applications": [
+              "tata",
+            ],
+            "entityTableName": "a",
+            "fields": [],
+            "name": "A",
+            "pagination": "pagination",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityB).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-  ],
-  "entityTableName": "b",
-  "fields": [],
-  "name": "B",
-  "pagination": "infinite-scroll",
-  "relationships": [],
-}
-`);
+          {
+            "applications": [
+              "tata",
+            ],
+            "entityTableName": "b",
+            "fields": [],
+            "name": "B",
+            "pagination": "infinite-scroll",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityCInTata).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-    "tutu",
-  ],
-  "entityTableName": "c",
-  "fields": [],
-  "name": "C",
-  "pagination": "pagination",
-  "relationships": [],
-}
-`);
+          {
+            "applications": [
+              "tata",
+              "tutu",
+            ],
+            "entityTableName": "c",
+            "fields": [],
+            "name": "C",
+            "pagination": "pagination",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityCInTutu).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-    "tutu",
-  ],
-  "entityTableName": "c",
-  "fields": [],
-  "name": "C",
-  "pagination": "pagination",
-  "relationships": [],
-}
-`);
+          {
+            "applications": [
+              "tata",
+              "tutu",
+            ],
+            "entityTableName": "c",
+            "fields": [],
+            "name": "C",
+            "pagination": "pagination",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityD).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tutu",
-  ],
-  "dto": "mapstruct",
-  "entityTableName": "d",
-  "fields": [],
-  "name": "D",
-  "pagination": "infinite-scroll",
-  "relationships": [],
-  "service": "serviceClass",
-}
-`);
+          {
+            "applications": [
+              "tutu",
+            ],
+            "dto": "mapstruct",
+            "entityTableName": "d",
+            "fields": [],
+            "name": "D",
+            "pagination": "infinite-scroll",
+            "relationships": [],
+            "service": "serviceClass",
+          }
+        `);
         jestExpect(entityE).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tutu",
-  ],
-  "entityTableName": "e",
-  "fields": [],
-  "name": "E",
-  "pagination": "infinite-scroll",
-  "relationships": [],
-}
-`);
+          {
+            "applications": [
+              "tutu",
+            ],
+            "entityTableName": "e",
+            "fields": [],
+            "name": "E",
+            "pagination": "infinite-scroll",
+            "relationships": [],
+          }
+        `);
       });
       it('should not generate entity not in any app', () => {
         expect(entityF).to.be.false;
@@ -1003,7 +1003,7 @@ entity A
 entity B
 
 relationship OneToOne {
-  @id A{b} to @NotId(value) @Something B{a} with jpaDerivedIdentifier
+  @id A{b} to @NotId(value) @Something B{a} with builtInEntity
 }
 `;
         const importer = createImporterFromContent(content, { databaseType: 'postgresql', applicationName: 'toto' });
@@ -1018,31 +1018,32 @@ relationship OneToOne {
 
       it('should export them', () => {
         jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
-{
-  "options": {
-    "notId": "value",
-    "something": true,
-  },
-  "otherEntityName": "b",
-  "otherEntityRelationshipName": "a",
-  "ownerSide": true,
-  "relationshipName": "b",
-  "relationshipType": "one-to-one",
-  "useJPADerivedIdentifier": true,
-}
-`);
+          {
+            "options": {
+              "notId": "value",
+              "something": true,
+            },
+            "otherEntityName": "b",
+            "otherEntityRelationshipName": "a",
+            "ownerSide": true,
+            "relationshipName": "b",
+            "relationshipType": "one-to-one",
+            "relationshipWithBuiltInEntity": true,
+          }
+        `);
         jestExpect(relationshipOnDestination).toMatchInlineSnapshot(`
-{
-  "options": {
-    "id": true,
-  },
-  "otherEntityName": "a",
-  "otherEntityRelationshipName": "b",
-  "ownerSide": false,
-  "relationshipName": "a",
-  "relationshipType": "one-to-one",
-}
-`);
+          {
+            "options": {
+              "builtInEntity": true,
+              "id": true,
+            },
+            "otherEntityName": "a",
+            "otherEntityRelationshipName": "b",
+            "ownerSide": false,
+            "relationshipName": "a",
+            "relationshipType": "one-to-one",
+          }
+        `);
       });
     });
     context('when importing a JDL application with microfrontends', () => {
@@ -1058,15 +1059,15 @@ relationship OneToOne {
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
-[
-  {
-    "baseName": "foo",
-  },
-  {
-    "baseName": "bar",
-  },
-]
-`);
+          [
+            {
+              "baseName": "foo",
+            },
+            {
+              "baseName": "bar",
+            },
+          ]
+        `);
       });
     });
     context('when importing a JDL application with clientFramework no', () => {
