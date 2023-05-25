@@ -201,32 +201,38 @@ export default class JdlGenerator extends BaseGenerator {
           return;
         }
 
-        const generationOptions: any = { reproducible: this.reproducible, force: this.force };
+        const generatorOptions: any = { reproducible: this.reproducible, force: this.force };
 
         if (this.ignoreApplication || this.applications.length === 0) {
           if (this.applications.length === 0) {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(GENERATOR_ENTITIES, {
-              ...generationOptions,
-              entities: entities.map(entity => entity.name),
+              generatorOptions: {
+                ...generatorOptions,
+                entities: entities.map(entity => entity.name),
+              },
             });
           } else {
             for (const app of this.applications) {
               await this.composeWithJHipster(GENERATOR_ENTITIES, {
-                ...generationOptions,
-                entities: app.entities.map(entity => entity.name),
-                destinationRoot: app.folder ? this.destinationPath(app.folder) : undefined,
+                generatorOptions: {
+                  ...generatorOptions,
+                  entities: app.entities.map(entity => entity.name),
+                  destinationRoot: app.folder ? this.destinationPath(app.folder) : undefined,
+                },
               });
             }
           }
         } else if (this.applications.length === 1) {
           this.logger.debug('Generating 1 application');
-          await this.composeWithJHipster(GENERATOR_APP, generationOptions);
+          await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
         } else {
           this.logger.debug(`Generating ${this.applications.length}applications`);
           await this.composeWithJHipster(GENERATOR_WORKSPACES, {
-            workspacesFolders: this.applications.map(app => app.folder),
-            generateApplications: async () => this.runNonInteractive(this.applications, generationOptions),
+            generatorOptions: {
+              workspacesFolders: this.applications.map(app => app.folder),
+              generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
+            } as any,
           });
         }
       },
@@ -247,9 +253,11 @@ export default class JdlGenerator extends BaseGenerator {
             this.logger.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
             await this.composeWithJHipster(deploymentType, {
-              destinationRoot: this.destinationPath(deploymentType),
-              force: true,
-              skipPrompts: true,
+              generatorOptions: {
+                destinationRoot: this.destinationPath(deploymentType),
+                force: true,
+                skipPrompts: true,
+              } as any,
             });
           }
         }

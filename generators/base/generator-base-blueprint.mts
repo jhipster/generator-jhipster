@@ -21,6 +21,7 @@ import fs from 'fs';
 import path from 'path';
 import semver from 'semver';
 
+import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace } from './support/index.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
@@ -43,7 +44,8 @@ export default class JHipsterBaseBlueprintGenerator<
   jhipsterContext?: any;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, features);
+    const { jhipsterContext, ...opts } = options ?? {};
+    super(args, opts, features);
 
     if (this.options.help) {
       return;
@@ -57,7 +59,7 @@ export default class JHipsterBaseBlueprintGenerator<
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator
-      this.jhipsterContext = this.options.jhipsterContext;
+      this.jhipsterContext = jhipsterContext;
 
       try {
         // Fallback to the original generator if the file does not exists in the blueprint.
@@ -394,7 +396,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * @protected
    * Composes with blueprint generators, if any.
    */
-  protected async composeWithBlueprints(subGen: string, extraOptions?) {
+  protected async composeWithBlueprints(subGen: string, options?: ComposeOptions) {
     this.delegateToBlueprint = false;
 
     if (!this.configOptions.blueprintConfigured) {
@@ -408,7 +410,7 @@ export default class JHipsterBaseBlueprintGenerator<
     }
     const composedBlueprints: any[] = [];
     for (const blueprint of blueprints) {
-      const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
+      const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, options);
       if (blueprintGenerator) {
         composedBlueprints.push(blueprintGenerator);
         if ((blueprintGenerator as any).sbsBlueprint) {
@@ -494,7 +496,11 @@ export default class JHipsterBaseBlueprintGenerator<
    * @param {any} [extraOptions] - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
-  private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(blueprint, subGen, extraOptions = {}): Promise<G | undefined> {
+  private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(
+    blueprint,
+    subGen,
+    extraOptions: ComposeOptions = {}
+  ): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks) {
       this._checkBlueprint(blueprint);
@@ -517,14 +523,16 @@ export default class JHipsterBaseBlueprintGenerator<
       `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`
     );
 
-    const finalOptions = {
-      ...this.options,
-      configOptions: this.configOptions,
+    const finalOptions: ComposeOptions = {
+      forwardOptions: true,
       ...extraOptions,
-      jhipsterContext: this,
+      generatorOptions: {
+        jhipsterContext: this,
+        ...extraOptions?.generatorOptions,
+      } as any,
     };
 
-    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any, false);
+    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }

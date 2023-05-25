@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import path, { isAbsolute } from 'path';
+import path from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
-import fs, { existsSync } from 'fs';
+import fs from 'fs';
 import { exec } from 'child_process';
 import os from 'os';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import YeomanGenerator, { type Storage } from 'yeoman-generator';
 import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
@@ -213,61 +213,6 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
   rewriteFile(filePath, needle, content) {
     const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
     return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
-  }
-
-  /**
-   * Compose with a jhipster generator using default jhipster config.
-   * @param {string} generator - jhipster generator.
-   * @param {object} args - args to pass
-   * @param {object} [options] - options to pass
-   * @param {object} [composeOptions] - compose options
-   * @return {object} the composed generator
-   */
-  async composeWithJHipster(generator: string, args?: any, options?: any, { immediately = false } = {}) {
-    assert(typeof generator === 'string', 'generator should to be a string');
-    if (!isAbsolute(generator)) {
-      const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
-      if (!Array.isArray(args)) {
-        options = args;
-        args = [];
-      }
-
-      if ((this as any).env.get(namespace)) {
-        generator = namespace;
-      } else {
-        // Keep test compatibily were jhipster lookup does not run.
-        const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
-          const pathToLook = join(__dirname, `../${generator}${extension}`);
-          return existsSync(pathToLook) ? pathToLook : undefined;
-        });
-        if (!found) {
-          throw new Error(`Generator ${generator} was not found`);
-        }
-        generator = join(__dirname, `../${generator}${found}`);
-      }
-    }
-
-    return this.env.composeWith(generator, {
-      generatorArgs: args,
-      generatorOptions: {
-        ...this.options,
-        destinationRoot: (this as any)._destinationRoot,
-        configOptions: this.configOptions,
-        ...options,
-      },
-      schedule: !immediately,
-    });
-  }
-
-  /**
-   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
-   * @param {String} generator - jhipster generator.
-   * @param {String[]} [args] - arguments to pass
-   * @param {Object} [options] - options to pass
-   * @return {Promise<any>} the composed generator
-   */
-  dependsOnJHipster(generator: string, args?: string[], options?: any) {
-    return (this as any).composeWithJHipster(generator, args, options, { immediately: true });
   }
 
   /**
