@@ -205,6 +205,12 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
 }
 
 class JHipsterTest extends YeomanTest {
+  constructor() {
+    super();
+
+    this.adapterOptions = { log: createJHipsterLogger() };
+  }
+
   run<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
     GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
