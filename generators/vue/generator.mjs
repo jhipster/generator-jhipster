@@ -160,7 +160,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup({
       end({ application }) {
         this.log.ok('Vue application generated successfully.');
-        this.logger.log(
+        this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `)

@@ -73,7 +73,7 @@ async function prompting() {
   this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
 
   if ((this.devDatabaseType === H2_DISK || this.devDatabaseType === H2_MEMORY) && this.cloudfoundryProfile === 'dev') {
-    this.logger.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
+    this.log.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
     this.cloudfoundryProfile = 'prod';
   }
 }

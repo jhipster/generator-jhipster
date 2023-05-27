@@ -35,7 +35,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
-        this.logger.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+        this.log.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
 
       async checkJHipster() {
@@ -88,7 +88,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
       checkApplication() {
         if (this.jhipsterConfig.baseName === undefined) {
-          this.logger.warn("Current location doesn't contain a valid JHipster application");
+          this.log.warn("Current location doesn't contain a valid JHipster application");
           this.cancelCancellableTasks();
         }
       },
@@ -125,7 +125,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       });
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
-      this.logger.error('Error while parsing entities to JDL', error);
+      this.log.error('Error while parsing entities to JDL', error);
       throw new Error('\nError while parsing entities to JDL\n', { cause: error });
     }
     return jdlObject;

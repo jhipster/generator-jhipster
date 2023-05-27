@@ -230,9 +230,9 @@ ${needlePrefix} jhipster-needle-a-needle"
 
     it('returned function should not throw on optional missing needle', () => {
       const content = 'no needle';
-      expect(
-        createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log() {}, logger: { warn: () => {} } }, content, 'file')
-      ).toBe(content);
+      const log = () => {};
+      log.warn = () => {};
+      expect(createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log }, content, 'file')).toBe(content);
     });
 
     it('returned function should add contentToAdd', () => {

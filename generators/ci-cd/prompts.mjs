@@ -26,12 +26,12 @@ export default {
 async function askPipeline() {
   if (this.abort) return;
   if (this.autoconfigureTravis) {
-    this.logger.info('Auto-configuring Travis CI');
+    this.log.verboseInfo('Auto-configuring Travis CI');
     this.pipeline = 'travis';
     return;
   }
   if (this.autoconfigureJenkins) {
-    this.logger.info('Auto-configuring Jenkins');
+    this.log.verboseInfo('Auto-configuring Jenkins');
     this.pipeline = 'jenkins';
     this.sendBuildToGitlab = false;
     this.insideDocker = false;
@@ -39,7 +39,7 @@ async function askPipeline() {
   }
 
   if (this.autoconfigureGitlab) {
-    this.logger.info('Auto-configuring Gitlab');
+    this.log.verboseInfo('Auto-configuring Gitlab');
     this.pipeline = 'gitlab';
     this.sendBuildToGitlab = true;
     this.insideDocker = true;
@@ -47,19 +47,19 @@ async function askPipeline() {
   }
 
   if (this.autoconfigureAzure) {
-    this.logger.info('Auto-configuring Azure');
+    this.log.verboseInfo('Auto-configuring Azure');
     this.pipeline = 'azure';
     return;
   }
 
   if (this.autoconfigureGithub) {
-    this.logger.info('Auto-configuring GitHub Actions');
+    this.log.verboseInfo('Auto-configuring GitHub Actions');
     this.pipeline = 'github';
     return;
   }
 
   if (this.autoconfigureCircleCI) {
-    this.logger.info('Auto-configuring CircleCI');
+    this.log.verboseInfo('Auto-configuring CircleCI');
     this.pipeline = 'circle';
     return;
   }
@@ -105,19 +105,19 @@ async function askIntegrations() {
   }
 
   if (this.autoconfigureAzure) {
-    this.logger.info('Auto-configuring Azure');
+    this.log.verboseInfo('Auto-configuring Azure');
     this.pipeline = 'azure';
     return;
   }
 
   if (this.autoconfigureGithub) {
-    this.logger.info('Auto-configuring GitHub Actions');
+    this.log.verboseInfo('Auto-configuring GitHub Actions');
     this.pipeline = 'github';
     return;
   }
 
   if (this.autoconfigureCircleCI) {
-    this.logger.info('Auto-configuring CircleCI');
+    this.log.verboseInfo('Auto-configuring CircleCI');
     this.pipeline = 'circle';
     return;
   }

@@ -26,7 +26,7 @@ import { packageJson } from '../lib/index.mjs';
 
 const downloadFile = (url: string, filename: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    logger.info(`Downloading file: ${url}`);
+    logger.verboseInfo(`Downloading file: ${url}`);
     get(url, response => {
       if (response.statusCode !== 200) {
         reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
@@ -62,7 +62,7 @@ export const downloadJdlFile = async (jdlFile: string, { skipSampleRepository }:
   try {
     return await downloadFile(url, jdlFile);
   } catch (error) {
-    logger.info((error as any).message);
+    logger.verboseInfo((error as any).message);
     // TODO replace when any v8 is released.
     // const branchName = `v${packageJson.version.split('.', 2)[0]}`;
     const branchName = 'v8';

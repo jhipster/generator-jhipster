@@ -53,7 +53,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       initializing() {
-        this.logger.info(`The service ${this.name} is being created.`);
+        this.log.verboseInfo(`The service ${this.name} is being created.`);
         const configuration = this.config;
         this.baseName = configuration.get(BASE_NAME);
         this.packageName = configuration.get(PACKAGE_NAME);

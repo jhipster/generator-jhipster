@@ -56,7 +56,7 @@ export const checkKubernetes = runAsync(function () {
 
   shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
     if (stderr) {
-      this.logger.warn(
+      this.log.warn(
         'kubectl 1.2 or later is not installed on your computer.\n' +
           'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n'
       );
@@ -74,7 +74,7 @@ export const checkHelm = runAsync(function () {
     { silent: true },
     (code, stdout, stderr) => {
       if (stderr || code !== 0) {
-        this.logger.warn(
+        this.log.warn(
           'helm 2.12.x or later is not installed on your computer.\n' +
             'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
         );

@@ -139,11 +139,11 @@ export default class BootstrapGenerator extends BaseGenerator {
    * Queue environment's commit task.
    */
   queueCommit() {
-    this.logger.debug('Queueing conflicts task');
+    this.log.debug('Queueing conflicts task');
     (this as any).queueTask(
       {
         method: async () => {
-          this.logger.debug('Adding queueCommit event listener');
+          this.log.debug('Adding queueCommit event listener');
           this.env.sharedFs.once('change', () => {
             this.queueCommit();
           });

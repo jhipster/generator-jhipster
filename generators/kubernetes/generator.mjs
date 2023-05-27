@@ -54,8 +54,8 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
-        this.logger.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
+        this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
       ...super.initializing,
       checkKubernetes,
@@ -155,27 +155,27 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
     return {
       deploy() {
         if (this.hasWarning) {
-          this.logger.warn(`${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
-          this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.logger.warn(this.warningMessage);
+          this.log.warn(`${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
+          this.log.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.log.warn(this.warningMessage);
         } else {
-          this.logger.info(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
+          this.log.verboseInfo(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
         }
 
-        this.logger.warn(
+        this.log.warn(
           '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
           const targetImageName = this.appConfigs[i].targetImageName;
           if (originalImageName !== targetImageName) {
-            this.logger.info(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
+            this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
-          this.logger.info(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
+          this.log.verboseInfo(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
         if (this.dockerRepositoryName) {
-          this.logger.log('\nAlternatively, you can use Jib to build and push image directly to a remote registry:');
+          this.log.log('\nAlternatively, you can use Jib to build and push image directly to a remote registry:');
           this.appsFolders.forEach((appsFolder, index) => {
             const appConfig = this.appConfigs[index];
             let runCommand = '';
@@ -188,29 +188,29 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
                 appConfig.targetImageName
               }`;
             }
-            this.logger.info(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
+            this.log.verboseInfo(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
           });
         }
-        this.logger.log('\nYou can deploy all your apps by running the following kubectl command:');
-        this.logger.info(`  ${chalk.cyan('bash kubectl-apply.sh -f')}`);
-        this.logger.log('\n[OR]');
-        this.logger.log('\nIf you want to use kustomize configuration, then run the following command:');
-        this.logger.info(`  ${chalk.cyan('bash kubectl-apply.sh -k')}`);
+        this.log.log('\nYou can deploy all your apps by running the following kubectl command:');
+        this.log.verboseInfo(`  ${chalk.cyan('bash kubectl-apply.sh -f')}`);
+        this.log.log('\n[OR]');
+        this.log.log('\nIf you want to use kustomize configuration, then run the following command:');
+        this.log.verboseInfo(`  ${chalk.cyan('bash kubectl-apply.sh -k')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
           const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
-          this.logger.info("\nUse these commands to find your application's IP addresses:");
+          this.log.verboseInfo("\nUse these commands to find your application's IP addresses:");
           for (let i = 0; i < this.appsFolders.length; i++) {
             if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-              this.logger.info(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
+              this.log.verboseInfo(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
             }
           }
-          this.logger.log();
+          this.log.log();
         }
         // Make the apply script executable
         try {
           fs.chmodSync('kubectl-apply.sh', '755');
         } catch (err) {
-          this.logger.warn("Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'");
+          this.log.warn("Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'");
         }
       },
     };

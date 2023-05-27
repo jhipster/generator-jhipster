@@ -155,7 +155,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           relationship.otherEntityName = lowerFirst(otherEntityName);
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = relationship.otherEntityName;
-            this.logger.warn(
+            this.log.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
                 relationship
               )}, using ${relationship.otherEntityName} as fallback`
