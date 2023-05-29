@@ -89,7 +89,7 @@
     "@yeoman/adapter": "1.0.5",
     "@yeoman/conflicter": "1.0.4",
     "@yeoman/namespace": "1.0.0",
-    "@yeoman/transform": "1.1.0",
+    "@yeoman/transform": "1.2.0",
     "@yeoman/types": "1.0.1",
     "aws-sdk": "2.1386.0",
     "axios": "1.4.0",
