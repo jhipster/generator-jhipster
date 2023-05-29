@@ -7,7 +7,7 @@
     "@ng-bootstrap/ng-bootstrap": "14.2.0",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
-    "@popperjs/core": "2.11.7",
+    "@popperjs/core": "2.11.8",
     "bootstrap": "5.2.3",
     "bootswatch": "5.2.3",
     "ngx-cookie-service": "15.0.0",
