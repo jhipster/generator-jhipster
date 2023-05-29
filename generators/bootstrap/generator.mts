@@ -20,9 +20,10 @@ import { forceYoFiles } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
 import { createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 
+import { passthrough } from '@yeoman/transform';
 import BaseGenerator from '../base/index.mjs';
 import {
-  MultiStepTransform,
+  createMultiStepTransform,
   createPrettierTransform,
   createForceWriteConfigFilesTransform,
   autoCrlfTransform,
@@ -46,7 +47,6 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
-  multiStepTransform = new MultiStepTransform();
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
 
@@ -123,8 +123,9 @@ export default class BootstrapGenerator extends BaseGenerator {
   queueMultistepTransform() {
     this.queueTask({
       method: () => {
-        const filter = file => isFilePending(file) && this.multiStepTransform.templateFileFs.isTemplate(file.path);
-        return this.env.applyTransforms([this.multiStepTransform], {
+        const multiStepTransform = createMultiStepTransform();
+        const filter = file => isFilePending(file) && multiStepTransform.templateFileFs.isTemplate(file.path);
+        return this.env.applyTransforms([multiStepTransform], {
           name: 'applying multi-step templates',
           streamOptions: { filter },
         } as any);

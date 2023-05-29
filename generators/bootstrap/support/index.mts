@@ -18,6 +18,6 @@
  */
 export { default as autoCrlfTransform } from './auto-crlf-transform.mjs';
 export { default as createForceWriteConfigFilesTransform } from './force-write-config-files-transform.mjs';
-export { default as MultiStepTransform } from './multi-step-transform/index.mjs';
+export * from './multi-step-transform/index.mjs';
 export * from './prettier-support.mjs';
 export { default as createSortConfigFilesTransform } from './sort-config-files-transform.mjs';
