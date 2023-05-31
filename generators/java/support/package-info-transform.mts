@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { dirname, join, relative } from 'path';
-import { passthrough } from 'p-transform';
+import { passthrough } from '@yeoman/transform';
 import { MemFsEditor } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
@@ -45,7 +45,7 @@ package ${packageName};
         }
       }
     }
-  }, 'jhipster:package-info-transform');
+  });
 };
 
 export const matchMainJavaFiles = (srcMainJava: string) => new Minimatch(`**/${srcMainJava}/**/*.java`);

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
+import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 import CoreGenerator from '../../base-core/index.mjs';
 
@@ -173,7 +173,7 @@ ${newContent}`);
       }
       file.contents = Buffer.from(newContent);
     }
-  }, 'jhipster:translate-vue-files');
+  });
 }
 
 export default translateVueFilesTransform;
