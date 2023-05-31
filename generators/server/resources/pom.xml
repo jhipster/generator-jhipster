@@ -20,16 +20,16 @@
         <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <r2dbc-mysql.version>1.0.1</r2dbc-mysql.version>
+        <r2dbc-mysql.version>1.0.2</r2dbc-mysql.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>10.11.0</checkstyle.version>
+        <checkstyle.version>10.12.0</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
-        <gatling-maven-plugin.version>4.3.4</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>4.3.5</gatling-maven-plugin.version>
         <git-commit-id-plugin.version>6.0.0</git-commit-id-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>

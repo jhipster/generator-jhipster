@@ -1,11 +1,11 @@
+import { Readable } from 'stream';
 import { expect } from 'esmocha';
-import { passthrough, pipeline } from 'p-transform';
 
+import { pipeline } from 'p-transform';
 import generatedAnnotationTransform from './generated-annotation-transform.mjs';
 
 describe('generators - java - generated-annotation-transform', () => {
   it('should add GeneratedByJHipster to interface', async () => {
-    const source = passthrough();
     const file = {
       contents: Buffer.from(`package package.name;
 
@@ -13,11 +13,7 @@ interface Foo {
 }`),
       path: 'foo.java',
     };
-    setImmediate(() => {
-      source.write(file);
-      source.end();
-    });
-    await pipeline(source, generatedAnnotationTransform('generated.by.package'));
+    await pipeline(Readable.from([file]), generatedAnnotationTransform('generated.by.package'));
     expect(file.contents.toString()).toMatchInlineSnapshot(`
 "package package.name;
 import generated.by.package.GeneratedByJHipster;
@@ -29,7 +25,6 @@ interface Foo {
   });
 
   it('should add GeneratedByJHipster to @interface', async () => {
-    const source = passthrough();
     const file = {
       contents: Buffer.from(`package package.name;
 
@@ -37,11 +32,7 @@ interface Foo {
 }`),
       path: 'foo.java',
     };
-    setImmediate(() => {
-      source.write(file);
-      source.end();
-    });
-    await pipeline(source, generatedAnnotationTransform('generated.by.package'));
+    await pipeline(Readable.from([file]), generatedAnnotationTransform('generated.by.package'));
     expect(file.contents.toString()).toMatchInlineSnapshot(`
 "package package.name;
 import generated.by.package.GeneratedByJHipster;

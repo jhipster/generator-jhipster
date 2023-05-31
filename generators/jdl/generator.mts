@@ -81,7 +81,7 @@ export default class JdlGenerator extends BaseGenerator {
         if ((this.env.rootGenerator() as any) === this) {
           this.parseJHipsterArguments(command.arguments);
           if (this.jdlFiles) {
-            this.logger.info('Generating jdls', ...this.jdlFiles);
+            this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
           }
         }
       },
@@ -110,7 +110,7 @@ export default class JdlGenerator extends BaseGenerator {
           this.jdlFiles = await Promise.all(
             this.jdlFiles.map(toJdlFile).map(async filename => {
               if (!existsSync(this.destinationPath(filename))) {
-                this.logger.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
+                this.log.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
                 return downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
               }
               return filename;
@@ -224,10 +224,10 @@ export default class JdlGenerator extends BaseGenerator {
             }
           }
         } else if (this.applications.length === 1) {
-          this.logger.debug('Generating 1 application');
+          this.log.debug('Generating 1 application');
           await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
         } else {
-          this.logger.debug(`Generating ${this.applications.length}applications`);
+          this.log.debug(`Generating ${this.applications.length}applications`);
           await this.composeWithJHipster(GENERATOR_WORKSPACES, {
             generatorOptions: {
               workspacesFolders: this.applications.map(app => app.folder),
@@ -250,7 +250,7 @@ export default class JdlGenerator extends BaseGenerator {
           for (const deployment of this.exportedDeployments) {
             const deploymentConfig = deployment[GENERATOR_JHIPSTER];
             const deploymentType = deploymentConfig.deploymentType;
-            this.logger.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
+            this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
             await this.composeWithJHipster(deploymentType, {
               generatorOptions: {

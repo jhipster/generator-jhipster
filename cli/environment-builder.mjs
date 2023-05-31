@@ -27,7 +27,7 @@ import { fileURLToPath } from 'url';
 import { QueuedAdapter } from '@yeoman/adapter';
 
 import { CLI_NAME, logger } from './utils.mjs';
-import { packageNameToNamespace } from '../generators/base/support/index.mjs';
+import { createJHipsterLogger, packageNameToNamespace } from '../generators/base/support/index.mjs';
 import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../generators/base/internal/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +41,7 @@ function loadYoRc(filePath = '.yo-rc.json') {
 }
 
 const createEnvironment = (options = {}) => {
-  options.adapter = options.adapter ?? new QueuedAdapter();
+  options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
 
   // Remove after migration to environment 3.
   const configOptions = {};

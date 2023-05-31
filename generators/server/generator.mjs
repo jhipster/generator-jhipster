@@ -185,7 +185,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           try {
             await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
           } catch (error) {
-            this.logger.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
+            this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
           }
           return true;
         }.bind(this),
@@ -232,7 +232,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       forceReactiveGateway() {
         if (this.jhipsterConfig.applicationType === GATEWAY) {
           if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
-            this.logger.warn('Non reactive gateway is not supported. Switching to reactive.');
+            this.log.warn('Non reactive gateway is not supported. Switching to reactive.');
           }
           this.jhipsterConfig.reactive = true;
         }
@@ -479,7 +479,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         ) {
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
           entityConfig.searchEngine = NO_SEARCH_ENGINE;
-          this.logger.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+          this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
         }
       },
       configureModelFiltering({ application, entityConfig }) {
@@ -490,7 +490,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.jpaMetamodelFiltering &&
           (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
-          this.logger.warn('Not compatible with jpaMetamodelFiltering, disabling');
+          this.log.warn('Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
         }
       },
@@ -526,7 +526,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entityConfig.changelogDate === undefined) {
           const currentDate = this.dateFormatForLiquibase();
           if (entityStorage.existed) {
-            this.logger.info(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
+            this.log.verboseInfo(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
           }
           entityConfig.changelogDate = currentDate;
         }
@@ -559,7 +559,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this._validateField(entityName, field);
 
           if (field.fieldType === BYTE_BUFFER) {
-            this.logger.warn(
+            this.log.warn(
               `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(
                 field
               )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
@@ -595,14 +595,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = relationship.otherEntityName;
-            this.logger.warn(
+            this.log.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
                 relationship
               )}, using ${relationship.otherEntityName} as fallback`
             );
           }
           if (relationship.useJPADerivedIdentifier) {
-            this.logger.info('Option useJPADerivedIdentifier is deprecated, use id instead');
+            this.log.verboseInfo('Option useJPADerivedIdentifier is deprecated, use id instead');
             relationship.id = true;
           }
         });
@@ -855,7 +855,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (os.platform() === 'win32') {
           logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.logger.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.log.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
     });
   }
@@ -888,7 +888,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
 
     if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
-      this.logger.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
+      this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
       dest.enableHibernateCache = false;
     }
 
@@ -932,12 +932,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
     if (isReservedTableName(entityTableName, prodDatabaseType)) {
       if (jhiTablePrefix) {
-        this.logger.warn(
+        this.log.warn(
           `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
         );
         entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
       } else {
-        this.logger.warn(
+        this.log.warn(
           `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
         );
       }

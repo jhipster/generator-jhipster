@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { esmocha } from 'esmocha';
-import { Options } from 'yeoman-environment';
-import type YeomanGenerator from 'yeoman-generator';
+import type { BaseEnvironmentOptions } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
 import _ from 'lodash';
@@ -12,7 +11,7 @@ import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
 import { GENERATOR_WORKSPACES } from '../../generators/generator-list.mjs';
 import getGenerator from './get-generator.mjs';
 import deploymentTestSamples from './deployment-samples.mjs';
-import { normalizePathEnd } from '../../generators/base/support/index.mjs';
+import { createJHipsterLogger, normalizePathEnd } from '../../generators/base/support/index.mjs';
 import BaseGenerator from '../../generators/base/index.mjs';
 
 const { set } = _;
@@ -206,12 +205,18 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
 }
 
 class JHipsterTest extends YeomanTest {
+  constructor() {
+    super();
+
+    this.adapterOptions = { log: createJHipsterLogger() };
+  }
+
   run<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
     GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined
+    envOptions?: BaseEnvironmentOptions | undefined
   ): JHipsterRunContext<GeneratorType> {
-    return super.run(GeneratorOrNamespace, settings, envOptions) as any;
+    return super.run(GeneratorOrNamespace, settings, envOptions).withAdapterOptions({ log: createJHipsterLogger() }) as any;
   }
 
   runJHipster<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(

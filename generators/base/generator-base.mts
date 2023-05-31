@@ -35,7 +35,7 @@ import assert from 'assert';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { joinCallbacks, Logger } from './support/index.mjs';
+import { createJHipsterLogger, joinCallbacks, Logger } from './support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -164,7 +164,7 @@ export default class CoreGenerator extends YeomanGenerator {
 
     this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help });
 
-    this.logger = new Logger({ adapter: this.env.adapter, namespace: this.options.namespace, debugEnabled: this.debugEnabled });
+    this.logger = this.log as any;
 
     if (this.options.help) {
       return;
@@ -394,7 +394,7 @@ export default class CoreGenerator extends YeomanGenerator {
         rmSync(destinationFolder, { recursive: true });
       }
     } catch (error) {
-      this.logger.log(`Could not remove folder ${destinationFolder}`);
+      this.log.log(`Could not remove folder ${destinationFolder}`);
     }
   }
 
@@ -563,10 +563,10 @@ export default class CoreGenerator extends YeomanGenerator {
     if (result.debug) {
       if (Array.isArray(result.debug)) {
         for (const debug of result.debug) {
-          this.logger.debug(debug);
+          this.log.debug(debug);
         }
       } else {
-        this.logger.debug(result.debug);
+        this.log.debug(result.debug);
       }
     }
     if (result.info) {
@@ -581,10 +581,10 @@ export default class CoreGenerator extends YeomanGenerator {
     if (result.warning) {
       if (Array.isArray(result.warning)) {
         for (const warning of result.warning) {
-          this.logger.warn(warning);
+          this.log.warn(warning);
         }
       } else {
-        this.logger.warn(result.warning);
+        this.log.warn(result.warning);
       }
     }
     if (result.error) {
@@ -593,12 +593,12 @@ export default class CoreGenerator extends YeomanGenerator {
           throw new Error(result.error[0]);
         }
         for (const error of result.error) {
-          this.logger.warn(error);
+          this.log.warn(error);
         }
       } else if (throwOnError) {
         throw new Error(result.error);
       } else {
-        this.logger.warn(result.error);
+        this.log.warn(result.error);
       }
     }
   }
@@ -610,7 +610,7 @@ export default class CoreGenerator extends YeomanGenerator {
     try {
       const latestJhipster = await latestVersion(GENERATOR_JHIPSTER);
       if (semver.lt(packageJson.version, latestJhipster)) {
-        this.logger.warn(
+        this.log.warn(
           `${
             chalk.yellow(' ______________________________________________________________________________\n\n') +
             chalk.yellow('  JHipster update available: ') +
@@ -618,8 +618,8 @@ export default class CoreGenerator extends YeomanGenerator {
             chalk.gray(` (current: ${packageJson.version})`)
           }\n`
         );
-        this.logger.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-        this.logger.log(chalk.yellow(' ______________________________________________________________________________\n'));
+        this.log.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+        this.log.log(chalk.yellow(' ______________________________________________________________________________\n'));
       }
     } catch {
       // Ignore error

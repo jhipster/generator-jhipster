@@ -113,7 +113,7 @@ function askForMicroserviceJson() {
 
   return this.prompt(prompts).then(answers => {
     if (answers.microservicePath) {
-      this.logger.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+      this.log.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
       context.microservicePath = this.entityConfig.microservicePath = answers.microservicePath;
     }
   });
@@ -203,7 +203,7 @@ function askForFieldsToRemove() {
   ];
   return this.prompt(prompts).then(props => {
     if (props.confirmRemove) {
-      this.logger.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
+      this.log.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
       const fields = this.entityConfig.fields;
       for (let i = fields.length - 1; i >= 0; i -= 1) {
         const field = this.entityConfig.fields[i];
@@ -265,7 +265,7 @@ function askForRelationsToRemove() {
   ];
   return this.prompt(prompts).then(props => {
     if (props.confirmRemove) {
-      this.logger.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
+      this.log.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
       const relationships = this.entityConfig.relationships;
       for (let i = relationships.length - 1; i >= 0; i -= 1) {
         const rel = relationships[i];
@@ -421,7 +421,7 @@ function askForPagination() {
   ];
   return this.prompt(prompts).then(props => {
     this.entityConfig.pagination = props.pagination;
-    this.logger.log(chalk.green('\nEverything is configured, generating the entity...\n'));
+    this.log.log(chalk.green('\nEverything is configured, generating the entity...\n'));
   });
 }
 
@@ -430,7 +430,7 @@ function askForPagination() {
  */
 function askForField() {
   const context = this.context;
-  this.logger.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
+  this.log.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   const skipServer = context.skipServer;
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
@@ -881,7 +881,7 @@ function askForField() {
 function askForRelationship() {
   const context = this.context;
   const name = context.name;
-  this.logger.log(chalk.green('\nGenerating relationships to other entities\n'));
+  this.log.log(chalk.green('\nGenerating relationships to other entities\n'));
   const prompts = [
     {
       type: 'confirm',
@@ -1063,7 +1063,7 @@ function askForRelationship() {
     if (props.relationshipAdd) {
       return askForRelationship.call(this);
     }
-    this.logger.log('\n');
+    this.log.log('\n');
     return undefined;
   });
 }
@@ -1074,10 +1074,10 @@ function askForRelationship() {
 function logFieldsAndRelationships() {
   const context = this.context;
   if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
-    this.logger.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
+    this.log.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
   }
   if (this.entityConfig.fields.length > 0) {
-    this.logger.log(chalk.white('Fields'));
+    this.log.log(chalk.white('Fields'));
     this.entityConfig.fields.forEach(field => {
       const validationDetails = [];
       const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
@@ -1110,27 +1110,27 @@ function logFieldsAndRelationships() {
           validationDetails.push(`${MAXBYTES}='${field.fieldValidateRulesMaxbytes}'`);
         }
       }
-      this.logger.log(
+      this.log.log(
         chalk.red(field.fieldName) +
           chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) +
           chalk.cyan(validationDetails.join(' '))
       );
     });
-    this.logger.log();
+    this.log.log();
   }
   if (this.entityConfig.relationships.length > 0) {
-    this.logger.log(chalk.white('Relationships'));
+    this.log.log(chalk.white('Relationships'));
     this.entityConfig.relationships.forEach(relationship => {
       const validationDetails = [];
       if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
-      this.logger.info(
+      this.log.verboseInfo(
         `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
           relationship.relationshipType
         )} ${chalk.cyan(validationDetails.join(' '))}`
       );
     });
-    this.logger.log();
+    this.log.log();
   }
 }

@@ -71,7 +71,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
   get initializing() {
     return {
       initializing() {
-        this.logger.info(`The spring-controller ${this.name} is being created.`);
+        this.log.verboseInfo(`The spring-controller ${this.name} is being created.`);
         const configuration = this.config;
         this.baseName = configuration.get(BASE_NAME);
         this.packageName = configuration.get(PACKAGE_NAME);
@@ -148,7 +148,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
         this.apiPrefix = _.kebabCase(this.name);
 
         if (this.controllerActions.length === 0) {
-          this.logger.log(chalk.green('No controller actions found, adding a default action'));
+          this.log.log(chalk.green('No controller actions found, adding a default action'));
           this.controllerActions.push({
             actionName: 'defaultAction',
             actionMethod: 'Get',
@@ -174,7 +174,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
         this.controllerActions.forEach(action => {
           action.actionPath = _.kebabCase(action.actionName);
           action.actionNameUF = _.upperFirst(action.actionName);
-          this.logger.log(
+          this.log.log(
             chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`)
           );
         });

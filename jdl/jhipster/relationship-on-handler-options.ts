@@ -30,7 +30,7 @@ export default function checkAndReturnRelationshipOnValue(onValue, generator) {
 
   if (result) {
     if (!validOptions.includes(result)) {
-      generator.logger.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
+      generator.log.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
 
       result = undefined;
     }

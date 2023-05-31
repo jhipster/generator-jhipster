@@ -26,7 +26,7 @@ import os from 'os';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import YeomanGenerator, { type Storage } from 'yeoman-generator';
-import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase, Logger } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
@@ -97,7 +97,7 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
   abstract needleApi: any;
   abstract sharedData: any;
   abstract configOptions: any;
-  abstract logger: any;
+  declare log: Logger;
 
   /**
    * @private
@@ -287,7 +287,7 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
    * @param {string} msg - message to print
    */
   error(msg) {
-    this.logger.error();
+    this.log.error();
     throw new Error(`${msg}`);
   }
 
@@ -385,7 +385,7 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
-    this.logger.info(`Running command: '${chalk.bold(buildCmd)}'`);
+    this.log.verboseInfo(`Running command: '${chalk.bold(buildCmd)}'`);
     return {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,
@@ -470,9 +470,9 @@ export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHip
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
 templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
-            this.logger.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+            this.log.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
-            this.logger.debug(moreThanOneMessage);
+            this.log.debug(moreThanOneMessage);
           }
         }
         sourceFileFrom = existingTemplates.shift();
@@ -619,7 +619,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && (this as any).fs.exists(destinationFile)) {
-              this.logger.debug(`skipping file ${destinationFile}`);
+              this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
 
@@ -653,7 +653,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    this.logger.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
+    this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -680,7 +680,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       } else {
-        this.logger.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
+        this.log.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
     if (options.reproducible !== undefined) {
@@ -807,7 +807,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           this.jhipsterConfig.creationTimestamp = creationTimestamp;
         }
       } else {
-        this.logger.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
+        this.log.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
 
@@ -841,7 +841,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.jhipsterConfig.clientPackageManager) {
       const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
       if (!usingNpm) {
-        this.logger.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        this.log.warn(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
         options.skipInstall = true;
       }
     }
