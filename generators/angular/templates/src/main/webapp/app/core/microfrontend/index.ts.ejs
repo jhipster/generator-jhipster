@@ -36,8 +36,8 @@ export const loadTranslationModule = async (service: string): Promise<Type<any>>
   }).then(({ LazyTranslationModule }) => LazyTranslationModule);
 
 export const loadEntityModule = async (service: string): Promise<Type<any>> =>
-  loadRemoteModule<{ EntityRoutingModule: Type<any> }>({
+  loadRemoteModule<{ default: Type<any> }>({
     type: 'module',
     remoteEntry: `./services/${service}/remoteEntry.js`,
     exposedModule: './entity-routing',
-  }).then(m => m.EntityRoutingModule);
+  });

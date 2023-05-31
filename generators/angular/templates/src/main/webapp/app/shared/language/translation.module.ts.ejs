@@ -21,7 +21,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 <%_ if (applicationTypeMicroservice) { _%>import { TranslateHttpLoader } from '@ngx-translate/http-loader';<%_ } _%>
 import { translatePartialLoader, missingTranslationHandler } from 'app/config/translation.config';
-import { SessionStorageService } from 'ngx-webstorage';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 <%_ if (applicationTypeMicroservice) { _%>
 function lazyTranslatePartialLoader(http: HttpClient): TranslateLoader {
@@ -45,7 +45,7 @@ export class LazyTranslationModule {
   constructor(
     private translateService: TranslateService,
     private translateLoader: TranslateLoader,
-    sessionStorageService: SessionStorageService
+    stateStorageService: StateStorageService
   ) {
     const currentLang = translateService.store.currentLang;
     this.translateLoader.getTranslation(currentLang).subscribe(translation => {
@@ -73,11 +73,11 @@ export class LazyTranslationModule {
 export class TranslationModule {
   constructor(
     private translateService: TranslateService,
-    sessionStorageService: SessionStorageService
+    private stateStorageService: StateStorageService
   ) {
-    translateService.setDefaultLang('<%= nativeLanguage %>');
+    this.translateService.setDefaultLang('<%= nativeLanguage %>');
     // if user have changed language and navigates away from the application and back to the application then use previously choosed language
-    const langKey = sessionStorageService.retrieve('locale') ?? '<%= nativeLanguage %>';
-    translateService.use(langKey);
+    const langKey = this.stateStorageService.getLocale() ?? '<%= nativeLanguage %>';
+    this.translateService.use(langKey);
   }
 }

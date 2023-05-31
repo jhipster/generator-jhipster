@@ -52,7 +52,6 @@
     "ngx-cookie-service": "<%= nodeDependencies['ngx-cookie-service'] %>",
     <%_ } _%>
     "ngx-infinite-scroll": "<%= nodeDependencies['ngx-infinite-scroll'] %>",
-    "ngx-webstorage": "<%= nodeDependencies['ngx-webstorage'] %>",
     "@popperjs/core": "<%= nodeDependencies['@popperjs/core'] %>",
     "rxjs": "<%= nodeDependencies['rxjs'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
@@ -125,10 +124,6 @@
     "webpack-notifier": "<%= nodeDependencies['webpack-notifier'] %>"
   },
   "overrides": {
-    "ngx-webstorage": {
-      "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
-      "@angular/core": "<%= nodeDependencies['@angular/common'] %>"
-    },
     "webpack": "<%= nodeDependencies['webpack'] %>"
   },
   "engines": {
