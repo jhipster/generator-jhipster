@@ -19,8 +19,8 @@
   },
   "devDependencies": {
     "@angular-architects/module-federation-runtime": "16.0.3",
-    "@angular-builders/custom-webpack": "16.0.0-beta.1",
-    "@angular-builders/jest": "16.0.0-beta.3",
+    "@angular-builders/custom-webpack": "16.0.0",
+    "@angular-builders/jest": "16.0.0",
     "@angular-eslint/eslint-plugin": "16.0.2",
     "@angular/cli": "16.0.2",
     "@types/jest": "29.5.1",
