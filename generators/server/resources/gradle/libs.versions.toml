@@ -5,7 +5,7 @@ node-gradle = { id = 'com.github.node-gradle.node', version = '5.0.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '2.2.0' }
 
-gradle-sonarqube = { id = 'org.sonarqube', version = '4.1.0.3113' }
+gradle-sonarqube = { id = 'org.sonarqube', version = '4.2.0.3129' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.8.0' }
 
