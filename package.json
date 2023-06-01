@@ -165,7 +165,7 @@
     "sinon": "15.1.0",
     "sinon-chai": "3.7.0",
     "sort-keys": "5.0.0",
-    "typescript": "5.0.4",
+    "typescript": "5.1.3",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "8.0.0-rc.0"
   },
