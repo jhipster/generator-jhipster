@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "14.0.0",
-    "@types/jest": "29.5.1",
+    "@types/jest": "29.5.2",
     "@types/lodash": "4.14.195",
     "@types/node": "16.18.34",
     "@types/react": "18.2.7",
@@ -78,7 +78,7 @@
     "ts-jest": "29.1.0",
     "ts-loader": "9.4.3",
     "typescript": "5.0.4",
-    "webpack": "5.84.1",
+    "webpack": "5.85.0",
     "webpack-cli": "5.1.1",
     "webpack-dev-server": "4.15.0",
     "webpack-merge": "5.9.0",
