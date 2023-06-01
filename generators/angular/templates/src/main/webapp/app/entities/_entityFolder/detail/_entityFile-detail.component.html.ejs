@@ -17,48 +17,48 @@
  limitations under the License.
 -%>
 <div class="d-flex justify-content-center">
-    <div class="col-8">
-        <div *ngIf="<%= entityInstance %>">
-            <h2 data-cy="<%= entityInstance %>DetailsHeading"><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.detail.title"><%- getWebappTranslation(i18nKeyPrefix + '.detail.title') %></span></h2>
+  <div class="col-8">
+    <div *ngIf="<%= entityInstance %>">
+      <h2 data-cy="<%= entityInstance %>DetailsHeading"><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.detail.title"><%- getWebappTranslation(i18nKeyPrefix + '.detail.title') %></span></h2>
 
-            <hr>
+      <hr>
 
-            <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+      <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-            <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+      <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
-            <dl class="row-md jh-entity-details">
+      <dl class="row-md jh-entity-details">
 <%_ for (const field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-                <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%- getWebappTranslation(field.fieldTranslationKey) %></span></dt>
-                <dd>
+        <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%- getWebappTranslation(field.fieldTranslationKey) %></span></dt>
+        <dd>
     <%_ if (field.fieldIsEnum) { _%>
-                    <%# TODO: import enum and use its key as label _%>
-                    <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+          <%# TODO: import enum and use its key as label _%>
+          <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
-                    <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
-                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
-                            <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
-                        </a>
-                        {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
-                    </div>
+          <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
+          <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
+            <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
+          </a>
+          {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
+          </div>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
-                    <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
-                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- getWebappTranslation('entity.action.open') %></a>
-                        {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
-                    </div>
+          <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
+          <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- getWebappTranslation('entity.action.open') %></a>
+          {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
+          </div>
     <%_ } else if (field.fieldTypeDuration) { _%>
-                    <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
+          <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
     <%_ } else if (field.fieldTypeTimed) { _%>
-                    <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</span>
+          <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</span>
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-                    <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</span>
+          <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</span>
     <%_ } else { _%>
-                    <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+          <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
     <%_ } _%>
-                </dd>
+        </dd>
 <%_ } _%>
 <%_
 for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
@@ -71,48 +71,48 @@ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedde
     const otherEntityField = relationship.otherEntityField;
     if (ownerSide) {
 _%>
-                <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%- getWebappTranslation(i18nKeyPrefix + '.' + relationshipName) %></span></dt>
-                <dd>
+        <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%- getWebappTranslation(i18nKeyPrefix + '.' + relationshipName) %></span></dt>
+        <dd>
     <%_ if (relationship.otherEntityUser) { _%>
-        <%_ if (relationship.collection) { _%>
-                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                        {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
-                    </span>
-        <%_ } else { _%>
-                    <span>{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</span>
-        <%_ } _%>
+      <%_ if (relationship.collection) { _%>
+          <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+            {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
+          </span>
+      <%_ } else { _%>
+          <span>{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</span>
+      <%_ } _%>
     <%_ } else { _%>
-        <%_ if (relationship.collection) { _%>
-                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
-                    </span>
-        <%_ } else { _%>
-                    <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
-                    </div>
-        <%_ } _%>
+      <%_ if (relationship.collection) { _%>
+          <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+            <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+          </span>
+      <%_ } else { _%>
+          <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
+            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
+          </div>
+      <%_ } _%>
     <%_ } _%>
-                </dd>
+        </dd>
 <%_
     }
 }
 _%>
-            </dl>
+      </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info"
-                    data-cy="entityDetailsBackButton">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- getWebappTranslation('entity.action.back') %></span>
-            </button>
+      <button type="submit"
+          (click)="previousState()"
+          class="btn btn-info"
+          data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- getWebappTranslation('entity.action.back') %></span>
+      </button>
 <%_ if (!readOnly) { _%>
 
-            <button type="button"
-                    [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit"><%- getWebappTranslation('entity.action.edit') %></span>
-            </button>
+      <button type="button"
+          [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
+          class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit"><%- getWebappTranslation('entity.action.edit') %></span>
+      </button>
 <%_ } _%>
-        </div>
     </div>
+  </div>
 </div>

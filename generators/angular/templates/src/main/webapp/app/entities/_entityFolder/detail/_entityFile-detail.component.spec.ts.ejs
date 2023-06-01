@@ -20,8 +20,9 @@
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 const testEntity = this.generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { RouterTestingHarness, RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -31,75 +32,81 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 
 describe('<%= entityAngularName %> Management Detail Component', () => {
-    let comp: <%= entityAngularName %>DetailComponent;
-    let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
 <%_ if (anyFieldIsBlobDerived) { _%>
-    let dataUtils: DataUtils;
+  let dataUtils: DataUtils;
 <%_ } _%>
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [<%= entityAngularName %>DetailComponent],
-            providers: [
-                {
-                    provide: ActivatedRoute,
-                    useValue: { data: of({ <%= entityInstance %>: <%- testEntity %> }) }
-                }
-            ]
-        })
-        .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
-        .compileComponents();
-        fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
-        comp = fixture.componentInstance;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [<%= entityAngularName %>DetailComponent, RouterTestingModule.withRoutes([], { bindToComponentInputs: true })],
+      providers: [
+        provideRouter(
+          [
+            {
+              path: '**',
+              component: <%= entityAngularName %>DetailComponent,
+              resolve: { <%= entityInstance %>: () => of(<%- testEntity %>) },
+            },
+          ],
+          withComponentInputBinding()
+        ),
+      ],
+    })
+      .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
+      .compileComponents();
 <%_ if (anyFieldIsBlobDerived) { _%>
-        dataUtils = TestBed.inject(DataUtils);
-        jest.spyOn(window, 'open').mockImplementation(() => null);
+    dataUtils = TestBed.inject(DataUtils);
+    jest.spyOn(window, 'open').mockImplementation(() => null);
 <%_ } _%>
-    });
+  });
 
-    describe('OnInit', () => {
-        it('Should load <%= entityInstance %> on init', () => {
-            // WHEN
-            comp.ngOnInit();
+  describe('OnInit', () => {
+    it('Should load <%= entityInstance %> on init', async () => {
+      const harness = await RouterTestingHarness.create();
+      const instance = await harness.navigateByUrl('/', <%= entityAngularName %>DetailComponent);
 
-            // THEN
-            expect(comp.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
-        });
+      // THEN
+      expect(instance.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
     });
+  });
 
 <%_ if (anyFieldIsBlobDerived) { _%>
-    describe('byteSize', () => {
-        it('Should call byteSize from DataUtils', () => {
-            // GIVEN
-            jest.spyOn(dataUtils, 'byteSize');
-            const fakeBase64 = 'fake base64';
+  describe('byteSize', () => {
+    it('Should call byteSize from DataUtils', () => {
+      // GIVEN
+      jest.spyOn(dataUtils, 'byteSize');
+      const fakeBase64 = 'fake base64';
+      const fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
+      const comp = fixture.componentInstance;
 
-            // WHEN
-            comp.byteSize(fakeBase64);
+      // WHEN
+      comp.byteSize(fakeBase64);
 
-            // THEN
-            expect(dataUtils.byteSize).toBeCalledWith(fakeBase64);
-        });
+      // THEN
+      expect(dataUtils.byteSize).toBeCalledWith(fakeBase64);
     });
+  });
 
-    describe('openFile', () => {
-        it('Should call openFile from DataUtils', () => {
-            const newWindow = { ...window };
-            newWindow.document.write = jest.fn();
-            window.open = jest.fn(() => newWindow);
-            window.onload = jest.fn(() => newWindow) as any;
-            window.URL.createObjectURL = jest.fn() as any;
-            // GIVEN
-            jest.spyOn(dataUtils, 'openFile');
-            const fakeContentType = 'fake content type';
-            const fakeBase64 = 'fake base64';
+  describe('openFile', () => {
+    it('Should call openFile from DataUtils', () => {
+      const newWindow = { ...window };
+      newWindow.document.write = jest.fn();
+      window.open = jest.fn(() => newWindow);
+      window.onload = jest.fn(() => newWindow) as any;
+      window.URL.createObjectURL = jest.fn() as any;
+      // GIVEN
+      jest.spyOn(dataUtils, 'openFile');
+      const fakeContentType = 'fake content type';
+      const fakeBase64 = 'fake base64';
+      const fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
+      const comp = fixture.componentInstance;
 
-            // WHEN
-            comp.openFile(fakeBase64, fakeContentType);
+      // WHEN
+      comp.openFile(fakeBase64, fakeContentType);
 
-            // THEN
-            expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
-        });
+      // THEN
+      expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
     });
+  });
 <%_ } _%>
 });

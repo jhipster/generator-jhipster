@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -32,8 +32,8 @@ import { DataUtils } from 'app/core/util/data-util.service';
     templateUrl: './<%= entityFileName %>-detail.component.html',
     imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
-export class <%= entityAngularName %>DetailComponent implements OnInit {
-    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+export class <%= entityAngularName %>DetailComponent {
+    @Input() <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
     constructor(
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -41,12 +41,6 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
 <%_ } _%>
         protected activatedRoute: ActivatedRoute
     ) {}
-
-    ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
-            this.<%= entityInstance %> = <%= entityInstance %>;
-        });
-    }
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {
