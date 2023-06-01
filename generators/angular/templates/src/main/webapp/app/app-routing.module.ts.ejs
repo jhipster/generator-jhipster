@@ -73,7 +73,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 <%_ } _%>
         {
           path: '<%= applicationTypeMicroservice ? lowercaseBaseName : '' %>',
-          loadChildren: () => import(`./entities/entity-routing.module`),
+          loadChildren: () => import(`./entities/entity-routing.module`).then(({ EntityRoutingModule }) => EntityRoutingModule),
         },
 <%_ if (applicationTypeGateway) { _%>
   <%_ for (const remote of microfrontends) { _%>
