@@ -50,7 +50,7 @@
     "terser-webpack-plugin": "5.3.9",
     "ts-loader": "9.4.3",
     "typescript": "5.0.4",
-    "vitest": "0.31.2",
+    "vitest": "0.31.3",
     "vitest-sonar-reporter": "0.4.1",
     "vue-loader": "17.1.1",
     "vue-style-loader": "4.1.3",
