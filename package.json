@@ -116,7 +116,7 @@
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
     "p-queue": "7.3.4",
-    "p-transform": "4.0.3",
+    "p-transform": "4.0.5",
     "parse-gitignore": "2.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.8.8",
