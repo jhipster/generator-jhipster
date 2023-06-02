@@ -163,6 +163,10 @@
 
     <shutdownHook class="ch.qos.logback.core.hook.DefaultShutdownHook"/>
 
+    <root level="${logging.level.root}">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
     </contextListener>
