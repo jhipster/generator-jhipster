@@ -62,7 +62,7 @@ export const files = {
       templates: ['webpack/webpack.microfrontend.js'],
     },
     {
-      condition: generator => generator.microfrontend,
+      condition: generator => generator.microfrontend && generator.applicationTypeGateway,
       ...clientApplicationBlock,
       templates: ['core/microfrontend/index.ts'],
     },

@@ -80,7 +80,7 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
         <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">
+          <a class="nav-link" routerLink="/routerName1" (click)="collapseNavbar()">
             <fa-icon icon="iconName1" [fixedWidth]="true"></fa-icon>
             <span jhiTranslate="global.menu.routerName1">Router Name 1</span>
           </a>

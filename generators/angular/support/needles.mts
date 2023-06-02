@@ -73,7 +73,7 @@ export function addToEntitiesMenu({ application, entities }: { application: Base
   return joinCallbacks(
     ...entities.map(entity => {
       const { entityPage, entityTranslationKeyMenu, entityClassHumanized } = entity;
-      const routerLink = `routerLink="${entityPage}"`;
+      const routerLink = `routerLink="/${entityPage}"`;
 
       // prettier-ignore
       const contentToAdd =`
