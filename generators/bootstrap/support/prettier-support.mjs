@@ -60,7 +60,6 @@ export const createPrettierTransform = function (options, generator, transformOp
       fileContent = file.contents.toString('utf8');
       const data = prettier.format(fileContent, prettierOptions);
       file.contents = Buffer.from(data);
-      return;
     } catch (error) {
       let errorMessage;
       if (fileContent) {
