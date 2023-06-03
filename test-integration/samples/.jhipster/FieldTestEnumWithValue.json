@@ -8,7 +8,9 @@
   "fields": [
     { "fieldName": "myFieldA", "fieldType": "MyEnumA", "fieldValues": "AAA,BBB" },
     { "fieldName": "myFieldB", "fieldType": "MyEnumB", "fieldValues": "AAA (aaa_aaa),BBB" },
-    { "fieldName": "myFieldC", "fieldType": "MyEnumC", "fieldValues": "AAA (aaa_aaa),BBB (b and b)" }
+    { "fieldName": "myFieldC", "fieldType": "MyEnumC", "fieldValues": "AAA (aaa_aaa),BBB (b and b)" },
+    { "fieldName": "myFieldD", "fieldType": "MyEnumD", "fieldValues": "AAA (AAA),BBB (BBB)" },
+    { "fieldName": "myFieldE", "fieldType": "MyEnumE", "fieldValues": "AAA (aaa_aaa),BBB (BBB)" }
   ],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
