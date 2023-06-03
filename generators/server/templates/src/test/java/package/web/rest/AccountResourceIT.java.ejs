@@ -529,14 +529,14 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-            .andExpect(status().is4xxClientError());
+            .andExpect(status().isCreated());
 <%_ } _%>
     }
 
@@ -655,14 +655,14 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
-            .expectStatus().is4xxClientError();
+            .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-            .andExpect(status().is4xxClientError());
+            .andExpect(status().isCreated());
 <%_ } _%>
     }
 
