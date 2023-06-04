@@ -72,7 +72,7 @@ const LoginModal = (props: ILoginModalProps) => {
                   data-cy="username"
                   validate={{ required: 'Username cannot be empty!' }}
                   register={register}
-                  error={errors.username}
+                  error={errors['username']}
                   isTouched={touchedFields.username}
                 />
                 <ValidatedField
@@ -84,7 +84,7 @@ const LoginModal = (props: ILoginModalProps) => {
                   data-cy="password"
                   validate={{ required: 'Password cannot be empty!' }}
                   register={register}
-                  error={errors.password}
+                  error={errors['password']}
                   isTouched={touchedFields.password}
                 />
                 <ValidatedField
