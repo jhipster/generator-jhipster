@@ -28,7 +28,8 @@
     <property name="FILE_LOG_PATTERN" value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } &#45;&#45;&#45; [%t] %-40.40logger{39} : %crlf(%m) %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
     -->
 
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
     <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
     <!--
@@ -156,6 +157,11 @@
     <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
 <%_ } _%>
     <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level -->
+
+    <springProperty name="log.level" source="logging.level.root" defaultValue="INFO" />
+    <root level="${log.level}">
+        <appender-ref ref="CONSOLE" />
+    </root>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
