@@ -116,6 +116,9 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 
     constraintNameMaxLength: 64,
     tableNameMaxLength: 64,
+    r2dbc: {
+      protocolSuffix: 'mariadb://',
+    },
   },
   [MYSQL]: {
     name: 'MySQL',
