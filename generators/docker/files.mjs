@@ -142,7 +142,8 @@ export const dockerFiles = {
     {
       condition: generator => generator.authenticationTypeOauth2,
       path: DOCKER_DIR,
-      templates: ['keycloak.yml', { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
+      templates: ['keycloak.yml', 'config/keycloak-health-check.sh',
+        { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
     },
     {
       condition: generator => generator.serviceDiscoveryAny || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
