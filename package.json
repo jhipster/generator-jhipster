@@ -86,7 +86,7 @@
     "@types/glob": "npm:noist@1.0.0",
     "@types/lodash": "4.14.195",
     "@types/minimatch": "npm:noist@1.0.0",
-    "@yeoman/adapter": "1.0.5",
+    "@yeoman/adapter": "1.1.0",
     "@yeoman/conflicter": "1.0.6",
     "@yeoman/namespace": "1.0.0",
     "@yeoman/transform": "1.2.0",
