@@ -62,7 +62,7 @@ export const searchEntities = createAsyncThunk(
   <%_ } else { _%>
     const requestUrl = `${apiSearchUrl}?query=${query}`;
   <%_ } _%>
-    return axios.get<I<%= entityReactName %>[]>(requestUrl);
+    return await axios.get<I<%= entityReactName %>[]>(requestUrl);
   }
 );
 
@@ -73,14 +73,14 @@ export const getEntities = createAsyncThunk('<%= entityInstance %>/fetch_entity_
 <%_ } else { _%>
   const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
 <%_ } _%>
-  return axios.get<I<%= entityReactName %>[]>(requestUrl);
+  return await axios.get<I<%= entityReactName %>[]>(requestUrl);
 });
 
 export const getEntity = createAsyncThunk(
   '<%= entityInstance %>/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
-    return axios.get<I<%= entityReactName %>>(requestUrl);
+    return await axios.get<I<%= entityReactName %>>(requestUrl);
   },
   { serializeError: serializeAxiosError }
 );
@@ -94,7 +94,7 @@ export const createEntity = createAsyncThunk(
     thunkAPI.dispatch(getEntities({}));
     return result;
   <%_ } else { _%>
-    return axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
+    return await axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }
@@ -108,7 +108,7 @@ export const updateEntity = createAsyncThunk(
     thunkAPI.dispatch(getEntities({}));
     return result;
   <%_ } else { _%>
-    return axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    return await axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }
@@ -122,7 +122,7 @@ export const partialUpdateEntity = createAsyncThunk(
     thunkAPI.dispatch(getEntities({}));
     return result;
   <%_ } else { _%>
-    return axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    return await axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }
