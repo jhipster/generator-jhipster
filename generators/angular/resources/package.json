@@ -4,7 +4,7 @@
     "@fortawesome/angular-fontawesome": "0.13.0",
     "@fortawesome/fontawesome-svg-core": "6.4.0",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
-    "@ng-bootstrap/ng-bootstrap": "15.0.0",
+    "@ng-bootstrap/ng-bootstrap": "15.0.1",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@popperjs/core": "2.11.8",
