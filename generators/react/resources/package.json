@@ -31,7 +31,7 @@
     "@types/jest": "29.5.2",
     "@types/lodash": "4.14.195",
     "@types/node": "16.18.34",
-    "@types/react": "18.2.8",
+    "@types/react": "18.2.9",
     "@types/react-dom": "18.2.4",
     "@types/react-redux": "7.1.25",
     "@types/redux": "3.6.31",
