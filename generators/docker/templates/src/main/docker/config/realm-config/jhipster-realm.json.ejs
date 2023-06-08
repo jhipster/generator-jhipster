@@ -2,7 +2,7 @@
   "id": "jhipster",
   "realm": "jhipster",
   "displayName": "JHipster",
-  "displayNameHtml" : "<div class=\"kc-logo-text\"><span>JHipster</span></div>",
+  "displayNameHtml": "<div class=\"kc-logo-text\"><span>JHipster</span></div>",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -1642,25 +1642,25 @@
       ]
     },
     {
-    "id" : "49177925-3cb4-4fe1-9ced-d9a331dee5c6",
-    "name" : "acr",
-    "description" : "OpenID Connect scope for add acr (authentication context class reference) to the token",
-    "protocol" : "openid-connect",
-    "attributes" : {
-    "include.in.token.scope" : "false",
-    "display.on.consent.screen" : "false"
-    },
-    "protocolMappers" : [ {
-    "id" : "df11a217-a90d-4d01-9aab-84fbaa3a0ad6",
-    "name" : "acr loa level",
-    "protocol" : "openid-connect",
-    "protocolMapper" : "oidc-acr-mapper",
-    "consentRequired" : false,
-    "config" : {
-    "id.token.claim" : "true",
-    "access.token.claim" : "true"
-    }
-    } ]
+      "id": "49177925-3cb4-4fe1-9ced-d9a331dee5c6",
+      "name": "acr",
+      "description": "OpenID Connect scope for add acr (authentication context class reference) to the token",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [{
+        "id": "df11a217-a90d-4d01-9aab-84fbaa3a0ad6",
+        "name": "acr loa level",
+        "protocol": "openid-connect",
+        "protocolMapper": "oidc-acr-mapper",
+        "consentRequired": false,
+        "config": {
+          "id.token.claim": "true",
+          "access.token.claim": "true"
+        }
+      }]
     },
     {
       "id": "2daaac74-636f-4074-87a9-d1aba9dffb96",
@@ -2536,21 +2536,22 @@
       "config": {}
     },
     {
-    "alias" : "webauthn-register",
-    "name" : "Webauthn Register",
-    "providerId" : "webauthn-register",
-    "enabled" : true,
-    "defaultAction" : false,
-    "priority" : 70,
-    "config" : { }
-    }, {
-    "alias" : "webauthn-register-passwordless",
-    "name" : "Webauthn Register Passwordless",
-    "providerId" : "webauthn-register-passwordless",
-    "enabled" : true,
-    "defaultAction" : false,
-    "priority" : 80,
-    "config" : { }
+      "alias": "webauthn-register",
+      "name": "Webauthn Register",
+      "providerId": "webauthn-register",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 70,
+      "config": { }
+    },
+    {
+      "alias": "webauthn-register-passwordless",
+      "name": "Webauthn Register Passwordless",
+      "providerId": "webauthn-register-passwordless",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 80,
+      "config": { }
     }
   ],
   "browserFlow": "browser",
