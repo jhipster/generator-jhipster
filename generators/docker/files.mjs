@@ -142,7 +142,8 @@ export const dockerFiles = {
     {
       condition: generator => generator.authenticationTypeOauth2,
       path: DOCKER_DIR,
-      templates: ['keycloak.yml',
+      templates: [
+        'keycloak.yml',
         {
           file: 'config/keycloak-health-check.sh',
           renameTo: () => 'realm-config/keycloak-health-check.sh',
@@ -150,8 +151,8 @@ export const dockerFiles = {
         },
         {
           file: 'config/realm-config/jhipster-realm.json',
-          renameTo: () => 'realm-config/jhipster-realm.json'
-        }
+          renameTo: () => 'realm-config/jhipster-realm.json',
+        },
       ],
     },
     {
