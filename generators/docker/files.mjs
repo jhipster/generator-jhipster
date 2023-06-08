@@ -146,6 +146,7 @@ export const dockerFiles = {
         {
           file: 'config/keycloak-health-check.sh',
           renameTo: () => 'realm-config/keycloak-health-check.sh'
+          transform: false,
         },
         {
           file: 'config/realm-config/jhipster-realm.json',
