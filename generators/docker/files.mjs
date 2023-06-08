@@ -145,7 +145,7 @@ export const dockerFiles = {
       templates: ['keycloak.yml',
         {
           file: 'config/keycloak-health-check.sh',
-          renameTo: () => 'realm-config/keycloak-health-check.sh'
+          renameTo: () => 'realm-config/keycloak-health-check.sh',
           transform: false,
         },
         {
