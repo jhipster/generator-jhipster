@@ -117,6 +117,117 @@ exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.packa
 }
 `;
 
+exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-pulsar-hazelcast should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_NEO4J_URI=bolt://neo4j:7687
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
+      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+  neo4j:
+    extends:
+      file: ./neo4j.yml
+      service: neo4j
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
+  pulsar:
+    extends:
+      file: ./pulsar.yml
+      service: pulsar
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-pulsar-hazelcast should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/pulsar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/swagger-editor.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-cacheProvider(no) should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
@@ -312,6 +423,275 @@ exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-memcached should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;database=jhipster;encrypt=false
+      - SPRING_LIQUIBASE_URL=jdbc:sqlserver://mssql:1433;database=jhipster;encrypt=false
+      - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8081/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      mssql:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+  mssql:
+    extends:
+      file: ./mssql.yml
+      service: mssql
+  memcached:
+    extends:
+      file: ./memcached.yml
+      service: memcached
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-memcached should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/memcached.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mssql.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/swagger-editor.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-pulsar should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - SPRING_CASSANDRA_CONTACTPOINTS=cassandra
+      - JHIPSTER_SLEEP=10
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
+      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8081/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      cassandra-migration:
+        condition: service_completed_successfully
+      elasticsearch:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+  cassandra:
+    extends:
+      file: ./cassandra.yml
+      service: cassandra
+  cassandra-migration:
+    extends:
+      file: ./cassandra.yml
+      service: cassandra-migration
+  elasticsearch:
+    extends:
+      file: ./elasticsearch.yml
+      service: elasticsearch
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
+  consul:
+    extends:
+      file: ./consul.yml
+      service: consul
+  consul-config-loader:
+    extends:
+      file: ./consul.yml
+      service: consul-config-loader
+  pulsar:
+    extends:
+      file: ./pulsar.yml
+      service: pulsar
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-pulsar should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra-cluster.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra-migration.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra/Cassandra-Migration.Dockerfile": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra/scripts/autoMigrate.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra/scripts/execute-cql.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/elasticsearch.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/pulsar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": {
@@ -544,6 +924,246 @@ exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/swagger-editor.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipster
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+  postgresql:
+    extends:
+      file: ./postgresql.yml
+      service: postgresql
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/postgresql.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-pulsar should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_NEO4J_URI=bolt://neo4j:7687
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
+      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+  neo4j:
+    extends:
+      file: ./neo4j.yml
+      service: neo4j
+  elasticsearch:
+    extends:
+      file: ./elasticsearch.yml
+      service: elasticsearch
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
+  consul:
+    extends:
+      file: ./consul.yml
+      service: consul
+  consul-config-loader:
+    extends:
+      file: ./consul.yml
+      service: consul-config-loader
+  pulsar:
+    extends:
+      file: ./pulsar.yml
+      service: pulsar
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-pulsar should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/elasticsearch.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/pulsar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": {
