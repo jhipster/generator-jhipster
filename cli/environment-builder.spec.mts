@@ -21,6 +21,7 @@ import assert from 'assert';
 import { expect } from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
+import { jestExpect } from 'esmocha';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
 import EnvironmentBuilder from './environment-builder.mjs';
@@ -270,9 +271,11 @@ describe('cli - EnvironmentBuilder', () => {
 
   describe('_lookupBlueprints', () => {
     let envBuilder;
-    beforeEach(() => {
+    beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      envBuilder = EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
+      envBuilder = EnvironmentBuilder.create();
+      await envBuilder._loadBlueprints();
+      await envBuilder._lookupBlueprints({ localOnly: true });
     });
     describe('with multiple blueprints', () => {
       let oldArgv;
@@ -308,7 +311,8 @@ describe('cli - EnvironmentBuilder', () => {
     let envBuilder;
     beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true })._loadSharedOptions();
+      envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
+      await envBuilder._loadSharedOptions();
     });
     describe('with multiple blueprints', () => {
       let oldArgv;
@@ -328,13 +332,13 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load sharedOptions', () => {
-        expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('fooValue')).to.be.true;
+        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
         expect(envBuilder.getEnvironment().sharedOptions.single).to.be.true;
       });
 
       it('should merge sharedOptions', () => {
-        expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('fooValue')).to.be.true;
-        expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('barValue')).to.be.true;
+        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
+        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['barValue']));
       });
     });
   });

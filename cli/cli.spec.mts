@@ -2,7 +2,7 @@
 import assert from 'assert';
 import { expect, mock, resetAllMocks, fn } from 'esmocha';
 import { exec, fork } from 'child_process';
-import Environment from 'yeoman-environment';
+import { BaseEnvironment } from '@yeoman/types';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
@@ -153,13 +153,13 @@ describe('cli', () => {
     const commands = { mocked: {} };
     let generator;
     let runArgs;
-    let env: Environment;
+    let env: BaseEnvironment;
 
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand);
 
       const BaseGenerator = (await import('../generators/base/index.mjs')).default;
-      env = Environment.createEnv();
+      env = await helpers.createTestEnv();
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, sharedData: {} });
       generator._options = {
         foo: {
