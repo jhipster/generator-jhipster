@@ -83,9 +83,7 @@
     "@faker-js/faker": "7.6.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.2",
-    "@types/glob": "npm:noist@1.0.0",
     "@types/lodash": "4.14.195",
-    "@types/minimatch": "npm:noist@1.0.0",
     "@yeoman/adapter": "1.1.0",
     "@yeoman/conflicter": "1.0.7",
     "@yeoman/namespace": "1.0.0",
@@ -138,6 +136,8 @@
   "devDependencies": {
     "@node-loaders/esbuildx": "1.2.0",
     "@types/chai": "4.3.5",
+    "@types/glob": "npm:noist@1.0.0",
+    "@types/minimatch": "npm:noist@1.0.0",
     "@types/mocha": "10.0.1",
     "@types/node": "16.18.34",
     "@types/shelljs": "0.8.12",
