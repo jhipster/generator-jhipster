@@ -282,7 +282,7 @@ export default class JdlGenerator extends BaseGenerator {
         }
         const envBuilder = await this.createEnvBuilder(envOptions);
         const env = envBuilder.getEnvironment();
-        await env.run(`${CLI_NAME}:${GENERATOR_APP}`, generatorOptions);
+        await env.run([`${CLI_NAME}:${GENERATOR_APP}`], generatorOptions);
       })
     );
   }
