@@ -272,9 +272,10 @@ export default class JdlGenerator extends BaseGenerator {
   async runNonInteractive(applications: ApplicationWithEntitiesAndPath[], options) {
     await Promise.all(
       applications.map(async application => {
-        const cwd = application.folder ? this.destinationPath(application.folder) : this.destinationPath();
+        const rootCwd = this.destinationPath();
+        const cwd = application.folder ? this.destinationPath(application.folder) : rootCwd;
         const adapter = (this.env.adapter as QueuedAdapter).newAdapter();
-        const envOptions: any = { cwd, sharedFs: application.sharedFs, adapter };
+        const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
         // Install should happen at the root of the monorepository. Force skip install at childs.
         if (this.options.monorepository) {

@@ -401,7 +401,7 @@ export default class JHipsterBaseBlueprintGenerator<
 
     if (!this.configOptions.blueprintConfigured) {
       this.configOptions.blueprintConfigured = true;
-      this._configureBlueprints();
+      await this._configureBlueprints();
     }
 
     let blueprints = this.jhipsterConfig.blueprints || [];
@@ -450,7 +450,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * @private
    * Configure blueprints.
    */
-  private _configureBlueprints() {
+  private async _configureBlueprints() {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
     const blueprint = this.options.blueprint;
@@ -468,7 +468,7 @@ export default class JHipsterBaseBlueprintGenerator<
       .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
       .map(blueprint => blueprint.name);
     if (missingBlueprints.length > 0) {
-      this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints } as any);
+      await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints } as any);
     }
 
     if (blueprints && blueprints.length > 0) {

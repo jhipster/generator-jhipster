@@ -188,7 +188,7 @@ export const buildCommands = async ({
           command.generatorNamespaces = operands.map(
             namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`
           );
-          envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          await envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
           await Promise.all(
             command.generatorNamespaces.map(async namespace => {
               const generatorMeta = env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
