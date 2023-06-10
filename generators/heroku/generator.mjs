@@ -728,11 +728,11 @@ export default class HerokuGenerator extends BaseGenerator {
                   choices: [
                     {
                       value: 'Yes',
-                      name: 'Yes, I confirmed',
+                      name: 'Yes, I confirm',
                     },
                     {
                       value: 'No',
-                      name: 'No, break (Recommended)',
+                      name: 'No, abort (Recommended)',
                     },
                   ],
                   default: 0,
@@ -742,7 +742,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.log('');
               const props = await this.prompt(prompts);
               if (props.userDeployDecision === 'Yes') {
-                this.log.info(chalk.bold('Continued deploying...'));
+                this.log.info(chalk.bold('Continuing deployment...'));
               } else {
                 this.log(this.logger);
                 this.log.info(chalk.bold('You aborted deployment!'));
