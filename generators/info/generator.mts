@@ -29,17 +29,13 @@ import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../bas
 
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, features);
-
-    if (this.options.help) return;
-
-    this.env.options.skipInstall = true;
+    super(args, options, { customInstallTask: true, customCommitTask: true, ...features });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       sayHello() {
-        this.logger.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+        this.log.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
 
       async checkJHipster() {
@@ -56,6 +52,14 @@ export default class InfoGenerator extends BaseApplicationGenerator {
         const result = JSON.stringify({ ...this.jhipsterConfig, jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
         console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
         console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+
+        if (this.jhipsterConfig.packages && this.jhipsterConfig.packages.length > 0) {
+          for (const pkg of this.jhipsterConfig.packages) {
+            const yoRc = this.readDestinationJSON(`${pkg}/.yo-rc.json`);
+            const result = JSON.stringify({ ...yoRc['generator-jhipster'], jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
+            console.log(`\n<details>\n<summary>.yo-rc.json file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+          }
+        }
       },
 
       async checkJava() {
@@ -84,7 +88,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
       checkApplication() {
         if (this.jhipsterConfig.baseName === undefined) {
-          this.logger.warn("Current location doesn't contain a valid JHipster application");
+          this.log.warn("Current location doesn't contain a valid JHipster application");
           this.cancelCancellableTasks();
         }
       },
@@ -121,7 +125,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       });
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
-      this.logger.error('Error while parsing entities to JDL', error);
+      this.log.error('Error while parsing entities to JDL', error);
       throw new Error('\nError while parsing entities to JDL\n', { cause: error });
     }
     return jdlObject;

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
+import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
@@ -120,7 +120,7 @@ const translateAngularFilesTransform = getWebappTranslation => {
   const translate = createTranslationReplacer(getWebappTranslation);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
-  }, 'jhipster:translate-angular-files');
+  });
 };
 
 export default translateAngularFilesTransform;

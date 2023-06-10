@@ -1,39 +1,44 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router/composables';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute } from 'vue-router';
 
+import { useDateFormat } from '@/shared/composables'
 import UserManagementService from './user-management.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementView',
   setup() {
     const route = useRoute();
-    const router = useRouter();
+    const { formatDateLong: formatDate } = useDateFormat();
 
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const user: Ref<any> = ref(null);
 
-    async function loadUser(userId: <%- user.primaryKey.tsType _%>) {
+    async function loadUser(userId: string) {
       try {
         const response = await userManagementService.get(userId);
         user.value = response.data;
       } catch (error) {
-        alertService().showHttpError(router.app, error.response);
+        alertService.showHttpError(error.response);
       }
     }
 
-<%_ if (user.primaryKey.tsType === 'number') { _%>
-    loadUser(Number(route.params.userId));
-<%_ } else { _%>
-    loadUser(route.params.userId);
-<%_ } _%>
+    loadUser(route.params?.userId);
 
     return {
+      formatDate,
       alertService,
       userManagementService,
       user,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

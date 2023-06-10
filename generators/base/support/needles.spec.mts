@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jest from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 
 import { checkContentIn, insertContentBeforeNeedle, createNeedleCallback, createBaseNeedle } from './needles.mjs';
 
@@ -231,9 +230,9 @@ ${needlePrefix} jhipster-needle-a-needle"
 
     it('returned function should not throw on optional missing needle', () => {
       const content = 'no needle';
-      expect(
-        createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log() {}, logger: { warn: () => {} } }, content, 'file')
-      ).toBe(content);
+      const log = () => {};
+      log.warn = () => {};
+      expect(createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log }, content, 'file')).toBe(content);
     });
 
     it('returned function should add contentToAdd', () => {
@@ -264,7 +263,7 @@ content to add2
 
     beforeEach(() => {
       generator = {
-        editFile: jest.fn(),
+        editFile: esmocha.fn(),
       };
     });
 

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
@@ -65,7 +65,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
     return this.asDefaultTaskGroup({
       generatedAnnotation({ application }) {
         if (this.jhipsterConfig.withGeneratedFlag) {
-          (this as any).queueTransformStream(generatedAnnotationTransform(application.packageName), {
+          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
             name: 'adding @GeneratedByJHipster annotations',
             streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
           });
@@ -74,7 +74,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
       generatedPackageInfo({ application }) {
         const mainPackageMatch = matchMainJavaFiles(application.srcMainJava);
         if (this.packageInfoFile) {
-          (this as any).queueTransformStream(
+          this.queueTransformStream(
             packageInfoTransform({
               javaRoots: [this.destinationPath(application.srcMainJava)],
               editor: this.fs,

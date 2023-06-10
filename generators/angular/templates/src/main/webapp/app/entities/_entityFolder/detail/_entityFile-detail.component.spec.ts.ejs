@@ -87,8 +87,8 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
             const newWindow = { ...window };
             newWindow.document.write = jest.fn();
             window.open = jest.fn(() => newWindow);
-            window.onload = jest.fn(() => newWindow);
-            window.URL.createObjectURL = jest.fn();
+            window.onload = jest.fn(() => newWindow) as any;
+            window.URL.createObjectURL = jest.fn() as any;
             // GIVEN
             jest.spyOn(dataUtils, 'openFile');
             const fakeContentType = 'fake content type';

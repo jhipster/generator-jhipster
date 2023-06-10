@@ -20,9 +20,9 @@ import { Component, OnInit<% if (microfrontend && enableTranslation && applicati
 import { Router, RouterModule } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
-import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 import SharedModule from 'app/shared/shared.module';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive'
 import { VERSION } from 'app/app.constants';
@@ -74,7 +74,7 @@ export default class NavbarComponent implements OnInit {
     private loginService: LoginService,
 <%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    private sessionStorageService: SessionStorageService,
+    private stateStorageService: StateStorageService,
   <%_ if (applicationTypeGateway && microfrontend) { _%>
     private injector: Injector,
   <%_ } _%>
@@ -105,7 +105,7 @@ export default class NavbarComponent implements OnInit {
 
 <%_ if (enableTranslation) { _%>
   changeLanguage(languageKey: string): void {
-    this.sessionStorageService.store('locale', languageKey);
+    this.stateStorageService.storeLocale(languageKey);
     this.translateService.use(languageKey);
   }
 <%_ } _%>

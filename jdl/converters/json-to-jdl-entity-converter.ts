@@ -32,7 +32,7 @@ import { Entity, Field, Relationship } from './types.js';
 import { asJdlRelationshipType } from './parsed-jdl-to-jdl-object/relationship-converter.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
-const { JPA_DERIVED_IDENTIFIER, BUILT_IN_ENTITY } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = unaryOptions;
 const { ANGULAR_SUFFIX, CLIENT_ROOT_FOLDER, DTO, MICROSERVICE, PAGINATION, SEARCH, SERVICE } = binaryOptions.Options;
 
@@ -291,9 +291,6 @@ function getRelationshipOptions(relationship: Relationship): JDLRelationshipOpti
     source: relationship.options ?? {},
     destination: {},
   };
-  if (relationship.useJPADerivedIdentifier) {
-    options[JPA_DERIVED_IDENTIFIER] = true;
-  }
   if (relationship.relationshipWithBuiltInEntity) {
     options.global[BUILT_IN_ENTITY] = true;
   }

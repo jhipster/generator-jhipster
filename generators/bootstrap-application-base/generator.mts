@@ -92,7 +92,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json')
         );
       },
     });
@@ -140,13 +140,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
-      loadUser({ application }) {
+      loadUser({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity) {
           if (this.sharedData.hasEntity('User')) {
             throw new Error("Fail to bootstrap 'User', already exists.");
           }
 
-          const user = createUserEntity.call(this, {}, application);
+          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'User');
+          const customUserData = customUser ? customUser.entityStorage.getAll() : {};
+          const user = createUserEntity.call(this, customUserData, application);
           this.sharedData.setEntity('User', user);
           (application as any).user = user;
         }
@@ -154,11 +156,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       loadingEntities({ entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {
           if (this.sharedData.hasEntity(entityName)) {
-            throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
+            const existingEntity = this.sharedData.getEntity(entityName);
+            if (!existingEntity.builtIn) {
+              throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
+            }
+          } else {
+            const entity = entityStorage.getAll();
+            entity.name = entity.name ?? entityName;
+            this.sharedData.setEntity(entityName, entity);
           }
-          const entity = entityStorage.getAll();
-          entity.name = entity.name ?? entityName;
-          this.sharedData.setEntity(entityName, entity);
         }
 
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
@@ -217,22 +223,20 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   }
 
   printDestinationInfo(cwd = this.destinationPath()) {
-    this.logger.log(
+    this.log.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.logger.log(
+    this.log.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}
 
   Application files will be generated in folder: ${chalk.yellow(cwd)}`)
     );
     if (process.cwd() === this.getUserHome()) {
-      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.logger.log(
-        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
-      );
-      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.log.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.log.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
+      this.log.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.logger.log(
+    this.log.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }

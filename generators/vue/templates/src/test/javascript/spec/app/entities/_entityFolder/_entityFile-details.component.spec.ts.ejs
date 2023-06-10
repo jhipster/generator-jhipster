@@ -20,55 +20,58 @@
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
-import <%= entityAngularName %>Detail from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
-import type <%= entityAngularName %>DetailsComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
-import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import <%= entityAngularName %>Details from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
+import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
 
-type <%= entityAngularName %>DetailsComponentType = Vue & InstanceType<typeof <%= entityAngularName %>DetailsComponent>;
+type <%= entityAngularName %>DetailsComponentType = InstanceType<typeof <%= entityAngularName %>Details>;
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('<%= entityAngularName %> Management Detail Component', () => {
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
-    let mountOptions: ThisTypedShallowMountOptions<<%= entityAngularName %>DetailsComponentType>;
-    let router: VueRouter;
+    let mountOptions: MountingOptions<<%= entityAngularName %>DetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
-      router = new VueRouter({
-        routes: [
-          {
-            path: '/<%= entityApiUrl %>/:<%= entityInstance %>Id',
-          },
-        ],
+
+      alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+        i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
 
       mountOptions = {
-        store,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
-        localVue,
-        router,
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
         provide: {
+          alertService,
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
         },
       };
@@ -78,31 +81,32 @@ describe('Component Tests', () => {
       it('Should call load all on init', async () => {
         // GIVEN
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
-        router.push('/<%= entityApiUrl %>/' + <%- tsKeyId %>);
-        const wrapper = shallowMount<<%= entityAngularName %>DetailsComponentType>(<%= entityAngularName %>Detail, mountOptions);
+        route = {
+          params: {
+            <%= entityInstance %>Id: '' + <%- tsKeyId %>,
+          },
+        };
+        const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });
         const comp = wrapper.vm;
-  
         // WHEN
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%= entityInstance %>).toBe(<%= entityInstance %>Sample);
+        expect(comp.<%= entityInstance %>).toMatchObject(<%= entityInstance %>Sample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
-        router.push('/');
-        router.push('/cass-bank-accounts/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
-        const wrapper = shallowMount<<%= entityAngularName %>DetailsComponentType>(<%= entityAngularName %>Detail, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });
         const comp = wrapper.vm;
         await comp.$nextTick();
 
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

@@ -1,0 +1,32 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { decimal, helpers, required, sameAs, minLength, maxLength, minValue, maxValue, numeric } from "@vuelidate/validators";
+
+export const useValidation = () => {
+  return {
+    required: (message: string) => helpers.withMessage(message, required),
+    decimal: (message: string) => helpers.withMessage(message, decimal),
+    numeric: (message: string) => helpers.withMessage(message, numeric),
+    sameAs: (message: string, ...args: Parameters<typeof sameAs>) => helpers.withMessage(message, sameAs(...args)),
+    minLength: (message: string, ...args: Parameters<typeof minLength>) => helpers.withMessage(message, minLength(...args)),
+    maxLength: (message: string, ...args: Parameters<typeof maxLength>) => helpers.withMessage(message, maxLength(...args)),
+    minValue: (message: string, ...args: Parameters<typeof minValue>) => helpers.withMessage(message, minValue(...args)),
+    maxValue: (message: string, ...args: Parameters<typeof maxValue>) => helpers.withMessage(message, maxValue(...args)),
+  };
+};

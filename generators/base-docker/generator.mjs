@@ -43,16 +43,16 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
 
     // This adds support for a `--skip-checks` flag
     this.option('skip-checks', {
-      desc: 'Check the status of the required tools',
+      description: 'Check the status of the required tools',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     // This adds support for a `--skip-prompts` flag
     this.option('skip-prompts', {
-      desc: 'Generate pre-existing configuration',
+      description: 'Generate pre-existing configuration',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.regenerate = this.options.skipPrompts;
@@ -61,7 +61,7 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
   get initializing() {
     return {
       async setupServerConsts() {
-        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
         this.dockerContainers = this.prepareDependencies(
           {
             ...elasticDockerContainer,

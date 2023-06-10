@@ -36,7 +36,6 @@ Options:
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
-  --skip-jhipster-dependencies             Don't write jhipster dependencies.
   --legacy-db-names                        Generate database names with jhipster 6 compatibility.
   --ignore-errors                          Don't fail on prettier errors.
   -n, --native-language [value]            Set application native language
@@ -60,6 +59,7 @@ Options:
   --prettier-tab-width                     Default tab width for prettier
   --with-admin-ui                          Generate administrative user interface
   --skip-git                               Skip git repository initialization
+  --monorepository                         Use monorepository
   -h, --help                               display help for command
 "
 `;
@@ -478,7 +478,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "merge-jsons-webpack-plugin": "MERGE_JSONS_WEBPACK_PLUGIN_VERSION",
     "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
     "ngx-infinite-scroll": "NGX_INFINITE_SCROLL_VERSION",
-    "ngx-webstorage": "NGX_WEBSTORAGE_VERSION",
     "npm": "NPM_VERSION",
     "nyc": "NYC_VERSION",
     "postcss-rtlcss": "POSTCSS_RTLCSS_VERSION",
@@ -1017,7 +1016,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "merge-jsons-webpack-plugin": "MERGE_JSONS_WEBPACK_PLUGIN_VERSION",
     "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
     "ngx-infinite-scroll": "NGX_INFINITE_SCROLL_VERSION",
-    "ngx-webstorage": "NGX_WEBSTORAGE_VERSION",
     "npm": "NPM_VERSION",
     "nyc": "NYC_VERSION",
     "postcss-rtlcss": "POSTCSS_RTLCSS_VERSION",

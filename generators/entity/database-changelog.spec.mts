@@ -1,4 +1,4 @@
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, runResult } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { getGenerator } from '../../test/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/generator.mjs';
@@ -18,9 +18,8 @@ const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 describe('generator - entity database changelogs', () => {
   context('when regenerating the entity', () => {
     describe('with cassandra database', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
@@ -28,16 +27,13 @@ describe('generator - entity database changelogs', () => {
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });
 
-      after(() => runResult.cleanup());
-
       it('should create database changelog for the entity', () => {
         runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/cql/changelog/20160926101210_added_entity_Foo.cql`]);
       });
     });
     describe('with gateway application type', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
           .withJHipsterConfig({ applicationType: 'gateway' }, [
@@ -46,8 +42,6 @@ describe('generator - entity database changelogs', () => {
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });
-
-      after(() => runResult.cleanup());
 
       it('should not create database changelogs', () => {
         runResult.assertNoFile([

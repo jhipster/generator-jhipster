@@ -92,46 +92,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const validator = createValidator(jdlObject, logger);
         validator.checkForErrors();
       });
-
-      it('should warn', () => {
-        expect(parameter).to.equal(
-          "The table name 'continue' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
-        );
-      });
-    });
-    context('when having a field reserved name', () => {
-      let parameter;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication({
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.SQL,
-        });
-        const entity = new JDLEntity({
-          name: 'Valid',
-        });
-        entity.addField(
-          new JDLField({
-            name: 'catch',
-            type: fieldTypes.CommonDBTypes.STRING,
-          })
-        );
-        jdlObject.addEntity(entity);
-        jdlObject.addApplication(application);
-        application.addEntityName(entity.name);
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        const validator = createValidator(jdlObject, logger);
-        validator.checkForErrors();
-      });
-
-      it('should warn', () => {
-        expect(parameter).to.equal("The name 'catch' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.");
-      });
     });
     context('when passing gateway as application type', () => {
       context('with incompatible database type and field type', () => {
@@ -161,38 +121,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
           expect(() => {
             validator.checkForErrors();
           }).not.to.throw();
-        });
-      });
-    });
-    context('if the field type is invalid for a database type', () => {
-      context('when checking a JDL object with a JDL application', () => {
-        let validator;
-
-        before(() => {
-          const jdlObject = new JDLObject();
-          const application = createJDLApplication({
-            applicationType: MONOLITH,
-            databaseType: databaseTypes.SQL,
-          });
-          application.addEntityNames(['Valid']);
-          jdlObject.addApplication(application);
-          const validEntity = new JDLEntity({
-            name: 'Valid',
-          });
-          validEntity.addField(
-            new JDLField({
-              name: 'validField',
-              type: 'WeirdType',
-            })
-          );
-          jdlObject.addEntity(validEntity);
-          validator = createValidator(jdlObject);
-        });
-
-        it('should fail', () => {
-          expect(() => {
-            validator.checkForErrors();
-          }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
         });
       });
     });
@@ -408,31 +336,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
         expect(() => {
           validator.checkForErrors();
         }).to.throw("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
-      });
-    });
-    context('when having a JDL with pagination and Cassandra as database type', () => {
-      let validator;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication({
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.CASSANDRA,
-        });
-        jdlObject.addOption(
-          new JDLBinaryOption({
-            name: binaryOptions.Options.PAGINATION,
-            value: binaryOptions.Values.pagination.PAGINATION,
-          })
-        );
-        jdlObject.addApplication(application);
-        validator = createValidator(jdlObject);
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).to.throw("Pagination isn't allowed when the application uses Cassandra.");
       });
     });
     context('when having DTOs without services', () => {

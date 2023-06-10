@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import fse from 'fs-extra';
 import path from 'path';
 import { expect } from 'chai';
@@ -664,115 +664,81 @@ paginate * with infinite-scroll
 
       it('should set them', () => {
         jestExpect(entityA).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-  ],
-  "dto": "no",
-  "embedded": false,
-  "entityTableName": "a",
-  "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
-  "name": "A",
-  "pagination": "pagination",
-  "readOnly": false,
-  "relationships": [],
-  "service": "no",
-}
-`);
+          {
+            "applications": [
+              "tata",
+            ],
+            "entityTableName": "a",
+            "fields": [],
+            "name": "A",
+            "pagination": "pagination",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityB).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-  ],
-  "dto": "no",
-  "embedded": false,
-  "entityTableName": "b",
-  "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
-  "name": "B",
-  "pagination": "infinite-scroll",
-  "readOnly": false,
-  "relationships": [],
-  "service": "no",
-}
-`);
+          {
+            "applications": [
+              "tata",
+            ],
+            "entityTableName": "b",
+            "fields": [],
+            "name": "B",
+            "pagination": "infinite-scroll",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityCInTata).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-    "tutu",
-  ],
-  "dto": "no",
-  "embedded": false,
-  "entityTableName": "c",
-  "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
-  "name": "C",
-  "pagination": "pagination",
-  "readOnly": false,
-  "relationships": [],
-  "service": "no",
-}
-`);
+          {
+            "applications": [
+              "tata",
+              "tutu",
+            ],
+            "entityTableName": "c",
+            "fields": [],
+            "name": "C",
+            "pagination": "pagination",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityCInTutu).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tata",
-    "tutu",
-  ],
-  "dto": "no",
-  "embedded": false,
-  "entityTableName": "c",
-  "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
-  "name": "C",
-  "pagination": "pagination",
-  "readOnly": false,
-  "relationships": [],
-  "service": "no",
-}
-`);
+          {
+            "applications": [
+              "tata",
+              "tutu",
+            ],
+            "entityTableName": "c",
+            "fields": [],
+            "name": "C",
+            "pagination": "pagination",
+            "relationships": [],
+          }
+        `);
         jestExpect(entityD).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tutu",
-  ],
-  "dto": "mapstruct",
-  "embedded": false,
-  "entityTableName": "d",
-  "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
-  "name": "D",
-  "pagination": "infinite-scroll",
-  "readOnly": false,
-  "relationships": [],
-  "service": "serviceClass",
-}
-`);
+          {
+            "applications": [
+              "tutu",
+            ],
+            "dto": "mapstruct",
+            "entityTableName": "d",
+            "fields": [],
+            "name": "D",
+            "pagination": "infinite-scroll",
+            "relationships": [],
+            "service": "serviceClass",
+          }
+        `);
         jestExpect(entityE).toMatchInlineSnapshot(`
-{
-  "applications": [
-    "tutu",
-  ],
-  "dto": "no",
-  "embedded": false,
-  "entityTableName": "e",
-  "fields": [],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
-  "name": "E",
-  "pagination": "infinite-scroll",
-  "readOnly": false,
-  "relationships": [],
-  "service": "no",
-}
-`);
+          {
+            "applications": [
+              "tutu",
+            ],
+            "entityTableName": "e",
+            "fields": [],
+            "name": "E",
+            "pagination": "infinite-scroll",
+            "relationships": [],
+          }
+        `);
       });
       it('should not generate entity not in any app', () => {
         expect(entityF).to.be.false;
@@ -927,46 +893,7 @@ ${entities}`
       });
 
       it('should return the blueprints attributes in the application', () => {
-        expect(importState.exportedApplications).to.deep.equal([
-          {
-            entities: [],
-            'generator-jhipster': {
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
-              baseName: 'appWithBlueprints',
-              blueprints: [{ name: 'generator-jhipster-vuejs' }, { name: 'generator-jhipster-dotnetcore' }],
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angular',
-              clientTheme: 'none',
-              clientThemeVariant: '',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
-              dtoSuffix: 'DTO',
-              enableGradleEnterprise: false,
-              enableHibernateCache: true,
-              enableSwaggerCodegen: false,
-              enableTranslation: true,
-              entitySuffix: '',
-              gradleEnterpriseHost: '',
-              jhiPrefix: 'jhi',
-              languages: [],
-              messageBroker: 'no',
-              nativeLanguage: 'en',
-              packageFolder: 'com/mycompany/myapp',
-              packageName: 'com.mycompany.myapp',
-              prodDatabaseType: 'postgresql',
-              searchEngine: 'no',
-              reactive: false,
-              serverPort: 8080,
-              serviceDiscoveryType: 'no',
-              skipUserManagement: false,
-              testFrameworks: [],
-              websocket: 'no',
-              withAdminUi: true,
-            },
-          },
-        ]);
+        jestExpect(importState.exportedApplications).toMatchSnapshot();
       });
 
       it('should warn about not performing jdl validation', () => {
@@ -1076,7 +1003,7 @@ entity A
 entity B
 
 relationship OneToOne {
-  @id A{b} to @NotId(value) @Something B{a} with jpaDerivedIdentifier
+  @id A{b} to @NotId(value) @Something B{a} with builtInEntity
 }
 `;
         const importer = createImporterFromContent(content, { databaseType: 'postgresql', applicationName: 'toto' });
@@ -1091,31 +1018,32 @@ relationship OneToOne {
 
       it('should export them', () => {
         jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
-{
-  "options": {
-    "notId": "value",
-    "something": true,
-  },
-  "otherEntityName": "b",
-  "otherEntityRelationshipName": "a",
-  "ownerSide": true,
-  "relationshipName": "b",
-  "relationshipType": "one-to-one",
-  "useJPADerivedIdentifier": true,
-}
-`);
+          {
+            "options": {
+              "notId": "value",
+              "something": true,
+            },
+            "otherEntityName": "b",
+            "otherEntityRelationshipName": "a",
+            "ownerSide": true,
+            "relationshipName": "b",
+            "relationshipType": "one-to-one",
+            "relationshipWithBuiltInEntity": true,
+          }
+        `);
         jestExpect(relationshipOnDestination).toMatchInlineSnapshot(`
-{
-  "options": {
-    "id": true,
-  },
-  "otherEntityName": "a",
-  "otherEntityRelationshipName": "b",
-  "ownerSide": false,
-  "relationshipName": "a",
-  "relationshipType": "one-to-one",
-}
-`);
+          {
+            "options": {
+              "builtInEntity": true,
+              "id": true,
+            },
+            "otherEntityName": "a",
+            "otherEntityRelationshipName": "b",
+            "ownerSide": false,
+            "relationshipName": "a",
+            "relationshipType": "one-to-one",
+          }
+        `);
       });
     });
     context('when importing a JDL application with microfrontends', () => {
@@ -1131,15 +1059,15 @@ relationship OneToOne {
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
-[
-  {
-    "baseName": "foo",
-  },
-  {
-    "baseName": "bar",
-  },
-]
-`);
+          [
+            {
+              "baseName": "foo",
+            },
+            {
+              "baseName": "bar",
+            },
+          ]
+        `);
       });
     });
     context('when importing a JDL application with clientFramework no', () => {

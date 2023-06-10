@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import path from 'path';
 import { dirname } from 'path';
@@ -520,105 +520,18 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
 JDLApplication {
   "config": JDLApplicationConfiguration {
     "options": {
-      "applicationType": StringJDLApplicationConfigurationOption {
-        "name": "applicationType",
-        "quoted": false,
-        "value": "monolith",
-      },
-      "authenticationType": StringJDLApplicationConfigurationOption {
-        "name": "authenticationType",
-        "quoted": false,
-        "value": "jwt",
-      },
       "baseName": StringJDLApplicationConfigurationOption {
         "name": "baseName",
         "quoted": false,
         "value": "toto",
       },
-      "buildTool": StringJDLApplicationConfigurationOption {
-        "name": "buildTool",
-        "quoted": false,
-        "value": "maven",
-      },
-      "cacheProvider": StringJDLApplicationConfigurationOption {
-        "name": "cacheProvider",
-        "quoted": false,
-        "value": "ehcache",
-      },
-      "clientFramework": StringJDLApplicationConfigurationOption {
-        "name": "clientFramework",
-        "quoted": false,
-        "value": "angular",
-      },
-      "clientTheme": StringJDLApplicationConfigurationOption {
-        "name": "clientTheme",
-        "quoted": false,
-        "value": "none",
-      },
-      "clientThemeVariant": StringJDLApplicationConfigurationOption {
-        "name": "clientThemeVariant",
-        "quoted": false,
-        "value": "",
-      },
-      "databaseType": StringJDLApplicationConfigurationOption {
-        "name": "databaseType",
-        "quoted": false,
-        "value": "sql",
-      },
-      "devDatabaseType": StringJDLApplicationConfigurationOption {
-        "name": "devDatabaseType",
-        "quoted": false,
-        "value": "h2Disk",
-      },
-      "dtoSuffix": StringJDLApplicationConfigurationOption {
-        "name": "dtoSuffix",
-        "quoted": false,
-        "value": "DTO",
-      },
-      "enableGradleEnterprise": BooleanJDLApplicationConfigurationOption {
-        "name": "enableGradleEnterprise",
-        "value": false,
-      },
-      "enableHibernateCache": BooleanJDLApplicationConfigurationOption {
-        "name": "enableHibernateCache",
-        "value": true,
-      },
-      "enableSwaggerCodegen": BooleanJDLApplicationConfigurationOption {
-        "name": "enableSwaggerCodegen",
-        "value": false,
-      },
       "enableTranslation": BooleanJDLApplicationConfigurationOption {
         "name": "enableTranslation",
         "value": false,
       },
-      "entitySuffix": StringJDLApplicationConfigurationOption {
-        "name": "entitySuffix",
-        "quoted": false,
-        "value": "",
-      },
-      "gradleEnterpriseHost": StringJDLApplicationConfigurationOption {
-        "name": "gradleEnterpriseHost",
-        "quoted": true,
-        "value": "",
-      },
-      "jhiPrefix": StringJDLApplicationConfigurationOption {
-        "name": "jhiPrefix",
-        "quoted": false,
-        "value": "jhi",
-      },
       "languages": ListJDLApplicationConfigurationOption {
         "name": "languages",
         "value": Set {},
-      },
-      "messageBroker": StringJDLApplicationConfigurationOption {
-        "name": "messageBroker",
-        "quoted": false,
-        "value": "no",
-      },
-      "nativeLanguage": StringJDLApplicationConfigurationOption {
-        "name": "nativeLanguage",
-        "quoted": false,
-        "value": "en",
       },
       "packageFolder": StringJDLApplicationConfigurationOption {
         "name": "packageFolder",
@@ -629,46 +542,6 @@ JDLApplication {
         "name": "packageName",
         "quoted": false,
         "value": "com.mathieu.sample",
-      },
-      "prodDatabaseType": StringJDLApplicationConfigurationOption {
-        "name": "prodDatabaseType",
-        "quoted": false,
-        "value": "postgresql",
-      },
-      "reactive": BooleanJDLApplicationConfigurationOption {
-        "name": "reactive",
-        "value": false,
-      },
-      "searchEngine": StringJDLApplicationConfigurationOption {
-        "name": "searchEngine",
-        "quoted": false,
-        "value": "no",
-      },
-      "serverPort": IntegerJDLApplicationConfigurationOption {
-        "name": "serverPort",
-        "value": 8080,
-      },
-      "serviceDiscoveryType": StringJDLApplicationConfigurationOption {
-        "name": "serviceDiscoveryType",
-        "quoted": false,
-        "value": "no",
-      },
-      "skipUserManagement": BooleanJDLApplicationConfigurationOption {
-        "name": "skipUserManagement",
-        "value": false,
-      },
-      "testFrameworks": ListJDLApplicationConfigurationOption {
-        "name": "testFrameworks",
-        "value": Set {},
-      },
-      "websocket": StringJDLApplicationConfigurationOption {
-        "name": "websocket",
-        "quoted": false,
-        "value": "no",
-      },
-      "withAdminUi": BooleanJDLApplicationConfigurationOption {
-        "name": "withAdminUi",
-        "value": true,
       },
     },
   },
@@ -1050,13 +923,11 @@ JDLDeployment {
           expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
         });
       });
-      context('when parsing a JDL relationship with JPA derived identifier enabled', () => {
+      context('when parsing a JDL relationship with built in entity enabled', () => {
         let jdlObject;
 
         before(() => {
-          const input = JDLReader.parseFromFiles([
-            path.join(__dirname, '..', '..', '__test-files__', 'relationship_jpa_derived_identifier.jdl'),
-          ]);
+          const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'relationship_built_in_entity.jdl')]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,
@@ -1065,7 +936,7 @@ JDLDeployment {
 
         it('should set it', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.global).to.deep.equal({
-            jpaDerivedIdentifier: true,
+            builtInEntity: true,
           });
         });
       });

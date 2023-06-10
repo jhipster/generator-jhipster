@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -90,18 +90,18 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
-  "dto": "no",
-  "embedded": false,
+  "dto": undefined,
+  "embedded": undefined,
   "entityTableName": "entity_a",
   "fields": [],
-  "fluentMethods": true,
+  "fluentMethods": undefined,
   "javadoc": "The best entity",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": undefined,
   "name": "A",
-  "pagination": "no",
-  "readOnly": false,
+  "pagination": undefined,
+  "readOnly": undefined,
   "relationships": [],
-  "service": "no",
+  "service": undefined,
 }
 `);
         });

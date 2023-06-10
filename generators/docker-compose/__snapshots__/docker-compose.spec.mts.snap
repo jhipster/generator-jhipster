@@ -543,7 +543,7 @@ jhipster:
     healthcheck:
       test:
         - CMD-SHELL
-        - pg_isready
+        - pg_isready -U $\${POSTGRES_USER}
       interval: 5s
       timeout: 5s
       retries: 10
@@ -684,8 +684,8 @@ exports[`generator - Docker Compose gateway and multi microservices using oauth2
       "01-gateway",
       "02-mysql",
       "03-psql",
-      "07-mariadb",
-      "10-couchbase"
+      "10-couchbase",
+      "07-mariadb"
     ],
     "serviceDiscoveryType": "consul"
   }
@@ -873,7 +873,7 @@ jhipster:
     healthcheck:
       test:
         - CMD-SHELL
-        - pg_isready
+        - pg_isready -U $\${POSTGRES_USER}
       interval: 5s
       timeout: 5s
       retries: 10
@@ -1002,6 +1002,7 @@ jhipster:
     command: ['start-dev --import-realm']
     volumes:
       - ./realm-config:/opt/keycloak/data/import
+      - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
     environment:
       - KC_DB=dev-file
       - KEYCLOAK_ADMIN=admin
@@ -1009,11 +1010,12 @@ jhipster:
       - KC_FEATURES=scripts
       - KC_HTTP_PORT=9080
       - KC_HTTPS_PORT=9443
+      - KC_HEALTH_ENABLED=true
     ports:
       - 9080:9080
       - 9443:9443
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9080/realms/jhipster"]
+      test: 'bash /opt/keycloak/health-check.sh'
       interval: 5s
       timeout: 5s
       retries: 20
@@ -1022,6 +1024,22 @@ jhipster:
   },
   "realm-config/jhipster-realm.json": {
     "contents": Any<String>,
+    "stateCleared": "modified",
+  },
+  "realm-config/keycloak-health-check.sh": {
+    "contents": "#!/bin/bash
+exec 3<>/dev/tcp/localhost/9080
+
+echo -e "GET /health/ready HTTP/1.1\\nhost: localhost:9080\\n" >&3
+
+timeout --preserve-status 1 cat <&3 | grep -m 1 status | grep -m 1 UP
+ERROR=$?
+
+exec 3<&-
+exec 3>&-
+
+exit $ERROR
+",
     "stateCleared": "modified",
   },
 }
@@ -1221,7 +1239,7 @@ jhipster:
     healthcheck:
       test:
         - CMD-SHELL
-        - pg_isready
+        - pg_isready -U $\${POSTGRES_USER}
       interval: 5s
       timeout: 5s
       retries: 10
@@ -1320,8 +1338,8 @@ exports[`generator - Docker Compose gateway and multi microservices, with couchb
       "01-gateway",
       "02-mysql",
       "03-psql",
-      "07-mariadb",
-      "10-couchbase"
+      "10-couchbase",
+      "07-mariadb"
     ],
     "serviceDiscoveryType": "consul"
   }
@@ -1493,7 +1511,7 @@ jhipster:
     healthcheck:
       test:
         - CMD-SHELL
-        - pg_isready
+        - pg_isready -U $\${POSTGRES_USER}
       interval: 5s
       timeout: 5s
       retries: 10

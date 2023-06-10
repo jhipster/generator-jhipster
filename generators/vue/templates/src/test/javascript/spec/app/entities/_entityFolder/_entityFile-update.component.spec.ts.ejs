@@ -18,124 +18,102 @@
 -%>
 <%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, ThisTypedShallowMountOptions } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-<%_ let dayJsIncluded = false;
-  for (field of fields.filter(field => !field.id)) { _%>
-  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
-      dayJsIncluded = true; _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
+import { DATE_TIME_LONG_FORMAT } from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/composables/date-format';
+<%_ } _%>
+import <%= entityAngularName %>Update from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
+import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
+
+<%_
+  const allRelationshipsThatNeedSelectOptions = Object
+    .values(relationshipsByOtherEntity)
+    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .filter(relationships => relationships.length > 0);
+_%>
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+import UserService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/user/user.service';
+  <%_ } else { _%>
+import <%= relationship.otherEntity.entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
-import <%= entityAngularName %>Update from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
-import type <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
-import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+type <%= entityAngularName %>UpdateComponentType = InstanceType<typeof <%= entityAngularName %>Update>;
 
-<%_ const importEntitiesSeen = [entityAngularName];
-  for (relationship of relationships) { _%>
-  <%_ if (!relationship.otherEntityIsEmbedded) {
-    const otherEntityAngularName = relationship.otherEntityAngularName;
-    const otherEntityFileName = relationship.otherEntityFileName;
-    const otherEntityFolderName = relationship.otherEntityFileName;
-    const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder; _%>
-    <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
-      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-import UserService from '@/entities/user/user.service';
-      <% } else if (!relationship.otherEntityUser) { %>
-import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
-      <%_ } _%>
-    <%_ } _%>
-    <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
-  <%_ } _%>
-<%_ } _%>
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-type <%= entityAngularName %>UpdateComponentType = Vue & InstanceType<typeof <%= entityAngularName %>UpdateComponent>;
-
-const localVue = createLocalVue();
-
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
 
 const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
-  let mountOptions: ThisTypedShallowMountOptions<<%= entityAngularName %>UpdateComponentType>;
-  let router: VueRouter;
+  let mountOptions: MountingOptions<<%= entityAngularName %>UpdateComponentType>['global'];
+  let alertService: AlertService;
 
   describe('<%= entityAngularName %> Management Update Component', () => {
     let comp: <%= entityAngularName %>UpdateComponentType;
     let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
+      route = {};
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
-      router = new VueRouter({
-        routes: [
-          {
-            path: '/<%= entityApiUrl %>/:<%= entityInstance %>Id',
-          },
-        ],
+
+      alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+        i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
 
       mountOptions = {
-        store,
-<%_ if (enableTranslation) { _%>
-        i18n,
-<%_ } _%>
-        localVue,
-        router,
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
         provide: {
+          alertService,
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-<%_
-  const entitiesSeen = [entityAngularName];
-  for (relationship of relationships) { _%>
-  <%_ if (!relationship.otherEntityIsEmbedded) {
-      const otherEntityName = relationship.otherEntityName;
-      const otherEntityAngularName = relationship.otherEntityAngularName; _%>
-    <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-          userService: () => new UserService(),
-      <%_ } else { _%>
-          <%= otherEntityName %>Service: () =>
-            sinon.createStubInstance<<%= otherEntityAngularName %>Service>(<%= otherEntityAngularName %>Service, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
-      <%_ } _%>
-    <%_ } _%>
-    <%_ entitiesSeen.push(otherEntityAngularName); _%>
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+            userService: () =>
+              sinon.createStubInstance<UserService>(UserService, {
+                retrieve: sinon.stub().resolves({}),
+              } as any),
+  <%_ } else { _%>
+            <%= relationship.otherEntity.entityInstance %>Service: () =>
+              sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
+                retrieve: sinon.stub().resolves({}),
+              } as any),
   <%_ } _%>
 <%_ } _%>
         },
       };
     });
 
-<%_
-  let dateTestsIncluded = false;
-  for (field of fields.filter(field => !field.id)) {
-    if (field.fieldTypeTimed && !dateTestsIncluded) {
-      dateTestsIncluded = true;
-_%>
+    afterEach(() => {
+      vitest.resetAllMocks();
+    });
+
+<%_ if (anyFieldIsTimeDerived) { _%>
     describe('load', () => {
       beforeEach(() => {
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
       });
       it('Should convert date from string', () => {
@@ -153,13 +131,12 @@ _%>
         expect(comp.convertDateTimeFromServer(null)).toBeNull();
       });
     });
-  <%_ } _%>
 <%_ } _%>
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%= entityInstance %> = <%= entityInstance %>Sample;
         <%= entityInstance %>ServiceStub.update.resolves(<%= entityInstance %>Sample);
@@ -177,7 +154,7 @@ _%>
         // GIVEN
         const entity = {};
         <%= entityInstance %>ServiceStub.create.resolves(entity);
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%= entityInstance %> = entity;
 
@@ -198,29 +175,31 @@ _%>
         <%= entityInstance %>ServiceStub.retrieve.resolves([<%= entityInstance %>Sample]);
 
         // WHEN
-        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        route = {
+          params: {
+            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%= entityInstance %>).toBe(<%= entityInstance %>Sample);
+        expect(comp.<%= entityInstance %>).toMatchObject(<%= entityInstance %>Sample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
-        router.push('/');
-        router.push('/<%- entityApiUrl %>/' + <%= entityInstance %>Sample.<%- primaryKey.name %>);
-        const wrapper = shallowMount<<%= entityAngularName %>UpdateComponentType>(<%= entityAngularName %>Update, mountOptions);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
 
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

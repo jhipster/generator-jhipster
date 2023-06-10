@@ -1,22 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import Logs from '@/admin/logs/logs.vue';
-import type LogsComponent from '@/admin/logs/logs.component';
-import LogsService from '@/admin/logs/logs.service';
+import Logs from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/logs/logs.vue';
+import LogsService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/logs/logs.service';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
-
-type LogsComponentType = Vue & InstanceType<typeof LogsComponent>;
-
-const localVue = createLocalVue();
-
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
+type LogsComponentType = InstanceType<typeof Logs>;
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -28,13 +16,7 @@ describe('Logs Component', () => {
 
   beforeEach(() => {
     axiosStub.get.resolves({});
-    const wrapper = shallowMount<LogsComponentType>(Logs, {
-      store,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      localVue,
-    });
+    const wrapper = shallowMount(Logs);
     logs = wrapper.vm;
   });
 

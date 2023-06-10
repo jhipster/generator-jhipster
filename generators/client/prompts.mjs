@@ -76,7 +76,7 @@ export async function askForClientTheme({ control }) {
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
       choices: async () => {
         const bootswatchChoices = await retrieveOnlineBootswatchThemes(this).catch(errorMessage => {
-          this.logger.warn(errorMessage);
+          this.log.warn(errorMessage);
           return retrieveLocalBootswatchThemes();
         });
         return [

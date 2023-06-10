@@ -1,4 +1,4 @@
-import * as setupAxiosConfig from '@/shared/config/axios-interceptor';
+import * as setupAxiosConfig from '../../../<%- clientSrcDirRelativeToClientTestDir %>shared/config/axios-interceptor';
 import * as sinon from 'sinon';
 import axios from 'axios';
 import MockAdapter from "axios-mock-adapter";
@@ -6,6 +6,11 @@ import MockAdapter from "axios-mock-adapter";
 const mock = new MockAdapter(axios);
 
 describe('Axios interceptor', () => {
+  beforeEach(() => {
+    axios.interceptors.request.clear();
+    axios.interceptors.response.clear();
+  });
+
   it('should use localStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'auth');
@@ -34,9 +39,9 @@ describe('Axios interceptor', () => {
 describe('Axios errors interceptor', () => {
     it('should use callback on 401, 403 errors', async () => {
       const callback = sinon.spy();
-  
+
       setupAxiosConfig.setupAxiosInterceptors(callback, () => {});
-  
+
       try {
         mock.onGet().reply(401);
         await axios('/api/test');
@@ -46,9 +51,9 @@ describe('Axios errors interceptor', () => {
     });
     it('should use callback 50x errors', async () => {
       const callback = sinon.spy();
-  
+
       setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
-  
+
       try {
         mock.onGet().reply(500);
         await axios('/api/test');
@@ -58,9 +63,9 @@ describe('Axios errors interceptor', () => {
     });
     it('should not use callback for errors different 50x, 401, 403', async () => {
       const callback = sinon.spy();
-  
+
       setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
-  
+
       try {
         mock.onGet().reply(402);
         await axios('/api/test');
@@ -69,4 +74,3 @@ describe('Axios errors interceptor', () => {
       }
     });
   });
-  

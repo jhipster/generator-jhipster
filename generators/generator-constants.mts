@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-beta.1';
 // Version of Java
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
@@ -25,14 +25,14 @@ export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = '16.17.0';
+export const NODE_VERSION = '18.16.0';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 
 export const javaDependencies: Record<string, string> = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.0.5',
+  'spring-boot': '3.0.7',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.

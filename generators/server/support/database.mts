@@ -20,7 +20,7 @@ import crypto from 'crypto';
 
 import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.mjs';
 import { hibernateSnakeCase } from './string.mjs';
-import { databaseData } from '../../sql/support/index.mjs';
+import { databaseData } from '../../spring-data-relational/support/index.mjs';
 import { ValidationResult } from '../../base/api.mjs';
 
 const dbTypes = fieldTypes;

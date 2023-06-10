@@ -90,23 +90,22 @@ echo "::endgroup::"
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
-  'generators/cassandra' \
-  'generators/couchbase' \
   'generators/cucumber' \
-  'generators/elasticsearch' \
   'generators/gatling' \
   'generators/gradle' \
-  'generators/kafka' \
+  'generators/liquibase' \
+  'generators/liquibase-changelogs' \
   'generators/maven' \
-  'generators/mongodb' \
-  'generators/neo4j' \
-  'generators/pulsar' \
   'generators/server' \
   'generators/spring-cache' \
+  'generators/spring-cloud-steam' \
+  'generators/spring-data-cassandra' \
+  'generators/spring-data-couchbase' \
+  'generators/spring-data-elasticsearch' \
+  'generators/spring-data-mongodb' \
+  'generators/spring-data-neo4j' \
+  'generators/spring-data-relational' \
   'generators/spring-websocket' \
-  'generators/sql' \
-  'generators/database-changelog' \
-  'generators/database-changelog-liquibase' \
   || SERVER=true ANY=true
 echo "::endgroup::"
 
@@ -119,6 +118,8 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application' \
   'generators/bootstrap-application-base' \
   'generators/common' \
+  'generators/git' \
+  'generators/jdl' \
   'generators/languages' \
   'jdl' \
   'lib' \

@@ -12,9 +12,7 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
-    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-    if (!jhContext) {
+    if (!this.jhipsterContext) {
       throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
@@ -50,7 +48,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         db: 'mysql',
         blueprint: 'myblueprint',
       })
-      .withGenerators([[mockReactBlueprintSubGen, 'jhipster-myblueprint:react']])
+      .withGenerators([[mockReactBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])
       .withAnswers({
         baseName: 'jhipster',
         clientFramework: REACT,

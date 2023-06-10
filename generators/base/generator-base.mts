@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname, relative } from 'path';
+import { basename, join as joinPath, dirname, relative, isAbsolute, join } from 'path';
+import { requireNamespace } from '@yeoman/namespace';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
@@ -25,14 +26,16 @@ import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
-import { statSync, rmSync } from 'fs';
+import { statSync, rmSync, existsSync } from 'fs';
 import { lt as semverLessThan } from 'semver';
-import type Storage from 'yeoman-generator/lib/util/storage.js';
-
+import type { ComposeOptions, Storage } from 'yeoman-generator';
+import semver from 'semver';
+import latestVersion from 'latest-version';
+import assert from 'assert';
 import SharedData from './shared-data.mjs';
 import YeomanGenerator from './generator-base-todo.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { joinCallbacks, Logger } from './support/index.mjs';
+import { createJHipsterLogger, joinCallbacks, Logger } from './support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -43,14 +46,16 @@ import type {
   JHipsterOptions,
   ValidationResult,
   WriteFileOptions,
+  JHipsterArguments,
 } from './api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
 import command from './command.mjs';
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 
-const { merge, kebabCase } = _;
+const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
@@ -97,7 +102,6 @@ export default class CoreGenerator extends YeomanGenerator {
 
   readonly sharedData!: SharedData<BaseApplication>;
   readonly logger: Logger;
-  declare _config: Record<string, any>;
   jhipsterConfig!: Record<string, any>;
   /**
    * @deprecated
@@ -110,8 +114,17 @@ export default class CoreGenerator extends YeomanGenerator {
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
 
+  // TODO switch to FullEnvironment type
+  declare env: any;
+
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+    super(args, options, {
+      skipParseOptions: true,
+      tasksMatchingPriority: true,
+      taskPrefix: PRIORITY_PREFIX,
+      unique: 'namespace',
+      ...features,
+    });
 
     this.option('skip-prompts', {
       description: 'Skip prompts',
@@ -151,7 +164,7 @@ export default class CoreGenerator extends YeomanGenerator {
 
     this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help });
 
-    this.logger = new Logger({ adapter: this.env.adapter, namespace: this.options.namespace, debugEnabled: this.debugEnabled });
+    this.logger = this.log as any;
 
     if (this.options.help) {
       return;
@@ -159,28 +172,17 @@ export default class CoreGenerator extends YeomanGenerator {
 
     this.parseJHipsterOptions(command.options);
 
-    this.registerPriorities(CUSTOM_PRIORITIES as any);
+    this.registerPriorities(CUSTOM_PRIORITIES);
 
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
 
     if (this.options.namespace !== 'jhipster:bootstrap') {
       // jhipster:bootstrap is always required. Run it once the enviroment starts.
-      (this.env as any).runLoop.add(
-        'environment:run',
-        async (done, stop) => {
-          try {
-            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
-            done();
-          } catch (error) {
-            stop(error);
-          }
-        },
-        {
-          once: 'queueJhipsterBootstrap',
-          run: false,
-        }
-      );
+      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
+        once: 'queueJhipsterBootstrap',
+        startQueue: false,
+      });
     }
 
     // Add base template folder.
@@ -237,7 +239,7 @@ export default class CoreGenerator extends YeomanGenerator {
   getTaskNames(): string[] {
     let priorities = super.getTaskNames();
     if (this.options.skipPriorities) {
-      priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
+      priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;
   }
@@ -260,7 +262,7 @@ export default class CoreGenerator extends YeomanGenerator {
         optionValue = this.options[optionDesc.name ?? optionName];
       }
       if (optionValue !== undefined) {
-        optionValue = optionDesc.type(optionValue);
+        optionValue = optionDesc.type !== Array && optionDesc.type !== Function ? optionDesc.type(optionValue) : optionValue;
         if (optionDesc.scope === 'storage') {
           this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'blueprint') {
@@ -276,13 +278,30 @@ export default class CoreGenerator extends YeomanGenerator {
     });
   }
 
+  parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
+    const { positionalArguments = [] } = this.options;
+    const argumentEntries = Object.entries(jhipsterArguments);
+    if (positionalArguments.length > argumentEntries.length) {
+      throw new Error('More arguments than allowed');
+    }
+    argumentEntries.forEach(([argumentName, argumentDef], index) => {
+      if (positionalArguments.length > index) {
+        const argument = positionalArguments[index];
+        const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
+        this[argumentName] = convertedValue;
+      } else if (argumentDef.required) {
+        throw new Error(`Missing required argument ${argumentName}`);
+      }
+    });
+  }
+
   /**
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
   jhipsterTemplatePath(...path: string[]) {
     let existingGenerator: string;
     try {
-      existingGenerator = this._jhipsterGenerator || (this.env as any).requireNamespace(this.options.namespace).generator;
+      existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
     } catch (error) {
       if (this.options.namespace) {
         const split = this.options.namespace.split(':', 2);
@@ -292,7 +311,52 @@ export default class CoreGenerator extends YeomanGenerator {
       }
     }
     this._jhipsterGenerator = existingGenerator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path);
+    return this._jhipsterGenerator
+      ? this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path)
+      : this.templatePath(...path);
+  }
+
+  /**
+   * Compose with a jhipster generator using default jhipster config.
+   * @return {object} the composed generator
+   */
+  async composeWithJHipster(generator: string, options?: ComposeOptions) {
+    assert(typeof generator === 'string', 'generator should to be a string');
+    if (!isAbsolute(generator)) {
+      const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+      if (await this.env.get(namespace)) {
+        generator = namespace;
+      } else {
+        // Keep test compatibily were jhipster lookup does not run.
+        const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
+          const pathToLook = join(__dirname, `../${generator}${extension}`);
+          return existsSync(pathToLook) ? pathToLook : undefined;
+        });
+        if (!found) {
+          throw new Error(`Generator ${generator} was not found`);
+        }
+        generator = join(__dirname, `../${generator}${found}`);
+      }
+    }
+
+    return this.composeWith(generator, {
+      forwardOptions: true,
+      ...options,
+      generatorOptions: {
+        configOptions: this.configOptions,
+        ...options?.generatorOptions,
+      } as any,
+    });
+  }
+
+  /**
+   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
+   */
+  async dependsOnJHipster(generator: string, options?: ComposeOptions) {
+    return this.composeWithJHipster(generator, {
+      ...options,
+      schedule: false,
+    });
   }
 
   /**
@@ -301,7 +365,7 @@ export default class CoreGenerator extends YeomanGenerator {
    */
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
-    const relativePath = relative((this.env as any).conflicter.cwd, destinationFile);
+    const relativePath = relative((this.env as any).logCwd, destinationFile);
     // Delete from memory fs to keep updated.
     this.fs.delete(destinationFile);
     try {
@@ -321,7 +385,7 @@ export default class CoreGenerator extends YeomanGenerator {
    */
   removeFolder(...path: string[]) {
     const destinationFolder = this.destinationPath(...path);
-    const relativePath = relative((this.env as any).conflicter.cwd, destinationFolder);
+    const relativePath = relative((this.env as any).logCwd, destinationFolder);
     // Delete from memory fs to keep updated.
     this.fs.delete(`${destinationFolder}/**`);
     try {
@@ -330,7 +394,7 @@ export default class CoreGenerator extends YeomanGenerator {
         rmSync(destinationFolder, { recursive: true });
       }
     } catch (error) {
-      this.logger.log(`Could not remove folder ${destinationFolder}`);
+      this.log.log(`Could not remove folder ${destinationFolder}`);
     }
   }
 
@@ -499,10 +563,10 @@ export default class CoreGenerator extends YeomanGenerator {
     if (result.debug) {
       if (Array.isArray(result.debug)) {
         for (const debug of result.debug) {
-          this.logger.debug(debug);
+          this.log.debug(debug);
         }
       } else {
-        this.logger.debug(result.debug);
+        this.log.debug(result.debug);
       }
     }
     if (result.info) {
@@ -517,10 +581,10 @@ export default class CoreGenerator extends YeomanGenerator {
     if (result.warning) {
       if (Array.isArray(result.warning)) {
         for (const warning of result.warning) {
-          this.logger.warn(warning);
+          this.log.warn(warning);
         }
       } else {
-        this.logger.warn(result.warning);
+        this.log.warn(result.warning);
       }
     }
     if (result.error) {
@@ -529,13 +593,36 @@ export default class CoreGenerator extends YeomanGenerator {
           throw new Error(result.error[0]);
         }
         for (const error of result.error) {
-          this.logger.warn(error);
+          this.log.warn(error);
         }
       } else if (throwOnError) {
         throw new Error(result.error);
       } else {
-        this.logger.warn(result.error);
+        this.log.warn(result.error);
       }
+    }
+  }
+
+  /**
+   * Checks if there is a newer JHipster version available.
+   */
+  protected async checkForNewVersion() {
+    try {
+      const latestJhipster = await latestVersion(GENERATOR_JHIPSTER);
+      if (semver.lt(packageJson.version, latestJhipster)) {
+        this.log.warn(
+          `${
+            chalk.yellow(' ______________________________________________________________________________\n\n') +
+            chalk.yellow('  JHipster update available: ') +
+            chalk.green.bold(latestJhipster) +
+            chalk.gray(` (current: ${packageJson.version})`)
+          }\n`
+        );
+        this.log.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+        this.log.log(chalk.yellow(' ______________________________________________________________________________\n'));
+      }
+    } catch {
+      // Ignore error
     }
   }
 
@@ -554,7 +641,7 @@ export default class CoreGenerator extends YeomanGenerator {
     help,
   }: {
     jhipsterOldVersion: string | null;
-    help: boolean;
+    help?: boolean;
   }): SharedData<BaseApplication> {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);

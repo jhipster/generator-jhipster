@@ -1,15 +1,19 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 
 import HealthService from './health.service';
 import <%=jhiPrefixCapitalized%>HealthModal from './health-modal.vue';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Health',
   components: {
     'health-modal': <%=jhiPrefixCapitalized%>HealthModal,
   },
   setup() {
-    const healthService = inject('healthService', () => new HealthService());
+    const healthService = inject('healthService', () => new HealthService(), true);
 
     const healthData: Ref<any> = ref(null);
     const currentHealth: Ref<any> = ref(null);
@@ -20,6 +24,9 @@ export default defineComponent({
       healthData,
       currentHealth,
       updatingHealth,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   mounted(): void {
@@ -27,7 +34,7 @@ export default defineComponent({
   },
   methods: {
     baseName(name: any): any {
-      return this.healthService().getBaseName(name);
+      return this.healthService.getBaseName(name);
     },
     getBadgeClass(statusState: any): string {
       if (statusState === 'UP') {
@@ -37,15 +44,15 @@ export default defineComponent({
     },
     refresh(): void {
       this.updatingHealth = true;
-      this.healthService()
+      this.healthService
         .checkHealth()
         .then(res => {
-          this.healthData = this.healthService().transformHealthData(res.data);
+          this.healthData = this.healthService.transformHealthData(res.data);
           this.updatingHealth = false;
         })
         .catch(error => {
           if (error.status === 503) {
-            this.healthData = this.healthService().transformHealthData(error.error);
+            this.healthData = this.healthService.transformHealthData(error.error);
           }
           this.updatingHealth = false;
         });
@@ -55,7 +62,7 @@ export default defineComponent({
       (<any>this.$refs.healthModal).show();
     },
     subSystemName(name: string): string {
-      return this.healthService().getSubSystemName(name);
+      return this.healthService.getSubSystemName(name);
     },
   },
 });

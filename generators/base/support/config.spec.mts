@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { removeFieldsWithNullishValues } from './config.mjs';
 
 describe('generator - base - support - config', () => {

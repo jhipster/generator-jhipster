@@ -48,7 +48,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
 
       it('should return the converted applications', () => {
-        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
+        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' }));
       });
     });
     context('when passing a jdl object', () => {
@@ -64,8 +64,8 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
 
       it('should add the converted applications', () => {
-        expect(jdlObject.applications.tata).to.deep.equal(createJDLApplication({ baseName: 'tata' }));
-        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
+        expect(jdlObject.applications.tata).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'tata' }));
+        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' }));
       });
     });
   });

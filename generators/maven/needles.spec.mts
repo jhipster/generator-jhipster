@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { dryRunHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -127,7 +127,7 @@ describe('generator - maven - needles', () => {
           blueprint: 'myblueprint',
           clientFramework: 'no',
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:maven']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
     });
 
     it('Assert pom.xml has the dependency management added', () => {
@@ -254,7 +254,7 @@ describe('generator - maven - needles', () => {
         .withOptions({
           profile: 'prod',
         })
-        .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:maven']]);
+        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
     });
 
     it('Assert pom.xml has the dependency management added', () => {

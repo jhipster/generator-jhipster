@@ -22,7 +22,7 @@
 import { expect } from 'chai';
 import { relationshipOptions } from '../jhipster/index.mjs';
 
-const { JPA_DERIVED_IDENTIFIER, exists } = relationshipOptions;
+const { BUILT_IN_ENTITY, exists } = relationshipOptions;
 
 describe('jdl - RelationshipOptions', () => {
   describe('exists', () => {
@@ -33,7 +33,7 @@ describe('jdl - RelationshipOptions', () => {
     });
     describe('when the option exists', () => {
       it('should return true', () => {
-        expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
+        expect(exists(BUILT_IN_ENTITY)).to.be.true;
       });
     });
   });

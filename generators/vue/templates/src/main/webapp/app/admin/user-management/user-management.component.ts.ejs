@@ -1,18 +1,23 @@
-import Vue2Filters from 'vue2-filters';
+import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 import UserManagementService from './user-management.service';
-import AlertService from '@/shared/alert/alert.service';
-import { computed, defineComponent, inject, Ref, ref } from 'vue';
-import { useStore } from '@/store';
+import { useAlertService } from '@/shared/alert/alert.service';
+
+import { useDateFormat } from '@/shared/composables'
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
-  mixins: [Vue2Filters.mixin],
   mounted(): void {
     this.loadAll();
   },
   setup(prop) {
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const { formatDateShort: formatDate } = useDateFormat();
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
+    const username = inject<ComputedRef<string>>('currentUsername');
 
     const error = ref('');
     const success = ref('');
@@ -31,9 +36,8 @@ export default defineComponent({
     const queryCount: Ref<number> = ref(null);
 <%_ } _%>
 
-    const username = computed(() => useStore().getters.account?.login ?? '');
-
     return {
+      formatDate,
       userManagementService,
       alertService,
       error,
@@ -52,6 +56,9 @@ export default defineComponent({
 <%_ if (!databaseTypeCassandra) { _%>
       totalItems,
       queryCount,
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
 <%_ } _%>
     };
   },
@@ -77,9 +84,9 @@ export default defineComponent({
       this.userManagementService
         .retrieve({
 <%_ if (!databaseTypeCassandra) { _%>
+          sort: this.sort(),
           page: this.page - 1,
           size: this.itemsPerPage,
-          sort: this.sort(),
 <%_ } _%>
         })
         .then(res => {
@@ -127,25 +134,21 @@ export default defineComponent({
 <%_
   const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
   const headerParams = `X-${frontendAppName}-params`.toLowerCase();
-  if (enableTranslation) {
 _%>
-          const message = this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
-<%_ } else {_%>
-          const message = res.headers['<%=headerAlert%>'];
+          this.alertService.showInfo(
+<%_ if (enableTranslation) { _%>
+            this.t$(res.headers['<%=headerAlert%>'].toString(), { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) }),
+<%_ } else { _%>
+            res.headers['<%=headerAlert%>'].toString(),
 <%_ } _%>
-          this.$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'danger',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+            { variant: 'danger' },
+          );
           this.removeId = null;
           this.loadAll();
           this.closeDialog();
         })
         .catch(error => {
-          this.alertService().showHttpError(this, error.response);
+          this.alertService.showHttpError(error.response);
         });
     },
     prepareRemove(instance): void {

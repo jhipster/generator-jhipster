@@ -1,20 +1,25 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   props: {
     page: Number,
     total: Number,
     itemsPerPage: Number,
   },
   setup(props) {
-    const { page, total, itemsPerPage} = props;
-
-    const first = computed(() => ((page - 1) * itemsPerPage === 0 ? 1 : (page - 1) * itemsPerPage + 1));
-    const second = computed(() => (page * itemsPerPage < total ? page * itemsPerPage : total));
+    const first = computed(() => ((props.page - 1) * props.itemsPerPage === 0 ? 1 : (props.page - 1) * props.itemsPerPage + 1));
+    const second = computed(() => (props.page * props.itemsPerPage < props.total ? props.page * props.itemsPerPage : props.total));
 
     return {
       first,
       second,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

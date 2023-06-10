@@ -1,7 +1,11 @@
 import { defineComponent, inject, ref, Ref, onMounted } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 import GatewayService from './gateway.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>GatewayComponent',
   setup() {
     const gatewayService = inject('gatewayService', () => new GatewayService(), true);
@@ -45,6 +49,9 @@ export default defineComponent({
       updatingRoutes,
       gatewayService,
       refresh,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
 });

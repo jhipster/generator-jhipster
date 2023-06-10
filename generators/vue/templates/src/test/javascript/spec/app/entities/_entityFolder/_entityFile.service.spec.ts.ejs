@@ -28,10 +28,10 @@ import dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (anyFieldIsLocalDate || anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
-import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/date/filters';
+import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/composables/date-format';
 <%_ } _%>
-import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/model/<%= entityModelFileName %>.model';
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
@@ -71,7 +71,7 @@ describe('Service Tests', () => {
 <%_ fields.filter(field => !field.id).forEach((field) => {
     const fieldType = field.fieldType; _%>
   <%_ if (field.fieldIsEnum) { _%>
-        <%= fieldType + '.' + field.enumValues[0].name %>,
+        '<%= field.enumValues[0].name  %>',
   <%_ } else if (field.fieldTypeBoolean) { _%>
         false,
   <%_ } else if (field.fieldTypeDuration) { _%>

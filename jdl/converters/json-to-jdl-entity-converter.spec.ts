@@ -30,7 +30,7 @@ import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/in
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { JPA_DERIVED_IDENTIFIER, BUILT_IN_ENTITY } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 
 const {
   Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
@@ -219,9 +219,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing relationships with options', () => {
-        context('such as jpaDerivedIdentifier', () => {
+        context('such as builtInEntity', () => {
           it('should accept it', () => {
-            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}').options[JPA_DERIVED_IDENTIFIER]).to.be
+            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}').options.global[BUILT_IN_ENTITY]).to.be
               .true;
           });
         });

@@ -50,5 +50,10 @@ export default function cleanupOldFilesTask({ application } = {}) {
   }
   if (this.isJhipsterVersionLessThan('7.10.1')) {
     this.removeFile('tsconfig.spec.json');
+    this.removeFile(`${application.clientSrcDir}app/shared/config/formatter.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/shared/config/formatter.spec.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/date/filters.ts`);
+    this.removeFile(`${application.clientTestDir}jest.conf.js`);
+    this.removeFile(`${application.clientTestDir}spec/setup.js`);
   }
 }

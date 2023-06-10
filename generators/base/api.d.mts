@@ -1,4 +1,5 @@
-import type { OptionConfig, GeneratorOptions, GeneratorFeatures, ArgumentConfig } from 'yeoman-generator';
+import type { BaseOptions, BaseFeatures, ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
+import { SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.mjs';
 
 export type ApplicationWithConfig = {
@@ -8,15 +9,41 @@ export type ApplicationWithConfig = {
   entities: Record<string, unknown>;
 };
 
-export interface JHipsterGeneratorOptions extends GeneratorOptions {
+export type JHipsterGeneratorOptions = BaseOptions & {
   applicationWithConfig?: ApplicationWithConfig;
-}
+  positionalArguments: unknown[];
+  jhipsterContext?: any;
+  skipYoResolve?: boolean;
+  ignoreErrors?: boolean;
+  commandName: string;
+  applicationWithEntities?: any;
+  blueprints?: string;
+  blueprint?: any;
+  configOptions: any;
+  reproducible?: boolean;
+  applicationId?: string;
+  sharedData: any;
+  ignoreNeedlesError?: boolean;
+  skipPriorities?: string[];
+  skipWriting?: boolean;
+  entities?: string[];
+  localBlueprint?: boolean;
+  baseName?: string;
+  db?: string;
+  applicationType?: string;
+  skipUserManagement?: boolean;
+  force?: boolean;
+  skipDbChangelog?: boolean;
+  jdlFile?: string;
+  recreateInitialChangelog?: boolean;
+  monorepository?: boolean;
+};
 
-export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
+export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
-}
+};
 
 // eslint-disable-next-line no-use-before-define
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
@@ -91,7 +118,7 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
     }
 );
 
-export type JHipsterOption = OptionConfig & {
+export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
@@ -104,7 +131,7 @@ export type ValidationResult = {
   error?: string | string[];
 };
 
-export type JHipsterArgumentConfig = ArgumentConfig;
+export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'>;
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 

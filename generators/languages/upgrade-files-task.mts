@@ -16,7 +16,7 @@ function gitMove(this: BaseGenerator, from: string, to: string) {
   const source = this.destinationPath(from);
   const dest = this.destinationPath(to);
   if (source && dest && shelljs.test('-f', source)) {
-    this.logger.info(`Renaming the file - ${source} to ${dest}`);
+    this.log.verboseInfo(`Renaming the file - ${source} to ${dest}`);
     return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
   }
   return true;
@@ -28,7 +28,7 @@ function gitMove(this: BaseGenerator, from: string, to: string) {
 export default function upgradeFilesTask(this: BaseGenerator) {
   let atLeastOneSuccess = false;
   if (this.isJhipsterVersionLessThan('6.1.0')) {
-    const languages = this.config.get('languages');
+    const languages = this.config.get<string[]>('languages');
     if (languages) {
       const langNameDiffer = function (lang) {
         const langProp = languageSnakeCase(lang);
@@ -41,8 +41,8 @@ export default function upgradeFilesTask(this: BaseGenerator) {
         .forEach(props => {
           const code = gitMove.call(
             this,
-            `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
-            `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
+            `${SERVER_MAIN_RES_DIR}i18n/messages_${props![0]}.properties`,
+            `${SERVER_MAIN_RES_DIR}i18n/messages_${props![1]}.properties`
           );
           atLeastOneSuccess = atLeastOneSuccess || code;
         });

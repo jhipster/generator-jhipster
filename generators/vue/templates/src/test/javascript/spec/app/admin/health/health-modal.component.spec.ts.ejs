@@ -1,35 +1,27 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount } from '@vue/test-utils';
 
-import { useStore } from '@/store';
-import * as config from '@/shared/config/config';
-import HealthModal from '@/admin/health/health-modal.vue';
-import type HealthModalComponent from '@/admin/health/health-modal.component';
+import HealthModal from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/health/health-modal.vue';
 
-type HealthModalComponentType = Vue & InstanceType<typeof HealthModalComponent>;
+type HealthModalComponentType = InstanceType<typeof HealthModal>;
 
-const localVue = createLocalVue();
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = useStore();
-localVue.component('font-awesome-icon', {});
-const healthsService = { getBaseName: jest.fn(), getSubSystemName: jest.fn() };
+const healthService = { getBaseName: vitest.fn(), getSubSystemName: vitest.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;
 
   beforeEach(() => {
-    const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
+    const wrapper = shallowMount(HealthModal, {
       propsData: {
         currentHealth: {},
       },
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      localVue,
-      provide: {
-        healthService: () => healthsService,
+      global: {
+        stubs: {
+          'font-awesome-icon': true,
+        },
+        provide: {
+          healthService,
+        },
       },
     });
     healthModal = wrapper.vm;
@@ -39,13 +31,13 @@ describe('Health Modal Component', () => {
     it('should use healthService', () => {
       healthModal.baseName('base');
 
-      expect(healthsService.getBaseName).toHaveBeenCalled();
+      expect(healthService.getBaseName).toHaveBeenCalled();
     });
 
     it('should use healthService', () => {
       healthModal.subSystemName('base');
 
-      expect(healthsService.getSubSystemName).toHaveBeenCalled();
+      expect(healthService.getSubSystemName).toHaveBeenCalled();
     });
   });
 
@@ -68,16 +60,14 @@ describe('Health Modal Component for diskSpace', () => {
   let healthModal: HealthModalComponentType;
 
   beforeEach(() => {
-    const wrapper = shallowMount<HealthModalComponentType>(HealthModal, {
+    const wrapper = shallowMount(HealthModal, {
       propsData: {
         currentHealth: { name: 'diskSpace' },
       },
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      localVue,
-      provide: {
-        healthService: () => healthsService,
+      global: {
+        provide: {
+          healthService,
+        },
       },
     });
     healthModal = wrapper.vm;

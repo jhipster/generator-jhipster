@@ -19,24 +19,32 @@
 <%_
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto'; %>
+        try {
 <%_ if (!viaService) { _%>
   <%_ if (reactive) { _%>
-        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query)<%_ if (dtoMapstruct) { %>
-            .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
+            return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query)<%_ if (dtoMapstruct) { %>
+                .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
   <%_ } else { _%>
     <%_ if (searchEngineElasticsearch) { _%>
-        return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(query).spliterator(), false)
+            return StreamSupport
+                .stream(<%= entityInstance %>SearchRepository.search(query).spliterator(), false)
     <%_ } else { _%>
-            return <%= entityInstance %>Repository.search(query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
+                return <%= entityInstance %>Repository.search(query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
     <%_ } _%>
     <%_ if (dtoMapstruct) { _%>
-            .map(<%= entityToDtoReference %>)
+                .map(<%= entityToDtoReference %>)
     <%_ } _%>
     <%_ if (dtoMapstruct || searchEngineElasticsearch) { _%>
-            .toList();
+                .toList();
     <%_ } _%>
   <%_ } _%>
 <%_ } else { _%>
-        return <%= entityInstance %>Service.search(query)<% if (reactive && fromResource) { %>.collectList()<% } %>;
+            return <%= entityInstance %>Service.search(query)<% if (reactive && fromResource) { %>.collectList()<% } %>;
 <%_ } _%>
+        } catch (RuntimeException e) {
+    <% if (searchEngineElasticsearch && fromResource) { %>
+            throw ElasticsearchExceptionMapper.mapException(e);
+    <%_ } else { _%>
+            throw e;
+    <% } %>
+        }

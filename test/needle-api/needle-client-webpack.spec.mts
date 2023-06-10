@@ -13,9 +13,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
-    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-    if (!jhContext) {
+    if (!this.jhipsterContext) {
       throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
@@ -49,7 +47,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]])
       .run();
   }
 

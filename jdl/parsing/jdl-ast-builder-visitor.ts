@@ -334,15 +334,12 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   relationshipOption(context) {
-    if (context.JPA_DERIVED_IDENTIFIER) {
-      return { optionName: 'jpaDerivedIdentifier', type: 'UNARY' };
-    }
     if (context.BUILT_IN_ENTITY) {
       return { optionName: BUILT_IN_ENTITY, type: 'UNARY' };
     }
 
     /* istanbul ignore next */
-    throw new Error("No valid relationship option found, expected 'jpaDerivedIdentifier'.");
+    throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}'.`);
   }
 
   enumDeclaration(context) {

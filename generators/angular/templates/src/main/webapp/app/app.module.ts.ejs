@@ -27,7 +27,6 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
 import { CookieService } from 'ngx-cookie-service';
 <%_ } _%>
-import { NgxWebstorageModule } from 'ngx-webstorage';
 import dayjs from 'dayjs/esm';
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 
@@ -59,7 +58,6 @@ import { TrackerService } from './core/tracker/tracker.service';
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
-    NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-', caseSensitive: true }),
     MainModule,
 <%_ if (enableTranslation) { _%>
     TranslationModule,

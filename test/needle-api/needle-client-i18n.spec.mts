@@ -11,9 +11,7 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
-    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-    if (!jhContext) {
+    if (!this.jhipsterContext) {
       throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
@@ -53,7 +51,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']]);
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:languages' }]]);
   });
 
   it('Assert english global.json contain the new key', () => {

@@ -29,7 +29,7 @@ describe('generators - server - needle - logback', () => {
         blueprint: 'myblueprint',
         clientFramework: 'no',
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']]);
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:server' }]]);
   });
 
   it('Assert log is added to logback-spring.xml', () => {

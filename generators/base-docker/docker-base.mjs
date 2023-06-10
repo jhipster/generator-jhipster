@@ -31,7 +31,7 @@ export { checkDocker } from './docker-utils.mjs';
  * Check Images
  */
 export function checkImages() {
-  this.logger.log('\nChecking Docker images in applications directories...');
+  this.log.log('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
   let runCommand = '';
@@ -96,16 +96,14 @@ export function loadConfigs() {
   const serverPort = 8080;
 
   // Loading configs
-  this.logger.debug(`Apps folders: ${this.appsFolders}`);
+  this.log.debug(`Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
-    this.logger.debug(chalk.red.bold(`App folder ${path}`));
+    this.log.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       config.composePort = serverPort + index;
-      this.logger.debug(
-        chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`)
-      );
+      this.log.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
 
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
@@ -153,7 +151,7 @@ export function loadFromYoRc() {
   delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
-    this.logger.log('\nFound .yo-rc.json config file...');
+    this.log.log('\nFound .yo-rc.json config file...');
   }
 
   if (this.regenerate) {

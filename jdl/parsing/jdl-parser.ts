@@ -322,7 +322,7 @@ export default class JDLParser extends CstParser {
 
   relationshipOption(): any {
     this.RULE('relationshipOption', () => {
-      this.OR([{ ALT: () => this.CONSUME(LexerTokens.JPA_DERIVED_IDENTIFIER) }, { ALT: () => this.CONSUME(LexerTokens.BUILT_IN_ENTITY) }]);
+      this.OR([{ ALT: () => this.CONSUME(LexerTokens.BUILT_IN_ENTITY) }]);
     });
   }
 

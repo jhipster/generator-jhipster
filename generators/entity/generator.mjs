@@ -36,7 +36,7 @@ const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'argument', ...features });
+    super(args, options, { unique: 'argument', skipParseOptions: false, ...features });
 
     // This makes `name` a required argument.
     this.argument('name', {
@@ -47,66 +47,67 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
     // This method adds support for a `--[no-]regenerate` flag
     this.option('regenerate', {
-      desc: 'Regenerate the entity without presenting an option to update it',
+      description: 'Regenerate the entity without presenting an option to update it',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('table-name', {
-      desc: 'Specify table name that will be used by the entity',
+      description: 'Specify table name that will be used by the entity',
       type: String,
     });
 
     // This method adds support for a `--[no-]fluent-methods` flag
     this.option('fluent-methods', {
-      desc: 'Generate fluent methods in entity beans to allow chained object construction',
+      description: 'Generate fluent methods in entity beans to allow chained object construction',
       type: Boolean,
     });
 
     // This adds support for a `--angular-suffix` flag
     this.option('angular-suffix', {
-      desc: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
+      description: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
       type: String,
     });
 
     // This adds support for a `--client-root-folder` flag
     this.option('client-root-folder', {
-      desc: 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
+      description:
+        'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
       type: String,
     });
 
     // This adds support for a `--skip-ui-grouping` flag
     this.option('skip-ui-grouping', {
-      desc: 'Disables the UI grouping behaviour for entity client side code',
+      description: 'Disables the UI grouping behaviour for entity client side code',
       type: Boolean,
     });
 
     // This adds support for a `--skip-server` flag
     this.option('skip-server', {
-      desc: 'Skip the server-side code generation',
+      description: 'Skip the server-side code generation',
       type: Boolean,
     });
 
     // This adds support for a `--skip-client` flag
     this.option('skip-client', {
-      desc: 'Skip the client-side code generation',
+      description: 'Skip the client-side code generation',
       type: Boolean,
     });
 
     // This adds support for a `--skip-db-changelog` flag
     this.option('skip-db-changelog', {
-      desc: 'Skip the generation of database changelog (liquibase for sql databases)',
+      description: 'Skip the generation of database changelog (liquibase for sql databases)',
       type: Boolean,
     });
 
     // This adds support for a `--db` flag
     this.option('db', {
-      desc: 'Provide DB option for the application when using skip-server flag',
+      description: 'Provide DB option for the application when using skip-server flag',
       type: String,
     });
 
     this.option('single-entity', {
-      desc: 'Regenerate only a single entity, relationships can be not correctly generated',
+      description: 'Regenerate only a single entity, relationships can be not correctly generated',
       type: Boolean,
     });
   }
@@ -130,9 +131,11 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY, {
-        entityExisted,
-        configExisted,
-        arguments: [name],
+        generatorOptions: {
+          entityExisted,
+          configExisted,
+          arguments: [name],
+        },
       });
     }
 
@@ -186,15 +189,17 @@ export default class EntityGenerator extends BaseApplicationGenerator {
             context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
             context.useConfigurationFile = true;
 
-            this.logger.info(`\nThe entity ${context.name} is being updated.\n`);
+            this.log.verboseInfo(`\nThe entity ${context.name} is being updated.\n`);
             try {
               // We are generating a entity from a microservice.
               // Load it directly into our entity configuration.
               this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
-              this.entityStorage.set(this.microserviceConfig);
+              if (this.microserviceConfig) {
+                this.entityStorage.set(this.microserviceConfig);
+              }
             } catch (err) {
-              this.logger.debug('Error:', err);
-              throw new Error('\nThe entity configuration file could not be read!\n');
+              this.log.debug('Error:', err);
+              throw new Error(`The entity configuration file could not be read! ${err}`, { cause: err });
             }
           }
           if (this.entityConfig.clientRootFolder === undefined) {
@@ -250,14 +255,14 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
-          this.logger.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+          this.log.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
         }
 
         // Structure for prompts.
         this.entityStorage.defaults({ fields: [], relationships: [] });
 
         if (!context.useConfigurationFile) {
-          this.logger.info(`\nThe entity ${entityName} is being created.\n`);
+          this.log.verboseInfo(`\nThe entity ${entityName} is being created.\n`);
         }
       },
     };
@@ -294,12 +299,14 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
-          entities: this.options.singleEntity ? [this.context.name] : undefined,
-          regenerate: true,
-          writeEveryEntity: false,
-          composedEntities: [this.context.name],
-          skipDbChangelog: this.options.skipDbChangelog,
-          skipInstall: this.options.skipInstall,
+          generatorOptions: {
+            entities: this.options.singleEntity ? [this.context.name] : undefined,
+            regenerate: true,
+            writeEveryEntity: false,
+            composedEntities: [this.context.name],
+            skipDbChangelog: this.options.skipDbChangelog,
+            skipInstall: this.options.skipInstall,
+          },
         });
       },
     };
@@ -313,7 +320,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   get end() {
     return {
       end() {
-        this.logger.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+        this.log.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
       },
     };
   }

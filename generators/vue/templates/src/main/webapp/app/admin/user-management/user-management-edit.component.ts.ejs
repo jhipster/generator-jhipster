@@ -1,9 +1,16 @@
-import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
+import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useVuelidate } from '@vuelidate/core'
+import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
-import AlertService from '@/shared/alert/alert.service';
-import { defineComponent, inject, ref, Ref } from 'vue';
-import { useRoute } from 'vue-router/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
+import { useRoute, useRouter } from 'vue-router';
+<%_ if (enableTranslation) { _%>
+import languages from '@/shared/config/languages';
+<%_ } _%>
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -35,37 +42,35 @@ const validations: any = {
 };
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementEdit',
   validations,
   setup() {
     const route = useRoute();
+    const router = useRouter();
 
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
+    const previousState = () => router.go(-1);
 
     const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
     const isSaving: Ref<boolean> = ref(false);
     const authorities: Ref<string[]> = ref([]);
-    const languages: Ref<string[]> = ref([]);
 
     const initAuthorities = async () => {
       const response = await userManagementService.retrieveAuthorities();
       authorities.value = response.data;
     };
 
-    const loadUser = async (userId: <%- user.primaryKey.tsType _%>) => {
+    const loadUser = async (userId: string) => {
       const response = await userManagementService.get(userId);
       userAccount.value = response.data;
     };
 
     initAuthorities();
-    const userId = route.params.userId;
+    const userId = route.params?.userId;
     if (userId) {
-<%_ if (user.primaryKey.tsType === 'number') { _%>
-      loadUser(Number(userId));
-<%_ } else { _%>
       loadUser(userId);
-<%_ } _%>
     }
 
     return {
@@ -73,14 +78,16 @@ export default defineComponent({
       userAccount,
       isSaving,
       authorities,
-      languages,
       userManagementService,
+      previousState,
+      v$: useVuelidate(),
+<%_ if (enableTranslation) { _%>
+      languages: languages(),
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {
-    previousState(): void {
-      this.$router.go(-1);
-    },
     save(): void {
       this.isSaving = true;
       if (this.userAccount.id) {
@@ -88,17 +95,11 @@ export default defineComponent({
           .update(this.userAccount)
           .then(res => {
             this.returnToList();
-            (this.$root as any).$bvToast.toast(this.getMessageFromHeader(res).toString(), {
-              toaster: 'b-toaster-top-center',
-              title: 'Info',
-              variant: 'info',
-              solid: true,
-              autoHideDelay: 5000,
-            });
+            this.alertService.showInfo(this.getToastMessageFromHeader(res));
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService().showHttpError(this, error.response);
+            this.alertService.showHttpError(error.response);
           });
       } else {
 <%_ if (!enableTranslation) { _%>
@@ -108,33 +109,26 @@ export default defineComponent({
           .create(this.userAccount)
           .then(res => {
             this.returnToList();
-            this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
-              toaster: 'b-toaster-top-center',
-              title: 'Success',
-              variant: 'success',
-              solid: true,
-              autoHideDelay: 5000,
-            });
-          })
-          .catch(error => {
+            this.alertService.showSuccess(this.getToastMessageFromHeader(res));
+          }).catch(error => {
             this.isSaving = true;
-            this.alertService().showHttpError(this.$root, error.response);
+            this.alertService.showHttpError(error.response);
           });
       }
     },
 
     returnToList(): void {
       this.isSaving = false;
-      this.$router.go(-1);
+      this.previousState();
     },
 
-    getMessageFromHeader(res: any): any {
+    getToastMessageFromHeader(res: any): string {
 <%_
   const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
   const headerParams = `X-${frontendAppName}-params`.toLowerCase();
   if (enableTranslation) {
 _%>
-      return this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
+      return this.t$(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) }).toString();
 <%_ } else {_%>
       return res.headers['<%=headerAlert%>'];
 <%_ } _%>

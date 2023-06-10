@@ -125,7 +125,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'resources', 'package.json')
         );
       },
     });

@@ -21,6 +21,7 @@ import fs from 'fs';
 import path from 'path';
 import semver from 'semver';
 
+import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace } from './support/index.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
@@ -28,6 +29,7 @@ import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norm
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
+import CoreGenerator from './generator-base.mjs';
 
 /**
  * Base class that contains blueprints support.
@@ -42,7 +44,8 @@ export default class JHipsterBaseBlueprintGenerator<
   jhipsterContext?: any;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, features);
+    const { jhipsterContext, ...opts } = options ?? {};
+    super(args, opts, features);
 
     if (this.options.help) {
       return;
@@ -56,14 +59,17 @@ export default class JHipsterBaseBlueprintGenerator<
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator
-      this.jhipsterContext = this.options.jhipsterContext;
+      this.jhipsterContext = jhipsterContext;
 
       try {
         // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
+        const blueprintedTemplatePath = this.jhipsterTemplatePath();
+        if (!this.jhipsterTemplatesFolders.includes(blueprintedTemplatePath)) {
+          this.jhipsterTemplatesFolders.push(blueprintedTemplatePath);
+        }
       } catch (error) {
-        this.logger.warn('Error adding current blueprint templates as alternative for JHipster templates.');
-        this.logger.log(error);
+        this.log.warn('Error adding current blueprint templates as alternative for JHipster templates.');
+        this.log.log(error);
       }
     }
   }
@@ -390,12 +396,12 @@ export default class JHipsterBaseBlueprintGenerator<
    * @protected
    * Composes with blueprint generators, if any.
    */
-  protected async composeWithBlueprints(subGen: string, extraOptions?) {
+  protected async composeWithBlueprints(subGen: string, options?: ComposeOptions) {
     this.delegateToBlueprint = false;
 
     if (!this.configOptions.blueprintConfigured) {
       this.configOptions.blueprintConfigured = true;
-      this._configureBlueprints();
+      await this._configureBlueprints();
     }
 
     let blueprints = this.jhipsterConfig.blueprints || [];
@@ -404,7 +410,7 @@ export default class JHipsterBaseBlueprintGenerator<
     }
     const composedBlueprints: any[] = [];
     for (const blueprint of blueprints) {
-      const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
+      const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, options);
       if (blueprintGenerator) {
         composedBlueprints.push(blueprintGenerator);
         if ((blueprintGenerator as any).sbsBlueprint) {
@@ -434,7 +440,7 @@ export default class JHipsterBaseBlueprintGenerator<
       if (baseGeneratorPriorityName in this) {
         const blueprintPriorityName = `${blueprintTaskPrefix}${priorityName}`;
         if (!Object.hasOwn(Object.getPrototypeOf(blueprintGenerator), blueprintPriorityName)) {
-          this.logger.debug(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
+          this.log.debug(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
         }
       }
     }
@@ -444,12 +450,12 @@ export default class JHipsterBaseBlueprintGenerator<
    * @private
    * Configure blueprints.
    */
-  private _configureBlueprints() {
+  private async _configureBlueprints() {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
     const blueprint = this.options.blueprint;
     if (blueprint) {
-      this.logger.warn('--blueprint option is deprecated. Please use --blueprints instead');
+      this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
       if (!argvBlueprints.split(',').includes(blueprint)) {
         argvBlueprints = `${blueprint},${argvBlueprints}`;
       }
@@ -462,7 +468,7 @@ export default class JHipsterBaseBlueprintGenerator<
       .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
       .map(blueprint => blueprint.name);
     if (missingBlueprints.length > 0) {
-      this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints } as any);
+      await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints } as any);
     }
 
     if (blueprints && blueprints.length > 0) {
@@ -490,7 +496,11 @@ export default class JHipsterBaseBlueprintGenerator<
    * @param {any} [extraOptions] - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
-  private async _composeBlueprint(blueprint, subGen, extraOptions = {}) {
+  private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(
+    blueprint,
+    subGen,
+    extraOptions: ComposeOptions = {}
+  ): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks) {
       this._checkBlueprint(blueprint);
@@ -502,25 +512,27 @@ export default class JHipsterBaseBlueprintGenerator<
       await this.env.lookup({ filterPaths: true, packagePatterns: blueprint } as any);
     }
     if (!(await this.env.get(generatorNamespace))) {
-      this.logger.debug(
+      this.log.debug(
         `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(
           generatorNamespace
         )} subgenerator: falling back to default generator`
       );
       return undefined;
     }
-    this.logger.debug(
+    this.log.debug(
       `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`
     );
 
-    const finalOptions = {
-      ...this.options,
-      configOptions: this.configOptions,
+    const finalOptions: ComposeOptions = {
+      forwardOptions: true,
       ...extraOptions,
-      jhipsterContext: this,
+      generatorOptions: {
+        jhipsterContext: this,
+        ...extraOptions?.generatorOptions,
+      } as any,
     };
 
-    const blueprintGenerator = await this.composeWith(generatorNamespace, finalOptions, true);
+    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }
@@ -538,7 +550,7 @@ export default class JHipsterBaseBlueprintGenerator<
     const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
     const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
     if (!blueprintPackagePath) {
-      this.logger.warn(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
+      this.log.warn(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
       return undefined;
     }
     const packageJsonFile = path.join(blueprintPackagePath, 'package.json');
@@ -557,7 +569,7 @@ export default class JHipsterBaseBlueprintGenerator<
   private _findBlueprintVersion(blueprintPkgName) {
     const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
     if (!blueprintPackageJson || !blueprintPackageJson.version) {
-      this.logger.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
+      this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
       return undefined;
     }
     return blueprintPackageJson.version;
@@ -583,14 +595,14 @@ export default class JHipsterBaseBlueprintGenerator<
   protected _checkJHipsterBlueprintVersion(blueprintPkgName) {
     const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
     if (!blueprintPackageJson) {
-      this.logger.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
+      this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
       return;
     }
     const mainGeneratorJhipsterVersion = packageJson.version;
     const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
     if (blueprintJhipsterVersion) {
       if (!semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {
-        this.logger.info(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
+        this.log.verboseInfo(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
         return;
       }
       if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintJhipsterVersion)) {
@@ -614,6 +626,6 @@ export default class JHipsterBaseBlueprintGenerator<
         )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
       );
     }
-    this.logger.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
+    this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
   }
 }

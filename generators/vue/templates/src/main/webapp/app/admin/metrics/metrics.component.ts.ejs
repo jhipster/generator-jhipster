@@ -1,16 +1,22 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 import numeral from 'numeral';
 
+import { useDateFormat } from '@/shared/composables'
 import <%=jhiPrefixCapitalized%>MetricsModal from './metrics-modal.vue';
 import MetricsService from './metrics.service';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Metrics',
   components: {
     'metrics-modal': <%=jhiPrefixCapitalized%>MetricsModal,
   },
   setup() {
-    const metricsService = inject('metricsService', () => new MetricsService());
+    const { formatDate } = useDateFormat();
+    const metricsService = inject('metricsService', () => new MetricsService(), true);
 
     const metrics: Ref<any> = ref({});
     const threadData: Ref<any> = ref(null);
@@ -23,18 +29,22 @@ export default defineComponent({
       threadData,
       threadStats,
       updatingMetrics,
+      formatDate,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   mounted(): void {
     this.refresh();
   },
   methods: {
-    refresh(): void {
-      this.metricsService()
+    refresh() {
+      return this.metricsService
         .getMetrics()
         .then(resultsMetrics => {
           this.metrics = resultsMetrics.data;
-          this.metricsService()
+          this.metricsService
             .retrieveThreadDump()
             .then(res => {
               this.updatingMetrics = true;

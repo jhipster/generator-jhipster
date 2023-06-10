@@ -188,7 +188,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'templates', 'package.json')
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json')
         );
       },
 
@@ -196,6 +196,14 @@ export default class CypressGenerator extends BaseApplicationGenerator {
         this.packageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
+          },
+          scripts: {
+            e2e: 'npm run e2e:cypress:headed --',
+            'e2e:headless': 'npm run e2e:cypress --',
+            'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
+            'e2e:cypress': 'cypress run --e2e --browser chrome',
+            'e2e:cypress:record': 'npm run e2e:cypress -- --record',
+            cypress: 'cypress open --e2e',
           },
         });
       },
@@ -212,7 +220,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
             'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
             'e2e:cypress:audits':
               // eslint-disable-next-line no-template-curly-in-string
-              'cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.config.js',
+              'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
           },
         });
       },

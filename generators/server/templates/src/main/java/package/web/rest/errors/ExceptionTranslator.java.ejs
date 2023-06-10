@@ -41,6 +41,9 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.core.AuthenticationException;
+<%_ } _%>
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
@@ -146,12 +149,25 @@ _%>
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException)
-            return new EmailAlreadyUsedException().getProblemDetailWithCause();
-        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException )
-            return new LoginAlreadyUsedException().getProblemDetailWithCause();
+        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException ||
+            ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException) {
+                // return 201 - CREATED on purpose to not reveal information to potential attackers
+                // see https://github.com/jhipster/generator-jhipster/issues/21731
+                return ProblemDetailWithCauseBuilder.instance()
+                    .withStatus(201).build();
+            }
         if(ex instanceof <%= packageName %>.service.InvalidPasswordException )
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
+
+        <%_ if (reactive) { _%>
+        if (ex instanceof AuthenticationException) {
+            // Ensure no information about existing users is revealed via failed authentication attempts
+            return ProblemDetailWithCauseBuilder.instance()
+                .withStatus(toStatus(ex).value())
+                .withTitle("Unauthorized")
+                .withDetail("Invalid credentials").build();
+        }
+        <%_ } _%>
 <%_ } _%>
         if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause)
             return (ProblemDetailWithCause) exp.getBody();

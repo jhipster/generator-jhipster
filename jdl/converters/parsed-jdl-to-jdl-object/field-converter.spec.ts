@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { convertField } from './field-converter.js';
 
 describe('jdl - FieldConverter', () => {

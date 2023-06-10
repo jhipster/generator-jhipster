@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new,no-unused-expressions */
-import { jestExpect } from 'mocha-expect-snapshot';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { jsonEntity as JSONEntity } from '../jhipster/index.mjs';
 
@@ -52,18 +52,18 @@ describe('jdl - JSONEntity', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
-  "dto": "no",
-  "embedded": false,
-  "entityTableName": "toto",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": undefined,
   "fields": [],
-  "fluentMethods": true,
+  "fluentMethods": undefined,
   "javadoc": undefined,
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": undefined,
   "name": "Toto",
-  "pagination": "no",
-  "readOnly": false,
+  "pagination": undefined,
+  "readOnly": undefined,
   "relationships": [],
-  "service": "no",
+  "service": undefined,
 }
 `);
       });
@@ -275,17 +275,17 @@ JSONEntity {
 JSONEntity {
   "applications": [],
   "dto": "mapstruct",
-  "embedded": false,
-  "entityTableName": "toto",
+  "embedded": undefined,
+  "entityTableName": undefined,
   "fields": [],
-  "fluentMethods": true,
+  "fluentMethods": undefined,
   "javadoc": "A comment",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": undefined,
   "name": "Toto",
   "pagination": "pagination",
-  "readOnly": false,
+  "readOnly": undefined,
   "relationships": [],
-  "service": "no",
+  "service": undefined,
 }
 `);
       });

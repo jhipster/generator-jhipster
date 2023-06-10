@@ -40,4 +40,4 @@ export const loadEntityModule = async (service: string): Promise<Type<any>> =>
     type: 'module',
     remoteEntry: `./services/${service}/remoteEntry.js`,
     exposedModule: './entity-routing',
-  }).then(m => m.EntityRoutingModule);
+  }).then(({ EntityRoutingModule }) => EntityRoutingModule);

@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 import chalk from 'chalk';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
@@ -72,7 +72,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json')
         );
       },
     });
@@ -121,7 +121,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
       writeFiles,
       queueTranslateTransform({ control, application }) {
         if (!application.enableTranslation) {
-          (this as any).queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation), {
+          this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation), {
             name: 'translating webapp',
             streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
           });
@@ -159,7 +159,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup({
       end({ application }) {
         this.log.ok('Angular application generated successfully.');
-        this.logger.log(
+        this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `)

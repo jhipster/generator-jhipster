@@ -55,7 +55,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
             authorities: [Authority.ADMIN],
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
+          loadChildren: () => import('./admin/admin-routing.module'),
         },
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -73,7 +73,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 <%_ } _%>
         {
           path: '<%= applicationTypeMicroservice ? lowercaseBaseName : '' %>',
-          loadChildren: () => import(`./entities/entity-routing.module`).then(m => m.EntityRoutingModule),
+          loadChildren: () => import(`./entities/entity-routing.module`).then(({ EntityRoutingModule }) => EntityRoutingModule),
         },
 <%_ if (applicationTypeGateway) { _%>
   <%_ for (const remote of microfrontends) { _%>

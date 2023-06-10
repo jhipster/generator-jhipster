@@ -16,13 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import environmentTransform from 'yeoman-environment/transform';
-
-const { patternSpy } = environmentTransform;
+import { transformFileField } from '@yeoman/transform';
+import { ConflicterFile } from '@yeoman/conflicter';
 
 const createForceWriteConfigFilesTransform = () =>
-  patternSpy((file: any) => {
-    file.conflicter = 'force';
-  }, '**/.jhipster/*.json').name('jhipster:config-files:force');
+  transformFileField<'conflicter', ConflicterFile>('conflicter', 'force', { pattern: '**/.jhipster/*.json' });
 
 export default createForceWriteConfigFilesTransform;

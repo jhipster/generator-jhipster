@@ -1,57 +1,15 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router/composables';
-<%_ if (anyFieldIsBlobDerived) { _%>
-  import useDataUtils from '@/shared/data/data-utils.service';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
 <%_ } _%>
-<%_
-  let fieldsContainedValidators = [];
-  for (field of fields.filter(field => !field.id)) {
-    if (field.fieldValidate === true) {
-      if (!fieldsContainedValidators.includes('numeric') && (field.fieldTypeInteger || field.fieldTypeLong)) {
-        fieldsContainedValidators.push('numeric');
-      }
-      if (!fieldsContainedValidators.includes('decimal') && (field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal)) {
-        fieldsContainedValidators.push('decimal');
-      }
-      if (!fieldsContainedValidators.includes('required') && field.fieldValidationRequired) {
-        fieldsContainedValidators.push('required');
-      }
-      if (!fieldsContainedValidators.includes('minLength') && field.fieldValidationMinLength) {
-        fieldsContainedValidators.push('minLength');
-      }
-      if (!fieldsContainedValidators.includes('maxLength') && field.fieldValidationMaxLength) {
-        fieldsContainedValidators.push('maxLength');
-      }
-      if (!fieldsContainedValidators.includes('minValue') && field.fieldValidationMin) {
-        fieldsContainedValidators.push('minValue');
-      }
-      if (!fieldsContainedValidators.includes('maxValue') && field.fieldValidationMax) {
-        fieldsContainedValidators.push('maxValue');
-      }
-    }
-  }
-  for (relationship of relationships) {
-    if (relationship.relationshipValidate === true) {
-      if (!fieldsContainedValidators.includes('required') && relationship.relationshipRequired) {
-        fieldsContainedValidators.push('required');
-      }
-    }
-  }
-  if (fieldsContainedValidators.length !== 0) {
-    let validators = fieldsContainedValidators.toString();
-  _%>import {<%= validators %>} from 'vuelidate/lib/validators';
-<%_ } _%>
-<%_
-  let dayJsIncluded = false;
-  for (field of fields.filter(field => !field.id)) { _%>
-  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
-    dayJsIncluded = true; _%>
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-  <%_ } _%>
-<%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core'
 
-import AlertService from '@/shared/alert/alert.service';
+<%_ if (anyFieldIsBlobDerived) { _%>
+import useDataUtils from '@/shared/data/data-utils.service';
+<%_ } _%>
+import { useValidation<% if (anyFieldIsTimeDerived) { %>, useDateFormat<% } %> } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_
   const allRelationshipsThatNeedSelectOptions = Object
@@ -76,54 +34,12 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
-const validations: any = {
-  <%= entityInstance %>: {
-<%_ for (field of fields.filter(field => !field.id)) {
-  const fieldName = field.fieldName;
-_%>
-    <%= fieldName %>:  {
-  <%_ if (field.fieldValidate) { _%>
-    <%_ if (field.fieldValidationRequired) { _%>
-    required,
-    <%_ } _%>
-    <%_ if (field.fieldValidationMinLength) { _%>
-      minLength: minLength(<%= field.fieldValidateRulesMinlength %>),
-    <%_ } _%>
-    <%_ if (field.fieldValidationMaxLength) { _%>
-      maxLength: maxLength(<%= field.fieldValidateRulesMaxlength %>),
-    <%_ } _%>
-    <%_ if (field.fieldTypeInteger || field.fieldTypeLong) { _%>
-      numeric,
-    <%_ } _%>
-    <%_ if (field.fieldTypeBigDecimal || field.fieldTypeDouble || field.fieldTypeFloat) { _%>
-      decimal,
-    <%_ } _%>
-    <%_ if (field.fieldValidationMin) { _%>
-      min: minValue(<%= field.fieldValidateRulesMin %>),
-    <%_ } _%>
-    <%_ if (field.fieldValidationMax) { _%>
-      max: maxValue(<%= field.fieldValidateRulesMax %>),
-    <%_ } _%>
-
-  <%_ } _%>
-    },
-<%_ } _%>
-<%_ for (relationship of relationships) { _%>
-  <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
-    <%= relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: {
-      required
-    },
-  <%_ } _%>
-<%_ } _%>
-  }
-};
-
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%= entityAngularName %>Update',
-  validations,
   setup() {
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
-    const alertService = inject('alertService', () => new AlertService());
+    const alertService = inject('alertService', () => useAlertService(), true);
   
     const <%= entityInstance %>: Ref<I<%= entityAngularName %>> = ref(new <%= entityAngularName %>());
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
@@ -131,7 +47,7 @@ export default defineComponent({
     const userService = inject('userService', () => new UserService());
     const <%= relationship.otherEntity.entityInstancePlural %>: Ref<Array<any>> = ref([]);
   <%_ } else { _%>
-    const <%= relationship.otherEntity.entityInstance %>Service = inject('<%= relationship.otherEntity.entityName %>Service', () => new <%= relationship.otherEntity.entityAngularName %>Service());
+    const <%= relationship.otherEntity.entityInstance %>Service = inject('<%= relationship.otherEntity.entityInstance %>Service', () => new <%= relationship.otherEntity.entityAngularName %>Service());
     const <%= relationship.otherEntity.entityInstancePlural %>: Ref<I<%= relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>
@@ -139,10 +55,12 @@ export default defineComponent({
     const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
     <%_ }); _%>
     const isSaving = ref(false);
-    const currentLanguage = ref('');
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const route = useRoute();
     const router = useRouter();
+
+    const previousState = () => router.go(-1);
 
     const retrieve<%= entityAngularName %> = async <%= entityInstance %>Id => {
       try {
@@ -157,11 +75,11 @@ _%>
 <%_ } } _%>
         <%= entityInstance %>.value = res;
       } catch (error) {
-        alertService().showHttpError(router.app, error.response);
+        alertService.showHttpError(error.response);
       }
     };
 
-    if (route.params.<%= entityInstance %>Id) {
+    if (route.params?.<%= entityInstance %>Id) {
       retrieve<%= entityAngularName %>(route.params.<%= entityInstance %>Id);
     }
 <%_ if (relationships.length > 0) { _%>
@@ -187,11 +105,51 @@ _%>
     const dataUtils = useDataUtils();
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+    const { t: t$ } = useI18n();
+<%_ } _%>
+    const validations = useValidation();
+    const validationRules = {
+<%_ for (field of fields.filter(field => !field.id)) { _%>
+      <%= field.fieldName %>:  {
+  <%_ if (field.fieldValidate) { _%>
+    <%_ if (field.fieldValidationRequired) { _%>
+        required: validations.required(t$('entity.validation.required').toString()),
+    <%_ } _%>
+    <%_ if (field.fieldValidationMinLength) { _%>
+        minLength: validations.minLength(t$('entity.validation.minlength', { min: <%= field.fieldValidateRulesMinlength %> }).toString(), <%= field.fieldValidateRulesMinlength %>),
+    <%_ } _%>
+    <%_ if (field.fieldValidationMaxLength) { _%>
+        maxLength: validations.maxLength(t$('entity.validation.maxlength', { max: <%= field.fieldValidateRulesMaxlength %> }).toString(), <%= field.fieldValidateRulesMaxlength %>),
+    <%_ } _%>
+    <%_ if (field.fieldTypeInteger || field.fieldTypeLong) { _%>
+        numeric: validations.numeric(t$('entity.validation.number').toString()),
+    <%_ } _%>
+    <%_ if (field.fieldValidationMin) { _%>
+        min: validations.minValue(t$('entity.validation.min', { min: <%= field.fieldValidateRulesMin %> }).toString(), <%= field.fieldValidateRulesMin %>),
+    <%_ } _%>
+    <%_ if (field.fieldValidationMax) { _%>
+        max: validations.maxValue(t$('entity.validation.max', { max: <%= field.fieldValidateRulesMax %> }).toString(), <%= field.fieldValidateRulesMax %>),
+    <%_ } _%>
+  <%_ } _%>
+      },
+<%_ } _%>
+<%_ for (relationship of relationships) { _%>
+      <%= relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: {
+  <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
+        required: validations.required(t$('entity.validation.required').toString()),
+  <%_ } _%>
+      },
+<%_ } _%>
+    };
+    const v$ = useVuelidate(validationRules, <%= entityInstance %> as any);
+    v$.value.$validate();
+
     return {
       <%= entityInstance %>Service,
       alertService,
-      router,
       <%= entityInstance %>,
+      previousState,
     <%_ enumImports.forEach( (importedPath, importedType) => { _%>
       <%- this._.lowerFirst(importedType) %>Values,
     <%_ }); _%>
@@ -203,16 +161,16 @@ _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
       ...dataUtils,
 <%_ } _%>
+      v$,
+<%_ if (anyFieldIsTimeDerived) { _%>
+      ...useDateFormat({ entityRef: <%= entityInstance %> }),
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      t$,
+<%_ } _%>
     };
   },
   created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
     <%_ if (relationshipsContainManyToOne) { _%>
     <%_
       for (relationship of relationships) {
@@ -233,80 +191,34 @@ _%>
     if (this.<%= entityInstance %>.id) {
         this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
-          this.$router.go(-1);
-        <%_ if (enableTranslation) { _%>
-          const message = this.$t('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id });
-        <%_ } else {_%>
-          const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
-        <%_ } _%>
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          })
+          this.previousState();
+          this.alertService.showInfo(
+<%_ if (enableTranslation) { _%>
+            this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id })
+<%_ } else {_%>
+            'A <%= entityAngularName %> is updated with identifier ' + param.id
+<%_ } _%>
+          );
         }).catch(error => {
             this.isSaving = false;
-            this.alertService().showHttpError(this,error.response);
+            this.alertService.showHttpError(error.response);
         });
       } else {
         this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
-          this.$router.go(-1);
-        <%_ if (enableTranslation) { _%>
-            const message = this.$t('<%= i18nAlertHeaderPrefix %>.created', { 'param' : param.id });
-        <%_ } else {_%>
-          const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
-        <%_ } _%>
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+          this.previousState();
+          this.alertService.showSuccess(
+<%_ if (enableTranslation) { _%>
+            this.t$('<%= i18nAlertHeaderPrefix %>.created', { param: param.id }).toString()
+<%_ } else {_%>
+            'A <%= entityAngularName %> is created with identifier ' + param.id
+<%_ } _%>
+          );
         }).catch(error => {
             this.isSaving = false;
-            this.alertService().showHttpError(this,error.response);
+            this.alertService.showHttpError(error.response);
         });
       }
-    },
-
-  <%_
-    let dateFunctionIncluded = false;
-    for (field of fields.filter(field => !field.id)) {
-        const fieldName = field.fieldName;
-        const fieldType = field.fieldType;
-        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateFunctionIncluded) {
-            dateFunctionIncluded = true;
-  _%>
-    convertDateTimeFromServer(date: Date): string {
-      if (date && dayjs(date).isValid()) {
-        return dayjs(date).format(DATE_TIME_LONG_FORMAT);
-      }
-      return null;
-    },
-
-    updateInstantField(field, event) {
-      if (event.target.value) {
-        this.<%= entityInstance %>[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-      } else {
-        this.<%= entityInstance %>[field] = null;
-      }
-    },
-
-    updateZonedDateTimeField(field, event) {
-      if (event.target.value) {
-        this.<%= entityInstance %>[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-      } else {
-        this.<%= entityInstance %>[field] = null;
-      }
-    },
-    <%_ } } _%>
-
-    previousState() : void {
-      this.$router.go(-1);
     },
 
   <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>

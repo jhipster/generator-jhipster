@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export { default as convertTranslationsSupport } from './convert-translation.mjs';
 export * from './needles.mjs';
 export * from './translate-vue.mjs';
 export { default as translateVueFilesTransform } from './translate-vue.mjs';

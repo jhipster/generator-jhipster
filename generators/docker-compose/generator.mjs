@@ -21,6 +21,7 @@ import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import pathjs from 'path';
 import normalize from 'normalize-path';
+import runAsync from 'run-async';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -63,14 +64,14 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return {
       ...super.initializing,
 
-      checkDockerCompose() {
+      checkDockerCompose: runAsync(function () {
         if (this.skipChecks) return;
 
         const done = this.async();
 
         shelljs.exec('docker compose version', { silent: true }, (code, stdout, stderr) => {
           if (stderr) {
-            this.logger.error(
+            this.log.error(
               chalk.red(
                 'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
                   '         Read https://docs.docker.com/compose/install/\n'
@@ -81,7 +82,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             const composeVersionMajor = composeVersion.split('.')[0];
             const composeVersionMinor = composeVersion.split('.')[1];
             if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-              this.logger.error(
+              this.log.error(
                 chalk.red(
                   `$Docker Compose version 1.6.0 or later is not installed on your computer.
                                              Docker Compose version found: ${composeVersion}
@@ -92,7 +93,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           }
           done();
         });
-      },
+      }),
     };
   }
 
@@ -111,8 +112,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   get configuring() {
     return {
       sayHello() {
-        this.logger.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-        this.logger.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+        this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
       ...super.configuring,
@@ -183,6 +184,37 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             const ports = yamlConfig.ports[0].split(':').slice(-2);
             ports[0] = appConfig.composePort;
             yamlConfig.ports[0] = ports.join(':');
+          }
+
+          if (yamlConfig.environment) {
+            yamlConfig.environment = yamlConfig.environment.map(envOption => {
+              // Doesn't applies to keycloak, jhipster-registry and consul.
+              // docker-compose changes the container name to `${lowercaseBaseName}-${databaseType}`.
+              // we need to update the environment urls to the new container host.
+              [
+                'SPRING_R2DBC_URL',
+                'SPRING_DATASOURCE_URL',
+                'SPRING_LIQUIBASE_URL',
+                'SPRING_NEO4J_URI',
+                'SPRING_DATA_MONGODB_URI',
+                'JHIPSTER_CACHE_REDIS_SERVER',
+                'SPRING_ELASTICSEARCH_URIS',
+              ].forEach(varName => {
+                if (envOption.startsWith(varName)) {
+                  envOption = envOption
+                    .replace('://', `://${lowercaseBaseName}-`)
+                    .replace('oracle:thin:@', `oracle:thin:@${lowercaseBaseName}-`);
+                }
+              });
+              ['JHIPSTER_CACHE_MEMCACHED_SERVERS', 'SPRING_COUCHBASE_CONNECTION_STRING', 'SPRING_CASSANDRA_CONTACTPOINTS'].forEach(
+                varName => {
+                  if (envOption.startsWith(varName)) {
+                    envOption = envOption.replace(`${varName}=`, `${varName}=${lowercaseBaseName}-`);
+                  }
+                }
+              );
+              return envOption;
+            });
           }
 
           if (appConfig.applicationType === MONOLITH && this.monitoring === PROMETHEUS) {
@@ -318,21 +350,21 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return {
       end() {
         if (this.hasWarning) {
-          this.logger.warn('Docker Compose configuration generated, but no Jib cache found');
-          this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.logger.log(chalk.red(this.warningMessage));
+          this.log.warn('Docker Compose configuration generated, but no Jib cache found');
+          this.log.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.log.log(chalk.red(this.warningMessage));
         } else {
-          this.logger.info(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+          this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-        this.logger.info(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
         if (this.gatewayNb + this.monolithicNb > 1) {
-          this.logger.log('\nYour applications will be accessible on these URLs:');
+          this.log.log('\nYour applications will be accessible on these URLs:');
           this.appConfigs.forEach(appConfig => {
             if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-              this.logger.info(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+              this.log.verboseInfo(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
             }
           });
-          this.logger.log('\n');
+          this.log.log('\n');
         }
       },
     };

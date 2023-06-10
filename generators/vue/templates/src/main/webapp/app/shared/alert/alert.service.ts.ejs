@@ -1,13 +1,71 @@
-import Vue from 'vue';
+import type { BvToast } from 'bootstrap-vue';
+import { getCurrentInstance } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { Composer, useI18n } from 'vue-i18n';
+<%_ } _%>
+
+export const useAlertService = () => {
+  const bvToast = getCurrentInstance().root.proxy['_bv__toast'];
+  if (!bvToast) {
+    throw new Error('BootstrapVue toast component was not found');
+  }
+<%_ if (enableTranslation) { _%>
+  const i18n = useI18n();
+<%_ } _%>
+  return new AlertService({
+    bvToast,
+<%_ if (enableTranslation) { _%>
+    i18n,
+<%_ } _%>
+  });
+};
 
 export default class AlertService {
-  public showError(instance: Vue, message: string, params?: any) {
-    <%_ if (enableTranslation) { _%>
-    const alertMessage = instance.$t(message, params);
-    <%_ } else {_%>
-    const alertMessage = message;
-    <%_ } _%>
-    (instance.$root as any).$bvToast.toast(alertMessage.toString(), {
+  private bvToast: BvToast;
+<%_ if (enableTranslation) { _%>
+  private i18n: Composer;
+<%_ } _%>
+
+  constructor({
+    bvToast,
+<%_ if (enableTranslation) { _%>
+    i18n,
+<%_ } _%>
+  }: {
+    bvToast: BvToast;
+<%_ if (enableTranslation) { _%>
+    i18n: Composer,
+<%_ } _%>
+  }) {
+    this.bvToast = bvToast;
+<%_ if (enableTranslation) { _%>
+    this.i18n = i18n;
+<%_ } _%>
+  }
+
+  public showInfo(toastMessage: string, toastOptions?: any) {
+    this.bvToast.toast(toastMessage, {
+      toaster: 'b-toaster-top-center',
+      title: 'Info',
+      variant: 'info',
+      solid: true,
+      autoHideDelay: 5000,
+      ...toastOptions,
+    });
+  }
+
+  public showSuccess(toastMessage: string) {
+    this.bvToast.toast(toastMessage, {
+      toaster: 'b-toaster-top-center',
+      title: 'Success',
+      variant: 'success',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  }
+
+  public showError(toastMessage: string) {
+    this.bvToast.toast(toastMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
       variant: 'danger',
@@ -16,46 +74,54 @@ export default class AlertService {
     });
   }
 
-  public showHttpError(instance: Vue, httpErrorResponse: any) {
+  public showHttpError(httpErrorResponse: any) {
+    let errorMessage: string | null = null;
     switch (httpErrorResponse.status) {
       case 0:
-        this.showError(instance,<% if (enableTranslation) { %> 'error.server.not.reachable'<% } else { %> 'Server not reachable'<% } %>);
+        errorMessage = this.i18n.t('error.server.not.reachable').toString();
         break;
 
       case 400: {
         const arr = Object.keys(httpErrorResponse.headers);
-        let errorHeader: string | null = null;
 <%_ if (enableTranslation) { _%>
-            let entityKey: string | null = null;
+        let entityKey: string | null = null;
 <%_ } _%>
         for (const entry of arr) {
           if (entry.toLowerCase().endsWith('app-error')) {
-            errorHeader = httpErrorResponse.headers[entry];
+            errorMessage = httpErrorResponse.headers[entry];
 <%_ if (enableTranslation) { _%>
             } else if (entry.toLowerCase().endsWith('app-params')) {
               entityKey = httpErrorResponse.headers[entry];
 <%_ } _%>
             }
         }
-        if (errorHeader) {
 <%_ if (enableTranslation) { _%>
-          const alertData = entityKey ? { entityName: instance.$t(`global.menu.entities.${entityKey}`) } : undefined;
-<%_ } _%>
-          this.showError(instance, errorHeader<% if (enableTranslation) { %>, alertData<% } %>);
-        } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {  
-          this.showError(instance, <% if (enableTranslation) { %>httpErrorResponse.data.message<% } else { %>'Validation error'<% } %>);
-        } else {
-          this.showError(instance, httpErrorResponse.data.message);
+        if (errorMessage && entityKey) {
+          errorMessage = this.i18n.t(errorMessage, { entityName: this.i18n.t(`global.menu.entities.${entityKey}`) }).toString();
+        } else if (!errorMessage) {
+          errorMessage = this.i18n.t(httpErrorResponse.data.message).toString();
         }
+<%_ } else { _%>
+        if (!errorMessage && httpErrorResponse.data?.fieldErrors) {
+          errorMessage = 'Validation error';
+        } else if (!errorMessage) {
+          errorMessage = httpErrorResponse.data.message;
+        }
+<%_ } _%>
         break;
       }
 
       case 404:
-        this.showError(instance, <% if (enableTranslation) { %>'error.http.404'<% } else { %>'Not found'<% } %>);
+        errorMessage = this.i18n.t('error.http.404').toString();
         break;
 
       default:
-        this.showError(instance, httpErrorResponse.data.message);
+<%_ if (enableTranslation) { _%>
+        errorMessage = this.i18n.t(httpErrorResponse.data.message).toString();
+<%_ } else { _%>
+        errorMessage = httpErrorResponse.data.message;
+<%_ } _%>
     }
+    this.showError(errorMessage);
   }
 }

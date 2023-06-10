@@ -161,7 +161,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
-      generator.logger.warn(
+      generator.log.warn(
         `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
       );
     }
@@ -222,7 +222,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-      generator.logger.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
+      generator.log.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {
       relationship.relationshipValidate = relationship.relationshipRequired = true;
     }

@@ -14,7 +14,7 @@ spec:
     port: 9443
     targetPort: 8443
   clusterIP: None
-  publishNotReadyAddresses: true  
+  publishNotReadyAddresses: true
   selector:
     app: keycloak
 ---
@@ -59,10 +59,17 @@ spec:
           value: scripts
         - name: KC_PROXY
           value: "edge"
+        <%_ if (ingressTypeGke) { _%>
         - name: KC_HOSTNAME_URL
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
         - name: KC_HOSTNAME_ADMIN_URL
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        <%_ } else { _%>
+        - name: KC_HOSTNAME_URL
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        - name: KC_HOSTNAME_ADMIN_URL
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        <%_ } _%>
         - name: KC_CACHE_STACK
           value: "kubernetes"
         - name: JAVA_OPTS_APPEND

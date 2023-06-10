@@ -1,5 +1,5 @@
 import path, { basename, join } from 'path';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
@@ -1180,8 +1180,6 @@ entity Customer {
             .withOptions({ ...options, applicationWithEntities })
             .run();
         });
-
-        after(() => runResult.cleanup());
 
         it('should create entity config file', () => {
           runResult.assertFile([join('.jhipster', 'Smarty.json')]);

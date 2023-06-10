@@ -1,16 +1,21 @@
 import { defineComponent, ref, Ref, computed, PropType } from 'vue';
-import Vue2Filters from 'vue2-filters';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { filterBy } from '@/shared/computables';
 
 export default defineComponent({
+  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>MetricsModal',
   props: {
     threadDump: {
       type: Array as PropType<any[]>,
     },
   },
-  mixins: [Vue2Filters.mixin],
   setup(props) {
-    const threadDumpFilter: Ref<any> = ref(null);
+    const threadDumpFilter: Ref<any> = ref('');
+    const filteredThreadDump = computed(() => filterBy(props.threadDump, { filterByTerm: threadDumpFilter.value }));
 
     const threadDumpData = computed(() => {
       const data = {
@@ -40,6 +45,10 @@ export default defineComponent({
     return {
       threadDumpFilter,
       threadDumpData,
+      filteredThreadDump,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
     };
   },
   methods: {
