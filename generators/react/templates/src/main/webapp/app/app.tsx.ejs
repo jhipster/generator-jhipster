@@ -41,7 +41,6 @@ export const App = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(getProfile());
   }, []);
 
