@@ -28,6 +28,8 @@ export const JDL_RELATIONSHIP_ONE_TO_MANY = 'OneToMany';
 export const JDL_RELATIONSHIP_MANY_TO_ONE = 'ManyToOne';
 export const JDL_RELATIONSHIP_MANY_TO_MANY = 'ManyToMany';
 
+export type JDLRelationshipSide = 'left' | 'right';
+
 export type JDLRelationshipType =
   | typeof JDL_RELATIONSHIP_ONE_TO_ONE
   | typeof JDL_RELATIONSHIP_ONE_TO_MANY
@@ -36,6 +38,7 @@ export type JDLRelationshipType =
 export type JDLRelationshipOptions = Record<'global' | 'source' | 'destination', Record<string, any>>;
 
 export type JDLRelationshipModel = {
+  side: JDLRelationshipSide | undefined;
   from: string;
   to: string;
   type: JDLRelationshipType;
@@ -49,6 +52,7 @@ export type JDLRelationshipModel = {
 };
 
 export default class JDLRelationship implements JDLRelationshipModel {
+  side: JDLRelationshipSide | undefined;
   from: string;
   to: string;
   type: JDLRelationshipType;
@@ -68,6 +72,7 @@ export default class JDLRelationship implements JDLRelationshipModel {
     if (!relationshipTypeExists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
       throw new Error('A valid type and at least one injected field must be passed to create a relationship.');
     }
+    this.side = merged.side;
     this.from = merged.from;
     this.to = merged.to;
     this.type = merged.type;
@@ -185,6 +190,7 @@ function mergeDefaultsWithOverrides(
 
 function defaults(): Omit<JDLRelationshipModel, 'from' | 'to' | 'type'> {
   return {
+    side: undefined,
     injectedFieldInFrom: null,
     injectedFieldInTo: null,
     isInjectedFieldInFromRequired: false,

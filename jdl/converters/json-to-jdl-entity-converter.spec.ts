@@ -153,8 +153,11 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         it('should parse bidirectional OneToOne relationships', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.to.be.undefined;
         });
+        it('should parse bidirectional ManyToOne relationships', () => {
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}')).not.to.be.undefined;
+        });
         it('should parse bidirectional OneToMany relationships', () => {
-          expect(jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}')).not.to.be.undefined;
+          expect(jdlObject.relationships.getOneToMany('OneToMany_Employee{job}_Job{employee}')).not.to.be.undefined;
         });
         it('should parse unidirectional ManyToOne relationships', () => {
           expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.to.be.undefined;
@@ -163,9 +166,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.to.be.undefined;
         });
         it('should parse comments in relationships for owner', () => {
-          const relationship = jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
-          expect(relationship.commentInFrom).to.equal('A relationship');
-          expect(relationship.commentInTo).to.equal('Another side of the same relationship');
+          const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
+          expect(relationship.commentInFrom).to.equal('Another side of the same relationship');
+          expect(relationship.commentInTo).to.equal('A relationship');
         });
         it('should parse comments in relationships for owned', () => {
           const entities = new Map([
@@ -173,14 +176,14 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             ['Employee', readJsonEntity('Employee')],
           ]);
           const jdlObject = convertEntitiesToJDL({ entities });
-          const relationship = jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
-          expect(relationship.commentInFrom).to.equal('A relationship');
-          expect(relationship.commentInTo).to.equal('Another side of the same relationship');
+          const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
+          expect(relationship.commentInFrom).to.equal('Another side of the same relationship');
+          expect(relationship.commentInTo).to.equal('A relationship');
         });
         it('should parse required relationships in owner', () => {
-          const relationship = jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
-          expect(relationship.isInjectedFieldInFromRequired).to.be.true;
-          expect(relationship.isInjectedFieldInToRequired).to.be.undefined;
+          const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
+          expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
+          expect(relationship.isInjectedFieldInToRequired).to.be.true;
         });
         it('should parse required relationships in owned', () => {
           const relationship = jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}');

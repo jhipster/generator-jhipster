@@ -1014,10 +1014,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
 
     if (
-      relationship.ownerSide === undefined &&
+      relationship.relationshipSide === undefined &&
       (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
     ) {
-      throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`);
+      throw new Error(
+        `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+      );
     }
   }
 

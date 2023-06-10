@@ -1,3 +1,4 @@
+export type RelationshipSide = 'left' | 'right';
 export type RelationshipType = 'one-to-one' | 'many-to-one' | 'one-to-many' | 'many-to-many';
 
 export type Field = {
@@ -7,6 +8,7 @@ export type Field = {
 } & Record<string, any>;
 
 export type Relationship = {
+  relationshipSide?: RelationshipSide;
   relationshipName: string;
   relationshipType: RelationshipType;
   otherEntityName: string;

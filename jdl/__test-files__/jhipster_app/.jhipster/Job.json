@@ -2,11 +2,14 @@
   "fluentMethods": true,
   "relationships": [
     {
+      "relationshipSide": "right",
       "relationshipName": "employee",
+      "otherEntityRelationshipName": "job",
       "otherEntityName": "employee",
       "relationshipType": "many-to-one"
     },
     {
+      "relationshipSide": "left",
       "relationshipType": "many-to-many",
       "otherEntityRelationshipName": "job",
       "relationshipName": "task",

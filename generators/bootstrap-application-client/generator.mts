@@ -30,7 +30,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 

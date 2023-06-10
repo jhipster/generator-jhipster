@@ -1025,8 +1025,8 @@ relationship OneToOne {
             },
             "otherEntityName": "b",
             "otherEntityRelationshipName": "a",
-            "ownerSide": true,
             "relationshipName": "b",
+            "relationshipSide": "left",
             "relationshipType": "one-to-one",
             "relationshipWithBuiltInEntity": true,
           }
@@ -1039,8 +1039,8 @@ relationship OneToOne {
             },
             "otherEntityName": "a",
             "otherEntityRelationshipName": "b",
-            "ownerSide": false,
             "relationshipName": "a",
+            "relationshipSide": "right",
             "relationshipType": "one-to-one",
           }
         `);
