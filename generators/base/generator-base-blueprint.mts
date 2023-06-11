@@ -605,7 +605,7 @@ export default class JHipsterBaseBlueprintGenerator<
         this.log.verboseInfo(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
         return;
       }
-      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintJhipsterVersion)) {
+      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintJhipsterVersion, { includePrerelease: true })) {
         return;
       }
       throw new Error(
@@ -617,7 +617,7 @@ export default class JHipsterBaseBlueprintGenerator<
     const blueprintPeerJhipsterVersion =
       blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
     if (blueprintPeerJhipsterVersion) {
-      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
+      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion, { includePrerelease: true })) {
         return;
       }
       throw new Error(
