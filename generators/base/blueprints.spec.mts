@@ -91,7 +91,7 @@ describe('generator - base - with blueprint', () => {
         .withFakeTestBlueprint('generator-jhipster-myblueprint', {
           packageJson: {
             peerDependencies: {
-              'generator-jhipster': '>=7.0.0-beta.0',
+              'generator-jhipster': '*',
             },
           },
         })
