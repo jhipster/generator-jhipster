@@ -14,7 +14,7 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.5</gatling.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
-        <hazelcast-spring.version>5.3.0</hazelcast-spring.version>
+        <hazelcast-spring.version>5.3.1</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
