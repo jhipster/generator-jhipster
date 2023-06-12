@@ -85,23 +85,9 @@ export default class UpgradeGenerator extends BaseGenerator {
       type: String,
     });
 
-    // This adds support for a `--skip-install` flag
-    this.option('skip-install', {
-      description: 'Skips installing dependencies during the upgrade process',
-      type: Boolean,
-      default: false,
-    });
-
     // This adds support for a `--silent` flag
     this.option('silent', {
       description: 'Hides output of the generation process',
-      type: Boolean,
-      default: false,
-    });
-
-    // This adds support for a `--skip-checks` flag
-    this.option('skip-checks', {
-      description: 'Disable checks during project regeneration',
       type: Boolean,
       default: false,
     });
@@ -124,7 +110,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    return {
+    return this.asInitializingTaskGroup({
       displayLogo() {
         this.log.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
         this.log.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
@@ -138,7 +124,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         this.currentJhipsterVersion = this.config.get('jhipsterVersion');
         this.clientPackageManager = this.config.get('clientPackageManager');
       },
-    };
+    });
   }
 
   _rmRf(file) {

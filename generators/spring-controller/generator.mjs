@@ -55,7 +55,6 @@ export default class SpringControllerGenerator extends BaseGenerator {
 
     this.option('default', {
       type: Boolean,
-      default: false,
       description: 'default option',
     });
     this.defaultOption = this.options.default;

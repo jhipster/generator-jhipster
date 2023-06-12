@@ -45,7 +45,6 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
     this.option('defaults', {
       description: 'Execute jhipster with default config',
       type: Boolean,
-      default: false,
     });
 
     this.option('composed-entities', {
