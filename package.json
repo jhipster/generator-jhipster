@@ -142,7 +142,7 @@
     "@types/node": "16.18.35",
     "@types/shelljs": "0.8.12",
     "@types/sinon-chai": "3.2.9",
-    "@typescript-eslint/eslint-plugin": "5.59.9",
+    "@typescript-eslint/eslint-plugin": "5.59.11",
     "@typescript-eslint/parser": "5.59.11",
     "chai": "4.3.7",
     "chokidar": "3.5.3",
