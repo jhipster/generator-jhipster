@@ -5,12 +5,12 @@
         "logged": {
             "message": "\"{{username}}\"としてログインしています。"
         },
-        "question": "JHipsterに関して質問があれば:",
+        "question": "JHipsterに関するお問い合わせは、こちらまで:",
         "link": {
             "homepage": "JHipsterのサイト",
             "stackoverflow": "Stack Overflow のJHipster",
             "bugtracker": "JHipsterのバグトラッカー",
-            "chat": "JHipster public chat room",
+            "chat": "JHipsterの公開チャットルーム",
             "follow": "Twitterの @jhipster"
         },
         "like": "JHipsterを気に入ったら、是非スターをつけてください。",
