@@ -29,7 +29,7 @@ sourceSets {
 dependencies {
   <%_ if (prodDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    implementation "io.asyncer:r2dbc-mysql:<%- javaDependencies['r2dbc-mysql'] %>"
+    implementation "io.asyncer:r2dbc-mysql"
     <%_ } _%>
     implementation "com.mysql:mysql-connector-j"
     testImplementation "org.testcontainers:mysql"

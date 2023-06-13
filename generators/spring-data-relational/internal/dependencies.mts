@@ -146,7 +146,7 @@ export const getDatabaseTypeMavenDefinition: (
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql', version: javaDependencies['r2dbc-mysql'] }],
+        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' }],
       },
     },
     oracle: {
