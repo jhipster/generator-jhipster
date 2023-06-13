@@ -44,7 +44,6 @@ export default class PageGenerator extends BaseApplicationGenerator {
       description: 'Skip prompts',
       type: Boolean,
       hide: true,
-      default: false,
     });
     this.option('recreate', {
       type: Boolean,

@@ -48,7 +48,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     this.option('defaults', {
       description: 'Execute jhipster with default config',
       type: Boolean,
-      default: false,
     });
     this.option('base-name', {
       description: 'Application base name',
