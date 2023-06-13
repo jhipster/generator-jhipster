@@ -131,7 +131,7 @@
     "winston": "3.9.0",
     "yaml": "2.3.1",
     "yeoman-environment": "3.19.3",
-    "yeoman-generator": "6.0.0-rc.1"
+    "yeoman-generator": "6.0.0-rc.2"
   },
   "devDependencies": {
     "@node-loaders/esbuildx": "1.2.0",
