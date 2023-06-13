@@ -166,10 +166,8 @@ spec:
   <%_ } _%>
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
-        - name: SPRING_DATA_MONGODB_DATABASE
-          value: <%= app.baseName %>
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
+          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>/<%= app.baseName %><% if (app.reactive) { %>?waitQueueMultiple=1000<% } %>"
 <%_ } _%>
 <%_ if (app.databaseTypeNeo4j) { _%>
         - name: SPRING_NEO4J_URI
