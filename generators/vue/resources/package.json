@@ -46,7 +46,7 @@
     "rimraf": "5.0.1",
     "sass": "1.63.3",
     "sass-loader": "13.3.2",
-    "sinon": "15.1.0",
+    "sinon": "15.1.2",
     "terser-webpack-plugin": "5.3.9",
     "ts-loader": "9.4.3",
     "typescript": "5.1.3",
