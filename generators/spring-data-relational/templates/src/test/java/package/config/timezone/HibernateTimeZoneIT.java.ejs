@@ -148,6 +148,9 @@ class HibernateTimeZoneIT {
         assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
     }
 
+    /* TODO OffsetTime behavior has changed in hibernate 6.2.
+     * See https://github.com/hibernate/hibernate-orm/pull/6264
+     * OffsetTime is not officially supported at jhipster as an entity field.
     @Test
     @Transactional
     void storeOffsetTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
@@ -164,6 +167,7 @@ class HibernateTimeZoneIT {
 
         assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
     }
+    */
 
     @Test
     @Transactional
