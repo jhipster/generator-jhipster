@@ -60,8 +60,8 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
-        this.logger.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
+        this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
+        this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
       },
       ...super.initializing,
       checkKubernetes,
@@ -74,7 +74,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
           { silent: true },
           (code, stdout, stderr) => {
             if (stderr || code !== 0) {
-              this.logger.warn(
+              this.log.warn(
                 'Knative 0.8.* or later is not installed on your computer.\n' +
                   'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n'
               );
@@ -177,25 +177,25 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
     return {
       deploy() {
         if (this.hasWarning) {
-          this.logger.warn('Kubernetes Knative configuration generated, but no Jib cache found');
-          this.logger.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.logger.warn(this.warningMessage);
+          this.log.warn('Kubernetes Knative configuration generated, but no Jib cache found');
+          this.log.warn('If you forgot to generate the Docker image for this application, please run:');
+          this.log.warn(this.warningMessage);
         } else {
-          this.logger.info(`\n${chalk.bold.green('Kubernetes Knative configuration successfully generated!')}`);
+          this.log.verboseInfo(`\n${chalk.bold.green('Kubernetes Knative configuration successfully generated!')}`);
         }
-        this.logger.warn(
+        this.log.warn(
           '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
           const targetImageName = this.appConfigs[i].targetImageName;
           if (originalImageName !== targetImageName) {
-            this.logger.info(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
+            this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
-          this.logger.info(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
+          this.log.verboseInfo(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
         if (this.dockerRepositoryName) {
-          this.logger.log('\nAlternatively, you can use Jib to build and push image directly to a remote registry:');
+          this.log.log('\nAlternatively, you can use Jib to build and push image directly to a remote registry:');
           this.appsFolders.forEach((appsFolder, index) => {
             const appConfig = this.appConfigs[index];
             let runCommand = '';
@@ -208,30 +208,28 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
                 appConfig.targetImageName
               }`;
             }
-            this.logger.log(`${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
+            this.log.log(`${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
           });
         }
-        this.logger.log('\nYou can deploy all your apps by running the following script:');
+        this.log.log('\nYou can deploy all your apps by running the following script:');
         if (this.generatorType === K8S) {
-          this.logger.info(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
+          this.log.verboseInfo(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
           // Make the apply script executable
           try {
             fs.chmodSync('kubectl-knative-apply.sh', '755');
           } catch (err) {
-            this.logger.warn(
-              "Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'"
-            );
+            this.log.warn("Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'");
           }
         } else {
-          this.logger.info(`  ${chalk.cyan('bash helm-knative-apply.sh or ./helm-knative-apply.sh')}`);
-          this.logger.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
-          this.logger.info(`  ${chalk.cyan('bash helm-knative-upgrade.sh or ./helm-knative-upgrade.sh')}`);
+          this.log.verboseInfo(`  ${chalk.cyan('bash helm-knative-apply.sh or ./helm-knative-apply.sh')}`);
+          this.log.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
+          this.log.verboseInfo(`  ${chalk.cyan('bash helm-knative-upgrade.sh or ./helm-knative-upgrade.sh')}`);
           // Make the apply script executable
           try {
             fs.chmodSync('helm-knative-apply.sh', '755');
             fs.chmodSync('helm-knative-upgrade.sh', '755');
           } catch (err) {
-            this.logger.warn(
+            this.log.warn(
               "Failed to make 'helm-knative-apply.sh', 'helm-knative-upgrade.sh' executable, you may need to run 'chmod +x helm-knative-apply.sh helm-knative-upgrade.sh"
             );
           }

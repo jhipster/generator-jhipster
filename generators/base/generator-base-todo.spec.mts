@@ -1,12 +1,10 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import Environment from 'yeoman-environment';
-import { TestAdapter } from 'yeoman-test';
 import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
 import Base from './index.mjs';
 import { parseChangelog } from './support/timestamp.mjs';
-import Logger from './support/logger.mjs';
+import { createJHipsterLogger } from './support/logger.mjs';
 
 const BaseGenerator: any = Base.prototype;
 
@@ -15,7 +13,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-BaseGenerator.logger = new Logger({ adapter: new TestAdapter() });
+BaseGenerator.logger = createJHipsterLogger();
 
 describe('generator - base', () => {
   describe('getFrontendAppName', () => {
@@ -64,7 +62,7 @@ describe('generator - base', () => {
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
       const Dummy = helpers.createDummyGenerator(Base);
-      base = new Dummy({ ...options, sharedData: {}, env: Environment.createEnv() });
+      base = new Dummy({ ...options, sharedData: {}, env: await helpers.createTestEnv() });
     });
     describe('when there is no configured lastLiquibaseTimestamp', () => {
       let firstChangelogDate;
@@ -171,10 +169,11 @@ describe('generator - base', () => {
         });
       });
       describe('with a future creationTimestamp option', () => {
-        it('should throw', () => {
+        it('should throw', async () => {
           options.creationTimestamp = '2030-01-01';
           const Dummy = helpers.createDummyGenerator(Base);
-          expect(() => new Dummy({ ...options, env: Environment.createEnv(), sharedData: {} })).to.throw(
+          const env = await helpers.createTestEnv();
+          expect(() => new Dummy({ ...options, env, sharedData: {} })).to.throw(
             /^Creation timestamp should not be in the future: 2030-01-01\.$/
           );
         });

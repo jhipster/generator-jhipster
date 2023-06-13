@@ -19,9 +19,8 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
 import _ from 'lodash';
-import { TerminalAdapter } from '@yeoman/adapter';
 
-import { Logger, CLI_LOGGER } from '../generators/base/support/index.mjs';
+import { createJHipsterLogger, CLI_LOGGER } from '../generators/base/support/index.mjs';
 
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';
@@ -30,7 +29,7 @@ const SUCCESS_MESSAGE = `Congratulations, JHipster execution is complete!
 If you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`;
 const SPONSOR_MESSAGE = 'Sponsored with ❤️  by @oktadev.';
 
-export const logger = new Logger({ adapter: new TerminalAdapter(), namespace: CLI_LOGGER });
+export const logger = createJHipsterLogger({ namespace: CLI_LOGGER });
 
 /**
  *  Get options for the command

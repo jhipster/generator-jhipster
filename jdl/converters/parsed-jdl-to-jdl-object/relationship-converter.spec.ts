@@ -50,7 +50,7 @@ describe('jdl - RelationshipConverter', () => {
                 },
                 cardinality: 'one-to-many',
                 options: {
-                  global: [{ optionName: 'jpaDerivedIdentifier', type: 'UNARY' }],
+                  global: [{ optionName: 'builtInEntity', type: 'UNARY' }],
                   source: [],
                   destination: [],
                 },
@@ -58,7 +58,7 @@ describe('jdl - RelationshipConverter', () => {
             ],
             options => {
               if (options.length !== 0) {
-                return { jpaDerivedIdentifier: true };
+                return { builtInEntity: true };
               }
               return {};
             }
@@ -67,27 +67,28 @@ describe('jdl - RelationshipConverter', () => {
 
         it('should convert them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-[
-  JDLRelationship {
-    "commentInFrom": "/**\\nRequired\\n/",
-    "commentInTo": "/**\\nNot required\\n/",
-    "from": "Source",
-    "injectedFieldInFrom": "destination",
-    "injectedFieldInTo": "source",
-    "isInjectedFieldInFromRequired": true,
-    "isInjectedFieldInToRequired": false,
-    "options": {
-      "destination": {},
-      "global": {
-        "jpaDerivedIdentifier": true,
-      },
-      "source": {},
-    },
-    "to": "Destination",
-    "type": "OneToMany",
-  },
-]
-`);
+            [
+              JDLRelationship {
+                "commentInFrom": "/**\\nRequired\\n/",
+                "commentInTo": "/**\\nNot required\\n/",
+                "from": "Source",
+                "injectedFieldInFrom": "destination",
+                "injectedFieldInTo": "source",
+                "isInjectedFieldInFromRequired": true,
+                "isInjectedFieldInToRequired": false,
+                "options": {
+                  "destination": {},
+                  "global": {
+                    "builtInEntity": true,
+                  },
+                  "source": {},
+                },
+                "side": undefined,
+                "to": "Destination",
+                "type": "OneToMany",
+              },
+            ]
+          `);
         });
       });
       context('when there is no injected field in both sides', () => {
@@ -109,7 +110,7 @@ describe('jdl - RelationshipConverter', () => {
                 },
                 cardinality: 'one-to-many',
                 options: {
-                  global: [{ optionName: 'jpaDerivedIdentifier', type: 'UNARY' }],
+                  global: [{ optionName: 'builtInEntity', type: 'UNARY' }],
                   source: [],
                   destination: [],
                 },
@@ -117,7 +118,7 @@ describe('jdl - RelationshipConverter', () => {
             ],
             options => {
               if (options.length !== 0) {
-                return { jpaDerivedIdentifier: true };
+                return { builtInEntity: true };
               }
               return {};
             }
@@ -126,27 +127,28 @@ describe('jdl - RelationshipConverter', () => {
 
         it('should generate them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-[
-  JDLRelationship {
-    "commentInFrom": "/**\\nRequired\\n/",
-    "commentInTo": "/**\\nNot required\\n/",
-    "from": "Source",
-    "injectedFieldInFrom": "destination",
-    "injectedFieldInTo": "source",
-    "isInjectedFieldInFromRequired": true,
-    "isInjectedFieldInToRequired": false,
-    "options": {
-      "destination": {},
-      "global": {
-        "jpaDerivedIdentifier": true,
-      },
-      "source": {},
-    },
-    "to": "Destination",
-    "type": "OneToMany",
-  },
-]
-`);
+            [
+              JDLRelationship {
+                "commentInFrom": "/**\\nRequired\\n/",
+                "commentInTo": "/**\\nNot required\\n/",
+                "from": "Source",
+                "injectedFieldInFrom": "destination",
+                "injectedFieldInTo": "source",
+                "isInjectedFieldInFromRequired": true,
+                "isInjectedFieldInToRequired": false,
+                "options": {
+                  "destination": {},
+                  "global": {
+                    "builtInEntity": true,
+                  },
+                  "source": {},
+                },
+                "side": undefined,
+                "to": "Destination",
+                "type": "OneToMany",
+              },
+            ]
+          `);
         });
       });
     });

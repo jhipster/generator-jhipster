@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
+import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
 export function convertVueTranslations(body) {
@@ -30,7 +30,7 @@ const convertTranslationsSupport = ({ clientSrcDir }) => {
     if (isTranslationFile(file)) {
       file.contents = Buffer.from(convertVueTranslations(file.contents.toString()));
     }
-  }, 'jhipster:convert-vue-translation-files');
+  });
   return { transform, isTranslationFile };
 };
 

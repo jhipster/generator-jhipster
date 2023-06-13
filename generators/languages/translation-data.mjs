@@ -121,8 +121,8 @@ export default class TranslationData {
     }
     if (translatedValue === undefined) {
       const errorMessage = `Translation missing for ${translationKey}`;
-      this.generator.logger.warn(errorMessage);
-      this.generator.logger.debug(`${errorMessage} at ${inspect(this.translations, { depth: null })}`);
+      this.generator.log.warn(errorMessage);
+      this.generator.log.debug(`${errorMessage} at ${inspect(this.translations, { depth: null })}`);
       return errorMessage;
     }
     if (!data) {

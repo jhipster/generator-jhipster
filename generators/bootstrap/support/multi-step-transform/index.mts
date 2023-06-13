@@ -16,63 +16,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Duplex } from 'stream';
 import PQueue from 'p-queue';
-import PTransform from 'p-transform';
 import { isFilePending } from 'mem-fs-editor/state';
-
 import TemplateFileFs from './template-file-fs.mjs';
 
-export default class MultiStepTransform extends PTransform {
-  twoStepTemplateQueue: PQueue;
-  templateFileFs: TemplateFileFs;
-  pendingFiles: string[];
+// eslint-disable-next-line import/prefer-default-export
+export const createMultiStepTransform = () => {
+  const twoStepTemplateQueue = new PQueue({ concurrency: 1, autoStart: false });
+  const templateFileFs = new TemplateFileFs({});
+  const pendingFiles: string[] = [];
 
-  constructor(options = {}) {
-    super({
-      logName: 'jhipster:multi-step-transform',
-      ...options,
-      transform: file => {
-        try {
-          if (file.contents && this.templateFileFs.isTemplate(file.path)) {
-            const templateFile = this.templateFileFs.add(file.path, file.contents.toString());
-            if (templateFile.rootTemplate) {
-              // If multi-step root, postpone.
-              this.twoStepTemplateQueue.add(() => {
-                if (this.pendingFiles.includes(templateFile.basePath)) {
-                  return;
-                }
-                file.path = templateFile.basePath;
-                file.contents = Buffer.from(templateFile.render().concat('\n'));
-                this.push(file);
-              });
-            } else {
-              delete file.state;
+  const duplex: Duplex & { templateFileFs: TemplateFileFs } = Duplex.from(async function* (source) {
+    for await (const file of source) {
+      if (file.contents && templateFileFs.isTemplate(file.path)) {
+        const templateFile = templateFileFs.add(file.path, file.contents.toString());
+        if (templateFile.rootTemplate) {
+          // If multi-step root, postpone.
+          twoStepTemplateQueue.add(() => {
+            if (pendingFiles.includes(templateFile.basePath)) {
+              return;
             }
-          } else {
-            if (isFilePending(file)) {
-              this.pendingFiles.push(file.path);
-            }
-            this.push(file);
-          }
-        } catch (error) {
-          this.destroy(error as Error);
+            file.path = templateFile.basePath;
+            file.contents = Buffer.from(templateFile.render().concat('\n'));
+          });
+        } else {
+          delete file.state;
         }
-      },
-    });
+      } else if (isFilePending(file)) {
+        pendingFiles.push(file.path);
+      }
+      yield file;
+    }
+    await twoStepTemplateQueue.start().onIdle();
+  }) as any;
 
-    this.setMaxListeners(100);
-    this.twoStepTemplateQueue = new PQueue({ concurrency: 1, autoStart: false });
-    this.templateFileFs = new TemplateFileFs(options);
-
-    // Keep track of existing files, they should take precedence over multi-step templates.
-    this.pendingFiles = [];
-  }
-
-  _flush(callback) {
-    // Clear normal queue before templates.
-    (this as any)
-      .flushQueue()
-      .then(() => this.twoStepTemplateQueue.start().onIdle())
-      .then(() => super._flush(callback));
-  }
-}
+  duplex.templateFileFs = templateFileFs;
+  return duplex;
+};

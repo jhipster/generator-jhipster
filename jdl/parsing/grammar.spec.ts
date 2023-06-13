@@ -1551,7 +1551,7 @@ entity A {
       let relationship;
 
       before(() => {
-        const content = parseFromContent('relationship OneToOne { A to B with jpaDerivedIdentifier }');
+        const content = parseFromContent('relationship OneToOne { A to B with builtInEntity }');
         relationship = content.relationships[0];
       });
 
@@ -1559,7 +1559,7 @@ entity A {
         expect(relationship.options).to.deep.equal({
           global: [
             {
-              optionName: 'jpaDerivedIdentifier',
+              optionName: 'builtInEntity',
               type: 'UNARY',
             },
           ],
@@ -1574,9 +1574,9 @@ entity A {
 
         before(() => {
           const content = parseFromContent(`relationship OneToOne {
-  A to B with jpaDerivedIdentifier,
+  A to B with builtInEntity,
   B to C,
-  D to E with jpaDerivedIdentifier
+  D to E with builtInEntity
 }
 `);
           relationships = content.relationships;
@@ -1596,7 +1596,7 @@ entity A {
       "destination": [],
       "global": [
         {
-          "optionName": "jpaDerivedIdentifier",
+          "optionName": "builtInEntity",
           "type": "UNARY",
         },
       ],
@@ -1637,7 +1637,7 @@ entity A {
       "destination": [],
       "global": [
         {
-          "optionName": "jpaDerivedIdentifier",
+          "optionName": "builtInEntity",
           "type": "UNARY",
         },
       ],

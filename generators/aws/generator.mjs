@@ -60,7 +60,7 @@ export default class AwsGenerator extends BaseGenerator {
           this.dbInstanceClass = this.jhipsterConfig.aws.dbInstanceClass;
           this.customDBInstanceClass = '';
 
-          this.logger.log(
+          this.log.log(
             chalk.green(
               'This is an existing deployment, using the configuration from your .yo-rc.json file \nto deploy your application...\n'
             )
@@ -131,7 +131,7 @@ export default class AwsGenerator extends BaseGenerator {
     return {
       productionBuild: runAsync(function () {
         const cb = this.async();
-        this.logger.log(chalk.bold('Building application'));
+        this.log.log(chalk.bold('Building application'));
 
         const child = this.buildApplication(this.buildTool, 'prod', true, err => {
           if (err) {
@@ -147,8 +147,8 @@ export default class AwsGenerator extends BaseGenerator {
       }),
       createBucket: runAsync(function () {
         const cb = this.async();
-        this.logger.log();
-        this.logger.log(chalk.bold('Create S3 bucket'));
+        this.log.log();
+        this.log.log(chalk.bold('Create S3 bucket'));
 
         const s3 = this.awsFactory.getS3();
 
@@ -160,15 +160,15 @@ export default class AwsGenerator extends BaseGenerator {
               throw new Error(err.message);
             }
           } else {
-            this.logger.info(data.message);
+            this.log.verboseInfo(data.message);
             cb();
           }
         });
       }),
       uploadWar: runAsync(function () {
         const cb = this.async();
-        this.logger.log();
-        this.logger.log(chalk.bold('Upload WAR to S3'));
+        this.log.log();
+        this.log.log(chalk.bold('Upload WAR to S3'));
 
         const s3 = this.awsFactory.getS3();
 
@@ -182,15 +182,15 @@ export default class AwsGenerator extends BaseGenerator {
             throw new Error(err.message);
           } else {
             this.warKey = data.warKey;
-            this.logger.info(data.message);
+            this.log.verboseInfo(data.message);
             cb();
           }
         });
       }),
       createDatabase: runAsync(function () {
         const cb = this.async();
-        this.logger.log();
-        this.logger.log(chalk.bold('Create database'));
+        this.log.log();
+        this.log.log(chalk.bold('Create database'));
 
         const rds = this.awsFactory.getRds();
 
@@ -206,15 +206,15 @@ export default class AwsGenerator extends BaseGenerator {
           if (err) {
             throw new Error(err.message);
           } else {
-            this.logger.info(data.message);
+            this.log.verboseInfo(data.message);
             cb();
           }
         });
       }),
       createDatabaseUrl: runAsync(function () {
         const cb = this.async();
-        this.logger.log();
-        this.logger.log(chalk.bold('Waiting for database (This may take several minutes)'));
+        this.log.log();
+        this.log.log(chalk.bold('Waiting for database (This may take several minutes)'));
 
         if (this.dbEngine === 'postgres') {
           this.dbEngine = POSTGRESQL;
@@ -232,15 +232,15 @@ export default class AwsGenerator extends BaseGenerator {
             throw new Error(err.message);
           } else {
             this.dbUrl = data.dbUrl;
-            this.logger.info(data.message);
+            this.log.verboseInfo(data.message);
             cb();
           }
         });
       }),
       verifyRoles: runAsync(function () {
         const cb = this.async();
-        this.logger.log();
-        this.logger.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
+        this.log.log();
+        this.log.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
         const iam = this.awsFactory.getIam();
         iam.verifyRoles({}, err => {
           if (err) {
@@ -252,8 +252,8 @@ export default class AwsGenerator extends BaseGenerator {
       }),
       createApplication: runAsync(function () {
         const cb = this.async();
-        this.logger.log();
-        this.logger.log(chalk.bold('Create/Update application'));
+        this.log.log();
+        this.log.log(chalk.bold('Create/Update application'));
 
         const eb = this.awsFactory.getEb();
 
@@ -272,7 +272,7 @@ export default class AwsGenerator extends BaseGenerator {
           if (err) {
             throw new Error(err.message);
           } else {
-            this.logger.info(data.message);
+            this.log.verboseInfo(data.message);
             cb();
           }
         });

@@ -22,7 +22,7 @@ export const EntityNavbarItems: NavbarItem[] = [
 <%_ for (const entity of this.localEntities) { _%>
   {
     name: '<%= entity.entityAngularName %>',
-    route: '<%= entity.entityPage %>',
+    route: '/<%= entity.entityPage %>',
   <%_ if (enableTranslation) { _%>
     translationKey: 'global.menu.entities.<%= entity.entityTranslationKey %>',
   <%_ } _%>

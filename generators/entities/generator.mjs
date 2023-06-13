@@ -45,7 +45,6 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
     this.option('defaults', {
       description: 'Execute jhipster with default config',
       type: Boolean,
-      default: false,
     });
 
     this.option('composed-entities', {
@@ -113,7 +112,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   get composing() {
     return {
       async composeApp() {
-        await this.composeWithJHipster(GENERATOR_APP, { skipPriorities: ['writing', 'postWriting'] });
+        await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { skipPriorities: ['writing', 'postWriting'] } });
       },
     };
   }

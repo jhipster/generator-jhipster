@@ -71,7 +71,7 @@ describe('Service Tests', () => {
 <%_ fields.filter(field => !field.id).forEach((field) => {
     const fieldType = field.fieldType; _%>
   <%_ if (field.fieldIsEnum) { _%>
-        <%= fieldType + '.' + field.enumValues[0].name %>,
+        '<%= field.enumValues[0].name  %>',
   <%_ } else if (field.fieldTypeBoolean) { _%>
         false,
   <%_ } else if (field.fieldTypeDuration) { _%>

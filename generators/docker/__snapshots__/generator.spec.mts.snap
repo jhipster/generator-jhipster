@@ -210,6 +210,9 @@ exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.j
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -525,6 +528,9 @@ exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTran
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -683,6 +689,9 @@ exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": {
@@ -1017,6 +1026,9 @@ exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslat
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -1149,6 +1161,9 @@ exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": {

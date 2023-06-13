@@ -37,7 +37,6 @@ export default class SpringServiceGenerator extends BaseGenerator {
 
     this.option('default', {
       type: Boolean,
-      default: false,
       description: 'default option',
     });
     this.defaultOption = this.options.default;
@@ -45,7 +44,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
+      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { generatorArgs: [this.name] });
     }
   }
 
@@ -53,7 +52,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       initializing() {
-        this.logger.info(`The service ${this.name} is being created.`);
+        this.log.verboseInfo(`The service ${this.name} is being created.`);
         const configuration = this.config;
         this.baseName = configuration.get(BASE_NAME);
         this.packageName = configuration.get(PACKAGE_NAME);

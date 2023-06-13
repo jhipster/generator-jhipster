@@ -41,18 +41,10 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
-    // This adds support for a `--skip-checks` flag
-    this.option('skip-checks', {
-      description: 'Check the status of the required tools',
-      type: Boolean,
-      default: false,
-    });
-
     // This adds support for a `--skip-prompts` flag
     this.option('skip-prompts', {
       description: 'Generate pre-existing configuration',
       type: Boolean,
-      default: false,
     });
 
     this.regenerate = this.options.skipPrompts;

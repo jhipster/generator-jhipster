@@ -131,9 +131,11 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY, {
-        entityExisted,
-        configExisted,
-        arguments: [name],
+        generatorOptions: {
+          entityExisted,
+          configExisted,
+          arguments: [name],
+        },
       });
     }
 
@@ -187,7 +189,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
             context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
             context.useConfigurationFile = true;
 
-            this.logger.info(`\nThe entity ${context.name} is being updated.\n`);
+            this.log.verboseInfo(`\nThe entity ${context.name} is being updated.\n`);
             try {
               // We are generating a entity from a microservice.
               // Load it directly into our entity configuration.
@@ -196,7 +198,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
                 this.entityStorage.set(this.microserviceConfig);
               }
             } catch (err) {
-              this.logger.debug('Error:', err);
+              this.log.debug('Error:', err);
               throw new Error(`The entity configuration file could not be read! ${err}`, { cause: err });
             }
           }
@@ -253,14 +255,14 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
-          this.logger.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+          this.log.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
         }
 
         // Structure for prompts.
         this.entityStorage.defaults({ fields: [], relationships: [] });
 
         if (!context.useConfigurationFile) {
-          this.logger.info(`\nThe entity ${entityName} is being created.\n`);
+          this.log.verboseInfo(`\nThe entity ${entityName} is being created.\n`);
         }
       },
     };
@@ -297,12 +299,14 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
-          entities: this.options.singleEntity ? [this.context.name] : undefined,
-          regenerate: true,
-          writeEveryEntity: false,
-          composedEntities: [this.context.name],
-          skipDbChangelog: this.options.skipDbChangelog,
-          skipInstall: this.options.skipInstall,
+          generatorOptions: {
+            entities: this.options.singleEntity ? [this.context.name] : undefined,
+            regenerate: true,
+            writeEveryEntity: false,
+            composedEntities: [this.context.name],
+            skipDbChangelog: this.options.skipDbChangelog,
+            skipInstall: this.options.skipInstall,
+          },
         });
       },
     };
@@ -316,7 +320,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   get end() {
     return {
       end() {
-        this.logger.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+        this.log.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
       },
     };
   }

@@ -6,7 +6,7 @@
       "relationshipName": "region",
       "otherEntityName": "region",
       "ownerSide": true,
-      "useJPADerivedIdentifier": true,
+      "relationshipWithBuiltInEntity": true,
       "otherEntityRelationshipName": "country"
     },
     {

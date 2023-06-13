@@ -32,7 +32,7 @@ import { Entity, Field, Relationship } from './types.js';
 import { asJdlRelationshipType } from './parsed-jdl-to-jdl-object/relationship-converter.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
-const { JPA_DERIVED_IDENTIFIER, BUILT_IN_ENTITY } = relationshipOptions;
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = unaryOptions;
 const { ANGULAR_SUFFIX, CLIENT_ROOT_FOLDER, DTO, MICROSERVICE, PAGINATION, SEARCH, SERVICE } = binaryOptions.Options;
 
@@ -175,6 +175,10 @@ function dealWithRelationships(relationships: Relationship[] | undefined, entity
     return;
   }
   relationships.forEach(relationship => {
+    if (relationship.relationshipSide === 'right') {
+      // Right side will be merged into the left side.
+      return;
+    }
     const jdlRelationship = getRelationship(relationship, entityName);
     if (jdlRelationship) {
       jdlObject.addRelationship(jdlRelationship);
@@ -192,6 +196,7 @@ function getRelationship(relationship: Relationship, entityName: string) {
   const destinationEntity = entities.get(destinationEntityName);
 
   let relationshipConfiguration: JDLRelationshipModel = {
+    side: relationship.relationshipSide,
     from: entityName,
     to: destinationJDLEntity?.name ?? destinationEntityName,
     type,
@@ -224,31 +229,6 @@ function getRelationship(relationship: Relationship, entityName: string) {
     isInjectedFieldInToRequired: destinationSideAttributes.injectedFieldInDestinationIsRequired ?? false,
     commentInTo: destinationSideAttributes.commentForDestinationEntity,
   };
-  if (relationship.relationshipType === 'many-to-one') {
-    if (destinationSideAttributes.injectedFieldInDestinationEntity) {
-      // This is a bidirectional relationship so consider it as a OneToMany
-      return new JDLRelationship({
-        type: JDL_RELATIONSHIP_ONE_TO_MANY,
-        from: relationshipConfiguration.to,
-        to: relationshipConfiguration.from,
-        commentInFrom: relationshipConfiguration.commentInTo,
-        commentInTo: relationshipConfiguration.commentInFrom,
-        injectedFieldInFrom: relationshipConfiguration.injectedFieldInTo,
-        injectedFieldInTo: relationshipConfiguration.injectedFieldInFrom,
-        isInjectedFieldInFromRequired: relationshipConfiguration.isInjectedFieldInToRequired,
-        isInjectedFieldInToRequired: relationshipConfiguration.isInjectedFieldInFromRequired,
-        options: {
-          global: relationshipConfiguration.options.global,
-          destination: relationshipConfiguration.options.source,
-          source: relationshipConfiguration.options.destination,
-        },
-      });
-    }
-  }
-  // Only one side of the relationship with every information is added to the jdl
-  if (!relationship.ownerSide && relationship.relationshipType !== 'many-to-one') {
-    return undefined;
-  }
   return new JDLRelationship(relationshipConfiguration);
 }
 
@@ -291,9 +271,6 @@ function getRelationshipOptions(relationship: Relationship): JDLRelationshipOpti
     source: relationship.options ?? {},
     destination: {},
   };
-  if (relationship.useJPADerivedIdentifier) {
-    options[JPA_DERIVED_IDENTIFIER] = true;
-  }
   if (relationship.relationshipWithBuiltInEntity) {
     options.global[BUILT_IN_ENTITY] = true;
   }

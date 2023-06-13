@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { extname } from 'path';
-import { passthrough } from 'p-transform';
+import { passthrough } from '@yeoman/transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';
 import addJavaAnnotation from './add-java-annotation.mjs';
 
@@ -33,7 +33,7 @@ const generatedAnnotationTransform = packageName => {
         addJavaAnnotation(file.contents.toString('utf8'), { package: packageName, annotation: 'GeneratedByJHipster' })
       );
     }
-  }, 'jhipster:generated-by-annotation');
+  });
 };
 
 export default generatedAnnotationTransform;

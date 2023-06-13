@@ -8,6 +8,7 @@
       "otherEntityField": "foo"
     },
     {
+      "relationshipSide": "left",
       "relationshipType": "one-to-many",
       "relationshipName": "job",
       "otherEntityName": "job",

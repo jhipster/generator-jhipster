@@ -1,4 +1,4 @@
-import Environment from 'yeoman-environment';
+import type Environment from 'yeoman-environment';
 import EnvironmentBuilder from './environment-builder.mjs';
 
 /**

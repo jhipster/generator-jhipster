@@ -12,7 +12,7 @@ Options:
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
   --skip-prompts                           Skip prompts
-  --defaults                               Execute jhipster with default config (default: false)
+  --defaults                               Execute jhipster with default config
   --base-name <value>                      Application base name
   --application-type <value>               Application type to generate
   --client-framework <value>               Provide client framework for the application
@@ -477,7 +477,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "merge-jsons-webpack-plugin": "MERGE_JSONS_WEBPACK_PLUGIN_VERSION",
     "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
     "ngx-infinite-scroll": "NGX_INFINITE_SCROLL_VERSION",
-    "ngx-webstorage": "NGX_WEBSTORAGE_VERSION",
     "npm": "NPM_VERSION",
     "nyc": "NYC_VERSION",
     "postcss-rtlcss": "POSTCSS_RTLCSS_VERSION",
@@ -1015,7 +1014,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "merge-jsons-webpack-plugin": "MERGE_JSONS_WEBPACK_PLUGIN_VERSION",
     "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
     "ngx-infinite-scroll": "NGX_INFINITE_SCROLL_VERSION",
-    "ngx-webstorage": "NGX_WEBSTORAGE_VERSION",
     "npm": "NPM_VERSION",
     "nyc": "NYC_VERSION",
     "postcss-rtlcss": "POSTCSS_RTLCSS_VERSION",

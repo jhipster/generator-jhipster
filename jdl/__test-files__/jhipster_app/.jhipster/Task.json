@@ -2,6 +2,7 @@
   "fluentMethods": true,
   "relationships": [
     {
+      "relationshipSide": "right",
       "relationshipType": "many-to-many",
       "relationshipValidateRules": "required",
       "relationshipName": "job",

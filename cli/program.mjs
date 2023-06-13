@@ -87,7 +87,7 @@ const addCommandGeneratorOptions = async (command, generatorMeta, { root, bluepr
     if (!info) {
       throw error;
     }
-    logger.info(`${info}, error: ${error}`);
+    logger.verboseInfo(`${info}, error: ${error}`);
   }
 };
 
@@ -147,7 +147,7 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
 
   const suggestion = didYouMean(first, availableCommands);
   if (suggestion) {
-    logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+    logger.verboseInfo(`Did you mean ${chalk.yellow(suggestion)}?`);
   }
 
   const message = `${chalk.yellow(first)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`;
@@ -188,7 +188,7 @@ export const buildCommands = async ({
           command.generatorNamespaces = operands.map(
             namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`
           );
-          envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          await envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
           await Promise.all(
             command.generatorNamespaces.map(async namespace => {
               const generatorMeta = env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);

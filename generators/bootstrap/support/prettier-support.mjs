@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from '@yeoman/transform';
+import { passthrough } from 'p-transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
@@ -31,54 +31,52 @@ export const createPrettierTransform = function (options, generator, transformOp
     transformOptions = { ignoreErrors: transformOptions };
   }
   const { ignoreErrors = false, extensions } = transformOptions;
-  return passthrough(
-    async file => {
-      if (isFileStateDeleted(file)) {
-        return;
+  const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
+
+  return passthrough(async file => {
+    if (!minimatch.match(file.path) || isFileStateDeleted(file)) {
+      return;
+    }
+    if (!file.contents) {
+      throw new Error(`File content doesn't exist for ${file.relative}`);
+    }
+    /* resolve from the projects config */
+    let fileContent;
+    try {
+      const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
+      const prettierOptions = {
+        plugins: [],
+        // Config from disk
+        ...resolvedDestinationFileOptions,
+        // for better errors
+        filepath: file.relative,
+      };
+      if (options.packageJson) {
+        prettierOptions.plugins.push(prettierPluginPackagejson);
       }
-      if (!file.contents) {
-        throw new Error(`File content doesn't exist for ${file.relative}`);
+      if (options.java) {
+        prettierOptions.plugins.push(prettierPluginJava);
       }
-      /* resolve from the projects config */
-      let fileContent;
-      try {
-        const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
-        const prettierOptions = {
-          plugins: [],
-          // Config from disk
-          ...resolvedDestinationFileOptions,
-          // for better errors
-          filepath: file.relative,
-        };
-        if (options.packageJson) {
-          prettierOptions.plugins.push(prettierPluginPackagejson);
-        }
-        if (options.java) {
-          prettierOptions.plugins.push(prettierPluginJava);
-        }
-        fileContent = file.contents.toString('utf8');
-        const data = prettier.format(fileContent, prettierOptions);
-        file.contents = Buffer.from(data);
-        return;
-      } catch (error) {
-        let errorMessage;
-        if (fileContent) {
-          errorMessage = `Error parsing file ${file.relative}: ${error}
+      fileContent = file.contents.toString('utf8');
+      const data = prettier.format(fileContent, prettierOptions);
+      file.contents = Buffer.from(data);
+    } catch (error) {
+      let errorMessage;
+      if (fileContent) {
+        errorMessage = `Error parsing file ${file.relative}: ${error}
 
 At: ${fileContent
-            .split('\n')
-            .map((value, idx) => `${idx + 1}: ${value}`)
-            .join('\n')}`;
-        } else {
-          errorMessage = `Unknown prettier error: ${error}`;
-        }
-        if (ignoreErrors) {
-          generator.logger.warn(errorMessage);
-          return;
-        }
-        throw new Error(errorMessage);
+          .split('\n')
+          .map((value, idx) => `${idx + 1}: ${value}`)
+          .join('\n')}`;
+      } else {
+        errorMessage = `Unknown prettier error: ${error}`;
       }
-    },
-    { pattern: `**/*.{${extensions}}`, patternOptions: { dot: true } }
-  );
+      if (ignoreErrors) {
+        generator.log.warn(errorMessage);
+        return;
+      }
+      throw new Error(errorMessage);
+    }
+  });
 };

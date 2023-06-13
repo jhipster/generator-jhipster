@@ -44,7 +44,6 @@ export default class PageGenerator extends BaseApplicationGenerator {
       description: 'Skip prompts',
       type: Boolean,
       hide: true,
-      default: false,
     });
     this.option('recreate', {
       type: Boolean,
@@ -160,7 +159,7 @@ export default class PageGenerator extends BaseApplicationGenerator {
     return {
       success() {
         if (this.env.rootGenerator() !== this) return;
-        this.logger.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
+        this.log.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
       },
     };
   }
