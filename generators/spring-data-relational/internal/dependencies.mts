@@ -61,7 +61,7 @@ export const getImperativeMavenDefinition = ({ javaDependencies }: { javaDepende
   properties: [{ property: 'hibernate.version', value: javaDependencies.hibernate }],
   dependencies: [
     { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
-    { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6-jakarta' },
+    { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
     { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
     { groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen', scope: 'provided' },
     { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
