@@ -14,7 +14,7 @@
     "ngx-infinite-scroll": "16.0.0",
     "rxjs": "7.8.1",
     "tslib": "2.5.3",
-    "zone.js": "0.13.0"
+    "zone.js": "0.13.1"
   },
   "devDependencies": {
     "@angular-architects/module-federation-runtime": "16.0.3",
