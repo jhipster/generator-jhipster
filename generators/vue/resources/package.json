@@ -30,7 +30,7 @@
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "11.0.0",
     "css-loader": "6.8.1",
-    "css-minimizer-webpack-plugin": "5.0.0",
+    "css-minimizer-webpack-plugin": "5.0.1",
     "eslint": "8.42.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-vue": "8.7.1",
