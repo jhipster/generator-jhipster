@@ -2055,9 +2055,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATA_MONGODB_URI
-                  value: mongodb://\${APPLICATION_NAME}-mongodb
-                - name: SPRING_DATA_MONGODB_DATABASE
-                  value: \${APPLICATION_NAME}
+                  value: mongodb://\${APPLICATION_NAME}-mongodb/\${APPLICATION_NAME}
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
