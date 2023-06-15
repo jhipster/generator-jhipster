@@ -21,9 +21,11 @@ package <%= packageName %>.security.oauth2;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,7 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for the {@link AuthorizationHeaderUtil} utility class.
  */
+@ExtendWith(MockitoExtension.class)
 class AuthorizationHeaderUtilTest {
 
     public static final String VALID_REGISTRATION_ID = "OIDC";
