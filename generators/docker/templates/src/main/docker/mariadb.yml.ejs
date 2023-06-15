@@ -24,9 +24,9 @@ services:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mariadb/
+    #   - ~/volumes/jhipster/<%= baseName %>/mariadb/:/var/lib/mariadb/
     environment:
-      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_DATABASE=<%= baseName.toLowerCase() %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
