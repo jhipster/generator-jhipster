@@ -35,6 +35,7 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
 <%_ if (prodDatabaseTypeMariadb) { _%>
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.message.client.HandshakeResponse", "writeConnectAttributes");
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.SimpleClient", "sendCommand");
+        builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.SimpleClient", "execute");
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.MariadbPacketDecoder", "decode");
 <%_ } _%>
 <%_ if (devDatabaseTypeMssql || prodDatabaseTypeMssql) { _%>
