@@ -130,7 +130,9 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshToken() {
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).additionalMessageConverters(any(HttpMessageConverter.class));
+        doReturn(restTemplateBuilder)
+            .when(restTemplateBuilder)
+            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
         doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
         doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
 
@@ -151,7 +153,9 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshToken_NoRefreshToken() {
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).additionalMessageConverters(any(HttpMessageConverter.class));
+        doReturn(restTemplateBuilder)
+            .when(restTemplateBuilder)
+            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
         doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
         doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
 
@@ -172,7 +176,9 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshTokenFails() {
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).additionalMessageConverters(any(HttpMessageConverter.class));
+        doReturn(restTemplateBuilder)
+            .when(restTemplateBuilder)
+            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
         doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
         doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
 
