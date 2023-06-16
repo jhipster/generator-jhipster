@@ -589,6 +589,12 @@
                     </executions>
                     <configuration>
                       <javaVersion>${java.version}</javaVersion>
+                      <%_ if (databaseTypeCassandra) { _%>
+                      <ignoreClassNamePatterns>
+                        <ignoreClassNamePattern><%= packageName %>.domain.PersistentTokenHelper__MapperGenerated</ignoreClassNamePattern>
+                        <ignoreClassNamePattern><%= packageName %>.domain.UserHelper__MapperGenerated</ignoreClassNamePattern>
+                      </ignoreClassNamePatterns>
+                      <%_ } _%>
                     </configuration>
                 </plugin>
                 <plugin>
