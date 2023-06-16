@@ -93,7 +93,7 @@
     "axios": "1.4.0",
     "chalk": "4.1.2",
     "chevrotain": "10.5.0",
-    "commander": "10.0.1",
+    "commander": "11.0.0",
     "conf": "11.0.1",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
