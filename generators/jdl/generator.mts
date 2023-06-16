@@ -224,10 +224,10 @@ export default class JdlGenerator extends BaseGenerator {
             }
           }
         } else if (this.applications.length === 1) {
-          this.log.debug('Generating 1 application');
+          this.log.info('Generating 1 application');
           await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
         } else {
-          this.log.debug(`Generating ${this.applications.length}applications`);
+          this.log.info(`Generating ${this.applications.length} applications`);
           await this.composeWithJHipster(GENERATOR_WORKSPACES, {
             generatorOptions: {
               workspacesFolders: this.applications.map(app => app.folder),
@@ -246,20 +246,28 @@ export default class JdlGenerator extends BaseGenerator {
   get end() {
     return this.asEndTaskGroup({
       async generateDeployments() {
-        if (!this.ignoreDeployments && this.exportedDeployments && this.exportedDeployments.length > 0) {
-          for (const deployment of this.exportedDeployments) {
-            const deploymentConfig = deployment[GENERATOR_JHIPSTER];
-            const deploymentType = deploymentConfig.deploymentType;
-            this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
+        if (!this.exportedDeployments || this.exportedDeployments.length === 0) {
+          this.log.info('No deployment configured');
+          return;
+        }
+        if (this.ignoreDeployments) {
+          this.log.info(`Ignoring ${this.exportedDeployments.length} deployments`);
+          return;
+        }
 
-            await this.composeWithJHipster(deploymentType, {
-              generatorOptions: {
-                destinationRoot: this.destinationPath(deploymentType),
-                force: true,
-                skipPrompts: true,
-              } as any,
-            });
-          }
+        this.log.info(`Generating ${this.exportedDeployments.length} deployments`);
+        for (const deployment of this.exportedDeployments) {
+          const deploymentConfig = deployment[GENERATOR_JHIPSTER];
+          const deploymentType = deploymentConfig.deploymentType;
+          this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
+
+          await this.composeWithJHipster(deploymentType, {
+            generatorOptions: {
+              destinationRoot: this.destinationPath(deploymentType),
+              force: true,
+              skipPrompts: true,
+            } as any,
+          });
         }
       },
     });
