@@ -63,6 +63,7 @@ export const getImperativeMavenDefinition = ({ javaDependencies }: { javaDepende
     { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
     { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
     // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+    // eslint-disable-next-line no-template-curly-in-string
     { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core', version: '${hibernate.version}' },
     { groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen', scope: 'provided' },
     { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },

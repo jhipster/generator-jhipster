@@ -313,7 +313,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
-    implementation "org.hibernate.orm:hibernate-core"
+    implementation "org.hibernate.orm:hibernate-core:${hibernateVersion}"
     implementation "org.hibernate.validator:hibernate-validator"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
