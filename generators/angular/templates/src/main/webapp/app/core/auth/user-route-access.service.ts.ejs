@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable, isDevMode } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { Injectable, inject, isDevMode } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -28,7 +28,7 @@ import { LoginService } from 'app/login/login.service';
 import { StateStorageService } from './state-storage.service';
 
 @Injectable({ providedIn: 'root' })
-export class UserRouteAccessService implements CanActivate {
+class UserRouteAccess {
   constructor(
     private router: Router,
 <%_ if (authenticationTypeOauth2) { _%>
@@ -66,3 +66,6 @@ export class UserRouteAccessService implements CanActivate {
     );
   }
 }
+
+export const UserRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
+  inject(UserRouteAccess).canActivate(next, state);
