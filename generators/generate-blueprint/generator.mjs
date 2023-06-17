@@ -46,6 +46,7 @@ import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 import command from './command.mjs';
+import { NODE_VERSION } from '../generator-constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
@@ -169,6 +170,7 @@ export default class extends BaseGenerator {
     return {
       prepareCommands() {
         this.application.commands = [];
+        this.application.nodeVersion = NODE_VERSION;
         if (!this.application[GENERATORS]) return;
         for (const generator of Object.keys(this.application[GENERATORS])) {
           const subGeneratorConfig = this.getSubGeneratorStorage(generator).getAll();
@@ -265,7 +267,7 @@ export default class extends BaseGenerator {
             'yeoman-test': `${packagejs.devDependencies['yeoman-test']}`,
           },
           engines: {
-            node: '>=16.13.0',
+            node: `>=${packagejs.engines.node}`,
           },
           imports: {
             '#test-utils': './test/utils.mjs',
