@@ -62,7 +62,8 @@ export const getImperativeMavenDefinition = ({ javaDependencies }: { javaDepende
   dependencies: [
     { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
     { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
-    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
+    // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core', version: '${hibernate.version}' },
     { groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen', scope: 'provided' },
     { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
     { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
