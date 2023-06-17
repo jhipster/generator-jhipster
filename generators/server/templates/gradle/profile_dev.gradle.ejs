@@ -26,6 +26,20 @@ sourceSets {
 }
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
+
+configurations {
+  all {
+    resolutionStrategy {
+      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+      force "org.hibernate.orm:hibernate-core:${hibernateVersion}"
+<%_ if (enableHibernateCache && (cacheProviderEhcache || cacheProviderCaffeine || cacheProviderRedis)) { _%>
+      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+      force "org.hibernate.orm:hibernate-jcache:${hibernateVersion}"
+<%_ } _%>
+    }
+  }
+}
+
 dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   <%_ if (devDatabaseTypeH2Any) { _%>
