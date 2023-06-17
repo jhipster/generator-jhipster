@@ -34,7 +34,7 @@ updates:
     ignore:
       # Should match supported node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'npm'
     directory: '/generators/angular/resources/'
@@ -52,7 +52,7 @@ updates:
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/resources/'
@@ -94,7 +94,7 @@ updates:
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'npm'
     directory: '/generators/vue/resources/'
@@ -109,15 +109,12 @@ updates:
       - 'theme: dependencies'
       - 'skip-changelog'
     ignore:
-      # vue3 dependency
-      - dependency-name: 'vue-loader'
-        versions: ['>=16']
       # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
       - dependency-name: 'bootstrap'
         versions: ['>=5']
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'docker'
     directory: '/generators/server/resources/'
