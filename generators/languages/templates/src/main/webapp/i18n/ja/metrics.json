@@ -6,64 +6,64 @@
         "jvm": {
             "title": "JVMメトリクス",
             "memory": {
-                "title": "Memory",
-                "total": "Total Memory",
-                "heap": "Heap Memory",
-                "nonheap": "Non-Heap Memory"
+                "title": "メモリ",
+                "total": "メモリ合計",
+                "heap": "\"Heap\"メモリ",
+                "nonheap": "\"Non-Heap\"メモリ"
             },
             "threads": {
                 "title": "スレッド",
-                "all": "ALL",
-                "runnable": "Runnable",
-                "timedwaiting": "Timed waiting",
-                "waiting": "Waiting",
-                "blocked": "Blocked",
+                "all": "すべて",
+                "runnable": "実行可能",
+                "timedwaiting": "待ち時間",
+                "waiting": "待機中",
+                "blocked": "ブロック済",
                 "dump": {
                     "title": "スレッドダンプ",
                     "id": "Id: ",
-                    "blockedtime": "Blocked Time",
-                    "blockedcount": "Blocked Count",
-                    "waitedtime": "Waited Time",
-                    "waitedcount": "Waited Count",
-                    "lockname": "Lock name",
-                    "stacktrace": "Stacktrace",
+                    "blockedtime": "ブロック時間",
+                    "blockedcount": "ブロック回数",
+                    "waitedtime": "待機時間",
+                    "waitedcount": "待機回数",
+                    "lockname": "ロックプロセス名",
+                    "stacktrace": "スタックトレース",
                     "show": "表示",
-                    "hide": "隠す"
+                    "hide": "非表示"
                 }
             },
             "gc": {
                 "title": "ガベージコレクション",
-                "marksweepcount": "Mark Sweep count",
-                "marksweeptime": "Mark Sweep time",
-                "scavengecount": "Scavenge count",
-                "scavengetime": "Scavenge time"
+                "marksweepcount": "\"Mark Sweep\"合計",
+                "marksweeptime": "\"Mark Sweep\"時間",
+                "scavengecount": "\"Scavenge\"合計",
+                "scavengetime": "\"Scavenge\"時間"
             },
             "http": {
-                "title": "HTTPリクエスト数 (イベント/秒)",
+                "title": "HTTPリクエスト（時間単位：ミリ秒）",
                 "active": "アクティブリクエスト数:",
                 "total": "トータルリクエススト数:",
                 "table": {
-                    "code": "Code",
-                    "count": "Count",
-                    "mean": "Mean",
-                    "average": "Average",
-                    "max": "Max"
+                    "code": "コード",
+                    "count": "合計",
+                    "mean": "中央値",
+                    "average": "平均",
+                    "max": "最大"
                 },
                 "code": {
                     "ok": "Ok",
-                    "notfound": "Not found",
-                    "servererror": "Server Error"
+                    "notfound": "見つかりません",
+                    "servererror": "サーバーエラー"
                 }
             }
         },
         "servicesstats": {
-            "title": "サービス統計 (回/ミリ秒)",
+            "title": "サービス統計（時間単位：ミリ秒）",
             "table": {
-                "name": "Service name",
-                "count": "Count",
-                "mean": "Mean",
-                "min": "Min",
-                "max": "Max",
+                "name": "サービス名",
+                "count": "合計",
+                "mean": "中央値",
+                "min": "最小",
+                "max": "最大",
                 "p50": "p50",
                 "p75": "p75",
                 "p95": "p95",
@@ -71,20 +71,28 @@
             }
         },
         "cache": {
-            "title": "Cache統計",
-            "cachename": "Cache name",
-            "hits": "Hits",
-            "misses": "Misses",
-            "evictions": "Evictions"
+            "title": "キャッシュ統計",
+            "cachename": "キャッシュ名",
+            "hits": "ヒット数",
+            "misses": "ミス数",
+            "gets": "読み込み数",
+            "puts": "書き込み数",
+            "removals": "削除数",
+            "evictions": "追い出し数",
+            "hitPercent": "ヒット率%",
+            "missPercent": "ミス率%",
+            "averageGetTime": "平均取得時間（µs）",
+            "averagePutTime": "平均書き込み時間（µs）",
+            "averageRemoveTime": "平均削除時間（µs）"
         },
         "datasource": {
-            "usage": "使用状況",
-            "title": "データベース統計 (回/ミリ秒)",
-            "name": "Pool usage",
-            "count": "Count",
-            "mean": "Mean",
-            "min": "Min",
-            "max": "Max",
+            "usage": "コネクションプールの使用状況",
+            "title": "データベース統計（時間単位：ミリ秒）",
+            "name": "プール利用状況",
+            "count": "合計",
+            "mean": "中央値",
+            "min": "最小",
+            "max": "最大",
             "p50": "p50",
             "p75": "p75",
             "p95": "p95",
