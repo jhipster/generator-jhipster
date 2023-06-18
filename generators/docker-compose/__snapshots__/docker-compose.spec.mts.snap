@@ -624,11 +624,11 @@ jhipster:
   msmariadb-mariadb:
     image: mariadb-placeholder
     volumes:
-      - ./config/mariadb:/etc/mysql/conf.d
+      - ./config/mariadb:/etc/mariadb/conf.d
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=msmariadb
-    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_DATABASE=msmariadb
+    command: mariadbd --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
         - CMD
@@ -966,11 +966,11 @@ jhipster:
   msmariadb-mariadb:
     image: mariadb-placeholder
     volumes:
-      - ./config/mariadb:/etc/mysql/conf.d
+      - ./config/mariadb:/etc/mariadb/conf.d
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=msmariadb
-    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_DATABASE=msmariadb
+    command: mariadbd --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
         - CMD
@@ -1593,11 +1593,11 @@ jhipster:
   msmariadb-mariadb:
     image: mariadb-placeholder
     volumes:
-      - ./config/mariadb:/etc/mysql/conf.d
+      - ./config/mariadb:/etc/mariadb/conf.d
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=msmariadb
-    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_DATABASE=msmariadb
+    command: mariadbd --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
         - CMD
