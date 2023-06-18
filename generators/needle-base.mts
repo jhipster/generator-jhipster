@@ -75,7 +75,7 @@ export default class {
    * @param rewriteFileModel
    * @param errorMessage
    */
-  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): void {
+  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage?: string): void {
     const ignoreNonExisting = errorMessage ?? true;
     const { path: rewritePath, file } = rewriteFileModel;
     let fullPath;

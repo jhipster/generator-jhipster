@@ -324,7 +324,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    */
-  getTaskFirstArgForPriority(priorityName) {
+  getTaskFirstArgForPriority(priorityName): any {
     if (
       ![
         LOADING,

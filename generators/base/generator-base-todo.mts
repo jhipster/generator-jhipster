@@ -23,10 +23,9 @@ import chalk from 'chalk';
 import fs from 'fs';
 import { exec } from 'child_process';
 import os from 'os';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import YeomanGenerator, { type Storage } from 'yeoman-generator';
-import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase, Logger } from './support/index.mjs';
+import { type Storage } from 'yeoman-generator';
+import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
+import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
@@ -64,10 +63,6 @@ import {
 import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -92,13 +87,7 @@ const isWin32 = os.platform() === 'win32';
 /**
  * Class the contains the methods that should be refactored and converted to typescript.
  */
-export default abstract class JHipsterBaseGenerator extends YeomanGenerator<JHipsterGeneratorOptions, JHipsterGeneratorFeatures> {
-  abstract jhipsterConfig: any;
-  abstract needleApi: any;
-  abstract sharedData: any;
-  abstract configOptions: any;
-  declare log: Logger;
-
+export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGenerator {
   /**
    * @private
    * Add a new element in the "global.json" translations.
@@ -499,7 +488,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
           const basename = path.basename(sourceFileFrom);
           const seed = `${context.entityClass}-${basename}${context.fakerSeed ?? ''}`;
-          Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
+          Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
             entity.resetFakerSeed(seed);
           });
           // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.

@@ -24,12 +24,12 @@ import semver from 'semver';
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace } from './support/index.mjs';
-import JHipsterBaseGenerator from './generator-base.mjs';
+import JHipsterBaseGenerator from './generator-base-todo.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
-import CoreGenerator from './generator-base.mjs';
+import CoreGenerator from '../base-core/generator-base.mjs';
 
 /**
  * Base class that contains blueprints support.
@@ -50,6 +50,9 @@ export default class JHipsterBaseBlueprintGenerator<
     if (this.options.help) {
       return;
     }
+
+    this.loadRuntimeOptions();
+    this.loadStoredAppOptions();
 
     this.sbsBlueprint = this.features.sbsBlueprint ?? false;
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
