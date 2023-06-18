@@ -26,6 +26,9 @@ const javaxCacheApi = {
 const hibernateJCache = {
   groupId: 'org.hibernate.orm',
   artifactId: 'hibernate-jcache',
+  // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+  // eslint-disable-next-line no-template-curly-in-string
+  version: '${hibernate.version}',
 };
 
 type CacheProviderDependencies = {

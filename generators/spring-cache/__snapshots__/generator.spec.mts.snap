@@ -70,6 +70,7 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
         {
           "artifactId": "hibernate-jcache",
           "groupId": "org.hibernate.orm",
+          "version": "\${hibernate.version}",
         },
       ],
     },
@@ -139,6 +140,7 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
         {
           "artifactId": "hibernate-jcache",
           "groupId": "org.hibernate.orm",
+          "version": "\${hibernate.version}",
         },
       ],
     },
@@ -470,6 +472,7 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
         {
           "artifactId": "hibernate-jcache",
           "groupId": "org.hibernate.orm",
+          "version": "\${hibernate.version}",
         },
       ],
     },

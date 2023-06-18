@@ -169,9 +169,7 @@ objects:
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://${APPLICATION_NAME}-mongodb<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %>
-            - name: SPRING_DATA_MONGODB_DATABASE
-              value: ${APPLICATION_NAME}
+              value: mongodb://${APPLICATION_NAME}-mongodb/${APPLICATION_NAME}<% if (app.reactive) { %>?waitQueueMultiple=1000<% } %>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

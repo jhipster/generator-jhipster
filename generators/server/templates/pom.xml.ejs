@@ -71,7 +71,7 @@
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version><%- javaDependencies['git-commit-id-plugin'] %></git-commit-id-plugin.version>
+        <git-commit-id-maven-plugin.version><%- javaDependencies['git-commit-id-maven-plugin'] %></git-commit-id-maven-plugin.version>
         <jacoco-maven-plugin.version><%- javaDependencies['jacoco-maven-plugin'] %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
         <jib-maven-plugin.image><%- dockerContainers.javaJre %></jib-maven-plugin.image>
@@ -555,7 +555,7 @@
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
-                    <version>${git-commit-id-plugin.version}</version>
+                    <version>${git-commit-id-maven-plugin.version}</version>
                     <executions>
                         <execution>
                             <goals>

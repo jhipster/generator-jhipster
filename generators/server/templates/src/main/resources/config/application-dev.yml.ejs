@@ -154,8 +154,7 @@ spring:
 <%_ if (databaseTypeMongodb) { _%>
   data:
     mongodb:
-      uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
-      database: <%= baseName %>
+      uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:

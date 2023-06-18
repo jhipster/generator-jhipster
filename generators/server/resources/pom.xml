@@ -20,7 +20,6 @@
         <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <r2dbc-mysql.version>1.0.2</r2dbc-mysql.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
@@ -30,7 +29,7 @@
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.3.7</gatling-maven-plugin.version>
-        <git-commit-id-plugin.version>6.0.0</git-commit-id-plugin.version>
+        <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
@@ -81,11 +80,6 @@
               <groupId>com.typesafe</groupId>
               <artifactId>config</artifactId>
               <version>${typesafe.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>io.asyncer</groupId>
-              <artifactId>r2dbc-mysql</artifactId>
-              <version>${r2dbc-mysql.version}</version>
             </dependency>
             <dependency>
               <groupId>io.gatling.highcharts</groupId>
@@ -165,7 +159,7 @@
                 <plugin>
                   <groupId>io.github.git-commit-id</groupId>
                   <artifactId>git-commit-id-maven-plugin</artifactId>
-                  <version>${git-commit-id-plugin.version}</version>
+                  <version>${git-commit-id-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>io.spring.nohttp</groupId>

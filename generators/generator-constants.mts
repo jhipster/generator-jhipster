@@ -32,26 +32,23 @@ export const javaDependencies: Record<string, string> = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.0.7',
+  'spring-boot': '3.1.0',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
    */
+  // TODO update to spring-boot provided version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
   hibernate: '6.1.7.Final',
   /*
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.
    */
   cassandra: '4.15.0',
-  /**
-   * TODO drop once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-   */
-  'r2dbc-mariadb': '1.1.2',
 };
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELATICSEARCH_TAG = '8.5.3';
+export const ELATICSEARCH_TAG = '8.7.1';
 export const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
