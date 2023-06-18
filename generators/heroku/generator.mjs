@@ -425,12 +425,12 @@ export default class HerokuGenerator extends BaseGenerator {
               });
             } else {
               this.abort = true;
+              this.herokuAppName = null;
               if (stderr.includes('Invalid credentials')) {
                 this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
               } else {
                 this.log.error(err);
               }
-              done();
             }
           } else {
             done();
@@ -710,7 +710,48 @@ export default class HerokuGenerator extends BaseGenerator {
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
             await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
-            await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+            const { stdout: data } = await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+            if (data) {
+              this.logger.info(data);
+              // remote:  !     The following add-ons were automatically provisioned: . These add-ons may incur additional cost,
+              // which is prorated to the second. Run `heroku addons` for more info.
+              if (data.includes('Run `heroku addons` for more info.')) {
+                await execCmd('heroku addons');
+              }
+
+              this.log('');
+              const prompts = [
+                {
+                  type: 'list',
+                  name: 'userDeployDecision',
+                  message: 'Continue to deploy?',
+                  choices: [
+                    {
+                      value: 'Yes',
+                      name: 'Yes, I confirm',
+                    },
+                    {
+                      value: 'No',
+                      name: 'No, abort (Recommended)',
+                    },
+                  ],
+                  default: 0,
+                },
+              ];
+
+              this.log('');
+              const props = await this.prompt(prompts);
+              if (props.userDeployDecision === 'Yes') {
+                this.log.info(chalk.bold('Continuing deployment...'));
+              } else {
+                this.log(this.logger);
+                this.log.info(chalk.bold('You aborted deployment!'));
+                this.abort = true;
+                this.herokuAppName = null;
+                return;
+              }
+              this.log('');
+            }
 
             this.log.log(chalk.bold('\nDeploying application'));
 
