@@ -470,6 +470,10 @@ export default class CoreGenerator extends YeomanGenerator {
     try {
       originalContent = this.readDestination(filePath);
     } catch (_error) {
+      // null return should be treated like an error.
+    }
+
+    if (!originalContent) {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
       if (ignoreNonExisting) {

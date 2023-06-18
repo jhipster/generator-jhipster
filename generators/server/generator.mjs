@@ -396,15 +396,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.srcTestDir = TEST_DIR;
       },
       registerSpringFactory({ source, application }) {
-        // We need a flag so we can recreate the file.
-        let testSpringFactoryCreated = false;
         source.addTestSpringFactory = ({ key, value }) => {
           const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
-          if (!testSpringFactoryCreated) {
-            testSpringFactoryCreated = true;
-            this.writeDestination(springFactoriesFile, '');
-          }
-          this.editFile(springFactoriesFile, addSpringFactory({ key, value }));
+          this.editFile(springFactoriesFile, { create: true }, addSpringFactory({ key, value }));
         };
       },
       addLogNeedles({ source, application }) {
