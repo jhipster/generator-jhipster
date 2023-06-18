@@ -20,6 +20,7 @@
         <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <micrometer-context-propagation.version>1.0.3</micrometer-context-propagation.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
@@ -95,6 +96,11 @@
               <groupId>jakarta.validation</groupId>
               <artifactId>jakarta.validation-api</artifactId>
               <version>${validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>context-propagation</artifactId>
+                <version>${micrometer-context-propagation.version}</version>
             </dependency>
             <dependency>
               <groupId>org.awaitility</groupId>
