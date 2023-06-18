@@ -22,11 +22,11 @@
         "refresh.button": "リロード",
         "stacktrace": "スタックトレース",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "詳細",
+            "properties": "プロパティ",
+            "name": "名前",
+            "value": "値",
+            "error": "エラー"
         },
         "indicator": {
 <%_ if (messageBrokerAny) { _%>
@@ -48,7 +48,7 @@
             "mail": "メール",
             "livenessState": "Liveness state",
             "readinessState": "Readiness state",
-            "ping": "Application"<% if (searchEngineElasticsearch) { %>,
+            "ping": "アプリケーション"<% if (searchEngineElasticsearch) { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
             "db": "データベース"<% } %><% if (databaseTypeSql && reactive) { %>,
             "r2dbc": "データベース"<% } %><% if (databaseTypeMongodb) { %>,

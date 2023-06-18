@@ -61,8 +61,10 @@ export const getImperativeMavenDefinition = ({ javaDependencies }: { javaDepende
   properties: [{ property: 'hibernate.version', value: javaDependencies.hibernate }],
   dependencies: [
     { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
-    { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate5-jakarta' },
-    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
+    { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
+    // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+    // eslint-disable-next-line no-template-curly-in-string
+    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core', version: '${hibernate.version}' },
     { groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen', scope: 'provided' },
     { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
     { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
@@ -124,9 +126,7 @@ export const getDatabaseTypeMavenDefinition: (
         ],
       },
       r2dbc: {
-        // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-        // dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb', version: javaDependencies['r2dbc-mariadb'] }],
-        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql', version: javaDependencies['r2dbc-mysql'] }],
+        dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' }],
       },
     },
     mssql: {
@@ -148,7 +148,7 @@ export const getDatabaseTypeMavenDefinition: (
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql', version: javaDependencies['r2dbc-mysql'] }],
+        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' }],
       },
     },
     oracle: {

@@ -18,12 +18,22 @@
 -%>
 package <%= packageName %>.security.oauth2;
 
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -44,36 +54,30 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 /**
  * Test class for the {@link AuthorizationHeaderUtil} utility class.
  */
+@ExtendWith(MockitoExtension.class)
 class AuthorizationHeaderUtilTest {
 
     public static final String VALID_REGISTRATION_ID = "OIDC";
     public static final String SUB_VALUE = "123456";
-    @Mock private OAuth2AuthorizedClientService clientService;
-    @Mock private RestTemplateBuilder restTemplateBuilder;
-    @Mock private SecurityContext securityContext;
-    @InjectMocks private AuthorizationHeaderUtil authorizationHeaderUtil;
+
+    @Mock
+    private OAuth2AuthorizedClientService clientService;
+
+    @Mock
+    private RestTemplateBuilder restTemplateBuilder;
+
+    @Mock
+    private SecurityContext securityContext;
+
+    @InjectMocks
+    private AuthorizationHeaderUtil authorizationHeaderUtil;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
         SecurityContextHolder.setContext(securityContext);
-
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).additionalMessageConverters(any(HttpMessageConverter.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
     }
 
     @Test
@@ -88,8 +92,9 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_JwtAuthentication() {
-        JwtAuthenticationToken jwtToken = new JwtAuthenticationToken(new Jwt("tokenVal", Instant.now(),
-            Instant.now().plus(Duration.ofMinutes(3)), Map.of("alg", "HS256"), Map.of("sub",SUB_VALUE)));
+        JwtAuthenticationToken jwtToken = new JwtAuthenticationToken(
+            new Jwt("tokenVal", Instant.now(), Instant.now().plus(Duration.ofMinutes(3)), Map.of("alg", "HS256"), Map.of("sub", SUB_VALUE))
+        );
         doReturn(jwtToken).when(securityContext).getAuthentication();
 
         Optional<String> header = authorizationHeaderUtil.getAuthorizationHeader();
@@ -100,15 +105,15 @@ class AuthorizationHeaderUtilTest {
     @Test
     void getAuthorizationHeader_OAuth2Authentication_InvalidClient() {
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken("INVALID");
-        OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient();
 
         doReturn(oauth2Token).when(securityContext).getAuthentication();
-        doReturn(authorizedClient).when(clientService).loadAuthorizedClient(eq(VALID_REGISTRATION_ID), eq(SUB_VALUE));
 
-        Assertions.assertThatThrownBy(() -> {
-            Optional<String> header = authorizationHeaderUtil.getAuthorizationHeader();
-        }).isInstanceOf(OAuth2AuthorizationException.class)
-            .hasMessageContaining("[access_denied] The token is expired");;
+        Assertions
+            .assertThatThrownBy(() -> {
+                authorizationHeaderUtil.getAuthorizationHeader();
+            })
+            .isInstanceOf(OAuth2AuthorizationException.class)
+            .hasMessageContaining("[access_denied] The token is expired");
     }
 
     @Test
@@ -125,6 +130,12 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshToken() {
+        doReturn(restTemplateBuilder)
+            .when(restTemplateBuilder)
+            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
+        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
+        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
+
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
@@ -142,6 +153,12 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshToken_NoRefreshToken() {
+        doReturn(restTemplateBuilder)
+            .when(restTemplateBuilder)
+            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
+        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
+        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
+
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
@@ -159,6 +176,12 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshTokenFails() {
+        doReturn(restTemplateBuilder)
+            .when(restTemplateBuilder)
+            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
+        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
+        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
+
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
@@ -166,12 +189,16 @@ class AuthorizationHeaderUtilTest {
         doReturn(authorizedClient).when(clientService).loadAuthorizedClient(eq(VALID_REGISTRATION_ID), eq(SUB_VALUE));
 
         RestTemplate restTemplate = mock(RestTemplate.class);
-        doThrow(new OAuth2AuthorizationException(new OAuth2Error("E"), "error")).when(restTemplate).exchange(any(RequestEntity.class), eq(OAuthIdpTokenResponseDTO.class));
+        doThrow(new OAuth2AuthorizationException(new OAuth2Error("E"), "error"))
+            .when(restTemplate)
+            .exchange(any(RequestEntity.class), eq(OAuthIdpTokenResponseDTO.class));
         doReturn(restTemplate).when(restTemplateBuilder).build();
 
-        Assertions.assertThatThrownBy(() -> {
-            Optional<String> header = authorizationHeaderUtil.getAuthorizationHeader();
-        }).isInstanceOf(OAuth2AuthenticationException.class)
+        Assertions
+            .assertThatThrownBy(() -> {
+                authorizationHeaderUtil.getAuthorizationHeader();
+            })
+            .isInstanceOf(OAuth2AuthenticationException.class)
             .hasMessageContaining("error");
     }
 
@@ -195,7 +222,8 @@ class AuthorizationHeaderUtilTest {
         OAuth2AccessToken token = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, "tokenVal", issuedAt, expiresAt);
 
         return new OAuth2AuthorizedClient(
-            ClientRegistration.withRegistrationId(VALID_REGISTRATION_ID)
+            ClientRegistration
+                .withRegistrationId(VALID_REGISTRATION_ID)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .clientId("web-app")
                 .clientSecret("secret")
@@ -205,14 +233,19 @@ class AuthorizationHeaderUtilTest {
                 .build(),
             "sub",
             token,
-            new OAuth2RefreshToken("refreshVal", Instant.now()));
+            new OAuth2RefreshToken("refreshVal", Instant.now())
+        );
     }
 
     private OAuth2AuthenticationToken getTestOAuth2AuthenticationToken(String registrationId) {
         return new OAuth2AuthenticationToken(
-            new DefaultOidcUser(List.of(new SimpleGrantedAuthority("USER")),
-                OidcIdToken.withTokenValue("tokenVal").claim("sub", SUB_VALUE).build()),
-            List.of(new SimpleGrantedAuthority("USER")), registrationId);
+            new DefaultOidcUser(
+                List.of(new SimpleGrantedAuthority("USER")),
+                OidcIdToken.withTokenValue("tokenVal").claim("sub", SUB_VALUE).build()
+            ),
+            List.of(new SimpleGrantedAuthority("USER")),
+            registrationId
+        );
     }
 
     private Optional<OAuthIdpTokenResponseDTO> getTestOAuthIdpTokenResponseDTO(boolean hasRefreshToken) {

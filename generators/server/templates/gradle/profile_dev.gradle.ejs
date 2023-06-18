@@ -26,6 +26,20 @@ sourceSets {
 }
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
+
+configurations {
+  all {
+    resolutionStrategy {
+      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+      force "org.hibernate.orm:hibernate-core:${hibernateVersion}"
+<%_ if (enableHibernateCache && (cacheProviderEhcache || cacheProviderCaffeine || cacheProviderRedis)) { _%>
+      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+      force "org.hibernate.orm:hibernate-jcache:${hibernateVersion}"
+<%_ } _%>
+    }
+  }
+}
+
 dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   <%_ if (devDatabaseTypeH2Any) { _%>
@@ -37,7 +51,7 @@ dependencies {
   <%_ } _%>
   <%_ if (devDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    implementation ("io.asyncer:r2dbc-mysql:<%- javaDependencies['r2dbc-mysql'] %>")
+    implementation ("io.asyncer:r2dbc-mysql")
     <%_ } _%>
     implementation "com.mysql:mysql-connector-j"
   <%_ } _%>
@@ -49,9 +63,7 @@ dependencies {
   <%_ } _%>
   <%_ if (devDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
-    // TODO drop version once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625
-    // implementation "org.mariadb:r2dbc-mariadb:<%- javaDependencies['r2dbc-mariadb'] %>"
-    implementation "io.asyncer:r2dbc-mysql:<%- javaDependencies['r2dbc-mysql'] %>"
+    implementation "org.mariadb:r2dbc-mariadb"
     <%_ } _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>

@@ -20,7 +20,6 @@ import { forceYoFiles } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
 import { createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 
-import { passthrough } from '@yeoman/transform';
 import BaseGenerator from '../base/index.mjs';
 import {
   createMultiStepTransform,
@@ -51,7 +50,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   skipPrettier?: boolean;
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { uniqueGlobally: true, customCommitTask: true, ...features });
+    super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
   }
 
   beforeQueue() {
@@ -103,13 +102,6 @@ export default class BootstrapGenerator extends BaseGenerator {
         const filter = file => isFilePending(file) && isPrettierConfigFile(file);
         await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
       },
-      async commitFiles() {
-        this.env.sharedFs.once('change', () => {
-          this.queueMultistepTransform();
-          this.queueCommit();
-        });
-        await this.commitSharedFs();
-      },
     };
   }
 
@@ -134,28 +126,16 @@ export default class BootstrapGenerator extends BaseGenerator {
       queueName: MULTISTEP_TRANSFORM_QUEUE,
       once: true,
     });
-  }
 
-  /**
-   * Queue environment's commit task.
-   */
-  queueCommit() {
-    this.log.debug('Queueing conflicts task');
-    (this as any).queueTask(
-      {
-        method: async () => {
-          this.log.debug('Adding queueCommit event listener');
-          this.env.sharedFs.once('change', () => {
-            this.queueCommit();
-          });
-          await this.commitSharedFs();
-        },
-      },
-      {
-        priorityName: 'conflicts',
-        once: 'write memory fs to disk',
+    const onChangeListener = file => {
+      if (createMultiStepTransform().templateFileFs.isTemplate(file)) {
+        this.queueMultistepTransform();
+      } else {
+        this.env.sharedFs.once('change', onChangeListener);
       }
-    );
+    };
+
+    this.env.sharedFs.once('change', onChangeListener);
   }
 
   /**
