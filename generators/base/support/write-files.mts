@@ -29,8 +29,8 @@ const isWin32 = platform() === 'win32';
  */
 // eslint-disable-next-line import/prefer-default-export
 export function joinCallbacks<Generator>(...callbacks: EditFileCallback<Generator>[]): EditFileCallback<Generator> {
-  return function (this: Generator, content: string, filePath: string) {
-    if (isWin32 && content.match(/\r\n/)) {
+  return function (this: Generator, content: string | null, filePath: string) {
+    if (isWin32 && content?.match(/\r\n/)) {
       const removeSlashRSlashN: EditFileCallback<Generator> = ct => normalizeLineEndings(ct, '\n');
       const addSlashRSlashN: EditFileCallback<Generator> = ct => normalizeLineEndings(ct, '\r\n');
       callbacks = [removeSlashRSlashN, ...callbacks, addSlashRSlashN];
