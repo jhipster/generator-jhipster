@@ -42,7 +42,8 @@
     "./generators": "./dist/generators/generator-list.mjs",
     "./generators/*": "./dist/generators/*/index.mjs",
     "./jdl/": "./dist/jdl/",
-    "./generators/base/support": "./dist/generators/base/support/index.mjs"
+    "./generators/base/support": "./dist/generators/base/support/index.mjs",
+    "./priorities": "./lib/constants/priorities.mjs"
   },
   "main": "dist/lib/index.mjs",
   "bin": {
