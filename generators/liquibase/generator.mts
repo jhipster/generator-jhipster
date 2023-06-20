@@ -19,7 +19,7 @@
 import fs from 'fs';
 
 import _ from 'lodash';
-import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
 import {
@@ -45,12 +45,6 @@ import {
   addLiquibaseConstraintsChangelogCallback,
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.mjs';
-
-export type LiquibaseEntity = Entity & {
-  anyRelationshipIsOwnerSide: boolean;
-  liquibaseFakeData: Record<string, any>[];
-  fakeDataCount: number;
-};
 
 const BASE_CHANGELOG = {
   addedFields: [],

@@ -1,5 +1,11 @@
 {
-  "include": ["./generators/base", "./generators/base-application"],
+  "include": [
+    "./generators/base",
+    "./generators/core",
+    "./generators/base-application",
+    "./generators/*/support",
+    "./generators/*/type-export.d.ts"
+  ],
   "exclude": ["**/*.spec.*", "**/__*/**"],
   "extends": "./tsconfig.json",
   "compilerOptions": {
