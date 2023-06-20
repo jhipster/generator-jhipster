@@ -28,6 +28,7 @@ export const files = {
         '.mocharc.cjs',
         'README.md',
         'test/utils.mjs',
+        'tsconfig.json',
         '.prettierignore.jhi.blueprint',
       ],
     },
