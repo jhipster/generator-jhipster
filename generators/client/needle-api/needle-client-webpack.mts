@@ -24,10 +24,10 @@ const { ANGULAR } = clientFrameworkTypes;
 
 export default class extends needleClient {
   _getWebpackFile(clientFramework: string = this.clientFramework) {
-    return this.clientFramework === ANGULAR ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js` : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
+    return clientFramework === ANGULAR ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js` : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
   }
 
-  copyExternalAssets(source: string, target: string, clientFramework: string) {
+  copyExternalAssets(source: string, target: string, clientFramework?: string) {
     const errorMessage = 'Resource path not added to JHipster app.';
     let assetBlock = '';
     if (source && target) {

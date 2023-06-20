@@ -755,6 +755,9 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "test/utils.mjs": {
     "stateCleared": "modified",
   },
+  "tsconfig.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -782,6 +785,9 @@ exports[`generator - generate-blueprint with default config should write files a
     "stateCleared": "modified",
   },
   "test/utils.mjs": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
 }

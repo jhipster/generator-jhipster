@@ -40,9 +40,15 @@
     "./cli": "./dist/cli/index.mjs",
     "./package.json": "./package.json",
     "./generators": "./dist/generators/generator-list.mjs",
-    "./generators/*": "./dist/generators/*/index.mjs",
+    "./generators/*": {
+      "types": "./dist/types/generators/*/types-export.d.ts",
+      "default": "./dist/generators/*/index.mjs"
+    },
     "./jdl/": "./dist/jdl/",
-    "./generators/base/support": "./dist/generators/base/support/index.mjs"
+    "./generators/*/support": {
+      "types": "./dist/types/generators/*/support/index.d.mts",
+      "default": "./dist/generators/*/support/index.mjs"
+    }
   },
   "main": "dist/lib/index.mjs",
   "bin": {

@@ -28,14 +28,13 @@ import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import { statSync, rmSync, existsSync } from 'fs';
 import { lt as semverLessThan } from 'semver';
-import type { ComposeOptions, Storage } from 'yeoman-generator';
+import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import semver from 'semver';
 import latestVersion from 'latest-version';
 import assert from 'assert';
-import SharedData from './shared-data.mjs';
-import YeomanGenerator from './generator-base-todo.mjs';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import { createJHipsterLogger, joinCallbacks, Logger } from './support/index.mjs';
+import SharedData from '../base/shared-data.mjs';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.mjs';
+import { joinCallbacks, Logger } from '../base/support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -47,12 +46,12 @@ import type {
   ValidationResult,
   WriteFileOptions,
   JHipsterArguments,
-} from './api.mjs';
+} from '../base/api.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import { type BaseApplication } from '../base-application/types.mjs';
+import { CommonClientServerApplication, type BaseApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
-import command from './command.mjs';
+import command from '../base/command.mjs';
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 
 const { merge } = _;
@@ -67,7 +66,7 @@ const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`
 /**
  * This is the base class for a generator for every generator.
  */
-export default class CoreGenerator extends YeomanGenerator {
+export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOptions, JHipsterGeneratorFeatures> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -100,7 +99,7 @@ export default class CoreGenerator extends YeomanGenerator {
   debugEnabled?: boolean;
   jhipster7Migration?: boolean;
 
-  readonly sharedData!: SharedData<BaseApplication>;
+  readonly sharedData!: SharedData<CommonClientServerApplication>;
   readonly logger: Logger;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -116,6 +115,7 @@ export default class CoreGenerator extends YeomanGenerator {
 
   // TODO switch to FullEnvironment type
   declare env: any;
+  declare log: Logger;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
@@ -162,7 +162,7 @@ export default class CoreGenerator extends YeomanGenerator {
       }
     }
 
-    this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help });
+    this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help }) as any;
 
     this.logger = this.log as any;
 
@@ -173,9 +173,6 @@ export default class CoreGenerator extends YeomanGenerator {
     this.parseJHipsterOptions(command.options);
 
     this.registerPriorities(CUSTOM_PRIORITIES);
-
-    this.loadRuntimeOptions();
-    this.loadStoredAppOptions();
 
     if (this.options.namespace !== 'jhipster:bootstrap') {
       // jhipster:bootstrap is always required. Run it once the enviroment starts.
