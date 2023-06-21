@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const NODE_VERSION = '14.18.1';
+export const NODE_VERSION = '18.16.1';
 
 export const SKIP_COMMIT_HOOK = 'skipCommitHook';
 export const SKIP_COMMIT_HOOK_DESCRIPTION = 'Skip adding husky commit hooks';
