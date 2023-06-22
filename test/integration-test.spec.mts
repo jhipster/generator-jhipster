@@ -63,6 +63,7 @@ describe('integration-test', () => {
   describe('::application samples', () => {
     for (const [name, yoFile] of [...itSamplesEntries, ...dailyBuildEntries]) {
       let yoJson = fse.readJsonSync(yoFile);
+      const writeConfig = () => fse.writeJsonSync(yoFile, yoJson);
       const config = yoJson['generator-jhipster'];
       describe(`${name} test`, () => {
         before(() => {
@@ -102,6 +103,51 @@ describe('integration-test', () => {
         }
         it('should be ordered', () => {
           assert(JSON.stringify(yoJson) === JSON.stringify(sortKeys(yoJson, { deep: true })));
+        });
+        it('should have matching skipClient/clientFrameworkNo', () => {
+          const clientFrameworkNo = config.clientFramework === 'no';
+          const clientFrameworkAny = config.clientFramework && config.clientFramework !== 'no';
+          if (clientFrameworkAny && config.skipClient) {
+            if (fixSamples) {
+              if (config.microfrontend) {
+                delete config.skipClient;
+              } else {
+                delete config.clientFramework;
+              }
+              writeConfig();
+            } else {
+              throw new Error('Conflict');
+            }
+          }
+          if (clientFrameworkNo) {
+            if (config.skipClient === false) {
+              if (fixSamples) {
+                delete config.skipClient;
+                writeConfig();
+              } else {
+                throw new Error('Conflict');
+              }
+            }
+            if (config.microfrontend) {
+              if (fixSamples) {
+                delete config.microfrontend;
+                writeConfig();
+              } else {
+                throw new Error('Conflict');
+              }
+            }
+          }
+        });
+        it('cypress should not added to skipClient and clientFrameworkNo', () => {
+          if (config.skipClient || config.clientFramework === 'no') {
+            const includesCypress = config.testFrameworks?.includes('cypress');
+            if (fixSamples && includesCypress) {
+              config.testFrameworks = config.testFrameworks.filter(test => test !== 'cypress');
+              writeConfig();
+            } else {
+              assert(!includesCypress);
+            }
+          }
         });
       });
     }
