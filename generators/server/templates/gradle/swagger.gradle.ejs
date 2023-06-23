@@ -36,6 +36,15 @@ openApiGenerate {
     importMappings = [Problem:"org.springframework.http.ProblemDetail"]
 }
 
+configurations {
+    all {
+        resolutionStrategy {
+            // TODO drop forced version. Refer to https://github.com/OpenAPITools/openapi-generator/issues/15876
+            force "io.swagger.parser.v3:swagger-parser:2.1.15"
+        }
+    }
+}
+
 sourceSets {
     main {
         java {
