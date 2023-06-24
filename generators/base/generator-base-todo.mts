@@ -894,9 +894,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.testFrameworks = config.testFrameworks || [];
 
-    dest.remotes =
-      Object.entries(config.applications || {}).map(([baseName, remoteConfig]) => ({ baseName, ...(remoteConfig as any) })) || [];
-
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
@@ -946,9 +943,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         microfrontend.capitalizedBaseName = _.upperFirst(baseName);
         microfrontend.endpointPrefix = `services/${microfrontend.lowercaseBaseName}`;
       });
-    } else if ((!dest.microfrontends || dest.microfrontends.length === 0) && dest.remotes) {
-      dest.remotes.forEach(app => (this as any).loadDerivedAppConfig(app));
-      dest.microfrontends = dest.remotes.filter(r => r.clientFramework && r.clientFramework !== CLIENT_FRAMEWORK_NO);
+    } else if (dest.microfrontend) {
+      dest.microfrontends = [];
     }
     dest.microfrontend =
       dest.microfrontend ||
@@ -1008,7 +1004,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (dest.applicationTypeMicroservice) {
         dest.microfrontend = dest.clientFrameworkAny;
       } else if (dest.applicationTypeGateway) {
-        dest.microfrontend = dest.microfrontends.length > 0;
+        dest.microfrontend = dest.microfrontends && dest.microfrontends.length > 0;
       }
     }
     dest.clientThemeNone = dest.clientTheme === 'none';
