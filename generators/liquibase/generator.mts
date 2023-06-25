@@ -77,6 +77,10 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.liquibaseDefaultSchemaName =
+          application.databaseTypeSql && application.devDatabaseTypeMysql && application.baseName ? application.baseName : '';
+      },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
