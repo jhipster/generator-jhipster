@@ -21,6 +21,7 @@
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.0.3</micrometer-context-propagation.version>
+        <picocli.version>4.6.1</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
@@ -126,6 +127,11 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct</artifactId>
               <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>info.picocli</groupId>
+              <artifactId>picocli</artifactId>
+              <version>${picocli.version}</version>
             </dependency>
             <dependency>
               <groupId>org.springframework.pulsar</groupId>
