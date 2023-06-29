@@ -42,7 +42,7 @@ type DatabaseTypeSqlApplication = (
 ) & {
   devDatabaseType: string;
   prodDatabaseType: string;
-  devDatabaseTypeMysql: string;
+  devDatabaseTypeMysql: boolean;
 } & LiquibaseApplication;
 
 type DatabaseTypeApplication = DeterministicOptionWithDerivedProperties<
