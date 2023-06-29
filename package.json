@@ -104,7 +104,7 @@
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.5.0",
-    "dot-properties": "^1.0.1",
+    "dot-properties": "1.0.1",
     "ejs": "3.1.9",
     "escape-string-regexp": "5.0.0",
     "execa": "7.1.1",
