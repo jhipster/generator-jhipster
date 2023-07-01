@@ -45,7 +45,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
   <%_ } _%>
 
-  <%_ if (!reactive) { _%>
+  <%_ if (!reactive && !authenticationTypeJwt) { _%>
 import jakarta.servlet.http.HttpServletRequest;
   <%_ } _%>
 import jakarta.validation.Valid;
