@@ -272,9 +272,10 @@ class UserServiceIT {
 
         maybeUser = userService.requestPasswordReset(user.getEmail())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isPresent();
-        assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
-        assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
-        assertThat(maybeUser.orElse(null).getResetKey()).isNotNull();
+        User theUser = maybeUser.orElseThrow(() -> new NullPointerException());
+        assertThat(theUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(theUser.getResetDate()).isNotNull();
+        assertThat(theUser.getResetKey()).isNotNull();
     }
 
     @Test
@@ -338,9 +339,10 @@ class UserServiceIT {
 
         Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isPresent();
-        assertThat(maybeUser.orElse(null).getResetDate()).isNull();
-        assertThat(maybeUser.orElse(null).getResetKey()).isNull();
-        assertThat(maybeUser.orElse(null).getPassword()).isNotEqualTo(oldPassword);
+        User theUser = maybeUser.orElseThrow(() -> new NullPointerException());
+        assertThat(theUser.getResetDate()).isNull();
+        assertThat(theUser.getResetKey()).isNull();
+        assertThat(theUser.getPassword()).isNotEqualTo(oldPassword);
 
         userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }

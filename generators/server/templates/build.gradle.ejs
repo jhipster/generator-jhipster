@@ -21,6 +21,7 @@ plugins {
     id "maven-publish"
     id "idea"
     id "eclipse"
+    id "net.ltgt.errorprone" version "<%- javaDependencies['error-prone-gradle-plugin'] %>"
     id "jacoco"
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
@@ -257,6 +258,8 @@ repositories {
 
 dependencies {
     // import JHipster dependencies BOM
+    errorprone("com.google.errorprone:error_prone_core:${errorProneCoreVersion}")
+
     if (!project.hasProperty("gae")) {
         implementation platform("tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}")
     }

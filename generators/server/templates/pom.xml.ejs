@@ -70,6 +70,7 @@
         <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
+        <error-prone-maven-plugin.version><%- javaDependencies['error-prone-maven-plugin'] %></error-prone-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-maven-plugin.version><%- javaDependencies['git-commit-id-maven-plugin'] %></git-commit-id-maven-plugin.version>
@@ -477,7 +478,20 @@
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
+                        <compilerArgs>
+                            <arg>-XDcompilePolicy=simple</arg>
+                            <arg>-Xplugin:ErrorProne</arg>
+                        </compilerArgs>
                         <annotationProcessorPaths>
+                            <path>
+                                <groupId>com.google.errorprone</groupId>
+                                <artifactId>error_prone_core</artifactId>
+                                <version>${error-prone-maven-plugin.version}</version>
+                            </path>
+                            <!-- Other annotation processors go here.
+                            If 'annotationProcessorPaths' is set, processors will no longer be
+                            discovered on the regular -classpath; see also 'Using Error Prone
+                            together with other annotation processors' below. -->
                             <path>
                                 <groupId>org.springframework.boot</groupId>
                                 <artifactId>spring-boot-configuration-processor</artifactId>

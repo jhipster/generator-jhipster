@@ -20,6 +20,7 @@ rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
 # Dependency versions
+errorProneCoreVersion=<%- javaDependencies['error-prone-gradle-core'] %>
 jhipsterDependenciesVersion=<%= jhipsterDependenciesVersion %>
 # The spring-boot version should match the one managed by
 # https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= jhipsterDependenciesVersion %>
@@ -64,6 +65,7 @@ cassandraDriverVersion=<%- javaDependencies.cassandra %>
 <%_ } _%>
 
 # gradle plugin version
+errorPronePluginVersion=<%- javaDependencies['error-prone-gradle-plugin'] %>
 jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
 gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 <%_ if (!skipClient) { _%>

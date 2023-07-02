@@ -30,6 +30,7 @@
         <!-- Plugin versions -->
         <checkstyle.version>10.12.1</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
+        <error-prone-maven-plugin.version>2.20.0</error-prone-maven-plugin.version>
         <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.3.7</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>

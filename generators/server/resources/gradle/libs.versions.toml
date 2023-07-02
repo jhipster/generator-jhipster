@@ -1,4 +1,8 @@
 [plugins]
+error-prone-gradle-core = { id = 'com.google.errorprone:error_prone_core', version = '2.20.0' }
+
+error-prone-gradle-plugin = { id = 'net.ltgt.errorprone', version = '3.1.0' }
+
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.1' }
 
 node-gradle = { id = 'com.github.node-gradle.node', version = '5.0.0' }
