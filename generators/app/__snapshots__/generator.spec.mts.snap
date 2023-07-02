@@ -54,7 +54,7 @@ Options:
   --enable-hibernate-cache                 Enable hibernate cache
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
-  --message-broker <value>                 message brooker
+  --message-broker <value>                 message broker
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --prettier-tab-width                     Default tab width for prettier
   --with-admin-ui                          Generate administrative user interface
