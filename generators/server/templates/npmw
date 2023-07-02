@@ -5,6 +5,7 @@ basedir=`dirname "$0"`
 if [ -f "$basedir/mvnw" ]; then
   bindir="$basedir/target/node"
   repodir="$basedir/target/node/node_modules"
+  spotlessApplyCommand="$basedir/mvnw process-sources"
   installCommand="$basedir/mvnw -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
 
   PATH="$basedir/$builddir/:$PATH"
@@ -13,6 +14,7 @@ if [ -f "$basedir/mvnw" ]; then
 elif [ -f "$basedir/gradlew" ]; then
   bindir="$basedir/build/node/bin"
   repodir="$basedir/build/node/lib/node_modules"
+  spotlessApplyCommand="$basedir/gradlew spotlessApply"
   installCommand="$basedir/gradlew npmSetup"
 else
   echo "Using npm installed globally"
@@ -21,6 +23,10 @@ fi
 
 NPM_EXE="$repodir/npm/bin/npm-cli.js"
 NODE_EXE="$bindir/node"
+
+if [ ! -z "$spotlessApplyCommand" ]; then
+  $spotlessApplyCommand || true
+fi
 
 if [ ! -x "$NPM_EXE" ] || [ ! -x "$NODE_EXE" ]; then
   $installCommand || true
