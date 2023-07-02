@@ -2292,7 +2292,7 @@ services:
     "stateCleared": "modified",
   },
   "src/main/resources/idea.gdsl": {
-    "contents": "// Jenkinsfile completions for Intellij IDEA
+    "contents": "// Jenkinsfile completions for IntelliJ IDEA
 
 def ctx = context(scope: scriptScope())
 contributor(ctx) {
@@ -2566,7 +2566,7 @@ services:
     "stateCleared": "modified",
   },
   "src/main/resources/idea.gdsl": {
-    "contents": "// Jenkinsfile completions for Intellij IDEA
+    "contents": "// Jenkinsfile completions for IntelliJ IDEA
 
 def ctx = context(scope: scriptScope())
 contributor(ctx) {
@@ -2751,7 +2751,7 @@ services:
     "stateCleared": "modified",
   },
   "src/main/resources/idea.gdsl": {
-    "contents": "// Jenkinsfile completions for Intellij IDEA
+    "contents": "// Jenkinsfile completions for IntelliJ IDEA
 
 def ctx = context(scope: scriptScope())
 contributor(ctx) {
@@ -3022,7 +3022,7 @@ services:
     "stateCleared": "modified",
   },
   "src/main/resources/idea.gdsl": {
-    "contents": "// Jenkinsfile completions for Intellij IDEA
+    "contents": "// Jenkinsfile completions for IntelliJ IDEA
 
 def ctx = context(scope: scriptScope())
 contributor(ctx) {
