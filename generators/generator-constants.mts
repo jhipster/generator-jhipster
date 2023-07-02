@@ -48,16 +48,16 @@ export const javaDependencies: Record<string, string> = {
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELATICSEARCH_TAG = '8.7.1';
-export const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
+export const ELASTICSEARCH_TAG = '8.7.1';
+export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
  * Manually updated docker containers
  */
 export const dockerContainers: Record<string, string> = {
-  elasticsearchTag: ELATICSEARCH_TAG,
-  elasticsearchImage: ELATICSEARCH_IMAGE,
-  elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
+  elasticsearchTag: ELASTICSEARCH_TAG,
+  elasticsearchImage: ELASTICSEARCH_IMAGE,
+  elasticsearch: `${ELASTICSEARCH_IMAGE}:${ELASTICSEARCH_TAG}`,
 };
 Object.freeze(dockerContainers);
 
@@ -78,7 +78,7 @@ export const HELM_GRAFANA = '^4.0.0';
 export const HELM_MYSQL = '^1.4.0';
 export const HELM_MARIADB = '^6.12.2';
 export const HELM_POSTGRESQL = '^6.5.3';
-export const HELM_MOGODB_REPLICASET = '^3.10.1';
+export const HELM_MONGODB_REPLICASET = '^3.10.1';
 export const HELM_COUCHBASE_OPERATOR = '^2.2.1';
 
 // all constants used throughout all generators
