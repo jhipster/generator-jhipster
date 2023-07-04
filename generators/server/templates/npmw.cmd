@@ -8,12 +8,18 @@ if exist "%NPMW_DIR%mvnw.cmd" (
   set NODE_EXE=^"^"
   set NODE_PATH=%NPMW_DIR%target\node\
   set NPM_EXE=^"%NPMW_DIR%target\node\npm.cmd^"
+  set SPOTLESS_APPLY_COMMAND=^"%NPMW_DIR%mvnw.cmd^" process-sources
   set INSTALL_NPM_COMMAND=^"%NPMW_DIR%mvnw.cmd^" -Pwebapp frontend:install-node-and-npm@install-node-and-npm
 ) else (
   set NODE_EXE=^"%NPMW_DIR%build\node\bin\node.exe^"
   set NODE_PATH=%NPMW_DIR%build\node\bin\
   set NPM_EXE=^"%NPMW_DIR%build\node\lib\node_modules\npm\bin\npm-cli.js^"
+  set SPOTLESS_APPLY_COMMAND=^"%NPMW_DIR%gradlew.bat^" spotlessApply
   set INSTALL_NPM_COMMAND=^"%NPMW_DIR%gradlew.bat^" npmSetup
+)
+
+if exist %SPOTLESS_APPLY_COMMAND% (
+  call %SPOTLESS_APPLY_COMMAND%
 )
 
 if not exist %NPM_EXE% (
