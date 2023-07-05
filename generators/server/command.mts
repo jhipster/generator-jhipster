@@ -41,7 +41,7 @@ const command: JHipsterCommandDefinition = {
       hide: true,
     },
     messageBroker: {
-      description: 'message brooker',
+      description: 'message broker',
       type: String,
       scope: 'storage',
     },
