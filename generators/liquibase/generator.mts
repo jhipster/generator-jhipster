@@ -222,6 +222,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
             properties: [
               { property: 'liquibase-plugin.hibernate-dialect' },
               { property: 'liquibase-plugin.driver' },
+              { property: 'h2.version', value: application.javaDependencies.h2 },
               { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
               { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
               { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },
@@ -262,6 +263,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
                 devDatabaseTypeH2Any: applicationAny.devDatabaseTypeH2Any,
                 driver: liquibasePluginJdbcDriver,
                 hibernateDialect: liquibasePluginHibernateDialect,
+                defaultSchemaName: application.liquibaseDefaultSchemaName,
                 // eslint-disable-next-line no-template-curly-in-string
                 url: '${liquibase-plugin.url}',
                 // eslint-disable-next-line no-template-curly-in-string

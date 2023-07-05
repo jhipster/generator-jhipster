@@ -13,6 +13,7 @@
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.5</gatling.version>
+        <h2.version>2.1.214</h2.version>
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.3.1</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
@@ -24,7 +25,7 @@
         <picocli.version>4.7.4</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
-        <validation-api.version>3.0.2.Final</validation-api.version>
+        <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.12.1</checkstyle.version>
@@ -88,6 +89,11 @@
               <groupId>io.gatling.highcharts</groupId>
               <artifactId>gatling-charts-highcharts</artifactId>
               <version>${gatling.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.h2database</groupId>
+              <artifactId>h2</artifactId>
+              <version>${h2.version}</version>
             </dependency>
             <dependency>
               <groupId>io.projectreactor.tools</groupId>

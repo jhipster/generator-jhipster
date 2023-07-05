@@ -14,7 +14,7 @@ export default function mavenPluginContent({
   // prettier-ignore
   return `
     <configuration>
-      <changeLogFile>\${project.basedir}/${srcMainResources}config/liquibase/master.xml</changeLogFile>
+      <changeLogFile>config/liquibase/master.xml</changeLogFile>
       <diffChangeLogFile>\${project.basedir}/${srcMainResources}config/liquibase/changelog/\${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
       <driver>${driver}</driver>
       <url>${url}</url>
@@ -51,6 +51,7 @@ export default function mavenPluginContent({
       <dependency>
         <groupId>com.h2database</groupId>
         <artifactId>h2</artifactId>
+        <version>\${h2.version}</version>
       </dependency>`: ''}
     </dependencies>`;
 }
