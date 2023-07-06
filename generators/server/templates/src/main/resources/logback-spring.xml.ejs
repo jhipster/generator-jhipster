@@ -85,6 +85,9 @@
     <logger name="io.searchbox" level="WARN"/>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
+    <%_ if (databaseTypeSql) { _%>
+    <logger name="io.asyncer.r2dbc.mysql" level="WARN"/>
+    <%_ } _%>
     <logger name="io.r2dbc" level="WARN"/>
 <%_ } _%>
 <%_ if (!reactive) { _%>
