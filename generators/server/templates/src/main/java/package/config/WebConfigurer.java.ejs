@@ -64,7 +64,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 <%_ if (reactive) { _%>
-import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
@@ -175,7 +175,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ } _%>
 
     @Bean
-    public Cors<% if (reactive) { %>Web<% } %>Filter corsFilter() {
+    public <% if (reactive) { %>CorsConfigurationSource corsConfigurationSource()<% } else { %>CorsFilter corsFilter()<% } %> {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || ! CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
@@ -190,7 +190,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/*/management/**", config);
 <%_ } _%>
         }
-        return new Cors<% if (reactive) { %>Web<% } %>Filter(source);
+        return <% if (reactive) { %>source<% } else { %>new CorsFilter(source)<% } %>;
     }
 <%_ if (reactive) { _%>
 
