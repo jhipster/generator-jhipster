@@ -32,8 +32,8 @@ export const checkDocker = runAsync(function () {
       this.log.error(
         chalk.red(
           'Docker version 1.10.0 or later is not installed on your computer.\n' +
-            '         Read http://docs.docker.com/engine/installation/#installation\n'
-        )
+            '         Read http://docs.docker.com/engine/installation/#installation\n',
+        ),
       );
       this.abort = true;
     } else {
@@ -45,8 +45,8 @@ export const checkDocker = runAsync(function () {
           chalk.red(
             `Docker version 1.10.0 or later is not installed on your computer.
                                  Docker version found: ${dockerVersion}
-                                 Read http://docs.docker.com/engine/installation/#installation`
-          )
+                                 Read http://docs.docker.com/engine/installation/#installation`,
+          ),
         );
         this.abort = true;
       } else {

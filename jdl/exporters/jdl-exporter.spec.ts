@@ -60,7 +60,7 @@ describe('jdl - JDLExporter', () => {
           jdlObject.addEntity(
             new JDLEntity({
               name: 'Toto',
-            })
+            }),
           );
           exportToJDL(jdlObject, PATH);
           fileExistence = fs.statSync(PATH).isFile();
@@ -85,7 +85,7 @@ describe('jdl - JDLExporter', () => {
             jdlObject.addEntity(
               new JDLEntity({
                 name: 'Toto',
-              })
+              }),
             );
             exportToJDL(jdlObject);
             fileExistence = fs.statSync(DEFAULT_PATH).isFile();

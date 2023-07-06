@@ -73,12 +73,12 @@ export function writeEntityFiles() {
                       packageName,
                       clientSrcDir,
                     },
-                  })
+                  }),
                 );
               })
-              .flat()
+              .flat(),
           )
-          .flat()
+          .flat(),
       );
     },
 

@@ -564,7 +564,7 @@ describe('cli', () => {
     };
   };
   `,
-              })
+              }),
             )
             .commitFiles();
         });

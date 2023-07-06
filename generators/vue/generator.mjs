@@ -65,7 +65,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_VUE, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_VUE, 'resources', 'package.json'),
         );
       },
     });
@@ -163,7 +163,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
         this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
-`)
+`),
         );
       },
     });
@@ -187,7 +187,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     routerName,
     enableTranslation,
     entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName)
+    entityTranslationValue = _.startCase(routerName),
   ) {
     this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }
@@ -215,7 +215,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     _entityUrl = this.entityUrl,
     _microserviceName = this.microserviceName,
     readOnly = this.readOnly,
-    _pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
+    _pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural,
   ) {
     this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
     this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);

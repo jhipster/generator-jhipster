@@ -43,7 +43,7 @@ describe('jdl - UnaryOptionValidator', () => {
       context('without any of its required attributes', () => {
         it('should fail', () => {
           expect(() => validator.validate({})).to.throw(
-            /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/
+            /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/,
           );
         });
       });

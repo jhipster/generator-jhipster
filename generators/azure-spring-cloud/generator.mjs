@@ -119,7 +119,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
             this.log.error(
               `You don't have the Azure CLI installed.
 Download it from:
-${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`
+${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`,
             );
             this.abort = true;
           }
@@ -136,7 +136,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
             this.log.error(
               `You don't have the Azure Spring Cloud extension installed in your Azure CLI.
 Install it by running:
-${chalk.red('az extension add --name spring-cloud')}`
+${chalk.red('az extension add --name spring-cloud')}`,
             );
             this.abort = true;
           }
@@ -180,14 +180,14 @@ ${chalk.red('az extension add --name spring-cloud')}`
             if (this.azureSpringCloudResourceGroupName === '') {
               this.log.verboseInfo(
                 `Your default Azure resource group is not set up. We recommend doing it using the command
-                                '${chalk.yellow('az configure --defaults group=<resource group name>')}`
+                                '${chalk.yellow('az configure --defaults group=<resource group name>')}`,
               );
               this.azureSpringCloudResourceGroupName = '';
             }
             if (this.azureSpringCloudServiceName === '') {
               this.log.verboseInfo(
                 `Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command
-                                '${chalk.yellow('az configure --defaults spring-cloud=<service instance name>')}`
+                                '${chalk.yellow('az configure --defaults spring-cloud=<service instance name>')}`,
               );
               this.azureSpringCloudServiceName = '';
             }
@@ -305,13 +305,13 @@ ${chalk.red('az extension add --name spring-cloud')}`
                     this.log.log(`${chalk.green(chalk.bold('Success!'))} Your application has been created.`);
                   }
                   done();
-                }
+                },
               );
             } else {
               this.log.log(chalk.bold('Application already exists, using it.'));
               done();
             }
-          }
+          },
         );
       }),
     };
@@ -376,7 +376,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
           // An exception is thrown if the folder doesn't exist
           this.log.error(
             `${chalk.red('Git is not set up on your project!')}
-You need a GitHub project correctly configured in order to use GitHub Actions.`
+You need a GitHub project correctly configured in order to use GitHub Actions.`,
           );
           this.abort = true;
           return;
@@ -416,7 +416,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                     this.log.verboseInfo(
                       `For the deployment to succeed, you will need to configure a ${chalk.bold('AZURE_CREDENTIALS')} secret in GitHub.
 Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/blob/master/11-configure-ci-cd/README.md
-for more detailed information.`
+for more detailed information.`,
                     );
                     done();
                   }
@@ -476,7 +476,7 @@ for more detailed information.`
               this.log.verboseInfo(`Application status  : ${chalk.bold(json.properties.status)}`);
             }
             done();
-          }
+          },
         );
       }),
     };

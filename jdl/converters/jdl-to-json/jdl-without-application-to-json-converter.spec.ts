@@ -304,7 +304,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
               name: binaryOptions.Options.DTO,
               value: binaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
-            })
+            }),
           );
           const returnedMap: any = convert({
             jdlObject,
@@ -322,7 +322,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should log the automatic setting of the option', () => {
           expect(loggerSpy.getCall(0).args[0]).to.equal(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
-              'no other value has been set.'
+              'no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
@@ -362,7 +362,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
             new JDLUnaryOption({
               name: unaryOptions.FILTER,
               entityNames: ['A'],
-            })
+            }),
           );
           const returnedMap: any = convert({
             jdlObject,
@@ -380,7 +380,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should log the automatic setting of the option', () => {
           expect(loggerSpy.getCall(0).args[0]).to.equal(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
-              'entity if no other value has been set.'
+              'entity if no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
@@ -420,7 +420,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
               values: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
-            })
+            }),
           );
           const returnedMap: any = convert({
             jdlObject,

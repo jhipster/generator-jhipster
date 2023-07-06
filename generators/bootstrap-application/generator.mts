@@ -95,43 +95,43 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           if (fieldValidateRules !== undefined) {
             assert(
               Array.isArray(fieldValidateRules),
-              `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             fieldValidateRules.forEach(fieldValidateRule => {
               assert(
                 SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule),
                 `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringifyApplicationData(
-                  field
-                )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
+                  field,
+                )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`,
               );
             });
             assert(
               !fieldValidateRules.includes(MAX) || field.fieldValidateRulesMax !== undefined,
-              `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             assert(
               !fieldValidateRules.includes(MIN) || field.fieldValidateRulesMin !== undefined,
-              `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             assert(
               !fieldValidateRules.includes(MAXLENGTH) || field.fieldValidateRulesMaxlength !== undefined,
-              `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             assert(
               !fieldValidateRules.includes(MINLENGTH) || field.fieldValidateRulesMinlength !== undefined,
-              `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             assert(
               !fieldValidateRules.includes(MAXBYTES) || field.fieldValidateRulesMaxbytes !== undefined,
-              `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             assert(
               !fieldValidateRules.includes(MINBYTES) || field.fieldValidateRulesMinbytes !== undefined,
-              `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
             assert(
               !fieldValidateRules.includes(PATTERN) || field.fieldValidateRulesPattern !== undefined,
-              `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+              `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
             );
           }
         });

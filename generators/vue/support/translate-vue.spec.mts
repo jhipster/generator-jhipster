@@ -68,7 +68,7 @@ return {
   t$: useI18n().t,
 }
 `,
-        })
+        }),
       ).toMatchInlineSnapshot(`
 "
 return {
@@ -91,7 +91,7 @@ t$('msg', { num : 1 }).toString();
 t$('msg', {  str  :  'a'  }).toString();
 t$('msg', {  exp:foo,num : 1 , str  :  'a'  }).toString();
 `,
-        })
+        }),
       ).toMatchInlineSnapshot(`
 "
 'getWebappTranslation('msg')';
@@ -114,7 +114,7 @@ t$('msg', { num : 1 })
 t$('msg', {  str  :  'a'  })
 t$('msg', {  exp:foo,num : 1 , str  :  'a'  })
 `,
-        })
+        }),
       ).toMatchInlineSnapshot(`
 "
 getWebappTranslation('msg')
@@ -134,7 +134,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
             getWebappTranslation,
             body: '<div v-text="t$(\'entity.action.cancel\')" foo=")"><div>fooo</div>fooo</div>',
             enableTranslation: false,
-          })
+          }),
         ).toThrow(/Nested tags identical to the translated tag are not supported:/);
       });
     });

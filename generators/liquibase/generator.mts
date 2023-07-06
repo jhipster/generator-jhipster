@@ -354,7 +354,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
         .map(entityName => [
           entityName,
           { name: entityName, ...JSON.parse(fs.readFileSync(this.getEntityConfigPath(entityName)).toString()) },
-        ])
+        ]),
     );
 
     if (application.generateBuiltInUserEntity) {
@@ -396,7 +396,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
         !application.incrementalChangelog ||
         !oldEntitiesConfig[entityName] ||
         !fs.existsSync(
-          this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`)
+          this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`),
         )
       ) {
         return [
@@ -432,7 +432,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
           // id changes are not supported
           !newRelationship.id &&
           // check if the same relationship wasn't already part of the old config
-          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship))
+          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship)),
       );
 
       // Calculate to be removed relationships
@@ -441,7 +441,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
           // id changes are not supported
           !oldRelationship.id &&
           // check if there are relationships not anymore in the new config
-          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship))
+          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship)),
       );
 
       // calcualte relationships that only need a foreign key recreation from the ones that are added
@@ -449,13 +449,13 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
       const relationshipsToRecreateForeignKeysOnly = addedRelationships
         .filter(addedRelationship =>
           removedRelationships.some(removedRelationship =>
-            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship)
-          )
+            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship),
+          ),
         )
         .concat(
           removedRelationships.filter(removedRelationship =>
-            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship))
-          )
+            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship)),
+          ),
         );
 
       return [

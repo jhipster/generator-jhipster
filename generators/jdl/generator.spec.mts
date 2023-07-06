@@ -67,7 +67,7 @@ describe(`generator - ${generator}`, () => {
         helpers.runJHipster(GENERATOR_JDL).withOptions({
           inline: 'entity Foo {}',
           baseName: 'jhipster',
-        })
+        }),
       ).rejects.toThrow('Database type is required to validate entities.');
     });
     it('without baseName should reject', async () => {
@@ -75,7 +75,7 @@ describe(`generator - ${generator}`, () => {
         helpers.runJHipster(GENERATOR_JDL).withOptions({
           inline: 'entity Foo {}',
           db: 'postgresql',
-        })
+        }),
       ).rejects.toThrow("The JDL object, the application's name and its the database type are mandatory.");
     });
 

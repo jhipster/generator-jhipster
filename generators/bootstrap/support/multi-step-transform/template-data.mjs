@@ -22,7 +22,7 @@ export default class TemplateData {
     if (!this[`_${section}`]) {
       this[`_${section}`] = this.render(
         { ...fragmentData, fragment: { [section]: true }, section, sections: Object.keys(this._sections) },
-        suffix
+        suffix,
       );
     }
     return this[`_${section}`];

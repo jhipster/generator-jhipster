@@ -544,7 +544,7 @@ entity A`);
             `/** A comment */
  @id
  entity A
- `
+ `,
           );
           parsedEntity = content.entities[0];
         });
@@ -573,7 +573,7 @@ entity A`);
               `@id
  /** A comment */
  entity A
- `
+ `,
             );
           }).to.throw();
         });
@@ -591,7 +591,7 @@ entity A`);
   @something
   name String
 }
-`
+`,
             );
             parsedEntity = content.entities[0];
           });
@@ -643,7 +643,7 @@ entity A`);
               `entity A {
   name String ${REQUIRED}
 }
-`
+`,
             );
             parsedEntity = content.entities[0];
           });
@@ -666,7 +666,7 @@ entity A`);
                 `entity A {
   name String ${MINLENGTH}(0)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -688,7 +688,7 @@ entity A`);
                 `entity A {
   name String ${MINLENGTH}(0.01)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -712,7 +712,7 @@ entity A`);
                 `entity A {
   name String ${MAXLENGTH}(42)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -734,7 +734,7 @@ entity A`);
                 `entity A {
   name String ${MAXLENGTH}(42.01)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -757,7 +757,7 @@ entity A`);
               `entity A {
   name String ${PATTERN}(/[A-Za-z]\\d/)
 }
-`
+`,
             );
             parsedEntity = content.entities[0];
           });
@@ -779,7 +779,7 @@ entity A`);
               `entity A {
   name String ${UNIQUE}
 }
-`
+`,
             );
             parsedEntity = content.entities[0];
           });
@@ -802,7 +802,7 @@ entity A`);
                 `entity A {
   name Integer ${MIN}(0)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -824,7 +824,7 @@ entity A`);
                 `entity A {
   name Integer ${MIN}(0.01)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -848,7 +848,7 @@ entity A`);
                 `entity A {
   name Integer ${MAX}(0)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -870,7 +870,7 @@ entity A`);
                 `entity A {
   name Integer ${MAX}(0.01)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -894,7 +894,7 @@ entity A`);
                 `entity A {
   name TextBlob ${MINBYTES}(0)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -916,7 +916,7 @@ entity A`);
                 `entity A {
   name TextBlob ${MINBYTES}(0.01)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -940,7 +940,7 @@ entity A`);
                 `entity A {
   name TextBlob ${MAXBYTES}(0)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -962,7 +962,7 @@ entity A`);
                 `entity A {
   name TextBlob ${MAXBYTES}(0.01)
 }
-`
+`,
               );
               parsedEntity = content.entities[0];
             });
@@ -986,7 +986,7 @@ entity A`);
 entity A {
   name TextBlob ${MAXBYTES}(MAX)
 }
-`
+`,
             );
             parsedEntity = content.entities[0];
           });
@@ -1015,7 +1015,7 @@ entity A {
   ENGLAND,
   ICELAND
 }
-`
+`,
         );
         parsedEnum = content.enums[0];
       });
@@ -1049,7 +1049,7 @@ entity A {
   FRANCE ENGLAND("aaa bbb ccc") ICELAND
   GERMANY
 }
-`
+`,
         );
         parsedEnum = content.enums[0];
       });
@@ -1088,7 +1088,7 @@ entity A {
   ENGLAND,
   ICELAND
 }
-`
+`,
         );
         parsedEnum = content.enums[0];
       });
@@ -1129,7 +1129,7 @@ entity A {
             /** some comment */IRELAND,
             /** some comment */ CANADA
 }
-`
+`,
         );
         parsedEnum = content.enums[0];
       });
@@ -1184,7 +1184,7 @@ entity A {
             /** some comment */IRELAND,
             /** some comment */ CANADA
 }
-`
+`,
         );
         parsedEnum = content.enums[0];
       });
@@ -1240,7 +1240,7 @@ entity A {
             /** some comment */IRELAND,
             /** some comment */ CANADA
 }
-`
+`,
         );
         parsedEnum = content.enums[0];
       });
@@ -1294,7 +1294,7 @@ entity A {
   ENGLAND (not_a_tea_country),
   ICELAND
 }
-`
+`,
           );
           parsedEnum = content.enums[0];
         });
@@ -1331,7 +1331,7 @@ entity A {
   ENGLAND ("not a tea country"),
   ICELAND
 }
-`
+`,
           );
           parsedEnum = content.enums[0];
         });
@@ -1998,7 +1998,7 @@ entity A {
             `deployment {
   kubernetesStorageClassName ""
 }
-`
+`,
           );
           parsedDeployment = content.deployments[0];
         });
@@ -2019,7 +2019,7 @@ entity A {
             `deployment {
   kubernetesStorageClassName "SetValue"
 }
-`
+`,
           );
           parsedDeployment = content.deployments[0];
         });

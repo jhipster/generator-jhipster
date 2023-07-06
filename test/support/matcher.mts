@@ -4,7 +4,7 @@ export const matchWrittenFiles = (
   title: string,
   resultGetter: () => RunResult,
   expectedFilesGetter: () => string[],
-  shouldMatch: boolean
+  shouldMatch: boolean,
 ) => {
   const testTitle = shouldMatch ? `writes ${title} files` : `doesn't write ${title} files`;
   it(testTitle, () => {

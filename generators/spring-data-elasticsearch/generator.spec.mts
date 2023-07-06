@@ -97,7 +97,7 @@ describe('generator - elasticsearch', () => {
           () => runResult,
           elasticsearch &&
             (sampleConfig.authenticationType === OAUTH2 ||
-              (sampleConfig.applicationType !== MICROSERVICE && !sampleConfig.skipUserManagement))
+              (sampleConfig.applicationType !== MICROSERVICE && !sampleConfig.skipUserManagement)),
         );
       });
       shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);

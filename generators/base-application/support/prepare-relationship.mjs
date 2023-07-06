@@ -61,7 +61,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   if (!relationship.otherEntity) {
     throw new Error(
-      `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`
+      `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`,
     );
   }
   const otherEntityData = relationship.otherEntity;
@@ -104,7 +104,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
     ) {
       throw new Error(
-        `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`
+        `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`,
       );
     } else {
       generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
@@ -167,7 +167,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
       generator.log.warn(
-        `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
+        `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`,
       );
     }
   }

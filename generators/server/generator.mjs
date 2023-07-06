@@ -315,7 +315,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           { packageName: `${application.packageName}.service.mapper`, documentation: 'Data transfer objects mappers.' },
           { packageName: `${application.packageName}.web.filter`, documentation: 'Request chain filters.' },
           { packageName: `${application.packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
-          { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' }
+          { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
         );
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
@@ -404,7 +404,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       addLogNeedles({ source, application }) {
         source.addIntegrationTestAnnotation = ({ package: packageName, annotation }) =>
           this.editFile(this.destinationPath(`${application.javaPackageTestDir}IntegrationTest.java`), content =>
-            addJavaAnnotation(content, { package: packageName, annotation })
+            addJavaAnnotation(content, { package: packageName, annotation }),
           );
         source.addLogbackMainLog = ({ name, level }) =>
           this.editFile(
@@ -412,7 +412,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             createNeedleCallback({
               needle: 'logback-add-log',
               contentToAdd: `<logger name="${name}" level="${level}"/>`,
-            })
+            }),
           );
         source.addLogbackTestLog = ({ name, level }) =>
           this.editFile(
@@ -420,7 +420,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             createNeedleCallback({
               needle: 'logback-add-log',
               contentToAdd: `<logger name="${name}" level="${level}"/>`,
-            })
+            }),
           );
       },
     });
@@ -494,7 +494,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const fixedEntityTableName = this._fixEntityTableName(
           entityConfig.entityTableName,
           entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          application.jhiTablePrefix
+          application.jhiTablePrefix,
         );
         if (fixedEntityTableName !== entityConfig.entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
@@ -502,7 +502,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const validation = this._validateTableName(
           entityConfig.entityTableName,
           entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          entityConfig
+          entityConfig,
         );
         if (validation !== true) {
           throw new Error(validation);
@@ -531,8 +531,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             this.jhipsterConfig.incrementalChangelog &&
             !existsSync(
               this.destinationPath(
-                `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`
-              )
+                `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`,
+              ),
             );
         }
       },
@@ -555,15 +555,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           if (field.fieldType === BYTE_BUFFER) {
             this.log.warn(
               `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(
-                field
-              )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
+                field,
+              )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`,
             );
             field.fieldValidate = false;
             field.fieldValidateRules = [];
           }
           if (entityConfig.pagination && entityConfig.pagination !== NO_PAGINATION && isReservedPaginationWords(field.fieldName)) {
             throw new Error(
-              `Field name '${field.fieldName}' found in ${entityConfig.name} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+              `Field name '${field.fieldName}' found in ${entityConfig.name} is a reserved keyword, as it is used by Spring for pagination in the URL.`,
             );
           }
           // Field type check should be ignored for entities of others microservices.
@@ -573,7 +573,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
               (application.databaseType !== SQL || !Object.values(RelationalOnlyDBTypes).includes(field.fieldType))
             ) {
               throw new Error(
-                `The type '${field.fieldType}' is an unknown field type for field '${field.fieldName}' of entity '${entityConfig.name}' using '${application.databaseType}' database.`
+                `The type '${field.fieldType}' is an unknown field type for field '${field.fieldName}' of entity '${entityConfig.name}' using '${application.databaseType}' database.`,
               );
             }
           }
@@ -591,8 +591,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             relationship.relationshipName = relationship.otherEntityName;
             this.log.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
-                relationship
-              )}, using ${relationship.otherEntityName} as fallback`
+                relationship,
+              )}, using ${relationship.otherEntityName} as fallback`,
             );
           }
           if (relationship.useJPADerivedIdentifier) {
@@ -823,7 +823,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
               microservices.map(ms => [
                 `ci:server:await:${ms}`,
                 `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
-              ])
+              ]),
             ),
             'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,
           });
@@ -927,12 +927,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     if (isReservedTableName(entityTableName, prodDatabaseType)) {
       if (jhiTablePrefix) {
         this.log.warn(
-          `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
+          `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`,
         );
         entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
       } else {
         this.log.warn(
-          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
+          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`,
         );
       }
     }
@@ -956,8 +956,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
           throw new Error(
             `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringifyApplicationData(
-              field
-            )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
+              field,
+            )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`,
           );
         }
       });
@@ -969,27 +969,27 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       }
       if (field.fieldValidateRules.includes(MAXLENGTH) && field.fieldValidateRulesMaxlength === undefined) {
         throw new Error(
-          `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+          `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
         );
       }
       if (field.fieldValidateRules.includes(MINLENGTH) && field.fieldValidateRulesMinlength === undefined) {
         throw new Error(
-          `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+          `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
         );
       }
       if (field.fieldValidateRules.includes(MAXBYTES) && field.fieldValidateRulesMaxbytes === undefined) {
         throw new Error(
-          `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+          `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
         );
       }
       if (field.fieldValidateRules.includes(MINBYTES) && field.fieldValidateRulesMinbytes === undefined) {
         throw new Error(
-          `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+          `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
         );
       }
       if (field.fieldValidateRules.includes(PATTERN) && field.fieldValidateRulesPattern === undefined) {
         throw new Error(
-          `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`
+          `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
         );
       }
     }
@@ -998,12 +998,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   _validateRelationship(entityName, relationship) {
     if (relationship.otherEntityName === undefined) {
       throw new Error(
-        `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+        `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
     if (relationship.relationshipType === undefined) {
       throw new Error(
-        `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+        `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
 
@@ -1012,7 +1012,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
     ) {
       throw new Error(
-        `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+        `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
   }

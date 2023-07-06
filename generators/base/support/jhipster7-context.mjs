@@ -143,7 +143,7 @@ const getProperty = (context, prop) => {
     const { replacement, get } = deprecatedProperties[prop];
     const value = get(context);
     console.log(
-      `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. Value: ${value}`
+      `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. Value: ${value}`,
     );
     return value;
   }
@@ -151,8 +151,8 @@ const getProperty = (context, prop) => {
     console.log(
       `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(
         // eslint-disable-next-line no-template-curly-in-string
-        'dockerContainers.${dockerImage}'
-      )}.`
+        'dockerContainers.${dockerImage}',
+      )}.`,
     );
   }
   const { generator, data } = context;
@@ -186,7 +186,7 @@ const createHandler = ({ ignoreWarnings = false } = {}) => ({
       'preventExtensions',
       'setPrototypeOf',
       'set',
-    ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)])
+    ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)]),
   ),
   ownKeys: ({ data }) => {
     return Reflect.ownKeys(data);

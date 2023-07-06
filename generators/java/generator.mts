@@ -93,7 +93,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
               streamOptions: {
                 filter: file => isFilePending(file) && !file.path.endsWith('package-info.java') && mainPackageMatch.match(file.path),
               },
-            }
+            },
           );
         }
       },

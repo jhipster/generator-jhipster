@@ -93,7 +93,7 @@ export default class {
         contentToCheck: rewriteFileModel.regexp,
         ignoreWhitespaces: rewriteFileModel.prettierAware,
         autoIndent: false,
-      })
+      }),
     );
   }
 

@@ -640,7 +640,7 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`
+`,
         );
       });
       it('should prepare EntityA', () => {
@@ -900,7 +900,7 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`
+`,
         );
       });
     });
@@ -923,7 +923,7 @@ describe(`generator - ${generator}`, () => {
                 },
               ],
             },
-          ]
+          ],
         );
       });
 
@@ -1212,7 +1212,7 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`
+`,
         );
       });
     });

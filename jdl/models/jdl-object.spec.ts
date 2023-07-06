@@ -82,7 +82,7 @@ describe('jdl - JDLObject', () => {
         jdlObject.addApplication(
           createJDLApplication({
             applicationType: MONOLITH,
-          })
+          }),
         );
       });
 
@@ -183,7 +183,7 @@ describe('jdl - JDLObject', () => {
             deploymentType: 'docker-compose',
             appFolders: ['tata'],
             dockerRepositoryName: 'test',
-          })
+          }),
         );
       });
 
@@ -360,7 +360,7 @@ describe('jdl - JDLObject', () => {
         jdlObject.addEntity(
           new JDLEntity({
             name: 'toto',
-          })
+          }),
         );
       });
 
@@ -542,7 +542,7 @@ describe('jdl - JDLObject', () => {
         jdlObject.addEnum(
           new JDLEnum({
             name: 'toto',
-          })
+          }),
         );
       });
 
@@ -603,7 +603,7 @@ describe('jdl - JDLObject', () => {
                 to: 'Valid',
                 type: relationshipTypes.MANY_TO_MANY,
                 injectedFieldInFrom: 'something',
-              })
+              }),
             );
           }).to.throw('Source and destination entities must be passed to create a relationship.');
         });
@@ -671,7 +671,7 @@ describe('jdl - JDLObject', () => {
             to: 'B',
             type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'b',
-          })
+          }),
         );
       });
 
@@ -691,7 +691,7 @@ describe('jdl - JDLObject', () => {
           to: 'Abc2',
           injectedFieldInFrom: 'something',
           type: relationshipTypes.ONE_TO_ONE,
-        })
+        }),
       );
       jdlObject.addRelationship(
         new JDLRelationship({
@@ -699,7 +699,7 @@ describe('jdl - JDLObject', () => {
           to: 'Abc2',
           injectedFieldInFrom: 'something',
           type: relationshipTypes.ONE_TO_MANY,
-        })
+        }),
       );
     });
 
@@ -820,7 +820,7 @@ describe('jdl - JDLObject', () => {
         jdlObject.addOption(
           new JDLUnaryOption({
             name: unaryOptions.SKIP_CLIENT,
-          })
+          }),
         );
       });
 
@@ -837,12 +837,12 @@ describe('jdl - JDLObject', () => {
       jdlObject.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-        })
+        }),
       );
       jdlObject.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_SERVER,
-        })
+        }),
       );
     });
 
@@ -890,7 +890,7 @@ describe('jdl - JDLObject', () => {
         jdlObject.addOption(
           new JDLUnaryOption({
             name: unaryOptions.READ_ONLY,
-          })
+          }),
         );
       });
 
@@ -1021,7 +1021,7 @@ ${relationship.toString()}
 
 ${option.toString()}
 ${option2.toString()}
-`
+`,
       );
     });
   });

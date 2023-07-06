@@ -116,7 +116,7 @@ export function preparePostEntityServerDerivedProperties(entity) {
     for (const relationship of entity.relationships) {
       if (!relationship.otherEntity.embedded) {
         relationship.joinColumnNames = relationship.otherEntity.primaryKey.fields.map(
-          otherField => `${relationship.columnNamePrefix}${otherField.columnName}`
+          otherField => `${relationship.columnNamePrefix}${otherField.columnName}`,
         );
       }
     }

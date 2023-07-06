@@ -131,15 +131,15 @@ export default class SpringServiceGenerator extends BaseGenerator {
 
         this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
-          `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
+          `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`,
         );
 
         if (this.useInterface) {
           this.writeFile(
             `${this.fetchFromInstalledJHipster(
-              'spring-service/templates'
+              'spring-service/templates',
             )}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
-            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
+            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`,
           );
         }
       },

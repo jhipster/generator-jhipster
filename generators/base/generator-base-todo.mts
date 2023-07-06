@@ -567,7 +567,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(
               typeof fileSpec === 'object' || typeof fileSpec === 'string' || typeof fileSpec === 'function',
-              `File must be an object, a string or a function for ${fileSpecPath}`
+              `File must be an object, a string or a function for ${fileSpecPath}`,
             );
             if (typeof fileSpec === 'function') {
               fileSpec = fileSpec.call(this, context);

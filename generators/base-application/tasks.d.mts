@@ -59,7 +59,7 @@ type ClientSource<ExtendsSelf = ClientSourceType> = {
 
 export type BaseApplicationGeneratorDefinition<
   Definition extends { applicationType: any; entityType: any; sourceType: any } = GenericApplicationDefinition &
-    GenericSourceTypeDefinition<Record<string, (...args: any[]) => any>>
+    GenericSourceTypeDefinition<Record<string, (...args: any[]) => any>>,
 > = BaseGeneratorDefinition<Definition> &
   // Add application to existing priorities
   Record<

@@ -89,7 +89,7 @@ function getJDLObjectFromMultipleApplications(directory) {
 function getJDLObjectFromSingleApplication(
   yoRcFileContent,
   entities?: Map<string, Entity>,
-  existingJDLObject = new JDLObject()
+  existingJDLObject = new JDLObject(),
 ): JDLObject {
   const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
   const jdlApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });

@@ -61,7 +61,7 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
       `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
       '* ==========================================================================\n' +
         'my comment\n' +
-        '========================================================================== */\n'
+        '========================================================================== */\n',
     );
   });
 
@@ -71,7 +71,7 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
       `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
       '* ==========================================================================\n' +
         'my comment\n' +
-        '========================================================================== */\n'
+        '========================================================================== */\n',
     );
   });
 
@@ -85,7 +85,7 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
             <span jhiTranslate="global.menu.routerName1">Router Name 1</span>
           </a>
         </li>
-`
+`,
     );
   });
 
@@ -96,7 +96,7 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
   it('admin module contains the import and the module added by needle api', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-      "import { appNameadminAngularNameModule } from './adminFolderName/adminFileName.module';"
+      "import { appNameadminAngularNameModule } from './adminFolderName/adminFileName.module';",
     );
     runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`, 'appNameadminAngularNameModule,');
   });
@@ -109,14 +109,14 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
         "        path: 'entity-audit',\n" +
         "        data: { pageTitle: 'entityAudit.home.title' },\n" +
         "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule),\n" +
-        '      },'
+        '      },',
     );
   });
 
   it('app module contains the import and the module added by needle api', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`,
-      "import { appNameangularNameModule } from './folderName/fileName.module';"
+      "import { appNameangularNameModule } from './folderName/fileName.module';",
     );
     runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, 'appNameangularNameModule,');
   });

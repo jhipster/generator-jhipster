@@ -41,7 +41,7 @@ describe('jdl - RelationshipIssue', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' })).to.throw(
-          /^A relationship's source, destination & type must be passed\.$/
+          /^A relationship's source, destination & type must be passed\.$/,
         );
       });
     });
@@ -49,7 +49,7 @@ describe('jdl - RelationshipIssue', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' })).to.throw(
-          /^A relationship's source, destination & type must be passed\.$/
+          /^A relationship's source, destination & type must be passed\.$/,
         );
       });
     });
@@ -58,7 +58,7 @@ describe('jdl - RelationshipIssue', () => {
     it('should fail', () => {
       // @ts-expect-error
       expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' })).to.throw(
-        /^A relationship's source, destination & type must be passed\.$/
+        /^A relationship's source, destination & type must be passed\.$/,
       );
     });
   });

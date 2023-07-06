@@ -215,7 +215,7 @@ Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
         {
           message: err.message,
         },
-        null
+        null,
       );
     });
 };

@@ -62,7 +62,7 @@ export const angularFiles = {
 
 export async function writeEntitiesFiles(
   this: CoreGenerator,
-  { application, entities, control }: GeneratorDefinition['writingEntitiesTaskParam']
+  { application, entities, control }: GeneratorDefinition['writingEntitiesTaskParam'],
 ) {
   await control.loadClientTranslations?.();
 
@@ -115,7 +115,7 @@ export function cleanupEntitiesFiles(this: CoreGenerator, { application, entitie
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
       this.removeFile(
-        `${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.spec.ts`
+        `${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.spec.ts`,
       );
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
