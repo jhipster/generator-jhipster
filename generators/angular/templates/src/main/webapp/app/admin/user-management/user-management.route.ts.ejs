@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Routes, ResolveFn } from '@angular/router';
+import { of } from 'rxjs';
 
 import { IUser } from './user-management.model';
 import { UserManagementService } from './service/user-management.service';
@@ -26,18 +26,13 @@ import UserManagementComponent from './list/user-management.component';
 import UserManagementDetailComponent from './detail/user-management-detail.component';
 import UserManagementUpdateComponent from './update/user-management-update.component';
 
-@Injectable({ providedIn: 'root' })
-export class UserManagementResolve implements Resolve<IUser | null> {
-  constructor(private service: UserManagementService) {}
-
-  resolve(route: ActivatedRouteSnapshot): Observable<IUser | null> {
-    const id = route.params['login'];
-    if (id) {
-      return this.service.find(id);
-    }
-    return of(null);
+export const UserManagementResolve: ResolveFn<IUser | null> = (route: ActivatedRouteSnapshot) => {
+  const login = route.paramMap.get('login');
+  if (login) {
+    return inject(UserManagementService).find(login);
   }
-}
+  return of(null);
+};
 
 const userManagementRoute: Routes = [
   {

@@ -21,15 +21,6 @@ import fs, { readFileSync } from 'fs';
 import fse from 'fs-extra';
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import {
-  GENERATOR_ANGULAR,
-  GENERATOR_CLIENT,
-  GENERATOR_COMMON,
-  GENERATOR_CYPRESS,
-  GENERATOR_REACT,
-  GENERATOR_SERVER,
-  GENERATOR_VUE,
-} from '../../generators/generator-list.mjs';
 import { getGeneratorFolder } from './get-generator.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

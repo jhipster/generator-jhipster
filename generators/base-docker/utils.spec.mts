@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { createDockerComposeFile } from './utils.mjs';
 
 describe('generator - base-docker - utils', () => {

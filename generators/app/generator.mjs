@@ -46,228 +46,223 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     super(args, options, features);
 
     this.option('defaults', {
-      desc: 'Execute jhipster with default config',
+      description: 'Execute jhipster with default config',
       type: Boolean,
-      defaults: false,
     });
     this.option('base-name', {
-      desc: 'Application base name',
+      description: 'Application base name',
       type: String,
     });
     this.option('application-type', {
-      desc: 'Application type to generate',
+      description: 'Application type to generate',
       type: String,
     });
 
     this.option('client-framework', {
-      desc: 'Provide client framework for the application',
+      description: 'Provide client framework for the application',
       type: String,
     });
 
     // This adds support for a `--skip-client` flag
     this.option('skip-client', {
-      desc: 'Skip the client-side application generation',
+      description: 'Skip the client-side application generation',
       type: Boolean,
     });
 
     // This adds support for a `--skip-server` flag
     this.option('skip-server', {
-      desc: 'Skip the server-side application generation',
+      description: 'Skip the server-side application generation',
       type: Boolean,
     });
 
     // This adds support for a `--skip-commit-hook` flag
     this.option('skip-commit-hook', {
-      desc: 'Skip adding husky commit hooks',
+      description: 'Skip adding husky commit hooks',
       type: Boolean,
     });
 
     // This adds support for a `--skip-user-management` flag
     this.option('skip-user-management', {
-      desc: 'Skip the user management module during app generation',
+      description: 'Skip the user management module during app generation',
       type: Boolean,
     });
 
     // This adds support for a `--skip-check-length-of-identifier` flag
     this.option('skip-check-length-of-identifier', {
-      desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
+      description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
       type: Boolean,
     });
 
     // This adds support for a `--skip-fake-data` flag
     this.option('skip-fake-data', {
-      desc: 'Skip generation of fake data for development',
+      description: 'Skip generation of fake data for development',
       type: Boolean,
     });
 
     // This adds support for a `--with-entities` flag
     this.option('with-entities', {
       alias: 'e',
-      desc: 'Regenerate the existing entities if any',
+      description: 'Regenerate the existing entities if any',
       type: Boolean,
     });
 
     // This adds support for a `--jhi-prefix` flag
     this.option('jhi-prefix', {
-      desc: 'Add prefix before services, controllers and states name',
+      description: 'Add prefix before services, controllers and states name',
       type: String,
     });
 
     // This adds support for a `--entity-suffix` flag
     this.option('entity-suffix', {
-      desc: 'Add suffix after entities name',
+      description: 'Add suffix after entities name',
       type: String,
     });
 
     // This adds support for a `--dto-suffix` flag
     this.option('dto-suffix', {
-      desc: 'Add suffix after dtos name',
+      description: 'Add suffix after dtos name',
       type: String,
     });
 
     // This adds support for a `--auth` flag
     this.option('auth', {
-      desc: 'Provide authentication type for the application when skipping server side generation',
+      description: 'Provide authentication type for the application when skipping server side generation',
       type: String,
     });
 
     // This adds support for a `--db` flag
     this.option('db', {
-      desc: 'Provide DB name for the application when skipping server side generation',
+      description: 'Provide DB name for the application when skipping server side generation',
       type: String,
     });
 
     // This adds support for a `--build` flag
     this.option('build', {
-      desc: 'Provide build tool for the application when skipping server side generation',
+      description: 'Provide build tool for the application when skipping server side generation',
       type: String,
     });
 
     // This adds support for a `--websocket` flag
     this.option('websocket', {
-      desc: 'Provide websocket option for the application when skipping server side generation',
+      description: 'Provide websocket option for the application when skipping server side generation',
       type: String,
     });
 
     // This adds support for a `--search-engine` flag
     this.option('search-engine', {
-      desc: 'Provide search engine for the application when skipping server side generation',
+      description: 'Provide search engine for the application when skipping server side generation',
       type: String,
     });
 
     // NOTE: Deprecated!!! Use --blueprints instead
     this.option('blueprint', {
-      desc: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
       type: String,
     });
     // This adds support for a `--blueprints` flag which can be used to specify one or more blueprints to use for generation
     this.option('blueprints', {
-      desc: 'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
+      description:
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
       type: String,
     });
 
     // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
     this.option('creation-timestamp', {
-      desc: 'Project creation timestamp (used for reproducible builds)',
+      description: 'Project creation timestamp (used for reproducible builds)',
       type: String,
     });
 
     this.option('incremental-changelog', {
-      desc: 'Creates incremental database changelogs',
+      description: 'Creates incremental database changelogs',
       type: Boolean,
     });
 
     this.option('recreate-initial-changelog', {
-      desc: 'Recreate the initial database changelog based on the current config',
-      type: Boolean,
-    });
-
-    this.option('skip-jhipster-dependencies', {
-      desc: "Don't write jhipster dependencies.",
+      description: 'Recreate the initial database changelog based on the current config',
       type: Boolean,
     });
 
     this.option('legacy-db-names', {
-      desc: 'Generate database names with jhipster 6 compatibility.',
+      description: 'Generate database names with jhipster 6 compatibility.',
       type: Boolean,
     });
 
     this.option('ignore-errors', {
-      desc: "Don't fail on prettier errors.",
+      description: "Don't fail on prettier errors.",
       type: Boolean,
     });
 
     this.option('native-language', {
       alias: 'n',
-      desc: 'Set application native language',
+      description: 'Set application native language',
       type: String,
       required: false,
     });
 
     this.option('enable-translation', {
-      desc: 'Enable translation',
+      description: 'Enable translation',
       type: Boolean,
       required: false,
     });
 
     this.option('language', {
       alias: 'l',
-      desc: 'Language to be added to application (existing languages are not removed)',
+      description: 'Language to be added to application (existing languages are not removed)',
       type: Array,
     });
 
     this.option('pk-type', {
-      desc: 'Default primary key type (beta)',
+      description: 'Default primary key type (beta)',
       type: String,
     });
 
     this.option('reproducible', {
-      desc: 'Try to reproduce changelog',
+      description: 'Try to reproduce changelog',
       type: Boolean,
     });
 
     this.option('client-package-manager', {
-      desc: 'Force an unsupported client package manager',
+      description: 'Force an unsupported client package manager',
       type: String,
     });
 
     this.option('cypress-coverage', {
-      desc: 'Enable Cypress code coverage report generation',
+      description: 'Enable Cypress code coverage report generation',
       type: Boolean,
     });
 
     this.option('cypress-audit', {
-      desc: 'Enable cypress-audit/lighthouse report generation',
+      description: 'Enable cypress-audit/lighthouse report generation',
       type: Boolean,
     });
 
     this.option('microfrontend', {
-      desc: 'Force generation of experimental microfrontend support',
+      description: 'Force generation of experimental microfrontend support',
       type: Boolean,
     });
 
     this.option('test-frameworks', {
-      desc: 'Test frameworks to be generated',
+      description: 'Test frameworks to be generated',
       type: Array,
     });
 
     this.option('reactive', {
-      desc: 'Generate a reactive backend',
+      description: 'Generate a reactive backend',
       type: Boolean,
     });
 
     this.option('enable-swagger-codegen', {
-      desc: 'API first development using OpenAPI-generator',
+      description: 'API first development using OpenAPI-generator',
       type: Boolean,
     });
 
     this.option('cache-provider', {
-      desc: 'Cache provider',
+      description: 'Cache provider',
       type: String,
     });
 
     this.option('enable-hibernate-cache', {
-      desc: 'Enable hibernate cache',
+      description: 'Enable hibernate cache',
       type: Boolean,
     });
   }
@@ -291,9 +286,9 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         checkNode(this.logger);
       },
 
-      checkForNewJHVersion() {
+      async checkForNewJHVersion() {
         if (!this.skipChecks) {
-          this.checkForNewVersion();
+          await this.checkForNewVersion();
         }
       },
 
@@ -368,7 +363,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_COMMON);
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES, {
-            regenerate: true,
+            generatorOptions: { regenerate: true },
           });
         }
         if (!skipServer) {
@@ -393,9 +388,12 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
         await Promise.all(
           this.jhipsterConfig.pages.map(page => {
-            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
-              skipInstall: true,
-              page,
+            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, {
+              generatorArgs: [page.name],
+              generatorOptions: {
+                skipInstall: true,
+                page,
+              },
             });
           })
         );

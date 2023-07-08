@@ -520,8 +520,8 @@ class AccountResourceIT {
 
         Optional<<%= user.persistClass %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser).isPresent();
-        testUser.get().setActivated(true);
-        userRepository.save(testUser.get())<% if (reactive) { %>.block()<% } %>;
+        testUser.orElseThrow().setActivated(true);
+        userRepository.save(testUser.orElseThrow())<% if (reactive) { %>.block()<% } %>;
 
         // Second (already activated) user
 <%_ if (reactive) { _%>
@@ -529,14 +529,14 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-            .andExpect(status().is4xxClientError());
+            .andExpect(status().isCreated());
 <%_ } _%>
     }
 
@@ -644,10 +644,10 @@ class AccountResourceIT {
 
         Optional<<%= user.persistClass %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser4).isPresent();
-        assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
+        assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
-        testUser4.get().setActivated(true);
-        userService.updateUser((new <%= user.adminUserDto %>(testUser4.get())))<% if (reactive) { %>.block()<% } %>;
+        testUser4.orElseThrow().setActivated(true);
+        userService.updateUser((new <%= user.adminUserDto %>(testUser4.orElseThrow())))<% if (reactive) { %>.block()<% } %>;
 
         // Register 4th (already activated) user
 <%_ if (reactive) { _%>
@@ -655,14 +655,14 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
-            .expectStatus().is4xxClientError();
+            .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-            .andExpect(status().is4xxClientError());
+            .andExpect(status().isCreated());
 <%_ } _%>
     }
 
@@ -701,8 +701,8 @@ class AccountResourceIT {
 
         Optional<<%= user.persistClass %>> userDup = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(userDup).isPresent();
-        assertThat(userDup.get().getAuthorities()).hasSize(1)
-            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>get<% } %>()<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>AuthoritiesConstants.USER<% } %>);
+        assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1)
+            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>()<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>AuthoritiesConstants.USER<% } %>);
     }
 
     @Test

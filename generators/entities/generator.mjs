@@ -23,7 +23,7 @@ import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     // This makes `name` a required argument.
     this.argument('entities', {
@@ -33,44 +33,43 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
     });
 
     this.option('skip-db-changelog', {
-      desc: 'Skip the generation of database changelog (liquibase for sql databases)',
+      description: 'Skip the generation of database changelog (liquibase for sql databases)',
       type: Boolean,
     });
 
     this.option('base-name', {
-      desc: 'Application base name',
+      description: 'Application base name',
       type: String,
     });
 
     this.option('defaults', {
-      desc: 'Execute jhipster with default config',
+      description: 'Execute jhipster with default config',
       type: Boolean,
-      defaults: false,
     });
 
     this.option('composed-entities', {
-      desc: 'Entities to be that already have been composed',
+      description: 'Entities to be that already have been composed',
       type: Array,
       hide: true,
-      defaults: [],
+      default: [],
     });
 
     this.option('entities-to-import', {
-      desc: 'Entities to be imported',
+      description: 'Entities to be imported',
       type: Array,
-      defaults: [],
+      default: [],
       hide: true,
     });
 
     this.option('regenerate', {
-      desc: 'Regenerate entities without prompts',
+      description: 'Regenerate entities without prompts',
       type: Boolean,
     });
 
     this.option('write-every-entity', {
-      desc: 'Private option to write every entity file',
+      description: 'Private option to write every entity file',
       type: Boolean,
-      defaults: true,
+      default: true,
       hide: true,
     });
   }
@@ -113,7 +112,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   get composing() {
     return {
       async composeApp() {
-        await this.composeWithJHipster(GENERATOR_APP, { skipPriorities: ['writing', 'postWriting'] });
+        await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { skipPriorities: ['writing', 'postWriting'] } });
       },
     };
   }

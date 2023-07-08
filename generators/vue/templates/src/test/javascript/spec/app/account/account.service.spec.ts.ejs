@@ -1,27 +1,15 @@
-import { createLocalVue } from '@vue/test-utils';
+<%_ if (authenticationUsesCsrf) { _%>
+import { vitest } from 'vitest';
+<%_ } _%>
 import axios from 'axios';
 import sinon from 'sinon';
 
-import AccountService from '@/account/account.service';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } %>
+import { createTestingPinia } from '@pinia/testing';
+import AccountService from '../../<%- clientSrcDirRelativeToClientTestDir %>account/account.service';
+import { AccountStore, useStore } from '../../<%- clientSrcDirRelativeToClientTestDir %>store';
 
-import {
-  initVueXStore,
-<%_ if (enableTranslation) { _%>
-  initI18N,
-<%_ } %>
-} from '@/shared/config/config';
-import { defaultAccountState } from '@/shared/config/store/account-store';
-
-const resetStore = store => {
-  store.replaceState({
-    accountStore: { ...defaultAccountState },
-<%_ if (enableTranslation) { _%>
-    translationStore: { languages: {} },
-<%_ } %>
-  });
+const resetStore = (store: AccountStore) => {
+  store.$reset();
 };
 
 const axiosStub = {
@@ -29,16 +17,10 @@ const axiosStub = {
   post: sinon.stub(axios, 'post'),
 };
 
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
-const mockedCookie = { get: jest.fn(() => { return 'token'; }) };
-<%_ } _%>
-const localVue = createLocalVue();
-const store = initVueXStore(localVue);
+createTestingPinia({ stubActions: false });
+const store = useStore();
 
 describe('Account Service test suite', () => {
-<%_ if (enableTranslation) { _%>
-  let i18n;
-<%_ } %>
   let accountService: AccountService;
 
   beforeEach(() => {
@@ -48,52 +30,49 @@ describe('Account Service test suite', () => {
 <%_ } %>
     axiosStub.get.reset();
     resetStore(store);
-<%_ if (enableTranslation) { _%>
-    i18n = initI18N(localVue);
-<%_ } %>
   });
 
   it('should init service and do not retrieve account', async () => {
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('management/info').resolves({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
 
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
-    expect(store.getters.logon).toBe(null);
+    expect(store.logon).toBe(null);
     expect(accountService.authenticated).toBe(false);
-    expect(store.getters.account).toBe(null);
+    expect(store.account).toBe(null);
     expect(axiosStub.get.calledWith('management/info')).toBeTruthy();
-    expect(store.getters.activeProfiles[0]).toBe('dev');
-    expect(store.getters.activeProfiles[1]).toBe('test');
-    expect(store.getters.ribbonOnProfiles).toBe('dev');
+    expect(store.activeProfiles[0]).toBe('dev');
+    expect(store.activeProfiles[1]).toBe('test');
+    expect(store.ribbonOnProfiles).toBe('dev');
   });
 
   it('should init service and retrieve profiles if already logged in before but no account found', async () => {
     axiosStub.get.resolves({});
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
-    expect(store.getters.logon).toBe(null);
+    expect(store.logon).toBe(null);
     expect(accountService.authenticated).toBe(false);
-    expect(store.getters.account).toBe(null);
+    expect(store.account).toBe(null);
     expect(axiosStub.get.calledWith('management/info')).toBeTruthy();
   });
 
   it('should init service and retrieve profiles if already logged in before but exception occurred and should be logged out', async () => {
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('api/account').rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
     expect(accountService.authenticated).toBe(false);
-    expect(store.getters.account).toBe(null);
+    expect(store.account).toBe(null);
     expect(axiosStub.get.calledWith('management/info')).toBeTruthy();
   });
 
   it('should init service and check for authority after retrieving account but getAccount failed', async () => {
     axiosStub.get.rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
@@ -103,7 +82,7 @@ describe('Account Service test suite', () => {
 
   it('should init service and check for authority after retrieving account', async () => {
     axiosStub.get.resolves({ status: 200, data: { authorities: ['USER'], langKey: 'en' } });
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
@@ -113,7 +92,7 @@ describe('Account Service test suite', () => {
 
   it('should init service as not authentified and not return any authorities admin and not retrieve account', async () => {
     axiosStub.get.rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('ADMIN').then((value: boolean) => {
@@ -123,7 +102,7 @@ describe('Account Service test suite', () => {
 
   it('should init service as not authentified and return authority user', async () => {
     axiosStub.get.rejects();
-    accountService = new AccountService(store<%_ if (enableTranslation) { _%>, new TranslationService(store, i18n)<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>, mockedCookie<%_ } %>);
+    accountService = new AccountService(store);
     await accountService.update();
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {

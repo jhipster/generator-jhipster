@@ -19,7 +19,7 @@ const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-deployment.yml
 - <%= appOut %>/<%= appName %>-service.yml
   <%_ if (!appConfig.databaseTypeNo) { _%>
-- <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType %>.yml
+- <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType ?? appConfig.databaseType %>.yml
   <%_ } _%>
   <%_ if (appConfig.searchEngineElasticsearch) { _%>
 - <%= appOut %>/<%= appName %>-elasticsearch.yml
@@ -43,14 +43,16 @@ const appOut = appName.concat('-', suffix); _%>
   <%_  } _%>
 <%_ }) _%>
 <%_ if (useKeycloak) { _%>
+  <%_ if (ingressTypeGke) { _%>
 # cert-manager
 - cert-manager/letsencrypt-staging-ca-secret.yml
 - cert-manager/letsencrypt-staging-issuer.yml
+  <%_ } _%>
 # keycloak
 - keycloak-<%= suffix %>/keycloak-configmap.yml
 - keycloak-<%= suffix %>/keycloak-postgresql.yml
 - keycloak-<%= suffix %>/keycloak.yml
-<%_ } _%>  
+<%_ } _%>
 <%_ if (useKafka) { _%>
 # messagebroker
 - messagebroker-<%= suffix %>/kafka.yml

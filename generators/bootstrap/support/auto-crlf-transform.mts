@@ -72,6 +72,6 @@ const autoCrlfTransform = (git: SimpleGit) =>
       file.contents = Buffer.from(normalizeLineEndings(file.contents.toString(), '\r\n'));
     }
     return file;
-  }, 'jhipster:crlf');
+  });
 
 export default autoCrlfTransform;

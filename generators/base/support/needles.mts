@@ -19,7 +19,7 @@
 import assert from 'assert';
 import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
-import CoreGenerator from '../generator-base.mjs';
+import CoreGenerator from '../../base-core/generator-base.mjs';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.mjs';
 import { joinCallbacks } from './write-files.mjs';
 
@@ -214,7 +214,7 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
     }
     const message = `Missing ${optional ? 'optional' : 'required'} jhipster-needle ${needle} not found at '${filePath}'`;
     if (optional) {
-      this.logger.warn(message);
+      this.log.warn(message);
       return content;
     }
     throw new Error(message);

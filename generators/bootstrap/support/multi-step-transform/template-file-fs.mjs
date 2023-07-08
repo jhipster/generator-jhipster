@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import path from 'path';
 
 import TemplateFile from './template-file.mjs';

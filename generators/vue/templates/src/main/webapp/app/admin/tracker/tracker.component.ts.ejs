@@ -1,48 +1,62 @@
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref, onMounted, onUnmounted } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 import { Subscription } from 'rxjs';
 
+import { useDateFormat } from '@/shared/composables'
 import TrackerService from './tracker.service';
+import { useRoute } from 'vue-router';
 
-@Component
-export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: '<%=jhiPrefixCapitalized%>TrackerComponent',
+  setup() {
+    const { formatDateShort: formatDate } = useDateFormat();
+    const trackerService = inject<TrackerService>('trackerService');
+    const activities: Ref<any[]> = ref([]);
+    const route = useRoute();
+    let subscription: Subscription;
 
-  public activities: any[] = [];
-  private subscription?: Subscription;
-
-  @Inject('trackerService') private trackerService: () => TrackerService;
-
-  public mounted(): void {
-    this.init();
-  }
-
-  public destroyed(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = undefined;
-    }
-  }
-
-  public init(): void {
-    this.subscription = this.trackerService().subscribe(activity => {
-      this.showActivity(activity);
-    });
-  }
-
-  public showActivity(activity: any): void {
-    let existingActivity = false;
-    for (let index = 0; index < this.activities.length; index++) {
-      if (this.activities[index].sessionId === activity.sessionId) {
-        existingActivity = true;
-        if (activity.page === 'logout') {
-          this.activities.splice(index, 1);
-        } else {
-          this.activities.splice(index, 1);
-          this.activities.push(activity);
+    const showActivity = (activity: any) => {
+      let existingActivity = false;
+      for (let index = 0; index < activities.value.length; index++) {
+        if (activities.value[index].sessionId === activity.sessionId) {
+          existingActivity = true;
+          if (activity.page === 'logout') {
+            activities.value.splice(index, 1);
+          } else {
+            activities.value.splice(index, 1);
+            activities.value.push(activity);
+          }
         }
       }
-    }
-    if (!existingActivity && activity.page !== 'logout') {
-      this.activities.push(activity);
-    }
-  }
-}
+      if (!existingActivity && activity.page !== 'logout') {
+        activities.value.push(activity);
+      }
+    };
+
+    onMounted(() => {
+      subscription = trackerService.subscribe(activity => {
+        showActivity(activity);
+      });
+      // Make sure current session shows on the list
+      trackerService.sendActivity(route.fullPath);
+    });
+
+    onUnmounted(() => {
+      if (subscription) {
+        subscription.unsubscribe();
+        subscription = null;
+      }
+    });
+
+    return {
+      activities,
+      formatDate,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+});

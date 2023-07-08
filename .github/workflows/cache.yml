@@ -59,15 +59,11 @@ jobs:
             ~/.npm
             ~/.cache/Cypress/
           key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load gradle cache'
         uses: actions/cache@v3
         with:
@@ -75,8 +71,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
 
       # generator-jhipster npm
       - name: 'Install generator-jhipster npm version'
@@ -117,10 +111,13 @@ jobs:
         run: $JHI_SCRIPTS/10-install-jhipster.sh
         continue-on-error: true
 
-      - name: 'maven'
+      - name: 'mvn(imperative): prepare project'
         run: |
           $JHI_SCRIPTS/11-generate-config.sh
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
+        continue-on-error: true
+      - name: 'mvn(imperative): cache dependencies'
+        run: |
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces
           npm install --force
           npm run backend:build-cache || true
           cd ..
@@ -128,10 +125,13 @@ jobs:
           mkdir app
         continue-on-error: true
 
-      - name: 'maven reactive'
+      - name: 'mvn(reactive): prepare project'
         run: |
           $JHI_SCRIPTS/11-generate-config.sh
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --reactive
+        continue-on-error: true
+      - name: 'mvn(reactive): cache dependencies'
+        run: |
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --reactive
           npm install --force
           npm run backend:build-cache || true
           cd ..
@@ -139,10 +139,13 @@ jobs:
           mkdir app
         continue-on-error: true
 
-      - name: 'gradle'
+      - name: 'gradle(imperative): prepare project'
         run: |
           $JHI_SCRIPTS/11-generate-config.sh
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --build gradle
+        continue-on-error: true
+      - name: 'gradle(imperative): cache dependencies'
+        run: |
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --build gradle
           npm install --force
           npm run backend:build-cache || true
           cd ..
@@ -150,10 +153,13 @@ jobs:
           mkdir app
         continue-on-error: true
 
-      - name: 'gradle reactive'
+      - name: 'gradle(reactive): prepare project'
         run: |
           $JHI_SCRIPTS/11-generate-config.sh
-          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --build gradle --reactive
+        continue-on-error: true
+      - name: 'gradle(reactive): cache dependencies'
+        run: |
+          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --build gradle --reactive
           npm install --force
           npm run backend:build-cache || true
           cd ..

@@ -46,6 +46,7 @@ import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 import command from './command.mjs';
+import { NODE_VERSION } from '../generator-constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
@@ -169,6 +170,7 @@ export default class extends BaseGenerator {
     return {
       prepareCommands() {
         this.application.commands = [];
+        this.application.nodeVersion = NODE_VERSION;
         if (!this.application[GENERATORS]) return;
         for (const generator of Object.keys(this.application[GENERATORS])) {
           const subGeneratorConfig = this.getSubGeneratorStorage(generator).getAll();
@@ -245,10 +247,10 @@ export default class extends BaseGenerator {
             ejslint: "ejslint generators/**/*.ejs && ejslint generators/**/*.ejs -d '&'",
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            mocha: 'mocha generators --no-insight --forbid-only',
+            esmocha: 'esmocha generators --no-insight --forbid-only',
             pretest: 'npm run prettier:check && npm run lint',
-            test: 'npm run mocha --',
-            'update-snapshot': 'npm run mocha -- --no-parallel --updateSnapshot',
+            test: 'npm run esmocha',
+            'update-snapshot': 'npm run esmocha -- --update-snapshot',
           },
           dependencies: {
             chalk: `${packagejs.dependencies.chalk}`,
@@ -259,15 +261,13 @@ export default class extends BaseGenerator {
             'eslint-config-airbnb-base': `${packagejs.devDependencies['eslint-config-airbnb-base']}`,
             'eslint-config-prettier': `${packagejs.devDependencies['eslint-config-prettier']}`,
             'eslint-plugin-import': `${packagejs.devDependencies['eslint-plugin-import']}`,
-            'eslint-plugin-mocha': `${packagejs.devDependencies['eslint-plugin-mocha']}`,
             'eslint-plugin-prettier': `${packagejs.devDependencies['eslint-plugin-prettier']}`,
-            mocha: `${packagejs.devDependencies.mocha}`,
-            'mocha-expect-snapshot': `${packagejs.devDependencies['mocha-expect-snapshot']}`,
+            esmocha: `${packagejs.devDependencies.esmocha}`,
             prettier: `${packagejs.dependencies.prettier}`,
             'yeoman-test': `${packagejs.devDependencies['yeoman-test']}`,
           },
           engines: {
-            node: '>=16.13.0',
+            node: `>=${packagejs.engines.node}`,
           },
           imports: {
             '#test-utils': './test/utils.mjs',
@@ -323,20 +323,22 @@ export default class extends BaseGenerator {
         } = this.options;
         if (!generateSnapshots) return;
 
-        // Generate snapshots to add to git.
-        this.logger.info(`
-This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
         try {
           if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
-            await this.spawnCommand('npm', ['link', 'generator-jhipster']);
+            this.log.verboseInfo('Linking generator-jhipster');
+            await this.spawnCommand('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
           }
+
+          // Generate snapshots to add to git.
+          this.log.verboseInfo(`
+This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
           await this.spawnCommand('npm', ['run', 'update-snapshot']);
         } catch (error) {
           if (generateSnapshots !== undefined) {
             // We are forcing to generate snapshots fail the generation.
             throw error;
           }
-          this.logger.warn('Fail to generate snapshots');
+          this.log.warn('Fail to generate snapshots');
         }
       },
     };
@@ -351,7 +353,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
       end() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
 
-        this.logger.log(`${chalk.bold.green('##### USAGE #####')}
+        this.log.log(`${chalk.bold.green('##### USAGE #####')}
 To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}

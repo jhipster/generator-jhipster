@@ -19,8 +19,9 @@
 import JDLParser from './jdl-parser.js';
 import deduplicate from '../utils/array-utils.js';
 
-import { applicationOptions, entityOptions, validations } from '../jhipster/index.mjs';
+import { applicationOptions, entityOptions, validations, relationshipOptions } from '../jhipster/index.mjs';
 
+const { BUILT_IN_ENTITY } = relationshipOptions;
 const { OptionNames } = applicationOptions;
 const { PaginationTypes } = entityOptions;
 const {
@@ -333,12 +334,12 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   relationshipOption(context) {
-    if (context.JPA_DERIVED_IDENTIFIER) {
-      return { optionName: 'jpaDerivedIdentifier', type: 'UNARY' };
+    if (context.BUILT_IN_ENTITY) {
+      return { optionName: BUILT_IN_ENTITY, type: 'UNARY' };
     }
 
     /* istanbul ignore next */
-    throw new Error("No valid relationship option found, expected 'jpaDerivedIdentifier'.");
+    throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}'.`);
   }
 
   enumDeclaration(context) {

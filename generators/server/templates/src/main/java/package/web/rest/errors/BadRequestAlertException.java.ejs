@@ -24,8 +24,6 @@ import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCauseBuilder;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings("java:S110") // Inheritance tree of classes should not be too deep
 public class BadRequestAlertException extends ErrorResponseException {
@@ -62,12 +60,5 @@ public class BadRequestAlertException extends ErrorResponseException {
 
     public ProblemDetailWithCause getProblemDetailWithCause() {
     	return (ProblemDetailWithCause) this.getBody();
-    }
-
-    private static Map<String, Object> getAlertParameters(String entityName, String errorKey) {
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("message", "error." + errorKey);
-        parameters.put("params", entityName);
-        return parameters;
     }
 }

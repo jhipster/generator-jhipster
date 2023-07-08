@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../base/index.mjs';
+import type BaseGenerator from '../base-core/index.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore

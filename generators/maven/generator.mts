@@ -56,16 +56,40 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         assert.equal(application.buildTool, MAVEN);
       },
       addSourceNeddles({ source }) {
-        source.addMavenAnnotationProcessor = artifact => this.pomStorage.addAnnotationProcessor(artifact);
-        source.addMavenDependency = artifact => this.pomStorage.addDependency(artifact);
-        source.addMavenDependencyManagement = artifact => this.pomStorage.addDependencyManagement(artifact);
-        source.addMavenDistributionManagement = artifact => this.pomStorage.addDistributionManagement(artifact);
-        source.addMavenPlugin = plugin => this.pomStorage.addPlugin(plugin);
-        source.addMavenPluginManagement = plugin => this.pomStorage.addPluginManagement(plugin);
-        source.addMavenPluginRepository = repository => this.pomStorage.addPluginRepository(repository);
-        source.addMavenProfile = profile => this.pomStorage.addProfile(profile);
-        source.addMavenProperty = property => this.pomStorage.addProperty(property);
-        source.addMavenRepository = repository => this.pomStorage.addRepository(repository);
+        function createForEach<T>(callback: (arg: T) => any): (arg: T | T[]) => void {
+          return (arg: T | T[]): void => {
+            const argArray = Array.isArray(arg) ? arg : [arg];
+            for (const item of argArray) {
+              callback(item);
+            }
+          };
+        }
+        source.addMavenAnnotationProcessor = createForEach(artifact => this.pomStorage.addAnnotationProcessor(artifact));
+        source.addMavenDependency = createForEach(artifact => this.pomStorage.addDependency(artifact));
+        source.addMavenDependencyManagement = createForEach(artifact => this.pomStorage.addDependencyManagement(artifact));
+        source.addMavenDistributionManagement = createForEach(artifact => this.pomStorage.addDistributionManagement(artifact));
+        source.addMavenPlugin = createForEach(plugin => this.pomStorage.addPlugin(plugin));
+        source.addMavenPluginManagement = createForEach(plugin => this.pomStorage.addPluginManagement(plugin));
+        source.addMavenPluginRepository = createForEach(repository => this.pomStorage.addPluginRepository(repository));
+        source.addMavenProfile = createForEach(profile => this.pomStorage.addProfile(profile));
+        source.addMavenProperty = createForEach(property => this.pomStorage.addProperty(property));
+        source.addMavenRepository = createForEach(repository => this.pomStorage.addRepository(repository));
+
+        source.addMavenDefinition = definition => {
+          // profiles should be added first due to inProfile
+          definition.profiles?.forEach(profile => this.pomStorage.addProfile(profile));
+          // annotationProcessors may depend on pluginManagement
+          definition.pluginManagement?.forEach(plugin => this.pomStorage.addPluginManagement(plugin));
+
+          definition.dependencies?.forEach(dependency => this.pomStorage.addDependency(dependency));
+          definition.dependencyManagement?.forEach(dependency => this.pomStorage.addDependencyManagement(dependency));
+          definition.distributionManagement?.forEach(distribution => this.pomStorage.addDistributionManagement(distribution));
+          definition.plugins?.forEach(plugin => this.pomStorage.addPlugin(plugin));
+          definition.pluginRepositories?.forEach(repository => this.pomStorage.addPluginRepository(repository));
+          definition.properties?.forEach(property => this.pomStorage.addProperty(property));
+          definition.repositories?.forEach(repository => this.pomStorage.addRepository(repository));
+          definition.annotationProcessors?.forEach(annotation => this.pomStorage.addAnnotationProcessor(annotation));
+        };
       },
     });
   }

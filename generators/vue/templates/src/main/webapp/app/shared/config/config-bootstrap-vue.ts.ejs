@@ -23,16 +23,18 @@ import {
   VBModal,
   BFormDatepicker,
   BInputGroup,
-  BInputGroupPrepend
+  BInputGroupPrepend,
+  ToastPlugin,
 } from 'bootstrap-vue';
 
 export function initBootstrapVue(vue) {
+  vue.use(ToastPlugin);
+
   vue.component('b-badge', BBadge);
   vue.component('b-dropdown', BDropdown);
   vue.component('b-dropdown-item', BDropdownItem);
   vue.component('b-link', BLink);
   vue.component('b-alert', BAlert);
-  vue.component('b-modal', BModal);
   vue.component('b-button', BButton);
   vue.component('b-navbar', BNavbar);
   vue.component('b-navbar-nav', BNavbarNav);
@@ -52,5 +54,5 @@ export function initBootstrapVue(vue) {
   vue.directive('b-modal', VBModal);
   vue.component('b-form-datepicker', BFormDatepicker);
   vue.component('b-input-group', BInputGroup);
-  vue.component('b-input-group-prepend', BInputGroupPrepend)
+  vue.component('b-input-group-prepend', BInputGroupPrepend);
 }

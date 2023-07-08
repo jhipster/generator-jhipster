@@ -31,15 +31,15 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
 org:
   neo4j:
     migrations:
       locations-to-scan:
       packages-to-scan: <%= packageName %>.config.neo4j
       installed-by: <%= baseName %>
-<%_ } _%>
 
+<%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
 eureka:
   client:
@@ -106,15 +106,15 @@ spring:
 <%_ } _%>
 <%_ if (messageBrokerPulsar) { _%>
     function:
-      definition: stringSupplier;stringConsumer
+      definition: testStringSupplier;testStringConsumer
     stream:
       bindings:
-        stringSupplier-out-0:
+        testStringSupplier-out-0:
           destination: <%= dasherizedBaseName %>
-        stringConsumer-in-0:
+        testStringConsumer-in-0:
           destination: <%= dasherizedBaseName %>
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: test
@@ -132,11 +132,13 @@ spring:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-<%_ if (!generateUserManagement && (applicationTypeMonolith || applicationTypeGateway) && authenticationTypeJwt) { _%>
+<%_ if (generateInMemoryUserCredentials) { _%>
   security:
     user:
       name: test
       password: test
+      roles:
+        - USER
 <%_ } _%>
   task:
     execution:

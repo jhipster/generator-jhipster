@@ -1,4 +1,16 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { defineComponent } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 
-@Component
-export default class JhiFooter extends Vue {}
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: '<%=jhiPrefixCapitalized%>Footer',
+  setup() {
+    return {
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+});

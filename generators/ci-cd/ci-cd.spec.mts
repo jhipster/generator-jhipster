@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { GENERATOR_CI_CD } from '../generator-list.mjs';
 import { dryRunHelpers as helpers } from '../../test/support/index.mjs';

@@ -7,7 +7,7 @@ const jdlEntitiesSamplesFolder = join(samplesFolder, 'jdl-entities');
 
 const isDirectory = dir => {
   try {
-    return statSync(samplePath).isDirectory();
+    return statSync(dir).isDirectory();
   } catch (error) {
     return false;
   }

@@ -1,25 +1,14 @@
 import axios from 'axios';
-import { Store } from 'vuex';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
+
+import { AccountStore } from '@/store';
 
 export default class AccountService {
-  constructor(
-    private store: Store<any>,
-<%_ if (enableTranslation) { _%>
-    private translationService: TranslationService,
-<%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
-    private cookie: any,
-<%_ } _%>
-  ) {
-  }
+  constructor(private store: AccountStore) {}
 
   public async update(): Promise<void> {
-    if (!this.store.getters.profilesLoaded) {
+    if (!this.store.profilesLoaded) {
       await this.retrieveProfiles();
-      this.store.commit('profilesLoaded');
+      this.store.setProfilesLoaded();
     }
     await this.loadAccount();
   }
@@ -28,8 +17,8 @@ export default class AccountService {
     try {
       const res = await axios.get<any>('management/info');
       if (res.data && res.data.activeProfiles) {
-        this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
-        this.store.commit('setActiveProfiles', res.data['activeProfiles']);
+        this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
+        this.store.setActiveProfiles(res.data['activeProfiles']);
       }
       return true;
     } catch (error) {
@@ -42,37 +31,31 @@ export default class AccountService {
       const response = await axios.get<any>('api/account');
       if (response.status === 200 && response.data) {
         const account = response.data;
-        this.store.commit('authenticated', account);
-<%_ if (enableTranslation) { _%>
-        if (this.store.getters.currentLanguage !== account.langKey) {
-          this.store.commit('currentLanguage', account.langKey);
-          this.translationService.refreshTranslation(this.store.getters.currentLanguage);
-        }
-<%_ } _%>
+        this.store.setAuthentication(account);
         return true;
       }
     } catch (error) {}
 
-    this.store.commit('logout');
+    this.store.logout();
     return false;
   }
 
   public async loadAccount() {
-    if (this.store.getters.logon) {
-      return this.store.getters.logon;
+    if (this.store.logon) {
+      return this.store.logon;
     }
 <%_ if (authenticationTypeJwt) { _%>
     const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
-<%_ } else { _%>
-    const token = this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN');
-<%_ } _%>
     if (this.authenticated && this.userAuthorities && token) {
+<%_ } else { _%>
+    if (this.authenticated && this.userAuthorities) {
+<%_ } _%>
       return;
     }
 
     const promise = this.retrieveAccount();
-    this.store.commit('authenticate', promise);
-    promise.then(() => this.store.commit('authenticate', null));
+    this.store.authenticate(promise);
+    promise.then(() => this.store.authenticate(null));
     await promise;
   }
 
@@ -85,11 +68,11 @@ export default class AccountService {
   }
 
   public get authenticated(): boolean {
-    return this.store.getters.authenticated;
+    return this.store.authenticated;
   }
 
   public get userAuthorities(): string[] {
-    return this.store.getters.account?.authorities;
+    return this.store.account?.authorities;
   }
 
   private checkAuthorities(authorities: string[]): boolean {

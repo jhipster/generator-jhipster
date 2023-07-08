@@ -368,31 +368,16 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/timezone/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/management/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapper.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/repository/timezone/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/DomainUserDetailsServiceIT.java": {
@@ -413,12 +398,6 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -428,16 +407,7 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
@@ -462,12 +432,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": {

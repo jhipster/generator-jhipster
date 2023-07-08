@@ -31,12 +31,14 @@ import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<%_ if (!skipClient) { _%>
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
+<%_ } _%>
 import org.springframework.security.web.SecurityFilterChain;
-<%_ if (!skipClient || authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (!skipClient || authenticationUsesCsrf) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import tech.jhipster.web.filter.CookieCsrfFilter;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -45,7 +47,7 @@ import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -75,18 +77,14 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 <%_ } _%>
-<%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
-import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-  <%_ if (applicationTypeMonolith) { _%>
-import org.springframework.security.config.Customizer;
-  <%_ } _%>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
@@ -99,8 +97,11 @@ import <%= packageName %>.security.oauth2.CustomClaimConverter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
 
+<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
+import static org.springframework.security.config.Customizer.withDefaults;
+<%_ } _%>
+
 @Configuration
-@EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
@@ -121,7 +122,7 @@ public class SecurityConfiguration {
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
     }
-<%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -132,11 +133,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+<%_ if (!applicationTypeMicroservice) { _%>
+            .cors(withDefaults())
+<%_ } _%>
             .csrf(csrf -> csrf
 <%_ if (devDatabaseTypeH2Any) { _%>
                 .ignoringRequestMatchers("/h2-console/**")
 <%_ } _%>
-<%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 // See https://stackoverflow.com/q/74447118/65681
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
@@ -147,14 +151,14 @@ public class SecurityConfiguration {
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
-  <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipClient) { _%>
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
-                .frameOptions(frameOptions -> frameOptions.sameOrigin())
+                .frameOptions(FrameOptionsConfig::sameOrigin)
                 .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 .permissionsPolicy(permissions ->
                     permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
@@ -179,7 +183,7 @@ public class SecurityConfiguration {
 <%_ } else { _%>
                     .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
                     .requestMatchers("/api/register").permitAll()
                     .requestMatchers("/api/activate").permitAll()
                     .requestMatchers("/api/account/reset-password/init").permitAll()
@@ -200,7 +204,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/management/prometheus").permitAll()
                     .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
             .rememberMe(rememberMe ->
                 rememberMe
                     .rememberMeServices(rememberMeServices)

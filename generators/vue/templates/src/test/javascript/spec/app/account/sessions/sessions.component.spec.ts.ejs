@@ -1,21 +1,20 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import * as config from '@/shared/config/config';
-import SessionsClass from '@/account/sessions/sessions.component';
-import Sessions from '@/account/sessions/sessions.vue';
-import router from '@/router';
+
+import { createTestingPinia } from '@pinia/testing';
+import { useStore } from '../../../<%- clientSrcDirRelativeToClientTestDir %>store';
+import Sessions from '../../../<%- clientSrcDirRelativeToClientTestDir %>account/sessions/sessions.vue';
+import router from '../../../<%- clientSrcDirRelativeToClientTestDir %>router';
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import TranslationService from '../../../<%- clientSrcDirRelativeToClientTestDir %>locale/translation.service';
 <%_ } _%>
 
-const localVue = createLocalVue();
+type SessionsComponentType = InstanceType<typeof Sessions>;
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = config.initVueXStore(localVue);
+const pinia = createTestingPinia({ stubActions: false });
+
+const store = useStore();
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
@@ -23,24 +22,21 @@ const axiosStub = {
 };
 
 describe('Sessions Component', () => {
-  let wrapper: Wrapper<SessionsClass>;
-  let sessions: SessionsClass;
+  let sessions: SessionsComponentType;
 
   beforeEach(() => {
     axiosStub.get.reset();
     axiosStub.get.resolves({ data: [] });
     axiosStub.delete.reset();
 
-    store.commit('authenticated', {
-      login: 'username'
+    store.setAuthentication({
+      login: 'username',
     });
 
-    wrapper = shallowMount<SessionsClass>(Sessions, {
-      store,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      localVue
+    const wrapper = shallowMount(Sessions, {
+      global: {
+        plugins: [pinia],
+      },
     });
     sessions = wrapper.vm;
   });
@@ -60,7 +56,7 @@ describe('Sessions Component', () => {
     axiosStub.delete.resolves();
 
     // When
-    sessions.invalidate('session');
+    await sessions.invalidate('session');
     await sessions.$nextTick();
 
     // Then
@@ -76,7 +72,7 @@ describe('Sessions Component', () => {
     axiosStub.delete.rejects();
 
     // When
-    sessions.invalidate('session');
+    await sessions.invalidate('session');
     await sessions.$nextTick();
 
     // Then

@@ -1,10 +1,11 @@
 node_modules
 docs
 .git
-test/jdl/**/.jhipster/**
+jdl/**/.jhipster/**
 .vscode-test
 **/templates/**/
 **/jdl-core.min.js
 **/generated-serialized-grammar.js
 test/fixtures/**
 dist
+coverage

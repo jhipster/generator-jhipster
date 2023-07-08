@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { fn, Mock } from 'jest-mock';
+import { esmocha, expect } from 'esmocha';
 import { RunResult } from 'yeoman-test';
 import { toHaveBeenCalledAfter } from 'jest-extended';
 
@@ -92,7 +91,7 @@ describe('generator - base - with blueprint', () => {
         .withFakeTestBlueprint('generator-jhipster-myblueprint', {
           packageJson: {
             peerDependencies: {
-              'generator-jhipster': '^7.0.0-beta.0',
+              'generator-jhipster': '>=7.0.0-beta.0',
             },
           },
         })
@@ -266,10 +265,10 @@ describe('generator - base-blueprint', () => {
     'end',
   ];
 
-  const createPrioritiesFakes = (): Record<string, Mock> => {
-    const mockedPriorities: Record<string, Mock> = {};
+  const createPrioritiesFakes = (): Record<string, esmocha.Mock> => {
+    const mockedPriorities: Record<string, esmocha.Mock> = {};
     priorities.forEach(priority => {
-      mockedPriorities[priority] = fn();
+      mockedPriorities[priority] = esmocha.fn();
     });
     return mockedPriorities;
   };
@@ -416,7 +415,7 @@ describe('generator - base-blueprint', () => {
 
   describe('priorities', () => {
     describe('when every priority has been implemented', () => {
-      let mockedPriorities: Record<string, Mock>;
+      let mockedPriorities: Record<string, esmocha.Mock>;
       let mockBlueprintSubGen;
       before(() => {
         mockedPriorities = createPrioritiesFakes();

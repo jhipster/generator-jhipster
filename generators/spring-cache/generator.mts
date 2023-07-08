@@ -20,9 +20,10 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_SPRING_CACHE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
-import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
+import { createNeedleCallback } from '../base/support/needles.mjs';
+import { getCacheProviderMavenDefinition } from './internal/dependencies.mjs';
 
-export default class SpringCacheGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -31,7 +32,41 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<Sprin
   }
 
   get preparing() {
-    return this.asPreparingTaskGroup({});
+    return this.asPreparingTaskGroup({
+      addNeedles({ source, application }) {
+        if (
+          (application as any).cacheProviderEhcache ||
+          (application as any).cacheProviderCaffeine ||
+          (application as any).cacheProviderRedis
+        ) {
+          const cacheConfigurationFile = `${application.javaPackageSrcDir}config/CacheConfiguration.java`;
+          const needle = `${(application as any).cacheProvider}-add-entry`;
+          const useJcacheConfiguration = (application as any).cacheProviderRedis;
+          const addEntryToCacheCallback = entry =>
+            createNeedleCallback({
+              needle,
+              contentToAdd: `createCache(cm, ${entry}${useJcacheConfiguration ? ', jcacheConfiguration' : ''});`,
+            });
+
+          source.addEntryToCache = ({ entry }) => this.editFile(cacheConfigurationFile, addEntryToCacheCallback(entry));
+          source.addEntityToCache = ({ entityAbsoluteClass, relationships }) => {
+            const entry = `${entityAbsoluteClass}.class.getName()`;
+            this.editFile(
+              cacheConfigurationFile,
+              addEntryToCacheCallback(entry),
+              ...(relationships ?? [])
+                .filter(rel => rel.collection)
+                .map(rel => addEntryToCacheCallback(`${entry} + ".${rel.propertyName}"`))
+            );
+          };
+        } else {
+          // Add noop
+          source.addEntryToCache = ({ entry }) => {};
+          // Add noop
+          source.addEntityToCache = ({ entityAbsoluteClass }) => {};
+        }
+      },
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -64,10 +99,48 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<Sprin
           source.applyFromGradle?.({ script: 'gradle/cache.gradle' });
         }
       },
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          if (!application.javaDependencies) {
+            throw new Error('Some application fields are be mandatory');
+          }
+          const applicationAny = application as any;
+
+          source.addMavenDependency?.({
+            groupId: 'org.springframework.boot',
+            artifactId: 'spring-boot-starter-cache',
+          });
+
+          const definition = getCacheProviderMavenDefinition(applicationAny.cacheProvider, application.javaDependencies);
+          source.addMavenDefinition?.(definition.base);
+          if (applicationAny.enableHibernateCache && definition.hibernateCache) {
+            source.addMavenDefinition?.(definition.hibernateCache);
+          }
+        }
+      },
     });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      customizeFiles({ application, entities, source }) {
+        if (application.databaseTypeSql) {
+          for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+            source.addEntityToCache?.({
+              entityAbsoluteClass: (entity as any).entityAbsoluteClass,
+              relationships: entity.relationships,
+            });
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.postWritingEntities));
   }
 }

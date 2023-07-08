@@ -40,7 +40,7 @@
 
       <div class="alert alert-warning" *ngSwitchCase="false">
         <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount"><%- getWebappTranslation('global.messages.info.register.noaccount') %></span>&nbsp;
-        <a class="alert-link" routerLink="account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link"><%- getWebappTranslation('global.messages.info.register.link') %></a>
+        <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link"><%- getWebappTranslation('global.messages.info.register.link') %></a>
       </div>
       <%_ } _%>
     </div>

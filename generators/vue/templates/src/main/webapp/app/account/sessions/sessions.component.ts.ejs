@@ -1,42 +1,57 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { defineComponent, ref, Ref, computed } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 import axios from 'axios';
 
-@Component
-export default class Sessions extends Vue {
-  public success: string = null;
-  public error: string = null;
-  public sessions: any[] = [];
+import { useStore } from '@/store';
 
-  public created(): void {
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Sessions',
+  setup() {
+    const store = useStore();
+
+    const success: Ref<string> = ref(null);
+    const error: Ref<string> = ref(null);
+    const sessions: Ref<any[]> = ref([]);
+
+    const authenticated = computed(() => store.authenticated);
+    const username = computed(() => store.account?.login ?? '');
+
+    return {
+      success,
+      error,
+      sessions,
+      authenticated,
+      username,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+  created(): void {
     this.retrieveSessions();
-  }
-
-  public retrieveSessions(): void {
-    axios.get('api/account/sessions/').then(response => {
-      this.error = null;
-      this.sessions = response.data;
-    });
-  }
-
-  public invalidate(session): void {
-    axios
-      .delete('api/account/sessions/' + session)
-      .then(() => {
+  },
+  methods: {    
+    retrieveSessions() {
+      return axios.get('api/account/sessions/').then(response => {
         this.error = null;
-        this.success = 'OK';
-        this.retrieveSessions();
-      })
-    .catch(() => {
-      this.success = null;
-      this.error = 'ERROR';
-    });
-  }
-
-  public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
-  }
-
-  public get username(): string {
-    return this.$store.getters.account ? this.$store.getters.account.login : '';
-  }
-}
+        this.sessions = response.data;
+      });
+    },
+    invalidate(session) {
+      return axios
+        .delete('api/account/sessions/' + session)
+        .then(() => {
+          this.error = null;
+          this.success = 'OK';
+          this.retrieveSessions();
+        })
+      .catch(() => {
+        this.success = null;
+        this.error = 'ERROR';
+      });
+    },
+  },
+});

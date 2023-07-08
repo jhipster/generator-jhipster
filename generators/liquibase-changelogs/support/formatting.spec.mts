@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import formatAsLiquibaseRemarks from './formatting.mjs';
 
 describe('generator - liquibase-changelogs - support - formatting', () => {

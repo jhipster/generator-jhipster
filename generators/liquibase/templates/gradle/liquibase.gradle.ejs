@@ -1,0 +1,106 @@
+configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
+dependencies {
+  implementation "org.liquibase:liquibase-core"
+  liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:<%- javaDependencies.picocli %>"
+<%_ if (databaseTypeSql && !reactive) { _%>
+
+  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (prodDatabaseType !== devDatabaseType) { _%>
+  if (project.hasProperty("prod") || project.hasProperty("gae")) {
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeMysql) { _%>
+  liquibaseRuntime "com.mysql:mysql-connector-j"
+  <%_ } _%>
+  <%_ if (prodDatabaseTypePostgres) { _%>
+  liquibaseRuntime "org.postgresql:postgresql"
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeMariadb) { _%>
+  liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeMssql) { _%>
+  liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
+  liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeOracle) { _%>
+  liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
+  <%_ } _%>
+  <%_ if (prodDatabaseType !== devDatabaseType) { _%>
+  }
+  <%_ } _%>
+<%_ } else if (databaseTypeNeo4j) { _%>
+  implementation "org.liquibase.ext:liquibase-neo4j:${liquibaseVersion}"
+  implementation "org.springframework:spring-jdbc"
+<%_ } _%>
+}
+
+project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+if (!project.hasProperty("runList")) {
+ project.ext.runList = "main"
+}
+
+liquibase {
+  activities {
+    main {
+      driver "<%= devJdbcDriver %>"
+      url "<%- devLiquibaseUrl %>"
+      username "<%- devDatabaseUsername %>"
+<%_ if (devDatabasePassword) { _%>
+      password "<%- devDatabasePassword %>"
+<%_ } _%>
+      changelogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
+<%_ if (liquibaseDefaultSchemaName) { _%>
+      defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
+<%_ } _%>
+      logLevel "debug"
+      classpath "<%= SERVER_MAIN_RES_DIR %>"
+    }
+    diffLog {
+      driver "<%= devJdbcDriver %>"
+      url "<%- devLiquibaseUrl %>"
+      username "<%- devDatabaseUsername %>"
+<%_ if (devDatabasePassword) { _%>
+      password "<%- devDatabasePassword %>"
+<%_ } _%>
+      changelogFile project.ext.diffChangelogFile
+<%_ if (!reactive) { _%>
+      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+<%_ } _%>
+<%_ if (liquibaseDefaultSchemaName) { _%>
+      defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
+<%_ } _%>
+      logLevel "debug"
+      classpath "$buildDir/classes/java/main"
+<%_ if (authenticationTypeOauth2) { _%>
+      excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
+<%_ } _%>
+    }
+  }
+
+  runList = project.ext.runList
+}
+
+liquibaseDiff.dependsOn compileJava
+liquibaseDiffChangelog.dependsOn compileJava
+
+configurations {
+  all {
+    resolutionStrategy {
+      // Inherited version from Spring Boot can't be used because of regressions:
+      // To be removed as soon as spring-boot use the same version
+      force 'org.liquibase:liquibase-core:<%- javaDependencies.liquibase %>'
+    }
+  }
+}
+
+ext {
+  if (project.hasProperty("no-liquibase")) {
+    springProfiles += ",no-liquibase"
+  }
+}

@@ -16,35 +16,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import logger from '../utils/objects/logger.js';
-import { relationshipTypes, validations } from '../jhipster/index.mjs';
-import { lowerFirst } from '../utils/string-utils.js';
+import { validations } from '../jhipster/index.mjs';
+import { relationshipTypeExists } from '../jhipster/relationship-types.js';
 
 const {
   Validations: { REQUIRED },
 } = validations;
 
-export default class JDLRelationship {
-  from: any;
-  to: any;
-  type: any;
-  options: any;
-  injectedFieldInFrom: any;
-  injectedFieldInTo: any;
-  isInjectedFieldInFromRequired: any;
-  isInjectedFieldInToRequired: any;
-  commentInFrom: any;
-  commentInTo: any;
+export const JDL_RELATIONSHIP_ONE_TO_ONE = 'OneToOne';
+export const JDL_RELATIONSHIP_ONE_TO_MANY = 'OneToMany';
+export const JDL_RELATIONSHIP_MANY_TO_ONE = 'ManyToOne';
+export const JDL_RELATIONSHIP_MANY_TO_MANY = 'ManyToMany';
 
-  constructor(args) {
+export type JDLRelationshipSide = 'left' | 'right';
+
+export type JDLRelationshipType =
+  | typeof JDL_RELATIONSHIP_ONE_TO_ONE
+  | typeof JDL_RELATIONSHIP_ONE_TO_MANY
+  | typeof JDL_RELATIONSHIP_MANY_TO_ONE
+  | typeof JDL_RELATIONSHIP_MANY_TO_MANY;
+export type JDLRelationshipOptions = Record<'global' | 'source' | 'destination', Record<string, any>>;
+
+export type JDLRelationshipModel = {
+  side: JDLRelationshipSide | undefined;
+  from: string;
+  to: string;
+  type: JDLRelationshipType;
+  options: JDLRelationshipOptions;
+  injectedFieldInFrom: null | string;
+  injectedFieldInTo: null | string;
+  isInjectedFieldInFromRequired: boolean;
+  isInjectedFieldInToRequired: boolean;
+  commentInFrom: null | string;
+  commentInTo: null | string;
+};
+
+export default class JDLRelationship implements JDLRelationshipModel {
+  side: JDLRelationshipSide | undefined;
+  from: string;
+  to: string;
+  type: JDLRelationshipType;
+  options: { global: Record<string, any>; source: Record<string, any>; destination: Record<string, any> };
+  injectedFieldInFrom: null | string;
+  injectedFieldInTo: null | string;
+  isInjectedFieldInFromRequired: boolean;
+  isInjectedFieldInToRequired: boolean;
+  commentInFrom: null | string;
+  commentInTo: null | string;
+
+  constructor(args: Partial<JDLRelationshipModel> & Pick<JDLRelationshipModel, 'from' | 'to' | 'type'>) {
     const merged = mergeDefaultsWithOverrides(args);
     if (!merged.from || !merged.to) {
       throw new Error('Source and destination entities must be passed to create a relationship.');
     }
-    checkFromAndToTypesAreString(merged);
-    if (!relationshipTypes.exists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
+    if (!relationshipTypeExists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
       throw new Error('A valid type and at least one injected field must be passed to create a relationship.');
     }
+    this.side = merged.side;
     this.from = merged.from;
     this.to = merged.to;
     this.type = merged.type;
@@ -68,23 +96,23 @@ export default class JDLRelationship {
     );
   }
 
-  hasGlobalOption(option) {
+  hasGlobalOption(option: string) {
     return option in this.options.global;
   }
 
-  forEachGlobalOption(passedFunction) {
+  forEachGlobalOption(passedFunction: (optionName: string, value: any) => void) {
     Object.entries(this.options.global).forEach(([key, value]) => {
       passedFunction(key, value);
     });
   }
 
-  forEachSourceOption(passedFunction) {
+  forEachSourceOption(passedFunction: (optionName: string, value: any) => void) {
     Object.entries(this.options.source).forEach(([key, value]) => {
       passedFunction(key, value);
     });
   }
 
-  forEachDestinationOption(passedFunction) {
+  forEachDestinationOption(passedFunction: (optionName: string, value: any) => void) {
     Object.entries(this.options.destination).forEach(([key, value]) => {
       passedFunction(key, value);
     });
@@ -146,11 +174,10 @@ export default class JDLRelationship {
   }
 }
 
-function mergeDefaultsWithOverrides(overrides) {
+function mergeDefaultsWithOverrides(
+  overrides: Partial<JDLRelationshipModel> & Pick<JDLRelationshipModel, 'from' | 'to' | 'type'>
+): JDLRelationshipModel {
   const defaultOptions = defaults();
-  if (!overrides || Object.keys(overrides).length === 0) {
-    return defaultOptions;
-  }
   const mergedOptions = {
     ...defaultOptions,
     ...overrides,
@@ -161,9 +188,9 @@ function mergeDefaultsWithOverrides(overrides) {
   return mergedOptions;
 }
 
-function defaults() {
+function defaults(): Omit<JDLRelationshipModel, 'from' | 'to' | 'type'> {
   return {
-    type: relationshipTypes.ONE_TO_ONE,
+    side: undefined,
     injectedFieldInFrom: null,
     injectedFieldInTo: null,
     isInjectedFieldInFromRequired: false,
@@ -176,20 +203,4 @@ function defaults() {
     commentInFrom: '',
     commentInTo: '',
   };
-}
-
-function checkFromAndToTypesAreString(merged) {
-  if (typeof merged.from === 'string' && typeof merged.to === 'string') {
-    return;
-  }
-  logger.warn(
-    "The 'from' and 'to' keys will only be accepted as strings in the next major version instead of " +
-      `JDLEntities, for relationship from '${merged.from.name}' to '${merged.to.name}'.`
-  );
-  if (typeof merged.from !== 'string') {
-    merged.from = merged.from.name;
-  }
-  if (typeof merged.to !== 'string') {
-    merged.to = merged.to.name;
-  }
 }

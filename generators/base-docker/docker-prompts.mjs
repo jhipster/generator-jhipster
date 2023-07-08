@@ -138,7 +138,7 @@ async function askForPath() {
   this.directoryPath = props.directoryPath;
   // Patch the path if there is no trailing "/"
   if (!this.directoryPath.endsWith('/')) {
-    this.logger.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
+    this.log.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
     this.directoryPath += '/';
   }
 
@@ -151,7 +151,7 @@ async function askForPath() {
     }
   }
 
-  this.logger.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
+  this.log.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
 }
 
 /**
@@ -259,17 +259,17 @@ async function askForServiceDiscovery() {
 
   if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === CONSUL)) {
     this.serviceDiscoveryType = CONSUL;
-    this.logger.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
+    this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
   } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === EUREKA)) {
     this.serviceDiscoveryType = EUREKA;
-    this.logger.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
+    this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
-    this.logger.warn(
+    this.log.warn(
       chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.')
     );
-    this.logger.info('Your service discovery enabled apps:');
+    this.log.verboseInfo('Your service discovery enabled apps:');
     serviceDiscoveryEnabledApps.forEach(app => {
-      this.logger.info(` -${app.baseName} (${app.serviceDiscoveryType})`);
+      this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
     });
 
     const prompts = [
@@ -384,8 +384,8 @@ export function getAppFolders(input, deploymentApplicationType) {
             appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
           }
         } catch (err) {
-          this.logger.error(chalk.red(`${file}: this .yo-rc.json can't be read`));
-          this.logger.debug('Error:', err);
+          this.log.error(chalk.red(`${file}: this .yo-rc.json can't be read`));
+          this.log.debug('Error:', err);
         }
       }
     }

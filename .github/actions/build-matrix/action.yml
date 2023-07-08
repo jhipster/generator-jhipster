@@ -90,7 +90,7 @@ runs:
   steps:
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
     - name: 'Check changes'
       id: build-changes
       run: |
@@ -105,28 +105,28 @@ runs:
 
         if [[ "true" == "${{ steps.build-changes.outputs.angular }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
           echo "::group::Workflows Angular"
-          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-angular.json
+          test-integration/scripts/99-write-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-angular.json
           cat matrix.json
           echo "::endgroup::"
         fi
 
         if [[ "true" == "${{ steps.build-changes.outputs.react }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
           echo "::group::Workflows React"
-          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-react.json
+          test-integration/scripts/99-write-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-react.json
           cat matrix.json
           echo "::endgroup::"
         fi
 
         if [[ "true" == "${{ steps.build-changes.outputs.vue }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
           echo "::group::Workflows Vue"
-          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-vue.json
+          test-integration/scripts/99-write-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-vue.json
           cat matrix.json
           echo "::endgroup::"
         fi
 
         if [[ "true" == "${{ steps.build-changes.outputs.any }}" && "" != "${{ inputs.workflow-samples-file }}" ]]; then
           echo "::group::Workflow default sample (${{ inputs.workflow-samples-file }})"
-          test-integration/scripts/99-print-matrix.js ${{ inputs.samples-directory }}/${{ inputs.workflow-samples-file }}.json
+          test-integration/scripts/99-write-matrix.js ${{ inputs.samples-directory }}/${{ inputs.workflow-samples-file }}.json
           cat matrix.json
           echo "::endgroup::"
         fi

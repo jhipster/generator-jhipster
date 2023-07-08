@@ -34,5 +34,5 @@ runs:
       run: $JHI_SCRIPTS/11-generate-config.sh
       shell: bash
     - name: 'GENERATION: project'
-      run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ inputs.extra-args }}
+      run: $JHI_SCRIPTS/12-generate-project.sh ${{ inputs.extra-args }}
       shell: bash

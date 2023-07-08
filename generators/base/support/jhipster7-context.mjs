@@ -126,6 +126,10 @@ const deprecatedProperties = {
     replacement: 'cacheProviderAny',
     get: ({ data }) => data.cacheProviderAny,
   },
+  enableLiquibase: {
+    replacement: 'databaseMigrationLiquibase',
+    get: ({ data }) => data.databaseMigrationLiquibase,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

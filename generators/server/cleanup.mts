@@ -20,13 +20,13 @@ import cleanupOauth2 from './cleanup-oauth2.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
 import type BaseGenerator from '../base/index.mjs';
-import { type GeneratorDefinition as ServerGeneratorDefinition } from './index.mjs';
+import { GeneratorDefinition } from '../base-application/generator.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: ServerGeneratorDefinition['writingTaskParam']) {
+export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam: GeneratorDefinition['writingTaskParam']) {
   const { application } = taskParam;
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);

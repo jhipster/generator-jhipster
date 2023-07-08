@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
@@ -12,7 +12,7 @@ const files = {
         relationshipName: 'region',
         otherEntityName: 'region',
         otherEntityField: 'id',
-        ownerSide: true,
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'country',
       },
     ],
@@ -34,20 +34,21 @@ const files = {
     service: 'no',
   },
   '.jhipster/Department.json': {
-    fluentMethods: true,
+    fluentMethods: false,
     relationships: [
       {
         relationshipType: 'one-to-one',
         relationshipName: 'location',
         otherEntityName: 'location',
         otherEntityField: 'id',
-        ownerSide: true,
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'department',
       },
       {
         relationshipType: 'one-to-many',
         relationshipValidateRules: 'required',
         relationshipName: 'employee',
+        relationshipSide: 'left',
         otherEntityName: 'employee',
         otherEntityRelationshipName: 'department',
       },
@@ -68,26 +69,29 @@ const files = {
     dto: 'no',
     pagination: 'no',
     service: 'no',
-    fluentMethods: false,
   },
   '.jhipster/Employee.json': {
     relationships: [
       {
+        relationshipSide: 'right',
         relationshipName: 'department',
         otherEntityName: 'department',
         relationshipType: 'many-to-one',
         otherEntityField: 'foo',
+        otherEntityRelationshipName: 'employee',
       },
       {
         relationshipType: 'one-to-many',
         relationshipName: 'job',
         otherEntityName: 'job',
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'employee',
       },
       {
         relationshipType: 'many-to-one',
         relationshipName: 'manager',
         otherEntityName: 'employee',
+        relationshipSide: 'left',
         otherEntityField: 'id',
       },
     ],
@@ -151,7 +155,9 @@ const files = {
         relationshipName: 'employee',
         otherEntityName: 'employee',
         relationshipType: 'many-to-one',
+        relationshipSide: 'right',
         otherEntityField: 'id',
+        otherEntityRelationshipName: 'job',
       },
       {
         relationshipType: 'many-to-many',
@@ -159,7 +165,7 @@ const files = {
         relationshipName: 'task',
         otherEntityName: 'task',
         otherEntityField: 'title',
-        ownerSide: true,
+        relationshipSide: 'left',
       },
     ],
     fields: [
@@ -194,7 +200,7 @@ const files = {
         relationshipName: 'job',
         otherEntityName: 'job',
         otherEntityField: 'id',
-        ownerSide: true,
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'jobHistory',
       },
       {
@@ -202,7 +208,7 @@ const files = {
         relationshipName: 'department',
         otherEntityName: 'department',
         otherEntityField: 'id',
-        ownerSide: true,
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'jobHistory',
       },
       {
@@ -210,7 +216,7 @@ const files = {
         relationshipName: 'employee',
         otherEntityName: 'employee',
         otherEntityField: 'id',
-        ownerSide: true,
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'jobHistory',
       },
     ],
@@ -243,7 +249,7 @@ const files = {
         relationshipName: 'country',
         otherEntityName: 'country',
         otherEntityField: 'id',
-        ownerSide: true,
+        relationshipSide: 'left',
         otherEntityRelationshipName: 'location',
       },
     ],
@@ -282,7 +288,7 @@ const files = {
         relationshipType: 'one-to-one',
         relationshipName: 'country',
         otherEntityName: 'country',
-        ownerSide: false,
+        relationshipSide: 'right',
         otherEntityRelationshipName: 'region',
       },
     ],
@@ -310,7 +316,7 @@ const files = {
         relationshipValidateRules: 'required',
         relationshipName: 'job',
         otherEntityName: 'job',
-        ownerSide: false,
+        relationshipSide: 'right',
         otherEntityRelationshipName: 'task',
       },
     ],

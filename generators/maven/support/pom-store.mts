@@ -23,6 +23,7 @@ import sortKeys from 'sort-keys';
 import CoreGenerator from '../../base-core/index.mjs';
 import XmlStorage from '../internal/xml-store.mjs';
 import {
+  MavenAnnotationProcessor,
   MavenArtifact,
   MavenDependency,
   MavenDistributionManagement,
@@ -184,8 +185,8 @@ export default class PomStorage extends XmlStorage {
   }
 
   public addProperty({ inProfile, property, value = null }: MavenProperty) {
-    const node = this.getNode({ profile: inProfile });
-    set(node, `properties.${property}`, value);
+    const node = this.getNode({ nodePath: 'properties', profile: inProfile });
+    node[property] = value;
     this.persist();
   }
 
@@ -240,7 +241,7 @@ export default class PomStorage extends XmlStorage {
     this.persist();
   }
 
-  public addAnnotationProcessor({ inProfile, ...artifact }: MavenArtifact) {
+  public addAnnotationProcessor({ inProfile, ...artifact }: MavenAnnotationProcessor) {
     const node = this.getNode({ profile: inProfile });
     const plugins = ensureChildIsArray(node, 'build.pluginManagement.plugins.plugin');
     const annotationProcessorPaths = ensureChild(
@@ -328,14 +329,12 @@ const emptyPomFile = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 
 export const createPomStorage = (generator: CoreGenerator) => {
+  const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
-    loadFile: () =>
-      generator.readDestination('pom.xml', {
-        defaults: emptyPomFile,
-      }),
+    loadFile,
     saveFile: content => generator.writeDestination('pom.xml', formatFirstXmlLevel(content)),
   });
-  (generator.fs as any).store.on('change', filename => {
+  generator.fs.store.on('change', filename => {
     if (filename === generator.destinationPath('pom.xml')) {
       pomStorage.clearCache();
     }

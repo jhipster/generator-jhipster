@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jestMock from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -25,7 +24,7 @@ import { fileURLToPath } from 'url';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import BaseGenerator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
-import { getCommandHelpOutput } from '../../test/support/tests.mjs';
+import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const { snakeCase } = lodash;
 
@@ -38,11 +37,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new BaseGenerator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
-
+  shouldSupportFeatures(BaseGenerator);
   describe('help', () => {
     it('should print expected information', async () => {
       expect(await getCommandHelpOutput()).toMatchSnapshot();
@@ -60,10 +55,10 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('skipPriorities', () => {
-    const initializing = jestMock.fn();
-    const prompting = jestMock.fn();
-    const writing = jestMock.fn();
-    const postWriting = jestMock.fn();
+    const initializing = esmocha.fn();
+    const prompting = esmocha.fn();
+    const writing = esmocha.fn();
+    const postWriting = esmocha.fn();
 
     class CustomGenerator extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {

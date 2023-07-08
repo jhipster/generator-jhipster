@@ -20,12 +20,7 @@
 import JSONEntity from '../../jhipster/json-entity.js';
 import formatComment from '../../utils/format-utils.js';
 import getTableNameFromEntityName from '../../jhipster/entity-table-name-creator.js';
-import logger from '../../utils/objects/logger.js';
 import { JDLEntity } from '../../models/index.mjs';
-
-const USER = 'user';
-const AUTHORITY = 'authority';
-const builtInEntities = new Set([USER, AUTHORITY]);
 
 export default {
   convert,
@@ -48,18 +43,6 @@ function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
 
   jdlEntities.forEach(jdlEntity => {
     const entityName = jdlEntity.name;
-    /*
-     * If the user adds a 'User' entity we consider it as the already
-     * created JHipster User entity and none of its fields and owner-side
-     * relationships will be considered.
-     */
-    if (builtInEntities.has(entityName.toLowerCase())) {
-      logger.warn(
-        `An Entity name '${entityName}' was used: '${entityName}' is an entity created by default by JHipster.` +
-          ' All relationships toward it will be kept but any attributes and relationships from it will be disregarded.'
-      );
-      return;
-    }
     convertedEntities.set(
       entityName,
       new JSONEntity({

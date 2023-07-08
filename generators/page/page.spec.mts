@@ -16,7 +16,7 @@ const createClientProject = () =>
 
 const createPage = runResult =>
   runResult
-    .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
+    .create('jhipster:page')
     .withAnswers({
       pageName,
     })
@@ -49,7 +49,10 @@ describe('generator - page', () => {
           `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
           `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
         );
-        runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/main.ts`, `${pageInstance}Service: () => new ${pageName}Service(),`);
+        runResult.assertFileContent(
+          `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+          `provide('${pageInstance}Service', () => new ${pageName}Service());`
+        );
       });
     };
 

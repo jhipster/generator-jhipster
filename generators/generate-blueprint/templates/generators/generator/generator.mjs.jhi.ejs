@@ -47,7 +47,7 @@ export default class extends <%= generatorClass %>Generator {
     if (this.options.help) return;
   <%_ if (!customGenerator) { _%>
 
-    if (!this.options.jhipsterContext) {
+    if (!this.jhipsterContext) {
       throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints <%= application.baseName %>')}`);
     }
     <%_ if (sbs) { _%>

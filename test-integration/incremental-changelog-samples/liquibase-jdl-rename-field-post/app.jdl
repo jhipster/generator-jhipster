@@ -129,14 +129,14 @@ entity Region {
 
 relationship OneToOne {
   Department{location} to Location,
-  Employee{user(login)} to User with jpaDerivedIdentifier
+  Employee{user(login)} to @Id User with builtInEntity
 }
 
 relationship OneToMany {
   BankAccount{operation} to Operation{bankAccount(name)}
 }
 relationship ManyToOne {
-  BankAccount{user(login)} to User
+  BankAccount{user(login)} to User with builtInEntity
 }
 relationship ManyToMany {
   Operation{theLabel(labelName)} to TheLabel{operation(renamed)}

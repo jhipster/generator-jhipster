@@ -14,9 +14,9 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_R2DBC_URL=r2dbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+      - SPRING_R2DBC_URL=r2dbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
@@ -129,7 +129,7 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_NEO4J_URI=bolt://jhipster-neo4j:7687
+      - SPRING_NEO4J_URI=bolt://neo4j:7687
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
@@ -210,6 +210,9 @@ exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.j
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -237,8 +240,8 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@jhipster-oracle:1521:jhipster
-      - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@jhipster-oracle:1521:jhipster
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle:1521:jhipster
+      - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle:1521:jhipster
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     healthcheck:
       test:
@@ -324,9 +327,9 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_R2DBC_URL=r2dbc:postgresql://jhipster-postgresql:5432/jhipster
-      - SPRING_LIQUIBASE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster
-      - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgresql:5432/jhipster
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     healthcheck:
       test:
@@ -446,9 +449,9 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://jhipster-mssql:1433;database=jhipster;encrypt=false
-      - SPRING_LIQUIBASE_URL=jdbc:sqlserver://jhipster-mssql:1433;database=jhipster;encrypt=false
-      - JHIPSTER_CACHE_MEMCACHED_SERVERS=jhipster-memcached:11211
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;database=jhipster;encrypt=false
+      - SPRING_LIQUIBASE_URL=jdbc:sqlserver://mssql:1433;database=jhipster;encrypt=false
+      - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
@@ -525,6 +528,9 @@ exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTran
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -557,9 +563,9 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - SPRING_CASSANDRA_CONTACTPOINTS=jhipster-cassandra
+      - SPRING_CASSANDRA_CONTACTPOINTS=cassandra
       - JHIPSTER_SLEEP=10
-      - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
     healthcheck:
@@ -685,6 +691,9 @@ exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTran
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -709,8 +718,8 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
       - 127.0.0.1:8080:8080
@@ -808,9 +817,8 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_DATA_MONGODB_URI=mongodb://jhipster-mongodb:27017/?waitQueueMultiple=1000
-      - SPRING_DATA_MONGODB_DATABASE=jhipster
-      - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/jhipster?waitQueueMultiple=1000
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
       - 127.0.0.1:8080:8080
@@ -944,8 +952,8 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster
-      - SPRING_LIQUIBASE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipster
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
@@ -1017,6 +1025,9 @@ exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslat
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -1040,11 +1051,11 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_NEO4J_URI=bolt://jhipster-neo4j:7687
+      - SPRING_NEO4J_URI=bolt://neo4j:7687
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-      - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
     ports:
@@ -1151,6 +1162,9 @@ exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslat
   "src/main/docker/realm-config/jhipster-realm.json": {
     "stateCleared": "modified",
   },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
@@ -1178,9 +1192,9 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mysql://jhipster-mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://jhipster-mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
@@ -1289,10 +1303,10 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_COUCHBASE_CONNECTION_STRING=jhipster-couchbase
+      - SPRING_COUCHBASE_CONNECTION_STRING=couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=jhipster
       - JHIPSTER_SLEEP=20
-      - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jest from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 
 import { createTranslationReplacer } from './translate-react.mjs';
 
@@ -27,7 +26,7 @@ describe('generator - react - transform', () => {
     beforeEach(() => {
       let value = 0;
       replaceReactTranslations = createTranslationReplacer(
-        jest.fn().mockImplementation((key, interpolation = '') => {
+        esmocha.fn().mockImplementation((key, interpolation = '') => {
           if (interpolation) {
             interpolation = `-${JSON.stringify(interpolation)}`;
           }

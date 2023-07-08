@@ -22,20 +22,20 @@ let helpBlocks = 0; %>
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
-                "refreshListLabel": "Refresh list",
+                "refreshListLabel": "リストの更新",
 <%_ if (!readOnly) { _%>
-                "createLabel": "<%= entityClassHumanized %> を追加",
-                "createOrEditLabel": "<%= entityClassHumanized %>を追加または編集",
+                "createLabel": "<%= entityClassHumanized %> の作成",
+                "createOrEditLabel": "<%= entityClassHumanized %>の作成または編集",
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
-                "search": "Search for <%= entityClassHumanized %>",
+                "search": "<%= entityClassHumanized %> の検索",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "<%= entityClassPluralHumanized %> が見つかりません。"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",
+            "created": "新しい <%= entityClassHumanized %> がID {{ param }} で作成されました。",
+            "updated": "ID {{ param }} の <%= entityClassHumanized %> が更新されました。",
+            "deleted": "ID {{ param }} の <%= entityClassHumanized %> が削除されました。",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "新しい <%= entityClassHumanized %> がID {{ param }} で作成されました。",
+            "updated": "ID {{ param }} の <%= entityClassHumanized %> が更新されました。",
+            "deleted": "ID {{ param }} の <%= entityClassHumanized %> が削除されました。"
         }
     }
 <%_ } _%>

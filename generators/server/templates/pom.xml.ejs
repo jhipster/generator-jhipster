@@ -34,9 +34,6 @@
         <!--
             Build properties
             The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
-<%_ if (databaseTypeCassandra) { _%>
-            The cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version}
-<%_ } _%>
         -->
         <maven.version>3.2.5</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
@@ -54,77 +51,29 @@
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx1G</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
-<%_ if (enableLiquibase) { _%>
-        <profile.no-liquibase />
-<%_ } _%>
         <profile.api-docs />
         <profile.tls />
         <profile.e2e />
+        <profile.test />
 
         <jhipster-dependencies.version><%= jhipsterDependenciesVersion %></jhipster-dependencies.version>
-        <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
-<%_ if (databaseTypeSql) { _%>
-        <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
-<%_ } _%>
-<%_ if (enableLiquibase) { _%>
-        <!-- The liquibase version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version><%- javaDependencies.liquibase %></liquibase.version>
-<%_ } _%>
-<%_ if (enableLiquibase && databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-        <liquibase-hibernate6.version><%- javaDependencies.liquibase %></liquibase-hibernate6.version>
-  <%_ } _%>
-        <validation-api.version><%- javaDependencies['validation-api'] %></validation-api.version>
-  <%_ if (reactive) { _%>
-        <commons-beanutils.version><%- javaDependencies['commons-beanutils'] %></commons-beanutils.version>
-  <%_ } _%>
-<%_ } _%>
+        <spring-boot.version><%- javaDependencies['spring-boot'] %></spring-boot.version>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version><%- javaDependencies['blockhound-junit-platform'] %></blockhound-junit-platform.version>
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-        <jaxb-runtime.version><%- javaDependencies['jaxb-runtime'] %></jaxb-runtime.version>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-        <cassandra-driver.version><%= CASSANDRA_DRIVER_VERSION %></cassandra-driver.version>
+        <micrometer-context-propagation.version><%- javaDependencies['micrometer-context-propagation'] %></micrometer-context-propagation.version>
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
-<%_ if (messageBrokerPulsar) { _%>
-        <spring-pulsar.version><%- javaDependencies['spring-pulsar'] %></spring-pulsar.version>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
-        <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-        <caffeine.version><%- javaDependencies.caffeine %></caffeine.version>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
-        <typesafe.version><%- javaDependencies.typesafe %></typesafe.version>
-<%_ } _%>
-<%_ if (cacheProviderHazelcast) { _%>
-  <%_ if (enableHibernateCache) { _%>
-        <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
-  <%_ } _%>
-        <hazelcast-spring.version><%- javaDependencies['hazelcast-spring'] %></hazelcast-spring.version>
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-        <awaitility.version><%- javaDependencies.awaitility %></awaitility.version>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <gatling.version><%- javaDependencies.gatling %></gatling.version>
+        <jackson-databind-nullable.version><%- javaDependencies['jackson-databind-nullable'] %></jackson-databind-nullable.version>
 <%_ } _%>
         <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
 <%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version><%- javaDependencies['gatling-maven-plugin'] %></gatling-maven-plugin.version>
-<%_ } _%>
-        <git-commit-id-plugin.version><%- javaDependencies['git-commit-id-plugin'] %></git-commit-id-plugin.version>
-        <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
+        <git-commit-id-maven-plugin.version><%- javaDependencies['git-commit-id-maven-plugin'] %></git-commit-id-maven-plugin.version>
+        <jacoco-maven-plugin.version><%- javaDependencies['jacoco-maven-plugin'] %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
         <jib-maven-plugin.image><%- dockerContainers.javaJre %></jib-maven-plugin.image>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
@@ -152,6 +101,7 @@
 <%_ } _%>
         <properties-maven-plugin.version><%- javaDependencies['properties-maven-plugin'] %></properties-maven-plugin.version>
         <sonar-maven-plugin.version><%- javaDependencies['sonar-maven-plugin'] %></sonar-maven-plugin.version>
+        <spotless-maven-plugin.version><%- javaDependencies['spotless-maven-plugin'] %></spotless-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -163,24 +113,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<%_ if (cacheProviderInfinispan) { _%>
-            <dependency>
-                <!-- TODO rework infinispan-bom dependency once spring-boot 3.0.5 is released -->
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-bom</artifactId>
-                <version>14.0.7.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-<%_ } _%>
-<%_ if (reactive && (prodDatabaseTypeMariadb || prodDatabaseTypeMysql)) { _%>
-            <dependency>
-                <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
-                <groupId>org.mariadb</groupId>
-                <artifactId>r2dbc-mariadb</artifactId>
-                <version>1.1.2</version>
-            </dependency>
-<%_ } _%>
         </dependencies>
     </dependencyManagement>
 
@@ -188,44 +120,11 @@
         <dependency>
             <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
-<%_ // TODO : remove dependency from jhipster-framework
-    if (reactive) { _%>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-webmvc</artifactId>
-                </exclusion>
-            </exclusions>
-<%_ } _%>
         </dependency>
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
-<%_ if (!cacheProviderNo) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${commons-beanutils.version}</version>
-        </dependency>
-  <%_ } else { _%>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate5-jakarta</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
@@ -234,81 +133,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-<%_ if (cacheProviderHazelcast) { _%>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate53</artifactId>
-            <version>${hazelcast-hibernate53.version}</version>
-        </dependency>
-  <%_ } _%>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-spring</artifactId>
-            <version>${hazelcast-spring.version}</version>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderInfinispan) { _%>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-hibernate-cache-v60</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring-boot3-starter-embedded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-commons-jakarta</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core-jakarta</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-component-annotations</artifactId>
-            <scope>compile</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderMemcached) { _%>
-        <dependency>
-            <groupId>com.google.code.simple-spring-memcached</groupId>
-            <artifactId>spring-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.simple-spring-memcached</groupId>
-            <artifactId>xmemcached-provider</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.xmemcached</groupId>
-            <artifactId>xmemcached</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-        </dependency>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerAny) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.springdoc</groupId>
 <%_ if (reactive) { _%>
@@ -317,198 +141,15 @@
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
 <%_ } _%>
         </dependency>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
-        </dependency>
-        <dependency>
-            <!-- TODO: to be removed
-            Openapi generator uses javax namespace for now https://github.com/OpenAPITools/openapi-generator/pull/13593 -->
-             <groupId>javax.annotation</groupId>
-             <artifactId>javax.annotation-api</artifactId>
-             <version>1.3.2</version>
-         </dependency>
-         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
-         </dependency>
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>couchbase</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.couchbase.client</groupId>
-            <artifactId>java-client</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-neo4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.michael-simons.neo4j</groupId>
-            <artifactId>neo4j-migrations-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>neo4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-        <dependency>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>cassandra</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <classifier>jakarta</classifier>
-        </dependency>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>jcache</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe</groupId>
-            <artifactId>config</artifactId>
-            <version>${typesafe.version}</version>
-        </dependency>
-  <%_ if (enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (enableLiquibase) { _%>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <!-- Inherited version from Spring Boot can't be used because of regressions -->
-            <version>${liquibase.version}</version>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-        <dependency>
-            <!-- Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6 -->
-            <groupId>io.mongock</groupId>
-            <artifactId>mongock-springboot-v3</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.reflections</groupId>
-                    <artifactId>reflections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.mongock</groupId>
-            <artifactId>mongodb-springdata-v4-driver</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.reflections</groupId>
-                    <artifactId>reflections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mongodb</artifactId>
-            <scope>test</scope>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mongock</groupId>
-            <artifactId>mongodb-reactive-driver</artifactId>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>com.github.differentway</groupId>
-            <artifactId>couchmove</artifactId>
         </dependency>
 <%_ } _%>
         <dependency>
@@ -535,52 +176,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-        </dependency>
-  <%_ } else { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-  <%_ } _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>jdbc</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>${awaitility.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %></artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -600,6 +195,23 @@
             <artifactId>netty-resolver-dns-native-macos</artifactId>
             <classifier>osx-aarch_64</classifier>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor.tools</groupId>
+            <artifactId>blockhound-junit-platform</artifactId>
+            <version>${blockhound-junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- fix https://github.com/jhipster/generator-jhipster/issues/21359 -->
+            <groupId>io.micrometer</groupId>
+            <artifactId>context-propagation</artifactId>
+            <version>${micrometer-context-propagation.version}</version>
+        </dependency>
+<%_ } else { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -609,12 +221,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-<%_ if (!authenticationTypeOauth2) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -638,14 +244,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-<%_ if (reactive) { _%>
-        <dependency>
-            <groupId>io.projectreactor.tools</groupId>
-            <artifactId>blockhound-junit-platform</artifactId>
-            <version>${blockhound-junit-platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
@@ -660,59 +258,21 @@
             <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-<%_ if (messageBrokerKafka) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-test-binder</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>kafka</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (messageBrokerPulsar) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.pulsar</groupId>
-            <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
-            <version>${spring-pulsar.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>pulsar</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
         <dependency>
             <!-- Spring Security OAuth 2.0 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeSession) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
@@ -721,25 +281,10 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-        <dependency>
-            <!-- DataStax driver -->
-            <groupId>com.datastax.oss</groupId>
-            <artifactId>java-driver-mapper-runtime</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bucket4j</groupId>
-            <artifactId>bucket4j-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bucket4j</groupId>
-            <artifactId>bucket4j-jcache</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
@@ -805,84 +350,19 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!reactive && databaseTypeSql) { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-data</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
-            <!-- fix https://github.com/reactor/BlockHound/issues/311 -->
-            <groupId>io.micrometer</groupId>
-            <artifactId>context-propagation</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
-<%_ if (communicationSpringWebsocket) { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-messaging</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (cucumberTests) { _%>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit-platform-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-spring</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-console</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <version>${gatling.version}</version>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
     </dependencies>
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
-<%_ if (cucumberTests) { _%>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-            </plugin>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-            </plugin>
-<%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -928,6 +408,10 @@
                 <artifactId>sonar-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -956,49 +440,6 @@
         </plugins>
         <pluginManagement>
             <plugins>
-<%_ if (cucumberTests) { _%>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
-                            <id>prepare cucumber feature files</id>
-                            <phase>integration-test</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <target>
-                                    <echo message="Running JUnit Platform CLI"/>
-                                    <java classname="org.junit.platform.console.ConsoleLauncher"
-                                          fork="true"
-                                          failonerror="true"
-                                          newenvironment="true"
-                                          maxmemory="512m"
-                                          classpathref="maven.test.classpath">
-                                        <arg value="--include-engine"/>
-                                        <arg value="cucumber"/>
-                                        <arg value="--scan-classpath"/>
-                                        <arg value="${project.build.testOutputDirectory}"/>
-                                    </java>
-                                </target>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-                <plugin>
-                    <groupId>io.gatling</groupId>
-                    <artifactId>gatling-maven-plugin</artifactId>
-                    <version>${gatling-maven-plugin.version}</version>
-                    <configuration>
-                        <runMultipleSimulations>true</runMultipleSimulations>
-                        <resourcesFolder>${project.basedir}/src/test/gatling/conf</resourcesFolder>
-                    </configuration>
-                </plugin>
-<%_ } _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
@@ -1047,26 +488,6 @@
                                 <artifactId>mapstruct-processor</artifactId>
                                 <version>${mapstruct.version}</version>
                             </path>
-<%_ if (databaseTypeSql) { _%>
-                            <path>
-                                <!-- For JPA static metamodel generation -->
-                                <groupId>org.hibernate.orm</groupId>
-                                <artifactId>hibernate-jpamodelgen</artifactId>
-                                <version>${hibernate.version}</version>
-                            </path>
-                            <path>
-                                <groupId>org.glassfish.jaxb</groupId>
-                                <artifactId>jaxb-runtime</artifactId>
-                                <version>${jaxb-runtime.version}</version>
-                            </path>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-                            <path>
-                                <groupId>com.datastax.oss</groupId>
-                                <artifactId>java-driver-mapper-processor</artifactId>
-                                <version>${cassandra-driver.version}</version>
-                            </path>
-<%_ } _%>
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
@@ -1114,6 +535,8 @@
                     <version>${frontend-maven-plugin.version}</version>
                     <configuration>
                         <installDirectory>target</installDirectory>
+                        <nodeVersion>${node.version}</nodeVersion>
+                        <npmVersion>${npm.version}</npmVersion>
                     </configuration>
                 </plugin>
 <%_ } _%>
@@ -1138,7 +561,7 @@
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
-                    <version>${git-commit-id-plugin.version}</version>
+                    <version>${git-commit-id-maven-plugin.version}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -1172,6 +595,12 @@
                     </executions>
                     <configuration>
                       <javaVersion>${java.version}</javaVersion>
+                      <%_ if (databaseTypeCassandra) { _%>
+                      <ignoreClassNamePatterns>
+                        <ignoreClassNamePattern><%= packageName %>.domain.PersistentTokenHelper__MapperGenerated</ignoreClassNamePattern>
+                        <ignoreClassNamePattern><%= packageName %>.domain.UserHelper__MapperGenerated</ignoreClassNamePattern>
+                      </ignoreClassNamePatterns>
+                      <%_ } _%>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -1373,7 +802,7 @@
                         </excludes>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                        <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
 <%_ } _%>
                     </configuration>
                 </plugin>
@@ -1409,6 +838,7 @@
   <%_ } _%>
                                     <delegatePattern>true</delegatePattern>
                                     <title><%= dasherizedBaseName %></title>
+                                    <useSpringBoot3>true</useSpringBoot3>
                                 </configOptions>
                             </configuration>
                         </execution>
@@ -1419,6 +849,25 @@
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${sonar-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${spotless-maven-plugin.version}</version>
+                    <configuration>
+                        <java>
+                            <removeUnusedImports />
+                        </java>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>spotless</id>
+                            <phase>process-sources</phase>
+                            <goals>
+                                <goal>apply</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
@@ -1436,7 +885,6 @@
 <%_ if (embeddableLaunchScript) { _%>
                         <executable>true</executable>
 <%_ } _%>
-                        <fork>true</fork>
                         <!--
                         Enable the line below to have remote debugging of your application on port 5005
                         <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
@@ -1445,20 +893,47 @@
                         <jvmArguments>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</jvmArguments>
 <%_ } _%>
                     </configuration>
-
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                        <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                        <!-- Force alphabetical order to have a reproducible build -->
+                        <runOrder>alphabetical</runOrder>
+                        <includes>
+                            <include>**/*IT*</include>
+                            <include>**/*IntTest*</include>
+                        </includes>
+<%_ if (reactive) { _%>
+                        <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                        <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=${profile.test}</argLine>
+<%_ } else { _%>
+                        <argLine>@{argLine} -Dspring.profiles.active=${profile.test}</argLine>
+<%_ } _%>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>verify</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
     </build>
     <profiles>
-<%_ if (enableLiquibase) { _%>
-        <profile>
-            <id>no-liquibase</id>
-            <properties>
-                <profile.no-liquibase>,no-liquibase</profile.no-liquibase>
-            </properties>
-        </profile>
-<%_ } _%>
         <profile>
             <id>api-docs</id>
             <properties>
@@ -1574,10 +1049,6 @@
                                 <goals>
                                     <goal>install-node-and-npm</goal>
                                 </goals>
-                                <configuration>
-                                    <nodeVersion>${node.version}</nodeVersion>
-                                    <npmVersion>${npm.version}</npmVersion>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>npm install</id>
@@ -1605,7 +1076,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev<%_ if (enableLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
 <%_ } _%>
@@ -1614,381 +1085,27 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>dev${profile.tls}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <profile.test>testdev</profile.test>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
                     <optional>true</optional>
                 </dependency>
-<%_ if (devDatabaseTypeH2Any) { _%>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-h2</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeMysql) { _%>
-                <dependency>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeMariadb) { _%>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeOracle) { _%>
-                <dependency>
-                    <groupId>com.oracle.database.jdbc</groupId>
-                    <artifactId>ojdbc8</artifactId>
-                </dependency>
-<%_ } _%>
-<%_ if (devDatabaseTypeMssql) { _%>
-                <dependency>
-                    <groupId>com.microsoft.sqlserver</groupId>
-                    <artifactId>mssql-jdbc</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.liquibase.ext</groupId>
-                    <artifactId>liquibase-mssql</artifactId>
-                    <version>${liquibase.version}</version>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-mssql</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypePostgres) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-  <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>r2dbc-postgresql</artifactId>
-                </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeSql && !devDatabaseTypeH2Any) { _%>
-                <dependency>
-                    <groupId>org.testcontainers</groupId>
-  <%_ if (devDatabaseTypeMysql) { _%>
-                    <artifactId>mysql</artifactId>
-  <%_ } else if (devDatabaseTypeMariadb) { _%>
-                    <artifactId>mariadb</artifactId>
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-                    <artifactId>postgresql</artifactId>
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-                    <artifactId>mssqlserver</artifactId>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-                    <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-                    <scope>test</scope>
-                </dependency>
-<%_ } _%>
             </dependencies>
-            <build>
-<%_ if (databaseTypeSql) { _%>
-                <plugins>
-  <%_ if (devDatabaseType !== prodDatabaseType && (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgres)) { _%>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <testExcludes>
-                                <testExclude><%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
-                            </testExcludes>
-                        </configuration>
-                    </plugin>
-  <%_ } _%>
-
-                </plugins>
-<%_ } _%>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-failsafe-plugin</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
-                            <configuration>
-                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <includes>
-                                    <include>**/*IT*</include>
-                                    <include>**/*IntTest*</include>
-                                </includes>
-  <%_ if (reactive) { _%>
-                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testdev</argLine>
-  <%_ } else { _%>
-                                <argLine>@{argLine} -Dspring.profiles.active=testdev</argLine>
-  <%_ } _%>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>integration-test</id>
-                                    <goals>
-                                        <goal>integration-test</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>verify</id>
-                                    <goals>
-                                        <goal>verify</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-<%_ if (databaseTypeSql) { _%>
-                        <plugin>
-                            <groupId>org.liquibase</groupId>
-                            <artifactId>liquibase-maven-plugin</artifactId>
-                            <version>${liquibase.version}</version>
-                            <configuration>
-                                <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
-                                <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                                <driver><%= devJdbcDriver %></driver>
-                                <url><%- devLiquibaseUrl %></url>
-                                <defaultSchemaName><% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %></defaultSchemaName>
-                                <username><%- devDatabaseUsername %></username>
-                                <password><%- devDatabasePassword %></password>
-                                <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
-                                <verbose>true</verbose>
-                                <logging>debug</logging>
-                                <contexts>!test</contexts>
-  <%_ if (authenticationTypeOauth2) { _%>
-                                <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
-  <%_ } _%>
-                            </configuration>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>org.liquibase</groupId>
-                                    <artifactId>liquibase-core</artifactId>
-                                    <version>${liquibase.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.liquibase.ext</groupId>
-                                    <artifactId>liquibase-hibernate6</artifactId>
-                                    <version>${liquibase-hibernate6.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.springframework.boot</groupId>
-                                    <artifactId>spring-boot-starter-data-jpa</artifactId>
-                                    <version>${spring-boot.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>jakarta.validation</groupId>
-                                    <artifactId>jakarta.validation-api</artifactId>
-                                    <version>${validation-api.version}</version>
-                                </dependency>
-  <%_ if (devDatabaseTypeH2Disk) { _%>
-                                <dependency>
-                                    <groupId>com.h2database</groupId>
-                                    <artifactId>h2</artifactId>
-                                </dependency>
-  <%_ } _%>
-                            </dependencies>
-                        </plugin>
-<%_ } _%>
-                    </plugins>
-                </pluginManagement>
-            </build>
-            <properties>
-                <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
-            </properties>
         </profile>
         <profile>
             <id>prod</id>
-<%_ if (databaseTypeSql) { _%>
-            <dependencies>
-                <dependency>
-                    <groupId>org.testcontainers</groupId>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-                    <artifactId>mysql</artifactId>
-  <%_ } else if (prodDatabaseTypeMariadb) { _%>
-                    <artifactId>mariadb</artifactId>
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-                    <artifactId>postgresql</artifactId>
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-                    <artifactId>mssqlserver</artifactId>
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-                    <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-                    <scope>test</scope>
-                </dependency>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-                <dependency>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb) { _%>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeOracle) { _%>
-                <dependency>
-                    <groupId>com.oracle.database.jdbc</groupId>
-                    <artifactId>ojdbc8</artifactId>
-                </dependency>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMssql) { _%>
-                <dependency>
-                    <groupId>com.microsoft.sqlserver</groupId>
-                    <artifactId>mssql-jdbc</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.liquibase.ext</groupId>
-                    <artifactId>liquibase-mssql</artifactId>
-                    <version>${liquibase.version}</version>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-mssql</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (prodDatabaseTypePostgres) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>r2dbc-postgresql</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-            </dependencies>
-<%_ } _%>
+            <properties>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <profile.test>testprod</profile.test>
+            </properties>
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-failsafe-plugin</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
-                            <configuration>
-                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <includes>
-                                    <include>**/*IT*</include>
-                                    <include>**/*IntTest*</include>
-                                </includes>
-<%_ if (reactive) { _%>
-                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testprod</argLine>
-<%_ } else { _%>
-                                <argLine>@{argLine} -Dspring.profiles.active=testprod</argLine>
-<%_ } _%>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>integration-test</id>
-                                    <goals>
-                                        <goal>integration-test</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>verify</id>
-                                    <goals>
-                                        <goal>verify</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-<%_ if (databaseTypeSql) { _%>
-                        <plugin>
-                            <groupId>org.liquibase</groupId>
-                            <artifactId>liquibase-maven-plugin</artifactId>
-                            <version>${liquibase.version}</version>
-                            <configuration>
-                                <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
-                                <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                                <driver><%= prodJdbcDriver %></driver>
-                                <url><%- prodLiquibaseUrl %></url>
-                                <defaultSchemaName><% if (prodDatabaseTypeMysql) { %><%= baseName %><% } else if (prodDatabaseTypePostgres) { %><% } %></defaultSchemaName>
-                                <username><%- prodDatabaseUsername %></username>
-                                <password><%- prodDatabasePassword %></password>
-                                <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= prodHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
-                                <verbose>true</verbose>
-                                <logging>debug</logging>
-                                <contexts>!test</contexts>
-  <%_ if (authenticationTypeOauth2) { _%>
-                                <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
-  <%_ } _%>
-                            </configuration>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>org.liquibase</groupId>
-                                    <artifactId>liquibase-core</artifactId>
-                                    <version>${liquibase.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.liquibase.ext</groupId>
-                                    <artifactId>liquibase-hibernate6</artifactId>
-                                    <version>${liquibase-hibernate6.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.springframework.boot</groupId>
-                                    <artifactId>spring-boot-starter-data-jpa</artifactId>
-                                    <version>${spring-boot.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>jakarta.validation</groupId>
-                                    <artifactId>jakarta.validation-api</artifactId>
-                                    <version>${validation-api.version}</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-<%_ } _%>
-                    </plugins>
-                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -2001,17 +1118,6 @@
                             </filesets>
                         </configuration>
                     </plugin>
-<%_ if (devDatabaseType !== prodDatabaseType && (devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypeMysql || devDatabaseTypePostgres)) { _%>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <testExcludes>
-                                <testExclude><%= packageFolder %>/config/<% if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
-                            </testExcludes>
-                        </configuration>
-                    </plugin>
-<%_ } _%>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -2033,10 +1139,6 @@
                                 <goals>
                                     <goal>install-node-and-npm</goal>
                                 </goals>
-                                <configuration>
-                                    <nodeVersion>${node.version}</nodeVersion>
-                                    <npmVersion>${npm.version}</npmVersion>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>npm install</id>
@@ -2078,10 +1180,6 @@
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
-            </properties>
         </profile>
         <profile>
             <id>war</id>
@@ -2129,12 +1227,6 @@
                     <artifactId>mapstruct-processor</artifactId>
                     <version>${mapstruct.version}</version>
                 </dependency>
-<%_ if (databaseTypeSql) { _%>
-                <dependency>
-                    <groupId>org.hibernate.orm</groupId>
-                    <artifactId>hibernate-jpamodelgen</artifactId>
-                </dependency>
-<%_ } _%>
             </dependencies>
         </profile>
         <profile>

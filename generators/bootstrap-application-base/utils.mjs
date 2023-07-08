@@ -32,10 +32,10 @@ export function createUserEntity(customUserData = {}, application) {
   const userEntityDefinition = this.getEntityConfig('User')?.getAll();
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
-      this.logger.warn('Relationships on the User entity side will be disregarded');
+      this.log.warn('Relationships on the User entity side will be disregarded');
     }
     if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
-      this.logger.warn('Fields on the User entity side (other than id) will be disregarded');
+      this.log.warn('Fields on the User entity side (other than id) will be disregarded');
     }
   }
 

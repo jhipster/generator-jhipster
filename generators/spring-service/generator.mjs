@@ -30,14 +30,13 @@ const { OptionNames } = applicationOptions;
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 export default class SpringServiceGenerator extends BaseGenerator {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('name', { type: String, required: true });
     this.name = this.options.name;
 
     this.option('default', {
       type: Boolean,
-      default: false,
       description: 'default option',
     });
     this.defaultOption = this.options.default;
@@ -45,7 +44,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
+      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { generatorArgs: [this.name] });
     }
   }
 
@@ -53,7 +52,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       initializing() {
-        this.logger.info(`The service ${this.name} is being created.`);
+        this.log.verboseInfo(`The service ${this.name} is being created.`);
         const configuration = this.config;
         this.baseName = configuration.get(BASE_NAME);
         this.packageName = configuration.get(PACKAGE_NAME);
@@ -80,14 +79,11 @@ export default class SpringServiceGenerator extends BaseGenerator {
           },
         ];
         if (!this.defaultOption) {
-          const done = this.async();
-          this.prompt(prompts).then(props => {
+          return this.prompt(prompts).then(props => {
             this.useInterface = props.useInterface;
-            done();
           });
-        } else {
-          this.useInterface = true;
         }
+        this.useInterface = true;
       },
     };
   }

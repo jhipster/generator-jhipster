@@ -32,7 +32,7 @@ module.exports = {
     ecmaVersion: 2020,
     project: [
       './tsconfig.json',
-      './tsconfig.spec.json',
+      './<%= clientTestDir %>spec/tsconfig.json',
 <%_ if (cypressTests) { _%>
       './<%= clientTestDir %>cypress/tsconfig.json',
 <%_ } _%>

@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.mjs';
+import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
 
@@ -37,10 +37,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
   describe('help', () => {
     it('should print expected information', async () => {
       expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
@@ -58,6 +55,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
+          jhipsterVersion: expect.any(String),
         });
       });
     });
@@ -78,6 +76,7 @@ describe(`generator - ${generator}`, () => {
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
+          jhipsterVersion: expect.any(String),
         });
       });
     });
@@ -97,6 +96,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
+          jhipsterVersion: expect.any(String),
         });
       });
     });

@@ -21,6 +21,7 @@ import assert from 'assert';
 import { expect } from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
+import { jestExpect } from 'esmocha';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
 import EnvironmentBuilder from './environment-builder.mjs';
@@ -29,11 +30,11 @@ const cliBlueprintFiles = {
   'cli/commands.js': `export default {
   foo: {
     blueprint: 'generator-jhipster-cli',
-    desc: 'Create a new foo.',
+    description: 'Create a new foo.',
     options: [
       {
         option: '--foo',
-        desc: 'foo description',
+        description: 'foo description',
       },
     ],
   },
@@ -50,7 +51,7 @@ const cliBlueprintFiles = {
       super(args, opts, features);
 
       this.option('foo-bar', {
-        desc: 'Sample option',
+        description: 'Sample option',
         type: Boolean,
       });
     }
@@ -73,7 +74,7 @@ const cliSharedBlueprintFiles = {
   'cli/commands.js': `export default {
   bar: {
     blueprint: 'generator-jhipster-cli-shared',
-    desc: 'Create a new bar.',
+    description: 'Create a new bar.',
   },
 };
 `,
@@ -88,7 +89,7 @@ const cliSharedBlueprintFiles = {
     constructor(args, options) {
       super(args, options);
       this.option('foo', {
-        desc: 'foo description',
+        description: 'foo description',
         type: Boolean,
       });
     }
@@ -270,15 +271,17 @@ describe('cli - EnvironmentBuilder', () => {
 
   describe('_lookupBlueprints', () => {
     let envBuilder;
-    beforeEach(() => {
+    beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      envBuilder = EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
+      envBuilder = EnvironmentBuilder.create();
+      await envBuilder._loadBlueprints();
+      await envBuilder._lookupBlueprints({ localOnly: true });
     });
     describe('with multiple blueprints', () => {
       let oldArgv;
 
       before(async () => {
-        const result = await helpers
+        await helpers
           .prepareTemporaryDir()
           .withFiles(createBlueprintFiles('generator-jhipster-cli', { generator: ['foo'] }))
           .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: ['foo', 'bar'] }))
@@ -308,7 +311,8 @@ describe('cli - EnvironmentBuilder', () => {
     let envBuilder;
     beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true })._loadSharedOptions();
+      envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
+      await envBuilder._loadSharedOptions();
     });
     describe('with multiple blueprints', () => {
       let oldArgv;
@@ -328,28 +332,14 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load sharedOptions', () => {
-        expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('fooValue')).to.be.true;
+        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
         expect(envBuilder.getEnvironment().sharedOptions.single).to.be.true;
       });
 
       it('should merge sharedOptions', () => {
-        expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('fooValue')).to.be.true;
-        expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('barValue')).to.be.true;
+        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
+        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['barValue']));
       });
-    });
-  });
-
-  describe('yeoman-test integration', () => {
-    before(async () => {
-      await helpers.prepareTemporaryDir();
-      sinon.spy(EnvironmentBuilder.prototype, 'getEnvironment');
-    });
-    after(() => {
-      EnvironmentBuilder.prototype.getEnvironment.restore();
-    });
-    it('calls getEnvironment', async () => {
-      await helpers.run('jhipster:info', { cwd: process.cwd(), autoCleanup: false }, { createEnv: EnvironmentBuilder.createEnv });
-      expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
     });
   });
 });

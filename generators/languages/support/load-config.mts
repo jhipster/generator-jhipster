@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { type I18nApplication } from '../types.mjs';
-import { findLanguageForTag, supportedLanguages as baseSupportedLanguages } from './languages.mjs';
+import { findLanguageForTag, supportedLanguages as baseSupportedLanguages, type Language } from './languages.mjs';
 
 /**
  * @param application - destination object
@@ -28,10 +28,16 @@ export default function loadConfig(application: I18nApplication, config: any, co
   const { supportedLanguages = baseSupportedLanguages } = control;
   application.enableTranslation = config.enableTranslation;
   application.nativeLanguage = config.nativeLanguage;
-  application.nativeLanguageDefinition = findLanguageForTag(config.nativeLanguage, supportedLanguages);
+  const nativeLanguageDefinition = findLanguageForTag(config.nativeLanguage, supportedLanguages);
+  if (!nativeLanguageDefinition) {
+    throw new Error(`Native language ${config.nativeLanguage} does not exist`);
+  }
+  application.nativeLanguageDefinition = nativeLanguageDefinition;
   if (application.enableTranslation) {
     application.languages = config.languages;
-    application.languagesDefinition = application.languages.map(lang => findLanguageForTag(lang, supportedLanguages));
+    application.languagesDefinition = application.languages
+      .map(lang => findLanguageForTag(lang, supportedLanguages))
+      .filter(lang => lang) as Language[];
     application.enableI18nRTL = (application.languagesDefinition ?? [application.nativeLanguageDefinition]).some(language => language.rtl);
   } else {
     application.enableI18nRTL = application.nativeLanguageDefinition.rtl;

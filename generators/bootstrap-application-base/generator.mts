@@ -16,17 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'assert';
 import os from 'os';
 import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { addFakerToEntity, loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.mjs';
+import {
+  addFakerToEntity,
+  loadEntitiesAnnotations,
+  loadEntitiesOtherSide,
+  stringifyApplicationData,
+} from '../base-application/support/index.mjs';
 import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
-  stringifyApplicationData,
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
@@ -36,7 +41,7 @@ import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
-const { upperFirst } = _;
+const { lowerFirst } = _;
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -93,7 +98,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json')
         );
       },
     });
@@ -132,6 +137,45 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           entityConfig.changelogDate = this.dateFormatForLiquibase();
         }
       },
+
+      configureRelationships({ entityName, entityStorage, entityConfig }) {
+        // Validate entity json relationship content
+        entityConfig.relationships.forEach((relationship: any) => {
+          const { otherEntityName, relationshipType } = relationship;
+
+          assert(
+            otherEntityName,
+            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+          );
+          assert(
+            relationshipType,
+            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+          );
+
+          if (!relationship.relationshipSide) {
+            // Try to create relationshipSide based on best bet.
+            if (relationship.ownerSide !== undefined) {
+              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
+            } else {
+              // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
+              const unidirectionalRelationship = !relationship.otherEntityRelationshipName;
+              const bidirectionalOneToManySide = !unidirectionalRelationship && relationship.relationshipType === 'one-to-many';
+              relationship.relationshipSide = unidirectionalRelationship || bidirectionalOneToManySide ? 'left' : 'right';
+            }
+          }
+
+          relationship.otherEntityName = lowerFirst(otherEntityName);
+          if (relationship.relationshipName === undefined) {
+            relationship.relationshipName = relationship.otherEntityName;
+            this.log.warn(
+              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
+                relationship
+              )}, using ${relationship.otherEntityName} as fallback`
+            );
+          }
+        });
+        entityStorage.save();
+      },
     });
   }
 
@@ -141,30 +185,47 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
-      loadUser({ application }) {
+      loadUser({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity) {
           if (this.sharedData.hasEntity('User')) {
             throw new Error("Fail to bootstrap 'User', already exists.");
           }
 
-          const user = createUserEntity.call(this, {}, application);
+          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'User');
+          const customUserData = customUser ? customUser.entityStorage.getAll() : {};
+          const user = createUserEntity.call(this, customUserData, application);
           this.sharedData.setEntity('User', user);
-          application.user = user;
+          (application as any).user = user;
         }
       },
       loadingEntities({ entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {
           if (this.sharedData.hasEntity(entityName)) {
-            throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
+            const existingEntity = this.sharedData.getEntity(entityName);
+            if (!existingEntity.builtIn) {
+              throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
+            }
+          } else {
+            const entity = entityStorage.getAll();
+            entity.name = entity.name ?? entityName;
+            this.sharedData.setEntity(entityName, entity);
           }
-          const entity = entityStorage.getAll();
-          entity.name = entity.name ?? entityName;
-          this.sharedData.setEntity(entityName, entity);
         }
 
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         loadEntitiesAnnotations(entities);
         this.validateResult(loadEntitiesOtherSide(entities));
+
+        for (const entity of entities) {
+          for (const relationship of entity.relationships) {
+            if (relationship.ownerSide === undefined) {
+              // ownerSide backward compatibility
+              relationship.ownerSide =
+                relationship.relationshipType === 'many-to-one' ||
+                (relationship.relationshipType !== 'one-to-many' && relationship.relationshipSide === 'left');
+            }
+          }
+        }
       },
     });
   }
@@ -218,22 +279,20 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   }
 
   printDestinationInfo(cwd = this.destinationPath()) {
-    this.logger.log(
+    this.log.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
-    this.logger.log(
+    this.log.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}
 
   Application files will be generated in folder: ${chalk.yellow(cwd)}`)
     );
     if (process.cwd() === this.getUserHome()) {
-      this.logger.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-      this.logger.log(
-        chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
-      );
-      this.logger.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
+      this.log.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+      this.log.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
+      this.log.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
-    this.logger.log(
+    this.log.log(
       chalk.green(' _______________________________________________________________________________________________________________\n')
     );
   }

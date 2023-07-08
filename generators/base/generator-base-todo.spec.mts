@@ -1,12 +1,10 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import Environment from 'yeoman-environment';
-import { TestAdapter } from 'yeoman-test';
 import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
 import Base from './index.mjs';
 import { parseChangelog } from './support/timestamp.mjs';
-import Logger from './support/logger.mjs';
+import { createJHipsterLogger } from './support/logger.mjs';
 
 const BaseGenerator: any = Base.prototype;
 
@@ -15,16 +13,9 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-BaseGenerator.logger = new Logger({ adapter: new TestAdapter() });
+BaseGenerator.logger = createJHipsterLogger();
 
 describe('generator - base', () => {
-  describe('checkForNewVersion', () => {
-    describe('when called', () => {
-      it('prints the new version info', () => {
-        expect(BaseGenerator.checkForNewVersion()).to.equal(undefined);
-      });
-    });
-  });
   describe('getFrontendAppName', () => {
     describe('when called with name having App', () => {
       it('returns the frontend app name', () => {
@@ -70,7 +61,8 @@ describe('generator - base', () => {
     let options;
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      base = new Base({ ...options, sharedData: {}, env: Environment.createEnv() });
+      const Dummy = helpers.createDummyGenerator(Base);
+      base = new Dummy({ ...options, sharedData: {}, env: await helpers.createTestEnv() });
     });
     describe('when there is no configured lastLiquibaseTimestamp', () => {
       let firstChangelogDate;
@@ -177,9 +169,11 @@ describe('generator - base', () => {
         });
       });
       describe('with a future creationTimestamp option', () => {
-        it('should throw', () => {
+        it('should throw', async () => {
           options.creationTimestamp = '2030-01-01';
-          expect(() => new Base({ ...options, env: Environment.createEnv() })).to.throw(
+          const Dummy = helpers.createDummyGenerator(Base);
+          const env = await helpers.createTestEnv();
+          expect(() => new Dummy({ ...options, env, sharedData: {} })).to.throw(
             /^Creation timestamp should not be in the future: 2030-01-01\.$/
           );
         });

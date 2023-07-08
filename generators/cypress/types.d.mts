@@ -1,5 +1,3 @@
-import { ClientApplication } from '../client/types.mjs';
-
 export type CypressProperties = {
   cypressAudit: boolean;
   cypressCoverage: boolean;
@@ -8,4 +6,4 @@ export type CypressProperties = {
   cypressBootstrapEntities: boolean;
 };
 
-export type CypressApplication = ClientApplication & CypressProperties;
+export type CypressApplication = CypressProperties;

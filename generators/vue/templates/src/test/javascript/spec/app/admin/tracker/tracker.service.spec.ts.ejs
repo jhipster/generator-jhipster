@@ -1,84 +1,116 @@
-import { createLocalVue } from '@vue/test-utils';
-import * as sinon from 'sinon';
-import VueRouter from 'vue-router';
+import { vitest } from 'vitest';
+import { ref, Ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import { createMemoryHistory, createRouter, Router } from 'vue-router';
 import { Subject } from 'rxjs';
 
-import TrackerService from '@/admin/tracker/tracker.service';
-import * as config from '@/shared/config/config';
-import { defaultAccountState } from '@/shared/config/store/account-store';
-
-const localVue = createLocalVue();
-const store = config.initVueXStore(localVue);
+import TrackerService, { useTrackerService } from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/tracker/tracker.service';
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
-  let routerStub: any;
+  let TrackerApp: any;
+  let authenticated: Ref<boolean>;
 
   let mockStomp: any;
+  let router: Router;
 
   beforeEach(() => {
-    store.replaceState({
-      ...store.state,
-      accountStore: { ...defaultAccountState },
-    });
-    routerStub = sinon.createStubInstance<VueRouter>(VueRouter);
-    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/' }));
-    routerStub.afterEach = sinon.spy();
-
-    trackerService = new TrackerService(routerStub, store<%_ if (authenticationTypeSession) { _%>,{ get: jest.fn()}<%_ } %>);
+    router = createRouter({ history: createMemoryHistory(), routes: [] });
+    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
+    router.afterEach = vitest.fn();
+    authenticated = ref(false);
 
     const watch$ = new Subject<any>();
 
     mockStomp = {
-      publish: sinon.stub(),
-      watch: sinon.stub().callsFake(() => watch$),
-      configure: sinon.stub(),
-      activate: sinon.stub(),
-      deactivate: sinon.stub(),
-      connected$: new Subject<any>(),
+      publish: vitest.fn(),
+      watch: vitest.fn().mockReturnValue(watch$),
+      configure: vitest.fn(),
+      activate: vitest.fn(),
+      deactivate: vitest.fn(),
+      connectionState$: new Subject<any>(),
     };
 
-    trackerService.stomp = mockStomp;
-    trackerService['buildUrl'] = () => '';
+    TrackerApp = {
+      name: 'TrackerApp',
+      template: `
+        <div></div>
+      `,
+      setup() {
+        trackerService = useTrackerService({ stomp: mockStomp });
+        trackerService['buildUrl'] = () => '';
+      },
+    };
   });
 
   it('Should subscribe router activity', async () => {
-    expect(routerStub.afterEach.calledOnce).toBeTruthy();
+    shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+    expect(router.afterEach).toBeCalledTimes(1);
   });
 
   it('Should call activate on authenticated', async () => {
     // WHEN
-    store.commit('authenticated', {});
-    await localVue.nextTick();
+    authenticated.value = true;
+    const wrapper = shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+    await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.activate.calledOnce).toBeTruthy();
+    expect(mockStomp.activate).toBeCalledTimes(1);
   });
 
   it('Should send activity on connected', async () => {
     // GIVEN
-    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/admin' }));
+    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
+    const wrapper = shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
 
     // WHEN
-    mockStomp.connected$.next({});
+    mockStomp.connectionState$.next(1);
+    await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.publish.callCount).toBe(1);
-    expect(
-      mockStomp.publish.calledOnceWithExactly({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) })
-    ).toBeTruthy();
+    expect(mockStomp.publish).toBeCalledTimes(1);
+    expect(mockStomp.publish).toBeCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
   it('Should disconnect on logout', async () => {
     // GIVEN
-    store.commit('authenticated', {});
-    await localVue.nextTick();
+    authenticated.value = true;
+    const wrapper = shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+    await wrapper.vm.n
 
     // WHEN
-    store.commit('logout');
-    await localVue.nextTick();
+    authenticated.value = false;
+    await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.deactivate.calledOnce).toBeTruthy();
+    expect(mockStomp.deactivate).toBeCalledTimes(1);
   });
 });

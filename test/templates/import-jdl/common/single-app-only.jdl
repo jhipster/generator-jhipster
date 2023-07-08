@@ -1,6 +1,0 @@
-application {
-  config {
-    baseName jhipsterApp,
-    packageName com.jhipster.myapp
-  }
-}

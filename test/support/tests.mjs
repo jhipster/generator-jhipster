@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import path, { dirname } from 'path';
 import sinon from 'sinon';
 import { existsSync } from 'fs';
@@ -419,5 +419,16 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP].callCount).toBe(3);
       });
     }
+  });
+};
+
+export const shouldSupportFeatures = Generator => {
+  it('should support features parameter', () => {
+    const instance = new Generator(
+      [],
+      { help: true, namespace: 'foo', resolved: 'bar', env: { cwd: 'foo' }, sharedData: {} },
+      { unique: 'bar' }
+    );
+    expect(instance.features.unique).toBe('bar');
   });
 };

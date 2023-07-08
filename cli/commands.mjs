@@ -79,51 +79,6 @@ const defaultCommands = {
   },
   jdl: {
     alias: 'import-jdl',
-    argument: ['[jdlFiles...]'],
-    cliOnly: true,
-    options: [
-      {
-        option: '--interactive',
-        desc: 'Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders',
-      },
-      {
-        option: '--json-only',
-        desc: 'Generate only the JSON files and skip entity regeneration',
-        default: false,
-      },
-      {
-        option: '--ignore-application',
-        desc: 'Ignores application generation',
-        default: false,
-      },
-      {
-        option: '--ignore-deployments',
-        desc: 'Ignores deployments generation',
-        default: false,
-      },
-      {
-        option: '--skip-sample-repository',
-        desc: 'Disable fetching sample files when the file is not a URL',
-        default: false,
-      },
-      {
-        option: '--inline <value>',
-        desc: 'Pass JDL content inline. Argument can be skipped when passing this',
-      },
-      {
-        option: '--skip-user-management',
-        desc: 'Skip the user management module during app generation',
-      },
-      {
-        option: '--unidirectional-relationships',
-        desc: 'Generate unidirectional relationships',
-      },
-      {
-        option: '--force-no-filtering',
-        desc: "Don't filter jdl entities",
-        default: false,
-      },
-    ],
     desc: `Create entities from the JDL file/URL/content passed in argument.
     Use the '--interactive' flag to generate multiple applications in series.`,
     help: `

@@ -28,14 +28,13 @@ import {
   getPomVersionProperties,
   getGradleLibsVersionsProperties,
 } from '../server/support/index.mjs';
-import type { GeneratorDefinition as ServerGeneratorDefinition } from '../server/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 import { addEntitiesOtherRelationships } from '../server/support/index.mjs';
 
-export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerGeneratorDefinition> {
-  async _postConstruct() {
+export default class BoostrapApplicationServer extends BaseApplicationGenerator {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 
@@ -47,19 +46,22 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
 
-        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
-        const gradleLibsVersions = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/gradle/libs.versions.toml'));
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
+        const gradleLibsVersions = this.readTemplate(
+          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml')
+        )?.toString();
+        application.packageInfoJavadocs = [];
         application.javaDependencies = this.prepareDependencies(
           {
             ...javaDependencies,
-            ...getPomVersionProperties(pomFile),
-            ...getGradleLibsVersionsProperties(gradleLibsVersions),
+            ...getPomVersionProperties(pomFile!),
+            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
           },
           // Gradle doesn't allows snakeCase
           value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
         );
 
-        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
         application.dockerContainers = this.prepareDependencies(
           {
             ...dockerContainers,

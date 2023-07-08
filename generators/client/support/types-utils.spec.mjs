@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
 
@@ -16,6 +16,7 @@ describe('generator - client - support - type-utils', () => {
   "BigDecimal": "number",
   "Blob": "string",
   "Boolean": "boolean",
+  "ByteBuffer": "string",
   "Double": "number",
   "Duration": "string",
   "Enum": "Enum",
@@ -29,6 +30,7 @@ describe('generator - client - support - type-utils', () => {
   "TextBlob": "string",
   "UUID": "string",
   "ZonedDateTime": "dayjs.Dayjs",
+  "byte[]": "string",
 }
 `);
       });

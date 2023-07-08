@@ -33,7 +33,8 @@ import { <%- importedType %> } from '<%- importedPath %>';
 
 export interface I<%= entityAngularName %> {
 <%_ for (const field of fields) {
-      const { fieldName, fieldValidationRequired, tsType, id } = field;
+      const { fieldName, fieldValidationRequired, id } = field;
+      const tsType = `${field.fieldIsEnum ? 'keyof typeof ' : ''}${field.tsType}`;
 _%>
   <%= fieldName %><% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: <%= tsType %><% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>

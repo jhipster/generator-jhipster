@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import ChildProcess from 'child_process';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { defaultHelpers as helpers } from '../../test/support/index.mjs';

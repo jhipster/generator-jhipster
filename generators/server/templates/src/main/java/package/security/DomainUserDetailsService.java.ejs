@@ -26,7 +26,6 @@ import <%= packageName %>.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
@@ -45,7 +44,6 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Authenticate a user from the database.
@@ -91,10 +89,10 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
+        List<SimpleGrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
             .map(Authority::getName)<% } %>
             .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+            .toList();
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
             user.getPassword(),
             grantedAuthorities);

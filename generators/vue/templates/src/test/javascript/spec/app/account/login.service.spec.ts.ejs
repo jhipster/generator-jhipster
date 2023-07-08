@@ -1,4 +1,4 @@
-import LoginService from '@/account/login.service';
+import LoginService from '../../<%- clientSrcDirRelativeToClientTestDir %>account/login.service';
 <%_ if (!authenticationTypeJwt) { _%>
 import axios from 'axios';
 import sinon from 'sinon';
@@ -10,10 +10,10 @@ const axiosStub = {
 <%_ } _%>
 
 describe('Login Service test suite', () => {
-  let loginService;
+  let loginService: LoginService;
 
   beforeEach(() => {
-    loginService = new LoginService();
+    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: vitest.fn() }<% } %>);
   });
 
 <%_ if (authenticationTypeOauth2) { _%>

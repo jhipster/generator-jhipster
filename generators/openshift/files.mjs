@@ -36,11 +36,9 @@ export function writeFiles() {
         this.app = this.appConfigs[i];
         this.writeFile('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
 
-        if (this.app.prodDatabaseType !== NO_DATABASE) {
-          this.writeFile(
-            `db/${this.app.prodDatabaseType}.yml.ejs`,
-            `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`
-          );
+        if (this.app.databaseType !== NO_DATABASE) {
+          const databaseType = this.app.prodDatabaseType ?? this.app.databaseType;
+          this.writeFile(`db/${databaseType}.yml.ejs`, `${this.directoryPath}/ocp/${appName}/${appName}-${databaseType}.yml`);
         }
         if (this.app.searchEngine === ELASTICSEARCH) {
           this.writeFile('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);

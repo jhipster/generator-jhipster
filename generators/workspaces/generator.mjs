@@ -20,15 +20,14 @@
 import fs from 'fs';
 import path from 'path';
 
-import { GENERATOR_ANGULAR, GENERATOR_APP, GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.mjs';
+import { GENERATOR_ANGULAR, GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseGenerator from '../base/index.mjs';
-import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
+import { getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
+import { removeFieldsWithNullishValues } from '../base/support/config.mjs';
+import command from './command.mjs';
 
-const {
-  DeploymentTypes: { DOCKERCOMPOSE },
-} = deploymentOptions;
 /**
  * Base class for a generator that can be extended through a blueprint.
  *
@@ -36,34 +35,37 @@ const {
  * @extends {BaseGenerator}
  */
 export default class WorkspacesGenerator extends BaseGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
+  workspacesFolders;
+  workspaces;
+  generateApplications;
+  generateWith;
 
-    this.option('workspaces', {
-      desc: 'Generate workspaces for multiples applications',
-      type: Boolean,
-    });
-
-    this.option('monorepository', {
-      desc: 'Use monorepository',
-      type: Boolean,
-    });
-
-    if (this.options.help) return;
-
-    // Generate workspaces file only when option passed or regenerating
-    this.generateWorkspaces = this.options.workspaces !== false || !!this.packageJson.get('workspaces');
-
-    // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
-    this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
-  }
+  generateWorkspaces;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints('workspaces');
+      await this.composeWithBlueprints(GENERATOR_WORKSPACES);
     }
 
     this.loadRuntimeOptions();
+  }
+
+  get initializing() {
+    return {
+      loadConfig() {
+        this.parseJHipsterOptions(command.options);
+
+        // Generate workspaces file only when option passed or regenerating
+        this.generateWorkspaces = this.workspaces !== false || !!this.packageJson.get('workspaces');
+
+        // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
+        this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
+      },
+    };
+  }
+
+  get [BaseGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get configuring() {
@@ -75,21 +77,14 @@ export default class WorkspacesGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
     return {
       async composeGit() {
-        if (this.options.monorepository) {
+        if (this.options.monorepository || this.jhipsterConfig.monorepository) {
           await this.composeWithJHipster(GENERATOR_GIT);
-        }
-      },
-      async generateJdl() {
-        const { generateJdl } = this.options;
-        if (generateJdl) {
-          await generateJdl();
         }
       },
     };
@@ -101,34 +96,24 @@ export default class WorkspacesGenerator extends BaseGenerator {
 
   get default() {
     return {
-      async configureUsingImportState() {
-        const importState = this.options.importState;
-        if (!importState || !this.generateWorkspaces) return;
+      async generateApplications() {
+        if (!this.generateApplications) {
+          return;
+        }
 
-        const applications = Object.entries(importState.exportedApplicationsWithEntities ?? {});
-        let clientPackageManager;
-        if (applications.length > 0) {
-          clientPackageManager = applications[0][1].config.clientPackageManager;
-          const { generateWith = GENERATOR_APP } = this.options;
-          if (this.options.generateApplications) {
-            for (const [appName, applicationWithEntities] of applications) {
-              await this.composeWithJHipster(generateWith, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
-            }
+        if (typeof this.generateApplications === 'function') {
+          await this.generateApplications.call(this);
+        } else {
+          for (const appName of this.workspacesFolders) {
+            await this.composeWithJHipster(this.generateWith, { generatorOptions: { destinationRoot: this.destinationPath(appName) } });
           }
         }
-        this.workspacesConfig.clientPackageManager = clientPackageManager || 'npm';
-        const dockerCompose = importState.exportedDeployments?.some(
-          deployment => deployment[GENERATOR_JHIPSTER].deploymentType === DOCKERCOMPOSE
-        );
-
-        this.workspacesConfig.dockerCompose = dockerCompose;
-        this.workspacesConfig.packages = applications.map(([appName]) => appName);
       },
-
       async configureUsingFiles() {
-        if (this.options.importState || !this.generateWorkspaces) return;
+        if (!this.generateWorkspaces) return;
 
-        const packages = this.workspacesConfig.packages || [];
+        const packages = [...(this.workspacesConfig.packages ?? [])];
+        this.workspacesFolders.forEach(workspace => !packages.includes(workspace) && packages.push(workspace));
         let dockerCompose;
 
         const dir = fs.opendirSync('./');
@@ -147,18 +132,6 @@ export default class WorkspacesGenerator extends BaseGenerator {
         }
         dir.closeSync();
 
-        const generateApplications = this.options.generateApplications;
-        if (generateApplications && Array.isArray(generateApplications)) {
-          const { generateWith = GENERATOR_APP } = this.options;
-          for (const appName of generateApplications) {
-            if (!packages.includes(appName)) {
-              packages.push(appName);
-            }
-            await this.composeWithJHipster(generateWith, { destinationRoot: this.destinationPath(appName) });
-          }
-        }
-
-        packages.sort();
         this.workspacesConfig.dockerCompose = dockerCompose;
         this.workspacesConfig.packages = packages;
       },
@@ -190,18 +163,18 @@ export default class WorkspacesGenerator extends BaseGenerator {
 
         const {
           dependencies: { rxjs },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'));
+          devDependencies: { webpack: webpackVersion },
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
 
         const {
           devDependencies: { concurrently },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json'));
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'));
 
         this.packageJson.merge({
           workspaces: {
             packages: this.packages,
           },
           devDependencies: {
-            rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
             concurrently,
           },
           scripts: {
@@ -212,6 +185,28 @@ export default class WorkspacesGenerator extends BaseGenerator {
             ...this._createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
+
+        const applications = this.loadApplications();
+        if (applications.some(app => app.clientFrameworkAngular)) {
+          this.packageJson.merge({
+            devDependencies: {
+              rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
+            },
+            overrides: {
+              webpack: webpackVersion,
+            },
+          });
+        }
+        if (applications.some(app => app.clientFrameworkVue)) {
+          this.packageJson.merge({
+            // https://github.com/vuejs/vue-jest/issues/480#issuecomment-1330479635
+            overrides: {
+              '@babel/core': '7.17.9',
+              '@babel/generator': '7.17.9',
+              'istanbul-lib-instrument': '5.2.0',
+            },
+          });
+        }
       },
     };
   }
@@ -264,5 +259,27 @@ export default class WorkspacesGenerator extends BaseGenerator {
 
   _createWorkspacesScript(...scripts) {
     return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
+  }
+
+  loadApplications() {
+    return this.workspacesConfig.packages
+      .map(appPath => {
+        const appConfig = this.readDestinationJSON(`${appPath}/.yo-rc.json`)[GENERATOR_JHIPSTER];
+        if (!appConfig) return undefined;
+
+        const app = getConfigWithDefaults(removeFieldsWithNullishValues(appConfig));
+
+        this.loadAppConfig(app, app);
+        this.loadServerConfig(app, app);
+        this.loadClientConfig(app, app);
+        this.loadPlatformConfig(app, app);
+
+        this.loadDerivedAppConfig(app);
+        this.loadDerivedClientConfig(app);
+        this.loadDerivedServerConfig(app);
+        this.loadDerivedPlatformConfig(app);
+        return app;
+      })
+      .filter(app => app);
   }
 }

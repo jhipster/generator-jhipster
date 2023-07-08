@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import Generator from './generator.mjs';
-import { moveToJavaPackageTestDir } from '../server/support/index.mjs';
-import { SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, TEST_DIR } from '../generator-constants.mjs';
+import { TEST_DIR } from '../generator-constants.mjs';
 import { WriteFileSection } from '../base/api.mjs';
 import { SpringBootApplication } from '../server/types.mjs';
 

@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { inspect } from 'node:util';
 import _ from 'lodash';
 import { entityClientI18nFiles } from './entity-files.mjs';
 import { clientI18nFiles } from './files.mjs';
+
+const { get } = _;
 
 export default class TranslationData {
   constructor(generator, control) {
@@ -44,6 +47,10 @@ export default class TranslationData {
       rootTemplatesPath,
       context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: 'en' },
     });
+
+    // Add entities to menu translation.
+    this.translations.global.menu.entities[entity.entityTranslationKeyMenu] = entity.entityClassHumanized;
+
     if (nativeLanguage && nativeLanguage !== 'en') {
       translationFiles.push(
         ...(await this.generator.writeFiles({
@@ -105,14 +112,17 @@ export default class TranslationData {
    * @param [data] {object} - template data in case translated value is a template
    */
   getClientTranslation(translationKey, data) {
-    let translatedValue = _.get(this.translations, translationKey);
+    let translatedValue = get(this.translations, translationKey);
     if (translatedValue === undefined) {
-      const [last, second, ...others] = translationKey.split('.').reverse();
-      translatedValue = _.get(this.translations, `${others.reverse().join('.')}['${second}.${last}']`);
+      const [last, second, third, ...others] = translationKey.split('.').reverse();
+      translatedValue =
+        get(this.translations, `${[...others.reverse(), third].join('.')}['${second}.${last}']`) ??
+        get(this.translations, `${others.reverse().join('.')}['${third}.${second}.${last}']`);
     }
     if (translatedValue === undefined) {
       const errorMessage = `Translation missing for ${translationKey}`;
-      this.logger.warn(`${errorMessage} at ${JSON.stringify(this.translations)}`);
+      this.generator.log.warn(errorMessage);
+      this.generator.log.debug(`${errorMessage} at ${inspect(this.translations, { depth: null })}`);
       return errorMessage;
     }
     if (!data) {

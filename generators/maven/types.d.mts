@@ -24,6 +24,8 @@ export type MavenArtifact = {
   inProfile?: string;
 };
 
+export type MavenAnnotationProcessor = MavenArtifact & Required<Pick<MavenArtifact, 'version'>>;
+
 export type MavenPlugin = MavenArtifact & {
   additionalContent?: string;
 };
@@ -40,6 +42,7 @@ export type MavenRepository = {
 export type MavenDependency = MavenArtifact & {
   type?: string;
   scope?: string;
+  classifier?: string;
   additionalContent?: string;
 };
 
@@ -59,15 +62,29 @@ export type MavenProperty = {
 
 export type MavenProfile = { id: string; content?: string };
 
+export type MavenDefinition = {
+  annotationProcessors?: MavenAnnotationProcessor[];
+  dependencies?: MavenDependency[];
+  dependencyManagement?: MavenDependency[];
+  distributionManagement?: MavenDistributionManagement[];
+  plugins?: MavenPlugin[];
+  pluginManagement?: MavenPlugin[];
+  pluginRepositories?: MavenRepository[];
+  properties?: MavenProperty[];
+  profiles?: MavenProfile[];
+  repositories?: MavenRepository[];
+};
+
 export type MavenSourceType = {
-  addMavenAnnotationProcessor?(artifact: MavenArtifact): void;
-  addMavenDependency?(dependecy: MavenDependency): void;
-  addMavenDependencyManagement?(dependecy: MavenDependency): void;
-  addMavenDistributionManagement?(distributionManagement: MavenDistributionManagement): void;
-  addMavenPlugin?(plugin: MavenPlugin): void;
-  addMavenPluginManagement?(plugin: MavenPlugin): void;
-  addMavenPluginRepository?(repository: MavenRepository): void;
-  addMavenProperty?(property: MavenProperty): void;
-  addMavenProfile?(profile: MavenProfile): void;
-  addMavenRepository?(repository: MavenRepository): void;
+  addMavenAnnotationProcessor?(artifact: MavenAnnotationProcessor | MavenAnnotationProcessor[]): void;
+  addMavenDependency?(dependecy: MavenDependency | MavenDependency[]): void;
+  addMavenDependencyManagement?(dependecy: MavenDependency | MavenDependency[]): void;
+  addMavenDistributionManagement?(distributionManagement: MavenDistributionManagement | MavenDistributionManagement[]): void;
+  addMavenPlugin?(plugin: MavenPlugin | MavenPlugin[]): void;
+  addMavenPluginManagement?(plugin: MavenPlugin | MavenPlugin[]): void;
+  addMavenPluginRepository?(repository: MavenRepository | MavenRepository[]): void;
+  addMavenProperty?(property: MavenProperty | MavenProperty[]): void;
+  addMavenProfile?(profile: MavenProfile | MavenProfile[]): void;
+  addMavenRepository?(repository: MavenRepository | MavenRepository[]): void;
+  addMavenDefinition?(definition: MavenDefinition): void;
 };

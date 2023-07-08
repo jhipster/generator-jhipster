@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Qeydiyyat",
+        "form": {
+            "button": "Qeydiyyatdan Keç"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "İstifadəçi adı məcburidir.",
+                    "minlength": "İstifadəçi adı ən az 1 hərfdən ibarət olmalıdır",
+                    "maxlength": "İstifadəçi adı ən çox 50 hərfdən ibarət olmalıdır",
+                    "pattern": "Your username is invalid."
+                }
+            },
+            "success": "<strong>Qeydiyyatdan keçdiniz!</strong> Zəhmət olmasa, təsdiq üçün e-poçtunuzu yoxlayın.",
+            "error": {
+                "fail": "<strong>Qeydiyyat uğurla başa çatmadı!</strong> Zəhmət olmasa, daha sonra təkrar cəhd edin.",
+                "userexists": "<strong>Qeyd etdiyiniz istifadəçi adı sistemde mövcuddur!</strong> Zəhmət olmasa, başqa bir istifadəçi adı seçin.",
+                "emailexists": "<strong>Email adresi artıq istifadə edilir!</strong> Zəhmət olmasa, başqa bir mail seçin."
+            }
+        }
+    }
+}

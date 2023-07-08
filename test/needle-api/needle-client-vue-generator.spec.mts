@@ -12,8 +12,7 @@ const { VUE } = clientFrameworkTypes;
 const mockBlueprintSubGen: any = class extends VueGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
-    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-    if (!jhContext) {
+    if (!this.jhipsterContext) {
       throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
     this.sbsBlueprint = true;
@@ -50,7 +49,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         db: 'mysql',
         blueprint: 'myblueprint',
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:vue']])
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:vue' }]])
       .withAnswers({
         baseName: 'jhipster',
         clientFramework: VUE,
@@ -128,7 +127,7 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
   it('menu contains the item in service', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
-      "@Provide('entityInstanceService') private entityInstanceService = () => new entityNameService();"
+      "provide('entityInstanceService', () => new entityNameService());"
     );
   });
 });

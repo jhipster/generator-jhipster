@@ -63,13 +63,13 @@ spec:
 <%_ if (app.prodDatabaseTypePostgres) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-postgresql 5432)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
+<%_ if (app.databaseTypeMongodb) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mongodb 27017)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeCouchbase) { _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase-cluster-srv 8091)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeNeo4j) { _%>
+<%_ if (app.databaseTypeNeo4j) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-neo4j 7474)
 <%_ } _%>
                   if [ $? -eq 0 ]; then
@@ -165,17 +165,15 @@ spec:
           value: <%- this.getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
-        - name: SPRING_DATA_MONGODB_DATABASE
-          value: <%= app.baseName %>
+<%_ if (app.databaseTypeMongodb) { _%>
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
+          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>/<%= app.baseName %><% if (app.reactive) { %>?waitQueueMultiple=1000<% } %>"
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeNeo4j) { _%>
+<%_ if (app.databaseTypeNeo4j) { _%>
         - name: SPRING_NEO4J_URI
           value: bolt://<%= app.baseName.toLowerCase() %>-neo4j.<%= kubernetesNamespace %>.svc.cluster.local:7687
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeCouchbase) { _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
         - name: SPRING_COUCHBASE_CONNECTION_STRING
           value: "<%= app.baseName.toLowerCase() %>-couchbase-cluster-srv"
         - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME
@@ -216,12 +214,19 @@ spec:
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
 <%_ } _%>
-<%_ if (useKeycloak) { _%>  
+<%_ if (useKeycloak) { _%>
+      <%_ if (ingressTypeGke) { _%>
         # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
           value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+      <%_ } else { _%>
+        - name: JAVA_OPTS
+          value: "-Xmx256m -Xms256m"
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
+          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+      <%_ } _%>
       <%_ if (app.applicationTypeGateway || app.applicationTypeMonolith) { _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: web_app
@@ -241,10 +246,12 @@ spec:
         - name: SERVER_SHUTDOWN
           value: graceful
     <%_ if (useKeycloak) { _%>
+        <%_ if (ingressTypeGke) { _%>
         # Custom trustStore required when using Let's Encrypt staging
         volumeMounts:
           - name: java-truststore
             mountPath: /etc/pki/java
+        <%_ } _%>
     <%_ } _%>
         resources:
           requests:
@@ -269,13 +276,14 @@ spec:
             port: http
           initialDelaySeconds: 120
   <%_ if (useKeycloak) { _%>
+      <%_ if (ingressTypeGke) { _%>
       volumes:
-      # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
+      # When using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore
       - name: java-truststore
         secret:
           secretName: letsencrypt-ca-secret
           items:
           - key: truststore.jks
             path: cacerts
+      <%_ } _%>
   <%_ } _%>
-          

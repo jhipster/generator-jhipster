@@ -17,8 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jestMock from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -27,6 +26,7 @@ import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.mjs';
 import type { BaseApplication } from '../base-application/types.js';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const { snakeCase } = lodash;
 
@@ -39,10 +39,7 @@ describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
 
   // TODO test is broken due to @esbuild-kit/esm-loader
   describe.skip('EnvironmentBuilder', () => {
@@ -57,28 +54,28 @@ describe(`generator - ${generator}`, () => {
 
   describe('custom priorities tasks', () => {
     // no args
-    const initializing = jestMock.fn();
-    const prompting = jestMock.fn();
-    const configuring = jestMock.fn();
-    const composing = jestMock.fn();
+    const initializing = esmocha.fn();
+    const prompting = esmocha.fn();
+    const configuring = esmocha.fn();
+    const composing = esmocha.fn();
 
     // application arg
-    const loading = jestMock.fn();
-    const preparing = jestMock.fn();
-    const writing = jestMock.fn();
-    const postWriting = jestMock.fn();
-    const install = jestMock.fn();
-    const end = jestMock.fn();
+    const loading = esmocha.fn();
+    const preparing = esmocha.fn();
+    const writing = esmocha.fn();
+    const postWriting = esmocha.fn();
+    const install = esmocha.fn();
+    const end = esmocha.fn();
 
     // entities args
-    const configuringEachEntity = jestMock.fn();
-    const preparingEachEntity = jestMock.fn();
-    const preparingEachEntityField = jestMock.fn();
-    const preparingEachEntityRelationship = jestMock.fn();
-    const postPreparingEachEntity = jestMock.fn();
-    const defaultTask = jestMock.fn();
-    const writingEntities = jestMock.fn();
-    const postWritingEntities = jestMock.fn();
+    const configuringEachEntity = esmocha.fn();
+    const preparingEachEntity = esmocha.fn();
+    const preparingEachEntityField = esmocha.fn();
+    const preparingEachEntityRelationship = esmocha.fn();
+    const postPreparingEachEntity = esmocha.fn();
+    const defaultTask = esmocha.fn();
+    const writingEntities = esmocha.fn();
+    const postWritingEntities = esmocha.fn();
 
     class CustomGenerator extends Generator<BaseApplication> {
       async beforeQueue() {
@@ -281,28 +278,28 @@ describe(`generator - ${generator}`, () => {
 
   describe('entities option', () => {
     // no args
-    const initializing = jestMock.fn();
-    const prompting = jestMock.fn();
-    const configuring = jestMock.fn();
-    const composing = jestMock.fn();
+    const initializing = esmocha.fn();
+    const prompting = esmocha.fn();
+    const configuring = esmocha.fn();
+    const composing = esmocha.fn();
 
     // application arg
-    const loading = jestMock.fn();
-    const preparing = jestMock.fn();
-    const writing = jestMock.fn();
-    const postWriting = jestMock.fn();
-    const install = jestMock.fn();
-    const end = jestMock.fn();
+    const loading = esmocha.fn();
+    const preparing = esmocha.fn();
+    const writing = esmocha.fn();
+    const postWriting = esmocha.fn();
+    const install = esmocha.fn();
+    const end = esmocha.fn();
 
     // entities args
-    const configuringEachEntity = jestMock.fn();
-    const preparingEachEntity = jestMock.fn();
-    const preparingEachEntityField = jestMock.fn();
-    const preparingEachEntityRelationship = jestMock.fn();
-    const postPreparingEachEntity = jestMock.fn();
-    const defaultTask = jestMock.fn();
-    const writingEntities = jestMock.fn();
-    const postWritingEntities = jestMock.fn();
+    const configuringEachEntity = esmocha.fn();
+    const preparingEachEntity = esmocha.fn();
+    const preparingEachEntityField = esmocha.fn();
+    const preparingEachEntityRelationship = esmocha.fn();
+    const postPreparingEachEntity = esmocha.fn();
+    const defaultTask = esmocha.fn();
+    const writingEntities = esmocha.fn();
+    const postWritingEntities = esmocha.fn();
 
     class CustomGenerator extends Generator<BaseApplication> {
       async beforeQueue() {

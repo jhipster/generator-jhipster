@@ -23,26 +23,17 @@ profile=dev
 jhipsterDependenciesVersion=<%= jhipsterDependenciesVersion %>
 # The spring-boot version should match the one managed by
 # https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= jhipsterDependenciesVersion %>
-springBootVersion=<%= SPRING_BOOT_VERSION %>
+springBootVersion=<%- javaDependencies['spring-boot'] %>
 # The hibernate version should match the one managed by
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
-hibernateVersion=<%= HIBERNATE_VERSION %>
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%- javaDependencies['spring-boot'] %> -->
+hibernateVersion=<%- javaDependencies.hibernate %>
 mapstructVersion=<%- javaDependencies.mapstruct %>
 archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
 <%_ if (enableSwaggerCodegen) { _%>
-jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
-<%_ } _%>
-<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-caffeineVersion=<%- javaDependencies.caffeine %>
+jacksonDatabindNullableVersion=<%- javaDependencies['jackson-databind-nullable'] %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=<%- javaDependencies.typesafe %>
-<%_ } _%>
-<%_ if (enableLiquibase && databaseTypeSql && !reactive) { _%>
-liquibaseHibernate6Version=<%- javaDependencies.liquibase %>
-<%_ } _%>
-<%_ if (enableLiquibase) { _%>
-liquibaseTaskPrefix=liquibase
 <%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
 hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
@@ -68,8 +59,8 @@ jaxbRuntimeVersion=<%- javaDependencies['jaxb-runtime'] %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=<%= CASSANDRA_DRIVER_VERSION %>
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%- javaDependencies['spring-boot'] %>
+cassandraDriverVersion=<%- javaDependencies.cassandra %>
 <%_ } _%>
 
 # gradle plugin version
@@ -78,10 +69,8 @@ gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=<%- javaDependencies['node-gradle'] %>
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-liquibasePluginVersion=<%- javaDependencies['gradle-liquibase'] %>
-<%_ } _%>
 sonarqubePluginVersion=<%- javaDependencies['gradle-sonarqube'] %>
+spotlessPluginVersion=<%- javaDependencies['spotless-gradle-plugin'] %>
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ } _%>

@@ -27,11 +27,11 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
+<%_ if (generateInMemoryUserCredentials) { _%>
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -46,7 +46,6 @@ import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 <%_ if (authenticationTypeSession) { _%>
@@ -83,12 +82,11 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-  <%_ if (authenticationTypeSession || skipUserManagement) { _%>
+  <%_ if (generateInMemoryUserCredentials) { _%>
 import org.springframework.security.core.userdetails.User;
-  <%_ } _%>
-  <%_ if (skipUserManagement) { _%>
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
   <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -101,7 +99,7 @@ import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 <%_ } _%>
@@ -112,10 +110,7 @@ import org.springframework.security.web.server.savedrequest.NoOpServerRequestCac
 <%_ } _%>
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
-<%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
-import org.springframework.util.StringUtils;
-<%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -135,14 +130,14 @@ import java.util.Set;
   <%_ if (!applicationTypeMicroservice) { _%>
 import java.util.function.Consumer;
   <%_ } _%>
-
-import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 
+<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
+import static org.springframework.security.config.Customizer.withDefaults;
+<%_ } _%>
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
 @Configuration
-@EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 public class SecurityConfiguration {
 
@@ -178,7 +173,7 @@ public class SecurityConfiguration {
         this.jHipsterProperties = jHipsterProperties;
     }
 
-<%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
+<%_ if (generateUserManagement) { _%>
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -191,7 +186,7 @@ public class SecurityConfiguration {
         return authenticationManager;
     }
 
-<%_ } else if (!authenticationTypeOauth2) { _%>
+<%_ } else if (generateInMemoryUserCredentials) { _%>
     @Bean
     public MapReactiveUserDetailsService userDetailsService(SecurityProperties properties) {
         SecurityProperties.User user = properties.getUser();
@@ -215,8 +210,11 @@ public class SecurityConfiguration {
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
                 pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**")
             )))
+<%_ if (!applicationTypeMicroservice) { _%>
+            .cors(withDefaults())
+<%_ } _%>
             .csrf(csrf -> csrf
-<%_ if ((authenticationTypeSession || authenticationTypeOauth2) && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
                 // See https://stackoverflow.com/q/74447118/65681
                 .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler()))

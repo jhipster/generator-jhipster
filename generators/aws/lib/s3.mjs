@@ -25,7 +25,7 @@ const S3_STANDARD_REGION = 'us-east-1';
 
 let Progressbar;
 
-const S3 = function S3(Aws, generator) {
+const S3 = function S3(Aws) {
   this.Aws = Aws;
   try {
     Progressbar = require('progress'); // eslint-disable-line

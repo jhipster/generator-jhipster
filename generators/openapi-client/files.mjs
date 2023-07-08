@@ -20,8 +20,10 @@
 import path from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
-import { SERVER_MAIN_SRC_DIR, OPENAPI_GENERATOR_CLI_VERSION, JACKSON_DATABIND_NULLABLE_VERSION } from '../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR, OPENAPI_GENERATOR_CLI_VERSION } from '../generator-constants.mjs';
 import { applicationOptions, buildToolTypes, applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
+import { addGradleDependencyCallback, addGradlePropertyCallback } from '../gradle/internal/needles.mjs';
+import { getPomVersionProperties } from '../server/support/dependabot-maven.mjs';
 
 const { OptionNames } = applicationOptions;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -43,7 +45,7 @@ export function customizeFiles() {
   return {
     callOpenApiGenerator() {
       if (Object.keys(this.clientsToGenerate).length === 0) {
-        this.logger.warn('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
+        this.log.warn('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
         return;
       }
 
@@ -73,7 +75,7 @@ export function customizeFiles() {
 
           additionalParameters.push('-p dateLibrary=java8');
         }
-        this.logger.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
+        this.log.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
 
         openApiCmd.push(
           `-g ${openApiGeneratorName}`,
@@ -127,10 +129,27 @@ export function customizeFiles() {
               "compile 'org.springframework.cloud:spring-cloud-starter-openfeign', { exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-ribbon' }";
             this.rewriteFile('./build.gradle', 'jhipster-needle-gradle-dependency', content);
           } else {
-            this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-openfeign');
+            // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+            this.editFile(
+              'build.gradle',
+              addGradleDependencyCallback({
+                groupId: 'org.springframework.cloud',
+                artifactId: 'spring-cloud-starter-openfeign',
+                scope: 'compile',
+              })
+            );
           }
         }
-        this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-oauth2');
+
+        // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+        this.editFile(
+          'build.gradle',
+          addGradleDependencyCallback({
+            groupId: 'org.springframework.cloud',
+            artifactId: 'spring-cloud-starter-oauth2',
+            scope: 'compile',
+          })
+        );
       }
     },
 
@@ -140,18 +159,30 @@ export function customizeFiles() {
      */
     addJacksonDataBindNullable() {
       if (!this.enableSwaggerCodegen) {
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
+        // TODO use application.javaDependencies
+        const versions = getPomVersionProperties(pomFile);
+        const jacksonDatabindNullableVersion = versions['jackson-databind-nullable'];
         if (this.buildTool === MAVEN) {
-          this.addMavenProperty('jackson-databind-nullable.version', JACKSON_DATABIND_NULLABLE_VERSION);
+          this.addMavenProperty('jackson-databind-nullable.version', jacksonDatabindNullableVersion);
           // eslint-disable-next-line no-template-curly-in-string
           this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
         } else if (this.buildTool === GRADLE) {
-          this.addGradleProperty('jacksonDatabindNullableVersion', JACKSON_DATABIND_NULLABLE_VERSION);
-          this.addGradleDependency(
-            'compile',
-            'org.openapitools',
-            'jackson-databind-nullable',
-            // eslint-disable-next-line no-template-curly-in-string
-            '${jacksonDatabindNullableVersion}'
+          // TODO addGradlePropertyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+          this.editFile(
+            'gradle.properties',
+            addGradlePropertyCallback({ property: 'jacksonDatabindNullableVersion', value: jacksonDatabindNullableVersion })
+          );
+          // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+          this.editFile(
+            'build.gradle',
+            addGradleDependencyCallback({
+              groupId: 'org.openapitools',
+              artifactId: 'jackson-databind-nullable',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: '${jacksonDatabindNullableVersion}',
+              scope: 'compile',
+            })
           );
         }
       }

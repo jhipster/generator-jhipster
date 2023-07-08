@@ -56,7 +56,6 @@ export default function parseFromDir(dir: string): JDLObject {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const jdlObject = convertServerOptionsToJDL(applicationOptions);
-  const skippedUserManagement = !!applicationOptions[OptionNames.SKIP_USER_MANAGEMENT];
-  const convertedJDLObject = convertEntitiesToJDL({ entities, skippedUserManagement });
+  const convertedJDLObject = convertEntitiesToJDL({ entities });
   return mergeJDLObjects(jdlObject, convertedJDLObject);
 }

@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Xəta Səhifəsi!",
+        "http": {
+            "400": "Xətalı sorğu.",
+            "403": "Bu səhifəyə icazəniz yoxdur.",
+            "404": "Bu səhifə mövcud deyil.",
+            "405": "İstifadə etdiyiniz HTTP metodu bu URL üçün dəstəklənmir.",
+            "500": "Daxili server xətası."
+        },
+        "concurrencyFailure": "Fərqli bir istifadəçi bu məlumatları sizinlə eyni vaxtda dəyişdirdi. Bu səbəbdən dəyişiklikləriniz qeyd alınmadı.",
+        "validation": "Serverdə validasiya xətası baş verdi."
+    }
+}

@@ -103,7 +103,7 @@ objects:
 <%_ if (app.prodDatabaseTypePostgres) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
+<%_ if (app.databaseTypeMongodb) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
 <%_ } _%>
 <%_ if (app.databaseTypeCassandra) { _%>
@@ -169,9 +169,7 @@ objects:
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://${APPLICATION_NAME}-mongodb<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %>
-            - name: SPRING_DATA_MONGODB_DATABASE
-              value: ${APPLICATION_NAME}
+              value: mongodb://${APPLICATION_NAME}-mongodb/${APPLICATION_NAME}<% if (app.reactive) { %>?waitQueueMultiple=1000<% } %>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

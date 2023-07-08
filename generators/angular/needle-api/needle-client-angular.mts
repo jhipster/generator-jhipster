@@ -137,7 +137,7 @@ export default class extends needleClientBase {
   addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName, jhiPrefix = 'jhi') {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const entityMenuPath = `${this.clientSrcDir}app/layouts/navbar/navbar.component.html`;
-    const routerLink = `routerLink="${routerName}"`;
+    const routerLink = `routerLink="/${routerName}"`;
     // prettier-ignore
     const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" ${routerLink} (click)="collapseNavbar()">
@@ -155,7 +155,7 @@ export default class extends needleClientBase {
   addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName, jhiPrefix = 'jhi') {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`;
     const navbarAdminPath = `${this.clientSrcDir}app/layouts/navbar/navbar.component.html`;
-    const routerLink = `routerLink="${routerName}"`;
+    const routerLink = `routerLink="/${routerName}"`;
     // prettier-ignore
     const entityEntry = `<li>
                         <a class="dropdown-item" ${routerLink} routerLinkActive="active" (click)="collapseNavbar()">

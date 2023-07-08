@@ -1,5 +1,3 @@
-import sortKeys from 'sort-keys';
-
 import { MatrixMonolith, MatrixMicroservice, MatrixGateway } from './application-samples.mjs';
 import { fromMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from './matrix-utils.mjs';
 

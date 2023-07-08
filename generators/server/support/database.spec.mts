@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 import { getDBTypeFromDBValue, getFKConstraintName, getJoinTableName, getUXConstraintName } from './database.mjs';

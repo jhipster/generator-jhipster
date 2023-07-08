@@ -58,7 +58,7 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                 </repository>
             </distributionManagement>
             <properties>
-                <propertyName>propertyValue</propertyName>
+                <propertyName.dotted>propertyValue</propertyName.dotted>
             </properties>
             <dependencies>
                 <dependency>

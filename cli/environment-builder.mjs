@@ -24,9 +24,10 @@ import Environment from 'yeoman-environment';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { QueuedAdapter } from '@yeoman/adapter';
 
 import { CLI_NAME, logger } from './utils.mjs';
-import { packageNameToNamespace } from '../generators/base/support/index.mjs';
+import { createJHipsterLogger, packageNameToNamespace } from '../generators/base/support/index.mjs';
 import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../generators/base/internal/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,14 +40,16 @@ function loadYoRc(filePath = '.yo-rc.json') {
   return JSON.parse(readFileSync(filePath, { encoding: 'utf-8' }));
 }
 
-const createEnvironment = (args, options = {}, adapter) => {
+const createEnvironment = (options = {}) => {
+  options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
+
   // Remove after migration to environment 3.
   const configOptions = {};
   const sharedOptions = {
     ...options.sharedOptions,
     configOptions,
   };
-  return Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
+  return new Environment({ newErrorHandler: true, ...options, sharedOptions });
 };
 
 export default class EnvironmentBuilder {
@@ -58,8 +61,8 @@ export default class EnvironmentBuilder {
    * @param [adapter] - adapter passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder
    */
-  static create(args, options = {}, adapter) {
-    const env = createEnvironment(args, options, adapter);
+  static create(options = {}) {
+    const env = createEnvironment(options);
     env.setMaxListeners(0);
     return new EnvironmentBuilder(env);
   }
@@ -101,17 +104,20 @@ export default class EnvironmentBuilder {
   }
 
   async prepare({ blueprints, lookups } = {}) {
-    await this._lookupJHipster()
-      ._lookupLocalBlueprint()
-      ._loadBlueprints(blueprints)
-      ._lookups(lookups)
-      ._lookupBlueprints()
-      ._loadSharedOptions();
+    await this._lookupJHipster();
+    await this._lookupLocalBlueprint();
+    this._loadBlueprints(blueprints);
+    await this._lookups(lookups);
+    await this._lookupBlueprints();
+    await this._loadSharedOptions();
     return this;
   }
 
   getBlueprintsNamespaces() {
-    return Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName));
+    return [
+      ...Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName)),
+      '@jhipster/jhipster-local',
+    ];
   }
 
   /**
@@ -131,7 +137,7 @@ export default class EnvironmentBuilder {
    *
    * @return {EnvironmentBuilder} this for chaining.
    */
-  _lookupJHipster() {
+  async _lookupJHipster() {
     // Register jhipster generators.
     const sourceRoot = path.basename(path.join(__dirname, '..'));
     let packagePath;
@@ -143,7 +149,7 @@ export default class EnvironmentBuilder {
       packagePath = path.join(__dirname, '../..');
       lookup = `${sourceRoot}/generators`;
     }
-    this.env.lookup({ packagePaths: [packagePath], lookups: [lookup] }).forEach(generator => {
+    (await this.env.lookup({ packagePaths: [packagePath], lookups: [lookup] })).forEach(generator => {
       // Verify jhipster generators namespace.
       assert(
         generator.namespace.startsWith(`${CLI_NAME}:`),
@@ -153,11 +159,11 @@ export default class EnvironmentBuilder {
     return this;
   }
 
-  _lookupLocalBlueprint() {
+  async _lookupLocalBlueprint() {
     const localBlueprintPath = path.join(process.cwd(), '.blueprint');
     if (existsSync(localBlueprintPath)) {
       // Register jhipster generators.
-      const generators = this.env.lookup({ packagePaths: [localBlueprintPath], lookups: ['.'] });
+      const generators = await this.env.lookup({ packagePaths: [localBlueprintPath], lookups: ['.'] });
       if (generators.length > 0) {
         this.env.alias(/^@jhipster\/jhipster-local(:(.*))?$/, '.blueprint$1');
         this.env.sharedOptions.localBlueprint = true;
@@ -166,11 +172,11 @@ export default class EnvironmentBuilder {
     return this;
   }
 
-  _lookups(lookups = []) {
+  async _lookups(lookups = []) {
     lookups = [].concat(lookups);
-    lookups.forEach(lookup => {
-      this.env.lookup(lookup);
-    });
+    for (const lookup of lookups) {
+      await this.env.lookup(lookup);
+    }
     return this;
   }
 
@@ -195,11 +201,11 @@ export default class EnvironmentBuilder {
    * @param {Object} [options] - forwarded to Environment lookup.
    * @return {EnvironmentBuilder} this for chaining.
    */
-  _lookupBlueprints(options) {
+  async _lookupBlueprints(options) {
     const allBlueprints = Object.keys(this._blueprintsWithVersion);
     if (allBlueprints && allBlueprints.length > 0) {
       // Lookup for blueprints.
-      this.env.lookup({ ...options, filterPaths: true, packagePatterns: allBlueprints });
+      await this.env.lookup({ ...options, filterPaths: true, packagePatterns: allBlueprints });
     }
     return this;
   }
@@ -211,8 +217,8 @@ export default class EnvironmentBuilder {
    * @param {Object} [options] - forwarded to Environment lookup.
    * @return {EnvironmentBuilder} this for chaining.
    */
-  lookupGenerators(generators, options = {}) {
-    this.env.lookup({ filterPaths: true, ...options, packagePatterns: generators });
+  async lookupGenerators(generators, options = {}) {
+    await this.env.lookup({ filterPaths: true, ...options, packagePatterns: generators });
     return this;
   }
 
@@ -223,7 +229,7 @@ export default class EnvironmentBuilder {
    * @return {Promise<EnvironmentBuilder>} this for chaining.
    */
   async _loadSharedOptions() {
-    const blueprintsPackagePath = this._getBlueprintPackagePaths();
+    const blueprintsPackagePath = await this._getBlueprintPackagePaths();
     if (blueprintsPackagePath) {
       const sharedOptions = (await this._getSharedOptions(blueprintsPackagePath)) ?? {};
       // Env will forward sharedOptions to every generator
@@ -238,7 +244,7 @@ export default class EnvironmentBuilder {
    * @return {Object[]} blueprint commands.
    */
   async getBlueprintCommands() {
-    const blueprintsPackagePath = this._getBlueprintPackagePaths();
+    const blueprintsPackagePath = await this._getBlueprintPackagePaths();
     return this._getBlueprintCommands(blueprintsPackagePath);
   }
 
@@ -301,7 +307,7 @@ export default class EnvironmentBuilder {
    * @private
    * Get packagePaths from current loaded blueprints.
    */
-  _getBlueprintPackagePaths() {
+  async _getBlueprintPackagePaths() {
     const blueprints = this._blueprintsWithVersion;
     if (!blueprints || Object.keys(blueprints).length === 0) {
       return undefined;
@@ -321,7 +327,7 @@ export default class EnvironmentBuilder {
       }, {});
 
     if (Object.keys(blueprintsToInstall).length > 0) {
-      this.env.installLocalGenerators(blueprintsToInstall);
+      await this.env.installLocalGenerators(blueprintsToInstall);
     }
 
     return Object.entries(blueprints).map(([blueprint, _version]) => {

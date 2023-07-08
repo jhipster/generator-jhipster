@@ -29,6 +29,10 @@
     "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
     "@fortawesome/vue-fontawesome": "<%= nodeDependencies['@fortawesome/vue-fontawesome'] %>",
+    "@vue/compat": "<%= nodeDependencies.vue %>",
+    "@vuelidate/core": "<%= nodeDependencies['@vuelidate/core'] %>",
+    "@vuelidate/validators": "<%= nodeDependencies['@vuelidate/validators'] %>",
+    "@vueuse/core": "<%= nodeDependencies['@vueuse/core'] %>",
     "axios": "<%= nodeDependencies['axios'] %>",
     "bootstrap": "<%= nodeDependencies['bootstrap'] %>",
     "bootstrap-vue": "<%= nodeDependencies['bootstrap-vue'] %>",
@@ -37,27 +41,26 @@
 <%_ } _%>
     "dayjs": "<%= nodeDependencies['dayjs'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
-    "sockjs-client": "1.5.2",
     "@stomp/rx-stomp": "1.1.4",
+    "js-cookie": "<%= nodeDependencies['js-cookie'] %>",
+    "sockjs-client": "1.5.2",
     "rxjs": "7.4.0",
 <%_ } _%>
+    "pinia": "<%= nodeDependencies.pinia %>",
     "vue": "<%= nodeDependencies['vue'] %>",
-    "vue-class-component": "<%= nodeDependencies['vue-class-component'] %>",
-    "vue-cookie": "<%= nodeDependencies['vue-cookie'] %>",
+<%_ if (enableTranslation) { _%>
     "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
-    "vue-infinite-loading": "<%= nodeDependencies['vue-infinite-loading'] %>",
-    "vue-property-decorator": "<%= nodeDependencies['vue-property-decorator'] %>",
-    "vue-router": "<%= nodeDependencies['vue-router'] %>",
-    "vue2-filters": "<%= nodeDependencies['vue2-filters'] %>",
-    "vuelidate": "<%= nodeDependencies['vuelidate'] %>",
-    "vuex": "<%= nodeDependencies['vuex'] %>"
+<%_ } _%>
+    "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
+    "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@rushstack/eslint-patch": "<%= nodeDependencies['@rushstack/eslint-patch'] %>",
-    "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "@types/sinon": "<%= nodeDependencies['@types/sinon'] %>",
-    "@types/vuelidate": "<%= nodeDependencies['@types/vuelidate'] %>",
+    "@vue/compiler-sfc": "<%= nodeDependencies.vue %>",
+    "@vitejs/plugin-vue": "<%= nodeDependencies['@vitejs/plugin-vue'] %>",
+    "@vitest/coverage-c8": "<%= nodeDependencies.vitest %>",
     "@vue/eslint-config-prettier": "<%= nodeDependencies['@vue/eslint-config-prettier'] %>",
     "@vue/eslint-config-typescript": "<%= nodeDependencies['@vue/eslint-config-typescript'] %>",
     "@vue/test-utils": "<%= nodeDependencies['@vue/test-utils'] %>",
@@ -67,7 +70,6 @@
     "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
     "css-loader": "<%= nodeDependencies['css-loader'] %>",
     "css-minimizer-webpack-plugin": "<%= nodeDependencies['css-minimizer-webpack-plugin'] %>",
-    "fork-ts-checker-webpack-plugin": "<%= nodeDependencies['fork-ts-checker-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
   <%_ blueprints.forEach(blueprint => { _%>
@@ -75,15 +77,11 @@
   <%_ }); _%>
 <%_ } _%>
     "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
-    "jest": "<%= nodeDependencies['jest'] %>",
-    "jest-environment-jsdom": "<%= nodeDependencies['jest-environment-jsdom'] %>",
-    "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
-    "jest-serializer-vue": "<%= nodeDependencies['jest-serializer-vue'] %>",
-    "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
 <%_ if (enableTranslation) { _%>
     "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
+    "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
     "mini-css-extract-plugin": "<%= nodeDependencies['mini-css-extract-plugin'] %>",
     "numeral": "<%= nodeDependencies['numeral'] %>",
     "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
@@ -103,19 +101,15 @@
     "sinon": "<%= nodeDependencies['sinon'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
     "terser-webpack-plugin": "<%= nodeDependencies['terser-webpack-plugin'] %>",
-    "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
     "ts-loader": "<%= nodeDependencies['ts-loader'] %>",
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
-<%_ if (microfrontend) { _%>
-    "@vue/vue2-jest": "<%= nodeDependencies['@vue/vue2-jest'] %>",
-<%_ } else { _%>
-    "vue-jest": "<%= nodeDependencies['vue-jest'] %>",
-<%_ } _%>
+    "vitest": "<%= nodeDependencies.vitest %>",
+    "vitest-sonar-reporter": "<%= nodeDependencies['vitest-sonar-reporter'] %>",
     "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
-    "vue-template-compiler": "<%= nodeDependencies['vue'] %>",
+    "vue-style-loader": "<%= nodeDependencies['vue-style-loader'] %>",
     "webpack": "<%= nodeDependencies['webpack'] %>",
     "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
     "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
@@ -142,21 +136,11 @@
     "serve": "<%= clientPackageManager %> run start --",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-<%_ if (cypressTests) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
-<%_ } _%>
-<%_ if (cypressTests) { _%>
-    "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
-    "e2e:cypress": "cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
-    "cypress": "cypress open --e2e",
-<%_ } _%>
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= clientTestDir %>jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
+    "vitest-run": "vitest --run --coverage",
+    "vitest": "vitest",
     "pretest": "<%= clientPackageManager %> run lint",
-    "test": "<%= clientPackageManager %> run jest --",
-    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
-    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "test": "<%= clientPackageManager %> run vitest-run --",
+    "test:watch": "<%= clientPackageManager %> run vitest",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",

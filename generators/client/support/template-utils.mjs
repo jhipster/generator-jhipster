@@ -144,7 +144,7 @@ export const generateTypescriptTestEntity = (references, additionalFields = {}) 
     .map(reference => {
       if (reference.field) {
         const field = reference.field;
-        const { fieldIsEnum, fieldType, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } = field;
+        const { fieldIsEnum, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } = field;
 
         const fakeData = field.generateFakeData('ts');
         if (fieldWithContentType) {
@@ -154,7 +154,7 @@ export const generateTypescriptTestEntity = (references, additionalFields = {}) 
           ];
         }
         if (fieldIsEnum) {
-          return [[fieldName, `${fieldType}[${fakeData}]`]];
+          return [[fieldName, fakeData]];
         }
         if (fieldTypeTimed || fieldTypeLocalDate) {
           return [[fieldName, `dayjs(${fakeData})`]];

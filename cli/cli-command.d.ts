@@ -1,4 +1,4 @@
-import Environment from 'yeoman-environment';
+import type Environment from 'yeoman-environment';
 import EnvironmentBuilder from './environment-builder.mjs';
 
 /**
@@ -9,7 +9,7 @@ type CliCommand = (
   options: Record<string, any>,
   env: Environment,
   envBuilder: EnvironmentBuilder,
-  createEnvBuilder: (args: any[], options: any) => Promise<EnvironmentBuilder>
+  createEnvBuilder: (options: any) => Promise<EnvironmentBuilder>
 ) => any;
 
 export default CliCommand;

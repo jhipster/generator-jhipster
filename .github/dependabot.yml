@@ -34,10 +34,10 @@ updates:
     ignore:
       # Should match supported node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/angular/templates/'
+    directory: '/generators/angular/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -52,10 +52,10 @@ updates:
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/common/templates/'
+    directory: '/generators/common/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -67,7 +67,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/'
+    directory: '/generators/client/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -80,7 +80,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/react/templates/'
+    directory: '/generators/react/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -94,10 +94,10 @@ updates:
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/vue/templates/'
+    directory: '/generators/vue/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -109,18 +109,15 @@ updates:
       - 'theme: dependencies'
       - 'skip-changelog'
     ignore:
-      # vue3 dependency
-      - dependency-name: 'vue-loader'
-        versions: ['>=16']
       # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
       - dependency-name: 'bootstrap'
         versions: ['>=5']
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=17']
+        versions: ['>=19']
 
   - package-ecosystem: 'docker'
-    directory: '/generators/server/templates/'
+    directory: '/generators/server/resources/'
     schedule:
       interval: 'daily'
       time: '00:20'
@@ -131,7 +128,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'maven'
-    directory: '/generators/server/templates/'
+    directory: '/generators/server/resources/'
     schedule:
       interval: 'daily'
       # Maven doesn't have many PRs, but it triggers every client workflow. Let 2h of interval.
@@ -143,7 +140,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'gradle'
-    directory: '/generators/server/templates/'
+    directory: '/generators/server/resources/'
     schedule:
       interval: 'daily'
       time: '08:00'

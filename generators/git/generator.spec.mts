@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import { basename, dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import { GENERATOR_GIT } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

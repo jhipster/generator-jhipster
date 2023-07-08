@@ -25,6 +25,7 @@ import {
   monitoringTypes,
   searchEngineTypes,
   serviceDiscoveryTypes,
+  ingressTypes,
 } from '../../jdl/jhipster/index.mjs';
 
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -32,6 +33,7 @@ const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { GKE, NGINX } = ingressTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
@@ -50,8 +52,9 @@ export function writeFiles() {
         this.writeFile('deployment.yml.ejs', `${appOut}/${appName}-deployment.yml`);
         this.writeFile('service.yml.ejs', `${appOut}/${appName}-service.yml`);
         // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
-        if (this.app.prodDatabaseType !== NO_DATABASE) {
-          this.writeFile(`db/${this.app.prodDatabaseType}.yml.ejs`, `${appOut}/${appName}-${this.app.prodDatabaseType}.yml`);
+        if (this.app.databaseType !== NO_DATABASE) {
+          const databaseType = this.app.prodDatabaseType ?? this.app.databaseType;
+          this.writeFile(`db/${databaseType}.yml.ejs`, `${appOut}/${appName}-${databaseType}.yml`);
         }
         if (this.app.searchEngine === ELASTICSEARCH) {
           this.writeFile('db/elasticsearch.yml.ejs', `${appOut}/${appName}-elasticsearch.yml`);
@@ -66,7 +69,7 @@ export function writeFiles() {
         if (!this.app.serviceDiscoveryAny && this.app.authenticationType === JWT) {
           this.writeFile('secret/jwt-secret.yml.ejs', `${appOut}/jwt-secret.yml`);
         }
-        if (this.app.prodDatabaseTypeCouchbase) {
+        if (this.app.databaseTypeCouchbase) {
           this.writeFile('secret/couchbase-secret.yml.ejs', `${appOut}/templates/couchbase-secret.yml`);
         }
         if (this.monitoring === PROMETHEUS) {
@@ -104,14 +107,14 @@ export function writeFiles() {
         if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
           this.entryPort = appConfig.composePort;
           if (this.ingressDomain) {
-            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", 
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*",
             "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
           } else {
-            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", 
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*",
             "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
           }
 
-          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", 
+          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*",
             "https://localhost:${appConfig.composePort}/*", `;
 
           if (appConfig.devServerPort !== undefined) {
@@ -125,8 +128,10 @@ export function writeFiles() {
       this.writeFile('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
       this.writeFile('keycloak/keycloak-postgresql.yml.ejs', `${keycloakOut}/keycloak-postgresql.yml`);
       this.writeFile('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
-      this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
-      this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
+      if (this.ingressType === GKE) {
+        this.writeFile('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
+        this.writeFile('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
+      }
     },
 
     writePrometheusGrafanaFiles() {

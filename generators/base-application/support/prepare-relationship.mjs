@@ -69,10 +69,15 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherEntityField = otherEntityData.primaryKey.name;
   }
 
+  Object.assign(relationship, {
+    relationshipLeftSide: relationship.relationshipSide === 'left',
+    relationshipRightSide: relationship.relationshipSide === 'right',
+  });
+
   _.defaults(relationship, {
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
-    ownerSide: relationship.ownerSide || relationship.relationshipType === 'many-to-one',
+    ownerSide: relationship.ownerSide || relationship.relationshipType === 'many-to-one' || relationship.relationshipSide === 'left',
     collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
   });
 
@@ -161,7 +166,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
-      generator.logger.warn(
+      generator.log.warn(
         `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
       );
     }
@@ -222,7 +227,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-      generator.logger.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
+      generator.log.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {
       relationship.relationshipValidate = relationship.relationshipRequired = true;
     }

@@ -19,21 +19,20 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, reservedKeywords, applicationOptions } from '../jhipster/index.mjs';
+import { fieldTypes, applicationOptions, relationshipOptions } from '../jhipster/index.mjs';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
 import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
-import ApplicationValidator from './application-validator.js';
 import JDLObject from '../models/jdl-object.js';
+import JDLRelationship from '../models/jdl-relationship.js';
 
 const { OptionNames } = applicationOptions;
-const { SQL } = databaseTypes;
 
-const { APPLICATION_TYPE, BLUEPRINTS, DATABASE_TYPE, BASE_NAME, REACTIVE, JHI_PREFIX, SKIP_USER_MANAGEMENT } = OptionNames;
-const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
+const { BUILT_IN_ENTITY } = relationshipOptions;
+const { BLUEPRINTS, BASE_NAME } = OptionNames;
 /**
  * Constructor taking the jdl object to check against application settings.
  * @param {JDLObject} jdlObject -  the jdl object to check.
@@ -47,7 +46,6 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
 
   return {
     checkForErrors: () => {
-      checkForApplicationErrors();
       jdlObject.forEachApplication(jdlApplication => {
         const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
         if (blueprints && blueprints.length > 0) {
@@ -55,7 +53,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
           return;
         }
         checkForEntityErrors(jdlApplication);
-        checkForRelationshipErrors(jdlApplication);
+        checkForRelationshipErrors();
         checkForEnumErrors();
         checkDeploymentsErrors();
         checkForOptionErrors(jdlApplication);
@@ -63,15 +61,6 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       checkForRelationshipsBetweenApplications();
     },
   };
-  function checkForApplicationErrors() {
-    if (jdlObject.getApplicationQuantity() === 0) {
-      return;
-    }
-    const validator = new ApplicationValidator();
-    jdlObject.forEachApplication(jdlApplication => {
-      validator.validate(jdlApplication);
-    });
-  }
 
   function checkForEntityErrors(jdlApplication) {
     if (jdlObject.getEntityQuantity() === 0) {
@@ -83,41 +72,15 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
         return;
       }
       validator.validate(jdlEntity);
-      if (
-        jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) &&
-        isReservedTableName(jdlEntity.tableName, jdlApplication.getConfigurationOptionValue(DATABASE_TYPE))
-      ) {
-        logger.warn(`The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
-      } else if (!jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) && isTableNameReserved(jdlEntity.tableName, jdlApplication)) {
-        logger.warn(
-          `The table name '${jdlEntity.tableName}' is a reserved keyword for application: ` +
-            `${jdlApplication.getConfigurationOptionValue(BASE_NAME)}` +
-            "so it will be prefixed with the value of 'jhiPrefix'."
-        );
-      }
       checkForFieldErrors(jdlEntity.name, jdlEntity.fields, jdlApplication);
     });
   }
 
   function checkForFieldErrors(entityName, jdlFields, jdlApplication) {
     const validator = new FieldValidator();
-    const filtering =
-      jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) === SQL && jdlApplication.getConfigurationOptionValue(REACTIVE) === false;
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
-      if (isReservedFieldName(jdlField.name)) {
-        logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of '${JHI_PREFIX}'.`);
-      }
-      if (filtering && isReservedPaginationWords(jdlField.name)) {
-        throw new Error(
-          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
-        );
-      }
-      const typeCheckingFunction = getTypeCheckingFunction(entityName, jdlApplication);
-      if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
-        throw new Error(`The type '${jdlField.type}' is an unknown field type for field '${fieldName}' of entity '${entityName}'.`);
-      }
       const isAnEnum = jdlObject.hasEnum(jdlField.type);
       checkForValidationErrors(jdlField, isAnEnum);
     });
@@ -134,18 +97,16 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForRelationshipErrors(jdlApplication) {
+  function checkForRelationshipErrors() {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
-    const skippedUserManagement = jdlApplication.getConfigurationOptionValue(SKIP_USER_MANAGEMENT);
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
-      validator.validate(jdlRelationship, { skippedUserManagement });
+      validator.validate(jdlRelationship);
       checkForAbsentEntities({
         jdlRelationship,
         doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
-        skippedUserManagementOption: skippedUserManagement,
       });
     });
   }
@@ -182,7 +143,6 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       } else {
         binaryOptionValidator.validate(option);
       }
-      checkForPaginationInAppWithCassandra(option, jdlApplication);
     });
   }
 
@@ -197,44 +157,28 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
   }
 }
 
-function checkForPaginationInAppWithCassandra(jdlOption, jdlApplication) {
-  if (
-    jdlApplication.getConfigurationOptionValue(DATABASE_TYPE) === databaseTypes.CASSANDRA &&
-    jdlOption.name === binaryOptions.Options.PAGINATION
-  ) {
-    throw new Error("Pagination isn't allowed when the application uses Cassandra.");
-  }
-}
-
-function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
+function checkForAbsentEntities({
+  jdlRelationship,
+  doesEntityExist,
+}: {
+  jdlRelationship: JDLRelationship;
+  doesEntityExist: (string) => boolean;
+}) {
   const absentEntities: any[] = [];
   if (!doesEntityExist(jdlRelationship.from)) {
     absentEntities.push(jdlRelationship.from);
   }
-  if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
+  if (!doesEntityExist(jdlRelationship.to) && !jdlRelationship.options.global[BUILT_IN_ENTITY]) {
     absentEntities.push(jdlRelationship.to);
   }
   if (absentEntities.length !== 0) {
     throw new Error(
       `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
-        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
+        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared. If '${
+          jdlRelationship.to
+        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`
     );
   }
-}
-
-function isUserManagementEntity(entityName) {
-  return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
-}
-
-function isTableNameReserved(tableName, jdlApplication: any = []) {
-  return isReservedTableName(tableName, jdlApplication.getConfigurationOptionValue(DATABASE_TYPE));
-}
-
-function getTypeCheckingFunction(entityName, jdlApplication) {
-  if (jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE) === applicationTypes.GATEWAY) {
-    return () => true;
-  }
-  return fieldTypes.getIsType(jdlApplication.getConfigurationOptionValue(DATABASE_TYPE));
 }
 
 function checkIfRelationshipIsBetweenApplications({ jdlRelationship, applicationsPerEntityName }) {

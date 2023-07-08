@@ -20,6 +20,7 @@
 import fs from 'fs';
 import { exec } from 'child_process';
 import chalk from 'chalk';
+import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 import statistics from '../statistics.mjs';
@@ -43,21 +44,21 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
     super(args, options, features);
 
     this.option('skip-build', {
-      desc: 'Skips building the application',
+      description: 'Skips building the application',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('skip-deploy', {
-      desc: 'Skips deployment to Azure App Service',
+      description: 'Skips deployment to Azure App Service',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.option('skip-insights', {
-      desc: 'Skips configuration of Azure Application Insights',
+      description: 'Skips configuration of Azure Application Insights',
       type: Boolean,
-      defaults: false,
+      default: false,
     });
 
     this.azureSpringCloudSkipBuild = this.options.skipBuild;
@@ -74,7 +75,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        this.logger.log(chalk.bold('Azure App Service configuration is starting'));
+        this.log.log(chalk.bold('Azure App Service configuration is starting'));
       },
       getSharedConfig() {
         this.loadAppConfig();
@@ -109,7 +110,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         }
       },
 
-      checkInstallation() {
+      checkInstallation: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -120,9 +121,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`)
           );
         });
-      },
+      }),
 
-      getAzureAppServiceDefaults() {
+      getAzureAppServiceDefaults: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         exec('az configure --list-defaults true', (err, stdout) => {
@@ -144,7 +145,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
               }
             });
             if (this.azureAppServiceResourceGroupName === '') {
-              this.logger.info(
+              this.log.verboseInfo(
                 `Your default Azure resource group is not set up. We recommend doing it using the command
                                 '${chalk.yellow('az configure --defaults group=<resource group name>')}`
               );
@@ -156,9 +157,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
-      askForazureAppServiceVariables() {
+      askForazureAppServiceVariables: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
 
@@ -203,9 +204,9 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           this.azureAppServiceName = props.azureAppServiceName;
           done();
         });
-      },
+      }),
 
-      askForAzureDeployType() {
+      askForAzureDeployType: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
         const prompts = [
@@ -231,7 +232,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           this.azureAppServiceDeploymentType = props.azureAppServiceDeploymentType;
           done();
         });
-      },
+      }),
     };
   }
 
@@ -263,10 +264,10 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         statistics.sendSubGenEvent('generator', 'azure-app-service');
       },
 
-      checkAzureGroupId() {
+      checkAzureGroupId: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
-        this.logger.log(chalk.bold(`\nChecking Azure resource group '${this.azureAppServiceResourceGroupName}'...`));
+        this.log.log(chalk.bold(`\nChecking Azure resource group '${this.azureAppServiceResourceGroupName}'...`));
         exec(`az group show --name ${this.azureAppServiceResourceGroupName}`, (err, stdout) => {
           if (err) {
             this.abort = true;
@@ -277,12 +278,12 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           }
           done();
         });
-      },
+      }),
 
-      azureAzureAppServicePlanCreate() {
+      azureAzureAppServicePlanCreate: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
-        this.logger.log(chalk.bold(`\nChecking Azure App Service plan '${this.azureAppServicePlan}'...`));
+        this.log.log(chalk.bold(`\nChecking Azure App Service plan '${this.azureAppServicePlan}'...`));
         let servicePlanAlreadyExists = false;
         exec(`az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
           if (err) {
@@ -291,20 +292,20 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           } else {
             const json = JSON.parse(stdout);
             if (json.filter(currentPlan => currentPlan.name === this.azureAppServicePlan).length > 0) {
-              this.logger.info(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
+              this.log.verboseInfo(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
               servicePlanAlreadyExists = true;
             }
             try {
               if (!servicePlanAlreadyExists) {
-                this.logger.info(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
+                this.log.verboseInfo(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                 exec(
                   `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName} --location ${this.azureLocation}`,
                   err => {
                     if (err) {
                       done(new Error('Could not create the Azure App Service plan'));
                     } else {
-                      this.logger.log(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
-                      this.logger.info(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
+                      this.log.log(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
+                      this.log.verboseInfo(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
 which is free for the first 30 days`);
                       done();
                     }
@@ -314,18 +315,18 @@ which is free for the first 30 days`);
                 done();
               }
             } catch (e) {
-              this.logger.warn(e);
+              this.log.warn(e);
               this.abort = true;
               throw new Error('Could not manage the Azure App Service plan');
             }
           }
         });
-      },
+      }),
 
-      azureAzureAppServiceCreate() {
+      azureAzureAppServiceCreate: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
-        this.logger.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
+        this.log.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
         exec(`az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
           if (err) {
             this.abort = true;
@@ -334,12 +335,12 @@ which is free for the first 30 days`);
             const json = JSON.parse(stdout);
             let applicationAlreadyExists = false;
             if (json.filter(currentApp => currentApp.name === this.azureAppServiceName).length > 0) {
-              this.logger.info(`Application '${this.azureAppServiceName}' already exists, using it`);
+              this.log.verboseInfo(`Application '${this.azureAppServiceName}' already exists, using it`);
               applicationAlreadyExists = true;
             }
             try {
               if (!applicationAlreadyExists) {
-                this.logger.info(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
+                this.log.verboseInfo(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
                 exec(
                   `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${this.azureAppServicePlan} \
                                             --resource-group ${this.azureAppServiceResourceGroupName}`,
@@ -348,7 +349,7 @@ which is free for the first 30 days`);
                       this.abort = true;
                       done(new Error('Could not create the Web application'));
                     } else {
-                      this.logger.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
+                      this.log.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
                       done();
                     }
                   }
@@ -357,19 +358,19 @@ which is free for the first 30 days`);
                 done();
               }
             } catch (e) {
-              this.logger.info(e);
+              this.log.verboseInfo(e);
               this.abort = true;
               throw new Error('Could not manage the Azure App Service Web application');
             }
           }
         });
-      },
+      }),
 
-      azureAzureAppServiceConfig() {
+      azureAzureAppServiceConfig: runAsync(function () {
         if (this.abort) return;
         const done = this.async();
-        this.logger.info(`Configuring Azure App Service '${this.azureAppServiceName}'...`);
-        this.logger.info("Enabling 'prod' and 'azure' Spring Boot profiles");
+        this.log.verboseInfo(`Configuring Azure App Service '${this.azureAppServiceName}'...`);
+        this.log.verboseInfo("Enabling 'prod' and 'azure' Spring Boot profiles");
         exec(
           `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${this.azureAppServiceName} --settings SPRING_PROFILES_ACTIVE=prod,azure`,
           (err, stdout) => {
@@ -380,11 +381,11 @@ which is free for the first 30 days`);
             done();
           }
         );
-      },
+      }),
 
       addAzureAppServiceMavenPlugin() {
         if (this.abort) return;
-        this.logger.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
+        this.log.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
         if (this.buildTool === MAVEN) {
           this.addMavenPlugin(
             'com.microsoft.azure',
@@ -395,51 +396,51 @@ which is free for the first 30 days`);
         }
       },
 
-      checkAzureApplicationInsightsExtension() {
+      checkAzureApplicationInsightsExtension: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudSkipInsights) return;
         const done = this.async();
-        this.logger.log(chalk.bold('\nAzure Application Insights configuration'));
-        this.logger.info('Checking Azure Application Insights CLI extension...');
+        this.log.log(chalk.bold('\nAzure Application Insights configuration'));
+        this.log.verboseInfo('Checking Azure Application Insights CLI extension...');
         exec('az extension show --name application-insights', err => {
           if (err) {
-            this.logger.info('The Azure Application Insights CLI extension is NOT installed, installing it...');
+            this.log.verboseInfo('The Azure Application Insights CLI extension is NOT installed, installing it...');
             exec('az extension add --name application-insights', err => {
               if (!err) {
-                this.logger.log(chalk.green('The Azure Application Insights CLI extension is installed!'));
+                this.log.log(chalk.green('The Azure Application Insights CLI extension is installed!'));
               } else {
-                this.logger.info(err);
+                this.log.verboseInfo(err);
                 this.abort = true;
                 throw new Error('Could not install the Azure Application Insights extension');
               }
               done();
             });
           } else {
-            this.logger.info('The Azure Application Insights CLI extension is already installed');
+            this.log.verboseInfo('The Azure Application Insights CLI extension is already installed');
             done();
           }
         });
-      },
+      }),
 
-      configureAzureApplicationInsights() {
+      configureAzureApplicationInsights: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudSkipInsights) return;
         const done = this.async();
-        this.logger.info('Checking Azure Application Insights instance...');
+        this.log.verboseInfo('Checking Azure Application Insights instance...');
         exec(
           `az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`,
           (err, stdout) => {
             if (err) {
-              this.logger.info('Azure Application Insights instance does not exist, creating it...');
+              this.log.verboseInfo('Azure Application Insights instance does not exist, creating it...');
               exec(
                 `az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName} --location ${this.azureLocation}`,
                 (err, stdout) => {
                   if (err) {
-                    this.logger.info(err);
+                    this.log.verboseInfo(err);
                     this.abort = true;
                     throw new Error('Could not create the Azure Application Insights instance');
                   } else {
-                    this.logger.log(chalk.green('The Azure Application Insights instance is created!'));
+                    this.log.log(chalk.green('The Azure Application Insights instance is created!'));
                     const json = JSON.parse(stdout);
                     this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
                   }
@@ -447,24 +448,26 @@ which is free for the first 30 days`);
                 }
               );
             } else {
-              this.logger.info('The Azure Application Insights instance already exists, using it');
+              this.log.verboseInfo('The Azure Application Insights instance already exists, using it');
               const json = JSON.parse(stdout);
               this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
               done();
             }
           }
         );
-      },
+      }),
 
-      addAzureApplicationInsightsDependency() {
+      addAzureApplicationInsightsDependency: runAsync(function () {
         if (this.abort) return;
         if (this.azureSpringCloudSkipInsights) return;
         const done = this.async();
-        this.logger.info('Adding Azure Application Insights support in the Web Application');
+        this.log.verboseInfo('Adding Azure Application Insights support in the Web Application');
         this.addMavenDependency('com.microsoft.azure', 'applicationinsights-spring-boot-starter', AZURE_APP_INSIGHTS_STARTER_VERSION);
-        this.logger.info(`The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`);
+        this.log.verboseInfo(
+          `The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`
+        );
         done();
-      },
+      }),
     };
   }
 
@@ -498,7 +501,7 @@ which is free for the first 30 days`);
     return {
       writeFiles() {
         if (this.abort) return;
-        this.logger.log(chalk.bold('\nCreating Azure App Service deployment files'));
+        this.log.log(chalk.bold('\nCreating Azure App Service deployment files'));
         this.writeFile('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
         if (this.azureAppServiceDeploymentType === 'github-action') {
           this.writeFile('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
@@ -513,14 +516,14 @@ which is free for the first 30 days`);
 
   get end() {
     return {
-      gitHubAction() {
+      gitHubAction: runAsync(function () {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'local') return;
 
         try {
-          this.logger.info('Test if Git is configured on your project...');
+          this.log.verboseInfo('Test if Git is configured on your project...');
           fs.lstatSync('.git');
-          this.logger.log(chalk.bold('\nUsing existing Git repository'));
+          this.log.log(chalk.bold('\nUsing existing Git repository'));
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
           throw new Error(
@@ -529,8 +532,8 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
           );
         }
         const gitAddCmd = 'git add .';
-        this.logger.log(chalk.bold('\nAdding Azure App Service files to the Git repository'));
-        this.logger.log(chalk.cyan(gitAddCmd));
+        this.log.log(chalk.bold('\nAdding Azure App Service files to the Git repository'));
+        this.log.log(chalk.cyan(gitAddCmd));
         const done = this.async();
         exec(gitAddCmd, (err, stdout, stderr) => {
           if (err) {
@@ -538,35 +541,35 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
             throw new Error(err);
           } else {
             const line = stderr.toString().trimRight();
-            if (line.trim().length !== 0) this.logger.info(line);
-            this.logger.log(chalk.bold('\nCommitting Azure App Service files'));
+            if (line.trim().length !== 0) this.log.verboseInfo(line);
+            this.log.log(chalk.bold('\nCommitting Azure App Service files'));
             const gitCommitCmd = 'git commit -m "Add Azure App Service files with automated GitHub Action deployment" --allow-empty';
 
-            this.logger.log(chalk.cyan(gitCommitCmd));
+            this.log.log(chalk.cyan(gitCommitCmd));
             exec(gitCommitCmd, (err, stdout, stderr) => {
               if (err) {
                 this.abort = true;
                 throw new Error(err);
               } else {
                 const line = stderr.toString().trimRight();
-                if (line.trim().length !== 0) this.logger.info(line);
-                this.logger.log(chalk.bold('\nPushing Azure App Service files'));
+                if (line.trim().length !== 0) this.log.verboseInfo(line);
+                this.log.log(chalk.bold('\nPushing Azure App Service files'));
                 const gitPushCmd = 'git push';
-                this.logger.log(chalk.cyan(gitPushCmd));
+                this.log.log(chalk.cyan(gitPushCmd));
                 exec(gitPushCmd, (err, stdout, stderr) => {
                   if (err) {
                     this.abort = true;
                     throw new Error(err);
                   } else {
                     const line = stderr.toString().trimRight();
-                    if (line.trim().length !== 0) this.logger.info(line);
-                    this.logger.log(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
-                    this.logger.info(
+                    if (line.trim().length !== 0) this.log.verboseInfo(line);
+                    this.log.log(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
+                    this.log.verboseInfo(
                       `For the deployment to succeed, you will need to configure a ${chalk.bold(
                         'AZURE_CREDENTIALS'
                       )} secret in GitHub. Type the following command to generate one for the current Azure Web Application:`
                     );
-                    this.logger.log(
+                    this.log.log(
                       chalk.bold(
                         `'az ad sp create-for-rbac --name http://${this.azureAppServiceName} --role contributor --scopes ${this.azureGroupId} --sdk-auth'`
                       )
@@ -578,15 +581,15 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
             });
           }
         });
-      },
+      }),
 
-      productionBuild() {
+      productionBuild: runAsync(function () {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'github-action') return;
         if (this.azureSpringCloudSkipBuild) return;
 
         const done = this.async();
-        this.logger.log(chalk.bold('\nBuilding application'));
+        this.log.log(chalk.bold('\nBuilding application'));
 
         const child = this.buildApplication(this.buildTool, 'prod', false, err => {
           if (err) {
@@ -601,20 +604,20 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
+      }),
 
-      productionDeploy() {
+      productionDeploy: runAsync(function () {
         if (this.abort) return;
         if (this.azureAppServiceDeploymentType === 'github-action') return;
         if (this.azureSpringCloudSkipDeploy) return;
 
         const done = this.async();
-        this.logger.log(chalk.bold('\nDeploying application...'));
+        this.log.log(chalk.bold('\nDeploying application...'));
 
         const child = this.runJavaBuildCommand(this.buildTool, 'prod', 'azure-webapp:deploy', err => {
           if (err) {
             this.abort = true;
-            this.logger.error(err);
+            this.log.error(err);
           }
           done();
         });
@@ -624,7 +627,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
         child.stdout.on('data', data => {
           process.stdout.write(data.toString());
         });
-      },
+      }),
     };
   }
 

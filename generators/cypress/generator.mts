@@ -19,27 +19,17 @@
 import _ from 'lodash';
 
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
-import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { cypressFiles, cypressEntityFiles } from './files.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
-import type { CypressApplication } from './types.mjs';
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.mjs';
-import { BaseApplicationGeneratorDefinition } from '../base-application/tasks.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-type ApplicationDefinition = {
-  applicationType: CypressApplication;
-  entityType: Entity;
-  sourceType: Record<string, (...args: any[]) => any>;
-};
-
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition>;
-
-export default class CypressGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class CypressGenerator extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, features);
 
@@ -154,12 +144,10 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
       async writeFiles({ application }) {
         const faker = await createFaker();
         faker.seed(stringHashCode(application.baseName));
+        const context = { ...application, faker } as any;
         return this.writeFiles({
           sections: cypressFiles,
-          context: {
-            ...application,
-            faker,
-          },
+          context,
         });
       },
     });
@@ -181,9 +169,10 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
 
       async writeCypressEntityFiles({ application, entities }) {
         for (const entity of entities) {
+          const context = { ...application, ...entity } as any;
           await this.writeFiles({
             sections: cypressEntityFiles,
-            context: { ...application, ...entity },
+            context,
           });
         }
       },
@@ -199,7 +188,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'templates', 'package.json')
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json')
         );
       },
 
@@ -207,6 +196,14 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
         this.packageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
+          },
+          scripts: {
+            e2e: 'npm run e2e:cypress:headed --',
+            'e2e:headless': 'npm run e2e:cypress --',
+            'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
+            'e2e:cypress': 'cypress run --e2e --browser chrome',
+            'e2e:cypress:record': 'npm run e2e:cypress -- --record',
+            cypress: 'cypress open --e2e',
           },
         });
       },
@@ -223,7 +220,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<Generator
             'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
             'e2e:cypress:audits':
               // eslint-disable-next-line no-template-curly-in-string
-              'cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.config.js',
+              'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
           },
         });
       },

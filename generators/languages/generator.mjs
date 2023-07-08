@@ -50,13 +50,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   languagesToApply;
 
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     this.option('skip-prompts', {
-      desc: 'Skip prompts',
+      description: 'Skip prompts',
       type: Boolean,
       hide: true,
-      defaults: false,
+      default: false,
     });
     // This makes it possible to pass `languages` by argument
     this.argument('languages', {
@@ -67,18 +67,18 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
     // This adds support for a `--skip-client` flag
     this.option('skip-client', {
-      desc: 'Skip installing client files',
+      description: 'Skip installing client files',
       type: Boolean,
     });
 
     // This adds support for a `--skip-server` flag
     this.option('skip-server', {
-      desc: 'Skip installing server files',
+      description: 'Skip installing server files',
       type: Boolean,
     });
 
     this.option('regenerate', {
-      desc: 'Regenerate languages files',
+      description: 'Regenerate languages files',
       type: Boolean,
     });
 
@@ -99,8 +99,10 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       this.supportedLanguages = supportedLanguages;
       const composedBlueprints = await this.composeWithBlueprints('languages', {
-        languages: this.languagesToApply,
-        arguments: this.options.languages,
+        generatorOptions: {
+          languages: this.languagesToApply,
+          arguments: this.options.languages,
+        },
       });
       for (const blueprint of composedBlueprints) {
         if (blueprint.supportedLanguages) {
@@ -127,11 +129,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       validate() {
         if (this.languagesToApply.length > 0) {
           if (this.skipClient) {
-            this.logger.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
+            this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
           } else if (this.skipServer) {
-            this.logger.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
+            this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
           } else {
-            this.logger.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
+            this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
           }
         }
       },

@@ -25,6 +25,7 @@ import cacheTypes from './cache-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
+import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.mjs';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;
@@ -47,7 +48,6 @@ const {
   BUILD_TOOL,
   CACHE_PROVIDER,
   CLIENT_FRAMEWORK,
-  CLIENT_PACKAGE_MANAGER,
   CLIENT_THEME,
   CLIENT_THEME_VARIANT,
   WITH_ADMIN_UI,
@@ -60,7 +60,6 @@ const {
   ENTITY_SUFFIX,
   JHI_PREFIX,
   LANGUAGES,
-  MESSAGE_BROKER,
   NATIVE_LANGUAGE,
   PACKAGE_FOLDER,
   PACKAGE_NAME,
@@ -72,10 +71,6 @@ const {
   SKIP_CLIENT,
   SKIP_USER_MANAGEMENT,
   TEST_FRAMEWORKS,
-  // TODO: This key is missing, investigate if this is a bug.
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  USE_NPM,
   WEBSOCKET,
   ENABLE_GRADLE_ENTERPRISE,
   GRADLE_ENTERPRISE_HOST,
@@ -89,9 +84,9 @@ const commonDefaultOptions = {
   [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
   [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
   [JHI_PREFIX]: OptionValues[JHI_PREFIX],
-  [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].no,
-  [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].no,
-  [WEBSOCKET]: OptionValues[WEBSOCKET].no,
+  [MESSAGE_BROKER]: MESSAGE_BROKER_NO,
+  [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
+  [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };
 
 export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}) {
@@ -113,9 +108,9 @@ export function getConfigForClientApplication(options: any = {}): any {
   if (clientFramework !== NO_CLIENT_FRAMEWORK) {
     if (!options[CLIENT_THEME]) {
       options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-      options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].none;
+      options[CLIENT_THEME_VARIANT] = '';
     } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
-      options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
+      options[CLIENT_THEME_VARIANT] = 'primary';
     }
   }
   return options;
@@ -184,8 +179,6 @@ export function getConfigForDatabaseType(options: any = {}): any {
       options[DEV_DATABASE_TYPE] = H2_DISK;
     }
   } else if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
-    options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
-    options[PROD_DATABASE_TYPE] = options[DATABASE_TYPE];
     if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
       options[ENABLE_HIBERNATE_CACHE] = false;
     }
@@ -298,8 +291,5 @@ export function getDefaultConfigForNewApplication(customOptions: any = {}): any 
     [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
     ...customOptions,
   };
-  if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
-    options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;
-  }
   return getConfigWithDefaults(options);
 }

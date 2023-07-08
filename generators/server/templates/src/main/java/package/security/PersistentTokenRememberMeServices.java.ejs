@@ -240,7 +240,7 @@ public class PersistentTokenRememberMeServices extends
             // No series match, so we can't authenticate using this cookie
             throw new RememberMeAuthenticationException("No persistent token found for series id: " + presentedSeries);
         }
-        PersistentToken token = optionalToken.get();
+        PersistentToken token = optionalToken.orElseThrow();
         // We have a match for this user/series combination
         log.info("presentedToken={} / tokenValue={}", presentedToken, token.getTokenValue());
         if (!presentedToken.equals(token.getTokenValue())) {

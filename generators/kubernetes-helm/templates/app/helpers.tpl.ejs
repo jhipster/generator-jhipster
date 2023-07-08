@@ -32,7 +32,7 @@ postgresql customisation
 {{- define "postgresql.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-postgresql" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseTypeMongodb) { _%>
+<%_ } else if (app.databaseTypeMongodb) { _%>
 {{/*
 mongodb customisation
 */}}

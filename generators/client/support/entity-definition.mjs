@@ -80,7 +80,7 @@ const generateEntityClientFields = (
     const nullable = !field.id && field.nullable;
     let tsType = 'any';
     if (field.fieldIsEnum) {
-      tsType = fieldType;
+      tsType = `keyof typeof ${fieldType}`;
     } else if (fieldType === TYPE_BOOLEAN) {
       tsType = 'boolean';
     } else if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {

@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.mjs';

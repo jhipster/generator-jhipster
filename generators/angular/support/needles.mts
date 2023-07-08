@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 import type { Entity } from '../../base-application/index.mjs';
-import type { BaseApplication } from '../../base-application/types.mjs';
+import type { BaseApplication, CommonClientServerApplication } from '../../base-application/types.mjs';
 import { createNeedleCallback } from '../../base/support/needles.mjs';
 import { joinCallbacks } from '../../base/support/write-files.mjs';
-import { ClientApplication } from '../../client/types.mjs';
 
 export function addRoute({
   needle,
@@ -50,7 +49,7 @@ export function addRoute({
   });
 }
 
-export function addEntitiesRoute({ application, entities }: { application: ClientApplication; entities: Entity[] }) {
+export function addEntitiesRoute({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
@@ -74,7 +73,7 @@ export function addToEntitiesMenu({ application, entities }: { application: Base
   return joinCallbacks(
     ...entities.map(entity => {
       const { entityPage, entityTranslationKeyMenu, entityClassHumanized } = entity;
-      const routerLink = `routerLink="${entityPage}"`;
+      const routerLink = `routerLink="/${entityPage}"`;
 
       // prettier-ignore
       const contentToAdd =`

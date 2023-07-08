@@ -27,10 +27,10 @@ application {
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
-    prodDatabaseType postgresql
+    prodDatabaseType mysql
     serviceDiscoveryType consul
     testFrameworks [cypress]
-    microfrontends [blog, notification, store]
+    microfrontends [blog, notification]
   }
   entities UserData, Product
 }
@@ -89,7 +89,7 @@ application {
     entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.notification
-    prodDatabaseType postgresql
+    prodDatabaseType mysql
     reactive true
     serverPort 8083
     serviceDiscoveryType consul
@@ -128,7 +128,7 @@ entity Product {
 
 /*
 relationship OneToOne {
-  @Id UserData{user(login)} to User
+  @Id UserData{user(login)} to User with builtInEntity
 }
 */
 
@@ -138,7 +138,7 @@ entity Notification {
 }
 
 relationship ManyToOne {
-  Blog{user(login)} to User
+  Blog{user(login)} to User with builtInEntity
   Post{blog(name)} to Blog
 }
 

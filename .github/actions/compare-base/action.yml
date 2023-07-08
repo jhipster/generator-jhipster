@@ -48,7 +48,7 @@ runs:
         npm ci --ignore-scripts
         rm -f "$JHI_BIN_FOLDER/jhipster"
         npm uninstall -g $JHI_CLI_PACKAGE
-        ln -s "${{ github.workspace }}/base/$JHI_CLI_PACKAGE/bin/jhipster.mjs" "$JHI_BIN_FOLDER/jhipster"
+        ln -s "${{ github.workspace }}/base/$JHI_CLI_PACKAGE/bin/jhipster.cjs" "$JHI_BIN_FOLDER/jhipster"
         jhipster --install-path
       shell: bash
     - name: 'MERGE: merge base config'
@@ -69,7 +69,8 @@ runs:
     - name: 'MERGE: merge base project'
       id: base
       run: |
-        $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --skip-git ${{ inputs.extra-args }}
+        set -x
+        $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git ${{ inputs.extra-args }}
         echo "application-path=${{inputs.application-path}}" >> $GITHUB_OUTPUT
       env:
         JHI_FOLDER_APP: ${{ inputs.application-path }}

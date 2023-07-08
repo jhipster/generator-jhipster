@@ -1,37 +1,47 @@
+import { ComputedRef, inject, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import * as SockJS from 'sockjs-client';
-import { Observer, map } from 'rxjs';
-import VueRouter from 'vue-router';
-import { Store } from 'vuex';
-import { RxStomp } from '@stomp/rx-stomp';
-
-import { AccountStateStorable } from '@/shared/config/store/account-store';
+import { map } from 'rxjs';
+import { RxStomp, RxStompState } from '@stomp/rx-stomp';
+import Cookies from 'js-cookie';
 
 const DESTINATION_TRACKER = '/topic/tracker';
 const DESTINATION_ACTIVITY = '/topic/activity';
 
+export const useTrackerService = ({ stomp }: { stomp?: RxStomp } = {}) => {
+  const router = useRouter();
+  const authenticated = inject<ComputedRef<boolean>>('authenticated');
+  const trackerService = new TrackerService({ stomp });
+
+  router.afterEach(to => trackerService.sendActivity(to.fullPath));
+
+  watch(trackerService.status, value => {
+    if (value === 'open') {
+      trackerService.sendActivity(router.currentRoute.value.fullPath);
+    }
+  });
+
+  watch(
+    authenticated,
+    (value, prevValue) => {
+      if (value === prevValue) return;
+      if (value) {
+        trackerService.connect();
+      } else {
+        trackerService.disconnect();
+      }
+    },
+    { immediate: true }
+  );
+  return trackerService;
+};
+
 export default class TrackerService {
+  public status = ref<'open' | 'connecting' | 'closing' | 'closed'>('closed');
   private rxStomp: RxStomp;
 
-  constructor(
-      private router: VueRouter,
-      private store: Store<AccountStateStorable>,
-<%_ if (authenticationTypeSession) { _%>
-      private cookie: any,
-<%_ } _%>
-    ) {
-    this.stomp = new RxStomp();
-    this.router.afterEach(() => this.sendActivity());
-
-    this.store.watch(
-      (_state, getters) => getters.authenticated,
-      (value, oldValue) => {
-        if (value === oldValue) return;
-        if (value) {
-          return this.connect();
-        }
-        return this.disconnect();
-      }
-    );
+  constructor({ stomp }: { stomp?: RxStomp }) {
+    this.stomp = stomp ?? new RxStomp();
   }
 
   get stomp() {
@@ -45,18 +55,32 @@ export default class TrackerService {
         console.log(new Date(), msg);
       },
     });
-    this.rxStomp.connected$.subscribe(() => {
-      this.sendActivity();
+
+    this.rxStomp.connectionState$.subscribe(state => {
+      switch (state) {
+        case RxStompState.CONNECTING:
+          this.status.value = 'connecting';
+          return;
+        case RxStompState.OPEN:
+          this.status.value = 'open';
+          return;
+        case RxStompState.CLOSING:
+          this.status.value = 'closing';
+          return;
+        case RxStompState.CLOSED:
+          this.status.value = 'closed';
+          return;
+      }
     });
   }
 
-  private connect(): void {
+  public connect(): void {
     this.updateCredentials();
-    return this.rxStomp.activate();
+    this.rxStomp.activate();
   }
 
-  private disconnect(): Promise<void> {
-    return this.rxStomp.deactivate();
+  public async disconnect(): Promise<void> {
+    await this.rxStomp.deactivate();
   }
 <%_ if (authenticationTypeJwt) { _%>
 
@@ -73,8 +97,8 @@ export default class TrackerService {
   private buildUrl(): string {
     // building absolute path so that websocket doesn't fail when deploying with a context path
     const loc = window.location;
-    const baseHref = document.querySelector('base').getAttribute('href');
-    const url = '//' + loc.host + baseHref + 'websocket/tracker';
+    const baseHref = document.querySelector('base')?.getAttribute('href');
+    const url = '//' + loc.host + (baseHref ?? '/') + 'websocket/tracker';
 <%_ if (authenticationTypeJwt) { _%>
     const authToken = this.getAuthToken();
     if (authToken) {
@@ -89,18 +113,18 @@ export default class TrackerService {
       webSocketFactory: () => {
         return new SockJS(this.buildUrl());
       },
-<%_ if (authenticationTypeSession) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
       connectHeaders: {
-        ['X-XSRF-TOKEN']: this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'),
-      }
+        ['X-XSRF-TOKEN']: Cookies.get('JSESSIONID') || Cookies.get('XSRF-TOKEN'),
+      },
 <%_ } _%>
     });
   }
 
-  private sendActivity(): void {
+  public sendActivity(page: string): void {
     this.rxStomp.publish({
       destination: DESTINATION_ACTIVITY,
-      body: JSON.stringify({ page: this.router.currentRoute.fullPath }),
+      body: JSON.stringify({ page }),
     });
   }
 
@@ -110,4 +134,4 @@ export default class TrackerService {
       .pipe(map(imessage => JSON.parse(imessage.body)))
       .subscribe(observer);
   }
-};
+}

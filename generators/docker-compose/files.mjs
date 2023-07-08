@@ -44,6 +44,7 @@ export function writeFiles() {
 
     writeKeycloakFiles() {
       if (this.authenticationType === OAUTH2 && this.applicationType !== MICROSERVICE) {
+        this.writeFile('realm-config/keycloak-health-check.sh', 'realm-config/keycloak-health-check.sh');
         this.writeFile('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
       }
     },

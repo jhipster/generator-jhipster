@@ -97,8 +97,7 @@ function getJDLObjectFromSingleApplication(
     existingJDLObject.addApplication(jdlApplication);
     return existingJDLObject;
   }
-  const skippedUserManagement = jdlApplication.getConfigurationOptionValue(OptionNames.SKIP_USER_MANAGEMENT);
-  const jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement });
+  const jdlObject = convertEntitiesToJDL({ entities });
   entities.forEach((entity, entityName) => jdlApplication.addEntityName(entityName));
   jdlObject.addApplication(jdlApplication);
   return mergeJDLObjects(existingJDLObject, jdlObject);

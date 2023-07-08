@@ -55,7 +55,7 @@
       "app-sample": "ng-gradle-h2disk-ws-nocache",
       "entity": "sql",
       "environment": "dev",
-      "war": 1,
+      "packaging": "war",
       "testcontainers": "false"
     },
     {

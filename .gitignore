@@ -22,4 +22,6 @@ test/temp/
 .project
 .settings
 test/**/*.png
+jdl/**/*.png
+test-integration/**/*.png
 /dist

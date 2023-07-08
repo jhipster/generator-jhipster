@@ -72,7 +72,7 @@ management:
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
 org:
   neo4j:
     migrations:
@@ -154,8 +154,7 @@ spring:
 <%_ if (databaseTypeMongodb) { _%>
   data:
     mongodb:
-      uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
-      database: <%= baseName %>
+      uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
@@ -174,13 +173,13 @@ spring:
     username: Administrator
     password: password
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
   liquibase:
   <%_ if (!skipFakeData) { _%>
     # Remove 'faker' if you do not want the sample data to be loaded automatically
   <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-  <%_ if (reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     url: <%- devJdbcUrl %>
   <%_ } _%>
 <%_ } _%>
@@ -236,7 +235,7 @@ jhipster:
       time-to-live-seconds: 3600
       backup-count: 1
   <%_ } _%>
-  <%_ if (cacheProviderEhCache) { _%>
+  <%_ if (cacheProviderEhcache) { _%>
     ehcache: # Ehcache configuration
       time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
       max-entries: 100 # Number of objects in each cache entry

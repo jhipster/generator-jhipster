@@ -25,9 +25,9 @@ export const vueFiles = {
       templates: [
         'package.json',
         'tsconfig.json',
-        'tsconfig.spec.json',
         '.postcssrc.js',
         '.eslintrc.js',
+        'vitest.config.ts',
         'webpack/config.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
@@ -44,7 +44,7 @@ export const vueFiles = {
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationBlock,
-      templates: ['index.ts'],
+      templates: ['index.ts', 'core/error/error-loading.vue'],
     },
     {
       condition: generator => generator.microfrontend,
@@ -84,6 +84,7 @@ export const vueFiles = {
         'shared/config/dayjs.ts',
         'shared/config/store/account-store.ts',
         'shared/security/authority.ts',
+        'store.ts',
         'router/index.ts',
         'router/admin.ts',
         'router/pages.ts',
@@ -94,7 +95,7 @@ export const vueFiles = {
     {
       condition: generator => generator.enableTranslation,
       ...clientApplicationBlock,
-      templates: ['locale/translation.service.ts', 'shared/config/formatter.ts', 'shared/config/store/translation-store.ts'],
+      templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts', 'shared/config/languages.ts'],
     },
   ],
   sharedVueApp: [
@@ -111,7 +112,11 @@ export const vueFiles = {
         'core/jhi-navbar/jhi-navbar.component.ts',
         'core/ribbon/ribbon.vue',
         'core/ribbon/ribbon.component.ts',
-        'shared/date/filters.ts',
+        'shared/composables/date-format.ts',
+        'shared/composables/index.ts',
+        'shared/composables/validation.ts',
+        'shared/computables/arrays.ts',
+        'shared/computables/index.ts',
         'shared/sort/jhi-sort-indicator.component.ts',
         'shared/sort/jhi-sort-indicator.vue',
         'shared/sort/sorts.ts',
@@ -228,7 +233,8 @@ export const vueFiles = {
     {
       ...clientTestBlock,
       templates: [
-        'jest.conf.js',
+        'spec/setup.ts',
+        'spec/tsconfig.json',
         'spec/app/account/account.service.spec.ts',
         'spec/app/core/home/home.component.spec.ts',
         'spec/app/core/error/error.component.spec.ts',
@@ -252,11 +258,6 @@ export const vueFiles = {
         'spec/app/admin/metrics/metrics.component.spec.ts',
         'spec/app/admin/metrics/metrics-modal.component.spec.ts',
       ],
-    },
-    {
-      condition: generator => generator.enableTranslation,
-      ...clientTestBlock,
-      templates: ['spec/app/shared/config/formatter.spec.ts'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,

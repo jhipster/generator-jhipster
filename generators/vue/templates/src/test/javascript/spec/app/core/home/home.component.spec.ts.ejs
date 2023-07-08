@@ -1,37 +1,36 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
-import Home from '@/core/home/home.vue';
-import HomeClass from '@/core/home/home.component';
-import * as config from '@/shared/config/config';
+import { vitest } from 'vitest';
+import { ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import Home from '../../../<%- clientSrcDirRelativeToClientTestDir %>core/home/home.vue';
 
-const localVue = createLocalVue();
-config.initVueApp(localVue);
-const store = config.initVueXStore(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-localVue.component('router-link', {});
+type HomeComponentType = InstanceType<typeof Home>;
 
 describe('Home', () => {
-  let home: HomeClass;
-  let wrapper: Wrapper<HomeClass>;
+  let home: HomeComponentType;
+  let authenticated;
+  let currentUsername;
 <%_ if (authenticationTypeJwt) { _%>
-  const loginService = { openLogin: jest.fn() };
+  const loginService = { openLogin: vitest.fn() };
 <%_ } else if (authenticationTypeSession) { _%>
-  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
+  const loginService = { openLogin: vitest.fn(), logout: vitest.fn() };
 <%_ } else if (authenticationTypeOauth2) { _%>
-  const loginService = { login: jest.fn(), logout: jest.fn() };
+  const loginService = { login: vitest.fn(), logout: vitest.fn() };
 <%_ } _%>
 
   beforeEach(() => {
-    wrapper = shallowMount<HomeClass>(Home, {
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      store,
-      localVue,
-      provide: {
-        loginService: () => loginService
-      }
+    authenticated = ref(false);
+    currentUsername = ref('');
+    const wrapper = shallowMount(Home, {
+      global: {
+        stubs: {
+          'router-link': true,
+        },  
+        provide: {
+          loginService,
+          authenticated,
+          currentUsername,
+        },
+      },
     });
     home = wrapper.vm;
   });
@@ -42,7 +41,8 @@ describe('Home', () => {
   });
 
   it('should have user data set after authentication', () => {
-    store.commit('authenticated', {login: 'test'});
+    authenticated.value = true;
+    currentUsername.value = 'test';
 
     expect(home.authenticated).toBeTruthy();
     expect(home.username).toBe('test');

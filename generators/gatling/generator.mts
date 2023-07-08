@@ -51,4 +51,43 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        const { javaDependencies } = application;
+        if (application.buildToolMaven) {
+          source.addMavenDefinition?.({
+            properties: [
+              { property: 'gatling.version', value: javaDependencies?.gatling },
+              { property: 'gatling-maven-plugin.version', value: javaDependencies?.['gatling-maven-plugin'] },
+            ],
+            dependencies: [
+              // eslint-disable-next-line no-template-curly-in-string
+              { groupId: 'io.gatling.highcharts', artifactId: 'gatling-charts-highcharts', version: '${gatling.version}', scope: 'test' },
+            ],
+            plugins: [{ groupId: 'io.gatling', artifactId: 'gatling-maven-plugin' }],
+            pluginManagement: [
+              {
+                groupId: 'io.gatling',
+                artifactId: 'gatling-maven-plugin',
+                // eslint-disable-next-line no-template-curly-in-string
+                version: '${gatling-maven-plugin.version}',
+                additionalContent: `
+<configuration>
+    <runMultipleSimulations>true</runMultipleSimulations>
+    <resourcesFolder>\${project.basedir}/src/test/gatling/conf</resourcesFolder>
+</configuration>
+`,
+              },
+            ],
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
 }

@@ -17,100 +17,97 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import type TerminalAdapter from 'yeoman-environment/lib/adapter';
-import createDebug, { type Debugger } from 'debug';
+import type { Logger as LoggerApi } from '@yeoman/types';
+import { createLogger, LoggerOptions, Logger as DefaultLogger } from '@yeoman/adapter';
+import createDebug from 'debug';
 
 /**
  * formats the message to be displayed in the console.
  * @param message the info message to format.
  */
-const formatWarningMessageHeader = message => {
-  return `${chalk.yellow.bold('WARNING!')} ${message}`;
+const addPrefixToParameters = (prefix: string, ...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  args[0] = `${prefix} ${args[0]}`;
+  return args;
 };
 
-const formatErrorMessageHeader = message => {
-  return `${chalk.red.bold('ERROR!')} ${message}`;
+const formatWarningMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.yellow.bold('WARNING!'), ...args);
 };
 
-const formatFatalMessageHeader = message => {
-  return `${chalk.red.bold('FATAL!')} ${message}`;
+const formatErrorMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.red.bold('ERROR!'), ...args);
 };
 
-const formatInfoMessageHeader = message => {
-  return `${chalk.green('INFO!')} ${message}`;
+const formatFatalMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.red.bold('FATAL!'), ...args);
 };
 
-export type LoggerOptions = {
-  adapter: TerminalAdapter;
-  namespace?: string;
-  debugEnabled?: boolean;
+const formatInfoMessageHeader = (...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
+  return addPrefixToParameters(chalk.green('INFO!'), ...args);
 };
 
 export const CLI_LOGGER = 'jhipster:cli';
 
-export default class Logger {
-  adapter: TerminalAdapter;
-  debugger: Debugger;
-  debugEnabled: boolean;
+export const createJHipsterLogger = (options: LoggerOptions & { namespace?: string; debugEnabled?: boolean } = {}) => {
+  const { namespace = 'jhipster' } = options;
+  const debug = createDebug(namespace);
 
-  constructor({ adapter, namespace = 'jhipster', debugEnabled }: LoggerOptions) {
-    this.adapter = adapter;
-    this.debugger = createDebug(namespace);
+  const customJHipsterLogger = {
+    debugger: debug,
 
-    const cliLogger = namespace === CLI_LOGGER;
-    if (cliLogger) {
-      this.debugEnabled = debugEnabled || process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
-    } else {
-      this.debugEnabled = debugEnabled ?? false;
-    }
+    debug(msg, ...args) {
+      this.debugger(msg, ...args);
+    },
+
+    warn(this: LoggerApi, ...args: Parameters<LoggerApi['write']>) {
+      this.writeln(...formatWarningMessageHeader(...args));
+      return this;
+    },
+
+    verboseInfo(this: LoggerApi, ...args: Parameters<LoggerApi['write']>) {
+      this.writeln(...formatInfoMessageHeader(...args));
+      return this;
+    },
+
+    log(this: LoggerApi, ...args: Parameters<LoggerApi['write']>) {
+      this.writeln(...args);
+      return this;
+    },
+
+    error(this: DefaultLogger, msg, error) {
+      const errorMessage = formatErrorMessageHeader(msg);
+      this.console.error(...errorMessage);
+      if (error) {
+        this.console.error(error);
+      }
+
+      process.exitCode = 1;
+    },
+
+    fatal(this: any, msg, trace) {
+      const fatalMessage = formatFatalMessageHeader(msg);
+      this.console.error(...fatalMessage);
+      if (trace) {
+        this.console.error(trace);
+      }
+
+      process.exit(1);
+    },
+  };
+
+  const logger = createLogger({ ...options, loggers: customJHipsterLogger });
+  const cliLogger = namespace === CLI_LOGGER;
+  let debugEnabled = options.debugEnabled;
+  if (cliLogger) {
+    debugEnabled = debugEnabled || process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
     if (debugEnabled) {
-      this.debugger.enabled = true;
-    }
-    if (cliLogger && this.debugEnabled) {
-      this.info('Debug logging is on');
+      logger.verboseInfo('Debug logging is on');
     }
   }
-
-  debug(msg, ...args) {
-    this.debugger(msg, ...args);
+  if (debugEnabled) {
+    logger.debugger.enabled = true;
   }
+  return logger;
+};
 
-  warn(msg) {
-    const warn = formatWarningMessageHeader(msg);
-    this.adapter.log(warn);
-  }
-
-  info(msg) {
-    const info = formatInfoMessageHeader(msg);
-    this.adapter.log(info);
-  }
-
-  log(msg) {
-    this.adapter.log(msg);
-  }
-
-  error(msg, error) {
-    const errorMessage = formatErrorMessageHeader(msg);
-    this.adapter.log(errorMessage);
-    if (error) {
-      this.adapter.log(error);
-    }
-
-    process.exitCode = 1;
-  }
-
-  /**
-   *  Use with caution.
-   *  process.exit is not recommended by Node.js.
-   *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
-   */
-  fatal(msg, trace) {
-    const fatalMessage = formatFatalMessageHeader(msg);
-    this.adapter.log(fatalMessage);
-    if (trace) {
-      this.adapter.log(trace);
-    }
-
-    process.exit(1);
-  }
-}
+export type Logger = ReturnType<typeof createJHipsterLogger>;

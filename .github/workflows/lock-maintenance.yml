@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - run: npm install -g npm@latest
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -54,7 +54,7 @@ jobs:
           ./test-integration/scripts/04-git-config.sh
           git commit -a -m "Bump transitional dependencies" || true
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'Bump transitional dependencies'

@@ -1,8 +1,10 @@
+import type { Storage } from 'yeoman-generator';
 import { ControlTaskParam, BaseGeneratorDefinition, SourceTaskParam, GenericSourceTypeDefinition } from '../base/tasks.mjs';
-import { BaseApplication } from './types.mjs';
-import { Entity } from './types/index.mjs';
+import { CommonClientServerApplication } from './types.mjs';
+import { Entity, Field, Relationship } from './types/index.mjs';
+import { ClientSourceType } from '../client/types.mjs';
 
-export type GenericApplicationDefinition<ApplicationType = BaseApplication> = {
+export type GenericApplicationDefinition<ApplicationType = CommonClientServerApplication> = {
   applicationType: ApplicationType;
   entityType: Entity;
 };
@@ -10,7 +12,7 @@ export type GenericApplicationDefinition<ApplicationType = BaseApplication> = {
 type ConfiguringEachEntityTaskParam = {
   entityName: string;
   /** Entity storage */
-  entityStorage: import('yeoman-generator/lib/util/storage');
+  entityStorage: Storage;
   /** Proxy object for the entitystorage */
   entityConfig: Record<string, any>;
 };
@@ -19,44 +21,44 @@ type LoadingEntitiesTaskParam = {
   entitiesToLoad: {
     entityName: string;
     /** Entity storage */
-    entityStorage: import('yeoman-generator/lib/util/storage');
+    entityStorage: Storage;
     /** Proxy object for the entitystorage */
     entityConfig: Record<string, any>;
   }[];
 };
 
-type ApplicationTaskParam<Definition extends ApplicationDefinition = ControlTaskParam & ApplicationDefinition> = {
+type ApplicationTaskParam<Definition extends GenericApplicationDefinition = ControlTaskParam & GenericApplicationDefinition> = {
   application: Definition['applicationType'] & { user: Definition['entityType'] };
 };
 
-export type EntitiesTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = {
+export type EntitiesTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {
   entities: Definition['entityType'][];
 };
 
-type EachEntityTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> = {
+type EachEntityTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {
   entity: Definition['entityType'];
   entityName: string;
   description: string;
 };
 
-type PreparingEachEntityFieldTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> =
+type PreparingEachEntityFieldTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> =
   EachEntityTaskParam<Definition> & {
     field: Field;
     fieldName: string;
   };
 
-type PreparingEachEntityRelationshipTaskParam<Definition extends ApplicationDefinition = ApplicationDefinition> =
+type PreparingEachEntityRelationshipTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> =
   EachEntityTaskParam<Definition> & {
     relationship: Relationship;
     relationshipName: string;
   };
 
-type ClientSource<ExtendsSelf extends ClientSource = ClientSource> = {
-  addEntitiesToClient?: (param: ControlTaskParam & { source: ExtendsSelf } & EntitiesTaskParam<Definition>) => any;
+type ClientSource<ExtendsSelf = ClientSourceType> = {
+  addEntitiesToClient?: (param: ControlTaskParam & { source: ExtendsSelf } & EntitiesTaskParam<GenericApplicationDefinition>) => any;
 };
 
 export type BaseApplicationGeneratorDefinition<
-  Definition extends { applicationType: any; entityType: any } = GenericApplicationDefinition &
+  Definition extends { applicationType: any; entityType: any; sourceType: any } = GenericApplicationDefinition &
     GenericSourceTypeDefinition<Record<string, (...args: any[]) => any>>
 > = BaseGeneratorDefinition<Definition> &
   // Add application to existing priorities

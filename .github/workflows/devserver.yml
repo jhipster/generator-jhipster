@@ -73,11 +73,12 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          entities-sample: ${{ matrix.entity }}
-          jdl-entities-sample: ${{ matrix.jdl-entity }}
-          application-sample: ${{ matrix.jhi-app-sample || matrix.app-sample }}
-          application-environment: ${{ matrix.environment }}
-          application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
+          application-sample: ${{ matrix.setup-application-sample }}
+          entities-sample: ${{ matrix.setup-entities-sample }}
+          jdl-entities-sample: ${{ matrix.setup-jdl-entities-sample }}
+          jdl-sample: ${{ matrix.setup-jdl-sample }}
+          application-environment: ${{ matrix.setup-application-environment }}
+          application-packaging: ${{ matrix.setup-application-packaging }}
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
@@ -127,7 +128,7 @@ jobs:
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
+        run: $JHI_SCRIPTS/12-generate-project.sh ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------

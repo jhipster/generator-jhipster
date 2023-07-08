@@ -1,31 +1,31 @@
 {
     "userManagement": {
         "home": {
-            "title": "Users",
-            "refreshListLabel": "Refresh list",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "ユーザーの一覧",
+            "refreshListLabel": "リストの更新",
+            "createLabel": "新しいユーザーの作成",
+            "createOrEditLabel": "ユーザーの作成または編集"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "A user is updated with identifier {{ param }}",
-        "deleted": "A user is deleted with identifier {{ param }}",
+        "created": "新しいユーザーがID {{ param }} で作成されました。",
+        "updated": "ID {{ param }} のユーザーが更新されました。",
+        "deleted": "ID {{ param }} のユーザーが削除されました。",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "ユーザー {{ login }} を削除してよろしいですか?"
         },
         "detail": {
-            "title": "User"
+            "title": "ユーザー"
         },
-        "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "login": "ログイン",
+        "firstName": "名",
+        "lastName": "姓",
+        "email": "メールアドレス",
+        "activated": "有効",
+        "deactivated": "無効",
+        "profiles": "プロファイル",
+        "langKey": "言語",
+        "createdBy": "作成者",
+        "createdDate": "作成日",
+        "lastModifiedBy": "更新者",
+        "lastModifiedDate": "更新日"
     }
 }

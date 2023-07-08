@@ -19,6 +19,15 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.IntegrationTest;
+<%_ if (authenticationTypeJwt) { _%>
+import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
+import org.springframework.beans.factory.annotation.Value;
+  <%_ if (!reactive) { _%>
+import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.BEARER;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+  <%_ } _%>
+<%_ } _%>
+
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -66,13 +75,23 @@ class AccountResourceIT {
 <%_ } else { _%>
     private MockMvc restAccountMockMvc;
 <%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+
+    @Value("${jhipster.security.authentication.jwt.base64-secret}")
+    private String jwtKey;
+<%_ } _%>
 
     @Test
+<%_ if (!authenticationTypeJwt) { _%>
     @WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)
+<%_ } _%>
     void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
+  <%_ if (authenticationTypeJwt) { _%>
+            .headers(header -> header.setBearerAuth(createValidTokenForUser(jwtKey, TEST_USER_LOGIN)))
+  <%_ } _%>
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -80,8 +99,13 @@ class AccountResourceIT {
             .jsonPath("$.login").isEqualTo(TEST_USER_LOGIN)
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
 <%_ } else { _%>
-        restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_JSON))
+        restAccountMockMvc.perform(
+                get("/api/account")
+                    .accept(MediaType.APPLICATION_JSON)
+  <%_ if (authenticationTypeJwt) { _%>
+                    .header(AUTHORIZATION, BEARER + createValidTokenForUser(jwtKey, TEST_USER_LOGIN))
+  <%_ } _%>
+            )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))

@@ -1,29 +1,30 @@
-import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
-import EntitiesMenu from '@/entities/entities-menu.vue';
-import EntitiesMenuClass from '@/entities/entities-menu.component';
-import * as config from '@/shared/config/config';
+import { vitest } from 'vitest';
+import { ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import EntitiesMenu from '../../<%- clientSrcDirRelativeToClientTestDir %>entities/entities-menu.vue';
 
-const localVue = createLocalVue();
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-localVue.component('b-dropdown-item', {});
-localVue.component('font-awesome-icon', {});
+type EntitiesMenuComponentType = InstanceType<typeof EntitiesMenu>;
 
 describe('EntitiesMenu', () => {
   let translationService;
 
   beforeEach(() => {
-    translationService = { loadTranslations: jest.fn() };
+    translationService = { loadTranslations: vitest.fn() };
   });
 
   describe('using microfrontendI18n', () => {
     beforeEach(() => {
-      shallowMount<EntitiesMenuClass>(EntitiesMenu, {
-        i18n,
-        localVue,
-        provide: {
-          translationService: () => translationService,
-          microfrontendI18n: true,
+      shallowMount(EntitiesMenu, {
+        global: {
+          stubs: {
+            'b-dropdown-item': true,
+            'font-awesome-icon': true,
+          },    
+          provide: {
+            translationService,
+            microfrontendI18n: true,
+            currentLanguage: ref('<%- nativeLanguage %>'),
+          },
         },
       });
     });
@@ -35,12 +36,17 @@ describe('EntitiesMenu', () => {
 
   describe('not using microfrontendI18n', () => {
     beforeEach(() => {
-      shallowMount<EntitiesMenuClass>(EntitiesMenu, {
-        i18n,
-        localVue,
-        provide: {
-          translationService: () => translationService,
-          microfrontendI18n: false,
+      shallowMount(EntitiesMenu, {
+        global: {
+          stubs: {
+            'b-dropdown-item': true,
+            'font-awesome-icon': true,
+          },    
+          provide: {
+            translationService,
+            microfrontendI18n: false,
+            currentLanguage: ref('<%- nativeLanguage %>'),
+          },
         },
       });
     });

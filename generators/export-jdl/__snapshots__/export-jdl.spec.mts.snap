@@ -10,34 +10,23 @@ exports[`generator - export-jdl exports entities to a JDL file with file argumen
     baseName standard
     buildTool gradle
     cacheProvider ehcache
-    clientFramework no
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Memory
-    dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
-    enableSwaggerCodegen false
     enableTranslation true
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "3.7.1"
     languages [en]
-    messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType postgresql
-    reactive false
     rememberMeKey "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8"
     searchEngine no
     serverPort 8080
-    serviceDiscoveryType no
     skipClient true
     skipServer true
-    skipUserManagement false
     testFrameworks []
     websocket no
-    withAdminUi true
   }
 
   entities Country, Department, Employee, Job, JobHistory, Region, Task
@@ -138,34 +127,23 @@ exports[`generator - export-jdl exports entities to a JDL file without argument 
     baseName standard
     buildTool gradle
     cacheProvider ehcache
-    clientFramework no
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Memory
-    dtoSuffix DTO
-    enableGradleEnterprise false
     enableHibernateCache true
-    enableSwaggerCodegen false
     enableTranslation true
-    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "3.7.1"
     languages [en]
-    messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType postgresql
-    reactive false
     rememberMeKey "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8"
     searchEngine no
     serverPort 8080
-    serviceDiscoveryType no
     skipClient true
     skipServer true
-    skipUserManagement false
     testFrameworks []
     websocket no
-    withAdminUi true
   }
 
   entities Country, Department, Employee, Job, JobHistory, Region, Task

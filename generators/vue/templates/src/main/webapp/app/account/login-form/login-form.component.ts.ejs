@@ -1,26 +1,36 @@
 import axios from 'axios';
-import Component from 'vue-class-component';
-import { Vue, Inject } from 'vue-property-decorator';
-import AccountService from '@/account/account.service';
-@Component({})
-export default class LoginForm extends Vue {
-  @Inject('accountService')
-  private accountService: () => AccountService;
-  public authenticationError = null;
-  public login = null;
-  public password = null;
-  public rememberMe: boolean = null;
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import AccountService from '../account.service';
+import LoginService from '@/account/login.service';
 
-  public doLogin(): void {
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  setup() {
+    const authenticationError: Ref<boolean> = ref(false);
+    const login: Ref<string> = ref(null);
+    const password: Ref<string> = ref(null);
+    const rememberMe: Ref<boolean> = ref(false);
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1)
+
+    const accountService = inject<AccountService>('accountService');
+    const loginService = inject<LoginService>('loginService');
+
+    const doLogin = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-    const data = { username: this.login, password: this.password, rememberMe: this.rememberMe };
-    axios
-      .post('api/authenticate', data)
-      .then((result) => {
+      const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
+      try {
+        const result = await axios.post('api/authenticate', data);
         const bearerToken = result.headers.authorization;
         if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
           const jwt = bearerToken.slice(7, bearerToken.length);
-          if (this.rememberMe) {
+          if (rememberMe.value) {
             localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
             sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
           } else {
@@ -29,26 +39,35 @@ export default class LoginForm extends Vue {
           }
         }
 <%_ } else { _%>
-    const data =
-      'username=' +
-      encodeURIComponent(this.login) +
-      '&password=' +
-      encodeURIComponent(this.password) +
-      '&remember-me=' +
-      this.rememberMe +
-      '&submit=Login';
-    axios
-      .post('api/authentication', data, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }).then(() => {
+      const data = `username=${encodeURIComponent(login.value)}&password=${encodeURIComponent(password.value)}&remember-me=${rememberMe.value}&submit=Login`;
+      try {
+        await axios.post('api/authentication', data, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        });
 <%_ } _%>
-        this.authenticationError = false;
-        (this.$root as any).$emit('bv::hide::modal','login-page');
-        this.accountService().retrieveAccount();
-      }).catch(()=> {
-        this.authenticationError = true;
-      });
-  }
-}
+
+        authenticationError.value = false;
+        loginService.hideLogin();
+        await accountService.retrieveAccount();
+        if (route.path === '/forbidden') {
+          previousState();
+        }
+      } catch (_error) {
+        authenticationError.value = true;
+      }
+    };
+    return {
+      authenticationError,
+      login,
+      password,
+      rememberMe,
+      accountService,
+      doLogin,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+});

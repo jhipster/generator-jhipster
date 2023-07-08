@@ -1,11 +1,10 @@
-import path, { dirname } from 'path';
+import path, { dirname, resolve } from 'path';
 import shelljs from 'shelljs';
 import fse from 'fs-extra';
 import _ from 'lodash';
 import { fileURLToPath } from 'url';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
-import { RunResult } from 'yeoman-test';
 import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { basicHelpers as helpers, getGenerator, result as runResult } from '../../test/support/index.mjs';
@@ -17,20 +16,19 @@ const __dirname = dirname(__filename);
 
 describe('generator - upgrade', function () {
   describe('default application', () => {
-    let runResult: RunResult;
-
     before(async () => {
       const VERSION_PLACEHOLDERS = process.env.VERSION_PLACEHOLDERS;
       delete process.env.VERSION_PLACEHOLDERS;
 
-      runResult = await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig({
+      await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig({
         skipClient: true,
         skipServer: true,
         baseName: 'upgradeTest',
       });
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_UPGRADE))
         .withOptions({
+          regenerateExecutable: resolve(__dirname, '../../bin/jhipster.cjs'),
           force: true,
           silent: false,
           targetVersion: packageJson.version,

@@ -45,7 +45,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
   <%_ } _%>
 
-  <%_ if (!reactive) { _%>
+  <%_ if (!reactive && !authenticationTypeJwt) { _%>
 import jakarta.servlet.http.HttpServletRequest;
   <%_ } _%>
 import jakarta.validation.Valid;
@@ -205,7 +205,7 @@ public class AccountResource {
     public void saveAccount(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
+        if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
         Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin(userLogin);
@@ -304,7 +304,7 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<<%= user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
-            mailService.sendPasswordResetMail(user.get());
+            mailService.sendPasswordResetMail(user.orElseThrow());
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made

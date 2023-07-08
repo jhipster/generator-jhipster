@@ -17,7 +17,7 @@
  * - buildTool: maven, gradle
  */
 
-/* reactive, maven */
+/* reactive, liquibase, maven */
 application {
   config {
     applicationType gateway
@@ -26,6 +26,7 @@ application {
     buildTool maven
     clientFramework angular
     creationTimestamp 1617901618886
+    databaseMigration liquibase
     databaseType neo4j
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
@@ -56,7 +57,7 @@ application {
   entities Blog, Post, Tag
 }
 
-/* microservice, imperative, gradle, entitySuffix/dtoSuffix */
+/* microservice, liquibase, imperative, gradle, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
@@ -65,6 +66,7 @@ application {
     buildTool gradle
     cacheProvider no
     creationTimestamp 1617901618888
+    databaseMigration liquibase
     databaseType neo4j
     dtoSuffix Rest
     entitySuffix Entity
@@ -128,7 +130,7 @@ entity Product {
 
 /* TODO relationships at Neo4J cascades, changing the user entity.
 relationship OneToOne {
-  @Id UserData{user(login)} to User
+  @Id UserData{user(login)} to User with builtInEntity
 }
 */
 

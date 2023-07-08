@@ -158,6 +158,9 @@
         "idnull": "Ungültige ID",
         "idinvalid": "Ungültige ID",
         "idnotfound": "ID konnte nicht gefunden werden",
+<%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Ungültige Suchanfrage",
+<%_ } _%>
         "file": {
             "could.not.extract": "Datei konnte nicht extrahiert werden",
             "not.image": "Es wird erwartet, dass die Datei ein Bild ist. Die Datei ist jedoch vom Typ \"{{ fileType }}\""

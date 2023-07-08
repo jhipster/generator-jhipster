@@ -43,7 +43,7 @@
       };
 
       window.onload = async function () {
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
         function getCSRF() {
           var name = 'XSRF-TOKEN=';
           var ca = document.cookie.split(';');
@@ -130,7 +130,8 @@
             if (y.includes('(default)')) return 1;
             if (x.includes('(management)')) return -1;
             if (y.includes('(management)')) return 1;
-            return x < y ? -1 : x > y ? 1 : 0;
+            if (x < y) return -1;
+            return x > y ? 1 : 0;
           });
         }
 
@@ -147,7 +148,7 @@
           plugins: [SwaggerUIBundle.plugins.DownloadUrl, AlwaysEnableTryItOutPlugin],
           tryItOutEnabled: true,
           requestInterceptor: function (req) {
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
             req.headers['X-XSRF-TOKEN'] = getCSRF();
 <%_ } else { _%>
             req.headers['Authorization'] = getBearerToken();

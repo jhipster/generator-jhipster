@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "認証",
+        "title": "ログイン",
         "form": {
             "password": "パスワード",
             "password.placeholder": "パスワード",
@@ -13,7 +13,7 @@
             }
         },
         "password": {
-            "forgot": "Did you forget your password?"
+            "forgot": "パスワードを忘れてしまいましたか?"
         }
     }
 }

@@ -212,7 +212,7 @@ export default class extends needleClientBase {
     const filePath = `${this.clientSrcDir}/app/entities/entities.component.ts`;
 
     // prettier-ignore
-    const entityEntry = `@Provide('${entityInstance}Service') private ${entityInstance}Service = () => new ${entityName}Service();`;
+    const entityEntry = `provide('${entityInstance}Service', () => new ${entityName}Service());`;
 
     const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-entities-component', entityEntry);
     this.addBlockContentToFile(rewriteFileModel, errorMessage);

@@ -27,13 +27,12 @@ import {
   moveToJavaPackageTestDir,
   replaceEntityFilePathVariables,
 } from './support/index.mjs';
-import { SERVER_MAIN_SRC_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
-import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
+import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.mjs';
 import { getEnumInfo } from '../base-application/support/index.mjs';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes, ServiceTypes } = entityOptions;
-const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = cacheTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
@@ -194,19 +193,39 @@ const userFiles = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
-      templates: ['domain/User.java', 'repository/UserRepository.java'],
+      templates: ['domain/User.java'],
     },
     {
-      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
       templates: ['service/dto/UserDTO.java'],
     },
     {
-      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user.adminUserDto}.java`),
       templates: ['service/dto/AdminUserDTO.java'],
+    },
+    {
+      condition: data => data.generateBuiltInUserEntity,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        'service/UserService.java',
+        'service/mapper/UserMapper.java',
+        'repository/UserRepository.java',
+        'web/rest/PublicUserResource.java',
+      ],
+    },
+    {
+      condition: data => data.generateBuiltInUserEntity,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: [
+        'service/UserServiceIT.java',
+        'service/mapper/UserMapperTest.java',
+        'web/rest/UserResourceIT.java',
+        'web/rest/PublicUserResourceIT.java',
+      ],
     },
   ],
 };
@@ -271,20 +290,4 @@ export function writeFiles() {
       }
     },
   };
-}
-
-export function customizeFiles({ application, entities }) {
-  if (application.databaseType === SQL) {
-    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
-      if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
-        this.addEntityToCache(
-          entity.entityAbsoluteClass,
-          entity.relationships,
-          application.packageName,
-          application.packageFolder,
-          application.cacheProvider
-        );
-      }
-    }
-  }
 }

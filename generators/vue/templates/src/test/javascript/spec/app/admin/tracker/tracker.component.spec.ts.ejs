@@ -1,30 +1,23 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as sinon from 'sinon';
 import { Subject, Subscription } from 'rxjs';
+import { createMemoryHistory, createRouter, Router } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import <%=jhiPrefixCapitalized%>Tracker from '@/admin/tracker/tracker.vue';
-import <%=jhiPrefixCapitalized%>TrackerComponent from '@/admin/tracker/tracker.component';
-import TrackerService from '@/admin/tracker/tracker.service';
+import <%=jhiPrefixCapitalized%>Tracker from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/tracker/tracker.vue';
+import TrackerService from '../../../<%- clientSrcDirRelativeToClientTestDir %>admin/tracker/tracker.service';
 
-const localVue = createLocalVue();
+type <%=jhiPrefixCapitalized%>TrackerComponentType = InstanceType<typeof <%=jhiPrefixCapitalized%>Tracker>;
 
-config.initVueApp(localVue);
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(localVue);
-<%_ } _%>
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', FontAwesomeIcon);
+let router: Router;
 
 const axiosStub = {
   get: sinon.stub(axios, 'get'),
 };
 
 describe('<%=jhiPrefixCapitalized%>Tracker', () => {
-  let wrapper: Wrapper<<%=jhiPrefixCapitalized%>TrackerComponent>;
-  let trackerView: <%=jhiPrefixCapitalized%>TrackerComponent;
+  let wrapper: any;
+  let trackerView: <%=jhiPrefixCapitalized%>TrackerComponentType;
 
   let subject: Subject<any>;
   let subscription: Subscription;
@@ -41,14 +34,17 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
       return subscription;
     });
 
-    wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponent>(<%=jhiPrefixCapitalized%>Tracker, {
-      store,
-<%_ if (enableTranslation) { _%>
-      i18n,
-<%_ } _%>
-      localVue,
-      provide: {
-        trackerService: () => trackerServiceStub,
+    router = createRouter({ history: createMemoryHistory(), routes: [] });
+
+    wrapper = shallowMount(<%=jhiPrefixCapitalized%>Tracker, {
+      global: {
+        plugins: [router],
+        stubs: {
+          'font-awesome-icon': true,
+        },
+        provide: {
+          trackerService: trackerServiceStub,
+        },
       },
     });
     trackerView = wrapper.vm;
@@ -58,9 +54,9 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
     expect(trackerServiceStub.subscribe.calledOnce).toBeTruthy();
   });
 
-  it('should unsubscribe at destroy', () => {
+  it('should unsubscribe at unmount', () => {
     // WHEN
-    wrapper.destroy();
+    wrapper.unmount();
 
     // THEN
     expect(subscriptionSpy.calledOnce).toBeTruthy();

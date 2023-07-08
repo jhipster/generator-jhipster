@@ -105,13 +105,11 @@ spec:
                   name: <%= app.baseName.toLowerCase() %>-postgresql
                   key: postgresql-password
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMongodb) { _%>
-            - name: SPRING_DATA_MONGODB_DATABASE
-              value: <%= app.baseName %>
+<%_ if (app.databaseTypeMongodb) { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
+              value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>/<%= app.baseName %><% if (app.reactive) { %>?waitQueueMultiple=1000<% } %>"
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeCouchbase) { _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
             - name: SPRING_COUCHBASE_CONNECTION_STRING
               value: "<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-couchbase-<%= i %>.<%= app.baseName.toLowerCase() %>-couchbase<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
             - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME

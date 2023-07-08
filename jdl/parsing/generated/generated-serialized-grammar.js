@@ -896,10 +896,10 @@ const serializedGrammar = [
                         definition: [
                             {
                                 type: 'Terminal',
-                                name: 'JPA_DERIVED_IDENTIFIER',
-                                label: "'jpaDerivedIdentifier'",
+                                name: 'BUILT_IN_ENTITY',
+                                label: "'builtInEntity'",
                                 idx: 0,
-                                pattern: 'jpaDerivedIdentifier',
+                                pattern: 'builtInEntity',
                             },
                         ],
                     },

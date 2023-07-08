@@ -31,7 +31,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_PAGE } from '../gener
  */
 export default class PageGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { skipParseOptions: false, ...features });
 
     // This makes it possible to pass `pageName` by argument
     this.argument('pageName', {
@@ -41,10 +41,9 @@ export default class PageGenerator extends BaseApplicationGenerator {
     });
 
     this.option('skip-prompts', {
-      desc: 'Skip prompts',
+      description: 'Skip prompts',
       type: Boolean,
       hide: true,
-      defaults: false,
     });
     this.option('recreate', {
       type: Boolean,
@@ -160,7 +159,7 @@ export default class PageGenerator extends BaseApplicationGenerator {
     return {
       success() {
         if (this.env.rootGenerator() !== this) return;
-        this.logger.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
+        this.log.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
       },
     };
   }

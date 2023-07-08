@@ -84,9 +84,8 @@ export function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pag
     { ignoreNonExisting: true },
     createNeedleCallback({
       needle: 'jhipster-needle-add-entity-service-to-main',
-      contentToAdd: stripMargin(`|${pageInstance}Service: () => new ${pageName}Service(),`),
+      contentToAdd: `provide('${pageInstance}Service', () => new ${pageName}Service());`,
       ignoreWhitespaces: true,
-      autoIndent: false,
     })
   );
 }

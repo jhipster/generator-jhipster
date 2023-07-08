@@ -427,7 +427,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
                 .map(
                     t -> {
                         Authority authority = new Authority();
-                        authority.setName(t.getT2().get());
+                        authority.setName(t.getT2().orElseThrow());
                         return authority;
                     }
                 )

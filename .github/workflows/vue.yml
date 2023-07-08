@@ -94,12 +94,12 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          application-sample: ${{ matrix.jhi-app-sample || matrix.app-sample || 'jdl' }}
-          entities-sample: ${{ matrix.entity || 'none' }}
-          jdl-entities-sample: ${{ matrix.jdl-entity || '' }}
-          jdl-sample: ${{ matrix.jdl-samples || '' }}
-          application-environment: ${{ matrix.environment || 'prod' }}
-          application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
+          application-sample: ${{ matrix.setup-application-sample }}
+          entities-sample: ${{ matrix.setup-entities-sample }}
+          jdl-entities-sample: ${{ matrix.setup-jdl-entities-sample }}
+          jdl-sample: ${{ matrix.setup-jdl-sample }}
+          application-environment: ${{ matrix.setup-application-environment }}
+          application-packaging: ${{ matrix.setup-application-packaging }}
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
@@ -153,12 +153,12 @@ jobs:
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-install ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
       - name: 'GENERATION: workspace git'
         if: matrix.workspaces == 'true'
         run: |
           git add .
-          git commit -m "Commit workspaces"
+          git commit --allow-empty -m "Commit workspaces"
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------

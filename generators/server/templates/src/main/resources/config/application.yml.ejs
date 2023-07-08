@@ -113,7 +113,7 @@ management:
 <% if (cacheProviderAny) { -%>
           - caches
 <% } -%>
-<% if (databaseTypeSql) { -%>
+<% if (databaseMigrationLiquibase) { -%>
           - liquibase
 <% } -%>
   endpoint:
@@ -126,7 +126,7 @@ management:
         liveness:
           include: livenessState
         readiness:
-          include: readinessState<% if (databaseTypeSql) { %>,db<% } %>
+          include: readinessState<% if (databaseTypeSql && !reactive) { %>,db<% } %>
     jhimetrics:
       enabled: true
   info:
@@ -137,10 +137,6 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
-<%_ if (databaseTypeNeo4j && reactive) { _%>
-    neo4j:
-      enabled: false # The health check for Neo4j doesn't work with WebFlux
-<%_ } _%>
   prometheus:
     metrics:
       export:
@@ -299,7 +295,7 @@ spring:
   <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
     problemdetails:
       enabled: true
-<%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
+<%_ if (generateInMemoryUserCredentials) { _%>
   security:
     user:
       name: admin

@@ -284,9 +284,6 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -296,9 +293,46 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/test/java/com/mycompany/myapp/web/rest/SkipResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
+}
+`;
+
+exports[`generator - entities regenerating all entities should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+        "Entity[Bar]",
+        "Entity[Skip]",
+      ],
+    },
+  ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Skip",
+      "relationships": [],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+    {
+      "changelogName": "20160926101211_added_entity_Bar",
+    },
+    {
+      "changelogName": "20160926101212_added_entity_Skip",
+    },
+  ],
 }
 `;
 
@@ -586,9 +620,6 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
   "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -598,9 +629,46 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
   "src/test/java/com/mycompany/myapp/web/rest/SkipResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
+}
+`;
+
+exports[`generator - entities regenerating selected entities with writeEveryEntity should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+        "Entity[Bar]",
+        "Entity[Skip]",
+      ],
+    },
+  ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Skip",
+      "relationships": [],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+    {
+      "changelogName": "20160926101211_added_entity_Bar",
+    },
+    {
+      "changelogName": "20160926101212_added_entity_Skip",
+    },
+  ],
 }
 `;
 
@@ -801,17 +869,43 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
+}
+`;
+
+exports[`generator - entities regenerating some entities should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Foo]",
+        "Entity[Bar]",
+      ],
+    },
+  ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
+      "relationships": [],
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20160926101210_added_entity_Foo",
+    },
+    {
+      "changelogName": "20160926101211_added_entity_Bar",
+    },
+  ],
 }
 `;

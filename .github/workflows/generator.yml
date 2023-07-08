@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: 18.16.1
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v3
         with:
@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'install required npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/common/templates/package.json').devDependencies.npm);")
+        run: npm install -g npm@$(node -e "console.log(require('./generators/common/resources/package.json').devDependencies.npm);")
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         shell: bash
       - name: Config git variables

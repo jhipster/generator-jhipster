@@ -1,25 +1,33 @@
-import Component from 'vue-class-component';
-import { Inject, Vue } from 'vue-property-decorator';
+import { ComputedRef, defineComponent, inject } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
 import LoginService from '@/account/login.service';
 
-@Component
-export default class Home extends Vue {
-  @Inject('loginService')
-  private loginService: () => LoginService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  setup() {
+    const loginService = inject<LoginService>('loginService');
 
-  public openLogin(): void {
+    const authenticated = inject<ComputedRef<boolean>>('authenticated');
+    const username = inject<ComputedRef<string>>('currentUsername');
+
+    const openLogin = () => {
 <%_ if (!authenticationTypeOauth2) { _%>
-    this.loginService().openLogin((<any>this).$root);
+      loginService.openLogin();
 <%_ } else { %>
-    this.loginService().login();
-<%_ } %>
-  }
+      loginService.login();
+<%_ } _%>
+    };
 
-  public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
-  }
-
-  public get username(): string {
-    return this.$store.getters.account?.login ?? '';
-  }
-}
+    return {
+      authenticated,
+      username,
+      openLogin,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+});

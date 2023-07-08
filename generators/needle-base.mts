@@ -75,7 +75,7 @@ export default class {
    * @param rewriteFileModel
    * @param errorMessage
    */
-  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage: string): void {
+  addBlockContentToFile(rewriteFileModel: NeedleFileModel, errorMessage?: string): void {
     const ignoreNonExisting = errorMessage ?? true;
     const { path: rewritePath, file } = rewriteFileModel;
     let fullPath;
@@ -107,7 +107,7 @@ export default class {
       message = 'File rewrite failed.';
     }
     this.generator.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(` or missing required jhipster-needle. ${message}\n`));
-    this.generator.logger.debug('Error:', exception);
+    this.generator.log.debug('Error:', exception);
   }
 
   /**

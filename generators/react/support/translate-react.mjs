@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
+import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
 const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
@@ -130,7 +130,7 @@ const translateReactFilesTransform = getWebappTranslation => {
   const translate = createTranslationReplacer(getWebappTranslation);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
-  }, 'jhipster:translate-react-files');
+  });
 };
 
 export default translateReactFilesTransform;

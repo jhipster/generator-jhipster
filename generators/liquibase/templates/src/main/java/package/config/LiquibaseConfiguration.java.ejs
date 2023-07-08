@@ -19,35 +19,37 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeNeo4j || reactive) { _%>
+import java.util.Optional;
 import tech.jhipster.config.liquibase.AsyncSpringLiquibase;
 <%_ } else { _%>
 import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
-<%_ } _%>
-import liquibase.integration.spring.SpringLiquibase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Qualifier;
-<%_ if (!reactive) { _%>
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-<%_ } _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
-<%_ if (reactive) { _%>
+import org.springframework.beans.factory.ObjectProvider;
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 <%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+import liquibase.ext.neo4j.database.jdbc.Neo4jDriver;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+<%_ } _%>
+
+import javax.sql.DataSource;
+import java.util.concurrent.Executor;
+
+import liquibase.integration.spring.SpringLiquibase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-
-import javax.sql.DataSource;
-import java.util.concurrent.Executor;
-<%_ if (reactive) { _%>
-import java.util.function.Supplier;
-<%_ } _%>
 
 @Configuration
 public class LiquibaseConfiguration {
@@ -61,12 +63,23 @@ public class LiquibaseConfiguration {
     }
 
     @Bean
-    public SpringLiquibase liquibase(@Qualifier("taskExecutor") Executor executor,<% if (!reactive) { %>
-            @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,<% } %> LiquibaseProperties liquibaseProperties,
-            <% if (reactive) { %>R2dbc<% } else { %>ObjectProvider<DataSource> dataSource, DataSource<% } %>Properties dataSourceProperties) {
+    public SpringLiquibase liquibase(
+        @Qualifier("taskExecutor") Executor executor,
+        LiquibaseProperties liquibaseProperties,
+<%_ if (databaseTypeNeo4j) { _%>
+        Neo4jProperties dataSourceProperties
+<%_ } else if (reactive) { _%>
+        R2dbcProperties dataSourceProperties
+<%_ } else { _%>
+        @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
+        ObjectProvider<DataSource> dataSource,
+        DataSourceProperties dataSourceProperties
+<%_ } _%>
+    ) {
 
-<%_ if (reactive) { _%>
-        SpringLiquibase liquibase = createAsyncSpringLiquibase(this.env, executor, liquibaseProperties, dataSourceProperties);
+<%_ if (databaseTypeNeo4j || reactive) { _%>
+        SpringLiquibase liquibase = new AsyncSpringLiquibase(executor, env);
+        liquibase.setDataSource(createLiquibaseDataSource(liquibaseProperties, dataSourceProperties));
 <%_ } else { _%>
         // If you don't want Liquibase to start asynchronously, substitute by this:
         // SpringLiquibase liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
@@ -92,28 +105,23 @@ public class LiquibaseConfiguration {
         }
         return liquibase;
     }
-<%_ if (reactive) { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 
-    public static SpringLiquibase createAsyncSpringLiquibase(Environment env, Executor executor,
-            LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
-        SpringLiquibase liquibase = new AsyncSpringLiquibase(executor, env);
-        liquibase.setDataSource(createNewDataSource(liquibaseProperties, dataSourceProperties));
-        return liquibase;
+    public DataSource createLiquibaseDataSource(LiquibaseProperties liquibaseProperties, Neo4jProperties dataSourceProperties) {
+        String url = Optional.ofNullable(liquibaseProperties.getUrl()).orElse("jdbc:neo4j:" + dataSourceProperties.getUri().toString());
+        String user = Optional.ofNullable(liquibaseProperties.getUser()).orElse(dataSourceProperties.getAuthentication().getUsername());
+        String password = Optional.ofNullable(liquibaseProperties.getPassword()).orElse(dataSourceProperties.getAuthentication().getPassword());
+
+        return new SimpleDriverDataSource(new Neo4jDriver(), url, user, password);
     }
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 
-    private static DataSource createNewDataSource(LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
-        String user = getProperty(liquibaseProperties::getUser, dataSourceProperties::getUsername);
-        String password = getProperty(liquibaseProperties::getPassword, dataSourceProperties::getPassword);
-        return DataSourceBuilder.create()
-            .url(liquibaseProperties.getUrl())
-            .username(user)
-            .password(password)
-            .build();
-    }
+    private static DataSource createLiquibaseDataSource(LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
+        String user = Optional.ofNullable(liquibaseProperties.getUser()).orElse(dataSourceProperties.getUsername());
+        String password = Optional.ofNullable(liquibaseProperties.getPassword()).orElse(dataSourceProperties.getPassword());
 
-    private static String getProperty(Supplier<String> property, Supplier<String> defaultValue) {
-        String value = property.get();
-        return (value != null) ? value : defaultValue.get();
+        return DataSourceBuilder.create().url(liquibaseProperties.getUrl()).username(user).password(password).build();
     }
 <%_ } _%>
 }

@@ -71,14 +71,12 @@ public class <%= entityClass %>GatlingTest extends Simulation {
     Map<String, String> headers_http = Map.of(
         "Accept", "application/json"
     );
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 
     Map<String, String> headers_http_authenticated = Map.of(
         "Accept", "application/json",
         "X-XSRF-TOKEN", "${xsrf_token}"
     );
-<%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 
     Map<String, String> keycloakHeaders = Map.of(
         "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -106,7 +104,7 @@ public class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } else { _%>
         .check(status().is(401))
 <%_ } _%>
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))
 <%_ } _%>
         ).exitHereIfFailed()

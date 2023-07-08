@@ -41,10 +41,6 @@ RUN \
   JHI_NODE_VERSION="$(/home/jhipster/generator-jhipster/test-integration/scripts/99-print-node-version.sh)"; \
   wget https://nodejs.org/dist/v$JHI_NODE_VERSION/node-v$JHI_NODE_VERSION-linux-$ARCH.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
-  # upgrade npm
-  npm install -g npm@7 && \
-  # install yeoman
-  npm install -g yo && \
   # cleanup
   apt-get clean && \
   rm -rf \

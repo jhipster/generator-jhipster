@@ -31,7 +31,7 @@ import MsSQLReservedKeywords from './reserved-keywords/mssql.js';
 import Neo4JReservedKeywords from './reserved-keywords/neo4j.js';
 import applicationOptions from './application-options.js';
 
-const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
+const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK] as Record<string, string>;
 
 const ReservedWords = {
   JHIPSTER: JHipsterReservedKeywords,

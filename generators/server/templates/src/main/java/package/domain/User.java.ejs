@@ -44,6 +44,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+  <%_ if (requiresPersistableImplementation) { _%>
+import org.springframework.data.domain.Persistable;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.annotation.Id;
@@ -131,7 +134,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable {
+public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<String><% } %> {
 
     private static final long serialVersionUID = 1L;
 
@@ -159,7 +162,11 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
   <%_ if (!authenticationTypeOauth2) { _%>
     @GeneratedValue(UUIDStringGenerator.class)
   <%_ } _%>
+  <%_ if (databaseMigrationLiquibase) { _%>
+    @Property("id")
+  <%_ } else { _%>
     @Property("user_id")
+  <%_ } _%>
 <%_ } else { _%>
   <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Id
@@ -203,6 +210,9 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
   <%_ } _%>
   <%_ if (databaseTypeSql && reactive) { _%>
     @Column("password_hash")
+  <%_ } _%>
+  <%_ if (databaseTypeNeo4j && databaseMigrationLiquibase) { _%>
+    @Property("password_hash")
   <%_ } _%>
     private String password;
 <%_ } _%>
@@ -389,7 +399,7 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
     private Set<Authority> authorities = new HashSet<>();
-<%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ } else { _%>
     private Set<String> authorities = new HashSet<>();
 <%_ } _%>
 <%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>
@@ -400,6 +410,11 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   <%_ } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive && requiresPersistableImplementation) { _%>
+
+    @Transient
+    private boolean isPersisted;
 <%_ } _%>
 
     public <%= user.primaryKey.type %> getId() {
@@ -505,11 +520,11 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
         this.langKey = langKey;
     }
 
-    public Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else if (databaseTypeCassandra || databaseTypeCouchbase) { %>String<% } %>> getAuthorities() {
+    public Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else { %>String<% } %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else if (databaseTypeCassandra || databaseTypeCouchbase) { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else { %>String<% } %>> authorities) {
         this.authorities = authorities;
     }
 <%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>
@@ -520,6 +535,18 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
 
     public void setPersistentTokens(Set<PersistentToken> persistentTokens) {
         this.persistentTokens = persistentTokens;
+    }
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive && requiresPersistableImplementation) { _%>
+
+    @Override
+    public boolean isNew() {
+        return !isPersisted;
+    }
+
+    public <%= user.persistClass %> setIsPersisted() {
+        this.isPersisted = true;
+        return this;
     }
 <%_ } _%>
 

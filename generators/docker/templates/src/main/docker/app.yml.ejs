@@ -37,28 +37,30 @@ services:
 const databaseName = prodDatabaseTypeMysql || prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
 _%>
   <%_ if (reactive) { _%>
-      - SPRING_R2DBC_URL=<%- this.getR2DBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+      - SPRING_R2DBC_URL=<%- this.getR2DBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
   <%_ } else { _%>
-      - SPRING_DATASOURCE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+      - SPRING_DATASOURCE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
   <%_ } _%>
-      - SPRING_LIQUIBASE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+      - SPRING_LIQUIBASE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-      - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
-      - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
-      - SPRING_NEO4J_URI=bolt://<%= baseName.toLowerCase() %>-neo4j:7687
+      - SPRING_NEO4J_URI=bolt://neo4j:7687
+  <%_ if (databaseMigrationLiquibase) { _%>
+      - SPRING_LIQUIBASE_URL=jdbc:neo4j:bolt://neo4j:7687
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-      - SPRING_COUCHBASE_CONNECTION_STRING=<%= baseName.toLowerCase() %>-couchbase
+      - SPRING_COUCHBASE_CONNECTION_STRING=couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=<%= baseName %>
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
-      - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+      - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
 <%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
-      - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -73,7 +75,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-      - SPRING_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
+      - SPRING_CASSANDRA_CONTACTPOINTS=cassandra
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
       - JHIPSTER_SLEEP=10 # Let migration complete
@@ -81,7 +83,7 @@ _%>
       - JHIPSTER_SLEEP=20 # Let database to start
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-      - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092

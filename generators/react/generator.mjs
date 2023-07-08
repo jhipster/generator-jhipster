@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { isFilePending } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -71,7 +71,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json')
         );
       },
     });
@@ -149,7 +149,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup({
       end({ application }) {
         this.log.ok('React application generated successfully.');
-        this.logger.log(
+        this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `)

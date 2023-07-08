@@ -7,29 +7,38 @@ import {
   GENERATOR_GATLING,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
-  GENERATOR_SQL,
+  GENERATOR_SPRING_DATA_RELATIONAL,
+  GENERATOR_SPRING_DATA_CASSANDRA,
+  GENERATOR_SPRING_DATA_COUCHBASE,
+  GENERATOR_SPRING_DATA_MONGODB,
+  GENERATOR_MAVEN,
+  GENERATOR_LIQUIBASE,
+  GENERATOR_LANGUAGES,
+  GENERATOR_SPRING_CLOUD_STREAM,
+  GENERATOR_GRADLE,
+  GENERATOR_DOCKER,
+  GENERATOR_COMMON,
 } from '../../generator-list.mjs';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
 export const mockedGenerators = [
-  'jhipster:cassandra',
-  'jhipster:common',
-  'jhipster:couchbase',
+  `jhipster:${GENERATOR_COMMON}`,
+  `jhipster:${GENERATOR_SPRING_DATA_COUCHBASE}`,
   `jhipster:${GENERATOR_CUCUMBER}`,
-  'jhipster:docker',
+  `jhipster:${GENERATOR_DOCKER}`,
   `jhipster:${GENERATOR_GATLING}`,
-  'jhipster:gradle',
-  'jhipster:kafka',
-  'jhipster:languages',
-  'jhipster:liquibase',
-  'jhipster:maven',
-  'jhipster:mongodb',
-  'jhipster:pulsar',
+  `jhipster:${GENERATOR_GRADLE}`,
+  `jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`,
+  `jhipster:${GENERATOR_LANGUAGES}`,
+  `jhipster:${GENERATOR_LIQUIBASE}`,
+  `jhipster:${GENERATOR_MAVEN}`,
+  `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`,
+  `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`,
+  `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
   `jhipster:${GENERATOR_SPRING_CACHE}`,
   `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
-  `jhipster:${GENERATOR_SQL}`,
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
@@ -45,28 +54,16 @@ export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
   }
 };
 
-export const shouldComposeWithKafka = (sampleConfig, runResultSupplier) => {
-  const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
-  if (kafkaEnabled) {
-    it(`should compose with ${KAFKA} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:kafka'].calledOnce);
-    });
-  } else {
-    it(`should not compose with ${KAFKA} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:kafka'].notCalled);
-    });
-  }
-};
-
-export const shouldComposeWithPulsar = (sampleConfig, runResultSupplier) => {
+export const shouldComposeWithSpringCloudStream = (sampleConfig, runResultSupplier) => {
   const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
-  if (pulsarEnabled) {
-    it(`should compose with ${PULSAR} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].calledOnce);
+  const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
+  if (pulsarEnabled || kafkaEnabled) {
+    it(`should compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].calledOnce);
     });
   } else {
-    it(`should not compose with ${PULSAR} generator`, () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:pulsar'].notCalled);
+    it(`should not compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
+      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].notCalled);
     });
   }
 };
@@ -77,11 +74,11 @@ const shouldComposeWithDatabasetype = (databaseType, testSample, runResultSuppli
     typeof testSample === 'boolean' ? testSample : testSample?.applicationWithEntities?.config?.databaseType === databaseType;
   if (shouldCompose) {
     it(`should compose with ${generator} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:${generator}`].calledOnce);
+      assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].calledOnce);
     });
   } else {
     it(`should not compose with ${generator} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:${generator}`].notCalled);
+      assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].notCalled);
     });
   }
 };

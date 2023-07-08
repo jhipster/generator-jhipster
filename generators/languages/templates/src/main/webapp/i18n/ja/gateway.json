@@ -1,15 +1,15 @@
 {
     "gateway": {
-        "title": "Gateway",
+        "title": "ゲートウェイ",
         "routes": {
-            "title": "Current routes",
+            "title": "現在のルート",
             "url": "URL",
-            "service": "service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "サービス",
+            "servers": "使用可能なサーバ",
+            "error": "警告:使用可能なサーバがありません!"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "リフレッシュ"
         }
     }
 }

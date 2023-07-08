@@ -1,41 +1,57 @@
-import Vue from 'vue';
-import { Component, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref, onMounted } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 import GatewayService from './gateway.service';
 
-@Component
-export default class <%=jhiPrefixCapitalized%>GatewayComponent extends Vue {
-  public gatewayRoutes: any[] = [];
-  public updatingRoutes = false;
-  @Inject('gatewayService') private gatewayService: () => GatewayService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: '<%=jhiPrefixCapitalized%>GatewayComponent',
+  setup() {
+    const gatewayService = inject('gatewayService', () => new GatewayService(), true);
 
-  public mounted() : void {
-    this.refresh();
-  }
+    const gatewayRoutes: Ref<any[]> = ref([]);
+    const updatingRoutes = ref(false);
 
-  public refresh() : void {
-    this.updatingRoutes = true;
-    this.gatewayService().findAll().then((res) => {
-      <%_ if (serviceDiscoveryConsul) { _%>
-      this.gatewayRoutes = res.data.map(gatewayRoute => {
-        gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
-          if (serviceInstance.healthService && serviceInstance.healthService.checks) {
-            if (
-              serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
-              serviceInstance.healthService.checks.length
-            ) {
-              serviceInstance.instanceInfo = { status: 'UP' };
-            } else {
-              serviceInstance.instanceInfo = { status: 'DOWN'} ;
+    const refresh = () => {
+      updatingRoutes.value = true;
+      gatewayService.findAll().then((res) => {
+<%_ if (serviceDiscoveryConsul) { _%>
+        gatewayRoutes.value = res.data.map(gatewayRoute => {
+          gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
+            if (serviceInstance.healthService && serviceInstance.healthService.checks) {
+              if (
+                serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
+                serviceInstance.healthService.checks.length
+              ) {
+                serviceInstance.instanceInfo = { status: 'UP' };
+              } else {
+                serviceInstance.instanceInfo = { status: 'DOWN'} ;
+              }
             }
-          }
-          return serviceInstance;
+            return serviceInstance;
+          });
+          return gatewayRoute;
         });
-        return gatewayRoute;
+<%_ } else { _%>
+        gatewayRoutes.value = res.data;
+<%_ } _%>
+        updatingRoutes.value = false;
       });
-      <%_ } else { _%>
-      this.gatewayRoutes = res.data;
-      <%_ } _%>
-      this.updatingRoutes = false;
+    }
+
+    onMounted(() => {
+      refresh();
     });
-  }
-}
+
+    return {
+      gatewayRoutes,
+      updatingRoutes,
+      gatewayService,
+      refresh,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+});

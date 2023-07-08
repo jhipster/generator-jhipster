@@ -140,6 +140,13 @@ const partialLanguages: PartialLanguage[] = [
     dayjsLocale: 'hy-am',
   },
   {
+    name: 'Azerbaijani (Latin)',
+    displayName: 'Azərbaycan dili',
+    languageTag: 'az-Latn-az',
+    angularLocale: 'az-Latn',
+    dayjsLocale: 'az',
+  },
+  {
     name: 'Belarusian',
     displayName: 'Беларускі',
     languageTag: 'by',
@@ -268,7 +275,7 @@ export const supportedLanguages: ReadonlyArray<Language> = partialLanguages.map(
 export const findLanguageForTag = (languageTag: string, languages: ReadonlyArray<Language> = supportedLanguages): Language | undefined =>
   languages.find(lang => lang.languageTag === languageTag);
 
-export const defaultLanguage = findLanguageForTag('en')!;
+export const defaultLanguage = findLanguageForTag('en') as Required<Language>;
 
 /**
  * Generate language objects in array of "'en': { name: 'English' }" format

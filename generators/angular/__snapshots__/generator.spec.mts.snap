@@ -1629,9 +1629,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "src/app/core/interceptor/notification.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/microfrontend/index.ts": {
-    "stateCleared": "modified",
-  },
   "src/app/core/request/request-util.ts": {
     "stateCleared": "modified",
   },
@@ -1861,15 +1858,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "src/app/entities/simple/update/simple-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/app/entities/user/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/app/entities/user/user.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
   "src/app/home/home.component.html": {
@@ -2295,9 +2283,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/core/interceptor/notification.interceptor.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/microfrontend/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/core/request/request-util.ts": {

@@ -36,17 +36,15 @@ const { DefinePlugin } = require('webpack');
         },
 <%_ } _%>
         shared: {
+          '@vuelidate/core': { singleton: true, shareScope: 'default' },
+          '@vuelidate/validators': { singleton: true, shareScope: 'default' },
           axios: { singleton: true, shareScope: 'default' },
           'vue-loader': { eager: true, singleton: false, shareScope: 'default' },
           'bootstrap-vue': { singleton: true, shareScope: 'default' },
           vue: { singleton: true, shareScope: 'default' },
-          vuelidate: { singleton: true, shareScope: 'default' },
-          'vue-class-component': { singleton: true, shareScope: 'default' },
           'vue-i18n': { singleton: true, shareScope: 'default' },
           'vue-router': { singleton: true, shareScope: 'default' },
-          'vue2-filters': { singleton: true, shareScope: 'default' },
-          vuex: { singleton: true, shareScope: 'default' },
-          'vue-property-decorator': { singleton: true, shareScope: 'default' },
+          pinia: { singleton: true, shareScope: 'default' },
           '@/shared/security/authority': {
             singleton: true,
             shareScope: 'default',

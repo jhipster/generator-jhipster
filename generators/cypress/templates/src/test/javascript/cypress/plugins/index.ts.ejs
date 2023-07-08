@@ -31,7 +31,6 @@
 <%_ if (cypressAudit) { _%>
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
-import ReportGenerator from 'lighthouse/report/generator/report-generator';
 <%_ } _%>
 
 export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
@@ -59,7 +58,8 @@ export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOpti
 
 <%_ if (cypressAudit) { _%>
   on('task', {
-    lighthouse: lighthouse((lighthouseReport) => {
+    lighthouse: lighthouse(async (lighthouseReport) => {
+      const { default: ReportGenerator } = await import('lighthouse/report/generator/report-generator');
       !existsSync('<%= cypressTemporaryDir %>') && mkdirSync('<%= cypressTemporaryDir %>', { recursive: true });
       writeFileSync('<%= cypressTemporaryDir %>lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
     }),

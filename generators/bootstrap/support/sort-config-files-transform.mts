@@ -18,18 +18,16 @@
  */
 import File from 'vinyl';
 import sortKeys from 'sort-keys';
-import environmentTransform from 'yeoman-environment/transform';
-
-const { patternSpy } = environmentTransform;
+import { transformContents } from '@yeoman/transform';
+import { MemFsEditorFile } from 'mem-fs-editor';
 
 const sortJsonFileContent = (contents: Exclude<File['contents'], null>) => {
   return Buffer.from(`${JSON.stringify(sortKeys(JSON.parse(contents.toString('utf8')), { deep: true }), null, 2)}\n`);
 };
 
 export default function createSortConfigFilesTransform(pattern = '**/{.yo-rc.json,.jhipster/*.json}') {
-  return patternSpy((file: any) => {
-    if (file.contents) {
-      file.contents = sortJsonFileContent(file.contents);
-    }
-  }, pattern).name('jhipster:sort-json-files');
+  return transformContents<MemFsEditorFile>(contents => sortJsonFileContent(contents!), {
+    filter: file => Boolean(file.contents),
+    pattern,
+  });
 }

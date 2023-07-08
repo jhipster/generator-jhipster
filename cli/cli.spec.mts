@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-expressions, no-console */
 import assert from 'assert';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect, mock, resetAllMocks, fn } from 'esmocha';
 import { exec, fork } from 'child_process';
-import Environment from 'yeoman-environment';
+import { BaseEnvironment } from '@yeoman/types';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { mock, resetAllMocks, fn } from '@node-loaders/jest-mock';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
 import { getCommand as actualGetCommonand } from './utils.mjs';
@@ -15,7 +14,7 @@ const { logger, getCommand } = await mock<typeof import('./utils.mjs')>('./utils
 const { buildJHipster } = await import('./program.mjs');
 
 const __filename = fileURLToPath(import.meta.url);
-const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.mjs');
+const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
 
 const mockCli = async (argv: string[], opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -30,7 +29,7 @@ const cliBlueprintFiles = {
     options: [
       {
         option: '--foo',
-        desc: 'foo description',
+        description: 'foo description',
       },
     ],
   },
@@ -47,7 +46,7 @@ const cliBlueprintFiles = {
       super(args, opts, features);
 
       this.option('foo-bar', {
-        desc: 'Sample option',
+        description: 'Sample option',
         type: Boolean,
       });
     }
@@ -85,7 +84,7 @@ const cliSharedBlueprintFiles = {
     constructor(args, options) {
       super(args, options);
       this.option('foo', {
-        desc: 'foo description',
+        description: 'foo description',
         type: Boolean,
       });
     }
@@ -106,21 +105,21 @@ describe('cli', () => {
   });
 
   it('--help should run without errors', done => {
-    exec(`${jhipsterCli} --help`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --help`, error => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('--version should run without errors', done => {
-    exec(`${jhipsterCli} --version`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} --version`, error => {
       expect(error).toBeNull();
       done();
     });
   });
 
   it('should return error on unknown command', function (done) {
-    exec(`${jhipsterCli} junkcmd`, (error, stdout, stderr) => {
+    exec(`${jhipsterCli} junkcmd`, (error, _stdout, stderr) => {
       expect(error).not.toBeNull();
       expect(error?.code).toBe(1);
       expect(stderr).toMatch('is not a known command');
@@ -134,8 +133,8 @@ describe('cli', () => {
         await mockCli(['jhipster', 'jhipster', 'entitt']);
         assert.fail();
       } catch (error) {
-        expect(logger.info).toHaveBeenCalledWith(expect.stringMatching('Did you mean'));
-        expect(logger.info).toHaveBeenCalledWith(expect.stringMatching('entity'));
+        expect(logger.verboseInfo).toHaveBeenCalledWith(expect.stringMatching('Did you mean'));
+        expect(logger.verboseInfo).toHaveBeenCalledWith(expect.stringMatching('entity'));
       }
     });
 
@@ -154,14 +153,14 @@ describe('cli', () => {
     const commands = { mocked: {} };
     let generator;
     let runArgs;
-    let env: Environment;
+    let env: BaseEnvironment;
 
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand);
 
       const BaseGenerator = (await import('../generators/base/index.mjs')).default;
-      env = Environment.createEnv();
-      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, namespace: 'jhipster:foo' });
+      env = await helpers.createTestEnv();
+      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, sharedData: {} });
       generator._options = {
         foo: {
           description: 'Foo',
@@ -254,23 +253,22 @@ describe('cli', () => {
     } as { mocked: any };
     beforeEach(() => {
       commands.mocked = {
-        cb: () => {},
         options: [
           {
             option: '--foo',
-            desc: 'Foo',
+            description: 'Foo',
           },
           {
             option: '--no-foo',
-            desc: 'No foo',
+            description: 'No foo',
           },
           {
             option: '--foo-bar',
-            desc: 'Foo bar',
+            description: 'Foo bar',
           },
           {
             option: '--no-foo-bar',
-            desc: 'No foo bar',
+            description: 'No foo bar',
           },
         ],
       };
@@ -278,7 +276,7 @@ describe('cli', () => {
 
     const commonTests = () => {
       it('should pass a defined environment', async () => {
-        return mockCli(argv, { commands });
+        return mockCli(argv, { commands, './mocked': () => {} });
       });
     };
 
@@ -333,7 +331,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options, env) => {
+        const cb = (args, options) => {
           expect(args).toEqual([['Foo', 'Bar']]);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -352,7 +350,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options, env) => {
+        const cb = (args, options) => {
           expect(args).toEqual([]);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -442,7 +440,7 @@ describe('cli', () => {
       describe('using blueprint with sharedOptions', () => {
         let stdout;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
@@ -493,7 +491,7 @@ describe('cli', () => {
       describe('using blueprint with cli option', () => {
         let stdout;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
@@ -555,7 +553,7 @@ describe('cli', () => {
         super(args, opts, features);
   
         this.option('foo-bar', {
-          desc: 'Sample option',
+          description: 'Sample option',
           type: Boolean,
         });
       }
@@ -616,7 +614,7 @@ describe('cli', () => {
         let stdout;
         let exitCode;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
@@ -645,7 +643,7 @@ describe('cli', () => {
         let stdout;
         let exitCode;
         beforeEach(async () => {
-          const result = await helpers
+          await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jest from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 
 import { joinCallbacks } from './write-files.mjs';
 import { EditFileCallback } from '../api.mjs';
@@ -33,7 +32,7 @@ describe('generator - base - support - writeFiles', () => {
     });
 
     it('with a callback, should return the callback return', () => {
-      const mock = jest.fn().mockReturnValue('return1');
+      const mock = esmocha.fn().mockReturnValue('return1');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callback = joinCallbacks(mock as EditFileCallback<any>);
 
@@ -44,8 +43,8 @@ describe('generator - base - support - writeFiles', () => {
     });
 
     it('with two callbacks, should forward last callback and return the last callback return', () => {
-      const mock1 = jest.fn().mockReturnValue('return1');
-      const mock2 = jest.fn().mockReturnValue('return2');
+      const mock1 = esmocha.fn().mockReturnValue('return1');
+      const mock2 = esmocha.fn().mockReturnValue('return2');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callback = joinCallbacks(mock1 as EditFileCallback<any>, mock2 as EditFileCallback<any>);
 

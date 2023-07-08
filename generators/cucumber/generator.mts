@@ -39,4 +39,61 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDefinition?.({
+            dependencies: [
+              { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
+              { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
+              { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
+              { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
+              { groupId: 'org.testng', artifactId: 'testng', scope: 'test' },
+            ],
+            plugins: [{ groupId: 'org.apache.maven.plugins', artifactId: 'maven-antrun-plugin' }],
+            pluginManagement: [
+              {
+                groupId: 'org.apache.maven.plugins',
+                artifactId: 'maven-antrun-plugin',
+                additionalContent: `
+<executions>
+  <execution>
+  <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
+  <id>prepare cucumber feature files</id>
+  <phase>integration-test</phase>
+  <goals>
+    <goal>run</goal>
+  </goals>
+  <configuration>
+    <target>
+        <echo message="Running JUnit Platform CLI"/>
+        <java classname="org.junit.platform.console.ConsoleLauncher"
+              fork="true"
+              failonerror="true"
+              newenvironment="true"
+              maxmemory="512m"
+              classpathref="maven.test.classpath">
+            <arg value="--include-engine"/>
+            <arg value="cucumber"/>
+            <arg value="--scan-classpath"/>
+            <arg value="\${project.build.testOutputDirectory}"/>
+        </java>
+    </target>
+  </configuration>
+  </execution>
+</executions>
+`,
+              },
+            ],
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
 }

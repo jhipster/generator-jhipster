@@ -20,7 +20,6 @@
  */
 
 import chalk from 'chalk';
-import { Option } from 'commander';
 import didYouMean from 'didyoumean';
 import fs from 'fs';
 import path, { dirname } from 'path';
@@ -88,7 +87,7 @@ const addCommandGeneratorOptions = async (command, generatorMeta, { root, bluepr
     if (!info) {
       throw error;
     }
-    logger.info(`${info}, error: ${error}`);
+    logger.verboseInfo(`${info}, error: ${error}`);
   }
 };
 
@@ -148,7 +147,7 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
 
   const suggestion = didYouMean(first, availableCommands);
   if (suggestion) {
-    logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+    logger.verboseInfo(`Did you mean ${chalk.yellow(suggestion)}?`);
   }
 
   const message = `${chalk.yellow(first)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`;
@@ -189,7 +188,7 @@ export const buildCommands = async ({
           command.generatorNamespaces = operands.map(
             namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`
           );
-          envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          await envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
           await Promise.all(
             command.generatorNamespaces.map(async namespace => {
               const generatorMeta = env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
@@ -204,16 +203,8 @@ export const buildCommands = async ({
           return;
         }
 
-        const jdlCommand = cmdName === 'jdl';
-        if (!cliOnly || jdlCommand) {
-          let generator;
-          if (jdlCommand) {
-            generator = 'app';
-          } else if (blueprint) {
-            generator = `${packageNameToNamespace(blueprint)}:${cmdName}`;
-          } else {
-            generator = cmdName;
-          }
+        if (!cliOnly) {
+          const generator = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : cmdName;
           const generatorMeta = env.getGeneratorMeta(generator.includes(':') ? generator : `${JHIPSTER_NS}:${generator}`);
           if (!generatorMeta) {
             return;
@@ -222,7 +213,7 @@ export const buildCommands = async ({
           await addCommandRootGeneratorOptions(command, generatorMeta);
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
-          const boostrapGen = [...(jdlCommand ? ['workspaces'] : []), 'bootstrap', generator];
+          const boostrapGen = ['bootstrap', generator];
           const allDependencies = await buildAllDependencies(boostrapGen, { env });
           for (const [metaName, generatorMeta] of Object.entries(allDependencies)) {
             await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
@@ -259,11 +250,12 @@ export const buildCommands = async ({
           ...useOptions,
           commandName: cmdName,
           blueprints: envBuilder.getBlueprintsOption(),
+          positionalArguments: args,
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console
           console.log(`Using jhipster at ${path.dirname(__dirname)}`);
-          return undefined;
+          return Promise.resolve();
         }
 
         printLogo();
@@ -272,7 +264,9 @@ export const buildCommands = async ({
         if (cliOnly) {
           logger.debug('Executing CLI only script');
           const cliOnlyCommand = await loadCommand(cmdName);
-          return cliOnlyCommand instanceof Function ? cliOnlyCommand(args, options, env, envBuilder, createEnvBuilder) : undefined;
+          return cliOnlyCommand instanceof Function
+            ? cliOnlyCommand(args, options, env, envBuilder, createEnvBuilder)
+            : Promise.reject(new Error(`Command ${cmdName} is not a function.`));
         }
 
         if (cmdName === 'run') {
@@ -308,8 +302,7 @@ export const buildJHipster = async ({
   defaultCommand,
 } = {}) => {
   // eslint-disable-next-line chai-friendly/no-unused-expressions
-  createEnvBuilder =
-    createEnvBuilder ?? (async (args, options) => EnvironmentBuilder.create(args, options).prepare({ blueprints, lookups }));
+  createEnvBuilder = createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups }));
   envBuilder = envBuilder ?? (await createEnvBuilder());
   env = env ?? envBuilder.getEnvironment();
   commands = commands ?? { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()) };

@@ -44,9 +44,6 @@ import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 import <%= packageName %>.service.mapper.UserMapper;
-<%_ if (!authenticationTypeOauth2) { _%>
-import <%= packageName %>.web.rest.vm.ManagedUserVM;
-<%_ } _%>
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -287,29 +284,28 @@ class UserResourceIT {
             .collectList().block()<% } %>.size();
 
         // Create the User
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setLogin(DEFAULT_LOGIN);
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+        user.setEmail(DEFAULT_EMAIL);
+        user.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        user.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isCreated();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isCreated());
   <%_ } _%>
@@ -342,37 +338,36 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
   <%_ if (databaseTypeCassandra) { _%>
-        managedUserVM.setId(UUID.randomUUID().toString());
+        user.setId(UUID.randomUUID().toString());
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-        managedUserVM.setId("1L");
+        user.setId("1L");
   <%_ } else { _%>
-        managedUserVM.setId(DEFAULT_ID);
+        user.setId(DEFAULT_ID);
   <%_ } _%>
-        managedUserVM.setLogin(DEFAULT_LOGIN);
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
+        user.setLogin(DEFAULT_LOGIN);
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+        user.setEmail(DEFAULT_EMAIL);
+        user.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        user.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -399,30 +394,29 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);// this login should already be used
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail("anothermail@localhost");
-        managedUserVM.setActivated(true);
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setLogin(DEFAULT_LOGIN);// this login should already be used
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+        user.setEmail("anothermail@localhost");
+        user.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        user.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -449,30 +443,29 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin("anotherlogin");
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);// this email should already be used
-        managedUserVM.setActivated(true);
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setLogin("anotherlogin");
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+        user.setEmail(DEFAULT_EMAIL);// this email should already be used
+        user.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        user.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -637,38 +630,37 @@ class UserResourceIT {
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(updatedUser.getLogin());
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setId(updatedUser.getId());
+        user.setLogin(updatedUser.getLogin());
+        user.setFirstName(UPDATED_FIRSTNAME);
+        user.setLastName(UPDATED_LASTNAME);
+        user.setEmail(UPDATED_EMAIL);
+        user.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        user.setImageUrl(UPDATED_IMAGEURL);
   <%_ } _%>
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        user.setLangKey(UPDATED_LANGKEY);
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        user.setCreatedBy(updatedUser.getCreatedBy());
+        user.setCreatedDate(updatedUser.getCreatedDate());
+        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -676,7 +668,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
+            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -703,38 +695,37 @@ class UserResourceIT {
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(UPDATED_LOGIN);
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setId(updatedUser.getId());
+        user.setLogin(UPDATED_LOGIN);
+        user.setFirstName(UPDATED_FIRSTNAME);
+        user.setLastName(UPDATED_LASTNAME);
+        user.setEmail(UPDATED_EMAIL);
+        user.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        user.setImageUrl(UPDATED_IMAGEURL);
   <%_ } _%>
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        user.setLangKey(UPDATED_LANGKEY);
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        user.setCreatedBy(updatedUser.getCreatedBy());
+        user.setCreatedDate(updatedUser.getCreatedDate());
+        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -742,7 +733,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
+            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
@@ -793,38 +784,37 @@ class UserResourceIT {
   <%_ } _%>
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(updatedUser.getLogin());
-        managedUserVM.setPassword(updatedUser.getPassword());
-        managedUserVM.setFirstName(updatedUser.getFirstName());
-        managedUserVM.setLastName(updatedUser.getLastName());
-        managedUserVM.setEmail("jhipster@localhost");// this email should already be used by anotherUser
-        managedUserVM.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setId(updatedUser.getId());
+        user.setLogin(updatedUser.getLogin());
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setEmail("jhipster@localhost");// this email should already be used by anotherUser
+        user.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(updatedUser.getImageUrl());
+        user.setImageUrl(updatedUser.getImageUrl());
   <%_ } _%>
-        managedUserVM.setLangKey(updatedUser.getLangKey());
+        user.setLangKey(updatedUser.getLangKey());
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        user.setCreatedBy(updatedUser.getCreatedBy());
+        user.setCreatedDate(updatedUser.getCreatedDate());
+        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -869,38 +859,37 @@ class UserResourceIT {
   <%_ } _%>
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin("jhipster");// this login should already be used by anotherUser
-        managedUserVM.setPassword(updatedUser.getPassword());
-        managedUserVM.setFirstName(updatedUser.getFirstName());
-        managedUserVM.setLastName(updatedUser.getLastName());
-        managedUserVM.setEmail(updatedUser.getEmail());
-        managedUserVM.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        user.setId(updatedUser.getId());
+        user.setLogin("jhipster");// this login should already be used by anotherUser
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setEmail(updatedUser.getEmail());
+        user.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setImageUrl(updatedUser.getImageUrl());
+        user.setImageUrl(updatedUser.getImageUrl());
   <%_ } _%>
-        managedUserVM.setLangKey(updatedUser.getLangKey());
+        user.setLangKey(updatedUser.getLangKey());
   <%_ if (!databaseTypeCassandra) { _%>
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        user.setCreatedBy(updatedUser.getCreatedBy());
+        user.setCreatedDate(updatedUser.getCreatedDate());
+        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>

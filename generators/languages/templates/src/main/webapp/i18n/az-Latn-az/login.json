@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Giriş",
+        "form": {
+            "password": "Şifrə",
+            "password.placeholder": "Şifrə",
+            "rememberme": "Yadda Saxla",
+            "button": "Giriş"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Giriş uğursuz oldu!</strong> Zəhmət olmasa, istifadəçi məlumatlarınızı yoxlayıb yenidən cəhd edin."
+            }
+        },
+        "password": {
+            "forgot": "Şifrəni unutdun?"
+        }
+    }
+}

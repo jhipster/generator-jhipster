@@ -17,8 +17,35 @@
  * limitations under the License.
  */
 
+import semver from 'semver';
+import { dirname, relative } from 'path';
+import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
+import chalk from 'chalk';
+
+import { packageJson } from '../lib/index.mjs';
 import { runJHipster } from './program.mjs';
 import { done, logger } from './utils.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const currentNodeVersion = process.versions.node;
+const minimumNodeVersion = packageJson.engines.node;
+
+if (!process.argv.includes('--skip-checks') && !semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
+  logger.fatal(
+    `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`
+  );
+}
+
+if (
+  relative(__dirname, process.cwd()).startsWith('..') &&
+  (existsSync('node_modules/.bin/jhipster') || existsSync('../node_modules/.bin/jhipster'))
+) {
+  logger.warn(`Since JHipster v8, the jhipster command will not use the locally installed generator-jhipster.
+    If you want to execute the locally installed generator-jhipster, run: ${chalk.yellow('npx jhipster')}`);
+}
 
 export default runJHipster().catch(done);
 

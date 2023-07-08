@@ -18,27 +18,18 @@
  */
 import shelljs from 'shelljs';
 import chalk from 'chalk';
-/**
- * This is the Generator base class.
- * This provides all the public API methods exposed via the module system.
- * The public API methods can be directly utilized as well using commonJS require.
- *
- * The method signatures in public API should not be changed without a major version change
- */
-export default {
-  checkDocker,
-};
+import runAsync from 'run-async';
 
 /**
  * Check that Docker exists.
  */
-export function checkDocker() {
+export const checkDocker = runAsync(function () {
   if (this.abort || this.skipChecks) return;
   const done = this.async();
 
   shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
     if (stderr) {
-      this.logger.error(
+      this.log.error(
         chalk.red(
           'Docker version 1.10.0 or later is not installed on your computer.\n' +
             '         Read http://docs.docker.com/engine/installation/#installation\n'
@@ -50,7 +41,7 @@ export function checkDocker() {
       const dockerVersionMajor = dockerVersion.split('.')[0];
       const dockerVersionMinor = dockerVersion.split('.')[1];
       if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-        this.logger.error(
+        this.log.error(
           chalk.red(
             `Docker version 1.10.0 or later is not installed on your computer.
                                  Docker version found: ${dockerVersion}
@@ -59,9 +50,20 @@ export function checkDocker() {
         );
         this.abort = true;
       } else {
-        this.logger.info('Docker is installed');
+        this.log.verboseInfo('Docker is installed');
       }
     }
     done();
   });
-}
+});
+
+/**
+ * This is the Generator base class.
+ * This provides all the public API methods exposed via the module system.
+ * The public API methods can be directly utilized as well using commonJS require.
+ *
+ * The method signatures in public API should not be changed without a major version change
+ */
+export default {
+  checkDocker,
+};

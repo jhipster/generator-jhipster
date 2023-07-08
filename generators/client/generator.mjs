@@ -30,6 +30,7 @@ import statistics from '../statistics.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { createNeedleCallback } from '../base/support/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -124,7 +125,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'resources', 'package.json')
         );
       },
     });
@@ -145,6 +146,17 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = LOGIN_REGEX_JS;
+      },
+
+      addExternalResource({ application, source }) {
+        source.addExternalResourceToRoot = ({ resource, comment }) =>
+          this.editFile(
+            `${application.clientSrcDir}index.html`,
+            createNeedleCallback({
+              needle: 'add-resources-to-root',
+              contentToAdd: [comment ? `<!-- ${comment} -->` : undefined, resource].filter(i => i).join('\n'),
+            })
+          );
       },
     });
   }

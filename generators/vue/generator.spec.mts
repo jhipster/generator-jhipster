@@ -1,10 +1,10 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildClientSamples, entitiesClientSamples as entities, checkEnforcements } from '../../test/support/index.mjs';
-import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
@@ -61,10 +61,7 @@ describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should support features parameter', () => {
-    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { unique: 'bar' });
-    expect(instance.features.unique).toBe('bar');
-  });
+  shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({ client: true }, GENERATOR_VUE);
 
@@ -80,6 +77,7 @@ describe(`generator - ${clientFramework}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
@@ -126,21 +124,6 @@ describe(`generator - ${clientFramework}`, () => {
 
           it(adminUiRoutingTitle, () => {
             assertion(
-              `${clientSrcDir}app/main.ts`,
-              "import HealthService from './admin/health/health.service';\n" +
-                "import MetricsService from './admin/metrics/metrics.service';\n" +
-                "import LogsService from './admin/logs/logs.service';\n" +
-                "import ConfigurationService from '@/admin/configuration/configuration.service';"
-            );
-            assertion(
-              `${clientSrcDir}app/main.ts`,
-              '    healthService: () => new HealthService(),\n' +
-                '    configurationService: () => new ConfigurationService(),\n' +
-                '    logsService: () => new LogsService(),\n' +
-                '    metricsService: () => new MetricsService(),'
-            );
-
-            assertion(
               `${clientSrcDir}app/router/admin.ts`,
               "  const JhiConfigurationComponent = () => import('@/admin/configuration/configuration.vue');\n" +
                 "  const JhiHealthComponent = () => import('@/admin/health/health.vue');\n" +
@@ -177,21 +160,21 @@ describe(`generator - ${clientFramework}`, () => {
             );
             assertion(
               `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
-              '<b-dropdown-item  to="/admin/metrics" active-class="active">\n' +
+              '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
                 '            <font-awesome-icon icon="tachometer-alt" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.metrics\')">Metrics</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.metrics\')"></span>\n' +
                 '          </b-dropdown-item>\n' +
                 '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
                 '            <font-awesome-icon icon="heart" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.health\')">Health</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.health\')"></span>\n' +
                 '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item  to="/admin/configuration" active-class="active">\n' +
+                '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
                 '            <font-awesome-icon icon="cogs" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.configuration\')">Configuration</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.configuration\')"></span>\n' +
                 '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item  to="/admin/logs" active-class="active">\n' +
+                '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
                 '            <font-awesome-icon icon="tasks" />\n' +
-                '            <span v-text="$t(\'global.menu.admin.logs\')">Logs</span>\n' +
+                '            <span v-text="t$(\'global.menu.admin.logs\')"></span>\n' +
                 '          </b-dropdown-item>'
             );
           });

@@ -1,85 +1,105 @@
-import Vue from 'vue';
-import { Component, Inject } from 'vue-property-decorator';
-import { email, helpers, maxLength, minLength, required, sameAs } from 'vuelidate/lib/validators';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useVuelidate } from '@vuelidate/core'
+import { email, helpers, maxLength, minLength, required, sameAs } from '@vuelidate/validators';
 import LoginService from '@/account/login.service';
 import RegisterService from '@/account/register/register.service';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 
-const loginPattern = helpers.regex('alpha', /<%- webappLoginRegExp %>/);
-const validations: any = {
-  registerAccount: {
-    login: {
-      required,
-      minLength: minLength(1),
-      maxLength: maxLength(50),
-      pattern: loginPattern
-    },
-    email: {
-      required,
-      minLength: minLength(5),
-      maxLength: maxLength(254),
-      email
-    },
-    password: {
-      required,
-      minLength: minLength(4),
-      maxLength: maxLength(254)
-    }
+const loginPattern = helpers.regex(/<%- webappLoginRegExp %>/);
+
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Register',
+  validations() {
+    return {
+      registerAccount: {
+        login: {
+          required,
+          minLength: minLength(1),
+          maxLength: maxLength(50),
+          pattern: loginPattern,
+       },
+        email: {
+          required,
+          minLength: minLength(5),
+          maxLength: maxLength(254),
+          email,
+        },
+        password: {
+          required,
+          minLength: minLength(4),
+          maxLength: maxLength(254),
+        },
+      },
+      confirmPassword: {
+        required,
+        minLength: minLength(4),
+        maxLength: maxLength(50),
+        sameAsPassword: sameAs(this.registerAccount.password),
+      },
+    };
   },
-  confirmPassword: {
-    required,
-    minLength: minLength(4),
-    maxLength: maxLength(50),
-    // prettier-ignore
-    sameAsPassword: sameAs(function() {
-      return this.registerAccount.password;
-    })
-  }
-};
+  setup(prop) {
+    const loginService = inject<LoginService>('loginService');
+    const registerService = inject('registerService', () => new RegisterService(), true);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
-@Component({
-  validations
-})
-export default class Register extends Vue {
-  @Inject('registerService') private registerService: () => RegisterService;
-  @Inject('loginService') private loginService: () => LoginService;
-  public registerAccount: any = {
-    login: undefined,
-    email: undefined,
-    password: undefined
-  };
-  public confirmPassword: any = null;
-  public error = '';
-  public errorEmailExists = '';
-  public errorUserExists = '';
-  public success = false;
+    const error: Ref<string> = ref('');
+    const errorEmailExists: Ref<string> = ref('');
+    const errorUserExists: Ref<string> = ref('');
+    const success: Ref<boolean> = ref(false);
 
-  public register() : void {
-    this.error = null;
-    this.errorUserExists = null;
-    this.errorEmailExists = null;
+    const confirmPassword: Ref<any> = ref(null);
+    const registerAccount: Ref<any> = ref({
+      login: undefined,
+      email: undefined,
+      password: undefined,
+    });
+
+    const openLogin = () => {
+      loginService.openLogin();
+    };
+
+    return {
+      openLogin,
+      currentLanguage,
+      registerService,
+      error,
+      errorEmailExists,
+      errorUserExists,
+      success,
+      confirmPassword,
+      registerAccount,
+      v$: useVuelidate(),
 <%_ if (enableTranslation) { _%>
-    this.registerAccount.langKey = this.$store.getters.currentLanguage;
-<%_ } else { _%>
-    this.registerAccount.langKey = 'en';
+      t$: useI18n().t,
 <%_ } _%>
-    this.registerService().processRegistration(this.registerAccount)
-      .then(() => {
-        this.success = true;
-      })
-      .catch(error => {
-        this.success = null;
-        if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
-          this.errorUserExists = 'ERROR';
-        } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-          this.errorEmailExists = 'ERROR';
-        } else {
-          this.error = 'ERROR';
-        }
-      });
-  }
-
-  public openLogin() : void {
-    this.loginService().openLogin((<any>this).$root);
-  }
-}
+    };
+  },
+  methods: {
+    register(): void {
+      this.error = null;
+      this.errorUserExists = null;
+      this.errorEmailExists = null;
+      this.registerAccount.langKey = this.currentLanguage;
+      this.registerService
+        .processRegistration(this.registerAccount)
+        .then(() => {
+          this.success = true;
+        })
+        .catch(error => {
+          this.success = null;
+          if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
+            this.errorUserExists = 'ERROR';
+          } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+            this.errorEmailExists = 'ERROR';
+          } else {
+            this.error = 'ERROR';
+          }
+        });
+    },
+  },
+});

@@ -67,7 +67,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: auto
+    default: release
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
@@ -159,8 +159,6 @@ runs:
 
         # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
         echo "MAVEN_OPTS=-Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120" >> $GITHUB_ENV
-        # Use java backward compatible locale values https://bugs.openjdk.java.net/browse/JDK-8267069
-        echo "java.locale.useOldISOCodes=true" >> $GITHUB_ENV
 
         echo "application-path=${{inputs.application-path}}" >> $GITHUB_OUTPUT
         echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT

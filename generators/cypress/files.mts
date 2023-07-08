@@ -22,10 +22,11 @@ import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.mjs';
 import { type Entity } from '../base-application/index.mjs';
+import type { CommonClientServerApplication } from '../base-application/types.mjs';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
-export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication> = {
+export const cypressFiles: WriteFileSection<CypressGenerator, CommonClientServerApplication> = {
   common: [
     {
       templates: ['cypress.config.ts', 'README.md.jhi.cypress'],

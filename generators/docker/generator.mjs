@@ -24,11 +24,9 @@ import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
- */
 export default class DockerGenerator extends BaseApplicationGenerator {
+  hasServicesFile = false;
+
   async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
@@ -40,14 +38,24 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       addAppServices({ application, source }) {
+        const writeInitialServicesFile = () => {
+          if (!this.hasServicesFile) {
+            const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
+            this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
+          }
+          this.hasServicesFile = true;
+        };
+
         source.addDockerExtendedServiceToApplicationAndServices = (...services) => {
           const extendedServices = createDockerExtendedServices(...services);
+          writeInitialServicesFile();
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedServices);
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedServices);
         };
 
         source.addDockerExtendedServiceToServices = (...services) => {
           const extendedServices = createDockerExtendedServices(...services);
+          writeInitialServicesFile();
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedServices);
         };
 
@@ -98,9 +106,6 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       async dockerServices({ application, source }) {
-        const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
-        this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
-
         if (application.databaseTypeCassandra) {
           const serviceName = application.databaseType;
           source.addDockerExtendedServiceToApplicationAndServices(
@@ -111,7 +116,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
             { serviceName, condition: SERVICE_HEALTHY },
             { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY }
           );
-        } else if (!application.databaseTypeSql || !application.prodDatabaseTypeOracle) {
+        } else if (application.databaseTypeAny && !application.prodDatabaseTypeOracle) {
           const serviceName = application.databaseTypeSql ? application.prodDatabaseType : application.databaseType;
           source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
           source.addDockerDependencyToApplication({ serviceName, condition: SERVICE_HEALTHY });
@@ -216,13 +221,17 @@ export default class DockerGenerator extends BaseApplicationGenerator {
             'postservices:up': `sleep ${postServicesSleep}`,
           });
         }
+        if (this.hasServicesFile) {
+          scriptsStorage.set({
+            'services:up': `docker compose -f ${application.dockerServicesDir}services.yml up --wait`,
+            'ci:e2e:teardown:docker': `docker compose -f ${application.dockerServicesDir}services.yml down -v && docker ps -a`,
+          });
+        }
         scriptsStorage.set({
-          'services:up': `docker compose -f ${application.dockerServicesDir}services.yml up --wait`,
           'app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
-          'ci:e2e:prepare:docker': 'npm run services:up && docker ps -a',
+          'ci:e2e:prepare:docker': 'npm run services:up --if-present && docker ps -a',
           'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
-          'ci:e2e:teardown:docker': `docker compose -f ${application.dockerServicesDir}services.yml down -v && docker ps -a`,
-          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
+          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker --if-present',
         });
       },
     });

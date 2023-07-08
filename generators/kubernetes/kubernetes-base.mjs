@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import runAsync from 'run-async';
 
 import shelljs from 'shelljs';
-import chalk from 'chalk';
 import crypto from 'crypto';
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
 import { loadFromYoRc } from '../base-docker/docker-base.mjs';
@@ -38,7 +38,7 @@ import {
   HELM_MARIADB,
   HELM_MYSQL,
   HELM_POSTGRESQL,
-  HELM_MOGODB_REPLICASET,
+  HELM_MONGODB_REPLICASET,
   HELM_COUCHBASE_OPERATOR,
 } from '../generator-constants.mjs';
 import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
@@ -50,32 +50,22 @@ const { INGRESS } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 const { K8S, HELM } = GeneratorTypes;
 
-export default {
-  checkKubernetes,
-  checkHelm,
-  loadConfig,
-  saveConfig,
-  setupKubernetesConstants,
-  setupHelmConstants,
-  derivedKubernetesPlatformProperties,
-};
-
-export function checkKubernetes() {
+export const checkKubernetes = runAsync(function () {
   if (this.skipChecks) return;
   const done = this.async();
 
   shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
     if (stderr) {
-      this.logger.warn(
+      this.log.warn(
         'kubectl 1.2 or later is not installed on your computer.\n' +
           'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n'
       );
     }
     done();
   });
-}
+});
 
-export function checkHelm() {
+export const checkHelm = runAsync(function () {
   if (this.skipChecks) return;
   const done = this.async();
 
@@ -84,7 +74,7 @@ export function checkHelm() {
     { silent: true },
     (code, stdout, stderr) => {
       if (stderr || code !== 0) {
-        this.logger.warn(
+        this.log.warn(
           'helm 2.12.x or later is not installed on your computer.\n' +
             'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
         );
@@ -92,7 +82,7 @@ export function checkHelm() {
       done();
     }
   );
-}
+});
 
 export function loadConfig() {
   loadFromYoRc.call(this);
@@ -162,6 +152,16 @@ export function setupHelmConstants() {
   this.HELM_MARIADB = HELM_MARIADB;
   this.HELM_MYSQL = HELM_MYSQL;
   this.HELM_POSTGRESQL = HELM_POSTGRESQL;
-  this.HELM_MOGODB_REPLICASET = HELM_MOGODB_REPLICASET;
+  this.HELM_MONGODB_REPLICASET = HELM_MONGODB_REPLICASET;
   this.HELM_COUCHBASE_OPERATOR = HELM_COUCHBASE_OPERATOR;
 }
+
+export default {
+  checkKubernetes,
+  checkHelm,
+  loadConfig,
+  saveConfig,
+  setupKubernetesConstants,
+  setupHelmConstants,
+  derivedKubernetesPlatformProperties,
+};

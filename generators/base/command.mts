@@ -45,6 +45,11 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'generator',
     },
+    skipJhipsterDependencies: {
+      description: "Don't write jhipster dependencies to package.json.",
+      type: Boolean,
+      scope: 'storage',
+    },
   },
 };
 

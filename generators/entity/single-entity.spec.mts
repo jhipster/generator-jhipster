@@ -1,4 +1,6 @@
-import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { expect } from 'esmocha';
+
+import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import BaseApplicationGenerator from '../base-application/generator.mjs';
 import { GENERATOR_ENTITY } from '../generator-list.mjs';
@@ -19,17 +21,19 @@ const entityBar = { name: 'Bar', changelogDate: '20160926101211' };
 describe('generator - entity --single-entity', () => {
   context('when regenerating', () => {
     describe('with default configuration', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
           .withJHipsterConfig({}, [entityFoo, entityBar])
           .withArguments(['Foo'])
-          .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
+          .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true })
+          .withMockedSource();
       });
 
-      after(() => runResult.cleanup());
+      it('should match source calls', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
+      });
 
       it('should create files for entity Foo', () => {
         runResult.assertFile([

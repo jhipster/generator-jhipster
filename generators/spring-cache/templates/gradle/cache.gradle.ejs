@@ -1,17 +1,17 @@
 dependencies {
   implementation "org.springframework.boot:spring-boot-starter-cache"
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
+<%_ if (cacheProviderEhcache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
   implementation "javax.cache:cache-api"
 <%_ } _%>
-<%_ if (cacheProviderEhCache) { _%>
+<%_ if (cacheProviderEhcache) { _%>
   implementation group: "org.ehcache", name: "ehcache", classifier: "jakarta"
   <%_ if (enableHibernateCache) { _%>
   implementation "org.hibernate.orm:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-  implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
-  implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
+  implementation "com.github.ben-manes.caffeine:caffeine"
+  implementation "com.github.ben-manes.caffeine:jcache"
   implementation "com.typesafe:config:${typesafeConfigVersion}"
   <%_ if (enableHibernateCache) { _%>
   implementation "org.hibernate.orm:hibernate-jcache"
@@ -24,9 +24,6 @@ dependencies {
   implementation "com.hazelcast:hazelcast-spring:${hazelcastSpringVersion}"
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
-  // TODO rework infinispan-bom dependency once spring-boot 3.0.5 is released
-  implementation platform("org.infinispan:infinispan-bom:14.0.7.Final")
-
   implementation "org.infinispan:infinispan-hibernate-cache-v60"
   implementation "org.infinispan:infinispan-spring-boot3-starter-embedded"
   implementation "org.infinispan:infinispan-commons-jakarta"

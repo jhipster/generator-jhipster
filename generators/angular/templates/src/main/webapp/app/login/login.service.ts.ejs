@@ -29,7 +29,7 @@ import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
-<%_ } else if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ } else if (authenticationUsesCsrf) { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>

@@ -44,6 +44,13 @@
       "jdl-samples": "ms-mf-vue-consul-oauth2-mysql-memcached",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"
+    },
+    {
+      "name": "stack-vue-no-db",
+      "jdl-samples": "stack-vue-no-db",
+      "skip-frontend-tests": "backend tests only",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true"
     }
   ]
 }

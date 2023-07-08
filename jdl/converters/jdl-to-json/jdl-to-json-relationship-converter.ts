@@ -18,19 +18,14 @@
  */
 
 import _ from 'lodash';
-import { relationshipTypes, relationshipOptions, validations } from '../../jhipster/index.mjs';
+import { relationshipOptions, validations } from '../../jhipster/index.mjs';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
 
 const {
   Validations: { REQUIRED },
 } = validations;
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
-const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
-
-const USER = 'user';
-const AUTHORITY = 'authority';
-const builtInEntities = new Set([USER, AUTHORITY]);
+const { BUILT_IN_ENTITY } = relationshipOptions;
 
 let convertedRelationships;
 
@@ -85,6 +80,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
   relatedRelationships.from.forEach(relationshipToConvert => {
     const otherSplitField: any = extractField(relationshipToConvert.injectedFieldInTo);
     const convertedRelationship: any = {
+      relationshipSide: 'left',
       relationshipType: _.kebabCase(relationshipToConvert.type),
       otherEntityName: camelCase(relationshipToConvert.to),
     };
@@ -102,23 +98,20 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
     if (splitField.otherEntityField) {
       convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
     }
-    if (relationshipToConvert.type === ONE_TO_ONE) {
-      convertedRelationship.ownerSide = true;
-    } else if (relationshipToConvert.type === MANY_TO_MANY) {
-      convertedRelationship.ownerSide = true;
-    }
     setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship);
     const convertedEntityRelationships = convertedRelationships.get(entityName);
     convertedEntityRelationships.push(convertedRelationship);
   });
 }
 
+export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
+
 function setRelationshipsToEntity(relatedRelationships, entityName) {
   relatedRelationships.to.forEach(relationshipToConvert => {
-    const relationshipType = relationshipToConvert.type === ONE_TO_MANY ? MANY_TO_ONE : relationshipToConvert.type;
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
     const convertedRelationship: any = {
-      relationshipType: _.kebabCase(relationshipType),
+      relationshipSide: 'right',
+      relationshipType: otherRelationshipType(_.kebabCase(relationshipToConvert.type)),
       otherEntityName: camelCase(relationshipToConvert.from),
     };
     if (otherSplitField.relationshipName) {
@@ -136,13 +129,8 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
     if (splitField.otherEntityField) {
       convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
     }
-    if (relationshipToConvert.type === ONE_TO_ONE || relationshipToConvert.type === MANY_TO_MANY) {
-      convertedRelationship.ownerSide = false;
-    } else if (relationshipToConvert.type === ONE_TO_MANY) {
-      relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
-    } else if (relationshipToConvert.type === MANY_TO_ONE) {
-      convertedRelationship.relationshipType = 'one-to-many';
-    }
+    relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo ?? lowerFirst(relationshipToConvert.from);
+
     setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
     const convertedEntityRelationships = convertedRelationships.get(entityName);
     convertedEntityRelationships.push(convertedRelationship);
@@ -152,10 +140,8 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
 function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship) {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-    if (optionName === JPA_DERIVED_IDENTIFIER) {
-      if (convertedRelationship.ownerSide) {
-        convertedRelationship.useJPADerivedIdentifier = optionValue;
-      }
+    if (optionName === BUILT_IN_ENTITY) {
+      convertedRelationship.relationshipWithBuiltInEntity = optionValue;
     } else {
       convertedRelationship.options[optionName] = optionValue;
     }
@@ -171,13 +157,7 @@ function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRel
 function setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship) {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-    if (optionName === JPA_DERIVED_IDENTIFIER) {
-      if (convertedRelationship.ownerSide) {
-        convertedRelationship.useJPADerivedIdentifier = optionValue;
-      }
-    } else {
-      convertedRelationship.options[optionName] = optionValue;
-    }
+    convertedRelationship.options[optionName] = optionValue;
   });
   relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
     convertedRelationship.options[optionName] = optionValue;

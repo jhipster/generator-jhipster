@@ -1,7 +1,5 @@
-import { mock, resetAllMocks } from '@node-loaders/jest-mock';
+import { expect, mock, resetAllMocks } from 'esmocha';
 import { ExecaSyncReturnValue } from 'execa';
-import { afterEach } from 'mocha';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 const execa = await mock<typeof import('execa')>('execa');
 

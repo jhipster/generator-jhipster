@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import jest from 'jest-mock';
+import { expect, esmocha } from 'esmocha';
 
 import { createTranslationReplacer } from './translate-angular.mjs';
 
@@ -27,7 +26,7 @@ describe('generator - angular - transform', () => {
 
     beforeEach(() => {
       let value = 0;
-      replaceAngularTranslations = createTranslationReplacer(jest.fn().mockImplementation(key => `translated-value-${key}-${value++}`));
+      replaceAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(key => `translated-value-${key}-${value++}`));
     });
 
     describe('with translation disabled', () => {

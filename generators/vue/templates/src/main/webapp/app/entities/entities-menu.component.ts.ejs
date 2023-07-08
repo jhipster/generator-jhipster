@@ -1,34 +1,43 @@
 import {
-  Component,
-  Inject,
-  Vue,
+  defineComponent,
 <%_ if (enableTranslation && applicationTypeMicroservice) { _%>
-  Watch,
+  inject,
+  onMounted,
+  watch,
+  ComputedRef,
 <%_ } _%>
-} from 'vue-property-decorator';
+} from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
 <%_ if (enableTranslation && applicationTypeMicroservice) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
-@Component
-export default class EntitiesMenu extends Vue {
-<%_ if (enableTranslation && applicationTypeMicroservice) { _%>
-  @Inject({ default: true }) private readonly microfrontendI18n!: boolean;
-  @Inject('translationService') private translationService: () => TranslationService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'EntitiesMenu',
+<%_ if (enableTranslation) { _%>
+  setup() {
+    const i18n = useI18n();
+  <%_ if (applicationTypeMicroservice) { _%>
+    const microfrontendI18n = inject('microfrontendI18n', true);
+    const translationService = inject<TranslationService>('translationService');
+    const currentLanguage = inject<ComputedRef<string>>('currentLanguage');
 
-  @Watch('$i18n.locale')
-  onLocaleChanged() {
-    this.loadLanguage();
-  }
+    const loadLanguage = () => {
+      if (microfrontendI18n) {
+        translationService.loadTranslations(currentLanguage.value, '<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
+      }
+    };
 
-  created(): void {
-    this.loadLanguage();
-  }
+    onMounted(() => loadLanguage());
+    watch(() => i18n.locale, () => loadLanguage());
 
-  private loadLanguage() {
-    if (this.microfrontendI18n) {
-      this.translationService().loadTranslations('<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
-    }
-  }
+  <%_ } _%>
+    return {
+      t$: i18n.t,
+    };
+  },
 <%_ } _%>
-}
+});

@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "İstifadəçi Parametrləri [<strong>{{username}}</strong>]",
+        "form": {
+            "firstname": "Ad",
+            "firstname.placeholder": "Adınız",
+            "lastname": "Soyad",
+            "lastname.placeholder": "Soyadınız",
+            "language": "Dil",
+            "button": "Yadda Saxla"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Xəta baş verdi!</strong> Parametrlər qeydə alınmadı.",
+                "emailexists": "<strong>Email adresi artıq istifadə edilir!</strong> Zəhmət olmasa, başqa bir mail seçin."
+            },
+            "success": "<strong>Parametrlər qeydə alındı!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Ad məcburidir.",
+                    "minlength": "Ad ən az 1 hərf olmalıdır",
+                    "maxlength": "Ad ən çox 50 hərf olmalıdır"
+                },
+                "lastname": {
+                    "required": "Soyad zorunludur.",
+                    "minlength": "Soyad ən az 1 hərf olmalıdır",
+                    "maxlength": "Soyad ən çox 50 hərf olmalıdır"
+                }
+            }
+        }
+    }
+}

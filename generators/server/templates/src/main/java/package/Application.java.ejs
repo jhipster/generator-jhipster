@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @SpringBootApplication
-@EnableConfigurationProperties({<% if (databaseTypeSql) { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
+@EnableConfigurationProperties({<% if (databaseMigrationLiquibase) { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);

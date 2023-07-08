@@ -16,18 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import memFsEditor from 'mem-fs-editor';
+import { passthrough } from 'p-transform';
+import { isFileStateDeleted } from 'mem-fs-editor/state';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 import { Minimatch } from 'minimatch';
-// eslint-disable-next-line import/no-unresolved
-import environmentTransform from 'yeoman-environment/transform';
-
-const { State } = memFsEditor;
-const { patternSpy } = environmentTransform;
-
-const { isFileStateDeleted } = State;
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFile = file => minimatch.match(file.path);
@@ -37,55 +31,52 @@ export const createPrettierTransform = function (options, generator, transformOp
     transformOptions = { ignoreErrors: transformOptions };
   }
   const { ignoreErrors = false, extensions } = transformOptions;
-  return patternSpy(
-    async file => {
-      if (isFileStateDeleted(file)) {
-        return file;
+  const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
+
+  return passthrough(async file => {
+    if (!minimatch.match(file.path) || isFileStateDeleted(file)) {
+      return;
+    }
+    if (!file.contents) {
+      throw new Error(`File content doesn't exist for ${file.relative}`);
+    }
+    /* resolve from the projects config */
+    let fileContent;
+    try {
+      const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
+      const prettierOptions = {
+        plugins: [],
+        // Config from disk
+        ...resolvedDestinationFileOptions,
+        // for better errors
+        filepath: file.relative,
+      };
+      if (options.packageJson) {
+        prettierOptions.plugins.push(prettierPluginPackagejson);
       }
-      if (!file.contents) {
-        throw new Error(`File content doesn't exist for ${file.relative}`);
+      if (options.java) {
+        prettierOptions.plugins.push(prettierPluginJava);
       }
-      /* resolve from the projects config */
-      let fileContent;
-      try {
-        const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
-        const prettierOptions = {
-          plugins: [],
-          // Config from disk
-          ...resolvedDestinationFileOptions,
-          // for better errors
-          filepath: file.relative,
-        };
-        if (options.packageJson) {
-          prettierOptions.plugins.push(prettierPluginPackagejson);
-        }
-        if (options.java) {
-          prettierOptions.plugins.push(prettierPluginJava);
-        }
-        fileContent = file.contents.toString('utf8');
-        const data = prettier.format(fileContent, prettierOptions);
-        file.contents = Buffer.from(data);
-        return file;
-      } catch (error) {
-        let errorMessage;
-        if (fileContent) {
-          errorMessage = `Error parsing file ${file.relative}: ${error}
+      fileContent = file.contents.toString('utf8');
+      const data = prettier.format(fileContent, prettierOptions);
+      file.contents = Buffer.from(data);
+    } catch (error) {
+      let errorMessage;
+      if (fileContent) {
+        errorMessage = `Error parsing file ${file.relative}: ${error}
 
 At: ${fileContent
-            .split('\n')
-            .map((value, idx) => `${idx + 1}: ${value}`)
-            .join('\n')}`;
-        } else {
-          errorMessage = `Unknown prettier error: ${error}`;
-        }
-        if (ignoreErrors) {
-          generator.logger.warn(errorMessage);
-          return file;
-        }
-        throw new Error(errorMessage);
+          .split('\n')
+          .map((value, idx) => `${idx + 1}: ${value}`)
+          .join('\n')}`;
+      } else {
+        errorMessage = `Unknown prettier error: ${error}`;
       }
-    },
-    `**/*.{${extensions}}`,
-    { dot: true }
-  ).name('jhipster:prettier');
+      if (ignoreErrors) {
+        generator.log.warn(errorMessage);
+        return;
+      }
+      throw new Error(errorMessage);
+    }
+  });
 };

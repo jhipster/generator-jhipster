@@ -6,15 +6,25 @@ import axios, { AxiosPromise } from 'axios';
 <%_ } _%>
 
 export default class LoginService {
-
 <%_ if (!authenticationTypeOauth2) { _%>
-  public openLogin(instance : Vue) : void {
-    instance.$emit('bv::show::modal','login-page');
+  private emit: (event: string, ...args: any[]) => void;
+
+  constructor({ emit }: { emit: (event: string, ...args: any[]) => void }) {
+    this.emit = emit;
+  }
+
+  public openLogin(): void {
+    this.emit('bv::show::modal', 'login-page');
+  }
+
+  public hideLogin(): void {
+    this.emit('bv::hide::modal', 'login-page');
   }
 <%_ } else { _%>
-  public login(loc = window.location) {
-    const port = (loc.port ? ':' + loc.port : '');
-    let contextPath = location.pathname;
+
+  public login(loc: { href: string; hostname: string; pathname: string; port?: string } = window.location) {
+    const port = loc.port ? `:${loc.port}` : '';
+    let contextPath = loc.pathname;
     if (contextPath.endsWith('accessdenied')) {
       contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
     }
@@ -29,8 +39,8 @@ export default class LoginService {
     loc.href = `//${loc.hostname}${port}${contextPath}oauth2/authorization/oidc`;
   }
 <%_ } _%>
-
 <%_ if (!authenticationTypeJwt) { _%>
+
   public logout() : AxiosPromise<any> {
     return axios.post('api/logout');
   }

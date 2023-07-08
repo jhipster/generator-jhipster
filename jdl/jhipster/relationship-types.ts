@@ -19,13 +19,16 @@
 
 import _ from 'lodash';
 
-const relationshipTypes: any = {
+import { asJdlRelationshipType } from '../converters/parsed-jdl-to-jdl-object/relationship-converter.js';
+import { JDLRelationshipType } from '../models/jdl-relationship.js';
+
+const relationshipTypes: Record<'ONE_TO_ONE' | 'ONE_TO_MANY' | 'MANY_TO_ONE' | 'MANY_TO_MANY', JDLRelationshipType> = {
   ONE_TO_ONE: 'OneToOne',
   ONE_TO_MANY: 'OneToMany',
   MANY_TO_ONE: 'ManyToOne',
   MANY_TO_MANY: 'ManyToMany',
 };
 
-relationshipTypes.exists = relationship => Object.values(relationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));
+export const relationshipTypeExists = relationship => Object.values(relationshipTypes).includes(asJdlRelationshipType(relationship));
 
 export default relationshipTypes;

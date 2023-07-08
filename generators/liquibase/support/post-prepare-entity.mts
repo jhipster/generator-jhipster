@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CommonClientServerApplication } from '../../base-application/types.mjs';
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
-import { LiquibaseEntity } from '../generator.mjs';
+import { LiquibaseEntity } from '../types.mjs';
+import { GeneratorDefinition } from '../../base-application/generator.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG } = CommonDBTypes;
@@ -26,10 +26,7 @@ const { LONG: TYPE_LONG } = CommonDBTypes;
 export default function postPrepareEntity({
   application,
   entity,
-}: {
-  application: CommonClientServerApplication;
-  entity: LiquibaseEntity;
-}) {
+}: Pick<GeneratorDefinition['postPreparingEachEntityTaskParam'], 'application' | 'entity'>) {
   const { relationships, builtIn, name, primaryKey } = entity;
   if (builtIn && name === 'User') {
     const userIdType = primaryKey.type;
@@ -41,9 +38,9 @@ export default function postPrepareEntity({
           { [idFieldName]: userIdType === TYPE_LONG ? 2 : idField.generateFakeData() },
         ]
       : [];
-    entity.liquibaseFakeData = liquibaseFakeData;
-    entity.fakeDataCount = liquibaseFakeData.length;
+    (entity as LiquibaseEntity).liquibaseFakeData = liquibaseFakeData;
+    (entity as LiquibaseEntity).fakeDataCount = liquibaseFakeData.length;
   }
 
-  entity.anyRelationshipIsOwnerSide = relationships.some(relationship => relationship.ownerSide);
+  (entity as LiquibaseEntity).anyRelationshipIsOwnerSide = relationships.some(relationship => relationship.ownerSide);
 }

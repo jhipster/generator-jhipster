@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { execSync } from 'child_process';
 import dockerPrompts from '../base-docker/docker-prompts.mjs';
 import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.mjs';
 
@@ -125,7 +124,6 @@ export async function askForIngressDomain() {
 
   const istioIpCommand = "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
   let istioMessage = '';
-  let istioIngressIp = '';
 
   let defaultValue = '';
   if (this.ingressDomain) {
@@ -133,8 +131,10 @@ export async function askForIngressDomain() {
   } else if (istio) {
     // If it's Istio, and no previous domain is configured, try to determine the default value
     try {
-      istioIngressIp = execSync(istioIpCommand, { encoding: 'utf8' });
-      defaultValue = `${istioIngressIp}.nip.io`;
+      if (!this.skipChecks) {
+        const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
+        defaultValue = `${istioIngressIp}.nip.io`;
+      }
     } catch (ex) {
       istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
     }
@@ -218,7 +218,7 @@ export async function askForIstioSupport() {
 export async function askForPersistentStorage() {
   if (this.regenerate) return;
   let usingDataBase = false;
-  this.appConfigs.forEach((appConfig, index) => {
+  this.appConfigs.forEach(appConfig => {
     if (appConfig.prodDatabaseType !== NO_DATABASE) {
       usingDataBase = true;
     }

@@ -19,6 +19,8 @@
 package <%= packageName %>.web.rest.errors;
 
 import <%= packageName %>.IntegrationTest;
+import org.hamcrest.core.AnyOf;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -120,7 +122,8 @@ class ExceptionTranslatorIT {
             .expectBody()
             .jsonPath("$.message").isEqualTo("error.http.401")
             .jsonPath("$.path").isEqualTo("/api/exception-translator-test/unauthorized")
-            .jsonPath("$.detail").isEqualTo("test authentication failed!");
+            .jsonPath("$.detail")
+            .value(AnyOf.anyOf(IsEqual.equalTo("test authentication failed!"), IsEqual.equalTo("Invalid credentials")));
     }
 
     @Test

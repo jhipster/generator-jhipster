@@ -1,6 +1,7 @@
-import type { GenericDerivedProperty, OptionalGenericDerivedProperty } from '../base/application.mjs';
+import { ClientApplication } from '../client/types.mjs';
 import { I18nApplication } from '../languages/types.mjs';
-import { Entity } from './tasks.mjs';
+import { SpringBootApplication } from '../server/types.mjs';
+import { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from './application-options.mjs';
 
 export type BaseApplication = {
   jhipsterVersion: string;
@@ -33,23 +34,21 @@ export type BaseApplication = {
 } & I18nApplication;
 
 /* ApplicationType Start */
-type ApplicationType = {
-  applicationType: 'monolith' | 'microservice' | 'gateway';
-};
-
 type MicroservicesArchitectureApplication = {
   microfrontend: boolean;
   gatewayServerPort: number;
 };
 
-type MicroserviceApplication = GenericDerivedProperty<ApplicationType, 'microservice'> & MicroservicesArchitectureApplication;
+type GatewayApplication = MicroservicesArchitectureApplication & {
+  microfrontends: string[];
+};
 
-type GatewayApplication = GenericDerivedProperty<ApplicationType, 'gateway'> &
-  MicroservicesArchitectureApplication & {
-    microfrontends: string[];
-  };
+type ApplicationType = DeterministicOptionWithDerivedProperties<
+  'applicationType',
+  ['monolith', 'gateway', 'microservice'],
+  [Record<string, never>, GatewayApplication, MicroservicesArchitectureApplication]
+>;
 
-type MonolithApplication = GenericDerivedProperty<ApplicationType, 'monolith'>;
 /* ApplicationType End */
 
 /* AuthenticationType Start */
@@ -62,25 +61,25 @@ type UserManagement =
       user: any;
     };
 
-type AuthenticationType = {
-  authenticationType: 'jwt' | 'oauth2' | 'session';
+type JwtApplication = UserManagement & {
+  jwtSecretKey: string;
 };
 
-type JwtApplication = UserManagement &
-  GenericDerivedProperty<AuthenticationType, 'jwt'> & {
-    jwtSecretKey: string;
-  };
-
-type Oauth2Application = GenericDerivedProperty<AuthenticationType, 'oauth2'> & {
+type Oauth2Application = {
   jwtSecretKey: string;
-  skipUserManagement: false;
   user: any;
 };
 
-type SessionApplication = UserManagement &
-  GenericDerivedProperty<AuthenticationType, 'session'> & {
-    rememberMeKey: string;
-  };
+type SessionApplication = UserManagement & {
+  rememberMeKey: string;
+};
+
+type AuthenticationType = DeterministicOptionWithDerivedProperties<
+  'authenticationType',
+  ['jwt', 'oauth2', 'session'],
+  [JwtApplication, Oauth2Application, SessionApplication]
+>;
+
 /* AuthenticationType End */
 
 type QuirksApplication = {
@@ -89,8 +88,10 @@ type QuirksApplication = {
 
 export type CommonClientServerApplication = BaseApplication &
   QuirksApplication &
-  (JwtApplication | Oauth2Application | SessionApplication) &
-  (MonolithApplication | GatewayApplication | MicroserviceApplication) & {
+  AuthenticationType &
+  SpringBootApplication &
+  ClientApplication &
+  ApplicationType & {
     clientSrcDir: string;
     clientTestDir?: string;
     clientDistDir?: string;
@@ -109,24 +110,8 @@ export type CommonClientServerApplication = BaseApplication &
     generateBuiltInAuthorityEntity?: boolean;
   };
 
-type ServiceDiscoveryType = 'no' | 'eureka' | 'consul';
+type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
 
-declare const SERVICE_DISCOVERY_TYPE = 'serviceDiscoveryType';
-
-type ServiceDiscovery = {
-  [SERVICE_DISCOVERY_TYPE]: ServiceDiscoveryType;
-};
-
-type ServiceDiscoveryApplication = OptionalGenericDerivedProperty<ServiceDiscovery, ServiceDiscovery[typeof SERVICE_DISCOVERY_TYPE]>;
-
-type MonitoringType = 'no' | 'elk' | 'prometheus';
-
-declare const MONITORING_TYPE = 'monitoring';
-
-type Monitoring = {
-  [MONITORING_TYPE]: MonitoringType;
-};
-
-type MonitoringApplication = OptionalGenericDerivedProperty<Monitoring, Monitoring[typeof MONITORING_TYPE]>;
+type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'elk', 'prometheus']>;
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;

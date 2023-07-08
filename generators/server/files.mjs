@@ -88,41 +88,6 @@ const feignFiles = {
   ],
 };
 
-const commonUserFiles = {
-  commonUserFiles: [
-    {
-      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['service/UserService.java'],
-    },
-    {
-      condition: data =>
-        data.authenticationTypeOauth2 || data.generateUserManagement || (data.applicationTypeMicroservice && !data.skipUserManagement),
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['service/mapper/UserMapper.java', 'web/rest/PublicUserResource.java'],
-    },
-    {
-      condition: data => data.authenticationTypeOauth2 || data.generateUserManagement,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: [
-        'web/rest/UserResourceIT.java',
-        'service/mapper/UserMapperTest.java',
-        'web/rest/PublicUserResourceIT.java',
-        'service/UserServiceIT.java',
-      ],
-    },
-    {
-      condition: data => data.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/vm/ManagedUserVM.java'],
-    },
-  ],
-};
-
 const oauth2Files = {
   oauth2Files: [
     {
@@ -190,11 +155,17 @@ const accountFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: [
         data => {
-          if (data.authenticationTypeOauth2) return 'web/rest/AccountResource_oauth2.java';
+          if (data.authenticationTypeOauth2 && data.generateBuiltInUserEntity) return 'web/rest/AccountResource_oauth2.java';
           if (data.generateUserManagement) return 'web/rest/AccountResource.java';
           return 'web/rest/AccountResource_skipUserManagement.java';
         },
       ],
+    },
+    {
+      condition: data => data.generateUserManagement,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/vm/ManagedUserVM.java'],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}package/`,
@@ -429,6 +400,12 @@ export const baseServerFiles = {
       templates: [data => `config/SecurityConfiguration_${data.imperativeOrReactive}.java`],
     },
     {
+      condition: data => data.generateInMemoryUserCredentials && !data.reactive && data.authenticationTypeJwt,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/SecurityInMemoryConfiguration.java'],
+    },
+    {
       condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
@@ -599,8 +576,7 @@ export const baseServerFiles = {
         generator.databaseTypeMongodb ||
         generator.searchEngineElasticsearch ||
         generator.databaseTypeCouchbase ||
-        generator.searchEngineCouchbase ||
-        generator.databaseTypeNeo4j,
+        generator.searchEngineCouchbase,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/TestContainersSpringContextCustomizerFactory.java'],
@@ -611,7 +587,6 @@ export const baseServerFiles = {
       templates: ['web/rest/WithUnauthenticatedMockUser.java'],
     },
   ],
-  ...commonUserFiles,
 };
 
 export const serverFiles = mergeSections(

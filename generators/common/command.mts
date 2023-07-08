@@ -25,6 +25,11 @@ const command: JHipsterCommandDefinition = {
       type: Number,
       scope: 'storage',
     },
+    withAdminUi: {
+      description: 'Generate administrative user interface',
+      type: Boolean,
+      scope: 'storage',
+    },
   },
 };
 

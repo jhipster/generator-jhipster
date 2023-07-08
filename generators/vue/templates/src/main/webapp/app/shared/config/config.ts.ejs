@@ -1,8 +1,7 @@
-import Vuex from 'vuex';
 <%_ if (enableTranslation) { _%>
-import VueI18n, { DateTimeFormats } from 'vue-i18n';
-import <%=jhiPrefixCapitalized%>Formatter from './formatter';
+import { createI18n, IntlDateTimeFormats } from 'vue-i18n';
 <%_ } _%>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
@@ -35,7 +34,7 @@ import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerA
 import { faTasks } from '@fortawesome/free-solid-svg-icons/faTasks';
 import { faThList } from '@fortawesome/free-solid-svg-icons/faThList';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
-import { faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
@@ -43,30 +42,15 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons/faUsersCog';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
-import VueCookie from 'vue-cookie';
-import Vuelidate from 'vuelidate';
-import Vue2Filters from 'vue2-filters';
-
-import * as filters from '@/shared/date/filters';
-import { accountStore } from '@/shared/config/store/account-store';
 <%_ if (enableTranslation) { _%>
-import { translationStore } from '@/shared/config/store/translation-store';
-<%_ } _%>
-
-<%_ if (enableTranslation) { _%>
-const dateTimeFormats: DateTimeFormats = {
+const datetimeFormats: IntlDateTimeFormats = {
   // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
 }
 <%_ } _%>
 
-export function initVueApp(vue) {
-  vue.use(VueCookie);
-  vue.use(Vuelidate);
-  vue.use(Vue2Filters);
-  filters.initFilters();
-}
-
 export function initFortAwesome(vue) {
+  vue.component('font-awesome-icon', FontAwesomeIcon);
+
   library.add(
     faArrowLeft,
     faAsterisk,
@@ -109,24 +93,17 @@ export function initFortAwesome(vue) {
 }
 
 <%_ if (enableTranslation) { _%>
-export function initI18N(vue) {
-  vue.use(VueI18n);
-  return new VueI18n({
-    dateTimeFormats,
-    silentTranslationWarn: true,
-    formatter: new <%=jhiPrefixCapitalized%>Formatter()
-  });
+export function initI18N(opts: any = {}) {
+  return createI18n(
+    {
+      missingWarn: false,
+      fallbackWarn: false,
+      legacy: false,
+      datetimeFormats,
+      silentTranslationWarn: true,
+      ...opts,
+    }
+  );
 }
 
 <%_ } _%>
-export function initVueXStore(vue) {
-  vue.use(Vuex);
-  return new Vuex.Store({
-    modules: {
-      accountStore,
-<%_ if (enableTranslation) { _%>
-      translationStore,
-<%_ } _%>
-    },
-  });
-}

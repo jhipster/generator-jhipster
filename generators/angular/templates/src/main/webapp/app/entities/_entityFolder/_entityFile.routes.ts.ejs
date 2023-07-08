@@ -24,7 +24,7 @@ import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFile
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
 <%_ } _%>
-import { <%= entityAngularName %>RoutingResolveService } from './route/<%= entityFileName %>-routing-resolve.service';
+import <%= entityAngularName %>Resolve from './route/<%= entityFileName %>-routing-resolve.service';
 import { ASC } from 'app/config/navigation.constants';
 
 const <%= entityInstance %>Route: Routes = [
@@ -40,7 +40,7 @@ const <%= entityInstance %>Route: Routes = [
     path: ':<%= primaryKey.name %>/view',
     component: <%= entityAngularName %>DetailComponent,
     resolve: {
-      <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
+      <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
     canActivate: [UserRouteAccessService]
   },
@@ -49,7 +49,7 @@ const <%= entityInstance %>Route: Routes = [
     path: 'new',
     component: <%= entityAngularName %>UpdateComponent,
     resolve: {
-      <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
+      <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
     canActivate: [UserRouteAccessService]
   },
@@ -57,7 +57,7 @@ const <%= entityInstance %>Route: Routes = [
     path: ':<%= primaryKey.name %>/edit',
     component: <%= entityAngularName %>UpdateComponent,
     resolve: {
-      <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
+      <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
     canActivate: [UserRouteAccessService]
   },

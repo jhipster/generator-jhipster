@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import environmentTransfrom from 'yeoman-environment/transform';
-import { isFilePending } from 'mem-fs-editor/lib/state.js';
+import { forceYoFiles } from '@yeoman/conflicter';
+import { isFilePending } from 'mem-fs-editor/state';
+import { createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 
 import BaseGenerator from '../base/index.mjs';
 import {
-  MultiStepTransform,
+  createMultiStepTransform,
   createPrettierTransform,
   createForceWriteConfigFilesTransform,
   autoCrlfTransform,
@@ -36,12 +37,6 @@ import { createSortConfigFilesTransform } from './support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
-const {
-  createConflicterCheckTransform,
-  createConflicterStatusTransform,
-  createYoRcTransform: createForceYoRcTransform,
-  createYoResolveTransform: createApplyYoResolveTransform,
-} = environmentTransfrom;
 
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -51,12 +46,11 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
-  multiStepTransform = new MultiStepTransform();
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { uniqueGlobally: true, customCommitTask: true, ...features });
+    super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
   }
 
   beforeQueue() {
@@ -66,7 +60,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     this.parseCommonRuntimeOptions();
 
     // Force npm override later if needed
-    this.env.options.nodePackageManager = 'npm';
+    (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;
   }
 
@@ -108,13 +102,6 @@ export default class BootstrapGenerator extends BaseGenerator {
         const filter = file => isFilePending(file) && isPrettierConfigFile(file);
         await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
       },
-      async commitFiles() {
-        this.env.sharedFs.once('change', () => {
-          this.queueMultistepTransform();
-          this.queueCommit();
-        });
-        await this.commitSharedFs();
-      },
     };
   }
 
@@ -128,8 +115,9 @@ export default class BootstrapGenerator extends BaseGenerator {
   queueMultistepTransform() {
     this.queueTask({
       method: () => {
-        const filter = file => isFilePending(file) && this.multiStepTransform.templateFileFs.isTemplate(file.path);
-        return this.env.applyTransforms([this.multiStepTransform], {
+        const multiStepTransform = createMultiStepTransform();
+        const filter = file => isFilePending(file) && multiStepTransform.templateFileFs.isTemplate(file.path);
+        return this.env.applyTransforms([multiStepTransform], {
           name: 'applying multi-step templates',
           streamOptions: { filter },
         } as any);
@@ -138,28 +126,16 @@ export default class BootstrapGenerator extends BaseGenerator {
       queueName: MULTISTEP_TRANSFORM_QUEUE,
       once: true,
     });
-  }
 
-  /**
-   * Queue environment's commit task.
-   */
-  queueCommit() {
-    this.logger.debug('Queueing conflicts task');
-    (this as any).queueTask(
-      {
-        method: async () => {
-          this.logger.debug('Adding queueCommit event listener');
-          this.env.sharedFs.once('change', () => {
-            this.queueCommit();
-          });
-          await this.commitSharedFs();
-        },
-      },
-      {
-        priorityName: 'conflicts',
-        once: 'write memory fs to disk',
+    const onChangeListener = file => {
+      if (createMultiStepTransform().templateFileFs.isTemplate(file)) {
+        this.queueMultistepTransform();
+      } else {
+        this.env.sharedFs.once('change', onChangeListener);
       }
-    );
+    };
+
+    this.env.sharedFs.once('change', onChangeListener);
   }
 
   /**
@@ -168,38 +144,21 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
     const { skipYoResolve } = this.options;
-    const env: any = this.env;
-
     const { ignoreErrors } = this.options;
-
-    const conflicterStatus = {
-      fileActions: [
-        {
-          key: 'i',
-          name: 'ignore, do not overwrite and remember (experimental)',
-          value: (file: any) => {
-            const { relativeFilePath } = file;
-            env.fs.append(`${this.env.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
-            return 'skip';
-          },
-        },
-      ],
-    };
 
     const prettierOptions = { packageJson: true, java: !this.jhipsterConfig.skipServer };
     const prettierTransformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
 
     const transformStreams = [
-      ...(skipYoResolve ? [] : [createApplyYoResolveTransform(env.conflicter)]),
-      createForceYoRcTransform(),
+      ...(skipYoResolve ? [] : [createYoResolveTransform()]),
+      forceYoFiles(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFilesTransform(),
       ...(this.skipPrettier ? [] : [createPrettierTransform(prettierOptions, this, prettierTransformOptions)]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
-      createConflicterCheckTransform(env.conflicter, conflicterStatus),
-      createConflicterStatusTransform(),
+      createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),
     ];
 
-    await env.fs.commit(transformStreams, stream);
+    await this.fs.commit(transformStreams, stream);
   }
 }

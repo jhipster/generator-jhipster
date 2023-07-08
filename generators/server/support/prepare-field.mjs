@@ -91,9 +91,9 @@ export default function prepareField(entityWithConfig, field, generator) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
     const jhiFieldNamePrefix = hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
-    if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType)) {
+    if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType ?? entityWithConfig.databaseType)) {
       if (!jhiFieldNamePrefix) {
-        generator.logger.warn(
+        generator.log.warn(
           `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
         );
         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;

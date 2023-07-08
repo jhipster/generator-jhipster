@@ -1,4 +1,4 @@
-import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { expect } from 'esmocha';
 
 import { detectCrLf } from './auto-crlf-transform.mjs';
 import { defaultHelpers as helpers } from '../../../test/support/helpers.mjs';

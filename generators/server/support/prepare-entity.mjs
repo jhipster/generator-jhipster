@@ -44,7 +44,7 @@ export default function prepareEntity(entity) {
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
 
-  if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
+  if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entity.jhiPrefix) {
     entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
   } else {
     entity.entityInstanceDbSafe = entity.entityInstance;
