@@ -38,7 +38,7 @@ import {
   HELM_MARIADB,
   HELM_MYSQL,
   HELM_POSTGRESQL,
-  HELM_MOGODB_REPLICASET,
+  HELM_MONGODB_REPLICASET,
   HELM_COUCHBASE_OPERATOR,
 } from '../generator-constants.mjs';
 import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
@@ -152,7 +152,7 @@ export function setupHelmConstants() {
   this.HELM_MARIADB = HELM_MARIADB;
   this.HELM_MYSQL = HELM_MYSQL;
   this.HELM_POSTGRESQL = HELM_POSTGRESQL;
-  this.HELM_MOGODB_REPLICASET = HELM_MOGODB_REPLICASET;
+  this.HELM_MONGODB_REPLICASET = HELM_MONGODB_REPLICASET;
   this.HELM_COUCHBASE_OPERATOR = HELM_COUCHBASE_OPERATOR;
 }
 

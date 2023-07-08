@@ -13,6 +13,7 @@
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.9.5</gatling.version>
+        <h2.version>2.2.220</h2.version>
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.3.1</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
@@ -21,14 +22,15 @@
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.0.3</micrometer-context-propagation.version>
+        <picocli.version>4.7.4</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
-        <validation-api.version>3.0.2.Final</validation-api.version>
+        <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.12.1</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
-        <frontend-maven-plugin.version>1.13.3</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.3.7</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
@@ -53,6 +55,7 @@
         <openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
+        <spotless-maven-plugin.version>2.37.0</spotless-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -86,6 +89,11 @@
               <groupId>io.gatling.highcharts</groupId>
               <artifactId>gatling-charts-highcharts</artifactId>
               <version>${gatling.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.h2database</groupId>
+              <artifactId>h2</artifactId>
+              <version>${h2.version}</version>
             </dependency>
             <dependency>
               <groupId>io.projectreactor.tools</groupId>
@@ -126,6 +134,11 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct</artifactId>
               <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>info.picocli</groupId>
+              <artifactId>picocli</artifactId>
+              <version>${picocli.version}</version>
             </dependency>
             <dependency>
               <groupId>org.springframework.pulsar</groupId>
@@ -276,6 +289,11 @@
                   <groupId>org.sonarsource.scanner.maven</groupId>
                   <artifactId>sonar-maven-plugin</artifactId>
                   <version>${sonar-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${spotless-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

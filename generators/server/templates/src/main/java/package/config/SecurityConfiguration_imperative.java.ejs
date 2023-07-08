@@ -31,7 +31,9 @@ import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<%_ if (!skipClient) { _%>
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
+<%_ } _%>
 import org.springframework.security.web.SecurityFilterChain;
 <%_ if (!skipClient || authenticationUsesCsrf) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -81,7 +83,6 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
-import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
@@ -96,8 +97,11 @@ import <%= packageName %>.security.oauth2.CustomClaimConverter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
 
+<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
+import static org.springframework.security.config.Customizer.withDefaults;
+<%_ } _%>
+
 @Configuration
-@EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
@@ -129,6 +133,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+<%_ if (!applicationTypeMicroservice) { _%>
+            .cors(withDefaults())
+<%_ } _%>
             .csrf(csrf -> csrf
 <%_ if (devDatabaseTypeH2Any) { _%>
                 .ignoringRequestMatchers("/h2-console/**")
@@ -151,7 +158,7 @@ public class SecurityConfiguration {
 <%_ if (!skipClient) { _%>
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
-                .frameOptions(frameOptions -> frameOptions.sameOrigin())
+                .frameOptions(FrameOptionsConfig::sameOrigin)
                 .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 .permissionsPolicy(permissions ->
                     permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))

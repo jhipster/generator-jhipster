@@ -1,20 +1,15 @@
-import _ from 'lodash';
-
-const { escapeRegExp } = _;
+import properties from 'dot-properties';
 
 // eslint-disable-next-line import/prefer-default-export
 export const addSpringFactory =
   ({ key, value }) =>
   content => {
-    const match = content?.match(`${escapeRegExp(key)}(\\w*)=`);
-    if (match) {
-      const matchEnd = match.index + match[0].length;
-      content = `${content.slice(0, matchEnd)}\\
-${value},${content.slice(matchEnd)}`;
-    } else {
-      content = `${content ? `${content.trimEnd()}\n\n` : ''}${key}=\\
-${value}
-`;
+    const obj = properties.parse(content ?? '');
+    const oldContent = obj[key] as string;
+    const factories = (oldContent?.split(',') ?? []).map(val => val.trim());
+    if (factories.includes(value)) {
+      return content;
     }
-    return content;
+    obj[key] = [...factories, value].join(',');
+    return properties.stringify(obj);
   };

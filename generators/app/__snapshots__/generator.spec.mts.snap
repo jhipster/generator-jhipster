@@ -54,7 +54,7 @@ Options:
   --enable-hibernate-cache                 Enable hibernate cache
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
-  --message-broker <value>                 message brooker
+  --message-broker <value>                 message broker
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --prettier-tab-width                     Default tab width for prettier
   --with-admin-ui                          Generate administrative user interface
@@ -337,6 +337,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "gradle-liquibase": "'GRADLE-LIQUIBASE-VERSION'",
     "gradle-modernizer-plugin": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",
     "gradle-sonarqube": "'GRADLE-SONARQUBE-VERSION'",
+    "h2": "'H-2-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
     "hibernate": "'HIBERNATE-VERSION'",
@@ -367,8 +368,11 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "node-gradle": "'NODE-GRADLE-VERSION'",
     "nohttp-checkstyle": "'NOHTTP-CHECKSTYLE-VERSION'",
     "openapi-generator-maven-plugin": "'OPENAPI-GENERATOR-MAVEN-PLUGIN-VERSION'",
+    "picocli": "'PICOCLI-VERSION'",
     "properties-maven-plugin": "'PROPERTIES-MAVEN-PLUGIN-VERSION'",
     "sonar-maven-plugin": "'SONAR-MAVEN-PLUGIN-VERSION'",
+    "spotless-gradle-plugin": "'SPOTLESS-GRADLE-PLUGIN-VERSION'",
+    "spotless-maven-plugin": "'SPOTLESS-MAVEN-PLUGIN-VERSION'",
     "spring-boot": "'SPRING-BOOT-VERSION'",
     "spring-pulsar": "'SPRING-PULSAR-VERSION'",
     "typesafe": "'TYPESAFE-VERSION'",
@@ -410,6 +414,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "liquibaseDefaultSchemaName": "",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -873,6 +878,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "gradle-liquibase": "'GRADLE-LIQUIBASE-VERSION'",
     "gradle-modernizer-plugin": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",
     "gradle-sonarqube": "'GRADLE-SONARQUBE-VERSION'",
+    "h2": "'H-2-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
     "hibernate": "'HIBERNATE-VERSION'",
@@ -903,8 +909,11 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "node-gradle": "'NODE-GRADLE-VERSION'",
     "nohttp-checkstyle": "'NOHTTP-CHECKSTYLE-VERSION'",
     "openapi-generator-maven-plugin": "'OPENAPI-GENERATOR-MAVEN-PLUGIN-VERSION'",
+    "picocli": "'PICOCLI-VERSION'",
     "properties-maven-plugin": "'PROPERTIES-MAVEN-PLUGIN-VERSION'",
     "sonar-maven-plugin": "'SONAR-MAVEN-PLUGIN-VERSION'",
+    "spotless-gradle-plugin": "'SPOTLESS-GRADLE-PLUGIN-VERSION'",
+    "spotless-maven-plugin": "'SPOTLESS-MAVEN-PLUGIN-VERSION'",
     "spring-boot": "'SPRING-BOOT-VERSION'",
     "spring-pulsar": "'SPRING-PULSAR-VERSION'",
     "typesafe": "'TYPESAFE-VERSION'",
@@ -946,6 +955,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "liquibaseDefaultSchemaName": "",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -1408,6 +1418,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "gradle-liquibase": "'GRADLE-LIQUIBASE-VERSION'",
     "gradle-modernizer-plugin": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",
     "gradle-sonarqube": "'GRADLE-SONARQUBE-VERSION'",
+    "h2": "'H-2-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
     "hibernate": "'HIBERNATE-VERSION'",
@@ -1438,8 +1449,11 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "node-gradle": "'NODE-GRADLE-VERSION'",
     "nohttp-checkstyle": "'NOHTTP-CHECKSTYLE-VERSION'",
     "openapi-generator-maven-plugin": "'OPENAPI-GENERATOR-MAVEN-PLUGIN-VERSION'",
+    "picocli": "'PICOCLI-VERSION'",
     "properties-maven-plugin": "'PROPERTIES-MAVEN-PLUGIN-VERSION'",
     "sonar-maven-plugin": "'SONAR-MAVEN-PLUGIN-VERSION'",
+    "spotless-gradle-plugin": "'SPOTLESS-GRADLE-PLUGIN-VERSION'",
+    "spotless-maven-plugin": "'SPOTLESS-MAVEN-PLUGIN-VERSION'",
     "spring-boot": "'SPRING-BOOT-VERSION'",
     "spring-pulsar": "'SPRING-PULSAR-VERSION'",
     "typesafe": "'TYPESAFE-VERSION'",
@@ -1481,6 +1495,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "liquibaseDefaultSchemaName": "",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",

@@ -5,6 +5,8 @@ configurations {
 dependencies {
   implementation "org.liquibase:liquibase-core"
   liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:<%- javaDependencies.picocli %>"
 <%_ if (databaseTypeSql && !reactive) { _%>
 
   liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
@@ -49,9 +51,13 @@ liquibase {
       driver "<%= devJdbcDriver %>"
       url "<%- devLiquibaseUrl %>"
       username "<%- devDatabaseUsername %>"
+<%_ if (devDatabasePassword) { _%>
       password "<%- devDatabasePassword %>"
-      changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
-      defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
+<%_ } _%>
+      changelogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
+<%_ if (liquibaseDefaultSchemaName) { _%>
+      defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
+<%_ } _%>
       logLevel "debug"
       classpath "<%= SERVER_MAIN_RES_DIR %>"
     }
@@ -59,12 +65,16 @@ liquibase {
       driver "<%= devJdbcDriver %>"
       url "<%- devLiquibaseUrl %>"
       username "<%- devDatabaseUsername %>"
+<%_ if (devDatabasePassword) { _%>
       password "<%- devDatabasePassword %>"
-      changeLogFile project.ext.diffChangelogFile
+<%_ } _%>
+      changelogFile project.ext.diffChangelogFile
 <%_ if (!reactive) { _%>
       referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
 <%_ } _%>
-      defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
+<%_ if (liquibaseDefaultSchemaName) { _%>
+      defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
+<%_ } _%>
       logLevel "debug"
       classpath "$buildDir/classes/java/main"
 <%_ if (authenticationTypeOauth2) { _%>
