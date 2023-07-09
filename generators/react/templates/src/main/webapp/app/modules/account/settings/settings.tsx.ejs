@@ -39,6 +39,7 @@ export const SettingsPage = () => {
     setValue,
     formState: { errors, touchedFields },
   } = useForm({
+      mode: 'onTouched',
       defaultValues: {
         firstName: account?.firstName,
         lastName: account?.lastName,

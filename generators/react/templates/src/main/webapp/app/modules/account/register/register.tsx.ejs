@@ -28,7 +28,7 @@ import { useForm } from 'react-hook-form';
 
 export const RegisterPage = () => {
 
-  const { register, handleSubmit, setValue, formState: { errors, touchedFields }} = useForm();
+  const { register, handleSubmit, setValue, formState: { errors, touchedFields }} = useForm({ mode: 'onTouched'});
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
 

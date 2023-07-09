@@ -73,6 +73,7 @@ export const UserManagementUpdate = () => {
     setValue,
     formState: { errors, touchedFields },
   } = useForm({
+        mode: 'onTouched',
         defaultValues: {
           id: user?.id,
           login: user?.login,
