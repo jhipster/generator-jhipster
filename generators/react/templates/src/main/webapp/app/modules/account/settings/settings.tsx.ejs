@@ -38,17 +38,19 @@ export const SettingsPage = () => {
     handleSubmit,
     setValue,
     formState: { errors, touchedFields },
-  } = useForm({
-      mode: 'onTouched',
-      defaultValues: {
-        firstName: account?.firstName,
-        lastName: account?.lastName,
-        email: account?.email,
+    reset: resetAsyncForm
+  } = useForm({ mode: 'onTouched' });
+
+  useEffect(() => {
+    resetAsyncForm({
+      firstName: account?.firstName,
+      lastName: account?.lastName,
+      email: account?.email,
 <%_ if (enableTranslation) { _%>
-        langKey: account?.langKey,
+      langKey: account?.langKey,
 <%_ } _%>
-      } as DefaultValues<FieldValues>
-  });
+    } as FieldValues);
+  }, [account]);
 
   useEffect(() => {
     dispatch(getSession());

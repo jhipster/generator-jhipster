@@ -21,7 +21,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, Form, Input } from 'reactstrap';
 import { Translate, translate, ValidatedTextInput, isEmail } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DefaultValues, FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 
 <%_ if (enableTranslation) { _%>
 import { locales, languages } from 'app/config/translation';
@@ -72,19 +72,21 @@ export const UserManagementUpdate = () => {
     handleSubmit,
     setValue,
     formState: { errors, touchedFields },
-  } = useForm({
-        mode: 'onTouched',
-        defaultValues: {
-          id: user?.id,
-          login: user?.login,
-          firstName: user?.firstName,
-          lastName: user?.lastName,
-          email: user?.email,
-          activated: user?.activated,
-          langKey: user?.langKey,
-          authorities: user?.authorities,
-        } as DefaultValues<FieldValues>
-    });
+    reset: resetAsyncForm
+  } = useForm({ mode: 'onTouched'});
+
+  useEffect(() => {
+    resetAsyncForm({
+      id: user?.id,
+      login: user?.login,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      activated: user?.activated,
+      langKey: user?.langKey,
+      authorities: user?.authorities,
+    } as FieldValues);
+  }, [user]);
 
   return (
     <div>
