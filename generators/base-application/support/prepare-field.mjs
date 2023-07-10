@@ -57,7 +57,7 @@ const fakeStringTemplateForFieldName = columnName => {
   } else if (columnName === 'job_title') {
     fakeTemplate = 'name.jobTitle';
   } else if (columnName === 'telephone' || columnName === 'phone') {
-    fakeTemplate = 'phone.phoneNumber';
+    fakeTemplate = 'phone.number';
   } else if (columnName === 'zip_code' || columnName === 'post_code') {
     fakeTemplate = 'address.zipCode';
   } else if (columnName === 'city') {
