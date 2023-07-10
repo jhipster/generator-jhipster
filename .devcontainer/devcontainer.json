@@ -1,0 +1,50 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.209.6/containers/java
+{
+  "name": "generator-jhipster",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "args": {
+      // Update the VARIANT arg to pick a Java version: 11, 17
+      // Append -bullseye or -buster to pin to an OS version.
+      // Use the -bullseye variants on local arm64/Apple Silicon.
+      "VARIANT": "17-bullseye"
+
+      // Defaults to generator-jhipster's default node version.
+      //"NODE_VERSION": ""
+    }
+  },
+  "mounts": [
+    // If your system OS/Architecture doesn't matches the container one, you can uncomment the following line and create node_modules_container to keep local and containers node_module usable.
+    // "source=${localWorkspaceFolder}/node_modules_container,target=/workspaces/generator-jhipster/node_modules,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/../jhipster-samples,target=/workspaces/jhipster-samples,type=bind,consistency=cached"
+  ],
+
+  "customizations": {
+    "vscode": {
+      // Set *default* container specific settings.json values on container create.
+      "settings": {
+        "java.jdt.ls.java.home": "/docker-java-home"
+      },
+
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": ["eamodio.gitlens", "esbenp.prettier-vscode", "github.vscode-github-actions", "hbenl.vscode-mocha-test-adapter"]
+    }
+  },
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
+  // Uncomment the next line to run commands after the container is created.
+  // "postCreateCommand": "cat /etc/os-release",
+
+  // Configure tool-specific properties.
+  // "customizations": {},
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "vscode"
+}
