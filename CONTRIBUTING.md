@@ -323,6 +323,30 @@ Update specific test snapshot
 Fixing lint and prettier errors
 `npm run lint-fix`
 
+## DX using vscode
+
+`generator-jhipster` add a series of vscode configurations for a better developer experience.
+
+### Development Containers
+
+Container is built using java, node and npm recommended by `generator-jhipster`.
+Once up, you should have the stack maintainers recommends.
+
+### Execution shortcuts
+
+Shortcuts are provided to easily generate integration tests samples.
+ - go to `Execute and Debug`.
+ - select the sample's github workflow.
+ - run the shortcut.
+ - select the sample.
+ - sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
+
+ Some daily builds samples are available too.
+
+### Generators tests
+
+At test tab you can run and debug individual test.
+
 ## Running integration tests locally
 
 You can run the builds locally by following below commands
