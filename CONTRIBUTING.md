@@ -335,13 +335,14 @@ Once up, you should have the stack maintainers recommends.
 ### Execution shortcuts
 
 Shortcuts are provided to easily generate integration tests samples.
- - go to `Execute and Debug`.
- - select the sample's github workflow.
- - run the shortcut.
- - select the sample.
- - sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
 
- Some daily builds samples are available too.
+- go to `Execute and Debug`.
+- select the sample's github workflow.
+- run the shortcut.
+- select the sample.
+- sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
+
+Some daily builds samples are available too.
 
 ### Generators tests
 
