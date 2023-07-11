@@ -6,6 +6,8 @@ FROM mcr.microsoft.com/vscode/devcontainers/java:0-${VARIANT}
 
 # [Choice] Node.js version: none, lts/*, defaults to generator-jhipster default node version.
 ARG NODE_VERSION
+
+# Copy required generator-jhipster resource to detect node and npm versions
 COPY /package.json /tmp/generator-jhipster/
 COPY /generators /tmp/generator-jhipster/generators
 COPY /test-integration /tmp/generator-jhipster/test-integration
