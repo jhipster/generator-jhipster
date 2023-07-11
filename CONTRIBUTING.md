@@ -289,19 +289,19 @@ Run every test with lint/prettier
 `npm test`
 
 Run every test without lint/prettier
-`npx mocha`
+`npx esmocha`
 
 Update every test snapshot
 `npm run update-snapshots`
 
 Run specific tests
-`npx mocha <path>`
+`npx esmocha <path>`
 
 Run specific tests in series (improved error reporting)
-`npx mocha <path> --no-parallel`
+`npx esmocha <path> --no-parallel`
 
 Update specific test snapshot
-`npm run update-snapshot -- <path>` or `npx mocha <path> --no-parallel --updateSnapshot`
+`npm run update-snapshot -- <path>` or `npx esmocha <path> --no-parallel --update-snapshot`
 
 Fixing lint and prettier errors
 `npm run lint-fix`
