@@ -57,7 +57,7 @@ const fakeStringTemplateForFieldName = columnName => {
   } else if (columnName === 'job_title') {
     fakeTemplate = 'name.jobTitle';
   } else if (columnName === 'telephone' || columnName === 'phone') {
-    fakeTemplate = 'phone.phoneNumber';
+    fakeTemplate = 'phone.number';
   } else if (columnName === 'zip_code' || columnName === 'post_code') {
     fakeTemplate = 'address.zipCode';
   } else if (columnName === 'city') {
@@ -123,23 +123,23 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
   } else if (field.fieldIsEnum) {
     if (field.fieldValues.length !== 0) {
       const enumValues = field.enumValues;
-      data = enumValues[faker.datatype.number(enumValues.length - 1)].name;
+      data = enumValues[faker.number.int(enumValues.length - 1)].name;
     } else {
       this.log.warn(`Enum ${field.fieldType} is not valid`);
       data = undefined;
     }
   } else if (field.fieldType === DURATION && type === 'cypress') {
-    data = `PT${faker.datatype.number({ min: 1, max: 59 })}M`;
+    data = `PT${faker.number.int({ min: 1, max: 59 })}M`;
 
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL, DURATION].includes(field.fieldType)) {
-    data = faker.datatype.number({
-      max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : undefined,
-      min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : undefined,
+    data = faker.number.int({
+      max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : 32767,
+      min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : 0,
     });
   } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE].includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
-    const date = faker.date.recent(1, changelogDate);
+    const date = faker.date.recent({ days: 1, refDate: changelogDate });
     const isoDate = date.toISOString();
     if (field.fieldType === LOCAL_DATE) {
       data = isoDate.split('T')[0];
@@ -160,9 +160,9 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
   } else if (field.fieldType === BYTES && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
-    data = field.id ? faker.datatype.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName));
+    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName));
   } else if (field.fieldType === UUID) {
-    data = faker.datatype.uuid();
+    data = faker.string.uuid();
   } else if (field.fieldType === BOOLEAN) {
     data = faker.datatype.boolean();
   } else {

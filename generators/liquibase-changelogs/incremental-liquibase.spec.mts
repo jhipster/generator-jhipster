@@ -1153,7 +1153,7 @@ entity Customer {
         entity: jdlApplicationEntitieWithByteTypes,
         bytesFields: true,
         testContent:
-          '1;geez;4178;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;17242',
+          '1;geez;1369;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;5650',
         contentRequired: true,
       },
       {
