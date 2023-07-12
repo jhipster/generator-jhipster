@@ -125,7 +125,7 @@
     "parse-gitignore": "2.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.8.8",
-    "prettier-plugin-java": "2.1.0",
+    "prettier-plugin-java": "2.2.0",
     "prettier-plugin-packagejson": "2.4.4",
     "progress": "2.0.3",
     "randexp": "0.5.3",
