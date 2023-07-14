@@ -32,7 +32,7 @@
     "css-loader": "6.8.1",
     "css-minimizer-webpack-plugin": "5.0.1",
     "eslint": "8.44.0",
-    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-prettier": "5.0.0",
     "eslint-plugin-vue": "8.7.1",
     "folder-hash": "4.0.4",
     "happy-dom": "10.3.2",
