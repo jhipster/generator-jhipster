@@ -433,7 +433,7 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
     }
 <%_ } _%>
-<%_ if (searchEngineAny) { _%>
+<%_ if (searchEngineAny && !searchEngineNo) { _%>
 
     /**
      * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding

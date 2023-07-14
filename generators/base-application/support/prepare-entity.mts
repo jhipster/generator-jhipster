@@ -39,7 +39,7 @@ import { Entity } from '../types/index.mjs';
 const { sortedUniq, intersection } = _;
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
+const { PaginationTypes, ServiceTypes, MapperTypes, SearchTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
@@ -50,6 +50,7 @@ const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const { SERVICE_IMPL } = ServiceTypes;
 const NO_SERVICE = ServiceTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
+const NO_SEARCHENGINE = SearchTypes.NO;
 const NO_MAPPER = MapperTypes.NO;
 
 const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
@@ -102,12 +103,14 @@ const BASE_TEMPLATE_DATA = {
 
 function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
+  const searchEngine = entityWithConfig.searchEngineNo;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
   _.defaults(entityWithConfig, {
     paginationPagination: pagination === PAGINATION,
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
+    searchEngineNo: searchEngine === NO_SEARCHENGINE,
     dtoMapstruct: dto === MAPSTRUCT,
     serviceImpl: service === SERVICE_IMPL,
     serviceNo: service === NO_SERVICE,
