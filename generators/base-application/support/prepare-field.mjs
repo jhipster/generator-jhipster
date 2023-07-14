@@ -59,15 +59,15 @@ const fakeStringTemplateForFieldName = columnName => {
   } else if (columnName === 'telephone' || columnName === 'phone') {
     fakeTemplate = 'phone.number';
   } else if (columnName === 'zip_code' || columnName === 'post_code') {
-    fakeTemplate = 'location.zipCode';
+    fakeTemplate = 'address.zipCode';
   } else if (columnName === 'city') {
-    fakeTemplate = 'location.city';
+    fakeTemplate = 'address.city';
   } else if (columnName === 'street_name' || columnName === 'street') {
-    fakeTemplate = 'location.street';
+    fakeTemplate = 'address.streetName';
   } else if (columnName === 'country') {
-    fakeTemplate = 'location.country';
+    fakeTemplate = 'address.country';
   } else if (columnName === 'country_code') {
-    fakeTemplate = 'location.countryCode';
+    fakeTemplate = 'address.countryCode';
   } else if (columnName === 'color') {
     fakeTemplate = 'commerce.color';
   } else if (columnName === 'account') {
