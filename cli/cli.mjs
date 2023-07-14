@@ -33,10 +33,16 @@ const __dirname = dirname(__filename);
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
 
-if (!process.argv.includes('--skip-checks') && !semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
-  logger.fatal(
-    `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`,
-  );
+if (!process.argv.includes('--skip-checks')) {
+  if (
+    !semver.satisfies(currentNodeVersion, minimumNodeVersion) &&
+    // Allow upgrade to be executed using node 16 due to https://github.com/jhipster/generator-jhipster/issues/20349
+    (!process.argv.includes('upgrade') || !semver.satisfies(currentNodeVersion, '^16.0.0'))
+  ) {
+    logger.fatal(
+      `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`,
+    );
+  }
 }
 
 if (
