@@ -156,7 +156,7 @@
     "concurrently": "8.2.0",
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.0",
-    "eslint": "8.44.0",
+    "eslint": "8.45.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-chai-friendly": "0.7.2",
