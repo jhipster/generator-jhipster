@@ -60,7 +60,7 @@ type ApplicationPropertiesNeedles = {
 export function insertContentIntoApplicationProperties(
   this: CoreGenerator | void,
   application: SpringBootApplication,
-  needles: ApplicationPropertiesNeedles
+  needles: ApplicationPropertiesNeedles,
 ) {
   if (this) {
     return createBaseNeedle.call(
@@ -69,13 +69,13 @@ export function insertContentIntoApplicationProperties(
         filePath: `${application.javaPackageSrcDir}config/ApplicationProperties.java`,
         needlesPrefix: 'application-properties',
       },
-      needles
+      needles,
     );
   }
   return createBaseNeedle(
     {
       needlesPrefix: 'application-properties',
     },
-    needles
+    needles,
   );
 }

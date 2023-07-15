@@ -29,7 +29,7 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
   };
 `;
   this.editFile(`${clientSrcDir}app/shared/language/find-language-from-key.pipe.ts`, { ignoreNonExisting }, content =>
-    content.replace(/{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g, newContent)
+    content.replace(/{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g, newContent),
   );
 }
 
@@ -43,7 +43,7 @@ function updateLanguagesInConstantsTask(this: BaseGenerator, { application, cont
   newContent += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n];';
 
   this.editFile(`${clientSrcDir}app/config/language.constants.ts`, { ignoreNonExisting }, content =>
-    content.replace(/export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g, newContent)
+    content.replace(/export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g, newContent),
   );
 }
 
@@ -59,7 +59,7 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
     '                ]';
 
   this.editFile('webpack/webpack.custom.js', { ignoreNonExisting }, content =>
-    content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent)
+    content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent),
   );
 }
 

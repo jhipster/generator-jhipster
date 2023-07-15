@@ -111,7 +111,7 @@ export default class InitGenerator extends BaseGenerator {
           const result = await git.log(['-n', '1', '--', '.yo-rc.json']).catch(() => {});
           if (result && result.total > 0) {
             this.log.info(
-              `Found .yo-rc.json in Git from ${repositoryRoot}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
+              `Found .yo-rc.json in Git from ${repositoryRoot}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`,
             );
             return;
           }
@@ -130,7 +130,7 @@ export default class InitGenerator extends BaseGenerator {
             this.log.ok(`Application successfully committed to Git from ${repositoryRoot}.`);
           } catch (e) {
             this.log.warn(
-              chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually. (${(e as any).message})`)
+              chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually. (${(e as any).message})`),
             );
           }
         };

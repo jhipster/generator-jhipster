@@ -37,6 +37,6 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         enableTranslation: false,
         nativeLanguage: 'en',
         languages: ['fr'],
-      })
+      }),
   );
 });

@@ -78,7 +78,7 @@ describe('jdl - JDLOptions', () => {
               name: unaryOptions.SKIP_CLIENT,
               entityNames: ['A', 'B', 'C', 'J'],
               excludedNames: ['M', 'N', 'O'],
-            })
+            }),
           );
         });
       });
@@ -102,7 +102,7 @@ describe('jdl - JDLOptions', () => {
           new JDLUnaryOption({
             name: unaryOptions.SKIP_CLIENT,
             entityNames: ['A'],
-          })
+          }),
         );
         expect(options.has(unaryOptions.SKIP_CLIENT)).to.be.true;
         expect(options.has(unaryOptions.SKIP_SERVER)).to.be.false;
@@ -123,7 +123,7 @@ describe('jdl - JDLOptions', () => {
           name: unaryOptions.SKIP_CLIENT,
           entityNames: ['A', 'B', 'C'],
           excludedNames: ['M'],
-        })
+        }),
       );
       expect(options.size()).to.equal(1);
     });
@@ -136,12 +136,12 @@ describe('jdl - JDLOptions', () => {
       jdlOptions.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-        })
+        }),
       );
       jdlOptions.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_SERVER,
-        })
+        }),
       );
     });
 
@@ -228,7 +228,7 @@ describe('jdl - JDLOptions', () => {
           name: unaryOptions.SKIP_CLIENT,
           entityNames: ['A', 'B', 'C'],
           excludedNames: ['M'],
-        })
+        }),
       );
       options.addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_SERVER, entityNames: ['D'] }));
       options.addOption(
@@ -236,7 +236,7 @@ describe('jdl - JDLOptions', () => {
           name: unaryOptions.SKIP_CLIENT,
           entityNames: ['A', 'J'],
           excludedNames: ['N', 'O'],
-        })
+        }),
       );
     });
 

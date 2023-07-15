@@ -49,7 +49,7 @@ function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
         entityName,
         entityTableName: getTableNameFromEntityName(jdlEntity.tableName),
         javadoc: formatComment(jdlEntity.comment),
-      })
+      }),
     );
   });
   return convertedEntities;

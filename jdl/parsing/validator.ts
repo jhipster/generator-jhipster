@@ -600,6 +600,6 @@ function getFirstToken(tokOrCstNode) {
   // CST Node - - assumes no nested CST Nodes, only terminals
   return _.flatten(Object.values(tokOrCstNode.children)).reduce<any>(
     (firstTok: any, nextTok: any) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok),
-    { startOffset: Infinity }
+    { startOffset: Infinity },
   );
 }

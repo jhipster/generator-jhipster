@@ -395,7 +395,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
                 page,
               },
             });
-          })
+          }),
         );
       },
     });

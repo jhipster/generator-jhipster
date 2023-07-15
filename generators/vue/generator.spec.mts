@@ -128,7 +128,7 @@ describe(`generator - ${clientFramework}`, () => {
               "  const JhiConfigurationComponent = () => import('@/admin/configuration/configuration.vue');\n" +
                 "  const JhiHealthComponent = () => import('@/admin/health/health.vue');\n" +
                 "  const JhiLogsComponent = () => import('@/admin/logs/logs.vue');\n" +
-                "  const JhiMetricsComponent = () => import('@/admin/metrics/metrics.vue');"
+                "  const JhiMetricsComponent = () => import('@/admin/metrics/metrics.vue');",
             );
             assertion(
               `${clientSrcDir}app/router/admin.ts`,
@@ -156,7 +156,7 @@ describe(`generator - ${clientFramework}`, () => {
       name: 'JhiConfigurationComponent',
       component: JhiConfigurationComponent,
       meta: { authorities: [Authority.ADMIN] }
-    },`
+    },`,
             );
             assertion(
               `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
@@ -175,7 +175,7 @@ describe(`generator - ${clientFramework}`, () => {
                 '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
                 '            <font-awesome-icon icon="tasks" />\n' +
                 '            <span v-text="t$(\'global.menu.admin.logs\')"></span>\n' +
-                '          </b-dropdown-item>'
+                '          </b-dropdown-item>',
             );
           });
         }

@@ -175,7 +175,7 @@ export default class JDLRelationship implements JDLRelationshipModel {
 }
 
 function mergeDefaultsWithOverrides(
-  overrides: Partial<JDLRelationshipModel> & Pick<JDLRelationshipModel, 'from' | 'to' | 'type'>
+  overrides: Partial<JDLRelationshipModel> & Pick<JDLRelationshipModel, 'from' | 'to' | 'type'>,
 ): JDLRelationshipModel {
   const defaultOptions = defaults();
   const mergedOptions = {

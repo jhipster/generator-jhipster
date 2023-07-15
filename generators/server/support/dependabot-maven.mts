@@ -34,6 +34,6 @@ export function getPomVersionProperties(pomContent: string): Record<string, stri
   return Object.fromEntries(
     Object.entries(getPomProperties(pomContent))
       .filter(([property]) => property.endsWith('.version'))
-      .map(([property, value]) => [property.slice(0, -8), value])
+      .map(([property, value]) => [property.slice(0, -8), value]),
   );
 }

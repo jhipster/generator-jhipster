@@ -79,7 +79,7 @@ describe('jdl - FieldTypes', () => {
         expect(
           fieldTypes.getIsType('sql', () => {
             // do nothing
-          })
+          }),
         ).to.equal(fieldTypes.isCommonDBType);
       });
     });
@@ -89,7 +89,7 @@ describe('jdl - FieldTypes', () => {
           fieldTypes.getIsType('thing', () => {});
         }).to.throw(
           "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
-            " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'"
+            " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'",
         );
       });
     });

@@ -83,8 +83,8 @@ describe('jdl - ValidationValidator', () => {
                 new JDLValidation({
                   name: 'minlength',
                   value: 0.001,
-                })
-              )
+                }),
+              ),
             ).to.throw(/^Decimal values are forbidden for the minlength validation.$/);
           });
         });
@@ -95,8 +95,8 @@ describe('jdl - ValidationValidator', () => {
                 new JDLValidation({
                   name: 'maxlength',
                   value: 0.001,
-                })
-              )
+                }),
+              ),
             ).to.throw(/^Decimal values are forbidden for the maxlength validation.$/);
           });
         });
@@ -107,8 +107,8 @@ describe('jdl - ValidationValidator', () => {
                 new JDLValidation({
                   name: 'minbytes',
                   value: 0.001,
-                })
-              )
+                }),
+              ),
             ).to.throw(/^Decimal values are forbidden for the minbytes validation.$/);
           });
         });
@@ -119,8 +119,8 @@ describe('jdl - ValidationValidator', () => {
                 new JDLValidation({
                   name: 'maxbytes',
                   value: 0.001,
-                })
-              )
+                }),
+              ),
             ).to.throw(/^Decimal values are forbidden for the maxbytes validation.$/);
           });
         });

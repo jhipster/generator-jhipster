@@ -232,7 +232,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asConfiguringEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['configuringEachEntityTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['configuringEachEntityTaskParam']>,
   ): GenericTaskGroup<this, Definition['configuringEachEntityTaskParam']> {
     return taskGroup;
   }
@@ -241,7 +241,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asLoadingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['loadingEntitiesTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['loadingEntitiesTaskParam']>,
   ): GenericTaskGroup<this, Definition['loadingEntitiesTaskParam']> {
     return taskGroup;
   }
@@ -250,7 +250,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityTaskParam']>,
   ): GenericTaskGroup<this, Definition['preparingEachEntityTaskParam']> {
     return taskGroup;
   }
@@ -259,7 +259,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPreparingEachEntityFieldTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityFieldTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityFieldTaskParam']>,
   ): GenericTaskGroup<this, Definition['preparingEachEntityFieldTaskParam']> {
     return taskGroup;
   }
@@ -268,7 +268,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPreparingEachEntityRelationshipTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityRelationshipTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityRelationshipTaskParam']>,
   ): GenericTaskGroup<this, Definition['preparingEachEntityRelationshipTaskParam']> {
     return taskGroup;
   }
@@ -277,7 +277,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']>,
   ): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']> {
     return taskGroup;
   }
@@ -286,7 +286,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['writingEntitiesTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['writingEntitiesTaskParam']>,
   ): GenericTaskGroup<this, Definition['writingEntitiesTaskParam']> {
     return taskGroup;
   }
@@ -295,7 +295,7 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']>,
   ): GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']> {
     return taskGroup;
   }

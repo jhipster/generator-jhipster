@@ -58,7 +58,7 @@ function checkForDuplicatedFields(entityName: string, fieldDeclarations: FieldDe
             ruleName: rulesNames.FLD_DUPLICATED,
             fieldName,
             entityName,
-          })
+          }),
         );
       }
     } else {

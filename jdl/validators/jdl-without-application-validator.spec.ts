@@ -50,7 +50,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         jdlObject.addEntity(
           new JDLEntity({
             name: 'Continue',
-          })
+          }),
         );
         validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
       });
@@ -70,7 +70,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           new JDLEntity({
             name: 'valid',
             tableName: 'continue',
-          })
+          }),
         );
         const logger = {
           warn: callParameter => {
@@ -82,14 +82,14 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           {
             databaseType: databaseTypes.SQL,
           },
-          logger
+          logger,
         );
         validator.checkForErrors();
       });
 
       it('should warn', () => {
         expect(parameter).to.equal(
-          "The table name 'continue' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
+          "The table name 'continue' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.",
         );
       });
     });
@@ -105,7 +105,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           new JDLField({
             name: 'catch',
             type: fieldTypes.CommonDBTypes.STRING,
-          })
+          }),
         );
         jdlObject.addEntity(entity);
         const logger = {
@@ -118,7 +118,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           {
             databaseType: databaseTypes.SQL,
           },
-          logger
+          logger,
         );
         validator.checkForErrors();
       });
@@ -139,7 +139,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             new JDLField({
               name: 'validField',
               type: 'UNKNOWN-TYPE',
-            })
+            }),
           );
           const jdlObject = new JDLObject();
           jdlObject.addEntity(validEntity);
@@ -167,7 +167,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           new JDLField({
             name: 'validField',
             type: 'WeirdType',
-          })
+          }),
         );
         const jdlObject = new JDLObject();
         jdlObject.addEntity(validEntity);
@@ -197,7 +197,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           new JDLValidation({
             name: MIN,
             value: 42,
-          })
+          }),
         );
         entity.addField(field);
         const jdlObject = new JDLObject();
@@ -238,7 +238,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         expect(() => {
           validator.checkForErrors();
         }).to.throw(
-          "In the relationship between Source and Valid, Source is not declared. If 'Valid' is a built-in entity declare like 'Source to Valid with builtInEntity'."
+          "In the relationship between Source and Valid, Source is not declared. If 'Valid' is a built-in entity declare like 'Source to Valid with builtInEntity'.",
         );
       });
     });
@@ -302,7 +302,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           expect(() => {
             checker.checkForErrors();
           }).to.throw(
-            "In the relationship between Source and Other, Other is not declared. If 'Other' is a built-in entity declare like 'Source to Other with builtInEntity'."
+            "In the relationship between Source and Other, Other is not declared. If 'Other' is a built-in entity declare like 'Source to Other with builtInEntity'.",
           );
         });
       });
@@ -316,7 +316,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           new JDLBinaryOption({
             name: binaryOptions.Options.PAGINATION,
             value: binaryOptions.Values.pagination.PAGINATION,
-          })
+          }),
         );
         validator = createValidator(jdlObject, { databaseType: databaseTypes.CASSANDRA });
       });
@@ -337,14 +337,14 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             name: binaryOptions.Options.DTO,
             value: binaryOptions.Values.dto.MAPSTRUCT,
             entityNames: ['A', 'B', 'C'],
-          })
+          }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
             value: binaryOptions.Values.service.SERVICE_CLASS,
             entityNames: ['B'],
-          })
+          }),
         );
         validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
       });
@@ -363,31 +363,31 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         jdlObject.addEntity(
           new JDLEntity({
             name: 'A',
-          })
+          }),
         );
         jdlObject.addEntity(
           new JDLEntity({
             name: 'B',
-          })
+          }),
         );
         jdlObject.addEntity(
           new JDLEntity({
             name: 'C',
-          })
+          }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
             value: binaryOptions.Values.dto.MAPSTRUCT,
             entityNames: ['A', 'B'],
-          })
+          }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
             value: binaryOptions.Values.service.SERVICE_CLASS,
             excludedNames: ['C'],
-          })
+          }),
         );
         validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
       });
@@ -464,7 +464,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         const validator = createValidator(
           jdlObject,
           { blueprints: ['generator-jhipster-nodejs', 'generator-jhipster-dotnetcore'] },
-          logger
+          logger,
         );
         validator.checkForErrors();
       });

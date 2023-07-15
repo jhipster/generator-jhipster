@@ -58,7 +58,7 @@ const H2_PROD_DATABASE_MODE = {
 const h2GetProdDatabaseData = (
   databaseType: string,
   { extraOptions = '' }: { extraOptions?: string },
-  { prodDatabaseType, buildDirectory, itests, localDirectory, protocolSuffix }: Parameters<getData>[0]
+  { prodDatabaseType, buildDirectory, itests, localDirectory, protocolSuffix }: Parameters<getData>[0],
 ): Partial<DatabaseData> => {
   const data: Partial<DatabaseData> = {};
   if (protocolSuffix) {

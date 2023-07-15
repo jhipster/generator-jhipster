@@ -118,7 +118,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
           done(
             new Error(`You don't have the Azure CLI installed.
           Download it from:
-          ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`)
+          ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`),
           );
         });
       }),
@@ -147,7 +147,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
             if (this.azureAppServiceResourceGroupName === '') {
               this.log.verboseInfo(
                 `Your default Azure resource group is not set up. We recommend doing it using the command
-                                '${chalk.yellow('az configure --defaults group=<resource group name>')}`
+                                '${chalk.yellow('az configure --defaults group=<resource group name>')}`,
               );
               this.azureAppServiceResourceGroupName = '';
             }
@@ -309,7 +309,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
 which is free for the first 30 days`);
                       done();
                     }
-                  }
+                  },
                 );
               } else {
                 done();
@@ -352,7 +352,7 @@ which is free for the first 30 days`);
                       this.log.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
                       done();
                     }
-                  }
+                  },
                 );
               } else {
                 done();
@@ -379,7 +379,7 @@ which is free for the first 30 days`);
               throw new Error('Could not configure Azure App Service instance');
             }
             done();
-          }
+          },
         );
       }),
 
@@ -391,7 +391,7 @@ which is free for the first 30 days`);
             'com.microsoft.azure',
             'azure-webapp-maven-plugin',
             AZURE_WEBAPP_MAVEN_PLUGIN_VERSION,
-            mavenPluginConfiguration(this)
+            mavenPluginConfiguration(this),
           );
         }
       },
@@ -445,7 +445,7 @@ which is free for the first 30 days`);
                     this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
                   }
                   done();
-                }
+                },
               );
             } else {
               this.log.verboseInfo('The Azure Application Insights instance already exists, using it');
@@ -453,7 +453,7 @@ which is free for the first 30 days`);
               this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
               done();
             }
-          }
+          },
         );
       }),
 
@@ -464,7 +464,7 @@ which is free for the first 30 days`);
         this.log.verboseInfo('Adding Azure Application Insights support in the Web Application');
         this.addMavenDependency('com.microsoft.azure', 'applicationinsights-spring-boot-starter', AZURE_APP_INSIGHTS_STARTER_VERSION);
         this.log.verboseInfo(
-          `The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`
+          `The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`,
         );
         done();
       }),
@@ -528,7 +528,7 @@ which is free for the first 30 days`);
           // An exception is thrown if the folder doesn't exist
           throw new Error(
             `${chalk.red('Git is not set up on your project!')}
-You need a GitHub project correctly configured in order to use GitHub Actions.`
+You need a GitHub project correctly configured in order to use GitHub Actions.`,
           );
         }
         const gitAddCmd = 'git add .';
@@ -566,13 +566,13 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                     this.log.log(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
                     this.log.verboseInfo(
                       `For the deployment to succeed, you will need to configure a ${chalk.bold(
-                        'AZURE_CREDENTIALS'
-                      )} secret in GitHub. Type the following command to generate one for the current Azure Web Application:`
+                        'AZURE_CREDENTIALS',
+                      )} secret in GitHub. Type the following command to generate one for the current Azure Web Application:`,
                     );
                     this.log.log(
                       chalk.bold(
-                        `'az ad sp create-for-rbac --name http://${this.azureAppServiceName} --role contributor --scopes ${this.azureGroupId} --sdk-auth'`
-                      )
+                        `'az ad sp create-for-rbac --name http://${this.azureAppServiceName} --role contributor --scopes ${this.azureGroupId} --sdk-auth'`,
+                      ),
                     );
                     done();
                   }

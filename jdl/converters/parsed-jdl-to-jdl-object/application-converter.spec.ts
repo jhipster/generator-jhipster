@@ -109,7 +109,7 @@ describe('jdl - ApplicationConverter', () => {
                     useOptions: [],
                   },
                 ],
-                {}
+                {},
               );
               expectedApplication = [
                 createJDLApplication({
@@ -147,7 +147,7 @@ describe('jdl - ApplicationConverter', () => {
                 useOptions: [],
               },
             ],
-            {}
+            {},
           );
           const application = createJDLApplication({
             baseName: 'mono',
@@ -200,7 +200,7 @@ describe('jdl - ApplicationConverter', () => {
                 useOptions: [],
               },
             ],
-            {}
+            {},
           );
           const application = createJDLApplication({
             baseName: 'mono',
@@ -239,7 +239,7 @@ describe('jdl - ApplicationConverter', () => {
 
           it('should fail', () => {
             expect(() => convertApplications(applicationsToConvert, {})).to.throw(
-              /^The entity C in the dto option isn't declared in mono's entity list\.$/
+              /^The entity C in the dto option isn't declared in mono's entity list\.$/,
             );
           });
         });
@@ -265,7 +265,7 @@ describe('jdl - ApplicationConverter', () => {
                   useOptions: [],
                 },
               ],
-              {}
+              {},
             );
           });
 

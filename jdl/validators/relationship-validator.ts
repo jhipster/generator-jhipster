@@ -79,7 +79,7 @@ function checkOneToOneRelationship(jdlRelationship: JDLRelationship) {
   if (!jdlRelationship.injectedFieldInFrom) {
     throw new Error(
       `In the One-to-One relationship from ${jdlRelationship.from} to ${jdlRelationship.to}, ` +
-        'the source entity must possess the destination, or you must invert the direction of the relationship.'
+        'the source entity must possess the destination, or you must invert the direction of the relationship.',
     );
   }
 }

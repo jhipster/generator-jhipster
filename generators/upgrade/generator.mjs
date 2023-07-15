@@ -104,7 +104,7 @@ export default class UpgradeGenerator extends BaseGenerator {
 
     if (!this.config.existed) {
       throw new Error(
-        "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it."
+        "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it.",
       );
     }
   }
@@ -273,11 +273,11 @@ export default class UpgradeGenerator extends BaseGenerator {
                 this.log.warn(
                   `${chalk.green('No update available.')} Application has already been generated with latest version for blueprint: ${
                     blueprint.name
-                  }`
+                  }`,
                 );
               }
               this.success(`Done checking for new version for blueprint ${blueprint.name}`);
-            })
+            }),
         ).then(() => {
           this.success('Done checking for new version of blueprints');
         });
@@ -347,7 +347,7 @@ export default class UpgradeGenerator extends BaseGenerator {
           const gitMerge = this.gitExec(args, { silent: this.silent });
           if (gitMerge.code !== 0) {
             throw new Error(
-              `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`
+              `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`,
             );
           }
           this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
@@ -371,7 +371,7 @@ export default class UpgradeGenerator extends BaseGenerator {
                 this.success(`Done installing blueprint: ${blueprint.name}@${blueprint.version}`);
                 resolve();
               });
-            })
+            }),
           ).then(() => {
             this.success('Done installing blueprints locally');
             return true;
@@ -441,7 +441,7 @@ export default class UpgradeGenerator extends BaseGenerator {
               this.success(`Done upgrading blueprint ${blueprint.name} to version ${blueprint.latestBlueprintVersion}`);
               resolve();
             });
-          })
+          }),
         ).then(() => {
           this.success('Done upgrading blueprints');
         });

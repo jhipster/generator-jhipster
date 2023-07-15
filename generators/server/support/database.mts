@@ -133,7 +133,7 @@ export function calculateDbNameWithLimit(
   tableOrEntityName: string,
   columnOrRelationshipName: string,
   limit: number,
-  { noSnakeCase = false, prefix = '', separator = '__' }: { noSnakeCase?: boolean; prefix?: string; separator?: string } = {}
+  { noSnakeCase = false, prefix = '', separator = '__' }: { noSnakeCase?: boolean; prefix?: string; separator?: string } = {},
 ): string {
   const halfLimit = Math.floor(limit / 2);
   const suffix = `_${crypto
@@ -164,7 +164,7 @@ type ConstraintName = {
 export function calculateDbName(
   tableOrEntityName: string,
   columnOrRelationshipName: string,
-  { prodDatabaseType, noSnakeCase = false, prefix = '', suffix = '', skipCheckLengthOfIdentifier = false }: ConstraintName = {}
+  { prodDatabaseType, noSnakeCase = false, prefix = '', suffix = '', skipCheckLengthOfIdentifier = false }: ConstraintName = {},
 ): ValidationResult & { value: string } {
   const separator = '__';
   const convertCase = noSnakeCase ? str => str : hibernateSnakeCase;
@@ -195,7 +195,7 @@ type FKConstraintName = {
 export function getFKConstraintName(
   tableOrEntityName: string,
   columnOrRelationshipName: string,
-  { prodDatabaseType, noSnakeCase, skipCheckLengthOfIdentifier }: FKConstraintName = {}
+  { prodDatabaseType, noSnakeCase, skipCheckLengthOfIdentifier }: FKConstraintName = {},
 ) {
   return calculateDbName(tableOrEntityName, columnOrRelationshipName, {
     prodDatabaseType,
@@ -217,7 +217,7 @@ type JoinTableName = {
 export function getJoinTableName(
   entityName,
   relationshipName,
-  { prodDatabaseType, skipCheckLengthOfIdentifier }: JoinTableName = {}
+  { prodDatabaseType, skipCheckLengthOfIdentifier }: JoinTableName = {},
 ): ValidationResult & { value: string } {
   const separator = '__';
   const prefix = 'rel_';

@@ -64,7 +64,7 @@ export function addEntitiesRoute({ application, entities }: { application: Commo
         modulePath,
         pageTitle,
       });
-    })
+    }),
   );
 }
 
@@ -89,6 +89,6 @@ export function addToEntitiesMenu({ application, entities }: { application: Base
         contentToAdd,
         contentToCheck: routerLink,
       });
-    })
+    }),
   );
 }

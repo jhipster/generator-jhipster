@@ -160,7 +160,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
 
         this.mappingImports = this.usedMethods.map(method => `org.springframework.web.bind.annotation.${method}Mapping`);
         this.mockRequestImports = this.usedMethods.map(
-          method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`
+          method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`,
         );
 
         this.mockRequestImports =
@@ -174,17 +174,17 @@ export default class SpringControllerGenerator extends BaseGenerator {
           action.actionPath = _.kebabCase(action.actionName);
           action.actionNameUF = _.upperFirst(action.actionName);
           this.log.log(
-            chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`)
+            chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`),
           );
         });
 
         this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
-          `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
+          `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`,
         );
         this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
-          `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
+          `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`,
         );
       },
     };

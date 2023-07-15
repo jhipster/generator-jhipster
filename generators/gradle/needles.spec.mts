@@ -68,7 +68,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         '            username = "username"\n' +
         '            password = "password"\n' +
         '        }\n' +
-        '    }'
+        '    }',
     );
   });
 });

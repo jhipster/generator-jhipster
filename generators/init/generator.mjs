@@ -58,7 +58,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
       loadNodeDependencies({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_INIT, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_INIT, 'resources', 'package.json'),
         );
       },
     });

@@ -50,7 +50,7 @@ export function replaceTranslationTags(
     body: string;
     enableTranslation: boolean;
     getWebappTranslation: GetWebappTranslation;
-  }
+  },
 ) {
   body = body.replaceAll(
     /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>a|b-(?:badge|link|button|alert)|button|div|h[1-9]|input|label|p|router-link|small|span|t[hd])(?:[^>]*)) v-(?:text|html)="(?<translate>t\$\([^)]*\))"(?<afterTranslateTag>(?:(?!\/?>)[^/>])*>))(?<tagContent>(?:(?!<\/\k<tagName>(?:>|\s|\n)).|\n)*)/g,
@@ -78,7 +78,7 @@ export function replaceTranslationTags(
         }
       }
       return `${groups.beforeTranslateTag}${groups.afterTranslateTag}${groups.tagContent}`;
-    }
+    },
   );
   if (enableTranslation) {
     return body;
@@ -156,7 +156,7 @@ function translateVueFilesTransform(
   }: {
     enableTranslation: boolean;
     getWebappTranslation: GetWebappTranslation;
-  }
+  },
 ) {
   return passthrough(file => {
     let newContent;

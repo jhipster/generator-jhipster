@@ -76,7 +76,7 @@ const getFieldNameUndercored = fields =>
   ['id'].concat(
     fields.map(field => {
       return _.snakeCase(field.fieldName);
-    })
+    }),
   );
 
 function askForMicroserviceJson() {
@@ -749,7 +749,7 @@ function askForField() {
             {
               name: 'Regular expression pattern',
               value: PATTERN,
-            }
+            },
           );
         } else if ([INTEGER, LONG, FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
           opts.push(
@@ -760,7 +760,7 @@ function askForField() {
             {
               name: 'Maximum',
               value: MAX,
-            }
+            },
           );
         }
         return opts;
@@ -1113,7 +1113,7 @@ function logFieldsAndRelationships() {
       this.log.log(
         chalk.red(field.fieldName) +
           chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) +
-          chalk.cyan(validationDetails.join(' '))
+          chalk.cyan(validationDetails.join(' ')),
       );
     });
     this.log.log();
@@ -1127,8 +1127,8 @@ function logFieldsAndRelationships() {
       }
       this.log.verboseInfo(
         `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
-          relationship.relationshipType
-        )} ${chalk.cyan(validationDetails.join(' '))}`
+          relationship.relationshipType,
+        )} ${chalk.cyan(validationDetails.join(' '))}`,
       );
     });
     this.log.log();

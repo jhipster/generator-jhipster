@@ -132,7 +132,7 @@ function addOptionsFromEntityAnnotations() {
           new JDLUnaryOption({
             name: annotationName,
             entityNames: [entityName],
-          })
+          }),
         );
       } else if (annotation.type === 'BINARY') {
         if (annotationName === 'paginate') {
@@ -143,7 +143,7 @@ function addOptionsFromEntityAnnotations() {
             name: annotationName,
             value: annotation.optionValue,
             entityNames: [entityName],
-          })
+          }),
         );
       }
     });
@@ -205,7 +205,7 @@ function globallyAddMicroserviceOption(applicationName) {
       name: binaryOptions.Options.MICROSERVICE,
       value: applicationName,
       entityNames,
-    })
+    }),
   );
 }
 
@@ -217,7 +217,7 @@ function fillUnaryAndBinaryOptions() {
         name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
         value: configuration.applicationName,
         entityNames,
-      })
+      }),
     );
   }
   const convertedOptions = convertOptions(parsedContent.options, parsedContent.useOptions);

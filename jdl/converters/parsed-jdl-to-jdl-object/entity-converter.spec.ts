@@ -43,7 +43,7 @@ describe('jdl - EntityConverter', () => {
               tableName: 'b_table',
             },
           ],
-          () => []
+          () => [],
         );
       });
 

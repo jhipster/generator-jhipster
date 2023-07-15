@@ -209,7 +209,7 @@ describe('jdl - JDLField', () => {
         expect(field.toString()).to.equal(
           `/**\n * ${args.comment}\n */\n` +
             `${args.name} ${args.type} ${args.validations[0].name} ` +
-            `${args.validations[1].name}(${args.validations[1].value})`
+            `${args.validations[1].name}(${args.validations[1].value})`,
         );
       });
     });

@@ -178,8 +178,8 @@ export const generateTestEntityPrimaryKey = (primaryKey, index) => {
   return JSON.stringify(
     generateTestEntity(
       primaryKey.fields.map(f => f.reference),
-      index
-    )
+      index,
+    ),
   );
 };
 

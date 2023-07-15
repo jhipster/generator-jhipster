@@ -163,7 +163,7 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
         }
 
         this.log.warn(
-          '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
+          '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:',
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();

@@ -48,5 +48,5 @@ export const stringifyApplicationData = data =>
       }
       return value;
     },
-    4
+    4,
   );

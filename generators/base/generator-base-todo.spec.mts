@@ -174,7 +174,7 @@ describe('generator - base', () => {
           const Dummy = helpers.createDummyGenerator(Base);
           const env = await helpers.createTestEnv();
           expect(() => new Dummy({ ...options, env, sharedData: {} })).to.throw(
-            /^Creation timestamp should not be in the future: 2030-01-01\.$/
+            /^Creation timestamp should not be in the future: 2030-01-01\.$/,
           );
         });
       });

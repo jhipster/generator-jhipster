@@ -537,7 +537,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    */
   prepareDependencies(
     map: Record<string, string>,
-    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
+    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`,
   ): Record<string, string> {
     if (this.useVersionPlaceholders) {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
@@ -617,7 +617,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
             chalk.yellow('  JHipster update available: ') +
             chalk.green.bold(latestJhipster) +
             chalk.gray(` (current: ${packageJson.version})`)
-          }\n`
+          }\n`,
         );
         this.log.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
         this.log.log(chalk.yellow(' ______________________________________________________________________________\n'));

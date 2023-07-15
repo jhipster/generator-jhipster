@@ -76,11 +76,11 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
             if (stderr || code !== 0) {
               this.log.warn(
                 'Knative 0.8.* or later is not installed on your computer.\n' +
-                  'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n'
+                  'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
               );
             }
             done();
-          }
+          },
         );
       }),
       loadConfig,
@@ -184,7 +184,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
           this.log.verboseInfo(`\n${chalk.bold.green('Kubernetes Knative configuration successfully generated!')}`);
         }
         this.log.warn(
-          '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
+          '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:',
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
@@ -230,7 +230,7 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
             fs.chmodSync('helm-knative-upgrade.sh', '755');
           } catch (err) {
             this.log.warn(
-              "Failed to make 'helm-knative-apply.sh', 'helm-knative-upgrade.sh' executable, you may need to run 'chmod +x helm-knative-apply.sh helm-knative-upgrade.sh"
+              "Failed to make 'helm-knative-apply.sh', 'helm-knative-upgrade.sh' executable, you may need to run 'chmod +x helm-knative-apply.sh helm-knative-upgrade.sh",
             );
           }
         }

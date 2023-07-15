@@ -38,10 +38,10 @@ const applicationConfig: JDLApplicationConfig = {
         pattern: option.tokenValuePattern,
         msg: `${option.name} property`,
       },
-    ])
+    ]),
   ),
   optionsValues: Object.fromEntries(
-    jdlOptions.map(option => [option.name, Object.fromEntries(option.knownChoices.map(choice => [choice, choice]))])
+    jdlOptions.map(option => [option.name, Object.fromEntries(option.knownChoices.map(choice => [choice, choice]))]),
   ),
   optionsTypes: Object.fromEntries(
     jdlOptions.map(option => [
@@ -49,7 +49,7 @@ const applicationConfig: JDLApplicationConfig = {
       {
         type: messageBrokerOption.type,
       },
-    ])
+    ]),
   ),
 };
 

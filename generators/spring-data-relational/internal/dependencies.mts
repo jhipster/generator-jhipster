@@ -115,7 +115,7 @@ export const getH2MavenDefinition = ({
 // eslint-disable-next-line import/prefer-default-export
 export const getDatabaseTypeMavenDefinition: (
   databaseType: string,
-  options: { inProfile?: string; javaDependencies: Record<string, string> }
+  options: { inProfile?: string; javaDependencies: Record<string, string> },
 ) => DatabaseTypeDependencies = (databaseType, { inProfile, javaDependencies }) => {
   const dependenciesForType: Record<string, DatabaseTypeDependencies> = {
     mariadb: {

@@ -83,7 +83,7 @@ function setOptionsToEachEntityName(jdlOption) {
     if ((!serviceOptionValue || serviceOptionValue === NO_SERVICE) && [DTO, FILTER].includes(jdlOption.name)) {
       logger.info(
         `The ${jdlOption.name} option is set for ${entityName}, the '${serviceClassOptionValue}' value for the ` +
-          "'service' is gonna be set for this entity if no other value has been set."
+          "'service' is gonna be set for this entity if no other value has been set.",
       );
       setOptionToEntityName({ optionName: 'service', optionValue: serviceClassOptionValue }, entityName);
     }

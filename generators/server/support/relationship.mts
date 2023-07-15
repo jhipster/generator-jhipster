@@ -35,7 +35,7 @@ export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationRes
       ) {
         if (relationship.otherEntity.builtIn) {
           result.warning.push(
-            `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`
+            `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`,
           );
         } else {
           relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);

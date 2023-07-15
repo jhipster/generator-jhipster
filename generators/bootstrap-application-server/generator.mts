@@ -48,7 +48,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
-          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml')
+          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml'),
         )?.toString();
         application.packageInfoJavadocs = [];
         application.javaDependencies = this.prepareDependencies(
@@ -58,7 +58,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
             ...getGradleLibsVersionsProperties(gradleLibsVersions!),
           },
           // Gradle doesn't allows snakeCase
-          value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
+          value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`,
         );
 
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
@@ -67,7 +67,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
             ...dockerContainers,
             ...getDockerfileContainers(dockerfile),
           },
-          dockerPlaceholderGenerator
+          dockerPlaceholderGenerator,
         );
       },
     });

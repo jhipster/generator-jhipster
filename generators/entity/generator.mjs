@@ -159,7 +159,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
             ...removeFieldsWithNullishValues(this.jhipsterConfig),
             ...removeFieldsWithNullishValues(this.microserviceConfig ?? {}),
           }),
-          this.application
+          this.application,
         );
 
         this.loadDerivedAppConfig(this.application);

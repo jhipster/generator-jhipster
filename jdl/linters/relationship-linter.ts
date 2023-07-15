@@ -73,7 +73,7 @@ function checkForCollapsibleRelationships(relationshipDeclarations: Relationship
             from: relationship.from,
             to: relationship.to,
             type,
-          })
+          }),
         );
       });
     }

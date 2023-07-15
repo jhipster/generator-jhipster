@@ -63,7 +63,7 @@ function validateKubernetesRelatedDeployment(jdlDeployment) {
   }
   if (jdlDeployment.istio && !jdlDeployment.ingressDomain) {
     throw new Error(
-      'An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.'
+      'An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.',
     );
   }
   if (jdlDeployment.kubernetesServiceType === Options.kubernetesServiceType.ingress && !jdlDeployment.ingressType) {

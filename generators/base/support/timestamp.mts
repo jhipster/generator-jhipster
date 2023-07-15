@@ -23,7 +23,7 @@ export function formatDateForChangelog(now: Date): string {
     now.getUTCDate(),
     now.getUTCHours(),
     now.getUTCMinutes(),
-    now.getUTCSeconds()
+    now.getUTCSeconds(),
   );
   const year = `${nowUTC.getFullYear()}`;
 
@@ -67,7 +67,7 @@ export function parseChangelog(changelogDate: string): Date {
   }
   const formattedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
     6,
-    8
+    8,
   )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
   return new Date(Date.parse(formattedDate));
 }

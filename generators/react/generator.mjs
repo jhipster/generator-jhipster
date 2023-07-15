@@ -71,7 +71,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'),
         );
       },
     });
@@ -152,7 +152,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
         this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
-`)
+`),
         );
       },
     });
@@ -175,7 +175,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     routerName,
     enableTranslation,
     entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName)
+    entityTranslationValue = _.startCase(routerName),
   ) {
     this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }
@@ -201,7 +201,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     entityName = this.entityAngularName,
     entityFolderName = this.entityFolderName,
     entityFileName = this.entityFileName,
-    { applicationTypeMicroservice, clientSrcDir }
+    { applicationTypeMicroservice, clientSrcDir },
   ) {
     this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, {
       applicationTypeMicroservice,

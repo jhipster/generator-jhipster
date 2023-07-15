@@ -118,7 +118,7 @@ describe(`generator - ${generator}`, () => {
             <groupId>group</groupId>
             <artifactId>artifact</artifactId>
         </dependency>
-`
+`,
       );
       runResult.assertFileContent(
         'pom.xml',
@@ -133,7 +133,7 @@ describe(`generator - ${generator}`, () => {
                 </exclusion>
             </exclusions>
         </dependency>
-`
+`,
       );
     });
     it('should add profiles', () => {
@@ -144,7 +144,7 @@ describe(`generator - ${generator}`, () => {
             <id>profileId</id>
             <foo>bar</foo>
         </profile>
-`
+`,
       );
       runResult.assertFileContent(
         'pom.xml',
@@ -153,7 +153,7 @@ describe(`generator - ${generator}`, () => {
             <id>profileId2</id>
             <foo2>bar2</foo2>
         </profile>
-`
+`,
       );
     });
     it('should match generated pom', () => {

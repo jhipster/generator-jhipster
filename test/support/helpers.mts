@@ -55,7 +55,7 @@ export type FakeBlueprintOptions = {
 
 export const createBlueprintFiles = (
   blueprintPackage: string,
-  { packageJson, generator = 'test-blueprint', generatorContent, files = {} }: FakeBlueprintOptions = {}
+  { packageJson, generator = 'test-blueprint', generatorContent, files = {} }: FakeBlueprintOptions = {},
 ) => {
   generatorContent =
     generatorContent ??
@@ -77,7 +77,7 @@ export const createBlueprintFiles = (
       ...packageJson,
     },
     ...Object.fromEntries(
-      generators.map(generator => [`node_modules/${blueprintPackage}/generators/${generator}/index.js`, generatorContent])
+      generators.map(generator => [`node_modules/${blueprintPackage}/generators/${generator}/index.js`, generatorContent]),
     ),
     ...Object.fromEntries(Object.entries(files).map(([file, content]) => [`node_modules/${blueprintPackage}/${file}`, content])),
   };
@@ -154,7 +154,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
         set() {
           return true;
         },
-      }
+      },
     );
 
     return this.withSharedApplication({ sharedSource: this.sharedSource });
@@ -183,7 +183,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
     const runResult = await super.run();
     if (this.sharedSource) {
       const sourceCallsArg = Object.fromEntries(
-        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => args[0])])
+        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => args[0])]),
       );
       if (sourceCallsArg.addEntitiesToClient) {
         sourceCallsArg.addEntitiesToClient = (sourceCallsArg.addEntitiesToClient as any).map(({ application, entities }) => ({
@@ -214,7 +214,7 @@ class JHipsterTest extends YeomanTest {
   run<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
     GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined
+    envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext<GeneratorType> {
     return super.run(GeneratorOrNamespace, settings, envOptions).withAdapterOptions({ log: createJHipsterLogger() }) as any;
   }
@@ -222,7 +222,7 @@ class JHipsterTest extends YeomanTest {
   runJHipster<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined
+    envOptions?: Options | undefined,
   ): JHipsterRunContext<GeneratorType> {
     return this.run(getGenerator(jhipsterGenerator), settings, envOptions);
   }
@@ -251,7 +251,7 @@ class JHipsterTest extends YeomanTest {
   create<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
     GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined
+    envOptions?: Options | undefined,
   ): JHipsterRunContext<GeneratorType> {
     return super.create(GeneratorOrNamespace, settings, envOptions) as any;
   }
@@ -261,7 +261,7 @@ class JHipsterTest extends YeomanTest {
   >(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined
+    envOptions?: Options | undefined,
   ): JHipsterRunContext<GeneratorType> {
     return this.create(getGenerator(jhipsterGenerator), settings, envOptions);
   }

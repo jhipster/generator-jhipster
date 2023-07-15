@@ -105,7 +105,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asInitializingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['initializingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['initializingTaskParam']>,
   ): GenericTaskGroup<this, Definition['initializingTaskParam']> {
     return taskGroup;
   }
@@ -131,7 +131,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPromptingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['promptingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['promptingTaskParam']>,
   ): GenericTaskGroup<this, Definition['promptingTaskParam']> {
     return taskGroup;
   }
@@ -157,7 +157,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asConfiguringTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['configuringTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['configuringTaskParam']>,
   ): GenericTaskGroup<this, Definition['configuringTaskParam']> {
     return taskGroup;
   }
@@ -183,7 +183,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asComposingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>,
   ): GenericTaskGroup<this, Definition['composingTaskParam']> {
     return taskGroup;
   }
@@ -210,7 +210,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asLoadingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['loadingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['loadingTaskParam']>,
   ): GenericTaskGroup<this, Definition['loadingTaskParam']> {
     return taskGroup;
   }
@@ -236,7 +236,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPreparingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['preparingTaskParam']>,
   ): GenericTaskGroup<this, Definition['preparingTaskParam']> {
     return taskGroup;
   }
@@ -262,7 +262,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asDefaultTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['defaultTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['defaultTaskParam']>,
   ): GenericTaskGroup<this, Definition['defaultTaskParam']> {
     return taskGroup;
   }
@@ -288,7 +288,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['writingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['writingTaskParam']>,
   ): GenericTaskGroup<this, Definition['writingTaskParam']> {
     return taskGroup;
   }
@@ -314,7 +314,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postWritingTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['postWritingTaskParam']>,
   ): GenericTaskGroup<this, Definition['postWritingTaskParam']> {
     return taskGroup;
   }
@@ -340,7 +340,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['installTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['installTaskParam']>,
   ): GenericTaskGroup<this, Definition['installTaskParam']> {
     return taskGroup;
   }
@@ -366,7 +366,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postInstallTaskParam']>
+    taskGroup: GenericTaskGroup<this, Definition['postInstallTaskParam']>,
   ): GenericTaskGroup<this, Definition['postInstallTaskParam']> {
     return taskGroup;
   }
@@ -502,7 +502,7 @@ export default class JHipsterBaseBlueprintGenerator<
   private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(
     blueprint,
     subGen,
-    extraOptions: ComposeOptions = {}
+    extraOptions: ComposeOptions = {},
   ): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks) {
@@ -517,13 +517,13 @@ export default class JHipsterBaseBlueprintGenerator<
     if (!(await this.env.get(generatorNamespace))) {
       this.log.debug(
         `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(
-          generatorNamespace
-        )} subgenerator: falling back to default generator`
+          generatorNamespace,
+        )} subgenerator: falling back to default generator`,
       );
       return undefined;
     }
     this.log.debug(
-      `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`
+      `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`,
     );
 
     const finalOptions: ComposeOptions = {
@@ -613,8 +613,8 @@ export default class JHipsterBaseBlueprintGenerator<
       }
       throw new Error(
         `The installed ${chalk.yellow(
-          blueprintPkgName
-        )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+          blueprintPkgName,
+        )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
       );
     }
     const blueprintPeerJhipsterVersion =
@@ -625,8 +625,8 @@ export default class JHipsterBaseBlueprintGenerator<
       }
       throw new Error(
         `The installed ${chalk.yellow(
-          blueprintPkgName
-        )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+          blueprintPkgName,
+        )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
       );
     }
     this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);

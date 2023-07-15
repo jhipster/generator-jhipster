@@ -61,7 +61,7 @@ describe('jdl - RelationshipConverter', () => {
                 return { builtInEntity: true };
               }
               return {};
-            }
+            },
           );
         });
 
@@ -121,7 +121,7 @@ describe('jdl - RelationshipConverter', () => {
                 return { builtInEntity: true };
               }
               return {};
-            }
+            },
           );
         });
 
