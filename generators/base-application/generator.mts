@@ -79,7 +79,7 @@ export default class BaseApplicationGenerator<
     applicationType: any;
     entityType: any;
     sourceType: any;
-  }> = GeneratorDefinition
+  }> = GeneratorDefinition,
 > extends BaseGenerator<Definition> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 

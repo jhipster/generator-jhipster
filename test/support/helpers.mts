@@ -257,7 +257,7 @@ class JHipsterTest extends YeomanTest {
   }
 
   createJHipster<
-    GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>
+    GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>,
   >(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,

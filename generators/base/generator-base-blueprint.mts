@@ -35,7 +35,7 @@ import CoreGenerator from '../base-core/generator-base.mjs';
  * Base class that contains blueprints support.
  */
 export default class JHipsterBaseBlueprintGenerator<
-  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition
+  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition,
 > extends JHipsterBaseGenerator {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
