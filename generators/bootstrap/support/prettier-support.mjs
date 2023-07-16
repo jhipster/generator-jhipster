@@ -45,9 +45,9 @@ export const createPrettierTransform = function (options, generator, transformOp
     try {
       const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
       const prettierOptions = {
-        plugins: [],
         // Config from disk
         ...resolvedDestinationFileOptions,
+        plugins: [],
         // for better errors
         filepath: file.relative,
       };
