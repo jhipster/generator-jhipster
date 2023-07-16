@@ -50,7 +50,7 @@ function writeApplicationFileForMultipleApplications(application) {
   const applicationBaseName = application[GENERATOR_NAME].baseName;
   if (doesFileExist(applicationBaseName)) {
     throw new Error(
-      `A file named '${applicationBaseName}' already exists, so a folder of the same name can't be created for the application.`
+      `A file named '${applicationBaseName}' already exists, so a folder of the same name can't be created for the application.`,
     );
   }
   createFolderIfItDoesNotExist(applicationBaseName);

@@ -122,7 +122,7 @@ describe('cli', () => {
         exitCode: 1,
         message: expect.stringContaining('is not a known command'),
         stderr: expect.stringContaining('is not a known command'),
-      })
+      }),
     );
   });
 
@@ -394,7 +394,7 @@ describe('cli', () => {
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
               stderr: expect.stringContaining('foo is not a known command'),
-            })
+            }),
           );
         });
       });
@@ -414,7 +414,7 @@ describe('cli', () => {
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),
               stderr: expect.stringContaining('foo is not a known command'),
-            })
+            }),
           );
         });
       });
@@ -548,7 +548,7 @@ describe('cli', () => {
     };
   };
   `,
-              })
+              }),
             )
             .commitFiles();
         });

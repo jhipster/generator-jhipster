@@ -249,7 +249,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
               this.artifactorySnapshotsId,
               this.artifactorySnapshotsUrl,
               this.artifactoryReleasesId,
-              this.artifactoryReleasesUrl
+              this.artifactoryReleasesUrl,
             );
           } else if (this.buildTool === GRADLE) {
             // TODO: add support here

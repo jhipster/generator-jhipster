@@ -98,7 +98,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
         );
       },
     });
@@ -145,11 +145,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           assert(
             otherEntityName,
-            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
           );
           assert(
             relationshipType,
-            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`
+            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
           );
 
           if (!relationship.relationshipSide) {
@@ -169,8 +169,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             relationship.relationshipName = relationship.otherEntityName;
             this.log.warn(
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(
-                relationship
-              )}, using ${relationship.otherEntityName} as fallback`
+                relationship,
+              )}, using ${relationship.otherEntityName} as fallback`,
             );
           }
         });
@@ -280,12 +280,12 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   printDestinationInfo(cwd = this.destinationPath()) {
     this.log.log(
-      chalk.green(' _______________________________________________________________________________________________________________\n')
+      chalk.green(' _______________________________________________________________________________________________________________\n'),
     );
     this.log.log(
       chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}
 
-  Application files will be generated in folder: ${chalk.yellow(cwd)}`)
+  Application files will be generated in folder: ${chalk.yellow(cwd)}`),
     );
     if (process.cwd() === this.getUserHome()) {
       this.log.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
@@ -293,7 +293,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       this.log.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
     }
     this.log.log(
-      chalk.green(' _______________________________________________________________________________________________________________\n')
+      chalk.green(' _______________________________________________________________________________________________________________\n'),
     );
   }
 }

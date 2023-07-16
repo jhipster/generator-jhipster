@@ -138,7 +138,7 @@ function addEnumsToJDL(entity: Entity) {
           name: field.fieldType,
           values: getEnumValuesFromString(field.fieldValues),
           comment: field.fieldTypeJavadoc,
-        })
+        }),
       );
     }
   });
@@ -245,7 +245,7 @@ function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, de
   const foundDestinationSideEntity = destinationEntityRelationships?.find(destinationEntityFromRelationship => {
     return isEntityTheDestinationSideEntity(
       upperFirst(destinationEntityFromRelationship.otherEntityName),
-      destinationEntityFromRelationship.otherEntityRelationshipName
+      destinationEntityFromRelationship.otherEntityRelationshipName,
     );
   });
   if (!foundDestinationSideEntity) {
@@ -323,7 +323,7 @@ function addUnaryOptionToJDL(unaryOption, entityName: string) {
     new JDLUnaryOption({
       name: unaryOption,
       entityNames: [entityName],
-    })
+    }),
   );
 }
 
@@ -333,6 +333,6 @@ function addBinaryOptionToJDL(binaryOption, value, entityName: string) {
       name: binaryOption,
       value,
       entityNames: [entityName],
-    })
+    }),
   );
 }

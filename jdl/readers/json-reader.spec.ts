@@ -48,8 +48,8 @@ describe('jdl - JSONReader', () => {
             parseFromDir('../../__test-files__/invalid_file.txt');
           }).to.throw(
             new RegExp(
-              "The passed directory '../../__test-files__/invalid_file.txt' must exist and must be a directory to read JSON files."
-            )
+              "The passed directory '../../__test-files__/invalid_file.txt' must exist and must be a directory to read JSON files.",
+            ),
           );
         });
       });
@@ -68,14 +68,14 @@ describe('jdl - JSONReader', () => {
         before(() => {
           renameSync(
             join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
-            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
+            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
           );
           content = parseFromDir(join(__dirname, '..', '__test-files__', 'jhipster_app'));
         });
         after(() => {
           renameSync(
             join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
-            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
+            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
           );
         });
 

@@ -10,8 +10,12 @@ arrowParens: avoid
 
 # jsx and tsx rules:
 bracketSameLine: false
-<%_ if (!skipServer) { _%>
 
+plugins:
+  - prettier-plugin-packagejson
+<%_ if (!skipServer) { _%>
+  - prettier-plugin-java
+  
 # java rules:
 overrides:
   - files: "*.java"

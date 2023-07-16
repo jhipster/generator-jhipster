@@ -66,7 +66,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
               message: 'Would you like to audit Cypress tests?',
             },
           ],
-          this.config
+          this.config,
         );
       },
     });
@@ -188,7 +188,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'resources', 'package.json')
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
 
@@ -269,7 +269,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           },
         }
       : {}`,
-            clientFramework
+            clientFramework,
           );
         }
       },

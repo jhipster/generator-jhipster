@@ -5,7 +5,7 @@
  * @returns {import('../../generators/generator-base.js').EditFileCallback}
  */
 export const createDockerComposeFile = (
-  name = 'jhipster'
+  name = 'jhipster',
 ) => `# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: ${name}
 `;
@@ -21,6 +21,6 @@ export const createDockerExtendedServices = (...services) => ({
         },
         ...additionalConfig,
       },
-    ])
+    ]),
   ),
 });

@@ -77,7 +77,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
           const returned: any = convert(
             [oneToOneRelationship, oneToManyRelationship, manyToOneRelationship, manyToManyRelationship],
-            ['A', 'B']
+            ['A', 'B'],
           );
           relationshipsForA = returned.get('A');
           relationshipsForB = returned.get('B');

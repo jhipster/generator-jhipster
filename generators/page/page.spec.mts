@@ -42,16 +42,16 @@ describe('generator - page', () => {
       it('adds page path, service', () => {
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-          `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+          `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`,
         );
         runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`, `path: '/pages/${pageFolderName}',`);
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-          `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+          `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`,
         );
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-          `provide('${pageInstance}Service', () => new ${pageName}Service());`
+          `provide('${pageInstance}Service', () => new ${pageName}Service());`,
         );
       });
     };

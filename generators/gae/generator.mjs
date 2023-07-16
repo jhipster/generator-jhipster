@@ -85,13 +85,13 @@ export default class GaeGenerator extends BaseGenerator {
                 if (err && code !== 0) {
                   this.log.error(err);
                   done(
-                    `Installation failed. \nPlease try to install the app-engine-java component manually via; gcloud components install ${component}`
+                    `Installation failed. \nPlease try to install the app-engine-java component manually via; gcloud components install ${component}`,
                   );
                 }
                 done();
               });
             }
-          }
+          },
         );
       }),
 
@@ -268,7 +268,7 @@ export default class GaeGenerator extends BaseGenerator {
               this.log.verboseInfo(`This project already has an App Engine location set, using location "${chalk.cyan(this.gaeLocation)}"`);
               done();
             }
-          }
+          },
         );
       }),
 
@@ -335,7 +335,7 @@ export default class GaeGenerator extends BaseGenerator {
 
         if (this.gaeInstanceClass.startsWith('F')) {
           this.log.verboseInfo(
-            `Instance Class "${chalk.cyan(this.gaeInstanceClass)}" can only be automatically scaled. Setting scaling type to automatic.`
+            `Instance Class "${chalk.cyan(this.gaeInstanceClass)}" can only be automatically scaled. Setting scaling type to automatic.`,
           );
           this.gaeScalingType = 'automatic';
           done();
@@ -485,7 +485,7 @@ export default class GaeGenerator extends BaseGenerator {
               this.gcpCloudSqlInstanceNameExists = true;
               done();
             });
-          }
+          },
         );
       }),
 
@@ -583,7 +583,7 @@ export default class GaeGenerator extends BaseGenerator {
               this.gcpCloudSqlDatabaseNameExists = true;
               done();
             });
-          }
+          },
         );
       }),
 
@@ -638,7 +638,7 @@ export default class GaeGenerator extends BaseGenerator {
               }
 
               done();
-            }
+            },
           );
         } else {
           done();
@@ -674,7 +674,7 @@ export default class GaeGenerator extends BaseGenerator {
 
           const cloudSQLInstanceName = shelljs.exec(
             `gcloud sql instances describe ${name} --format="value(connectionName)" --project="${this.gcpProjectId}"`,
-            { silent: true }
+            { silent: true },
           );
           this.gcpCloudSqlInstanceName = cloudSQLInstanceName.trim();
 
@@ -710,7 +710,7 @@ export default class GaeGenerator extends BaseGenerator {
                 done();
               });
             }
-          }
+          },
         );
       }),
 
@@ -803,7 +803,7 @@ export default class GaeGenerator extends BaseGenerator {
                 artifactId: 'mysql-socket-factory',
                 version: '1.0.8',
                 scope: 'compile',
-              })
+              }),
             );
           }
         }
@@ -819,7 +819,7 @@ export default class GaeGenerator extends BaseGenerator {
                 artifactId: 'postgres-socket-factory',
                 version: '1.0.12',
                 scope: 'compile',
-              })
+              }),
             );
           }
         }
@@ -831,7 +831,7 @@ export default class GaeGenerator extends BaseGenerator {
           // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile(
             'build.gradle',
-            addGradlePluginCallback({ groupId: 'com.google.cloud.tools', artifactId: 'appengine-gradle-plugin', version: '2.2.0' })
+            addGradlePluginCallback({ groupId: 'com.google.cloud.tools', artifactId: 'appengine-gradle-plugin', version: '2.2.0' }),
           );
           // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile(
@@ -840,7 +840,7 @@ export default class GaeGenerator extends BaseGenerator {
               groupId: 'org.springframework.boot.experimental',
               artifactId: 'spring-boot-thin-gradle-plugin',
               version: '1.0.13.RELEASE',
-            })
+            }),
           );
           // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/gae.gradle' }));
@@ -869,8 +869,8 @@ export default class GaeGenerator extends BaseGenerator {
         // Until issue; https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376 is fixed we shall disable .gcloudignore
         this.log.log(
           chalk.bold(
-            'Due to a Bug in GCloud SDK you will need to disable the generation of .gcloudignore file before deploying using: "gcloud config set gcloudignore/enabled false". For more info refer: https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376'
-          )
+            'Due to a Bug in GCloud SDK you will need to disable the generation of .gcloudignore file before deploying using: "gcloud config set gcloudignore/enabled false". For more info refer: https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376',
+          ),
         );
         if (this.buildTool === MAVEN) {
           this.log.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));

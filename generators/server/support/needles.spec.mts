@@ -37,14 +37,14 @@ describe('generator - server - support - needles', () => {
       it('with a non existing needle', () => {
         const application = runResult.generator.sharedData.getApplication();
         expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' })).toThrow(
-          /Missing required jhipster-needle application-properties-foo not found at/
+          /Missing required jhipster-needle application-properties-foo not found at/,
         );
       });
 
       it('without a needle', () => {
         const application = runResult.generator.sharedData.getApplication();
         expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, {})).toThrow(
-          /At least 1 needle is required/
+          /At least 1 needle is required/,
         );
       });
 

@@ -83,7 +83,7 @@ function exists(passedOption, passedValue?: any) {
         (passedOption === Options.MICROSERVICE ||
           passedOption === Options.ANGULAR_SUFFIX ||
           passedOption === Options.CLIENT_ROOT_FOLDER ||
-          Object.values(Values[option]).includes(passedValue))
+          Object.values(Values[option]).includes(passedValue)),
     )
   );
 }

@@ -199,11 +199,15 @@ export default class WorkspacesGenerator extends BaseGenerator {
         }
         if (applications.some(app => app.clientFrameworkVue)) {
           this.packageJson.merge({
+            devDependencies: {
+              '@vue/eslint-config-prettier': '7.1.0',
+            },
             // https://github.com/vuejs/vue-jest/issues/480#issuecomment-1330479635
             overrides: {
               '@babel/core': '7.17.9',
               '@babel/generator': '7.17.9',
               'istanbul-lib-instrument': '5.2.0',
+              'eslint-plugin-prettier': '5.0.0',
             },
           });
         }

@@ -27,7 +27,7 @@ export default class extends needleClientBase {
     routerName: string,
     enableTranslation: boolean,
     entityTranslationKeyMenu: string,
-    entityTranslationValue: string = _.startCase(routerName)
+    entityTranslationValue: string = _.startCase(routerName),
   ) {
     const ignoreNonExisting =
       this.generator.sharedData.getControl().ignoreNeedlesError &&
@@ -52,7 +52,7 @@ export default class extends needleClientBase {
         ignoreWhitespaces: true,
         contentToCheck: `<b-dropdown-item to="/${routerName}">`,
         autoIndent: false,
-      })
+      }),
     );
   }
 
@@ -92,7 +92,7 @@ export default class extends needleClientBase {
         ignoreWhitespaces: true,
         contentToCheck: `import('@/entities/${folderName}/${fileName}.vue');`,
         autoIndent: false,
-      })
+      }),
     );
   }
 
@@ -158,7 +158,7 @@ export default class extends needleClientBase {
         ignoreWhitespaces: true,
         contentToCheck: `path: '${entityFileName}'`,
         autoIndent: false,
-      })
+      }),
     );
   }
 
@@ -190,7 +190,7 @@ export default class extends needleClientBase {
 
   addEntityServiceToEntitiesComponentImport(entityName: string, entityClass: string, entityFileName: string, entityFolderName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow(
-      'not added to import in entities component.\n'
+      'not added to import in entities component.\n',
     )}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities.component.ts`;
 
@@ -200,14 +200,14 @@ export default class extends needleClientBase {
     const rewriteFileModel = this.generateFileModel(
       filePath,
       'jhipster-needle-add-entity-service-to-entities-component-import',
-      entityEntry
+      entityEntry,
     );
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
   addEntityServiceToEntitiesComponent(entityInstance: string, entityName: string) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow(
-      'not added to service in entities component.\n'
+      'not added to service in entities component.\n',
     )}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities.component.ts`;
 

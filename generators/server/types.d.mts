@@ -58,7 +58,7 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
     Record<string, never>,
     {
       enableGradleEnterprise: boolean;
-    }
+    },
   ]
 >;
 

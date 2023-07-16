@@ -58,7 +58,7 @@ function checkForDuplicatedEnums(enumDeclarations: EnumDeclaration[]) {
           new EnumIssue({
             ruleName: rulesNames.ENUM_DUPLICATED,
             enumName,
-          })
+          }),
         );
       }
     } else {
@@ -77,7 +77,7 @@ function checkForUnusedEnums(enumDeclarations: EnumDeclaration[], fieldDeclarati
   const declaredEnums = new Set(
     enumDeclarations.map(enumDeclaration => {
       return enumDeclaration.children.NAME[0].image;
-    })
+    }),
   );
   fieldTypes.forEach(usedEnum => {
     declaredEnums.delete(usedEnum);

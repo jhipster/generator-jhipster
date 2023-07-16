@@ -33,7 +33,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   ${booleanOption} true
                 }
-              }`)
+              }`),
             ).not.to.throw();
           });
         });
@@ -45,7 +45,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   ${booleanOption} 666
                 }
-              }`)
+              }`),
             ).to.throw(/^A boolean literal is expected, but found: "666"/);
           });
         });
@@ -61,7 +61,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 ${integerOption} 6666
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -75,7 +75,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   ${integerOption} abc
                 }
-              }`)
+              }`),
               ).to.throw(/^An integer literal is expected, but found: "abc"/);
             });
           });
@@ -92,7 +92,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 applicationType foo
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -105,7 +105,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   applicationType 666
                 }
-              }`)
+              }`),
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
@@ -117,7 +117,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   applicationType -
                 }
-              }`)
+              }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -129,7 +129,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   applicationType FOO
                 }
-              }`)
+              }`),
             ).to.throw(/^The applicationType property name must match: /);
           });
         });
@@ -142,7 +142,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   applicationType foo.bar
                 }
-              }`)
+              }`),
             ).to.throw(/^A single name is expected, but found a fully qualified name/);
           });
         });
@@ -158,7 +158,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 authenticationType jwt
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -170,7 +170,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 authenticationType jwt42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -184,7 +184,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 authenticationType "jwt"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""jwt""/);
           });
         });
@@ -196,7 +196,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 authenticationType 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -212,7 +212,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 baseName mySuperApp
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -224,7 +224,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 baseName mySuperApp42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -238,7 +238,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 baseName "mySuperApp"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""mySuperApp""/);
           });
         });
@@ -250,7 +250,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 baseName 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -264,7 +264,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [, generator-jhipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -275,7 +275,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [Generator-JHipster-Super-Blueprint]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -286,7 +286,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [.generator-jhipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -297,7 +297,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [_generator-jhipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -308,7 +308,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator -jhipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -319,7 +319,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-jh~ipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -330,7 +330,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-jh~ipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -341,7 +341,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-jh\\ipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -352,7 +352,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-'jhipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -363,7 +363,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-jhipster!-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -374,7 +374,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-(jhipster-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -385,7 +385,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-jhipster)-vuejs]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -396,7 +396,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
   config {
     blueprints [generator-jhipster-vue*js]
   }
-}`)
+}`),
           ).to.throw();
         });
       });
@@ -411,7 +411,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 buildTool maven
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -423,7 +423,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 buildTool maven42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -437,7 +437,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 buildTool "maven"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""maven""/);
           });
         });
@@ -449,7 +449,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 buildTool 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -465,7 +465,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 cacheProvider ehcache
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -477,7 +477,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 cacheProvider ehcache42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -491,7 +491,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 cacheProvider "ehcache"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
@@ -503,7 +503,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 cacheProvider 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -519,7 +519,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientFramework angular
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -531,7 +531,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientFramework angular42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -545,7 +545,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientFramework "react"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""react""/);
           });
         });
@@ -557,7 +557,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientFramework 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -572,7 +572,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 withAdminUi true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -585,7 +585,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 withAdminUi 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -600,7 +600,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientPackageManager npm
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -612,7 +612,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientPackageManager npm42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -626,7 +626,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientPackageManager "npm"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""npm""/);
           });
         });
@@ -638,7 +638,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 clientPackageManager 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -654,7 +654,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 databaseType sql
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -666,7 +666,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 databaseType sql42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -680,7 +680,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 databaseType "sql"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""sql""/);
           });
         });
@@ -692,7 +692,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 databaseType 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -708,7 +708,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 devDatabaseType postgresql
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -720,7 +720,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 devDatabaseType postgresql42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -734,7 +734,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 devDatabaseType "postgresql"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""postgresql""/);
           });
         });
@@ -746,7 +746,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 devDatabaseType 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -761,7 +761,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 enableHibernateCache true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -774,7 +774,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 enableHibernateCache 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -788,7 +788,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 enableSwaggerCodegen true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -801,7 +801,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 enableSwaggerCodegen 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -815,7 +815,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 enableTranslation true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -828,7 +828,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 enableTranslation 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -842,7 +842,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 frontendBuilder fooBar
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -855,7 +855,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   frontendBuilder 666
                 }
-              }`)
+              }`),
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
@@ -867,7 +867,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   frontendBuilder -
                 }
-              }`)
+              }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -880,7 +880,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   frontendBuilder foo.bar
                 }
-              }`)
+              }`),
             ).to.throw(/^A single name is expected, but found a fully qualified name/);
           });
         });
@@ -895,7 +895,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 jhipsterVersion "5.0.0"
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -908,7 +908,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 jhipsterVersion abc
               }
-            }`)
+            }`),
           ).to.throw(/^A string literal is expected, but found: "abc"\n\tat line: 4, column: 33/);
         });
       });
@@ -922,7 +922,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 jhiPrefix abcD42-_f
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -935,7 +935,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 jhiPrefix 42abc
               }
-            }`)
+            }`),
             ).to.throw("MismatchedTokenException: Found an invalid token 'abc', at line: 4 and column: 29.");
           });
         });
@@ -947,7 +947,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 jhiPrefix -abc
               }
-            }`)
+            }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -962,7 +962,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 languages [ab,bc, cd, zh-cn]
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -976,7 +976,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 languages [fr, en, 42]
               }
-            }`)
+            }`),
             ).to.throw(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
           });
         });
@@ -988,7 +988,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 languages true
               }
-            }`)
+            }`),
             ).to.throw(/^An array of names is expected, but found: "true"/);
           });
         });
@@ -1004,7 +1004,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 messageBroker ehcache
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1016,7 +1016,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 messageBroker ehcache42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1030,7 +1030,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 messageBroker "ehcache"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
@@ -1042,7 +1042,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 messageBroker 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -1057,7 +1057,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 microfrontends [mf_1,mf, mf123, mf]
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1071,7 +1071,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 microfrontends [mf_1, en, mf-1]
               }
-            }`)
+            }`),
             ).to.throw(/^The microfrontends property name must match: (.*), got mf-1.\n(.*)at line: (\d*), column: (\d*)/);
           });
         });
@@ -1083,7 +1083,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 microfrontends true
               }
-            }`)
+            }`),
             ).to.throw(/^An array of names is expected, but found: "true"/);
           });
         });
@@ -1098,7 +1098,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 nativeLanguage foo
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1111,7 +1111,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   nativeLanguage 666
                 }
-              }`)
+              }`),
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
@@ -1123,7 +1123,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   nativeLanguage -
                 }
-              }`)
+              }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -1135,7 +1135,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   nativeLanguage FOO
                 }
-              }`)
+              }`),
             ).to.throw(/^The nativeLanguage property name must match: /);
           });
         });
@@ -1148,7 +1148,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   nativeLanguage foo.bar
                 }
-              }`)
+              }`),
             ).to.throw(/^A single name is expected, but found a fully qualified name/);
           });
         });
@@ -1163,7 +1163,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 packageName foo
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1176,7 +1176,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   packageName -
                 }
-              }`)
+              }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -1188,7 +1188,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   packageName FOO
                 }
-              }`)
+              }`),
             ).to.throw(/^The packageName property name must match: /);
           });
         });
@@ -1204,7 +1204,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 prodDatabaseType ehcache
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1216,7 +1216,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 prodDatabaseType ehcache42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1230,7 +1230,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 prodDatabaseType "ehcache"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
@@ -1242,7 +1242,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 prodDatabaseType 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -1257,7 +1257,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 rememberMeKey "1want4b33randap1zz4"
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1272,7 +1272,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 searchEngine ehcache
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1284,7 +1284,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 searchEngine ehcache42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1298,7 +1298,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 searchEngine "ehcache"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
@@ -1310,7 +1310,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 searchEngine 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -1325,7 +1325,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 serverPort 6666
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1339,7 +1339,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 config {
                   serverPort abc
                 }
-              }`)
+              }`),
             ).to.throw(/^An integer literal is expected, but found: "abc"/);
           });
         });
@@ -1355,7 +1355,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 serviceDiscoveryType ehcache
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1369,7 +1369,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 serviceDiscoveryType "ehcache"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
@@ -1381,7 +1381,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 serviceDiscoveryType eHcache42
               }
-            }`)
+            }`),
             ).to.throw(/^The serviceDiscoveryType property name must match: /);
           });
         });
@@ -1393,7 +1393,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 serviceDiscoveryType 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -1408,7 +1408,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 skipClient true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1421,7 +1421,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 skipClient 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -1435,7 +1435,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 skipServer true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1448,7 +1448,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 skipServer 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -1462,7 +1462,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 skipUserManagement true
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1475,7 +1475,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 skipUserManagement 666
               }
-            }`)
+            }`),
           ).to.throw(/^A boolean literal is expected, but found: "666"/);
         });
       });
@@ -1489,7 +1489,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 testFrameworks [a,b, c]
               }
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1503,7 +1503,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 testFrameworks [fr, en, 42]
               }
-            }`)
+            }`),
             ).to.throw(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
           });
         });
@@ -1515,7 +1515,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 testFrameworks true
               }
-            }`)
+            }`),
             ).to.throw(/^An array of names is expected, but found: "true"/);
           });
         });
@@ -1531,7 +1531,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 websocket ehcache-
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1543,7 +1543,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 websocket ehcache42
               }
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1557,7 +1557,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 websocket "ehcache"
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
@@ -1569,7 +1569,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               config {
                 websocket 42
               }
-            }`)
+            }`),
             ).to.throw(/^A name is expected, but found: "42"/);
           });
         });
@@ -1584,7 +1584,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             parse(`
             deployment {
               deploymentType docker-compose
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1595,7 +1595,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 deploymentType 666
-              }`)
+              }`),
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
@@ -1605,7 +1605,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
             deployment {
               deploymentType -
-            }`)
+            }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -1615,7 +1615,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 deploymentType FOO
-              }`)
+              }`),
             ).to.throw(/^The deploymentType property name must match: /);
           });
         });
@@ -1626,7 +1626,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 deploymentType foo.bar
-              }`)
+              }`),
             ).to.throw(/^A single name is expected, but found a fully qualified name/);
           });
         });
@@ -1641,7 +1641,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 ${type} valid
-              }`)
+              }`),
             ).not.to.throw();
           });
         });
@@ -1652,7 +1652,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} 666
-                }`)
+                }`),
               ).to.throw(/^A name is expected, but found: "666"/);
             });
           });
@@ -1662,7 +1662,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
               deployment {
                 ${type} -
-              }`)
+              }`),
               ).to.throw(/^unexpected character: ->-<-/);
             });
           });
@@ -1672,7 +1672,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} FOO
-                }`)
+                }`),
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
@@ -1683,7 +1683,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} foo.bar
-                }`)
+                }`),
               ).to.throw(/^A single name is expected, but found a fully qualified name/);
             });
           });
@@ -1697,7 +1697,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             parse(`
             deployment {
               directoryPath "../"
-            }`)
+            }`),
           ).not.to.throw();
         });
       });
@@ -1708,7 +1708,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 directoryPath 666
-              }`)
+              }`),
             ).to.throw(/^A string literal is expected, but found: "666"/);
           });
         });
@@ -1718,7 +1718,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
             deployment {
               directoryPath -
-            }`)
+            }`),
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
@@ -1728,7 +1728,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 directoryPath "/test"
-              }`)
+              }`),
             ).to.throw(/^The directoryPath property name must match: /);
           });
         });
@@ -1739,7 +1739,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 directoryPath foo.bar
-              }`)
+              }`),
             ).to.throw(/^A string literal is expected, but found: "foo"/);
           });
         });
@@ -1755,7 +1755,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
             deployment {
               ${type} [test, test2,fooBar]
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1767,7 +1767,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} [fr, en, @123]
-              }`)
+              }`),
               ).to.throw(/^MismatchedTokenException: Found an invalid token '@', at line: \d+ and column: \d+\./);
             });
           });
@@ -1777,7 +1777,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} true
-              }`)
+              }`),
               ).to.throw(/^An array of names is expected, but found: "true"/);
             });
           });
@@ -1795,7 +1795,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
               deployment {
                 ${type} SpringCloudGateway
-              }`)
+              }`),
               ).not.to.throw();
             });
           });
@@ -1805,7 +1805,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
               deployment {
                 ${type} NodePort
-              }`)
+              }`),
               ).not.to.throw();
             });
           });
@@ -1817,7 +1817,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
               deployment {
                 ${type} test23
-              }`)
+              }`),
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
@@ -1827,7 +1827,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} test-123
-              }`)
+              }`),
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
@@ -1837,7 +1837,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} "true"
-              }`)
+              }`),
               ).to.throw(/^A name is expected, but found: ""true""/);
             });
           });
@@ -1854,7 +1854,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
             deployment {
               ${type} test-23
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1866,7 +1866,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} test_123
-              }`)
+              }`),
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
@@ -1876,7 +1876,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} "true"
-              }`)
+              }`),
               ).to.throw(/^A name is expected, but found: ""true""/);
             });
           });
@@ -1896,13 +1896,13 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }
             deployment {
               ${type} "gcr.io.192.120.0.0.io"
-            }`)
+            }`),
             ).not.to.throw();
             expect(() =>
               parse(`
             deployment {
               ${type} "test105"
-            }`)
+            }`),
             ).not.to.throw();
           });
         });
@@ -1914,9 +1914,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} "test 123"
-              }`)
+              }`),
               ).to.throw(
-                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`
+                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`,
               );
             });
           });
@@ -1926,7 +1926,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 parse(`
                 deployment {
                   ${type} true
-              }`)
+              }`),
               ).to.throw(/^A string literal is expected, but found: "true"/);
             });
           });
@@ -1939,7 +1939,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           parse(`
               deployment {
                 dockerPushCommand "test@123"
-            }`)
+            }`),
         ).to.throw(/^The dockerPushCommand property name must match:/);
       });
     });
@@ -1950,7 +1950,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             parse(`
           deployment {
             dockerPushCommand "docker push"
-          }`)
+          }`),
           ).not.to.throw();
         });
       });
@@ -1961,7 +1961,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               parse(`
               deployment {
                 dockerPushCommand true
-            }`)
+            }`),
             ).to.throw(/^A string literal is expected, but found: "true"/);
           });
         });
@@ -1974,7 +1974,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             parse(`
           deployment {
 ingressType nginx
-}`)
+}`),
           ).not.to.throw();
         });
       });
@@ -1988,7 +1988,7 @@ ingressType nginx
             parse(`enum MyEnum {
   FRANCE ("stinky but good cheese country"),
   ENGLAND ("tea country")
-}`)
+}`),
           ).not.to.throw();
         });
       });
@@ -1997,7 +1997,7 @@ ingressType nginx
           expect(() =>
             parse(`enum MyEnum {
   FRANCE ("stinky but g"ood cheese country")
-}`)
+}`),
           ).to.throw(/^unexpected character: ->"<-/);
         });
       });

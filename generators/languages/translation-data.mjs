@@ -57,7 +57,7 @@ export default class TranslationData {
           sections: entityClientI18nFiles,
           rootTemplatesPath,
           context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: nativeLanguage },
-        }))
+        })),
       );
     }
     for (const translationFile of translationFiles) {
@@ -95,7 +95,7 @@ export default class TranslationData {
             lang: application.nativeLanguage,
             clientSrcDir: '__tmp__',
           },
-        }))
+        })),
       );
     }
 

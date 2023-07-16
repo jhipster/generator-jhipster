@@ -153,7 +153,7 @@ export default class EnvironmentBuilder {
       // Verify jhipster generators namespace.
       assert(
         generator.namespace.startsWith(`${CLI_NAME}:`),
-        `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`
+        `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`,
       );
     });
     return this;
@@ -336,8 +336,8 @@ export default class EnvironmentBuilder {
       if (!packagePath) {
         logger.fatal(
           `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-            `npm i -g ${blueprint}`
-          )}`
+            `npm i -g ${blueprint}`,
+          )}`,
         );
       }
       return [blueprint, packagePath];

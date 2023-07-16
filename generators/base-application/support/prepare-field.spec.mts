@@ -33,7 +33,7 @@ describe('generator - base-application - support - prepareField', () => {
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
     defaultGenerator,
-    defaultConfig
+    defaultConfig,
   );
 
   describe('prepareFieldForTemplates', () => {
@@ -52,7 +52,7 @@ describe('generator - base-application - support - prepareField', () => {
       const field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
       it('should fail', () => {
         expect(() => prepareFieldForTemplates(defaultEntity, field, defaultGenerator)).to.throw(
-          /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/
+          /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/,
         );
       });
     });

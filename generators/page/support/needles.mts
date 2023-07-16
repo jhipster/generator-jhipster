@@ -29,11 +29,11 @@ export function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pa
       needle: 'jhipster-needle-add-entity-to-router-import',
       contentToAdd: stripMargin(
         `|// prettier-ignore
-                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`,
       ),
       ignoreWhitespaces: true,
       autoIndent: false,
-    })
+    }),
   );
 }
 
@@ -51,11 +51,11 @@ export function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFile
                   |    name: '${pageName}',
                   |    component: ${pageName},
                   |    meta: { authorities: [Authority.USER] }
-                  |  },`
+                  |  },`,
       ),
       ignoreWhitespaces: true,
       autoIndent: false,
-    })
+    }),
   );
 }
 
@@ -69,10 +69,10 @@ export function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageNam
       needle: 'jhipster-needle-add-entity-service-to-main-import',
       contentToAdd: stripMargin(
         // prettier-ignore
-        `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
+        `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`,
       ),
       ignoreWhitespaces: true,
-    })
+    }),
   );
 }
 
@@ -86,6 +86,6 @@ export function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pag
       needle: 'jhipster-needle-add-entity-service-to-main',
       contentToAdd: `provide('${pageInstance}Service', () => new ${pageName}Service());`,
       ignoreWhitespaces: true,
-    })
+    }),
   );
 }

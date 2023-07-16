@@ -55,7 +55,7 @@ export async function askForClient({ control }) {
       choices,
       default: config.clientFramework,
     },
-    this.config
+    this.config,
   );
 
   if (answers.clientFramework === NO_CLIENT_FRAMEWORK) {
@@ -89,7 +89,7 @@ export async function askForClientTheme({ control }) {
       },
       default: config.clientTheme,
     },
-    this.config
+    this.config,
   );
 }
 
@@ -113,7 +113,7 @@ export async function askForClientThemeVariant({ control }) {
       ],
       default: config.clientThemeVariant,
     },
-    this.config
+    this.config,
   );
 }
 
@@ -129,7 +129,7 @@ export async function askForAdminUi({ control }) {
       message: 'Do you want to generate the admin UI?',
       default: config.withAdminUi,
     },
-    this.config
+    this.config,
   );
 }
 
@@ -193,7 +193,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       },
       () => {
         reject(errorMessage);
-      }
+      },
     );
   });
 }

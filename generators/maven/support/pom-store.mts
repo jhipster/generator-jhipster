@@ -74,7 +74,7 @@ const propertiesOrder = [
 const formatFirstXmlLevel = content =>
   content.replace(
     /(\n {4}<(?:groupId|distributionManagement|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
-    '\n$1'
+    '\n$1',
   );
 
 const isComment = name => name.startsWith('#');
@@ -253,10 +253,10 @@ export default class PomStorage extends XmlStorage {
             groupId: 'org.apache.maven.plugins',
             artifactId: 'maven-compiler-plugin',
           },
-          artifactEquals
+          artifactEquals,
         );
       },
-      'configuration.annotationProcessorPaths'
+      'configuration.annotationProcessorPaths',
     );
     const paths = ensureChildIsArray(annotationProcessorPaths, 'path');
     appendOrReplace(paths, artifact, artifactEquals);

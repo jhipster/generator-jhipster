@@ -108,7 +108,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
           if (err) {
             this.log.error(
               "cloudfoundry's cf command line interface is not available. " +
-                'You can install it via https://github.com/cloudfoundry/cli/releases'
+                'You can install it via https://github.com/cloudfoundry/cli/releases',
             );
             this.abort = true;
           }
@@ -152,7 +152,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
             {},
             (err, stdout, stderr) => {
               done();
-            }
+            },
           );
           child.stdout.on('data', data => {
             this.log.verboseInfo(data.toString());

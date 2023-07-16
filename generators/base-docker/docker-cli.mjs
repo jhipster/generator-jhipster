@@ -86,8 +86,8 @@ export function getImageID(imageName, tag) {
           resolve(dockerID);
         }
       },
-      { silent: true }
-    )
+      { silent: true },
+    ),
   );
 }
 
@@ -103,8 +103,8 @@ export function tagImage(from, to) {
         }
         resolve(stdout);
       },
-      { silent: true }
-    )
+      { silent: true },
+    ),
   );
 }
 
@@ -126,7 +126,7 @@ export function loginToAws(region, accountId, username, password) {
         }
         resolve(stdout);
       }),
-    { silent: true }
+    { silent: true },
   );
 }
 
@@ -143,6 +143,6 @@ export function pushImage(repository) {
         reject(err);
       }
       resolve(stdout);
-    })
+    }),
   );
 }

@@ -57,7 +57,7 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
                 } else {
                   callback(null, { message: data.message });
                 }
-              }
+              },
             );
           }
         });

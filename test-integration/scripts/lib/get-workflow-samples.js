@@ -23,16 +23,16 @@ export const getWorkflowSamples = (workflows = WORKFLOW_NAMES) =>
                   name: `${DAILY_PREFIX}${sample.name}`,
                   'app-sample': `${DAILY_PREFIX}${sample['app-sample'] ?? sample.name}`,
                 }
-              : sample
+              : sample,
           )
-          .map(sample => [sample.name, sample])
+          .map(sample => [sample.name, sample]),
       ),
-    ])
+    ]),
   );
 
 export default workflows =>
   Object.fromEntries(
     Object.values(getWorkflowSamples(workflows))
       .map(workflowSamples => Object.entries(workflowSamples))
-      .flat()
+      .flat(),
   );

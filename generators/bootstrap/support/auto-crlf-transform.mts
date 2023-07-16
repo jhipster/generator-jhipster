@@ -63,7 +63,7 @@ const autoCrlfTransform = (git: SimpleGit) =>
       (await git.raw('check-attr', 'binary', 'eol', '--', file.path))
         .split(/\r\n|\r|\n/)
         .map(attr => attr.split(':'))
-        .map(([_file, attr, value]) => [attr, value])
+        .map(([_file, attr, value]) => [attr, value]),
     );
     if (attributes.binary === 'set' || attributes.eol === 'lf') {
       return file;

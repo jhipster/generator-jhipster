@@ -117,7 +117,7 @@ export const createProgram = ({ executableName = CLI_NAME, executableVersion } =
       // JHipster common options
       .option(
         '--blueprints <value>',
-        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
       )
       .option('--force-insight', 'Force insight')
       .option('--no-insight', 'Disable insight')
@@ -139,8 +139,8 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
   if (command.name() !== 'app') {
     logger.fatal(
       `${chalk.yellow(command.name())} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(
-        `${program.name()} ${command.name()} --help`
-      )}'.`
+        `${program.name()} ${command.name()} --help`,
+      )}'.`,
     );
   }
   const availableCommands = program.commands.map(c => c._name);
@@ -186,7 +186,7 @@ export const buildCommands = async ({
           command.usage(`${operands} [options]`);
           operands = Array.isArray(operands) ? operands : [operands];
           command.generatorNamespaces = operands.map(
-            namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`
+            namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`,
           );
           await envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
           await Promise.all(
@@ -198,7 +198,7 @@ export const buildCommands = async ({
 
               await addCommandRootGeneratorOptions(command, generatorMeta, { usage: command.generatorNamespaces.length === 1 });
               await addCommandGeneratorOptions(command, generatorMeta, { root: true });
-            })
+            }),
           );
           return;
         }
@@ -272,7 +272,7 @@ export const buildCommands = async ({
         if (cmdName === 'run') {
           return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
             results => done(results.find(result => result)),
-            errors => done(errors.find(error => error))
+            errors => done(errors.find(error => error)),
           );
         }
         const namespace = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;

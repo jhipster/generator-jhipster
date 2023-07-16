@@ -49,8 +49,8 @@ describe('needles - support', () => {
         checkContentIn(
           'bar foo',
           `foo    bar
-  foo`
-        )
+  foo`,
+        ),
       ).toBeTruthy();
     });
 
@@ -59,8 +59,8 @@ describe('needles - support', () => {
         checkContentIn(
           `bar
  foo`,
-          'foo    bar foo'
-        )
+          'foo    bar foo',
+        ),
       ).toBeTruthy();
     });
   });
@@ -72,7 +72,7 @@ describe('needles - support', () => {
         insertContentBeforeNeedle({
           contentToAdd: 'bar',
           needle: 'bar',
-        })
+        }),
       ).toThrow();
     });
 
@@ -82,7 +82,7 @@ describe('needles - support', () => {
         insertContentBeforeNeedle({
           content: 'bar',
           contentToAdd: 'bar',
-        })
+        }),
       ).toThrow();
     });
 
@@ -92,7 +92,7 @@ describe('needles - support', () => {
         insertContentBeforeNeedle({
           content: 'bar',
           needle: 'bar',
-        })
+        }),
       ).toThrow();
     });
 
@@ -193,7 +193,7 @@ ${needlePrefix} jhipster-needle-a-needle"
 `,
               contentToAdd,
               needle,
-            })
+            }),
           ).toThrow();
         });
       });
@@ -224,7 +224,7 @@ ${needlePrefix} jhipster-needle-a-needle"
 
     it('returned function should throw on missing needle', () => {
       expect(() => createNeedleCallback({ contentToAdd, needle }).call({ log() {} }, 'no needle')).toThrow(
-        /Missing required jhipster-needle/
+        /Missing required jhipster-needle/,
       );
     });
 
@@ -247,8 +247,8 @@ ${needlePrefix} jhipster-needle-a-needle"
       expect(
         createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle }).call(
           { log() {} },
-          `\\\\ jhipster-needle-${needle}`
-        )
+          `\\\\ jhipster-needle-${needle}`,
+        ),
       ).toMatchInlineSnapshot(`
 "content to add
 content to add2

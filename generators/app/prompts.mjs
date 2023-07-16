@@ -113,7 +113,7 @@ export async function askForApplicationType({ control }) {
         transformer: microfrontendsToPromptValue,
       },
     ],
-    this.config
+    this.config,
   );
 
   const { applicationType } = this.jhipsterConfig;

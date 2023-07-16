@@ -146,7 +146,7 @@ describe('jdl - RelationshipValidator', () => {
 
           it('should fail', () => {
             expect(() => validator.validate(relationship)).to.throw(
-              /^Required relationships to the same entity are not supported, for relationship from and to 'A'\.$/
+              /^Required relationships to the same entity are not supported, for relationship from and to 'A'\.$/,
             );
           });
         });
@@ -166,7 +166,7 @@ describe('jdl - RelationshipValidator', () => {
 
           it('should fail', () => {
             expect(() => validator.validate(relationship)).to.throw(
-              /^In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship\.$/
+              /^In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship\.$/,
             );
           });
         });

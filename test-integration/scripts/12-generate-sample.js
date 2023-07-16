@@ -70,14 +70,14 @@ if (sample['jdl-samples']) {
   await execa(
     jhipsterBin,
     ['jdl', ...files, '--skip-jhipster-dependencies', '--skip-install', '--no-insight', ...(sample['extra-args']?.split(' ') ?? [])],
-    { stdio: 'inherit' }
+    { stdio: 'inherit' },
   );
 } else {
   const appSample = sample['app-sample'] ?? sample.name;
   const isDailySample = isDaily(appSample);
   cpSync(
     join(isDailySample ? dailyBuildsFolder : samplesFolder, isDailySample ? appSample.replace(DAILY_PREFIX, '') : appSample, '.yo-rc.json'),
-    join(destSampleFolder, '.yo-rc.json')
+    join(destSampleFolder, '.yo-rc.json'),
   );
 
   if (jdlEntity) {
@@ -90,7 +90,7 @@ if (sample['jdl-samples']) {
   await execa(
     jhipsterBin,
     ['--with-entities', '--skip-jhipster-dependencies', '--skip-install', '--no-insight', ...(sample['extra-args']?.split(' ') ?? [])],
-    { stdio: 'inherit' }
+    { stdio: 'inherit' },
   );
 }
 

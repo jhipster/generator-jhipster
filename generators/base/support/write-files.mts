@@ -65,7 +65,7 @@ export function addSectionsCondition(files: Record<string, any[]>, commonConditi
         return block;
       });
       return [sectionName, sectionValue];
-    })
+    }),
   );
 }
 

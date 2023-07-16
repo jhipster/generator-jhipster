@@ -77,7 +77,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
               default: () => getDefaultAppName(this),
             },
           ],
-          this.config
+          this.config,
         );
       },
     };

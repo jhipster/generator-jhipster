@@ -62,7 +62,7 @@ function checkForDuplicatedEntities(entityDeclarations: EntityDeclaration[]) {
           new EntityIssue({
             ruleName: rulesNames.ENT_DUPLICATED,
             entityName,
-          })
+          }),
         );
       }
     } else {
@@ -83,7 +83,7 @@ function checkForUselessEntityBraces(entityDeclaration: EntityDeclaration) {
       new EntityIssue({
         ruleName: rulesNames.ENT_SHORTER_DECL,
         entityName: entityDeclaration.children.NAME[0].image,
-      })
+      }),
     );
   }
 }
@@ -98,7 +98,7 @@ function checkForUselessTableName(entityDeclaration: EntityDeclaration) {
         new EntityIssue({
           ruleName: rulesNames.ENT_OPTIONAL_TABLE_NAME,
           entityName,
-        })
+        }),
       );
     }
   }

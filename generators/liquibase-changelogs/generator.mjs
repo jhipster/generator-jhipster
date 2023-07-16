@@ -186,20 +186,21 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
           entityChanges.addedFields.length > 0 ||
           entityChanges.removedFields.length > 0 ||
           entityChanges.addedRelationships.some(
-            relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable
+            relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable,
           ) ||
           entityChanges.removedRelationships.some(
-            relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable
+            relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable,
           );
 
         if (entityChanges.requiresUpdateChangelogs) {
           entityChanges.hasFieldConstraint = entityChanges.addedFields.some(field => field.unique || !field.nullable);
           entityChanges.hasRelationshipConstraint = entityChanges.addedRelationships.some(
             relationship =>
-              (relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) && (relationship.unique || !relationship.nullable)
+              (relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) &&
+              (relationship.unique || !relationship.nullable),
           );
           entityChanges.shouldWriteAnyRelationship = entityChanges.addedRelationships.some(
-            relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable
+            relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable,
           );
 
           return this._writeUpdateFiles(writeContext, entityChanges);

@@ -45,9 +45,9 @@ export const createPrettierTransform = function (options, generator, transformOp
     try {
       const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
       const prettierOptions = {
-        plugins: [],
         // Config from disk
         ...resolvedDestinationFileOptions,
+        plugins: [],
         // for better errors
         filepath: file.relative,
       };
@@ -58,7 +58,7 @@ export const createPrettierTransform = function (options, generator, transformOp
         prettierOptions.plugins.push(prettierPluginJava);
       }
       fileContent = file.contents.toString('utf8');
-      const data = prettier.format(fileContent, prettierOptions);
+      const data = await prettier.format(fileContent, prettierOptions);
       file.contents = Buffer.from(data);
     } catch (error) {
       let errorMessage;
