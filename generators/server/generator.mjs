@@ -1101,6 +1101,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return getPKValue(primaryKey, databaseType, defaultValue);
   }
 
+  getJavaValueGeneratorForPrimaryKey(primaryKey) {
+    if (primaryKey.composite) {
+      return `new ${primaryKey.type}(${primaryKey.fields.map(f => this.getJavaValueGeneratorForType(f.fieldType)).join(', ')})`;
+    }
+    return this.getJavaValueGeneratorForType(primaryKey.type);
+  }
+
   /**
    * @private
    * Convert to Java bean name case

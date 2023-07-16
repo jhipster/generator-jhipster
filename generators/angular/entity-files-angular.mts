@@ -69,7 +69,7 @@ export async function writeEntitiesFiles(
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: angularFiles,
-      context: { ...application, ...entity, getWebappTranslation: control.getWebappTranslation },
+      context: { ...application, ...entity, entity, getWebappTranslation: control.getWebappTranslation },
     });
   }
 }

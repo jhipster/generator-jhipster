@@ -68,6 +68,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -310,6 +313,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/OAuth2Configuration.java": {
     "stateCleared": "modified",
   },
@@ -550,6 +556,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {

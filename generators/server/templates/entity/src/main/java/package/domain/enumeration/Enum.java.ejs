@@ -28,16 +28,16 @@ package <%= entityAbsolutePackage %>.domain.enumeration;
 public enum <%= enumName %> {
 <%_ if (withoutCustomValues) { _%>
 <%= enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}    ${enumValue.name}`).join(', ') %>
-<%_ } else {  
+<%_ } else {
   // The following code redefines the variable state to be 'without CustomValue' when name equals value.
-  withoutCustomValues = enumValues.every(({name, value}) => name === value);  
-  withCustomValues = enumValues.every(({name, value}) => name !== value);  
+  withoutCustomValues = enumValues.every(({name, value}) => name === value);
+  withCustomValues = enumValues.every(({name, value}) => name !== value);
   withSomeCustomValues = !withoutCustomValues && !withCustomValues;
 
   enumValues.forEach((enumWithCustomValue, index) => {
     if (enumWithCustomValue.comment){  _%>
 <%= enumWithCustomValue.comment %>
-  <%_ } 
+  <%_ }
   if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
     <%= enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
   <%_ } else { _%>
@@ -58,6 +58,6 @@ public enum <%= enumName %> {
     public String getValue() {
         return value;
     }
-  <%_ } _%>  
+  <%_ } _%>
 <%_ } _%>
 }

@@ -31,7 +31,7 @@ _%>
     Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
   <%_ } _%>
 <%_ } else { %>
-<%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
+<%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= primaryKey.composite && dtoMapstruct ? `${mapper}.toEntity(${instanceName})` : instanceName %>.get<%= primaryKey.nameCapitalized %>())
     .map(existing<%= entityClass %> -> {
   <%_ if (dtoMapstruct) { _%>
        <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);

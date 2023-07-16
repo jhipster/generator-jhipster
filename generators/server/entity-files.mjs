@@ -43,6 +43,12 @@ export const modelFiles = {
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi'],
     },
+    {
+      condition: generator => generator.primaryKey && generator.primaryKey.composite && !generator.primaryKey.derived,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaEntityPackageSrcDir,
+      templates: ['domain/_PersistClass_Id.java'],
+    },
   ],
   modelTestFiles: [
     {
@@ -260,7 +266,7 @@ export function writeFiles() {
           await this.writeFiles({
             sections: serverFiles,
             rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
-            context: { ...application, ...entity },
+            context: { ...application, ...entity, entity },
           });
         }
       }

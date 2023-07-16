@@ -25,7 +25,7 @@ if (field.fieldValidate) {
   const MAX_VALUE = 2147483647;
   const isBlob = field.fieldTypeBytes;
 
-  if (field.fieldValidationRequired && !isBlob) {
+  if (field.fieldValidationRequired && !field.autoGenerate && !isBlob) {
     // reactive tests need a default validation message because lookup is blocking
     validators.push('@NotNull' + (reactive ? '(message = "must not be null")' : ''));
   }

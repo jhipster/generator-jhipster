@@ -129,26 +129,26 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
             if (criteria.getDistinct() != null) {
                 specification = specification.and(distinct(criteria.getDistinct()));
             }
-            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
-                specification = specification.and(<%= this.getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
-            }
 <%_
 fields.forEach((field) => {
-  if (field.id || field.transient) return;
   if (field.filterableField) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
+                <%_ if (field.id && primaryKey.composite) { _%>
+                specification = specification.and(buildSpecification(criteria.get<%= field.fieldInJavaBeanMethod %>(), root -> root.get(<%= persistClass %>_.id).get(<%= primaryKey.type %>_.<%= field.fieldName %>)));
+                <%_ } else { _%>
                 specification = specification.and(<%= this.getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>));
+                <%_ } _%>
             }
   <%_ }
 });
 
-relationships.forEach((relationship) => {
+relationships.forEach((relationship) => relationship.otherEntity.primaryKey.fields.forEach((field) => {
   const metamodelFieldName = (relationship.relationshipManyToMany || relationship.relationshipOneToMany) ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
-if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-    specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-        root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>)));
+if (criteria.get<%= relationship.relationshipNameCapitalized %><%= field.fieldNameCapitalized %>() != null) {
+    specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %><%= field.fieldNameCapitalized %>(),
+        root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT)<%- relationship.otherEntity.primaryKey.composite ? `.get(${relationship.otherEntity.persistClass}_.id).get(${relationship.otherEntity.primaryKey.type}_.${field.fieldName})` : `.get(${relationship.otherEntity.persistClass}_.${field.fieldName})` %>));
 }
-<%_ }); /* forEach */ _%>
+<%_ })); /* forEach */ _%>
         }
         return specification;
     }

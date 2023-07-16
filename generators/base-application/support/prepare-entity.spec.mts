@@ -246,6 +246,8 @@ describe('generator - base-application - support - prepareEntity', () => {
           expect(field).to.deep.include({
             ...entity1.primaryKey.fields[0],
             fieldName: 'otherEntity1Id',
+            fieldNameDotted: 'otherEntity1.id',
+            fieldNameDottedAsserted: 'otherEntity1!.id!',
             fieldNameCapitalized: 'OtherEntity1Id',
             columnName: 'other_entity1_id',
             derivedPath: ['otherEntity1', 'id'],
@@ -258,14 +260,12 @@ describe('generator - base-application - support - prepareEntity', () => {
         });
 
         it('should prepare correct relationship id ids', () => {
-          const field = entity4.primaryKey.ids[1];
+          const field = entity4.primaryKey.fields[1];
           expect(field).to.deep.include({
-            name: 'otherEntity1Id',
-            nameCapitalized: 'OtherEntity1Id',
-            nameDotted: 'otherEntity1.id',
-            nameDottedAsserted: 'otherEntity1!.id!',
-            setter: 'setOtherEntity1Id',
-            getter: 'getOtherEntity1Id',
+            fieldName: 'otherEntity1Id',
+            fieldNameCapitalized: 'OtherEntity1Id',
+            fieldNameDotted: 'otherEntity1.id',
+            fieldNameDottedAsserted: 'otherEntity1!.id!',
           });
         });
 
@@ -275,6 +275,8 @@ describe('generator - base-application - support - prepareEntity', () => {
             ...entity3.primaryKey.fields[0],
             derived: true,
             fieldName: 'otherEntity3Uuid',
+            fieldNameDotted: 'otherEntity3.uuid',
+            fieldNameDottedAsserted: 'otherEntity3!.uuid!',
             fieldNameCapitalized: 'OtherEntity3Uuid',
             columnName: 'other_entity3_uuid',
             derivedPath: ['otherEntity3', 'uuid'],
@@ -286,14 +288,12 @@ describe('generator - base-application - support - prepareEntity', () => {
         });
 
         it('should prepare correct relationship id with derived primaryKey field ids', () => {
-          const field = entity4.primaryKey.ids[2];
+          const field = entity4.primaryKey.fields[2];
           expect(field).to.deep.include({
-            name: 'otherEntity3Uuid',
-            nameCapitalized: 'OtherEntity3Uuid',
-            nameDotted: 'otherEntity3.uuid',
-            nameDottedAsserted: 'otherEntity3!.uuid!',
-            setter: 'setOtherEntity3Uuid',
-            getter: 'getOtherEntity3Uuid',
+            fieldName: 'otherEntity3Uuid',
+            fieldNameCapitalized: 'OtherEntity3Uuid',
+            fieldNameDotted: 'otherEntity3.uuid',
+            fieldNameDottedAsserted: 'otherEntity3!.uuid!',
           });
         });
       });

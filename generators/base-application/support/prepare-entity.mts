@@ -353,10 +353,12 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     entityWithConfig.primaryKey = {
       fieldName: 'id',
       derived: true,
-      // MapsId copy the id from the relationship.
-      autoGenerate: true,
       get fields() {
-        return this.derivedFields;
+        return this.derivedFields.map(field => preparePrimaryKeyFields(field));
+      },
+      get autoGenerate() {
+        // MapsId=!composite is autoGenerate because it copies the id from the relationship.
+        return !this.composite;
       },
       get derivedFields() {
         return relationshipId.derivedPrimaryKey.derivedFields;
@@ -379,9 +381,6 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       },
       get composite() {
         return relationshipId.otherEntity.primaryKey.composite;
-      },
-      get ids() {
-        return this.fields.map(field => fieldToId(field));
       },
     };
   } else {
@@ -414,7 +413,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       ownFields: idFields,
       // Fields declared and inherited
       get fields() {
-        return [...this.ownFields, ...this.derivedFields];
+        return [...this.ownFields, ...this.derivedFields].map(field => preparePrimaryKeyFields(field));
       },
       get autoGenerate() {
         return this.composite ? false : this.fields[0].autoGenerate;
@@ -423,42 +422,27 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       get derivedFields() {
         return this.relationships.map(rel => rel.derivedPrimaryKey.derivedFields).flat();
       },
-      get ids() {
-        return this.fields.map(field => fieldToId(field));
-      },
     };
   }
   return entityWithConfig;
 }
 
-function fieldToId(field) {
-  return {
-    field,
-    get name() {
-      return field.fieldName;
-    },
-    get nameCapitalized() {
-      return field.fieldNameCapitalized;
-    },
-    get nameDotted() {
+function preparePrimaryKeyFields(field) {
+  Object.defineProperty(field, 'fieldNameDotted', {
+    get() {
       return field.derivedPath ? field.derivedPath.join('.') : field.fieldName;
     },
-    get nameDottedAsserted() {
+    enumerable: true,
+    configurable: true,
+  });
+  Object.defineProperty(field, 'fieldNameDottedAsserted', {
+    get() {
       return field.derivedPath ? `${field.derivedPath.join('!.')}!` : `${field.fieldName}!`;
     },
-    get setter() {
-      return `set${this.nameCapitalized}`;
-    },
-    get getter() {
-      return (field.fieldType === BOOLEAN ? 'is' : 'get') + this.nameCapitalized;
-    },
-    get autoGenerate() {
-      return !!field.autoGenerate;
-    },
-    get relationshipsPath() {
-      return field.relationshipsPath;
-    },
-  };
+    enumerable: true,
+    configurable: true,
+  });
+  return field;
 }
 
 /**

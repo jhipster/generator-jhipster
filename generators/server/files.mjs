@@ -478,6 +478,12 @@ export const baseServerFiles = {
       ],
     },
     {
+      condition: generator => !generator.reactive,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/MatrixVariableConfiguration.java'],
+    },
+    {
       condition: generator =>
         generator.generateUserManagement ||
         generator.authenticationTypeOauth2 ||
