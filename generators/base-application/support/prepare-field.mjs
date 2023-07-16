@@ -69,7 +69,7 @@ const fakeStringTemplateForFieldName = columnName => {
   } else if (columnName === 'country_code') {
     fakeTemplate = 'location.countryCode';
   } else if (columnName === 'color') {
-    fakeTemplate = 'commerce.color';
+    fakeTemplate = 'color.human';
   } else if (columnName === 'account') {
     fakeTemplate = 'finance.account';
   } else if (columnName === 'account_name') {
