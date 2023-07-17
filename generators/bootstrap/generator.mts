@@ -27,13 +27,14 @@ import {
   createForceWriteConfigFilesTransform,
   autoCrlfTransform,
   isPrettierConfigFile,
+  createSortConfigFilesTransform,
+  createESLintTransform,
 } from './support/index.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import command from './command.mjs';
-import { createSortConfigFilesTransform } from './support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
@@ -154,7 +155,12 @@ export default class BootstrapGenerator extends BaseGenerator {
       forceYoFiles(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFilesTransform(),
-      ...(this.skipPrettier ? [] : [createPrettierTransform(prettierOptions, this, prettierTransformOptions)]),
+      ...(this.skipPrettier
+        ? []
+        : [
+            createESLintTransform.call(this, { extensions: 'ts,js' }),
+            createPrettierTransform(prettierOptions, this, prettierTransformOptions),
+          ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
       createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),
     ];
