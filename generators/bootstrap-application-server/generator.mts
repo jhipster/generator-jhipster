@@ -40,7 +40,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadApplication({ application, control }) {
+      async loadApplication({ application }) {
         this.loadServerConfig(undefined, application);
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;

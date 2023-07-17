@@ -18,7 +18,6 @@
  */
 /* eslint-disable no-console */
 import chalk from 'chalk';
-import _ from 'lodash';
 
 import { createJHipsterLogger, CLI_LOGGER } from '../generators/base/support/index.mjs';
 

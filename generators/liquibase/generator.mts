@@ -18,7 +18,6 @@
  */
 import fs from 'fs';
 
-import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';

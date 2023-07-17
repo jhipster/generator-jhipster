@@ -19,8 +19,6 @@
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { getEnumInfo } from '../base-application/support/index.mjs';
 
-const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
-
 async function addEnumerationFiles({ application, entity }) {
   for (const field of entity.fields) {
     if (field.fieldIsEnum === true) {
@@ -35,7 +33,7 @@ async function addEnumerationFiles({ application, entity }) {
         templates: [
           {
             sourceFile: `${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/enum.model.ts`,
-            destinationFile: ctx => `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
+            destinationFile: `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
           },
         ],
         context: enumInfo,

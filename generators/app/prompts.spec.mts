@@ -1,4 +1,4 @@
-import { defaultHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import {
   applicationTypes,
   databaseTypes,

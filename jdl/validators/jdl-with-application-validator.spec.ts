@@ -68,31 +68,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
         }).to.throw(/^The name 'Continue' is a reserved keyword and can not be used as an entity class name.$/);
       });
     });
-    context('when having an entity with a reserved table name', () => {
-      let parameter;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication({
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.SQL,
-        });
-        const entity = new JDLEntity({
-          name: 'valid',
-          tableName: 'continue',
-        });
-        jdlObject.addEntity(entity);
-        application.addEntityName(entity.name);
-        jdlObject.addApplication(application);
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        const validator = createValidator(jdlObject, logger);
-        validator.checkForErrors();
-      });
-    });
     context('when passing gateway as application type', () => {
       context('with incompatible database type and field type', () => {
         let validator;

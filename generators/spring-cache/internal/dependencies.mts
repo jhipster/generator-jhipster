@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { MavenDefinition, MavenDependency, MavenProperty } from '../../maven/types.mjs';
+import { MavenDefinition } from '../../maven/types.mjs';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',

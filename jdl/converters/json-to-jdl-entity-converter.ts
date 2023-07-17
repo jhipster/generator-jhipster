@@ -21,7 +21,7 @@ import JDLObject from '../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../models/index.mjs';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions, JDL_RELATIONSHIP_ONE_TO_MANY } from '../models/jdl-relationship.js';
+import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions } from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 

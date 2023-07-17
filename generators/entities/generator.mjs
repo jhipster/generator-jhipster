@@ -19,7 +19,6 @@
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
-import { getDefaultAppName } from '../project-name/support/index.mjs';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {

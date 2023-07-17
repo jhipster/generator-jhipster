@@ -61,9 +61,9 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
           };
         } else {
           // Add noop
-          source.addEntryToCache = ({ entry }) => {};
+          source.addEntryToCache = () => {};
           // Add noop
-          source.addEntityToCache = ({ entityAbsoluteClass }) => {};
+          source.addEntityToCache = () => {};
         }
       },
     });
