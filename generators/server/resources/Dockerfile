@@ -43,7 +43,7 @@ FROM redis:7.0.12
 FROM confluentinc/cp-kafka:7.4.0
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.4.0
+FROM confluentinc/cp-zookeeper:7.4.1
 LABEL ALIAS=zookeeper
 
 FROM apachepulsar/pulsar:3.0.0
