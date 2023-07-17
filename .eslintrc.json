@@ -5,7 +5,7 @@
   },
   "extends": ["airbnb-base", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["mocha", "prettier", "chai-friendly", "@typescript-eslint"],
+  "plugins": ["mocha", "prettier", "chai-friendly", "@typescript-eslint", "unused-imports"],
   "settings": {
     "import/core-modules": ["generator-jhipster", "generator-jhipster/support"]
   },
@@ -69,13 +69,11 @@
     "no-promise-executor-return": "off",
     "no-irregular-whitespace": 2,
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-unused-vars": [
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
       "warn",
-      {
-        "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
-      }
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
     ],
     "@typescript-eslint/no-explicit-any": "off",
     "comma-dangle": "off",

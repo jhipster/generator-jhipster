@@ -76,7 +76,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForFieldErrors(entityName, jdlFields, jdlApplication) {
+  function checkForFieldErrors(_entityName, jdlFields, _jdlApplication) {
     const validator = new FieldValidator();
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];

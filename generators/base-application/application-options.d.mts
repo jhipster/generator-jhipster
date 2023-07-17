@@ -1,4 +1,4 @@
-import type { UnionToIntersection, EmptyObject, StringKeyOf } from 'type-fest';
+import type { UnionToIntersection, StringKeyOf } from 'type-fest';
 
 // Values<{ a: string, b: number }> = string | number
 type Values<T> = T[keyof T];

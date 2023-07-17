@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';

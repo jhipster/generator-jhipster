@@ -108,7 +108,7 @@ class Statistics {
         .post(url, data)
         .then(
           () => {},
-          error => {
+          () => {
             if (this.axiosProxyClient) {
               this.axiosProxyClient
                 .post(url, data)

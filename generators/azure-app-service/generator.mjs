@@ -114,7 +114,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         if (this.abort) return;
         const done = this.async();
 
-        exec('az --version', err => {
+        exec('az --version', () => {
           done(
             new Error(`You don't have the Azure CLI installed.
           Download it from:
@@ -285,7 +285,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         const done = this.async();
         this.log.log(chalk.bold(`\nChecking Azure App Service plan '${this.azureAppServicePlan}'...`));
         let servicePlanAlreadyExists = false;
-        exec(`az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
+        exec(`az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout) => {
           if (err) {
             this.abort = true;
             throw new Error('Could not list your Azure App Service plans');
@@ -327,7 +327,7 @@ which is free for the first 30 days`);
         if (this.abort) return;
         const done = this.async();
         this.log.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
-        exec(`az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
+        exec(`az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout) => {
           if (err) {
             this.abort = true;
             throw new Error('Could not list your Azure App Service instances');
@@ -373,7 +373,7 @@ which is free for the first 30 days`);
         this.log.verboseInfo("Enabling 'prod' and 'azure' Spring Boot profiles");
         exec(
           `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${this.azureAppServiceName} --settings SPRING_PROFILES_ACTIVE=prod,azure`,
-          (err, stdout) => {
+          err => {
             if (err) {
               this.abort = true;
               throw new Error('Could not configure Azure App Service instance');

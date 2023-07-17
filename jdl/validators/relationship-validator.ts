@@ -18,12 +18,11 @@
  */
 
 import Validator from './validator.js';
-import { relationshipTypes, relationshipOptions } from '../jhipster/index.mjs';
+import { relationshipTypes } from '../jhipster/index.mjs';
 import JDLRelationship from '../models/jdl-relationship.js';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
-const { BUILT_IN_ENTITY } = relationshipOptions;
 
 export default class RelationshipValidator extends Validator {
   constructor() {

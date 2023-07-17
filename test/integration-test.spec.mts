@@ -45,13 +45,13 @@ const itSamplesEntries = fs
   .filter(dirent => dirent.isDirectory())
   .map(({ name }) => name)
   .map(name => [name, path.join(itSamplesPath, name, '.yo-rc.json')])
-  .filter(([name, yoFile]) => fs.existsSync(yoFile));
+  .filter(([_name, yoFile]) => fs.existsSync(yoFile));
 const dailyBuildEntries = fs
   .readdirSync(dailyBuildsSamplesPath, { withFileTypes: true })
   .filter(dirent => dirent.isDirectory())
   .map(({ name }) => name)
   .map(name => [name, path.join(dailyBuildsSamplesPath, name, '.yo-rc.json')])
-  .filter(([name, yoFile]) => fs.existsSync(yoFile));
+  .filter(([_name, yoFile]) => fs.existsSync(yoFile));
 
 const itEntitiesSamplesEntries = fs
   .readdirSync(itEntitiesSamplesPath, { withFileTypes: true })

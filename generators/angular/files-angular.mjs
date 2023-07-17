@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createTranslationReplacer } from './support/index.mjs';
 
 import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
 

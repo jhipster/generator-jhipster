@@ -1,11 +1,11 @@
-export const mavenPluginConfiguration = data => `
+export const mavenPluginConfiguration = () => `
                 <configuration>
                     <deploy.projectId><%= gcpProjectId %></deploy.projectId>
                     <deploy.version>1</deploy.version>
                 </configuration>
 `;
 
-export const mavenProdProfileContent = data => `                        <properties>
+export const mavenProdProfileContent = () => `                        <properties>
           <spring.profiles.active>prod\${profile.api-docs}${
             // eslint-disable-next-line no-template-curly-in-string
             this.databaseTypeSql ? '${profile.no-liquibase},prod-gae' : ''
@@ -13,7 +13,7 @@ export const mavenProdProfileContent = data => `                        <propert
       </properties>
 `;
 
-export const mavenProfileContent = data => `                        <dependencies>
+export const mavenProfileContent = () => `                        <dependencies>
           <dependency>
               <groupId>org.springframework.boot</groupId>
               <artifactId>spring-boot-starter-undertow</artifactId>
