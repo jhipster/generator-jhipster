@@ -36,8 +36,8 @@ openApiGenerate {
     importMappings = [Problem:"org.springframework.http.ProblemDetail"]
 }
 
-configurations {
-    all {
+buildscript {
+    configurations.all {
         resolutionStrategy {
             // TODO drop forced version. Refer to https://github.com/OpenAPITools/openapi-generator/issues/15876
             force "com.fasterxml.jackson:jackson-bom:2.14.3"
