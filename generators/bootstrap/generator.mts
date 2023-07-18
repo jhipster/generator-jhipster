@@ -158,7 +158,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       ...(this.skipPrettier
         ? []
         : [
-            createESLintTransform.call(this, { extensions: 'ts,js' }),
+            createESLintTransform.call(this, { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: 'ts,js' }),
             createPrettierTransform(prettierOptions, this, prettierTransformOptions),
           ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
