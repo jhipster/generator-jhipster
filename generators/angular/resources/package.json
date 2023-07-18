@@ -42,7 +42,7 @@
     "rimraf": "5.0.1",
     "ts-jest": "29.1.1",
     "typescript": "5.1.6",
-    "webpack": "5.88.1",
+    "webpack": "5.88.2",
     "webpack-bundle-analyzer": "4.9.0",
     "webpack-merge": "5.9.0",
     "webpack-notifier": "1.15.0"
