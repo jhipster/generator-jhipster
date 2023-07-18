@@ -20,10 +20,9 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import fse from 'fs-extra';
-import path from 'path';
+import path, { dirname } from 'path';
 import { expect } from 'chai';
 
-import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.mjs';
 import { createImporterFromFiles, createImporterFromContent } from './jdl-importer.js';

@@ -24,10 +24,9 @@ import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from './tasks.mjs';
 import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs';
-import type { BaseApplication } from './types.mjs';
+import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 import { SpringBootSourceType } from '../server/types.mjs';
-import type { CommonClientServerApplication } from './types.mjs';
 
 const { upperFirst } = _;
 

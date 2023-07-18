@@ -1,8 +1,7 @@
-import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult, getGenerator } from '../support/index.mjs';
 
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { getGenerator } from '../support/index.mjs';
 import VueGenerator from '../../generators/vue/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 

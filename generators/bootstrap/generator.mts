@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { forceYoFiles } from '@yeoman/conflicter';
+import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
-import { createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 
 import BaseGenerator from '../base/index.mjs';
 import {

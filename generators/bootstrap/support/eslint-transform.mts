@@ -37,13 +37,15 @@ export const createESLintTransform = function (
     useEslintrc: false,
     resolvePluginsRelativeTo: getPackageRoot(),
     overrideConfig: {
-      plugins: ['unused-imports'],
+      plugins: ['unused-imports', 'import'],
       extends: ['plugin:@typescript-eslint/base'],
       parserOptions: {
         sourceType: 'module',
         ecmaVersion: 'latest',
       },
       rules: {
+        'import/order': 'error',
+        'import/no-duplicates': 'error',
         'unused-imports/no-unused-imports': 'error',
         'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }],
       },

@@ -19,12 +19,11 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
-import { expect } from 'chai';
 
 import { convert } from './jdl-without-application-to-json-converter.js';
 

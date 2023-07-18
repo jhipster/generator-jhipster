@@ -21,8 +21,7 @@
 
 import { expect } from 'chai';
 import fs from 'fs';
-import path from 'path';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
 

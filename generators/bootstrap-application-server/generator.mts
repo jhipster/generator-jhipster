@@ -27,11 +27,11 @@ import {
   prepareEntity as prepareEntityServerForTemplates,
   getPomVersionProperties,
   getGradleLibsVersionsProperties,
+  addEntitiesOtherRelationships,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
-import { addEntitiesOtherRelationships } from '../server/support/index.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   async beforeQueue() {
