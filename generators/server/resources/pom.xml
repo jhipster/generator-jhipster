@@ -55,7 +55,7 @@
         <openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <spotless-maven-plugin.version>2.37.0</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>2.38.0</spotless-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
