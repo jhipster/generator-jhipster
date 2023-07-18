@@ -257,7 +257,7 @@ export default class extends BaseGenerator {
           },
           devDependencies: {
             'ejs-lint': `${packagejs.devDependencies['ejs-lint']}`,
-            eslint: `${packagejs.devDependencies.eslint}`,
+            eslint: `${packagejs.dependencies.eslint}`,
             'eslint-config-airbnb-base': `${packagejs.devDependencies['eslint-config-airbnb-base']}`,
             'eslint-config-prettier': `${packagejs.devDependencies['eslint-config-prettier']}`,
             'eslint-plugin-import': `${packagejs.devDependencies['eslint-plugin-import']}`,
