@@ -26,3 +26,6 @@ test/**/*.png
 jdl/**/*.png
 test-integration/**/*.png
 /dist
+
+# allow customizations without having a dirty tree
+.devcontainer
