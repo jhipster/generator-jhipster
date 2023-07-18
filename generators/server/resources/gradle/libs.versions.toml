@@ -5,7 +5,7 @@ node-gradle = { id = 'com.github.node-gradle.node', version = '5.0.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '2.2.0' }
 
-gradle-sonarqube = { id = 'org.sonarqube', version = '4.2.1.3168' }
+gradle-sonarqube = { id = 'org.sonarqube', version = '4.3.0.3225' }
 
 spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '6.19.0' }
 
