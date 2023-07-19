@@ -19,10 +19,9 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { renameSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { expect } from 'chai';
 
-import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import parseFromDir from '../readers/json-reader.js';
 import { unaryOptions } from '../jhipster/index.mjs';

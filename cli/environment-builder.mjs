@@ -21,8 +21,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import { existsSync, readFileSync } from 'fs';
 import Environment from 'yeoman-environment';
-import path from 'path';
-import { dirname, resolve } from 'path';
+import path, { dirname, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { QueuedAdapter } from '@yeoman/adapter';
 

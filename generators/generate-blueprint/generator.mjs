@@ -238,6 +238,10 @@ export default class extends BaseGenerator {
       packageJson() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
+        const mainDependencies = {
+          ...packagejs.dependencies,
+          ...packagejs.devDependencies,
+        };
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
           keywords: ['yeoman-generator', 'jhipster-blueprint', 'jhipster-7'],
@@ -253,18 +257,18 @@ export default class extends BaseGenerator {
             'update-snapshot': 'npm run esmocha -- --update-snapshot',
           },
           dependencies: {
-            chalk: `${packagejs.dependencies.chalk}`,
+            chalk: `${mainDependencies.chalk}`,
           },
           devDependencies: {
-            'ejs-lint': `${packagejs.devDependencies['ejs-lint']}`,
-            eslint: `${packagejs.dependencies.eslint}`,
-            'eslint-config-airbnb-base': `${packagejs.devDependencies['eslint-config-airbnb-base']}`,
-            'eslint-config-prettier': `${packagejs.devDependencies['eslint-config-prettier']}`,
-            'eslint-plugin-import': `${packagejs.devDependencies['eslint-plugin-import']}`,
-            'eslint-plugin-prettier': `${packagejs.devDependencies['eslint-plugin-prettier']}`,
-            esmocha: `${packagejs.devDependencies.esmocha}`,
-            prettier: `${packagejs.dependencies.prettier}`,
-            'yeoman-test': `${packagejs.devDependencies['yeoman-test']}`,
+            'ejs-lint': `${mainDependencies['ejs-lint']}`,
+            eslint: `${mainDependencies.eslint}`,
+            'eslint-config-airbnb-base': `${mainDependencies['eslint-config-airbnb-base']}`,
+            'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
+            'eslint-plugin-import': `${mainDependencies['eslint-plugin-import']}`,
+            'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
+            esmocha: `${mainDependencies.esmocha}`,
+            prettier: `${mainDependencies.prettier}`,
+            'yeoman-test': `${mainDependencies['yeoman-test']}`,
           },
           engines: {
             node: `>=${packagejs.engines.node}`,

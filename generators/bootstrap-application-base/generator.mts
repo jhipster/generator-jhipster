@@ -27,8 +27,6 @@ import {
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   stringifyApplicationData,
-} from '../base-application/support/index.mjs';
-import {
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
   prepareRelationship,

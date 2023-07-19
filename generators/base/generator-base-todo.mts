@@ -25,7 +25,15 @@ import { exec } from 'child_process';
 import os from 'os';
 import { type Storage } from 'yeoman-generator';
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
-import { formatDateForChangelog, normalizePathEnd, createJHipster7Context, upperFirstCamelCase } from './support/index.mjs';
+import {
+  formatDateForChangelog,
+  normalizePathEnd,
+  createJHipster7Context,
+  upperFirstCamelCase,
+  removeFieldsWithNullishValues,
+  parseCreationTimestamp,
+  getHipster,
+} from './support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
@@ -60,7 +68,6 @@ import {
   NODE_VERSION,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { removeFieldsWithNullishValues, parseCreationTimestamp, getHipster } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
 

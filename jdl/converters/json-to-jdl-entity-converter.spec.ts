@@ -21,8 +21,7 @@
 import { expect } from 'chai';
 
 import fs from 'fs';
-import path from 'path';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
 import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/index.mjs';

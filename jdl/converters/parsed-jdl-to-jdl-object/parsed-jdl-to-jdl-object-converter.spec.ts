@@ -20,8 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import path from 'path';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';

@@ -18,12 +18,11 @@
  */
 
 import { jestExpect } from 'esmocha';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
-import { expect } from 'chai';
 
 import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity } from '../../models/index.mjs';
