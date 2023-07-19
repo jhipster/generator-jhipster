@@ -227,7 +227,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     const commandPrefix = 'npm install';
     const devDependencyParam = '--save-dev';
     const noPackageLockParam = '--no-package-lock';
-    const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --legacy-peer-deps`;
+    const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --force`;
     this.log.verboseInfo(generatorCommand);
 
     const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
