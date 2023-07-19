@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import process from 'node:process';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import semver from 'semver';
@@ -71,6 +71,8 @@ function gitExec(logger, args, options = {}, callback) {
 }
 
 export default class UpgradeGenerator extends BaseGenerator {
+  upgradeV7_9_3App;
+
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -105,6 +107,18 @@ export default class UpgradeGenerator extends BaseGenerator {
     if (!this.config.existed) {
       throw new Error(
         "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it.",
+      );
+    }
+
+    const currentNodeVersion = process.versions.node;
+    if (this.jhipsterConfig.jhipsterVersion === '7.9.3') {
+      if (!semver.satisfies(currentNodeVersion, '^16.0.0')) {
+        throw new Error('Upgrading a v7.9.3 generated application requires node 16 to upgrade');
+      }
+      this.upgradeV7_9_3App = true;
+    } else if (!semver.satisfies(currentNodeVersion, packageJson.engines.node)) {
+      this.log.fatal(
+        `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${packageJson.engines.node}\nPlease update your version of Node.`,
       );
     }
   }
@@ -162,7 +176,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.success('Cleaned up project directory');
   }
 
-  _generate(jhipsterVersion, blueprintInfo) {
+  _generate(jhipsterVersion, blueprintInfo, { target }) {
     this.log.verboseInfo(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
     let generatorCommand = 'yo jhipster';
     if (this.options.regenerateExecutable) {
@@ -178,7 +192,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         generatorCommand = 'npm exec --no jhipster --';
       }
     }
-    const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
+    const skipChecksOption = this.skipChecks || (!target && this.upgradeV7_9_3App) ? '--skip-checks' : '';
     const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
     this.log.verboseInfo(regenerateCmd);
     const result = this.spawnCommandSync(regenerateCmd);
@@ -200,8 +214,8 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.success(`Committed with message "${commitMsg}"`);
   }
 
-  _regenerate(jhipsterVersion, blueprintInfo) {
-    this._generate(jhipsterVersion, blueprintInfo);
+  _regenerate(jhipsterVersion, blueprintInfo, { target }) {
+    this._generate(jhipsterVersion, blueprintInfo, { target });
     const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
     this.log.verboseInfo(`Removing ${keystore}`);
     this._rmRf(keystore);
@@ -213,7 +227,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     const commandPrefix = 'npm install';
     const devDependencyParam = '--save-dev';
     const noPackageLockParam = '--no-package-lock';
-    const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --legacy-peer-deps`;
+    const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --force`;
     this.log.verboseInfo(generatorCommand);
 
     const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
@@ -400,7 +414,7 @@ export default class UpgradeGenerator extends BaseGenerator {
           const blueprintInfo =
             this.blueprints && this.blueprints.length > 0 ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} ` : '';
           // Regenerate the project
-          this._regenerate(this.currentJhipsterVersion, blueprintInfo);
+          this._regenerate(this.currentJhipsterVersion, blueprintInfo, { target: false });
           // Checkout original branch
           this._gitCheckout(this.sourceBranch);
           // Register reference for merging
@@ -461,7 +475,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         const targetJhipsterVersion = this.originalTargetJhipsterVersion
           ? `${this.originalTargetJhipsterVersion} ${this.targetJhipsterVersion}`
           : this.targetJhipsterVersion;
-        this._regenerate(targetJhipsterVersion, blueprintInfo);
+        this._regenerate(targetJhipsterVersion, blueprintInfo, { target: true });
       },
 
       checkoutSourceBranch() {
