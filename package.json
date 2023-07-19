@@ -100,7 +100,7 @@
     "aws-sdk": "2.1417.0",
     "axios": "1.4.0",
     "chalk": "4.1.2",
-    "chevrotain": "10.5.0",
+    "chevrotain": "11.0.1",
     "commander": "11.0.0",
     "conf": "11.0.2",
     "debug": "4.3.4",
