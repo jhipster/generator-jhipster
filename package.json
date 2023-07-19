@@ -102,7 +102,7 @@
     "chalk": "4.1.2",
     "chevrotain": "10.5.0",
     "commander": "11.0.0",
-    "conf": "11.0.1",
+    "conf": "11.0.2",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.5.0",
