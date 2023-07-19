@@ -294,7 +294,11 @@ sonar.javascript.lcov.reportPaths=target/test-results/lcov.info
 sonar.sourceEncoding=UTF-8
 sonar.exclusions=src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, target/classes/static/**/*.*
 
-sonar.issue.ignore.multicriteria=S3437,S4502,S4684,S5145,UndocumentedApi
+sonar.issue.ignore.multicriteria=\\
+  S3437,\\
+  S4502,\\
+  S4684,S5145,UndocumentedApi
+
 # Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored, as a JPA-managed field cannot be transient
 sonar.issue.ignore.multicriteria.S3437.resourceKey=src/main/java/**/*
 sonar.issue.ignore.multicriteria.S3437.ruleKey=squid:S3437
