@@ -18,12 +18,11 @@
  */
 
 import { jestExpect } from 'esmocha';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
-import { expect } from 'chai';
 
 import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity } from '../../models/index.mjs';
@@ -169,7 +168,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               name: binaryOptions.Options.DTO,
               value: binaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
-            })
+            }),
           );
           const returnedMap: any = convert(jdlObject);
           convertedOptions = returnedMap.get('A');
@@ -182,7 +181,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         it('should log the automatic setting of the option', () => {
           expect(loggerSpy.getCall(0).args[0]).to.equal(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
-              'no other value has been set.'
+              'no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
@@ -211,7 +210,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
             new JDLUnaryOption({
               name: unaryOptions.FILTER,
               entityNames: ['A'],
-            })
+            }),
           );
           const returnedMap: any = convert(jdlObject);
           convertedOptions = returnedMap.get('A');
@@ -224,7 +223,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         it('should log the automatic setting of the option', () => {
           expect(loggerSpy.getCall(0).args[0]).to.equal(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
-              'entity if no other value has been set.'
+              'entity if no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
@@ -253,7 +252,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               values: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
-            })
+            }),
           );
           const returnedMap: any = convert(jdlObject);
           convertedOptions = returnedMap.get('A');

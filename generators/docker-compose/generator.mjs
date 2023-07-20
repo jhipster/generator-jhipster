@@ -74,8 +74,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             this.log.error(
               chalk.red(
                 'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
-                  '         Read https://docs.docker.com/compose/install/\n'
-              )
+                  '         Read https://docs.docker.com/compose/install/\n',
+              ),
             );
           } else {
             const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
@@ -86,8 +86,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
                 chalk.red(
                   `$Docker Compose version 1.6.0 or later is not installed on your computer.
                                              Docker Compose version found: ${composeVersion}
-                                             Read https://docs.docker.com/compose/install`
-                )
+                                             Read https://docs.docker.com/compose/install`,
+                ),
               );
             }
           }
@@ -165,7 +165,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
                   return [serviceName, config];
                 }
                 return [`${lowercaseBaseName}-${serviceName}`, config];
-              })
+              }),
             );
           }
           if (appConfig.applicationType === GATEWAY) {
@@ -174,7 +174,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
             if (this.keycloakSecrets === undefined && appConfig.authenticationType === OAUTH2) {
               faker.seed(stringHashCode(appConfig.baseName));
-              this.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
+              this.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
             }
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
@@ -211,7 +211,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
                   if (envOption.startsWith(varName)) {
                     envOption = envOption.replace(`${varName}=`, `${varName}=${lowercaseBaseName}-`);
                   }
-                }
+                },
               );
               return envOption;
             });

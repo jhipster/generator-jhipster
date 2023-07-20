@@ -31,6 +31,7 @@ type ReactiveApplication = {
 
 export type LiquibaseApplication = {
   incrementalChangelog: boolean;
+  liquibaseDefaultSchemaName: string;
 };
 
 type DatabaseTypeSqlApplication = (
@@ -41,6 +42,7 @@ type DatabaseTypeSqlApplication = (
 ) & {
   devDatabaseType: string;
   prodDatabaseType: string;
+  devDatabaseTypeMysql: boolean;
 } & LiquibaseApplication;
 
 type DatabaseTypeApplication = DeterministicOptionWithDerivedProperties<
@@ -56,7 +58,7 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
     Record<string, never>,
     {
       enableGradleEnterprise: boolean;
-    }
+    },
   ]
 >;
 

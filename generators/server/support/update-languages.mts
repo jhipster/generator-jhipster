@@ -37,7 +37,7 @@ export function updateLanguagesInMailServiceITTask(this: BaseGenerator, { applic
   newContent += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
 
   this.editFile(`${javaPackageTestDir}/service/MailServiceIT.java`, { ignoreNonExisting }, content =>
-    content.replace(/private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g, newContent)
+    content.replace(/private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g, newContent),
   );
 }
 

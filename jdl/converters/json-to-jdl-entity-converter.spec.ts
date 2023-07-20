@@ -21,8 +21,7 @@
 import { expect } from 'chai';
 
 import fs from 'fs';
-import path from 'path';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
 import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/index.mjs';
@@ -99,49 +98,50 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         it('should parse options', () => {
           expect(
             jdlObject.getOptions().filter(option => option.name === DTO && option.value === MAPSTRUCT && option.entityNames.has('Employee'))
-              .length
+              .length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
               .filter(
-                option => option.name === PAGINATION && option.value === pagination['INFINITE-SCROLL'] && option.entityNames.has('Employee')
-              ).length
+                option =>
+                  option.name === PAGINATION && option.value === pagination['INFINITE-SCROLL'] && option.entityNames.has('Employee'),
+              ).length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
-              .filter(option => option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')).length
+              .filter(option => option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')).length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
-              .filter(option => option.name === SEARCH && option.value === ELASTICSEARCH && option.entityNames.has('Employee')).length
+              .filter(option => option.name === SEARCH && option.value === ELASTICSEARCH && option.entityNames.has('Employee')).length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
               .filter(option => option.name === MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee'))
-              .length
+              .length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
               .filter(option => option.name === ANGULAR_SUFFIX && option.value === 'myentities' && option.entityNames.has('Employee'))
-              .length
+              .length,
           ).to.equal(1);
           expect(
             jdlObject.getOptions().filter(option => option.name === unaryOptions.NO_FLUENT_METHOD && option.entityNames.has('Employee'))
-              .length
+              .length,
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === unaryOptions.FILTER && option.entityNames.has('Employee')).length
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.FILTER && option.entityNames.has('Employee')).length,
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === unaryOptions.READ_ONLY && option.entityNames.has('Employee')).length
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.READ_ONLY && option.entityNames.has('Employee')).length,
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === unaryOptions.EMBEDDED && option.entityNames.has('Employee')).length
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.EMBEDDED && option.entityNames.has('Employee')).length,
           ).to.equal(1);
         });
       });
@@ -233,7 +233,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       context('when parsing an unrecognised blob-typed field', () => {
         it('should fail', () => {
           expect(() => convertEntitiesToJDL({ entities: new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]) })).to.throw(
-            "Unrecognised blob type: 'unknown'"
+            "Unrecognised blob type: 'unknown'",
           );
         });
       });
@@ -249,9 +249,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
               fs
                 .readFileSync(
                   path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'),
-                  'utf-8'
+                  'utf-8',
                 )
-                .toString()
+                .toString(),
             ),
           ],
         ]);
@@ -272,9 +272,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
               fs
                 .readFileSync(
                   path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'with_authority', '.jhipster', 'TestEntity.json'),
-                  'utf-8'
+                  'utf-8',
                 )
-                .toString()
+                .toString(),
             ),
           ],
         ]);
@@ -289,6 +289,6 @@ describe('jdl - JSONToJDLEntityConverter', () => {
 
 function readJsonEntity(entityName) {
   return JSON.parse(
-    fs.readFileSync(path.join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString()
+    fs.readFileSync(path.join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString(),
   );
 }

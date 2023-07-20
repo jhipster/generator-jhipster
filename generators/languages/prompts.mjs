@@ -39,7 +39,7 @@ export async function askI18n() {
         store: true,
       },
     ],
-    this.config
+    this.config,
   );
   if (nativeLanguage !== answers.nativeLanguage) {
     this.languagesToApply.push(answers.nativeLanguage);

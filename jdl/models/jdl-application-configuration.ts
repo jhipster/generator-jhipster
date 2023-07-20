@@ -24,7 +24,7 @@ const { OptionNames } = ApplicationOptions;
 export default class JDLApplicationConfiguration {
   options: any;
 
-  constructor(config = {}) {
+  constructor() {
     this.options = {};
   }
 

@@ -173,7 +173,7 @@ describe(`generator - ${clientFramework}`, () => {
         loadComponent: () => import('./metrics/metrics.component'),
         title: 'metrics.title',
       },
-`
+`,
             );
           });
         }

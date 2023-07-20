@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_SPRING_DATA_MONGODB, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
@@ -59,7 +58,6 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
       addDependencies({ application, source }) {
         const { reactive } = application;
         if (application.buildToolMaven) {
-          const reactiveMongock = false; // workaround https://github.com/mongock/mongock/issues/613
           source.addMavenDefinition?.({
             dependencies: [
               { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },

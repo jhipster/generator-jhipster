@@ -182,7 +182,7 @@ function checkForErrors(jdlObject, configuration, logger = console) {
         databaseType,
         blueprints,
       },
-      logger
+      logger,
     );
   } else {
     validator = createWithApplicationValidator(jdlObject, logger);

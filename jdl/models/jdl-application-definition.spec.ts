@@ -88,14 +88,14 @@ describe('jdl - ApplicationOptions', () => {
       OptionNames.GRADLE_ENTERPRISE_HOST,
     ]);
     const optionsThatShouldNotBeQuoted = new Set(
-      Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName))
+      Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName)),
     );
 
     context('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => applicationDefinition.shouldTheValueBeQuoted()).to.throw(
-          /^An option name has to be passed to know whether it is quoted.$/
+          /^An option name has to be passed to know whether it is quoted.$/,
         );
       });
     });

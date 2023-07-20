@@ -180,13 +180,13 @@ describe('jdl - JDLEntity', () => {
           new JDLField({
             name: 'a',
             type: 'String',
-          })
+          }),
         );
         entity.addField(
           new JDLField({
             name: 'b',
             type: 'String',
-          })
+          }),
         );
         result = '';
         entity.forEachField(field => {
@@ -266,7 +266,7 @@ describe('jdl - JDLEntity', () => {
           `/**
  * ${args.comment}
  */
-entity ${args.name} (${args.tableName})`
+entity ${args.name} (${args.tableName})`,
         );
       });
     });
@@ -307,7 +307,7 @@ entity ${entity.name} (${entity.tableName}) {
    */
   ${field1.name} ${field1.type} ${field1.validations[0]}
   ${field2.name} ${field2.type}
-}`
+}`,
         );
       });
     });

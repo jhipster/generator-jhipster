@@ -59,7 +59,7 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
             ...elasticDockerContainer,
             ...getDockerfileContainers(dockerfile),
           },
-          dockerPlaceholderGenerator
+          dockerPlaceholderGenerator,
         );
       },
 
@@ -99,7 +99,7 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
 
   loadDeploymentConfig(
     config = _.defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
-    dest = this
+    dest = this,
   ) {
     dest.appsFolders = config.appsFolders;
     dest.directoryPath = config.directoryPath;

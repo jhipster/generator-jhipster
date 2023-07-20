@@ -42,7 +42,7 @@ export default function upgradeFilesTask(this: BaseGenerator) {
           const code = gitMove.call(
             this,
             `${SERVER_MAIN_RES_DIR}i18n/messages_${props![0]}.properties`,
-            `${SERVER_MAIN_RES_DIR}i18n/messages_${props![1]}.properties`
+            `${SERVER_MAIN_RES_DIR}i18n/messages_${props![1]}.properties`,
           );
           atLeastOneSuccess = atLeastOneSuccess || code;
         });

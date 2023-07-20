@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_SPRING_DATA_CASSANDRA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';

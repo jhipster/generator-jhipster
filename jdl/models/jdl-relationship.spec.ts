@@ -156,7 +156,7 @@ describe('jdl - JDLRelationship', () => {
 
     it('should return an unique representation of the relationship', () => {
       expect(relationship.getId()).to.equal(
-        `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`
+        `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`,
       );
     });
   });
@@ -226,7 +226,7 @@ describe('jdl - JDLRelationship', () => {
         expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
-}`
+}`,
         );
       });
     });
@@ -255,7 +255,7 @@ describe('jdl - JDLRelationship', () => {
    * ${relationship.commentInTo}
    */
   ${relationship.to}
-}`
+}`,
         );
       });
     });
@@ -279,7 +279,7 @@ describe('jdl - JDLRelationship', () => {
    * ${relationship.commentInFrom}
    */
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
-}`
+}`,
         );
       });
     });
@@ -304,7 +304,7 @@ describe('jdl - JDLRelationship', () => {
    * ${relationship.commentInTo}
    */
   ${relationship.to}
-}`
+}`,
         );
       });
     });
@@ -324,7 +324,7 @@ describe('jdl - JDLRelationship', () => {
         expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
-}`
+}`,
         );
       });
     });
@@ -345,7 +345,7 @@ describe('jdl - JDLRelationship', () => {
         expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{${relationship.injectedFieldInTo}}
-}`
+}`,
         );
       });
     });
@@ -373,7 +373,7 @@ describe('jdl - JDLRelationship', () => {
             `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
               `${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
-}`
+}`,
           );
         });
       });
@@ -403,7 +403,7 @@ describe('jdl - JDLRelationship', () => {
   @id
   @idGenerator(sequence)
   ${relationship.to}{${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
-}`
+}`,
           );
         });
       });

@@ -17,11 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Faker } from '@faker-js/faker';
+import { Faker, base } from '@faker-js/faker';
 import Randexp from 'randexp';
 
 import { languageToJavaLanguage } from '../../languages/support/index.mjs';
-import { stringHashCode } from './string.mjs';
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;
@@ -35,7 +34,7 @@ class RandexpWithFaker extends Randexp {
     }
     // In order to have consistent results with RandExp, the RNG is seeded.
     this.randInt = (from: number, to?: number): number => {
-      return faker.datatype.number({ min: from, max: to });
+      return faker.number.int({ min: from, max: to });
     };
   }
 }
@@ -54,23 +53,21 @@ class FakerWithRandexp extends Faker {
 // eslint-disable-next-line import/prefer-default-export
 export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
-  let nativeFakerInstance;
+  let locale;
   // Faker >=6 doesn't exports locales by itself, it exports a faker instance with the locale.
   // We need a Faker instance for each entity, to build additional fake instances, use the locale from the exported localized faker instance.
   // See https://github.com/faker-js/faker/pull/642
   try {
-    // eslint-disable-next-line import/no-dynamic-require
-    nativeFakerInstance = (await import(`@faker-js/faker/locale/${nativeLanguage}`)).faker;
+    // eslint-disable-next-line import/no-dynamic-require, quotes
+    locale = (await import(`@faker-js/faker`))[nativeLanguage];
   } catch (error) {
     // Faker not implemented for the native language, fallback to en.
     // eslint-disable-next-line import/no-unresolved, import/no-dynamic-require
-    nativeFakerInstance = (await import('@faker-js/faker/locale/en')).faker;
+    locale = (await import('@faker-js/faker')).en;
   }
 
   const faker = new FakerWithRandexp({
-    locales: nativeFakerInstance.locales,
-    locale: nativeFakerInstance.locale,
-    localeFallback: nativeFakerInstance.localeFallback,
+    locale: [locale, base],
   });
   faker.createRandexp = (pattern, m) => new RandexpWithFaker(pattern, m, faker);
   return faker;

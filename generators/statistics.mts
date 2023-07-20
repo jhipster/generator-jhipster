@@ -108,14 +108,14 @@ class Statistics {
         .post(url, data)
         .then(
           () => {},
-          error => {
+          () => {
             if (this.axiosProxyClient) {
               this.axiosProxyClient
                 .post(url, data)
                 .then(() => {})
                 .catch(() => {});
             }
-          }
+          },
         )
         .catch(() => {});
     }
@@ -190,7 +190,7 @@ class Statistics {
         'user-language': osLocaleSync(),
         isARegeneration,
       },
-      this.forceInsight
+      this.forceInsight,
     );
 
     this.insight.trackWithEvent('generator', 'app');
@@ -249,7 +249,7 @@ class Statistics {
         service,
         fluentMethods,
       },
-      this.forceInsight
+      this.forceInsight,
     );
   }
 }

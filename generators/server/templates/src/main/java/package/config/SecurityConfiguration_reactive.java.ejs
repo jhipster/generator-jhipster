@@ -46,7 +46,6 @@ import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 <%_ if (authenticationTypeSession) { _%>
@@ -131,14 +130,14 @@ import java.util.Set;
   <%_ if (!applicationTypeMicroservice) { _%>
 import java.util.function.Consumer;
   <%_ } _%>
-
-import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 
+<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
+import static org.springframework.security.config.Customizer.withDefaults;
+<%_ } _%>
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
 @Configuration
-@EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 public class SecurityConfiguration {
 
@@ -211,6 +210,9 @@ public class SecurityConfiguration {
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
                 pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**")
             )))
+<%_ if (!applicationTypeMicroservice) { _%>
+            .cors(withDefaults())
+<%_ } _%>
             .csrf(csrf -> csrf
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())

@@ -9,7 +9,7 @@ type CliCommand = (
   options: Record<string, any>,
   env: Environment,
   envBuilder: EnvironmentBuilder,
-  createEnvBuilder: (options: any) => Promise<EnvironmentBuilder>
+  createEnvBuilder: (options: any) => Promise<EnvironmentBuilder>,
 ) => any;
 
 export default CliCommand;

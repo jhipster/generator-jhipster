@@ -216,7 +216,7 @@ export const basicTests = data => {
       });
       it('should load default config and prompt values into the context', () => {
         expect(getTemplateData(runResult.generator)).toEqual(
-          expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig })
+          expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }),
         );
       });
     });
@@ -427,7 +427,7 @@ export const shouldSupportFeatures = Generator => {
     const instance = new Generator(
       [],
       { help: true, namespace: 'foo', resolved: 'bar', env: { cwd: 'foo' }, sharedData: {} },
-      { unique: 'bar' }
+      { unique: 'bar' },
     );
     expect(instance.features.unique).toBe('bar');
   });

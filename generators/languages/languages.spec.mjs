@@ -3,7 +3,6 @@ import { dirname, join } from 'path';
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { supportedLanguages } from './support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,15 +43,15 @@ const containsLanguageFiles = languageValue => {
   it('contains 3 needles in global.json', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
-      '"jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)"'
+      '"jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)"',
     );
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
-      '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"'
+      '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"',
     );
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
-      '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"'
+      '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"',
     );
   });
 };
@@ -90,7 +89,7 @@ const containsLanguageInVueStore = languageValue => {
     runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/languages.ts`, `${langKey}: { name:`);
     runResult.assertFileContent(
       `${CLIENT_WEBPACK_DIR}webpack.common.js`,
-      `{ pattern: './src/main/webapp/i18n/${languageValue}/*.json', fileName: './i18n/${languageValue}.json' }`
+      `{ pattern: './src/main/webapp/i18n/${languageValue}/*.json', fileName: './i18n/${languageValue}.json' }`,
     );
   });
 };
@@ -108,7 +107,7 @@ describe('generator - languages', () => {
               nativeLanguage: language.languageTag,
               languages: [language.languageTag],
             })
-            .run()
+            .run(),
         );
         containsLanguageFiles(language.languageTag);
       });
@@ -118,7 +117,7 @@ describe('generator - languages', () => {
             .run(generatorPath)
             .withOptions({ ignoreNeedlesError: true })
             .withLocalConfig({ enableTranslation: true, nativeLanguage: language.languageTag })
-            .withOptions({ languages: [language.languageTag], baseName: 'jhipster' })
+            .withOptions({ languages: [language.languageTag], baseName: 'jhipster' }),
         );
         containsLanguageFiles(language.languageTag);
       });
@@ -130,7 +129,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'], baseName: 'jhipster' })
-          .withOptions({ ignoreNeedlesError: true })
+          .withOptions({ ignoreNeedlesError: true }),
       );
       noLanguageFiles('fr');
     });
@@ -139,7 +138,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
-          .withOptions({ ignoreNeedlesError: true, skipPrompts: true, baseName: 'jhipster' })
+          .withOptions({ ignoreNeedlesError: true, skipPrompts: true, baseName: 'jhipster' }),
       );
       noLanguageFiles('fr');
       noLanguageFiles('en');
@@ -152,7 +151,7 @@ describe('generator - languages', () => {
           enableTranslation: true,
           nativeLanguage: 'fr',
           languages: [],
-        })
+        }),
       );
       containsLanguageFiles('fr');
     });
@@ -162,7 +161,7 @@ describe('generator - languages', () => {
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ nativeLanguage: 'fr', baseName: 'jhipster' })
+          .withOptions({ nativeLanguage: 'fr', baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
     });
@@ -172,7 +171,7 @@ describe('generator - languages', () => {
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' })
+          .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
     });
@@ -191,7 +190,7 @@ describe('generator - languages', () => {
             enableTranslation: true,
             nativeLanguage: 'fr',
             languages: ['en'],
-          })
+          }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
@@ -202,7 +201,7 @@ describe('generator - languages', () => {
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ nativeLanguage: 'fr', languages: ['en'], baseName: 'jhipster' })
+          .withOptions({ nativeLanguage: 'fr', languages: ['en'], baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
@@ -213,7 +212,7 @@ describe('generator - languages', () => {
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' })
+          .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
@@ -229,7 +228,7 @@ describe('generator - languages', () => {
             enableTranslation: true,
             nativeLanguage: 'fr',
             languages: ['fr', 'de'],
-          })
+          }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('de');
@@ -240,7 +239,7 @@ describe('generator - languages', () => {
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'en' })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ languages: ['fr', 'de'], baseName: 'jhipster' })
+          .withOptions({ languages: ['fr', 'de'], baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('de');

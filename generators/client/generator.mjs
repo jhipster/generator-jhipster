@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
@@ -125,7 +124,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'resources', 'package.json'),
         );
       },
     });
@@ -155,7 +154,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
             createNeedleCallback({
               needle: 'add-resources-to-root',
               contentToAdd: [comment ? `<!-- ${comment} -->` : undefined, resource].filter(i => i).join('\n'),
-            })
+            }),
           );
       },
     });
@@ -237,7 +236,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
           const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
           this.addWebpackConfig(
             `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
-            application.clientFramework
+            application.clientFramework,
           );
         } else if (application.clientFrameworkVue || application.clientFrameworkReact) {
           this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })", application.clientFramework);

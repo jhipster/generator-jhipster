@@ -41,7 +41,7 @@ export default function prepareField(entityWithConfig, field, generator) {
     assert.equal(
       entityWithConfig.dto,
       MAPSTRUCT,
-      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
+      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`,
     );
     // Remove from Entity.java and liquibase.
     field.transient = true;
@@ -94,7 +94,7 @@ export default function prepareField(entityWithConfig, field, generator) {
     if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType ?? entityWithConfig.databaseType)) {
       if (!jhiFieldNamePrefix) {
         generator.log.warn(
-          `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
+          `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`,
         );
         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
       } else {

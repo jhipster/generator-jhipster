@@ -8,34 +8,39 @@
       // Update the VARIANT arg to pick a Java version: 17, 19
       // Append -bullseye or -buster to pin to an OS version.
       // Use the -bullseye variants on local arm64/Apple Silicon.
-      "VARIANT": "17",
+      "VARIANT": "<%= JAVA_VERSION %>-bullseye",
       // Options
-      "INSTALL_MAVEN": "<%= buildToolMaven %>",
-      "INSTALL_GRADLE": "<%= buildToolGradle %>",
-      "NODE_VERSION": "lts/*"
+      // maven and gradle wrappers are used by default, we don't need them installed globally
+      // "INSTALL_MAVEN": "<%= buildToolMaven %>",
+      // "INSTALL_GRADLE": "<%= buildToolGradle %>",
+      "NODE_VERSION": "<%= nodeVersion %>"
     }
   },
 
-  // Set *default* container specific settings.json values on container create.
-  "settings": {
-    "java.home": "/docker-java-home"
-  },
+  "customizations": {
+    "vscode": {
+      // Set *default* container specific settings.json values on container create.
+      "settings": {
+        "java.jdt.ls.java.home": "/docker-java-home"
+      },
 
-  // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
 <%_ if(clientFrameworkAngular) { _%>
-    "angular.ng-template",
+        "angular.ng-template",
 <%_ } _%>
 <%_ if(!skipClient) { _%>
-    "christian-kohler.npm-intellisense",
-    "firsttris.vscode-jest-runner",
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    "dbaeumer.vscode-eslint",
+        "christian-kohler.npm-intellisense",
+        "firsttris.vscode-jest-runner",
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "dbaeumer.vscode-eslint",
 <%_ } _%>
-    "vscjava.vscode-java-pack",
-    "pivotal.vscode-boot-dev-pack",
-    "esbenp.prettier-vscode"
-	],
+        "vscjava.vscode-java-pack",
+        "pivotal.vscode-boot-dev-pack",
+        "esbenp.prettier-vscode"
+	    ],
+    },
+  },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [

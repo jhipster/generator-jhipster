@@ -72,7 +72,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'),
         );
       },
     });
@@ -162,7 +162,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
-`)
+`),
         );
       },
     });

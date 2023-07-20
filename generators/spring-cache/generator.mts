@@ -56,14 +56,14 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
               addEntryToCacheCallback(entry),
               ...(relationships ?? [])
                 .filter(rel => rel.collection)
-                .map(rel => addEntryToCacheCallback(`${entry} + ".${rel.propertyName}"`))
+                .map(rel => addEntryToCacheCallback(`${entry} + ".${rel.propertyName}"`)),
             );
           };
         } else {
           // Add noop
-          source.addEntryToCache = ({ entry }) => {};
+          source.addEntryToCache = () => {};
           // Add noop
-          source.addEntityToCache = ({ entityAbsoluteClass }) => {};
+          source.addEntityToCache = () => {};
         }
       },
     });

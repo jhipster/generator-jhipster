@@ -48,7 +48,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_ONE,
-          })
+          }),
         );
         relationships.add(
           new JDLRelationship({
@@ -56,7 +56,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc3',
             injectedFieldInFrom: 'somethingElse',
             type: relationshipTypes.ONE_TO_ONE,
-          })
+          }),
         );
       });
 
@@ -299,7 +299,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_ONE,
-          })
+          }),
         );
       });
 
@@ -325,7 +325,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_MANY,
-          })
+          }),
         );
       });
 
@@ -351,7 +351,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.MANY_TO_ONE,
-          })
+          }),
         );
       });
 
@@ -378,7 +378,7 @@ describe('jdl - JDLRelationships', () => {
             injectedFieldInFrom: 'something',
             injectedFieldInTo: 'somethingElse',
             type: relationshipTypes.MANY_TO_MANY,
-          })
+          }),
         );
       });
 
@@ -402,7 +402,7 @@ describe('jdl - JDLRelationships', () => {
           to: 'Abc2',
           injectedFieldInFrom: 'something',
           type: relationshipTypes.ONE_TO_ONE,
-        })
+        }),
       );
       expect(relationships.size()).to.equal(1);
     });
@@ -429,7 +429,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_MANY,
-          })
+          }),
         );
         jdlRelationships.add(
           new JDLRelationship({
@@ -437,7 +437,7 @@ describe('jdl - JDLRelationships', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: relationshipTypes.ONE_TO_ONE,
-          })
+          }),
         );
         jdlRelationships.forEach(jdlRelationship => {
           result.push({ from: jdlRelationship.from, to: jdlRelationship.to, type: jdlRelationship.type });

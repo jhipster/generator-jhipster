@@ -26,10 +26,7 @@ import { readJSONFile } from '../readers/json-file-reader.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
-import ApplicationOptions from '../jhipster/application-options.js';
 import { Entity } from './types.js';
-
-const { OptionNames } = ApplicationOptions;
 
 export default {
   convertToJDL,
@@ -89,7 +86,7 @@ function getJDLObjectFromMultipleApplications(directory) {
 function getJDLObjectFromSingleApplication(
   yoRcFileContent,
   entities?: Map<string, Entity>,
-  existingJDLObject = new JDLObject()
+  existingJDLObject = new JDLObject(),
 ): JDLObject {
   const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
   const jdlApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });

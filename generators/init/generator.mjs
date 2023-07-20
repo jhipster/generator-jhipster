@@ -19,9 +19,10 @@
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { defaultConfig } from './config.mjs';
-import { NODE_VERSION, SKIP_COMMIT_HOOK } from './constants.mjs';
+import { SKIP_COMMIT_HOOK } from './constants.mjs';
 import { files, commitHooksFiles } from './files.mjs';
 import command from './command.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
 /**
  * @class
@@ -51,13 +52,13 @@ export default class InitGenerator extends BaseApplicationGenerator {
     return this.asLoadingTaskGroup({
       loadConfig({ application }) {
         const config = { ...defaultConfig, ...this.config.getAll() };
-        application.nodeVersion = NODE_VERSION;
+        application.applicationNodeEngine = packageJson.engines.node;
         application[SKIP_COMMIT_HOOK] = config[SKIP_COMMIT_HOOK];
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_INIT, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_INIT, 'resources', 'package.json'),
         );
       },
     });

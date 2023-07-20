@@ -42,7 +42,7 @@ export function convertServerOptionsToJDL(config, jdl: JDLObject): JDLObject {
         new JDLUnaryOption({
           name: option,
           value: jhipsterConfig[option],
-        })
+        }),
       );
     }
   });

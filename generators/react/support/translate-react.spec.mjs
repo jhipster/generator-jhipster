@@ -31,7 +31,7 @@ describe('generator - react - transform', () => {
             interpolation = `-${JSON.stringify(interpolation)}`;
           }
           return `${key}${interpolation}-translated-value-${value++}`;
-        })
+        }),
       );
     });
 

@@ -1,4 +1,5 @@
 node_modules
+node_modules_container
 coverage
 .idea
 *.iml
@@ -25,3 +26,6 @@ test/**/*.png
 jdl/**/*.png
 test-integration/**/*.png
 /dist
+
+# allow customizations without having a dirty tree
+.devcontainer

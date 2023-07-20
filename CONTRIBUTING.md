@@ -219,13 +219,30 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 [Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
-### Set NPM to use the cloned project
+### Set `jhipster` command to use the cloned project
 
-In your cloned `generator-jhipster` project, run `npm link` and then run `npm ci`.
+Since v8 `generator-jhipster` is written in typescript.
+To run it you need to compile to javascript or use a just-in-time compilation.
+
+#### Runnning jit executable
+
+The executable is located at `bin/jhipster.cjs`.
+You can alias it to `jhipster` command:
+
+```shell
+alias jhipster="GLOBAL_PATH/generator-jhipster/bin/jhipster.cjs"
+```
+
+#### Globally linked compiled package
+
+In your cloned `generator-jhipster` project, run `npm ci` and then run `npm link`.
+
+`npm ci` will do a clean installation of all the project dependencies and compile sources.
+`npm run build` can be used to compile sources after each change.
 
 `npm link` will make a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
-`npm ci` will do a clean installation of all the project dependencies.
+### Test generating applications
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
@@ -234,14 +251,14 @@ Also add the option `--skip-jhipster-dependencies` to generate the application i
 
 To put it in a nutshell, you need to:
 
-1.  run `npm link` on the `generator-jhipster` project (link globally)
+1.  run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
 2.  run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
 You can execute `jhipster --install-path` to check where jhipster is being executed from.
 
 You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
-For projects with jhipster third party library (i.e. react-jhipster, ng-jhipster, etc.) you need to run `npm link` on the library project as well, then npm link the original framework (i.e. react) from the generated project to the library project `cd react-jhipster && npm link <path-to-generated-project>/node_modules/react`.
+For projects with jhipster third party library (i.e. react-jhipster, etc.) you need to run `npm link` on the library project as well, then npm link the original framework (i.e. react) from the generated project to the library project `cd react-jhipster && npm link <path-to-generated-project>/node_modules/react`.
 
 ```shell
 jhipster
@@ -289,22 +306,47 @@ Run every test with lint/prettier
 `npm test`
 
 Run every test without lint/prettier
-`npx mocha`
+`npx esmocha`
 
 Update every test snapshot
 `npm run update-snapshots`
 
 Run specific tests
-`npx mocha <path>`
+`npx esmocha <path>`
 
 Run specific tests in series (improved error reporting)
-`npx mocha <path> --no-parallel`
+`npx esmocha <path> --no-parallel`
 
 Update specific test snapshot
-`npm run update-snapshot -- <path>` or `npx mocha <path> --no-parallel --updateSnapshot`
+`npm run update-snapshot -- <path>` or `npx esmocha <path> --no-parallel --update-snapshot`
 
 Fixing lint and prettier errors
 `npm run lint-fix`
+
+## DX using vscode
+
+`generator-jhipster` add a series of vscode configurations for a better developer experience.
+
+### Development Containers
+
+Container is built using java, node and npm recommended by `generator-jhipster`.
+Once up, you should have the stack maintainers recommends.
+
+### Execution shortcuts
+
+Shortcuts are provided to easily generate integration tests samples.
+
+- go to `Execute and Debug`.
+- select the sample's github workflow.
+- run the shortcut.
+- select the sample.
+- sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
+
+Some daily builds samples are available too.
+
+### Generators tests
+
+At test tab you can run and debug individual test.
 
 ## Running integration tests locally
 
@@ -327,7 +369,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 - All features or bug fixes **must be tested** by one or more tests.
 - All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the JHipster generator project. Please note that generated projects use the same `.editorconfig` file, so that both the generator and the generated projects share the same configuration.
-- Java files **must be** formatted using Intellij IDEA default code style.
+- Java files **must be** formatted using IntelliJ IDEA default code style.
 - Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 - Any client side feature/change should be done for both Angular and react clients
 - Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html).

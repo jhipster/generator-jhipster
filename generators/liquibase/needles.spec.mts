@@ -50,25 +50,25 @@ describe('generator - liquibase - needles', () => {
   it('Assert changelog is added to master.xml', () => {
     runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-      '<include file="config/liquibase/changelog/aNewChangeLog.xml" relativeToChangelogFile="false"/>'
+      '<include file="config/liquibase/changelog/aNewChangeLog.xml" relativeToChangelogFile="false"/>',
     );
   });
 
   it('Assert incremental changelog is added to master.xml', () => {
     runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-      '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>'
+      '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>',
     );
     runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-      '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle2.xml" relativeToChangelogFile="false"/>'
+      '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle2.xml" relativeToChangelogFile="false"/>',
     );
   });
 
   it('Assert constraints changelog is added to master.xml', () => {
     runResult.assertFileContent(
       `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-      '<include file="config/liquibase/changelog/aNewConstraintsChangeLog.xml" relativeToChangelogFile="false"/>'
+      '<include file="config/liquibase/changelog/aNewConstraintsChangeLog.xml" relativeToChangelogFile="false"/>',
     );
   });
 });

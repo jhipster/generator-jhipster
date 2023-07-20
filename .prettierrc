@@ -11,6 +11,10 @@ arrowParens: avoid
 # jsx and tsx rules:
 bracketSameLine: false
 
+plugins:
+  - prettier-plugin-packagejson
+  - prettier-plugin-java
+
 overrides:
   # java rules:
   - files: "*.java"

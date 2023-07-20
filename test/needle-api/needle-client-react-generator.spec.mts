@@ -1,7 +1,6 @@
-import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult, getGenerator } from '../support/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { getGenerator } from '../support/index.mjs';
 import ReactGenerator from '../../generators/react/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 
@@ -72,7 +71,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
   it('Assert entity is added to menu', () => {
     result.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
-      '<MenuItem icon="asterisk" to="/routerName">\n        Router Name\n      </MenuItem>'
+      '<MenuItem icon="asterisk" to="/routerName">\n        Router Name\n      </MenuItem>',
     );
   });
 });

@@ -101,7 +101,7 @@ describe('jdl - JDLEnum', () => {
  */
 enum ${jdlEnum.name} {
   ${values.map(value => value.key).join(',\n  ')}
-}`
+}`,
         );
       });
     });
@@ -127,7 +127,7 @@ enum ${jdlEnum.name} {
   FRENCH (french),
   ENGLISH (english),
   ICELANDIC
-}`
+}`,
         );
       });
     });

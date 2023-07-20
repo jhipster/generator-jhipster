@@ -108,7 +108,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
           if (err) {
             this.log.error(
               "cloudfoundry's cf command line interface is not available. " +
-                'You can install it via https://github.com/cloudfoundry/cli/releases'
+                'You can install it via https://github.com/cloudfoundry/cli/releases',
             );
             this.abort = true;
           }
@@ -129,7 +129,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         const done = this.async();
 
         this.log.log(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
-        exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (err, stdout, stderr) => {
+        exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (_err, stdout) => {
           // Unauthenticated
           if (stdout.search('cf login') >= 0) {
             this.log.error("Error: Not authenticated. Run 'cf login' to login to your cloudfoundry account and try again.");
@@ -150,9 +150,9 @@ export default class CloudfoundryGenerator extends BaseGenerator {
           const child = exec(
             `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
             {},
-            (err, stdout, stderr) => {
+            () => {
               done();
-            }
+            },
           );
           child.stdout.on('data', data => {
             this.log.verboseInfo(data.toString());

@@ -1,6 +1,6 @@
 import { expect } from 'esmocha';
 import lodash from 'lodash';
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildSamplesFromMatrix, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';

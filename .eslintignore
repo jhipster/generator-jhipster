@@ -2,6 +2,7 @@
 coverage
 generators/**/templates
 node_modules
+node_modules_container
 test-integration
 docs
 test/templates

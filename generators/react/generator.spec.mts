@@ -121,7 +121,7 @@ describe(`generator - ${clientFramework}`, () => {
                 '  configuration: {\n' +
                 '    configProps: {} as any,\n' +
                 '    env: {} as any\n' +
-                '  },'
+                '  },',
             );
 
             assertion(
@@ -129,7 +129,7 @@ describe(`generator - ${clientFramework}`, () => {
               '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
                 '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
                 '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
-                '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>'
+                '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>',
             );
           });
         }

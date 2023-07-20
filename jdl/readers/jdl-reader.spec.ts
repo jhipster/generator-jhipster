@@ -20,9 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 import fs from 'fs';
-import path from 'path';
+import path, { dirname } from 'path';
 
-import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as JDLReader from '../readers/jdl-reader.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';

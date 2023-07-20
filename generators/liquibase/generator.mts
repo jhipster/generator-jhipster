@@ -18,7 +18,6 @@
  */
 import fs from 'fs';
 
-import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
@@ -77,6 +76,10 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.liquibaseDefaultSchemaName =
+          application.databaseTypeSql && application.devDatabaseTypeMysql && application.baseName ? application.baseName : '';
+      },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
@@ -218,6 +221,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
             properties: [
               { property: 'liquibase-plugin.hibernate-dialect' },
               { property: 'liquibase-plugin.driver' },
+              { property: 'h2.version', value: application.javaDependencies.h2 },
               { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
               { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
               { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },
@@ -258,6 +262,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
                 devDatabaseTypeH2Any: applicationAny.devDatabaseTypeH2Any,
                 driver: liquibasePluginJdbcDriver,
                 hibernateDialect: liquibasePluginHibernateDialect,
+                defaultSchemaName: application.liquibaseDefaultSchemaName,
                 // eslint-disable-next-line no-template-curly-in-string
                 url: '${liquibase-plugin.url}',
                 // eslint-disable-next-line no-template-curly-in-string
@@ -348,7 +353,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
         .map(entityName => [
           entityName,
           { name: entityName, ...JSON.parse(fs.readFileSync(this.getEntityConfigPath(entityName)).toString()) },
-        ])
+        ]),
     );
 
     if (application.generateBuiltInUserEntity) {
@@ -390,7 +395,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
         !application.incrementalChangelog ||
         !oldEntitiesConfig[entityName] ||
         !fs.existsSync(
-          this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`)
+          this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`),
         )
       ) {
         return [
@@ -426,7 +431,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
           // id changes are not supported
           !newRelationship.id &&
           // check if the same relationship wasn't already part of the old config
-          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship))
+          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship)),
       );
 
       // Calculate to be removed relationships
@@ -435,7 +440,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
           // id changes are not supported
           !oldRelationship.id &&
           // check if there are relationships not anymore in the new config
-          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship))
+          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship)),
       );
 
       // calcualte relationships that only need a foreign key recreation from the ones that are added
@@ -443,13 +448,13 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
       const relationshipsToRecreateForeignKeysOnly = addedRelationships
         .filter(addedRelationship =>
           removedRelationships.some(removedRelationship =>
-            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship)
-          )
+            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship),
+          ),
         )
         .concat(
           removedRelationships.filter(removedRelationship =>
-            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship))
-          )
+            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship)),
+          ),
         );
 
       return [

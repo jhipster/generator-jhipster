@@ -62,7 +62,7 @@ export function cleanupCouchbaseEntityFilesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
     if (this.isJhipsterVersionLessThan('7.6.1')) {
       this.removeFile(
-        `${application.srcMainResources}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`
+        `${application.srcMainResources}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`,
       );
     }
   }

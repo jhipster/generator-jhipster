@@ -114,7 +114,7 @@ export default class JdlGenerator extends BaseGenerator {
                 return downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
               }
               return filename;
-            })
+            }),
           );
         }
       },
@@ -292,7 +292,7 @@ export default class JdlGenerator extends BaseGenerator {
         const envBuilder = await this.createEnvBuilder(envOptions);
         const env = envBuilder.getEnvironment();
         await env.run([`${CLI_NAME}:${GENERATOR_APP}`], generatorOptions);
-      })
+      }),
     );
   }
 

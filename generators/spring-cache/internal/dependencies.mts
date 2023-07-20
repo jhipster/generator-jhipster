@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { MavenDefinition, MavenDependency, MavenProperty } from '../../maven/types.mjs';
+import { MavenDefinition } from '../../maven/types.mjs';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -39,7 +39,7 @@ type CacheProviderDependencies = {
 // eslint-disable-next-line import/prefer-default-export
 export const getCacheProviderMavenDefinition: (
   cacheProvider: string,
-  javaDependencies: Record<string, string>
+  javaDependencies: Record<string, string>,
 ) => CacheProviderDependencies = (cacheProvider: string, javaDependencies: Record<string, string>) => {
   const dependenciesForCache: Record<string, CacheProviderDependencies> = {
     redis: {

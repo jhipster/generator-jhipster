@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { expect } from 'esmocha';
 
 import { dryRunHelpers as helpers, getGenerator } from '../../test/support/index.mjs';

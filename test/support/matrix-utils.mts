@@ -27,7 +27,7 @@ export const fromMatrix = configMatrix => {
               [config]: value,
             },
           ];
-        })
+        }),
       )
       .flat();
   }, []);
@@ -43,7 +43,7 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
         .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
         .flat();
     },
-    [{}]
+    [{}],
   );
   const additionalMatrix = [];
   while (additionalMatrixTemp.length > 0) {
@@ -84,7 +84,7 @@ export const extendFilteredMatrix = (matrix, filter, extendedConfig) => {
 
 export const buildSamplesFromMatrix = (
   samples: Record<string, Record<string, unknown>>,
-  { commonConfig = {} }: { commonConfig?: Record<string, unknown> } = {}
+  { commonConfig = {} }: { commonConfig?: Record<string, unknown> } = {},
 ): Record<string, Record<string, unknown>> =>
   sortKeys(
     commonConfig
@@ -95,8 +95,8 @@ export const buildSamplesFromMatrix = (
               ...sample,
               ...commonConfig,
             },
-          ])
+          ]),
         )
       : samples,
-    { deep: true }
+    { deep: true },
   );

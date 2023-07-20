@@ -62,8 +62,8 @@ export default class AwsGenerator extends BaseGenerator {
 
           this.log.log(
             chalk.green(
-              'This is an existing deployment, using the configuration from your .yo-rc.json file \nto deploy your application...\n'
-            )
+              'This is an existing deployment, using the configuration from your .yo-rc.json file \nto deploy your application...\n',
+            ),
           );
         }
       },

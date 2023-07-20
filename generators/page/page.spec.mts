@@ -1,6 +1,5 @@
 import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
@@ -42,16 +41,16 @@ describe('generator - page', () => {
       it('adds page path, service', () => {
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-          `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+          `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`,
         );
         runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`, `path: '/pages/${pageFolderName}',`);
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-          `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+          `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`,
         );
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-          `provide('${pageInstance}Service', () => new ${pageName}Service());`
+          `provide('${pageInstance}Service', () => new ${pageName}Service());`,
         );
       });
     };

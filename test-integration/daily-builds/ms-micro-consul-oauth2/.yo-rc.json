@@ -25,7 +25,7 @@
     "serviceDiscoveryType": "consul",
     "skipClient": true,
     "skipUserManagement": true,
-    "testFrameworks": ["gatling", "cypress"],
+    "testFrameworks": ["gatling"],
     "websocket": false
   }
 }

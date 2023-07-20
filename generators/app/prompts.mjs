@@ -93,7 +93,7 @@ export async function askForApplicationType({ control }) {
         type: 'confirm',
         name: 'microfrontend',
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
-        default: config.microfrontend,
+        default: config.microfrontend ?? false,
       },
       {
         when: answers => {
@@ -113,7 +113,7 @@ export async function askForApplicationType({ control }) {
         transformer: microfrontendsToPromptValue,
       },
     ],
-    this.config
+    this.config,
   );
 
   const { applicationType } = this.jhipsterConfig;

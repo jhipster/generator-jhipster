@@ -24,7 +24,7 @@ export default class extends needleBase {
 
     this.addBlockContentToFile(
       { file: filePath, needle, splicable: content, regexp: `\n${style}\n`, prettierAware: true },
-      'Style not added to JHipster app.\n'
+      'Style not added to JHipster app.\n',
     );
   }
 

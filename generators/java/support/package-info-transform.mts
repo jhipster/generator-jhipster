@@ -40,7 +40,7 @@ const packageInfoTransform = ({ javaRoots, editor, javadocs }: PackageInfoTransf
  * ${packageJavadoc}
  */
 package ${packageName};
-`
+`,
           );
         }
       }

@@ -1,8 +1,7 @@
-import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult, getGenerator } from '../support/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_WEBPACK_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { getGenerator } from '../support/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const assetFrom = 'source';

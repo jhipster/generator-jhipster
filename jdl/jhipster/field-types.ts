@@ -142,7 +142,7 @@ export function getIsType(databaseType, callback?: any) {
       callback && callback();
       throw new Error(
         "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
-          " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'"
+          " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'",
       );
   }
   return isType;

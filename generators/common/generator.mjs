@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
@@ -30,7 +29,6 @@ import {
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
 } from '../generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 import command from './command.mjs';
 
@@ -93,7 +91,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
         );
       },
 

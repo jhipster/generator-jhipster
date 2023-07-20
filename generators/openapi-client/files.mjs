@@ -86,7 +86,7 @@ export function customizeFiles() {
           `-p basePackage=${this.packageName}.client`,
           `-p configPackage=${cliPackage}`,
           `-p title=${_.camelCase(cliName)}`,
-          `-p artifactId=${_.camelCase(cliName)}`
+          `-p artifactId=${_.camelCase(cliName)}`,
         );
 
         openApiCmd.push(additionalParameters.join(','));
@@ -136,7 +136,7 @@ export function customizeFiles() {
                 groupId: 'org.springframework.cloud',
                 artifactId: 'spring-cloud-starter-openfeign',
                 scope: 'compile',
-              })
+              }),
             );
           }
         }
@@ -148,7 +148,7 @@ export function customizeFiles() {
             groupId: 'org.springframework.cloud',
             artifactId: 'spring-cloud-starter-oauth2',
             scope: 'compile',
-          })
+          }),
         );
       }
     },
@@ -171,7 +171,7 @@ export function customizeFiles() {
           // TODO addGradlePropertyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile(
             'gradle.properties',
-            addGradlePropertyCallback({ property: 'jacksonDatabindNullableVersion', value: jacksonDatabindNullableVersion })
+            addGradlePropertyCallback({ property: 'jacksonDatabindNullableVersion', value: jacksonDatabindNullableVersion }),
           );
           // TODO addGradleDependencyCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
           this.editFile(
@@ -182,7 +182,7 @@ export function customizeFiles() {
               // eslint-disable-next-line no-template-curly-in-string
               version: '${jacksonDatabindNullableVersion}',
               scope: 'compile',
-            })
+            }),
           );
         }
       }
@@ -200,7 +200,7 @@ export function customizeFiles() {
         this.rewriteFile(
           mainClassFile,
           'import org.springframework.core.env.Environment;',
-          'import org.springframework.cloud.openfeign.EnableFeignClients;'
+          'import org.springframework.cloud.openfeign.EnableFeignClients;',
         );
         this.rewriteFile(mainClassFile, '@SpringBootApplication', '@EnableFeignClients');
       }
@@ -217,7 +217,7 @@ export function customizeFiles() {
       this.rewriteFile(
         mainClassFile,
         'import org.springframework.core.env.Environment;',
-        'import org.springframework.context.annotation.ComponentScan;\nimport org.springframework.context.annotation.FilterType;'
+        'import org.springframework.context.annotation.ComponentScan;\nimport org.springframework.context.annotation.FilterType;',
       );
 
       const componentScan =

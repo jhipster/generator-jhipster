@@ -315,7 +315,7 @@ export default class HerokuGenerator extends BaseGenerator {
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
           this.log.log(chalk.bold('\nInitializing Git repository'));
-          const child = ChildProcess.exec('git init', (err, stdout, stderr) => {
+          const child = ChildProcess.exec('git init', () => {
             done();
           });
           child.stdout.on('data', data => {
@@ -335,7 +335,7 @@ export default class HerokuGenerator extends BaseGenerator {
             done();
           } else {
             this.log.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            const child = ChildProcess.exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
+            const child = ChildProcess.exec(`heroku plugins:install ${cliPlugin}`, err => {
               if (err) {
                 this.abort = true;
                 this.log.error(err);
@@ -397,7 +397,7 @@ export default class HerokuGenerator extends BaseGenerator {
                     done();
                   });
                 } else {
-                  ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
+                  ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout) => {
                     if (err) {
                       this.abort = true;
                       this.log.error(err);
@@ -407,7 +407,7 @@ export default class HerokuGenerator extends BaseGenerator {
                       this.log.verboseInfo(stdout.trim());
 
                       // ensure that the git remote is the same as the appName
-                      ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                      ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, err => {
                         if (err) {
                           this.abort = true;
                           this.log.error(err);
@@ -453,7 +453,7 @@ export default class HerokuGenerator extends BaseGenerator {
         if (this.abort) return;
         const done = this.async();
 
-        const addonCreateCallback = (addon, err, stdout, stderr) => {
+        const addonCreateCallback = (addon, err) => {
           if (err) {
             const verifyAccountUrl = 'https://heroku.com/verify';
             if (_.includes(err, verifyAccountUrl)) {
@@ -552,7 +552,7 @@ export default class HerokuGenerator extends BaseGenerator {
             props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
             const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
             const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-            const child = ChildProcess.exec(configSetCmd, (err, stdout, stderr) => {
+            const child = ChildProcess.exec(configSetCmd, err => {
               if (err) {
                 this.abort = true;
                 this.log.error(err);
@@ -589,7 +589,7 @@ export default class HerokuGenerator extends BaseGenerator {
         }
         if (this.useOkta) {
           this.writeFile('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
-          fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
+          fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', err => {
             if (err) {
               this.log.warn(`${chalk.yellow.bold('WARNING!')} Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
             }
@@ -603,7 +603,7 @@ export default class HerokuGenerator extends BaseGenerator {
         // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile(
           'build.gradle',
-          addGradlePluginCallback({ groupId: 'gradle.plugin.com.heroku.sdk', artifactId: 'heroku-gradle', version: '1.0.4' })
+          addGradlePluginCallback({ groupId: 'gradle.plugin.com.heroku.sdk', artifactId: 'heroku-gradle', version: '1.0.4' }),
         );
         // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
@@ -632,8 +632,8 @@ export default class HerokuGenerator extends BaseGenerator {
           } catch (err) {
             this.log.warn(
               `${chalk.yellow.bold(
-                'WARNING!'
-              )}Failed to make 'provision-okta-addon.sh' executable, you may need to run 'chmod +x provison-okta-addon.sh'`
+                'WARNING!',
+              )}Failed to make 'provision-okta-addon.sh' executable, you may need to run 'chmod +x provison-okta-addon.sh'`,
             );
           }
         }
@@ -779,7 +779,7 @@ export default class HerokuGenerator extends BaseGenerator {
                 curlAvailable = true;
               } catch (err) {
                 this.log.log(
-                  chalk.red('cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.')
+                  chalk.red('cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'),
                 );
                 this.log.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
               }
@@ -788,7 +788,7 @@ export default class HerokuGenerator extends BaseGenerator {
                 jqAvailable = true;
               } catch (err) {
                 this.log.log(
-                  chalk.red('jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.')
+                  chalk.red('jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'),
                 );
                 this.log.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
               }
@@ -801,8 +801,8 @@ export default class HerokuGenerator extends BaseGenerator {
                 } catch (err) {
                   this.log.log(
                     chalk.red(
-                      'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.'
-                    )
+                      'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.',
+                    ),
                   );
                 }
               }
@@ -824,8 +824,8 @@ export default class HerokuGenerator extends BaseGenerator {
 
           this.log.log(
             chalk.bold(
-              `\nUploading your application code.\nThis may take ${chalk.cyan('several minutes')} depending on your connection speed...`
-            )
+              `\nUploading your application code.\nThis may take ${chalk.cyan('several minutes')} depending on your connection speed...`,
+            ),
           );
           try {
             await execCmd(herokuSetBuildpackCommand);
@@ -850,7 +850,7 @@ export default class HerokuGenerator extends BaseGenerator {
                 curlAvailable = true;
               } catch (err) {
                 this.log.log(
-                  chalk.red('cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.')
+                  chalk.red('cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'),
                 );
                 this.log.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
               }
@@ -859,7 +859,7 @@ export default class HerokuGenerator extends BaseGenerator {
                 jqAvailable = true;
               } catch (err) {
                 this.log.log(
-                  chalk.red('jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.')
+                  chalk.red('jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'),
                 );
                 this.log.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
               }
@@ -872,8 +872,8 @@ export default class HerokuGenerator extends BaseGenerator {
                 } catch (err) {
                   this.log.log(
                     chalk.red(
-                      'Failed to execute ./provision-okta-addon.sh. Make sure to set up Okta according to https://www.jhipster.tech/heroku/.'
-                    )
+                      'Failed to execute ./provision-okta-addon.sh. Make sure to set up Okta according to https://www.jhipster.tech/heroku/.',
+                    ),
                   );
                 }
               }

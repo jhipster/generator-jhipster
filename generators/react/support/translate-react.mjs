@@ -38,7 +38,7 @@ const replaceTranslationKeysWithText = (
   getWebappTranslation,
   body,
   regexp,
-  { keyPattern, interpolatePattern, wrapTranslation, escapeHtml } = {}
+  { keyPattern, interpolatePattern, wrapTranslation, escapeHtml } = {},
 ) => {
   const matches = body.matchAll(new RegExp(regexp, 'g'));
   if (typeof wrapTranslation === 'string') {

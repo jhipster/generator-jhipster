@@ -38,7 +38,7 @@ import {
   HELM_MARIADB,
   HELM_MYSQL,
   HELM_POSTGRESQL,
-  HELM_MOGODB_REPLICASET,
+  HELM_MONGODB_REPLICASET,
   HELM_COUCHBASE_OPERATOR,
 } from '../generator-constants.mjs';
 import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
@@ -58,7 +58,7 @@ export const checkKubernetes = runAsync(function () {
     if (stderr) {
       this.log.warn(
         'kubectl 1.2 or later is not installed on your computer.\n' +
-          'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n'
+          'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n',
       );
     }
     done();
@@ -76,11 +76,11 @@ export const checkHelm = runAsync(function () {
       if (stderr || code !== 0) {
         this.log.warn(
           'helm 2.12.x or later is not installed on your computer.\n' +
-            'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
+            'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
         );
       }
       done();
-    }
+    },
   );
 });
 
@@ -118,8 +118,8 @@ export function saveConfig() {
         monitoring: this.monitoring,
         istio: this.istio,
       },
-      defaultKubernetesConfig
-    )
+      defaultKubernetesConfig,
+    ),
   );
 }
 
@@ -152,7 +152,7 @@ export function setupHelmConstants() {
   this.HELM_MARIADB = HELM_MARIADB;
   this.HELM_MYSQL = HELM_MYSQL;
   this.HELM_POSTGRESQL = HELM_POSTGRESQL;
-  this.HELM_MOGODB_REPLICASET = HELM_MOGODB_REPLICASET;
+  this.HELM_MONGODB_REPLICASET = HELM_MONGODB_REPLICASET;
   this.HELM_COUCHBASE_OPERATOR = HELM_COUCHBASE_OPERATOR;
 }
 

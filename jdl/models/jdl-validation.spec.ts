@@ -92,7 +92,7 @@ describe('jdl - JDLValidation', () => {
           new JDLValidation({
             name: PATTERN,
             value: '[A-z0-9]',
-          }).toString()
+          }).toString(),
         ).to.equal('pattern(/[A-z0-9]/)');
       });
     });

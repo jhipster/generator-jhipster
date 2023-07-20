@@ -44,7 +44,7 @@ function checkForAbsentAttributes(validator, object) {
   if (absentAttributes.length !== 0) {
     const plural = absentAttributes.length > 1;
     throw new Error(
-      `The ${validator.objectType} attribute${plural ? 's' : ''} ${absentAttributes.join(', ')} ${plural ? 'were not' : 'was not'} found.`
+      `The ${validator.objectType} attribute${plural ? 's' : ''} ${absentAttributes.join(', ')} ${plural ? 'were not' : 'was not'} found.`,
     );
   }
 }

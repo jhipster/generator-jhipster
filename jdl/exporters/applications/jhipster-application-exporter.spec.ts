@@ -117,8 +117,8 @@ describe('jdl - JHipsterApplicationExporter', () => {
                 test: 1234,
               },
               null,
-              2
-            )
+              2,
+            ),
           );
           exportApplication({
             'generator-jhipster': {

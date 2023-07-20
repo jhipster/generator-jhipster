@@ -243,7 +243,7 @@ async function askForServiceDiscovery() {
   if (this.regenerate) return;
 
   const serviceDiscoveryEnabledApps = [];
-  this.appConfigs.forEach((appConfig, index) => {
+  this.appConfigs.forEach(appConfig => {
     if (appConfig.serviceDiscoveryAny) {
       serviceDiscoveryEnabledApps.push({
         baseName: appConfig.baseName,
@@ -265,7 +265,7 @@ async function askForServiceDiscovery() {
     this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
     this.log.warn(
-      chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.')
+      chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'),
     );
     this.log.verboseInfo('Your service discovery enabled apps:');
     serviceDiscoveryEnabledApps.forEach(app => {

@@ -147,7 +147,7 @@ async function askIntegrations() {
   if (['github'].includes(this.pipeline)) {
     integrationChoices.push({
       name: `Would you like to enable the ${chalk.yellow(
-        '*Cypress Dashboard*'
+        '*Cypress Dashboard*',
       )} (requires both CYPRESS_PROJECT_ID and CYPRESS_RECORD_KEY set on CI service)`,
       value: 'cypressDashboard',
     });

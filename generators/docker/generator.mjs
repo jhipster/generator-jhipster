@@ -69,7 +69,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
                     {
                       condition,
                     },
-                  ])
+                  ]),
                 ),
               },
             },
@@ -89,7 +89,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         if (application.authenticationTypeOauth2) {
           const faker = await createFaker();
           faker.seed(stringHashCode(application.baseName));
-          application.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
+          application.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
         }
         await this.writeFiles({
           sections: dockerFiles,
@@ -110,11 +110,11 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           const serviceName = application.databaseType;
           source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName },
-            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
+            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' },
           );
           source.addDockerDependencyToApplication(
             { serviceName, condition: SERVICE_HEALTHY },
-            { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY }
+            { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY },
           );
         } else if (application.databaseTypeAny && !application.prodDatabaseTypeOracle) {
           const serviceName = application.databaseTypeSql ? application.prodDatabaseType : application.databaseType;
@@ -156,13 +156,13 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         if (application.serviceDiscoveryConsul) {
           source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName: 'consul' },
-            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
+            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' },
           );
         }
         if (application.messageBrokerKafka) {
           source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName: 'kafka' },
-            { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
+            { serviceFile: './kafka.yml', serviceName: 'zookeeper' },
           );
         }
         if (application.messageBrokerPulsar) {
@@ -180,7 +180,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           if (prodDatabaseTypeNo || prodDatabaseTypeOracle) {
             scriptsStorage.set(
               'docker:db:up',
-              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`
+              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`,
             );
           } else {
             const dockerFile = `${application.dockerServicesDir}${prodDatabaseType}.yml`;
@@ -203,7 +203,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           } else {
             scriptsStorage.set(
               'docker:db:up',
-              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`
+              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`,
             );
           }
         }

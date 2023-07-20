@@ -60,7 +60,7 @@ describe('generator - base - with blueprint', () => {
           .withOptions({
             skipChecks: false,
             blueprint: 'myblueprint',
-          })
+          }),
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
 
@@ -125,7 +125,7 @@ describe('generator - base - with blueprint', () => {
           .withOptions({
             skipChecks: false,
             blueprint: 'myblueprint',
-          })
+          }),
       ).rejects.toThrow(/targets JHipster 1.1.1 and is not compatible with this JHipster version/));
   });
 });
@@ -173,7 +173,7 @@ describe('generator - base - with blueprint with constructor error', () => {
           .withJHipsterConfig()
           .withOptions({
             blueprints: 'generator-jhipster-throwing-constructor',
-          })
+          }),
       ).rejects.toThrow('blueprint with error');
     });
   });

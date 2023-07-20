@@ -18,7 +18,7 @@
  */
 import Generator from './generator.mjs';
 import { moveToJavaPackageSrcDir } from '../server/support/index.mjs';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { WriteFileSection } from '../base/api.mjs';
 import { SpringBootApplication } from '../server/types.mjs';
 

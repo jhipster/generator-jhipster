@@ -50,16 +50,16 @@ const requiredEngineFromPackageJson = () => {
 const checkNode = (
   logger,
   requiredNodeVersion = requiredEngineFromPackageJson(),
-  currentNodeVersion = getNodeVersionFromCurrentProcess()
+  currentNodeVersion = getNodeVersionFromCurrentProcess(),
 ) => {
   if (isNodeVersionCompliantWithRequirement(currentNodeVersion, requiredNodeVersion)) {
     logger.warn(
-      `Your NodeJS version is too old (${currentNodeVersion}). You should use at least NodeJS ${chalk.bold(requiredNodeVersion)}`
+      `Your NodeJS version is too old (${currentNodeVersion}). You should use at least NodeJS ${chalk.bold(requiredNodeVersion)}`,
     );
   }
   if (!isNodeLTS(getNodeReleaseFromCurrentProcess())) {
     logger.warn(
-      'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
+      'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.',
     );
   }
 };

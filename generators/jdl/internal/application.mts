@@ -33,7 +33,7 @@ export const customizeForMicroservices = (applicationsWithEntities: Record<strin
       const { baseName, clientFramework } = applicationsWithEntities[mf.baseName].config;
       if (clientFramework !== gatewayClientFramework) {
         throw Error(
-          `Using different client frameworks in microfrontends is not supported. Tried to use: ${gatewayClientFramework} with ${clientFramework} (${baseName})`
+          `Using different client frameworks in microfrontends is not supported. Tried to use: ${gatewayClientFramework} with ${clientFramework} (${baseName})`,
         );
       }
     }
@@ -51,7 +51,7 @@ export const customizeForMicroservices = (applicationsWithEntities: Record<strin
           appConfig.gatewayServerPort = appConfig.gatewayServerPort || gatewayServerPort;
           const { clientFramework, serverPort, applicationIndex, devServerPort } = appConfig;
           return [baseName, { clientFramework, serverPort, applicationIndex, devServerPort }];
-        })
+        }),
       );
     }
   }

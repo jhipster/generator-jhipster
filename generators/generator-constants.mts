@@ -25,20 +25,20 @@ export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = '18.16.0';
-export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
+export const NODE_VERSION = '18.16.1';
+export const OPENAPI_GENERATOR_CLI_VERSION = '2.6.0';
 
 export const javaDependencies: Record<string, string> = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.1.0',
+  'spring-boot': '3.1.1',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
    */
   // TODO update to spring-boot provided version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
-  hibernate: '6.1.7.Final',
+  hibernate: '6.1.7.Final', // Should be 6.2.5.Final
   /*
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.
@@ -48,16 +48,16 @@ export const javaDependencies: Record<string, string> = {
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELATICSEARCH_TAG = '8.7.1';
-export const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
+export const ELASTICSEARCH_TAG = '8.7.1';
+export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
  * Manually updated docker containers
  */
 export const dockerContainers: Record<string, string> = {
-  elasticsearchTag: ELATICSEARCH_TAG,
-  elasticsearchImage: ELATICSEARCH_IMAGE,
-  elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
+  elasticsearchTag: ELASTICSEARCH_TAG,
+  elasticsearchImage: ELASTICSEARCH_IMAGE,
+  elasticsearch: `${ELASTICSEARCH_IMAGE}:${ELASTICSEARCH_TAG}`,
 };
 Object.freeze(dockerContainers);
 
@@ -78,7 +78,7 @@ export const HELM_GRAFANA = '^4.0.0';
 export const HELM_MYSQL = '^1.4.0';
 export const HELM_MARIADB = '^6.12.2';
 export const HELM_POSTGRESQL = '^6.5.3';
-export const HELM_MOGODB_REPLICASET = '^3.10.1';
+export const HELM_MONGODB_REPLICASET = '^3.10.1';
 export const HELM_COUCHBASE_OPERATOR = '^2.2.1';
 
 // all constants used throughout all generators
