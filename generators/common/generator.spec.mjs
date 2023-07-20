@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { defaultHelpers as helpers, basicHelpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, basicHelpers, runResult } from '../../test/support/helpers.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { checkEnforcements } from '../../test/support/index.mjs';
@@ -47,9 +47,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig().withMockedGenerators(mockedGenerators);
+        await helpers.run(generatorFile).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
 
       it('should succeed', () => {
@@ -57,10 +56,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('Custom prettier', () => {
-      let runResult;
-
       before(async () => {
-        runResult = await basicHelpers
+        await basicHelpers
           .run(generatorFile)
           .withJHipsterConfig({
             prettierTabWidth: 10,
@@ -72,7 +69,7 @@ describe(`generator - ${generator}`, () => {
         runResult.assertFileContent('.prettierrc', /tabWidth: 10/);
       });
 
-      it('uses custom prettier formatting to java file', () => {
+      it('uses custom prettier formatting to js file', () => {
         runResult.assertFileContent('.lintstagedrc.js', / {10}'{/);
       });
     });
