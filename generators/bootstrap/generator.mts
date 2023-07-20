@@ -144,10 +144,7 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
     const { skipYoResolve } = this.options;
-    const { ignoreErrors } = this.options;
-
-    const prettierOptions = { packageJson: true, java: !this.jhipsterConfig.skipServer };
-    const prettierTransformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
+    const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
 
     const transformStreams = [
       ...(skipYoResolve ? [] : [createYoResolveTransform()]),
@@ -157,8 +154,13 @@ export default class BootstrapGenerator extends BaseGenerator {
       ...(this.skipPrettier
         ? []
         : [
-            createESLintTransform.call(this, { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: 'ts,js' }),
-            createPrettierTransform(prettierOptions, this, prettierTransformOptions),
+            createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
+            createPrettierTransform.call(this, {
+              ignoreErrors,
+              prettierPackageJson: true,
+              prettierJava: !this.jhipsterConfig.skipServer,
+              extensions: PRETTIER_EXTENSIONS,
+            }),
           ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
       createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),

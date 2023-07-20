@@ -118,14 +118,14 @@ export const CUSTOM_PRIORITIES = [
   {
     priorityName: POST_WRITING,
     queueName: POST_WRITING_QUEUE,
-    before: TRANSFORM,
+    before: PRE_CONFLICTS,
     args: generator => generator.getArgsForPriority(POST_WRITING),
   },
   {
     priorityName: PRE_CONFLICTS,
     queueName: PRE_CONFLICTS_QUEUE,
     args: generator => generator.getArgsForPriority(PRE_CONFLICTS),
-    before: CONFLICTS,
+    before: TRANSFORM,
   },
   {
     priorityName: INSTALL,

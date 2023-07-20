@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-
+import { isFilePending } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { writeFiles, prettierConfigFiles } from './files.mjs';
@@ -31,12 +31,10 @@ import {
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 import command from './command.mjs';
+import { createPrettierTransform } from '../bootstrap/support/prettier-support.mjs';
 
 const { REACT, ANGULAR } = clientFrameworkTypes;
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').CommonClientServerApplication>}
- */
+
 export default class CommonGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     this.loadStoredAppOptions();
@@ -158,7 +156,13 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
+      formatSonarProperties() {
+        this.queueTransformStream(createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
+          name: 'prettifying sonar-project.properties',
+          streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('sonar-project.properties') },
+        });
+      },
       addCommitHookDependencies({ application }) {
         if (application.skipCommitHook) return;
         this.packageJson.merge({
@@ -171,7 +175,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           },
         });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {

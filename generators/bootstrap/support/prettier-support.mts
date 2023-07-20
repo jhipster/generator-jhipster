@@ -20,20 +20,31 @@ import { passthrough } from 'p-transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
+import prettierPluginProperties from 'prettier-plugin-properties';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 import { Minimatch } from 'minimatch';
+import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
+import type CoreGenerator from '../../base-core/index.mjs';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
-export const isPrettierConfigFile = file => minimatch.match(file.path);
+export const isPrettierConfigFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
-export const createPrettierTransform = function (options, generator, transformOptions = {}) {
-  if (typeof transformOptions === 'boolean') {
-    transformOptions = { ignoreErrors: transformOptions };
-  }
-  const { ignoreErrors = false, extensions } = transformOptions;
-  const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
+export const createPrettierTransform = function (
+  this: CoreGenerator,
+  options: {
+    ignoreErrors?: boolean;
+    extensions?: string;
+    prettierPackageJson?: boolean;
+    prettierJava?: boolean;
+    prettierProperties?: boolean;
+    prettierOptions?: prettier.Options;
+  } = {},
+) {
+  const { ignoreErrors = false, extensions = '*', prettierPackageJson, prettierJava, prettierProperties, prettierOptions } = options;
+  const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
+  const minimatch = new Minimatch(globExpression, { dot: true });
 
-  return passthrough(async file => {
+  return passthrough(async (file: VinylMemFsEditorFile) => {
     if (!minimatch.match(file.path) || isFileStateDeleted(file)) {
       return;
     }
@@ -44,21 +55,25 @@ export const createPrettierTransform = function (options, generator, transformOp
     let fileContent;
     try {
       const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
-      const prettierOptions = {
+      const fileOptions: prettier.Options = {
         // Config from disk
         ...resolvedDestinationFileOptions,
         plugins: [],
         // for better errors
         filepath: file.relative,
+        ...prettierOptions,
       };
-      if (options.packageJson) {
-        prettierOptions.plugins.push(prettierPluginPackagejson);
+      if (prettierPackageJson && file.path.endsWith('package.json')) {
+        fileOptions.plugins!.push(prettierPluginPackagejson);
       }
-      if (options.java) {
-        prettierOptions.plugins.push(prettierPluginJava);
+      if (prettierJava && file.path.endsWith('.java')) {
+        fileOptions.plugins!.push(prettierPluginJava);
+      }
+      if (prettierProperties) {
+        fileOptions.plugins!.push(prettierPluginProperties);
       }
       fileContent = file.contents.toString('utf8');
-      const data = await prettier.format(fileContent, prettierOptions);
+      const data = await prettier.format(fileContent, fileOptions);
       file.contents = Buffer.from(data);
     } catch (error) {
       let errorMessage;
@@ -73,7 +88,7 @@ At: ${fileContent
         errorMessage = `Unknown prettier error: ${error}`;
       }
       if (ignoreErrors) {
-        generator.log.warn(errorMessage);
+        this?.log?.warn?.(errorMessage);
         return;
       }
       throw new Error(errorMessage);
