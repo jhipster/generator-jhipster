@@ -44,7 +44,7 @@ describe('jdl - FieldIssue', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).to.throw(
-          /^A field name and its entity's name must be passed\.$/
+          /^A field name and its entity's name must be passed\.$/,
         );
       });
     });

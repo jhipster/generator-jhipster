@@ -1,9 +1,7 @@
-import { basicHelpers as helpers } from '../support/index.mjs';
+import { basicHelpers as helpers, getGenerator } from '../support/index.mjs';
 
 import ClientGenerator from '../../generators/client/index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-
-import { getGenerator } from '../support/index.mjs';
 
 const { VUE } = clientFrameworkTypes;
 
@@ -37,6 +35,6 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         enableTranslation: false,
         nativeLanguage: 'en',
         languages: ['fr'],
-      })
+      }),
   );
 });

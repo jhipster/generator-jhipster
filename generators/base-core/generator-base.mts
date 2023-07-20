@@ -27,9 +27,8 @@ import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import { statSync, rmSync, existsSync } from 'fs';
-import { lt as semverLessThan } from 'semver';
+import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
-import semver from 'semver';
 import latestVersion from 'latest-version';
 import assert from 'assert';
 import SharedData from '../base/shared-data.mjs';
@@ -537,7 +536,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    */
   prepareDependencies(
     map: Record<string, string>,
-    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
+    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`,
   ): Record<string, string> {
     if (this.useVersionPlaceholders) {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
@@ -617,7 +616,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
             chalk.yellow('  JHipster update available: ') +
             chalk.green.bold(latestJhipster) +
             chalk.gray(` (current: ${packageJson.version})`)
-          }\n`
+          }\n`,
         );
         this.log.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
         this.log.log(chalk.yellow(' ______________________________________________________________________________\n'));

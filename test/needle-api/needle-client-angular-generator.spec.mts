@@ -61,7 +61,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
               <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityClassHumanized</span>
             </a>
           </li>
-`
+`,
     );
   });
 
@@ -75,7 +75,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
                             <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
                         </a>
                     </li>
-`
+`,
     );
   });
 
@@ -90,7 +90,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
         "        path: 'entityUrl',\n" +
         "        data: { pageTitle: 'entity.home.title' },\n" +
         "        loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
-        '      }'
+        '      }',
     );
   });
   it('should bail on any file change adding same needles again', async () => {

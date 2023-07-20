@@ -36,7 +36,7 @@ export default class extends needleClient {
     const rewriteFileModel = this.generateFileModel(
       this._getWebpackFile(clientFramework),
       'jhipster-needle-add-assets-to-webpack',
-      assetBlock
+      assetBlock,
     );
 
     this.addBlockContentToFile(rewriteFileModel, errorMessage);

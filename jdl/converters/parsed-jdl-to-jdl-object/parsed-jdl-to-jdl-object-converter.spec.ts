@@ -20,8 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import path from 'path';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
@@ -116,7 +115,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
                   type: fieldTypes.CommonDBTypes.IMAGE_BLOB,
                 }),
               },
-            })
+            }),
           );
           expect(jdlObject.entities.JobHistory).to.deep.eq(
             new JDLEntity({
@@ -134,13 +133,13 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
                 language: new JDLField({ name: 'language', type: 'Language' }),
               },
               comment: 'JobHistory comment.',
-            })
+            }),
           );
           expect(jdlObject.getEnum('JobType')).to.deep.equal(
             new JDLEnum({
               name: 'JobType',
               values: [{ key: 'TYPE1' }, { key: 'TYPE2' }],
-            })
+            }),
           );
           expect(jdlObject.entities.Job).to.deep.eq(
             new JDLEntity({
@@ -171,7 +170,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
                   type: fieldTypes.CommonDBTypes.LONG,
                 }),
               },
-            })
+            }),
           );
           expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
@@ -264,7 +263,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
                   type: fieldTypes.CommonDBTypes.LONG,
                 }),
               },
-            })
+            }),
           );
         });
       });
@@ -329,7 +328,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           enumField.addValidation(
             new JDLValidation({
               name: REQUIRED,
-            })
+            }),
           );
         });
 
@@ -338,7 +337,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
             new JDLEnum({
               name: 'MyEnum',
               values: [{ key: 'AAA' }, { key: 'BBB' }, { key: 'CCC' }],
-            })
+            }),
           );
           expect(jdlObject.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
@@ -962,7 +961,7 @@ entity B
             expect(() =>
               ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                 parsedContent,
-              })
+              }),
             ).to.throw(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
           });
         });

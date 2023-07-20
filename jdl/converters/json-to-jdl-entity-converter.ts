@@ -21,7 +21,7 @@ import JDLObject from '../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../models/index.mjs';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions, JDL_RELATIONSHIP_ONE_TO_MANY } from '../models/jdl-relationship.js';
+import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions } from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 
@@ -138,7 +138,7 @@ function addEnumsToJDL(entity: Entity) {
           name: field.fieldType,
           values: getEnumValuesFromString(field.fieldValues),
           comment: field.fieldTypeJavadoc,
-        })
+        }),
       );
     }
   });
@@ -245,7 +245,7 @@ function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, de
   const foundDestinationSideEntity = destinationEntityRelationships?.find(destinationEntityFromRelationship => {
     return isEntityTheDestinationSideEntity(
       upperFirst(destinationEntityFromRelationship.otherEntityName),
-      destinationEntityFromRelationship.otherEntityRelationshipName
+      destinationEntityFromRelationship.otherEntityRelationshipName,
     );
   });
   if (!foundDestinationSideEntity) {
@@ -323,7 +323,7 @@ function addUnaryOptionToJDL(unaryOption, entityName: string) {
     new JDLUnaryOption({
       name: unaryOption,
       entityNames: [entityName],
-    })
+    }),
   );
 }
 
@@ -333,6 +333,6 @@ function addBinaryOptionToJDL(binaryOption, value, entityName: string) {
       name: binaryOption,
       value,
       entityNames: [entityName],
-    })
+    }),
   );
 }

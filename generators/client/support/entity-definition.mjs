@@ -19,7 +19,7 @@
 
 import getTypescriptKeyType from './types-utils.mjs';
 
-import { fieldTypes, validations, clientFrameworkTypes, relationshipTypes } from '../../../jdl/jhipster/index.mjs';
+import { fieldTypes, validations, clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -65,7 +65,7 @@ const generateEntityClientFields = (
   dto,
   customDateType = 'dayjs.Dayjs',
   embedded = false,
-  clientFramwork = ANGULAR
+  clientFramwork = ANGULAR,
 ) => {
   const variablesWithTypes = [];
   if (!embedded && primaryKey) {

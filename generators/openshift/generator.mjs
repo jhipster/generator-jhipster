@@ -70,9 +70,9 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
         this.log.log(
           chalk.white(
             `Files will be generated in folder: ${chalk.yellow(
-              this.destinationRoot()
-            )} or in the root directory path that you select in the subsequent step`
-          )
+              this.destinationRoot(),
+            )} or in the root directory path that you select in the subsequent step`,
+          ),
         );
       },
 
@@ -87,7 +87,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
             this.log.warn(
               'oc 1.3 or later is not installed on your computer.\n' +
                 'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read' +
-                ' https://github.com/openshift/origin/\n'
+                ' https://github.com/openshift/origin/\n',
             );
           }
           done();
@@ -216,7 +216,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
         }
 
         this.log.warn(
-          'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
+          'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:',
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
@@ -242,16 +242,16 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
           const appName = app.baseName.toLowerCase();
           if (app.searchEngine === ELASTICSEARCH) {
             this.log.verboseInfo(
-              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`
+              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`,
             );
           }
           if (app.serviceDiscoveryType !== NO_SERVICE_DISCOVERY && regIndex++ === 0) {
             this.log.verboseInfo(
-              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`
+              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`,
             );
             if (app.serviceDiscoveryType === EUREKA) {
               this.log.verboseInfo(
-                `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`
+                `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`,
               );
             } else {
               this.log.verboseInfo(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
@@ -259,11 +259,11 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
           }
           if (app.prodDatabaseType !== NO_DATABASE) {
             this.log.verboseInfo(
-              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`
+              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`,
             );
           }
           this.log.verboseInfo(
-            `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`
+            `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`,
           );
         }
 

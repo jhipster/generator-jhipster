@@ -30,7 +30,7 @@ const generatedAnnotationTransform = packageName => {
       !file.path.endsWith('GeneratedByJHipster.java')
     ) {
       file.contents = Buffer.from(
-        addJavaAnnotation(file.contents.toString('utf8'), { package: packageName, annotation: 'GeneratedByJHipster' })
+        addJavaAnnotation(file.contents.toString('utf8'), { package: packageName, annotation: 'GeneratedByJHipster' }),
       );
     }
   });

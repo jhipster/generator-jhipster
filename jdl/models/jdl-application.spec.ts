@@ -414,7 +414,7 @@ describe('jdl - JDLApplication', () => {
   config {}
 
   entities A, B, C
-}`
+}`,
         );
       });
     });

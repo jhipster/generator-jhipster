@@ -36,7 +36,7 @@ describe('jdl - BinaryOptionValidator', () => {
     });
     it('should fail', () => {
       expect(() => validator.validate({})).to.throw(
-        /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/
+        /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
       );
     });
     context('when passing a binary option', () => {
@@ -50,7 +50,7 @@ describe('jdl - BinaryOptionValidator', () => {
       context('with an invalid value', () => {
         it('should fail', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
-            /^The 'dto' option is not valid for value 'toto'\.$/
+            /^The 'dto' option is not valid for value 'toto'\.$/,
           );
         });
       });

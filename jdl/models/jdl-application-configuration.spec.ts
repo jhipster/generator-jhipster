@@ -95,7 +95,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       it('should return its value', () => {
         expect(configuration.getOption(OptionNames.BASE_NAME)).to.deep.equal(
-          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application')
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'),
         );
       });
     });

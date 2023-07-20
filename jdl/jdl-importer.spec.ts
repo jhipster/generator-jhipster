@@ -20,10 +20,9 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import fse from 'fs-extra';
-import path from 'path';
+import path, { dirname } from 'path';
 import { expect } from 'chai';
 
-import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.mjs';
 import { createImporterFromFiles, createImporterFromContent } from './jdl-importer.js';
@@ -61,7 +60,7 @@ relationship OneToMany {
   A{user} to User with builtInEntity
 }
 `,
-          { applicationName: 'MyApp', databaseType: databaseTypes.SQL, skipFileGeneration: true }
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL, skipFileGeneration: true },
         ).import();
         jestExpect(importState.exportedEntities[0].relationships[0].relationshipWithBuiltInEntity).toBe(true);
       });
@@ -90,7 +89,7 @@ relationship OneToMany {
             return exportedEntity;
           });
         filesExist = ENTITY_NAMES.reduce(
-          (result, entityName) => result && fse.statSync(path.join('.jhipster', `${entityName}.json`)).isFile()
+          (result, entityName) => result && fse.statSync(path.join('.jhipster', `${entityName}.json`)).isFile(),
         );
       });
 
@@ -124,7 +123,7 @@ relationship OneToOne {
 `,
           {
             application: JSON.parse(fse.readFileSync(path.join(__dirname, '__test-files__', 'jhipster_app', '.yo-rc.json'), 'utf-8')),
-          }
+          },
         );
       });
 
@@ -232,7 +231,7 @@ relationship OneToOne {
           entity BankAccount
           entity Customer
           `,
-          {}
+          {},
         );
         returned = importer.import();
       });
@@ -395,7 +394,7 @@ relationship OneToOne {
           expect(applicationConfig).to.be.eql(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
           expect(importState.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
-            applicationWithEntities.entities
+            applicationWithEntities.entities,
           );
         });
       });
@@ -605,7 +604,7 @@ relationship OneToOne {
 
       it('should export them', () => {
         expect(exported.fields[0].fieldValues).to.equal(
-          'ARCHIVE (archive),DEV (development),INTEGRATION (integration),PROD (production),TEST (test),UAT (uat),NON_PROD (nonProd)'
+          'ARCHIVE (archive),DEV (development),INTEGRATION (integration),PROD (production),TEST (test),UAT (uat),NON_PROD (nonProd)',
         );
       });
     });
@@ -644,7 +643,7 @@ entity E
 entity F
 
 paginate * with infinite-scroll
-`
+`,
         );
         importer.import();
         entityA = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'A.json'), 'utf-8'));
@@ -765,7 +764,7 @@ paginate * with infinite-scroll
 `,
           {
             skipFileGeneration: true,
-          }
+          },
         );
         importer.import();
       });
@@ -830,7 +829,7 @@ application {
   }
   entities A, B
 }
-${entities}`
+${entities}`,
           );
           returned = importer.import();
         });
@@ -853,7 +852,7 @@ ${entities}`
             expect(applicationConfig).to.be.eql(applicationWithEntities.config);
             expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
             expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
-              applicationWithEntities.entities
+              applicationWithEntities.entities,
             );
             jestExpect(applicationWithEntities.entities).toMatchSnapshot();
           });
@@ -990,7 +989,7 @@ entity A
 
       it('should report it', () => {
         expect(caughtError.message).to.equal(
-          "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options."
+          "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options.",
         );
       });
     });
@@ -1055,7 +1054,7 @@ relationship OneToOne {
   }
 }
 `,
-          { skipFileGeneration: true }
+          { skipFileGeneration: true },
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
@@ -1079,7 +1078,7 @@ relationship OneToOne {
   }
 }
 `,
-          { skipFileGeneration: true }
+          { skipFileGeneration: true },
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].clientFramework).toBe(NO_CLIENT_FRAMEWORK);

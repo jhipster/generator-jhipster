@@ -599,7 +599,7 @@ export const serverFiles = mergeSections(
   addSectionsCondition(userManagementFiles, context => context.generateUserManagement),
   addSectionsCondition(imperativeConfigFiles, context => !context.reactive),
   addSectionsCondition(reactiveConfigFiles, context => context.reactive),
-  addSectionsCondition(swaggerFiles, context => context.enableSwaggerCodegen)
+  addSectionsCondition(swaggerFiles, context => context.enableSwaggerCodegen),
 );
 
 /**

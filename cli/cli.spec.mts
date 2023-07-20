@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-expressions, no-console */
 import assert from 'assert';
 import { expect, mock, resetAllMocks, fn } from 'esmocha';
-import { exec, fork } from 'child_process';
+import { fork } from 'child_process';
+import { execaCommandSync } from 'execa';
 import { BaseEnvironment } from '@yeoman/types';
 import { join, dirname } from 'path';
+import { coerce } from 'semver';
 import { fileURLToPath } from 'url';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
@@ -104,27 +106,24 @@ describe('cli', () => {
     resetAllMocks();
   });
 
-  it('--help should run without errors', done => {
-    exec(`${jhipsterCli} --help`, error => {
-      expect(error).toBeNull();
-      done();
-    });
+  it('--help should run without errors', () => {
+    const { stdout } = execaCommandSync(`${jhipsterCli} --help`);
+    expect(stdout).toMatch(/For more info visit/);
   });
 
-  it('--version should run without errors', done => {
-    exec(`${jhipsterCli} --version`, error => {
-      expect(error).toBeNull();
-      done();
-    });
+  it('--version should run without errors', () => {
+    const { stdout } = execaCommandSync(`${jhipsterCli} --version`);
+    expect(coerce(stdout)).toBeTruthy();
   });
 
-  it('should return error on unknown command', function (done) {
-    exec(`${jhipsterCli} junkcmd`, (error, _stdout, stderr) => {
-      expect(error).not.toBeNull();
-      expect(error?.code).toBe(1);
-      expect(stderr).toMatch('is not a known command');
-      done();
-    });
+  it('should return error on unknown command', () => {
+    expect(() => execaCommandSync(`${jhipsterCli} junkcmd`)).toThrowError(
+      expect.objectContaining({
+        exitCode: 1,
+        message: expect.stringContaining('is not a known command'),
+        stderr: expect.stringContaining('is not a known command'),
+      }),
+    );
   });
 
   describe('with an unknown command', () => {
@@ -382,33 +381,25 @@ describe('cli', () => {
   describe('when executing with blueprints', () => {
     describe('delegating commands', () => {
       describe('to blueprint without commands', () => {
-        let cbArgs;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-bar', { generator: ['app', 'server'] }))
             .commitFiles();
         });
-        beforeEach(done => {
-          exec(`${jhipsterCli} foo --blueprints bar`, (...args) => {
-            cbArgs = args;
-            done();
-          });
-        });
 
-        it('should execute callback with error', () => {
-          expect(cbArgs[0]).not.toBeNull();
-          expect(cbArgs[0].code).toBe(1);
-        });
-        it('should print warnings', () => {
-          /* eslint-disable prettier/prettier */
-          expect(cbArgs[1]).toMatch('No custom commands found within blueprint: generator-jhipster-bar');
-          expect(cbArgs[2]).toMatch('foo is not a known command');
+        it('should execute callback with error and print info', () => {
+          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar`)).toThrowError(
+            expect.objectContaining({
+              exitCode: 1,
+              stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
+              stderr: expect.stringContaining('foo is not a known command'),
+            }),
+          );
         });
       });
 
       describe('to multiple blueprints without commands', () => {
-        let cbArgs;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -416,22 +407,15 @@ describe('cli', () => {
             .withFiles(createBlueprintFiles('generator-jhipster-baz'))
             .commitFiles();
         });
-        beforeEach(done => {
-          exec(`${jhipsterCli} foo --blueprints bar,baz`, (...args) => {
-            cbArgs = args;
-            done();
-          });
-        });
 
-        it('should execute callback with error', () => {
-          expect(cbArgs[0]).not.toBeNull();
-          expect(cbArgs[0].code).toBe(1);
-        });
-        it('should print warnings', () => {
-          /* eslint-disable prettier/prettier */
-          expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-bar')).toBe(true);
-          expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-baz')).toBe(true);
-          expect(cbArgs[2].includes('foo is not a known command')).toBe(true);
+        it('should execute callback with error and print info', () => {
+          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar,baz`)).toThrowError(
+            expect.objectContaining({
+              exitCode: 1,
+              stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),
+              stderr: expect.stringContaining('foo is not a known command'),
+            }),
+          );
         });
       });
     });
@@ -551,20 +535,20 @@ describe('cli', () => {
     return class extends BaseGenerator {
       constructor(args, opts, features) {
         super(args, opts, features);
-  
+
         this.option('foo-bar', {
           description: 'Sample option',
           type: Boolean,
         });
       }
-  
+
       get [BaseGenerator.INITIALIZING]() {
         return {};
-      }  
+      }
     };
   };
   `,
-              })
+              }),
             )
             .commitFiles();
         });

@@ -28,7 +28,7 @@ export default {
 };
 
 async function prompting() {
-  const databaseType = this.databaseType;
+  const databaseType = this.databaseType ?? this.jhipsterConfig.databaseType;
   const prompts = [
     {
       name: 'cloudfoundryDeployedName',
@@ -52,13 +52,13 @@ async function prompting() {
       default: 0,
     },
     {
-      when: response => databaseType !== NO_DATABASE,
+      when: () => databaseType !== NO_DATABASE,
       name: 'cloudfoundryDatabaseServiceName',
       message: 'What is the name of your database service?',
       default: 'elephantsql',
     },
     {
-      when: response => databaseType !== NO_DATABASE,
+      when: () => databaseType !== NO_DATABASE,
       name: 'cloudfoundryDatabaseServicePlan',
       message: 'What is the name of your database plan?',
       default: 'turtle',

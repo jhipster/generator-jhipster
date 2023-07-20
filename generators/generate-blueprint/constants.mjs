@@ -80,7 +80,7 @@ export const allGeneratorsConfig = () => ({
   [GENERATORS]: Object.fromEntries(
     Object.values(GENERATOR_LIST).map(subGenerator => {
       return [subGenerator, allSubGeneratorConfig(subGenerator)];
-    })
+    }),
   ),
 });
 

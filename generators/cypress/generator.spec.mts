@@ -53,7 +53,7 @@ const e2eMatrix = extendMatrix(
       { value: 'src/', additional: { clientTestDir: 'test/' } },
       { value: 'src/main/webapp2/', additional: { clientTestDir: 'src/test/javascript2/' } },
     ],
-  }
+  },
 );
 
 const e2eSamples = Object.fromEntries(
@@ -63,7 +63,7 @@ const e2eSamples = Object.fromEntries(
       ...sample,
       testFrameworks: [CYPRESS],
     },
-  ])
+  ]),
 );
 const entities = [
   {
@@ -117,7 +117,7 @@ describe(`generator - ${generator}`, () => {
               '  metricsPageHeadingSelector,\n' +
                 '  healthPageHeadingSelector,\n' +
                 '  logsPageHeadingSelector,\n' +
-                '  configurationPageHeadingSelector,'
+                '  configurationPageHeadingSelector,',
             );
 
             assertion(
@@ -148,7 +148,7 @@ describe(`generator - ${generator}`, () => {
                 "      cy.clickOnAdminMenuItem('configuration');\n" +
                 "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
                 '    });\n' +
-                '  });'
+                '  });',
             );
 
             assertion(
@@ -156,7 +156,7 @@ describe(`generator - ${generator}`, () => {
               'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
                 'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
                 'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
-                'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';'
+                'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';',
             );
           });
         }

@@ -79,7 +79,7 @@ function getEntityOptionsInApplication(parsedApplication) {
 function checkEntityNamesInOptions(
   applicationName: string,
   entityOptions: (JDLUnaryOption | JDLBinaryOption)[],
-  entityNamesInApplication: string[]
+  entityNamesInApplication: string[],
 ) {
   const entityNamesInApplicationSet = new Set<string>(entityNamesInApplication);
   entityOptions.forEach(option => {
@@ -87,7 +87,7 @@ function checkEntityNamesInOptions(
     entityNamesForTheOption.forEach(entityNameForTheOption => {
       if (!entityNamesInApplicationSet.has(entityNameForTheOption)) {
         throw new Error(
-          `The entity ${entityNameForTheOption} in the ${option.name} option isn't declared in ${applicationName}'s entity list.`
+          `The entity ${entityNameForTheOption} in the ${option.name} option isn't declared in ${applicationName}'s entity list.`,
         );
       }
     });

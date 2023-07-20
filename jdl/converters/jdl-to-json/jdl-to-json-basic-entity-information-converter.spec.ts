@@ -20,14 +20,12 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
-import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
 import { JDLEntity } from '../../models/index.mjs';
 import { convert } from './jdl-to-json-basic-entity-converter.js';
-import logger from '../../utils/objects/logger.js';
 
 describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {

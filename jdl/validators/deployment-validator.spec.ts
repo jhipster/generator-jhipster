@@ -50,7 +50,7 @@ describe('jdl - DeploymentValidator', () => {
                 gatewayType: Options.gatewayType.springCloudGateway,
                 monitoring: 'no',
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-              })
+              }),
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
           });
         });
@@ -63,7 +63,7 @@ describe('jdl - DeploymentValidator', () => {
                 gatewayType: Options.gatewayType.springCloudGateway,
                 monitoring: 'no',
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-              })
+              }),
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
           });
         });
@@ -76,7 +76,7 @@ describe('jdl - DeploymentValidator', () => {
                 directoryPath: '../',
                 gatewayType: Options.gatewayType.springCloudGateway,
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-              })
+              }),
             ).not.to.throw();
           });
         });
@@ -94,8 +94,8 @@ describe('jdl - DeploymentValidator', () => {
                   },
                   {
                     applicationType: MICROSERVICE,
-                  }
-                )
+                  },
+                ),
               ).to.throw(/^A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.$/);
             });
           });
@@ -108,7 +108,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 monitoring: 'no',
-              })
+              }),
             ).not.to.throw();
           });
         });
@@ -123,7 +123,7 @@ describe('jdl - DeploymentValidator', () => {
                 kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                 monitoring: 'no',
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-              })
+              }),
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
           });
         });
@@ -136,7 +136,7 @@ describe('jdl - DeploymentValidator', () => {
                 kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                 monitoring: 'no',
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-              })
+              }),
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
           });
         });
@@ -151,10 +151,10 @@ describe('jdl - DeploymentValidator', () => {
                   directoryPath: '../',
                   kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                   serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-                })
+                }),
               ).not.to.throw();
             });
-          }
+          },
         );
         context('without kubernetesServiceType', () => {
           it('should fail', () => {
@@ -164,7 +164,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-              })
+              }),
             ).to.throw(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
           });
         });
@@ -179,9 +179,9 @@ describe('jdl - DeploymentValidator', () => {
                   serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
                   kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                   istio: true,
-                })
+                }),
               ).to.throw(
-                /^An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.$/
+                /^An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.$/,
               );
             });
           });
@@ -196,9 +196,9 @@ describe('jdl - DeploymentValidator', () => {
                   directoryPath: '../',
                   kubernetesServiceType: Options.kubernetesServiceType.ingress,
                   serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-                })
+                }),
               ).to.throw(
-                /^An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.$/
+                /^An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.$/,
               );
             });
           });
@@ -213,7 +213,7 @@ describe('jdl - DeploymentValidator', () => {
                 directoryPath: '../',
                 gatewayType: Options.gatewayType.springCloudGateway,
                 openshiftNamespace: 'default',
-              })
+              }),
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
           });
         });
@@ -225,7 +225,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 monitoring: 'no',
                 openshiftNamespace: 'default',
-              })
+              }),
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
           });
         });
@@ -237,7 +237,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 openshiftNamespace: 'default',
-              })
+              }),
             ).not.to.throw();
           });
         });
@@ -248,7 +248,7 @@ describe('jdl - DeploymentValidator', () => {
                 deploymentType: Options.deploymentType.openshift,
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
-              })
+              }),
             ).not.to.throw();
           });
         });
@@ -262,8 +262,8 @@ describe('jdl - DeploymentValidator', () => {
                   directoryPath: '../',
                   storageType: Options.storageType.ephemeral,
                 },
-                { prodDatabaseType: NO }
-              )
+                { prodDatabaseType: NO },
+              ),
             ).to.throw(/^Can't have the storageType option set when there is no prodDatabaseType.$/);
           });
         });
@@ -277,8 +277,8 @@ describe('jdl - DeploymentValidator', () => {
                   directoryPath: '../',
                   storageType: Options.storageType.ephemeral,
                 },
-                { searchEngine: searchEngineTypes.ELASTICSEARCH }
-              )
+                { searchEngine: searchEngineTypes.ELASTICSEARCH },
+              ),
             ).to.throw(/^Can't have the storageType option set when elasticsearch is the search engine.$/);
           });
         });
@@ -291,7 +291,7 @@ describe('jdl - DeploymentValidator', () => {
                 directoryPath: '../',
                 storageType: Options.storageType.ephemeral,
                 monitoring: Options.monitoring.prometheus,
-              })
+              }),
             ).to.throw(/^Can't have the storageType option set when the monitoring is done with prometheus.$/);
           });
         });
@@ -304,8 +304,8 @@ describe('jdl - DeploymentValidator', () => {
                   appsFolders: ['beers', 'burgers'],
                   directoryPath: '../',
                 },
-                { prodDatabaseType: MONGODB }
-              )
+                { prodDatabaseType: MONGODB },
+              ),
             ).not.to.throw();
           });
         });
@@ -318,7 +318,7 @@ describe('jdl - DeploymentValidator', () => {
             deploymentType: 'whatever',
             appsFolders: ['beers', 'burgers'],
             directoryPath: '../',
-          })
+          }),
         ).to.throw(/^The deployment type whatever isn't supported.$/);
       });
     });

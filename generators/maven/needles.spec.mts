@@ -33,7 +33,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
                         <artifactId>exclusionArtifactId</artifactId>
                     </exclusion>
                 </exclusions>`,
-          })
+          }),
         );
 
         source.addMavenDistributionManagement?.(
@@ -43,7 +43,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
             snapshotsUrl: 'snapshotsUrl',
             releasesId: 'releasesId',
             releasesUrl: 'releasesUrl',
-          })
+          }),
         );
         source.addMavenProperty?.(asItemOrArray({ inProfile, property: 'propertyName.dotted', value: 'propertyValue' }));
         source.addMavenDependency?.(
@@ -59,7 +59,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
                     <artifactId>exclusionArtifactId</artifactId>
                 </exclusion>
             </exclusions>`,
-          })
+          }),
         );
         source.addMavenPlugin?.(
           asItemOrArray({
@@ -74,7 +74,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
                         <artifactId>exclusionArtifactId</artifactId>
                     </exclusion>
                 </exclusions>`,
-          })
+          }),
         );
         source.addMavenPluginManagement?.(
           asItemOrArray({
@@ -88,7 +88,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
                             <artifactId>exclusionArtifactId</artifactId>
                         </exclusion>
                     </exclusions>`,
-          })
+          }),
         );
         source.addMavenAnnotationProcessor?.(
           asItemOrArray({
@@ -96,7 +96,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
             groupId: 'annotationProcessorGroupId',
             artifactId: 'annotationProcessorArtifactId',
             version: 'annotationProcessorVersion',
-          })
+          }),
         );
         source.addMavenProfile?.(asItemOrArray({ id: 'profileId', content: '            <other>other</other>' }));
         source.addMavenRepository?.(
@@ -105,13 +105,13 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
             url: 'repositoryUrl',
             releasesEnabled: true,
             snapshotsEnabled: false,
-          })
+          }),
         );
         source.addMavenPluginRepository?.(
           asItemOrArray({
             id: 'repositoryId',
             url: 'repositoryUrl',
-          })
+          }),
         );
       },
     });
@@ -146,7 +146,7 @@ describe('generator - maven - needles', () => {
                         <artifactId>exclusionArtifactId</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>`
+            </dependency>`,
       );
     });
 
@@ -162,7 +162,7 @@ describe('generator - maven - needles', () => {
             <id>releasesId</id>
             <url>releasesUrl</url>
         </repository>
-    </distributionManagement>`
+    </distributionManagement>`,
       );
     });
 
@@ -183,7 +183,7 @@ describe('generator - maven - needles', () => {
                     <artifactId>exclusionArtifactId</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>`
+        </dependency>`,
       );
     });
     it('Assert pom.xml has the maven plugin added', () => {
@@ -199,7 +199,7 @@ describe('generator - maven - needles', () => {
                         <artifactId>exclusionArtifactId</artifactId>
                     </exclusion>
                 </exclusions>
-            </plugin>`
+            </plugin>`,
       );
     });
 
@@ -216,7 +216,7 @@ describe('generator - maven - needles', () => {
                             <artifactId>exclusionArtifactId</artifactId>
                         </exclusion>
                     </exclusions>
-                </plugin>`
+                </plugin>`,
       );
     });
 
@@ -228,7 +228,7 @@ describe('generator - maven - needles', () => {
                                 <groupId>annotationProcessorGroupId</groupId>
                                 <artifactId>annotationProcessorArtifactId</artifactId>
                                 <version>annotationProcessorVersion</version>
-                            </path>`
+                            </path>`,
       );
     });
 
@@ -239,7 +239,7 @@ describe('generator - maven - needles', () => {
         <profile>
             <id>profileId</id>
             <other>other</other>
-        </profile>`
+        </profile>`,
       );
     });
   });
@@ -273,7 +273,7 @@ describe('generator - maven - needles', () => {
                                 <artifactId>exclusionArtifactId</artifactId>
                             </exclusion>
                         </exclusions>
-                    </dependency>`
+                    </dependency>`,
       );
     });
 
@@ -290,7 +290,7 @@ describe('generator - maven - needles', () => {
                     <id>releasesId</id>
                     <url>releasesUrl</url>
                 </repository>
-            </distributionManagement>`
+            </distributionManagement>`,
       );
     });
 
@@ -312,7 +312,7 @@ describe('generator - maven - needles', () => {
                             <artifactId>exclusionArtifactId</artifactId>
                         </exclusion>
                     </exclusions>
-                </dependency>`
+                </dependency>`,
       );
     });
     it('Assert pom.xml has the maven plugin added', () => {
@@ -328,7 +328,7 @@ describe('generator - maven - needles', () => {
                                 <artifactId>exclusionArtifactId</artifactId>
                             </exclusion>
                         </exclusions>
-                    </plugin>`
+                    </plugin>`,
       );
     });
 
@@ -345,7 +345,7 @@ describe('generator - maven - needles', () => {
                                     <artifactId>exclusionArtifactId</artifactId>
                                 </exclusion>
                             </exclusions>
-                        </plugin>`
+                        </plugin>`,
       );
     });
 
@@ -357,7 +357,7 @@ describe('generator - maven - needles', () => {
                                         <groupId>annotationProcessorGroupId</groupId>
                                         <artifactId>annotationProcessorArtifactId</artifactId>
                                         <version>annotationProcessorVersion</version>
-                                    </path>`
+                                    </path>`,
       );
     });
 

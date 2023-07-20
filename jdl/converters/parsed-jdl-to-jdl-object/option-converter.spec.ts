@@ -45,7 +45,7 @@ describe('jdl - OptionConverter', () => {
               {
                 [unaryOptionName]: { list: ['A'], excluded: ['B'] },
               },
-              []
+              [],
             );
           });
 
@@ -74,7 +74,7 @@ describe('jdl - OptionConverter', () => {
                   [optionValue!]: { list: ['A'], excluded: ['B'] },
                 },
               },
-              []
+              [],
             );
           });
 

@@ -58,7 +58,7 @@ export const checkKubernetes = runAsync(function () {
     if (stderr) {
       this.log.warn(
         'kubectl 1.2 or later is not installed on your computer.\n' +
-          'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n'
+          'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n',
       );
     }
     done();
@@ -76,11 +76,11 @@ export const checkHelm = runAsync(function () {
       if (stderr || code !== 0) {
         this.log.warn(
           'helm 2.12.x or later is not installed on your computer.\n' +
-            'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
+            'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
         );
       }
       done();
-    }
+    },
   );
 });
 
@@ -118,8 +118,8 @@ export function saveConfig() {
         monitoring: this.monitoring,
         istio: this.istio,
       },
-      defaultKubernetesConfig
-    )
+      defaultKubernetesConfig,
+    ),
   );
 }
 

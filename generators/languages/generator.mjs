@@ -116,7 +116,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             `Unsupported language "${unsupportedLanguage}" passed as argument to language generator.` +
               `\nSupported languages: ${this.supportedLanguages
                 .map(language => `\n  ${_.padEnd(language.languageTag, 5)} (${language.name})`)
-                .join('')}`
+                .join('')}`,
           );
         }
       }
@@ -241,7 +241,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           // Translation is normally not needed, add support on demand for angular.
           control.getWebappTranslation = () => {
             throw new Error(
-              `Translations are not loaded, call ${chalk.yellow("'await control.loadClientTranslations'")} to load translations`
+              `Translations are not loaded, call ${chalk.yellow("'await control.loadClientTranslations'")} to load translations`,
             );
           };
 
@@ -280,8 +280,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
                 ...application,
                 lang,
               },
-            })
-          )
+            }),
+          ),
         );
       },
       async translateFile({ application }) {
@@ -315,7 +315,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
               });
             }
             statistics.sendSubGenEvent('languages/language', language);
-          })
+          }),
         );
       },
     };

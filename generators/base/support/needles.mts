@@ -196,7 +196,7 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
         contentToAdd = contentToAdd.slice(1);
       }
       contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).filter(
-        eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces)
+        eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces),
       );
       if (contentToAdd.length === 0) {
         return content;
@@ -229,7 +229,7 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
 export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator | void,
   options: NeedleFileInsertion | Record<string, string>,
-  needles?: Record<string, string>
+  needles?: Record<string, string>,
 ): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
   const actualNeedles = needles === undefined ? (options as Record<string, string>) : needles;
   const actualOptions: NeedleFileInsertion | undefined = needles === undefined ? undefined : (options as NeedleFileInsertion);
@@ -242,7 +242,7 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
   const callbacks = Object.entries(actualNeedles)
     .filter(([_key, contentToAdd]) => contentToAdd)
     .map(([key, contentToAdd]) =>
-      createNeedleCallback({ needle: `${needlesPrefix}${kebabCase(key)}`, contentToAdd, optional, ignoreWhitespaces })
+      createNeedleCallback({ needle: `${needlesPrefix}${kebabCase(key)}`, contentToAdd, optional, ignoreWhitespaces }),
     );
 
   assert(callbacks.length > 0, 'At least 1 needle is required');

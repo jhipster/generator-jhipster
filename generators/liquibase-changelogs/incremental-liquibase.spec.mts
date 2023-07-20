@@ -283,7 +283,7 @@ entity Customer {
           ...options,
           skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
-        }
+        },
       ).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
@@ -304,7 +304,7 @@ entity Customer {
         {
           skipFileGeneration: true,
           ...options,
-        }
+        },
       ).import();
       runResult = await runResult
         .create(generatorPath)
@@ -334,15 +334,15 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'addColumn tableName="customer"'
+        'addColumn tableName="customer"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'column name="foo" type="varchar(255)"'
+        'column name="foo" type="varchar(255)"',
       );
       runResult.assertNoFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'dropColump'
+        'dropColump',
       );
     });
     it('should not create the entity constraint update changelog', () => {
@@ -368,7 +368,7 @@ entity Customer {
           ...options,
           skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
-        }
+        },
       ).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
@@ -389,7 +389,7 @@ entity Customer {
         {
           skipFileGeneration: true,
           ...options,
-        }
+        },
       ).import();
 
       runResult = await runResult
@@ -420,15 +420,15 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'addColumn tableName="customer"'
+        'addColumn tableName="customer"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'column name="foo" type="varchar(255)"'
+        'column name="foo" type="varchar(255)"',
       );
       runResult.assertNoFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'dropColump'
+        'dropColump',
       );
     });
     it('should create the entity constraint update changelog', () => {
@@ -455,7 +455,7 @@ entity Customer {
           ...options,
           skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
-        }
+        },
       ).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
@@ -475,7 +475,7 @@ entity Customer {
         {
           skipFileGeneration: true,
           ...options,
-        }
+        },
       ).import();
       runResult = await runResult
         .create(generatorPath)
@@ -505,15 +505,15 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'dropColumn tableName="customer"'
+        'dropColumn tableName="customer"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'column name="foo"'
+        'column name="foo"',
       );
       runResult.assertNoFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'addColumn'
+        'addColumn',
       );
     });
     it('should not create the entity constraint update changelog', () => {
@@ -540,7 +540,7 @@ entity Customer {
           ...options,
           skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
-        }
+        },
       ).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
@@ -560,7 +560,7 @@ entity Customer {
         {
           skipFileGeneration: true,
           ...options,
-        }
+        },
       ).import();
       runResult = await runResult
         .create(generatorPath)
@@ -590,15 +590,15 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'dropColumn tableName="customer"'
+        'dropColumn tableName="customer"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'column name="foo"'
+        'column name="foo"',
       );
       runResult.assertNoFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'addColumn'
+        'addColumn',
       );
     });
     it('should create the entity constraint update changelog', () => {
@@ -661,11 +661,11 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'addColumn tableName="one"'
+        'addColumn tableName="one"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'column name="another_another_id" type="bigint"'
+        'column name="another_another_id" type="bigint"',
       );
       runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`, 'dropColumn');
     });
@@ -728,11 +728,11 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'addColumn tableName="one"'
+        'addColumn tableName="one"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'column name="another_another_id" type="bigint"'
+        'column name="another_another_id" type="bigint"',
       );
       runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`, 'dropColumn');
     });
@@ -742,11 +742,11 @@ entity Customer {
     it('should contain onUpdate and onDelete handlers', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
-        'onUpdate="SET NULL"'
+        'onUpdate="SET NULL"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
-        'onDelete="CASCADE"'
+        'onDelete="CASCADE"',
       );
     });
     it('should match snapshot', () => {
@@ -819,11 +819,11 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'addColumn tableName="one"'
+        'addColumn tableName="one"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'column name="another_another_id" type="bigint"'
+        'column name="another_another_id" type="bigint"',
       );
       runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`, 'dropColumn');
     });
@@ -833,11 +833,11 @@ entity Customer {
     it('should contain onUpdate and onDelete handlers', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
-        'onUpdate="SET NULL"'
+        'onUpdate="SET NULL"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
-        'onDelete="CASCADE"'
+        'onDelete="CASCADE"',
       );
     });
 
@@ -850,7 +850,7 @@ entity Customer {
     it('should create entity update changelog with dropForeignKeyConstraint', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_One.xml`,
-        'dropForeignKeyConstraint'
+        'dropForeignKeyConstraint',
       );
     });
 
@@ -861,15 +861,15 @@ entity Customer {
     it('should contain addForeignKeyConstraint with correct onUpdate and onDelete handlers', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_constraints_One.xml`,
-        'addForeignKeyConstraint'
+        'addForeignKeyConstraint',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_constraints_One.xml`,
-        'onUpdate="CASCADE"'
+        'onUpdate="CASCADE"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_constraints_One.xml`,
-        'onDelete="SET NULL"'
+        'onDelete="SET NULL"',
       );
     });
 
@@ -944,11 +944,11 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'addColumn tableName="one"'
+        'addColumn tableName="one"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'column name="another_another_id" type="bigint"'
+        'column name="another_another_id" type="bigint"',
       );
       runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`, 'dropColumn');
     });
@@ -958,11 +958,11 @@ entity Customer {
     it('should contain onUpdate and onDelete handlers', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
-        'onUpdate="SET NULL"'
+        'onUpdate="SET NULL"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
-        'onDelete="CASCADE"'
+        'onDelete="CASCADE"',
       );
     });
 
@@ -972,20 +972,20 @@ entity Customer {
       runResult.assertFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_One.xml`, 'addColumn');
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_One.xml`,
-        'column name="another_ent_another_id" type="bigint"'
+        'column name="another_ent_another_id" type="bigint"',
       );
 
       runResult.assertFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_One.xml`, 'dropColumn');
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_One.xml`,
-        'column name="another_another_id"'
+        'column name="another_another_id"',
       );
     });
 
     it('should create entity update changelog with dropForeignKeyConstraint', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_One.xml`,
-        'dropForeignKeyConstraint'
+        'dropForeignKeyConstraint',
       );
     });
 
@@ -996,15 +996,15 @@ entity Customer {
     it('should contain addForeignKeyConstraint with correct onUpdate and onDelete handlers', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_constraints_One.xml`,
-        'addForeignKeyConstraint'
+        'addForeignKeyConstraint',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_constraints_One.xml`,
-        'onUpdate="CASCADE"'
+        'onUpdate="CASCADE"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200103000100_updated_entity_constraints_One.xml`,
-        'onDelete="SET NULL"'
+        'onDelete="SET NULL"',
       );
     });
 
@@ -1048,7 +1048,7 @@ entity Customer {
     it('should have a foreign key column in initial changelog', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
-        'column name="another_another_id" type="bigint"'
+        'column name="another_another_id" type="bigint"',
       );
     });
     it('should create entity initial fake data', () => {
@@ -1059,15 +1059,15 @@ entity Customer {
 
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_constraints_One.xml`,
-        'addForeignKeyConstraint'
+        'addForeignKeyConstraint',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_constraints_One.xml`,
-        'onUpdate="SET NULL"'
+        'onUpdate="SET NULL"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_constraints_One.xml`,
-        'onDelete="CASCADE"'
+        'onDelete="CASCADE"',
       );
     });
 
@@ -1128,15 +1128,15 @@ entity Customer {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'dropColumn tableName="one"'
+        'dropColumn tableName="one"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'column name="another_another_id"'
+        'column name="another_another_id"',
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,
-        'dropForeignKeyConstraint baseTableName="one" constraintName="fk_one__another_id"'
+        'dropForeignKeyConstraint baseTableName="one" constraintName="fk_one__another_id"',
       );
     });
     it('should not create an additional entity constraint update changelog', () => {
@@ -1191,11 +1191,11 @@ entity Customer {
           eachEntityConfig.contentRequired
             ? runResult.assertFileContent(
                 `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`,
-                eachEntityConfig.testContent
+                eachEntityConfig.testContent,
               )
             : runResult.assertNoFileContent(
                 `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`,
-                eachEntityConfig.testContent
+                eachEntityConfig.testContent,
               );
         });
       });

@@ -41,7 +41,7 @@ export default class extends needleClient {
     language: string,
     errorMessage: string,
     needle: string,
-    webappSrcDir: string = this.clientSrcDir
+    webappSrcDir: string = this.clientSrcDir,
   ) {
     const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
     const fullPath = `${webappSrcDir}i18n/${language}/global.json`;

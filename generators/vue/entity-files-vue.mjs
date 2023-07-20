@@ -96,7 +96,7 @@ export async function postWriteEntityFiles({ application, entities }) {
         entityUrl,
         microserviceName,
         readOnly,
-        pageTitle
+        pageTitle,
       );
       this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
     }

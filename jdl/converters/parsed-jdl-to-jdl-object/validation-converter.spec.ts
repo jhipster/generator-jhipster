@@ -72,7 +72,7 @@ describe('jdl - ValidationConverter', () => {
                   value: '/d+/',
                 },
               ],
-              () => {}
+              () => {},
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
@@ -92,7 +92,7 @@ describe('jdl - ValidationConverter', () => {
                   value: "/[A-Z']/",
                 },
               ],
-              () => {}
+              () => {},
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });

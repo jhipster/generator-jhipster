@@ -20,7 +20,7 @@ FROM mysql:8.0.33
 
 FROM mariadb:11.0.2
 
-FROM mongo:6.0.7
+FROM mongo:6.0.8
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.2.0
@@ -31,7 +31,7 @@ FROM cassandra:3.11.14
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.9.0
+FROM neo4j:5.10.0
 
 FROM hazelcast/management-center:5.3.1
 LABEL ALIAS=hazelcast
@@ -40,10 +40,10 @@ FROM memcached:1.6.21-alpine
 
 FROM redis:7.0.12
 
-FROM confluentinc/cp-kafka:7.4.0
+FROM confluentinc/cp-kafka:7.4.1
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.4.0
+FROM confluentinc/cp-zookeeper:7.4.1
 LABEL ALIAS=zookeeper
 
 FROM apachepulsar/pulsar:3.0.0

@@ -22,8 +22,7 @@
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { writeFileSync } from 'fs';
-import path from 'path';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from './jdl-linter.js';
 import Issues from './issues/issues.js';

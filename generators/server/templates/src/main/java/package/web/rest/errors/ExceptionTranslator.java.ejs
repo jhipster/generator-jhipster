@@ -268,16 +268,18 @@ _%>
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if(err instanceof MethodArgumentNotValidException)
+        if(err instanceof MethodArgumentNotValidException) {
             return ErrorConstants.ERR_VALIDATION;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-        else if(err instanceof ConcurrencyFailureException
-                || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException)
+        } else if(err instanceof ConcurrencyFailureException
+                || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
     <%_ } _%>
     <%_ if (reactive) { _%>
-        else if (err instanceof WebExchangeBindException) return ErrorConstants.ERR_VALIDATION;
+        } else if (err instanceof WebExchangeBindException) {
+            return ErrorConstants.ERR_VALIDATION;
     <%_ } _%>
+        }
         return null;
     }
 

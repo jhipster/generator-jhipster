@@ -20,13 +20,13 @@
 import { Alternation, Alternative, GAstVisitor, NonTerminal, Option, Repetition, RepetitionMandatory, Rule } from 'chevrotain';
 
 export default class TokenCollectorVisitor extends GAstVisitor {
-  visitNonTerminal(node: NonTerminal) {}
-  visitAlternative(node: Alternative) {}
-  visitOption(node: Option) {}
-  visitRepetition(node: Repetition) {}
-  visitRepetitionMandatory(node: RepetitionMandatory) {}
-  visitAlternation(node: Alternation) {}
-  visitRule(node: Rule) {}
+  visitNonTerminal(_node: NonTerminal) {}
+  visitAlternative(_node: Alternative) {}
+  visitOption(_node: Option) {}
+  visitRepetition(_node: Repetition) {}
+  visitRepetitionMandatory(_node: RepetitionMandatory) {}
+  visitAlternation(_node: Alternation) {}
+  visitRule(_node: Rule) {}
 
   actualTokens: any[];
 

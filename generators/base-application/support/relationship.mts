@@ -86,15 +86,15 @@ export const loadEntitiesOtherSide = (entities: Entity[]): ValidationResult => {
         ) {
           throw new Error(
             `Error at entity ${entity.name}: relationship name is not synchronized ${stringifyApplicationData(
-              relationship
-            )} with ${stringifyApplicationData(relationship.otherRelationship)}`
+              relationship,
+            )} with ${stringifyApplicationData(relationship.otherRelationship)}`,
           );
         }
         if (relationship.relationshipType !== otherRelationshipType(relationship.otherRelationship.relationshipType)) {
           throw new Error(
             `Error at entity ${entity.name}: relationship type is not synchronized ${stringifyApplicationData(
-              relationship
-            )} with ${stringifyApplicationData(otherRelationship)}`
+              relationship,
+            )} with ${stringifyApplicationData(otherRelationship)}`,
           );
         }
       }

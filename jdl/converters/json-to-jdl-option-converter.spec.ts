@@ -49,7 +49,7 @@ describe('jdl - JSONToJDLOptionConverter', () => {
         previousJDLObject.addOption(
           new JDLUnaryOption({
             name: SKIP_CLIENT,
-          })
+          }),
         );
         jdlObject = convertServerOptionsToJDL({ 'generator-jhipster': {} }, previousJDLObject);
       });

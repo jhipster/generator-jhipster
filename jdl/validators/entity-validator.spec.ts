@@ -41,8 +41,8 @@ describe('jdl - EntityValidator', () => {
             validator.validate(
               new JDLEntity({
                 name: 'A',
-              })
-            )
+              }),
+            ),
           ).not.to.throw();
         });
       });
@@ -55,7 +55,7 @@ describe('jdl - EntityValidator', () => {
         it('should fail', () => {
           it('should fail', () => {
             expect(() => validator.validate({ name: 'A', tableName: 'a' })).to.throw(
-              /^The entity attributes name, tableName were not found\.$/
+              /^The entity attributes name, tableName were not found\.$/,
             );
           });
         });

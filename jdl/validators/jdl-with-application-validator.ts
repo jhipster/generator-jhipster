@@ -76,7 +76,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForFieldErrors(entityName, jdlFields, jdlApplication) {
+  function checkForFieldErrors(_entityName, jdlFields, _jdlApplication) {
     const validator = new FieldValidator();
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
@@ -176,7 +176,7 @@ function checkForAbsentEntities({
       `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
         `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared. If '${
           jdlRelationship.to
-        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`
+        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`,
     );
   }
 }
@@ -189,12 +189,12 @@ function checkIfRelationshipIsBetweenApplications({ jdlRelationship, application
   }
   applicationsForSourceEntity = applicationsForSourceEntity.map(jdlApplication => jdlApplication.getConfigurationOptionValue(BASE_NAME));
   applicationsForDestinationEntity = applicationsForDestinationEntity.map(jdlApplication =>
-    jdlApplication.getConfigurationOptionValue(BASE_NAME)
+    jdlApplication.getConfigurationOptionValue(BASE_NAME),
   );
   const difference = applicationsForSourceEntity.filter(application => !applicationsForDestinationEntity.includes(application));
   if (difference.length !== 0) {
     throw new Error(
-      `Entities for the ${jdlRelationship.type} relationship from '${jdlRelationship.from}' to '${jdlRelationship.to}' do not belong to the same application.`
+      `Entities for the ${jdlRelationship.type} relationship from '${jdlRelationship.from}' to '${jdlRelationship.to}' do not belong to the same application.`,
     );
   }
 }

@@ -52,7 +52,7 @@ function convertUnaryOptions(parsedOptions) {
         name: unaryOptionName,
         entityNames: parsedUnaryOption.list,
         excludedNames: parsedUnaryOption.excluded,
-      })
+      }),
     );
   });
   return convertedUnaryOptions;
@@ -73,7 +73,7 @@ function convertBinaryOptions(parsedOptions) {
           value: optionValue,
           entityNames: parsedBinaryOption.list,
           excludedNames: parsedBinaryOption.excluded,
-        })
+        }),
       );
     });
   });
@@ -96,7 +96,7 @@ function convertUseOptions(useOptions) {
           value: optionValue,
           entityNames: list,
           excludedNames: excluded,
-        })
+        }),
       );
     });
   });

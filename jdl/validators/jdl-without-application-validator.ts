@@ -97,7 +97,7 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
       }
       if (filtering && isReservedPaginationWords(jdlField.name)) {
         throw new Error(
-          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`,
         );
       }
       const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
@@ -196,7 +196,7 @@ function checkForAbsentEntities({
       `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
         `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared. If '${
           jdlRelationship.to
-        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`
+        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`,
     );
   }
 }

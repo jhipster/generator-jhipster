@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -66,7 +65,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
               message: 'Would you like to audit Cypress tests?',
             },
           ],
-          this.config
+          this.config,
         );
       },
     });
@@ -188,7 +187,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'resources', 'package.json')
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
 
@@ -269,7 +268,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           },
         }
       : {}`,
-            clientFramework
+            clientFramework,
           );
         }
       },

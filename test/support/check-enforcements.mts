@@ -19,12 +19,8 @@
 import assert from 'assert';
 import fs, { readFileSync } from 'fs';
 import fse from 'fs-extra';
-import path, { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import path, { basename } from 'path';
 import { getGeneratorFolder } from './get-generator.mjs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

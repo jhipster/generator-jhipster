@@ -78,7 +78,7 @@
 
         try {
           const response = await axios.get('/management/health/discoveryComposite', axiosConfig);
-          const services = response.data?.components?.discoveryClient?.details?.services;
+          const services = response.data?.components?.discoveryClient?.details?.services<% if (serviceDiscoveryConsul) { %>.filter(service => service !== 'consul')<% } %>;
           console.log(`Services`, services);
 
           if (services && services.length > 0) {

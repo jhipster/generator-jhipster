@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { forceYoFiles } from '@yeoman/conflicter';
+import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
-import { createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -27,13 +26,14 @@ import {
   createForceWriteConfigFilesTransform,
   autoCrlfTransform,
   isPrettierConfigFile,
+  createSortConfigFilesTransform,
+  createESLintTransform,
 } from './support/index.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import command from './command.mjs';
-import { createSortConfigFilesTransform } from './support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
@@ -144,17 +144,24 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
     const { skipYoResolve } = this.options;
-    const { ignoreErrors } = this.options;
-
-    const prettierOptions = { packageJson: true, java: !this.jhipsterConfig.skipServer };
-    const prettierTransformOptions = { ignoreErrors: ignoreErrors || this.upgradeCommand, extensions: PRETTIER_EXTENSIONS };
+    const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
 
     const transformStreams = [
       ...(skipYoResolve ? [] : [createYoResolveTransform()]),
       forceYoFiles(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFilesTransform(),
-      ...(this.skipPrettier ? [] : [createPrettierTransform(prettierOptions, this, prettierTransformOptions)]),
+      ...(this.skipPrettier
+        ? []
+        : [
+            createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
+            createPrettierTransform.call(this, {
+              ignoreErrors,
+              prettierPackageJson: true,
+              prettierJava: !this.jhipsterConfig.skipServer,
+              extensions: PRETTIER_EXTENSIONS,
+            }),
+          ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
       createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),
     ];

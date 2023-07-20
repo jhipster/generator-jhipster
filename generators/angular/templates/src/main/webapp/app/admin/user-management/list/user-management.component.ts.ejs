@@ -17,10 +17,9 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
 import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (!databaseTypeCassandra) { _%>
-import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 <%_ } _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';

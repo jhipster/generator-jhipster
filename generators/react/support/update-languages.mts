@@ -29,7 +29,7 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
     };
 `;
   this.editFile(`${clientSrcDir}/app/config/translation.ts`, { ignoreNonExisting }, content =>
-    content.replace(/{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g, newContent)
+    content.replace(/{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g, newContent),
   );
 }
 
@@ -46,7 +46,7 @@ function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application, c
     '                ]';
 
   this.editFile('webpack/webpack.common.js', { ignoreNonExisting }, content =>
-    content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent)
+    content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent),
   );
 }
 

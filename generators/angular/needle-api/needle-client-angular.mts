@@ -59,7 +59,7 @@ export default class extends needleClientBase {
       ANGULAR,
       adminModulePath,
       importNeedle,
-      moduleNeedle
+      moduleNeedle,
     );
   }
 
@@ -72,7 +72,7 @@ export default class extends needleClientBase {
     clientFramework,
     modulePath,
     importNeedle,
-    moduleNeedle
+    moduleNeedle,
   ) {
     const errorMessage = `${
       chalk.yellow('Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework
@@ -84,7 +84,7 @@ export default class extends needleClientBase {
       folderName,
       fileName,
       modulePath,
-      importNeedle
+      importNeedle,
     );
     importRewriteFileModel.prettierAware = true;
     this.addBlockContentToFile(importRewriteFileModel, errorMessage);
@@ -128,9 +128,9 @@ export default class extends needleClientBase {
         contentToAdd: (content, { indentPrefix }) =>
           content.replace(
             /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
-            `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`
+            `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`,
           ),
-      })
+      }),
     );
   }
 
@@ -188,7 +188,7 @@ export default class extends needleClientBase {
         ignoreWhitespaces: true,
         contentToCheck: contentToCheck ?? `path: '${route}'`,
         autoIndent: true,
-      })
+      }),
     );
   }
 

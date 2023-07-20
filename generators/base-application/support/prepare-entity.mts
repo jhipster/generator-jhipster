@@ -196,7 +196,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   });
 
   entityWithConfig.entityFileName = _.kebabCase(
-    entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
+    entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix),
   );
   entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
     ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
@@ -220,7 +220,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   entityWithConfig.entityTranslationKeyMenu = _.camelCase(
     entityWithConfig.clientRootFolder
       ? `${entityWithConfig.clientRootFolder}-${entityWithConfig.entityStateName}`
-      : entityWithConfig.entityStateName
+      : entityWithConfig.entityStateName,
   );
 
   entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
@@ -619,7 +619,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);
 
   entity.reactiveEagerRelations = entity.relationships.filter(
-    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
+    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true),
   );
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }

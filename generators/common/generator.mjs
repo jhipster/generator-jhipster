@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import _ from 'lodash';
-
+import { isFilePending } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { writeFiles, prettierConfigFiles } from './files.mjs';
@@ -30,15 +29,12 @@ import {
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
 } from '../generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 import command from './command.mjs';
+import { createPrettierTransform } from '../bootstrap/support/prettier-support.mjs';
 
 const { REACT, ANGULAR } = clientFrameworkTypes;
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').CommonClientServerApplication>}
- */
+
 export default class CommonGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     this.loadStoredAppOptions();
@@ -93,7 +89,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json')
+          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
         );
       },
 
@@ -160,7 +156,13 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
+      formatSonarProperties() {
+        this.queueTransformStream(createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
+          name: 'prettifying sonar-project.properties',
+          streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('sonar-project.properties') },
+        });
+      },
       addCommitHookDependencies({ application }) {
         if (application.skipCommitHook) return;
         this.packageJson.merge({
@@ -173,7 +175,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           },
         });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {

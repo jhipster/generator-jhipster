@@ -160,7 +160,7 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
           this.log.verboseInfo(`\n${chalk.bold.green('Helm configuration successfully generated!')}`);
         }
         this.log.warn(
-          'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:'
+          'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:',
         );
         for (let i = 0; i < this.appsFolders.length; i++) {
           const originalImageName = this.appConfigs[i].baseName.toLowerCase();
@@ -180,7 +180,7 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
           fs.chmodSync('helm-upgrade.sh', '755');
         } catch (err) {
           this.log.warn(
-            "Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh"
+            "Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh",
           );
         }
       },

@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
-
 import { asJdlRelationshipType } from '../converters/parsed-jdl-to-jdl-object/relationship-converter.js';
 import { JDLRelationshipType } from '../models/jdl-relationship.js';
 

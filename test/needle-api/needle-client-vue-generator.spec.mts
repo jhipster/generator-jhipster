@@ -1,8 +1,7 @@
-import { basicHelpers as helpers, result as runResult } from '../support/index.mjs';
+import { basicHelpers as helpers, result as runResult, getGenerator } from '../support/index.mjs';
 
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { getGenerator } from '../support/index.mjs';
 import VueGenerator from '../../generators/vue/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 
@@ -31,7 +30,7 @@ const mockBlueprintSubGen: any = class extends VueGenerator {
           'entityFolderName',
           'entityFileName',
           'entityUrl',
-          'microserviceName'
+          'microserviceName',
         );
       },
     };
@@ -56,7 +55,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         enableTranslation: false,
         nativeLanguage: 'en',
         languages: ['fr'],
-      })
+      }),
   );
 
   it('menu contains the item and the root', () => {
@@ -67,7 +66,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       <font-awesome-icon icon="asterisk" />
       <span>Router Name</span>
     </b-dropdown-item>
-`
+`,
     );
   });
 
@@ -81,7 +80,7 @@ const entityName = () => import('@/entities/entityFolderName/entityFileName.vue'
 const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileName-update.vue');
 // prettier-ignore
 const entityNameDetails = () => import('@/entities/entityFolderName/entityFileName-details.vue');
-`
+`,
     );
   });
 
@@ -113,21 +112,21 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
       component: entityNameDetails,
       meta: { authorities: [Authority.USER] },
     },
-`
+`,
     );
   });
 
   it('menu contains the item in service import', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
-      "import entityNameService from './entityFolderName/entityFileName.service';"
+      "import entityNameService from './entityFolderName/entityFileName.service';",
     );
   });
 
   it('menu contains the item in service', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
-      "provide('entityInstanceService', () => new entityNameService());"
+      "provide('entityInstanceService', () => new entityNameService());",
     );
   });
 });
