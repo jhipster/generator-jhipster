@@ -169,8 +169,8 @@ _%>
         }
         <%_ } _%>
 <%_ } _%>
-        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
-            return problemDetailWithCause.getBody();
+        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause)
+            return ex.getBody();
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
