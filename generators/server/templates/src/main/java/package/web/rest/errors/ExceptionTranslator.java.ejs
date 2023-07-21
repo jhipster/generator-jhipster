@@ -320,9 +320,9 @@ _%>
     }
 
     private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {
-        return err instanceof BadRequestAlertException ?
-                HeaderUtil.createFailureAlert(applicationName, true, ((BadRequestAlertException) err).getEntityName(),
-                        ((BadRequestAlertException) err).getErrorKey(), ((BadRequestAlertException) err).getMessage()) : null;
+        return err instanceof BadRequestAlertException badRequestAlertException ?
+                HeaderUtil.createFailureAlert(applicationName, true, badRequestAlertException.getEntityName(),
+                        badRequestAlertException.getErrorKey(), badRequestAlertException.getMessage()) : null;
     }
 <%_ if (reactive) { _%>
     private HttpHeaders updateContentType(HttpHeaders headers) {
