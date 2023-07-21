@@ -272,7 +272,7 @@ _%>
             return ErrorConstants.ERR_VALIDATION;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         } else if(err instanceof ConcurrencyFailureException
-                || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException) {
+                || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
     <%_ } _%>
     <%_ if (reactive) { _%>
