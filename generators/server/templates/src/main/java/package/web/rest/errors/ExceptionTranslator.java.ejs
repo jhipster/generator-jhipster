@@ -169,8 +169,8 @@ _%>
         }
         <%_ } _%>
 <%_ } _%>
-        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause)
-            return (ProblemDetailWithCause) exp.getBody();
+        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
+            return problemDetailWithCause.getBody();
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
@@ -201,9 +201,9 @@ _%>
         if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
             problem.setProperty(PATH_KEY, getPathValue(request));
 
-        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) &&
+        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %> fieldException) &&
                 (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY)))
-            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors((<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %>) err));
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
 
         problem.setCause(buildCause(err.getCause(), request).orElse(null));
 
