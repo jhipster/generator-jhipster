@@ -125,7 +125,7 @@ _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
     ) {
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
-        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex, request), HttpStatusCode.valueOf(pdCause.getStatus()), request);
+        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
     @Nullable
@@ -170,7 +170,7 @@ _%>
         <%_ } _%>
 <%_ } _%>
         if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause)
-            return ex.getBody();
+            return exp.getBody();
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
