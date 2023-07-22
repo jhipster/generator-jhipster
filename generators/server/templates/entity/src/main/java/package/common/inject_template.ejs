@@ -20,7 +20,7 @@
   const beans = [];
   if (viaService) {
     beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
-    if (!(readOnly && reactive)) {
+    if (!readOnly) {
       beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
     }
     if (queryService && !reactive) {
