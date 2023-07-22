@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Faker, base } from '@faker-js/faker';
+import { Faker, base, en } from '@faker-js/faker';
 import Randexp from 'randexp';
 
 import { languageToJavaLanguage } from '../../languages/support/index.mjs';
@@ -67,7 +67,7 @@ export async function createFaker(nativeLanguage = 'en') {
   }
 
   const faker = new FakerWithRandexp({
-    locale: [locale, base],
+    locale: [locale, base, en],
   });
   faker.createRandexp = (pattern, m) => new RandexpWithFaker(pattern, m, faker);
   return faker;
