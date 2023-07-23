@@ -23,6 +23,7 @@ import tech.jhipster.config.JHipsterProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
@@ -96,6 +97,8 @@ import <%= packageName %>.security.oauth2.CustomClaimConverter;
 <%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 <%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -131,7 +134,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
 <%_ if (!applicationTypeMicroservice) { _%>
             .cors(withDefaults())
@@ -167,42 +170,42 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!skipClient) { _%>
-                    .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
-                    .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
-                    .requestMatchers("/app/**").permitAll()
-                    .requestMatchers("/i18n/**").permitAll()
-                    .requestMatchers("/content/**").permitAll()
-                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers(mvc.pattern("/"), mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+                    .requestMatchers(mvc.pattern("/app/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
                     .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
 <%_ } else { _%>
-                    .requestMatchers("/api/authenticate").permitAll()
+                    .requestMatchers(mvc.pattern("/api/authenticate")).permitAll()
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-                    .requestMatchers("/api/register").permitAll()
-                    .requestMatchers("/api/activate").permitAll()
-                    .requestMatchers("/api/account/reset-password/init").permitAll()
-                    .requestMatchers("/api/account/reset-password/finish").permitAll()
+                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-                    .requestMatchers("/api/auth-info").permitAll()
+                    .requestMatchers(mvc.pattern("/api/auth-info")).permitAll()
 <%_ } _%>
-                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/api/**").authenticated()
+                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
-                    .requestMatchers("/websocket/**").authenticated()
+                    .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
 <%_ } _%>
-                    .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/management/health").permitAll()
-                    .requestMatchers("/management/health/**").permitAll()
-                    .requestMatchers("/management/info").permitAll()
-                    .requestMatchers("/management/prometheus").permitAll()
-                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
+                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (generateUserManagement) { _%>
             .rememberMe(rememberMe ->
@@ -250,6 +253,12 @@ public class SecurityConfiguration {
             .oauth2Client();
 <%_ } _%>
         return http.build();
+    }
+
+    @Scope("prototype")
+    @Bean
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
     }
 <%_ if (authenticationTypeOauth2) { _%>
 
