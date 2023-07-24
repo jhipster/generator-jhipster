@@ -306,10 +306,11 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly).forEach((field) => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
-    const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
+    let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
     if (fieldValue === undefined) {
         return;
     }
+    fieldValue = fieldValue.replaceAll("'", "\\'");
   _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
