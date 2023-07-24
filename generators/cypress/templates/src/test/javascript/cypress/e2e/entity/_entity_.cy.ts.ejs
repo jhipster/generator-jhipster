@@ -310,7 +310,7 @@ describe('<%= entityClass %> e2e test', () => {
     if (fieldValue === undefined) {
         return;
     }
-    fieldValue = fieldValue.replaceAll("'", "\\'");
+    fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll("'", "\\'") : fieldValue;
   _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
