@@ -18,7 +18,7 @@
         <hazelcast-spring.version>5.3.1</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.3</jaxb-runtime.version>
-        <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
+        <junit-platform-launcher.version>1.10.0</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.0.4</micrometer-context-propagation.version>
