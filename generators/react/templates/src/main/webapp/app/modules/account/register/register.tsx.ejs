@@ -20,6 +20,7 @@ import React, { useState, useEffect } from 'react';
 import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { Row, Col, Alert, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
