@@ -51,11 +51,11 @@ const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const fakeStringTemplateForFieldName = columnName => {
   let fakeTemplate;
   if (columnName === 'first_name') {
-    fakeTemplate = 'name.firstName';
+    fakeTemplate = 'person.firstName';
   } else if (columnName === 'last_name') {
-    fakeTemplate = 'name.lastName';
+    fakeTemplate = 'person.lastName';
   } else if (columnName === 'job_title') {
-    fakeTemplate = 'name.jobTitle';
+    fakeTemplate = 'person.jobTitle';
   } else if (columnName === 'telephone' || columnName === 'phone') {
     fakeTemplate = 'phone.number';
   } else if (columnName === 'zip_code' || columnName === 'post_code') {
@@ -89,7 +89,7 @@ const fakeStringTemplateForFieldName = columnName => {
   } else if (columnName === 'url') {
     fakeTemplate = 'internet.url';
   } else {
-    fakeTemplate = 'random.words';
+    fakeTemplate = 'word.words';
   }
   return `{{${fakeTemplate}}}`;
 };

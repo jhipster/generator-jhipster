@@ -131,16 +131,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;ubiquitous
-2;Awesome Hydrogen fluid
-3;New AI
-4;Bicycle
-5;Chicken Views Mobility
-6;similique elaborate
-7;Officer
-8;Planner Gasoline
-9;sexy
-10;redefine
+1;yuck
+2;for atop
+3;uncurl
+4;elaborate through weep
+5;hopelessly
+6;easily almost obvious
+7;unionize joyously gah
+8;half ink
+9;psst majestically swiftly
+10;ragged
 ",
     "stateCleared": "modified",
   },
@@ -263,16 +263,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;ubiquitous
-2;Awesome Hydrogen fluid
-3;New AI
-4;Bicycle
-5;Chicken Views Mobility
-6;similique elaborate
-7;Officer
-8;Planner Gasoline
-9;sexy
-10;redefine
+1;yuck
+2;for atop
+3;uncurl
+4;elaborate through weep
+5;hopelessly
+6;easily almost obvious
+7;unionize joyously gah
+8;half ink
+9;psst majestically swiftly
+10;ragged
 ",
     "stateCleared": "modified",
   },
