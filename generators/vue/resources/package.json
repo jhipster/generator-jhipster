@@ -19,7 +19,7 @@
   "devDependencies": {
     "@pinia/testing": "0.1.2",
     "@rushstack/eslint-patch": "1.3.2",
-    "@types/node": "18.17.0",
+    "@types/node": "18.17.1",
     "@types/sinon": "10.0.15",
     "@vitejs/plugin-vue": "4.2.3",
     "@vue/eslint-config-prettier": "8.0.0",
