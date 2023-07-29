@@ -18,8 +18,8 @@
  */
 /* eslint-disable no-unused-expressions */
 import assert from 'assert';
-import { expect } from 'chai';
 import fs from 'fs';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import { jestExpect } from 'esmocha';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';

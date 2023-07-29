@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'esmocha';
-import lodash from 'lodash';
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
+import lodash from 'lodash';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { fromMatrix, extendMatrix, AuthenticationTypeMatrix, checkEnforcements } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';

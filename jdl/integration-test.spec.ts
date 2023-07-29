@@ -19,9 +19,9 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 
-import { fileURLToPath } from 'url';
 import { applicationTypes } from './jhipster/index.mjs';
 import { parseFromFiles } from './readers/jdl-reader.js';
 import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';

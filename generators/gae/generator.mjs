@@ -18,8 +18,8 @@
  */
 /* eslint-disable consistent-return */
 import os from 'os';
-import shelljs from 'shelljs';
 import fs from 'fs';
+import shelljs from 'shelljs';
 import chalk from 'chalk';
 import _ from 'lodash';
 import runAsync from 'run-async';

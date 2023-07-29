@@ -1,6 +1,6 @@
-import { execa } from 'execa';
 import { mkdir, lstat } from 'fs/promises';
 import { dirname } from 'path';
+import { execa } from 'execa';
 import { ValidationResult } from '../../base/api.mjs';
 
 /**

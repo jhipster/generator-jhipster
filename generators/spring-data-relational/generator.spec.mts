@@ -1,7 +1,7 @@
-import { expect } from 'esmocha';
-import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
+import lodash from 'lodash';
 
 import { buildServerMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';

@@ -19,10 +19,10 @@
 
 /* eslint-disable no-unused-expressions */
 
-import { expect } from 'chai';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'chai';
 import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);

@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import chalk from 'chalk';
-import _ from 'lodash';
 import { existsSync, readFileSync } from 'fs';
-import Environment from 'yeoman-environment';
 import path, { dirname, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
+import chalk from 'chalk';
+import _ from 'lodash';
+import Environment from 'yeoman-environment';
 import { QueuedAdapter } from '@yeoman/adapter';
 
 import { CLI_NAME, logger } from './utils.mjs';

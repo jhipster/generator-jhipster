@@ -18,11 +18,11 @@
  */
 import assert from 'assert';
 import path from 'path';
-import _ from 'lodash';
-import chalk from 'chalk';
 import fs from 'fs';
 import { exec } from 'child_process';
 import os from 'os';
+import chalk from 'chalk';
+import _ from 'lodash';
 import { type Storage } from 'yeoman-generator';
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
 import {

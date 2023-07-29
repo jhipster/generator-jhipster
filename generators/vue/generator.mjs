@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { relative } from 'path';
 import chalk from 'chalk';
 import _ from 'lodash';
 import { isFilePending } from 'mem-fs-editor/state';
 
-import { relative } from 'path';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';

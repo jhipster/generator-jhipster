@@ -18,10 +18,10 @@
  */
 import assert from 'assert';
 import fs from 'fs';
-import fse from 'fs-extra';
 import path, { dirname } from 'path';
-import sortKeys from 'sort-keys';
 import { fileURLToPath } from 'url';
+import fse from 'fs-extra';
+import sortKeys from 'sort-keys';
 
 import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
 import { formatDateForChangelog } from '../generators/base/support/index.mjs';

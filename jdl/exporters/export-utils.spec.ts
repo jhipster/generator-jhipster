@@ -18,10 +18,10 @@
  */
 /* eslint-disable no-unused-expressions */
 
-import { expect } from 'esmocha';
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
 import { writeConfigFile } from '../exporters/export-utils.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
 

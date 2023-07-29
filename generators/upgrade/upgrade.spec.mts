@@ -1,8 +1,8 @@
 import path, { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 import shelljs from 'shelljs';
 import fse from 'fs-extra';
 import _ from 'lodash';
-import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 
 import { packageJson } from '../../lib/index.mjs';

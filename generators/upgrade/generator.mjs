@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import process from 'node:process';
+import fs from 'fs';
+import path from 'path';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import semver from 'semver';
-import fs from 'fs';
 import gitignore from 'parse-gitignore';
-import path from 'path';
 import latestVersion from 'latest-version';
 
 import BaseGenerator from '../base/index.mjs';

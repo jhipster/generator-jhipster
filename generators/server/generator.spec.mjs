@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import assert from 'assert/strict';
-import { expect } from 'esmocha';
-import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
+import lodash from 'lodash';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.mjs';

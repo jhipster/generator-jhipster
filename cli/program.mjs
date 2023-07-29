@@ -19,11 +19,11 @@
  * limitations under the License.
  */
 
-import chalk from 'chalk';
-import didYouMean from 'didyoumean';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import didYouMean from 'didyoumean';
+import chalk from 'chalk';
 
 import logo from './logo.mjs';
 import EnvironmentBuilder from './environment-builder.mjs';

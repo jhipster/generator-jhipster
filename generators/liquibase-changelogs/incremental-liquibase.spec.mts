@@ -1,7 +1,7 @@
 import path, { basename, join } from 'path';
-import { expect } from 'esmocha';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
 
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';

@@ -19,11 +19,11 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
-import { jestExpect } from 'esmocha';
-import { expect } from 'chai';
 import { writeFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'chai';
+import { jestExpect } from 'esmocha';
 import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from './jdl-linter.js';
 import Issues from './issues/issues.js';
 import EnumIssue from './issues/enum-issue.js';
