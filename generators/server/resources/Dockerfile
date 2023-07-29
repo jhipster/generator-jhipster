@@ -16,7 +16,7 @@ LABEL ALIAS=postgresql
 FROM quay.io/keycloak/keycloak:21.1.2
 LABEL ALIAS=keycloak
 
-FROM mysql:8.0.33
+FROM mysql:8.0.34
 
 FROM mariadb:11.0.2
 
@@ -55,7 +55,7 @@ LABEL ALIAS=sonar
 FROM docker.io/bitnami/consul:1.16.0
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v2.45.0
+FROM prom/prometheus:v2.46.0
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.25.0
@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:10.0.2
+FROM grafana/grafana:10.0.3
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

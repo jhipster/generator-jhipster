@@ -125,7 +125,7 @@ _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
     ) {
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
-        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex, request), HttpStatusCode.valueOf(pdCause.getStatus()), request);
+        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
     @Nullable
@@ -169,8 +169,8 @@ _%>
         }
         <%_ } _%>
 <%_ } _%>
-        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause)
-            return (ProblemDetailWithCause) exp.getBody();
+        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
+            return problemDetailWithCause;
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
@@ -201,9 +201,9 @@ _%>
         if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
             problem.setProperty(PATH_KEY, getPathValue(request));
 
-        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) &&
+        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %> fieldException) &&
                 (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY)))
-            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors((<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %>) err));
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
 
         problem.setCause(buildCause(err.getCause(), request).orElse(null));
 
@@ -262,7 +262,7 @@ _%>
     }
 
     private URI getMappedType(Throwable err) {
-        if(err instanceof MethodArgumentNotValidException exp)
+        if(err instanceof MethodArgumentNotValidException)
             return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
@@ -272,7 +272,7 @@ _%>
             return ErrorConstants.ERR_VALIDATION;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         } else if(err instanceof ConcurrencyFailureException
-                || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException) {
+                || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
     <%_ } _%>
     <%_ if (reactive) { _%>
@@ -284,7 +284,7 @@ _%>
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if(err instanceof MethodArgumentNotValidException exp)
+        if(err instanceof MethodArgumentNotValidException)
             return "Method argument not valid";
         return null;
     }
@@ -319,10 +319,10 @@ _%>
         return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI(request))<% } %>;
     }
 
-    private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {
-        return err instanceof BadRequestAlertException ?
-                HeaderUtil.createFailureAlert(applicationName, true, ((BadRequestAlertException) err).getEntityName(),
-                        ((BadRequestAlertException) err).getErrorKey(), ((BadRequestAlertException) err).getMessage()) : null;
+    private HttpHeaders buildHeaders(Throwable err) {
+        return err instanceof BadRequestAlertException badRequestAlertException ?
+                HeaderUtil.createFailureAlert(applicationName, true, badRequestAlertException.getEntityName(),
+                        badRequestAlertException.getErrorKey(), badRequestAlertException.getMessage()) : null;
     }
 <%_ if (reactive) { _%>
     private HttpHeaders updateContentType(HttpHeaders headers) {

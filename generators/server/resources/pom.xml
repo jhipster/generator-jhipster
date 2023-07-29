@@ -18,7 +18,7 @@
         <hazelcast-spring.version>5.3.1</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.3</jaxb-runtime.version>
-        <junit-platform-launcher.version>1.9.3</junit-platform-launcher.version>
+        <junit-platform-launcher.version>1.10.0</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.0.4</micrometer-context-propagation.version>
@@ -52,8 +52,8 @@
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
         <modernizer-maven-plugin.version>2.6.0</modernizer-maven-plugin.version>
         <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
-        <openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
-        <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>7.0.0-beta</openapi-generator-maven-plugin.version>
+        <properties-maven-plugin.version>1.2.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <spotless-maven-plugin.version>2.38.0</spotless-maven-plugin.version>
     </properties>
