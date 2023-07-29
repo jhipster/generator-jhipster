@@ -40,14 +40,17 @@ function getTranslationValue(getWebappTranslation, key, data) {
  * @param {number} [options.replacementIndex]
  * @returns {string}
  */
-function replaceTranslationKeysWithText(getWebappTranslation, content, regexSource, { keyIndex = 1, replacementIndex = 1 } = {}) {
+function replaceTranslationKeysWithText(getWebappTranslation, content, regexSource, { keyIndex = 1, replacementIndex = 1, escape } = {}) {
   const regex = new RegExp(regexSource, 'g');
   let match = regex.exec(content);
   while (match !== null) {
     // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
     const key = match[keyIndex];
     const target = match[replacementIndex];
-    const translation = getTranslationValue(getWebappTranslation, key);
+    let translation = getTranslationValue(getWebappTranslation, key);
+    if (escape) {
+      translation = escape(translation, match);
+    }
     content = content.replace(target, translation);
     match = regex.exec(content);
   }
@@ -62,7 +65,9 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
  * @returns string with pageTitle replaced
  */
 function replaceJSTranslation(getWebappTranslation, content, jsKey) {
-  return replaceTranslationKeysWithText(getWebappTranslation, content, `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+)['|"]`);
+  return replaceTranslationKeysWithText(getWebappTranslation, content, `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+)['|"]`, {
+    escape: (translation, match) => translation.replaceAll(match[0].slice(-1), `\\${match[0].slice(-1)}`),
+  });
 }
 
 /**
