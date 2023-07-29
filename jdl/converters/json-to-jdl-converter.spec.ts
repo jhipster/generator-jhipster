@@ -369,5 +369,15 @@ describe('jdl - JSONToJDLConverter', () => {
         jestExpect(jdl).toMatch(/microfrontends \[foo, bar\]/);
       });
     });
+    context('with nullish attributes', () => {
+      it('should not fail', () => {
+        convertSingleContentToJDL({
+          'generator-jhipster': {
+            blueprints: null,
+            microfrontends: undefined,
+          },
+        });
+      });
+    });
   });
 });
