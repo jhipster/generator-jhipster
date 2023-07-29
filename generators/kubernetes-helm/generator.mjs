@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return, import/no-named-as-default-member */
-import chalk from 'chalk';
 import fs from 'fs';
+import chalk from 'chalk';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 

@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'esmocha';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
 
 import { basicTests, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';

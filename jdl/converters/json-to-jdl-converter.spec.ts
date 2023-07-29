@@ -20,9 +20,9 @@
 
 import fs from 'fs';
 import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { fileURLToPath } from 'url';
 import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
 

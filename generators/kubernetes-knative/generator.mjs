@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+import fs from 'fs';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
-import fs from 'fs';
 import runAsync from 'run-async';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';

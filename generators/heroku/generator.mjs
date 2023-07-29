@@ -18,10 +18,10 @@
  */
 /* eslint-disable consistent-return */
 import crypto from 'crypto';
-import _ from 'lodash';
 import fs from 'fs';
 import ChildProcess from 'child_process';
 import util from 'util';
+import _ from 'lodash';
 import chalk from 'chalk';
 import { glob } from 'glob';
 import runAsync from 'run-async';

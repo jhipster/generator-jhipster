@@ -18,8 +18,8 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { expect } from 'chai';
 import path from 'path';
+import { expect } from 'chai';
 
 import * as JSONFileReader from '../readers/json-file-reader.js';
 

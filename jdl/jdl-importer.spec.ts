@@ -18,12 +18,12 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { jestExpect } from 'esmocha';
 import fse from 'fs-extra';
-import path, { dirname } from 'path';
 import { expect } from 'chai';
 
-import { fileURLToPath } from 'url';
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.mjs';
 import { createImporterFromFiles, createImporterFromContent } from './jdl-importer.js';
 

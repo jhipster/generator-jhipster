@@ -20,8 +20,8 @@
 
 /* eslint-disable consistent-return */
 import { existsSync } from 'fs';
-import chalk from 'chalk';
 import os from 'os';
+import chalk from 'chalk';
 
 import {
   getDBTypeFromDBValue,

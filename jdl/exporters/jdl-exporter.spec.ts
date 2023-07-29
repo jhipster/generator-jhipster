@@ -18,10 +18,10 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import fs from 'fs';
 import { expect } from 'chai';
 import { jestExpect } from 'esmocha';
 
-import fs from 'fs';
 import JDLObject from '../models/jdl-object.js';
 import { JDLEntity } from '../models/index.mjs';
 import exportToJDL from '../exporters/jdl-exporter.js';
