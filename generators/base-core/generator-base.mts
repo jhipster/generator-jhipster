@@ -235,7 +235,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   getTaskNames(): string[] {
     let priorities = super.getTaskNames();
     if (this.options.skipPriorities) {
-      // Make sure yeoman-generator will not throw on empty tasks.
+      // Make sure yeoman-generator will not throw on empty tasks due to filtered priorities.
       this.customLifecycle = priorities.length > 0;
       priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
