@@ -96,18 +96,12 @@
       "console": "integratedTerminal"
     },
     {
-      "command": "npx --no open-cli ${workspaceFolder}/../jhipster-samples; exit 0",
-      "name": "open generated samples folder",
-      "request": "launch",
-      "type": "node-terminal"
-    },
-    {
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from angular workflow",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "args": ["${input:angularSample}"],
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:angularSample}", "--global"],
       "console": "integratedTerminal"
     },
     {
@@ -115,8 +109,8 @@
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from react workflow",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "args": ["${input:reactSample}"],
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:reactSample}", "--global"],
       "console": "integratedTerminal"
     },
     {
@@ -124,8 +118,8 @@
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from vue workflow",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "args": ["${input:vueSample}"],
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:vueSample}", "--global"],
       "console": "integratedTerminal"
     },
     {
@@ -133,8 +127,8 @@
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from daily-ms-oauth2 workflow",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "args": ["${input:daily-ms-oauth2Sample}"],
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-ms-oauth2Sample}", "--global"],
       "console": "integratedTerminal"
     },
     {
@@ -142,8 +136,8 @@
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
       "name": "generate sample from daily-neo4j workflow",
-      "program": "${workspaceFolder}/test-integration/scripts/12-generate-sample.js",
-      "args": ["${input:daily-neo4jSample}"],
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-neo4jSample}", "--global"],
       "console": "integratedTerminal"
     }
   ]

@@ -1,9 +1,6 @@
 import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { join } from 'path';
+import { testIntegrationFolder } from '../../constants.js';
 
 const WORKFLOW_NAMES = ['angular', 'react', 'vue', 'daily-ms-oauth2', 'daily-neo4j'];
 export const DAILY_PREFIX = 'daily-';
@@ -15,7 +12,7 @@ export const getWorkflowSamples = (workflows = WORKFLOW_NAMES) =>
     workflows.map(workflow => [
       workflow,
       Object.fromEntries(
-        JSON.parse(readFileSync(join(__dirname, `../../workflow-samples/${workflow}.json`)).toString())
+        JSON.parse(readFileSync(join(testIntegrationFolder, `workflow-samples/${workflow}.json`)).toString())
           .include.map(sample =>
             isDaily(workflow)
               ? {

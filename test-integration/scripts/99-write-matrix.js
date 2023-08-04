@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const packageRoot = join(dirname(__filename), '../..');
 
 const MATRIX_FILE = 'matrix.json';
 
@@ -24,7 +24,7 @@ writeFileSync(
         ...existing.include,
         ...process.argv
           .slice(2)
-          .map(file => join(__dirname, `../../${file.includes('/') ? file : `test-integration/workflow-samples/${file}.json`}`))
+          .map(file => join(packageRoot, file.includes('/') ? file : `test-integration/workflow-samples/${file}.json`))
           .map(file => {
             try {
               return JSON.parse(readFileSync(file).toString())

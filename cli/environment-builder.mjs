@@ -32,6 +32,10 @@ import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+export const enableDevBlueprint = process.env.JHIPSTER_DEV_BLUEPRINT === 'true';
+const devBlueprintPath = path.join(__dirname, '../.blueprint');
+const devBlueprintNamespace = '@jhipster/jhipster-dev';
+
 function loadYoRc(filePath = '.yo-rc.json') {
   if (!existsSync(filePath)) {
     return undefined;
@@ -105,6 +109,9 @@ export default class EnvironmentBuilder {
   async prepare({ blueprints, lookups } = {}) {
     await this._lookupJHipster();
     await this._lookupLocalBlueprint();
+    if (enableDevBlueprint) {
+      await this._lookupDevBlueprint();
+    }
     this._loadBlueprints(blueprints);
     await this._lookups(lookups);
     await this._lookupBlueprints();
@@ -116,6 +123,7 @@ export default class EnvironmentBuilder {
     return [
       ...Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName)),
       '@jhipster/jhipster-local',
+      ...(enableDevBlueprint ? [devBlueprintNamespace] : []),
     ];
   }
 
@@ -166,6 +174,17 @@ export default class EnvironmentBuilder {
       if (generators.length > 0) {
         this.env.alias(/^@jhipster\/jhipster-local(:(.*))?$/, '.blueprint$1');
         this.env.sharedOptions.localBlueprint = true;
+      }
+    }
+    return this;
+  }
+
+  async _lookupDevBlueprint() {
+    if (existsSync(devBlueprintPath)) {
+      // Register jhipster generators.
+      const generators = await this.env.lookup({ packagePaths: [devBlueprintPath], lookups: ['.'] });
+      if (generators.length > 0) {
+        this.env.alias(/^@jhipster\/jhipster-dev(:(.*))?$/, '.blueprint$1');
       }
     }
     return this;
@@ -243,7 +262,11 @@ export default class EnvironmentBuilder {
    * @return {Object[]} blueprint commands.
    */
   async getBlueprintCommands() {
-    const blueprintsPackagePath = await this._getBlueprintPackagePaths();
+    let blueprintsPackagePath = await this._getBlueprintPackagePaths();
+    if (enableDevBlueprint) {
+      blueprintsPackagePath = blueprintsPackagePath ?? [];
+      blueprintsPackagePath.push([devBlueprintNamespace, devBlueprintPath]);
+    }
     return this._getBlueprintCommands(blueprintsPackagePath);
   }
 

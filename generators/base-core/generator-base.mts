@@ -156,7 +156,12 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
       jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
       // Don't write jhipsterVersion to .yo-rc.json when reproducible
-      if (!this.options.reproducible && !this.jhipsterConfig.jhipsterVersion) {
+      if (
+        this.options.namespace.startsWith('jhipster:') &&
+        !this.options.namespace.startsWith('jhipster:bootstrap') &&
+        !this.options.reproducible &&
+        !this.jhipsterConfig.jhipsterVersion
+      ) {
         this.jhipsterConfig.jhipsterVersion = packageJson.version;
       }
     }
@@ -338,9 +343,11 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     }
 
     return this.composeWith(generator, {
-      forwardOptions: true,
+      forwardOptions: false,
       ...options,
       generatorOptions: {
+        ...this.options,
+        positionalArguments: [],
         configOptions: this.configOptions,
         ...options?.generatorOptions,
       } as any,

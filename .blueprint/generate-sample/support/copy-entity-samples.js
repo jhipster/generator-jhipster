@@ -1,8 +1,6 @@
 import { cpSync, mkdirSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-
-const entitiesSamplesDir = join(dirname(fileURLToPath(import.meta.url)), '../../samples/.jhipster');
+import { join } from 'path';
+import { entitiesSamplesDir } from '../../constants.js';
 
 const sqllight = ['BankAccount', 'Label', 'Operation'];
 
@@ -105,6 +103,9 @@ export const entitiesByType = {
 };
 
 export default function copyEntitySamples(dest, type) {
+  if (type === 'mongodb' || type === 'couchbase') {
+    type = 'document';
+  }
   const entitiesFolder = join(dest, '.jhipster');
   mkdirSync(entitiesFolder, { recursive: true });
   const entities = entitiesByType[type];

@@ -323,6 +323,37 @@ Update specific test snapshot
 Fixing lint and prettier errors
 `npm run lint-fix`
 
+## Generating and testing samples
+
+Sample generating is provided by `generator-jhipster` local blueprint which we will refer as `dev blueprint`.
+The dev blueprint is enabled by running jhipster in JIT mode (executing `./bin/jhipster.cjs` file relative to this file).
+
+### Generating samples using dev blueprint
+
+`jhipster generate-sample ng-default` will generate the `ng-default` sample at current folder.
+
+#### Daily builds samples
+
+Daily builds samples are prefixed with `daily-`.
+
+#### Samples folder
+
+A common samples folder will be used if `--global` option is used like `jhipster generate-sample ng-default --global`.
+At first execution a prompt will ask for the samples folder, the choosen value will be reused at next executions.
+At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very used for quick looks.
+
+### Testing samples
+
+CI tests uses the following commands:
+
+```
+npm ci:backend:test
+npm ci:frontend:test
+npm run ci:e2e:package # Builds the application
+npm run ci:e2e:prepare # Starts the application using docker
+npm run ci:e2e:run # Runs e2e tests
+```
+
 ## DX using vscode
 
 `generator-jhipster` add a series of vscode configurations for a better developer experience.
