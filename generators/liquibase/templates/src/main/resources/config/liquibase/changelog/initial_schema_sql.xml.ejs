@@ -40,7 +40,7 @@
         const idField = user.primaryKey.fields[0];
 _%>
         <createTable tableName="<%= user.entityTableName %>">
-            <column name="id" type="<%= idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true"<% } %><% if (reactive && idField.fieldType === 'Long') { %> startWith="1050"<% } %>>
+            <column name="id" type="<%= idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1050"<% } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">

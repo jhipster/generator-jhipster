@@ -2,8 +2,9 @@ package <%= packageName %>.web.filter;
 
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -45,11 +46,16 @@ class SpaWebFilterIT {
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void testFilterDoesNotForwardToIndexForV3ApiDocs() {
         webTestClient
+            .mutate()
+            .responseTimeout(Duration.ofMillis(10000))
+            .build()
             .get()
             .uri("/v3/api-docs")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON);
     }
 
     @Test

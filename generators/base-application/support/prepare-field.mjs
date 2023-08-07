@@ -96,7 +96,7 @@ const fakeStringTemplateForFieldName = columnName => {
 
 /**
  * @param {*} field
- * @param {*} faker
+ * @param {import('@faker-js/faker').Faker} faker
  * @param {*} changelogDate
  * @param {string} type csv, cypress, json-serializable, ts
  * @returns fake value
@@ -132,7 +132,13 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
     data = `PT${faker.number.int({ min: 1, max: 59 })}M`;
 
     // eslint-disable-next-line no-template-curly-in-string
-  } else if ([INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL, DURATION].includes(field.fieldType)) {
+  } else if ([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
+    data = faker.number.float({
+      max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : 32767,
+      min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : 0,
+      precision: 0.01,
+    });
+  } else if ([INTEGER, LONG, DURATION].includes(field.fieldType)) {
     data = faker.number.int({
       max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : 32767,
       min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : 0,
