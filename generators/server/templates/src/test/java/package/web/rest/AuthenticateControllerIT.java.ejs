@@ -23,7 +23,7 @@ import <%= packageName %>.IntegrationTest;
   <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
   <%_ } _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;

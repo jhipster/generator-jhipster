@@ -22,7 +22,7 @@ import <%= packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;

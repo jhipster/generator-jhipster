@@ -23,7 +23,7 @@ import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.repository.PersistentTokenRepository;
   <%_ } _%>
   <%_ if (!reactive) { _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
   <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.SecurityUtils;

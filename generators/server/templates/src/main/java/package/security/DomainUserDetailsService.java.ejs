@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.security;
 
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>

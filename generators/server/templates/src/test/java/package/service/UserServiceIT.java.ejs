@@ -24,7 +24,7 @@ import <%= packageName %>.config.Constants;
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 <%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;

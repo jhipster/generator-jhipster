@@ -93,7 +93,7 @@ import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing {@link <%= persistClass %>}.
+ * Service Implementation for managing {@link <%= entityAbsoluteClass %>}.
  */
 @Service<% if (databaseTypeSql) { %>
 @Transactional<% } %>
