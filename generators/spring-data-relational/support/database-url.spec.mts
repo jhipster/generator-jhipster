@@ -7,9 +7,9 @@ const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databa
 describe('generator - sql - database-url', () => {
   describe('getJdbcUrl', () => {
     describe('when called for mysql', () => {
-      it('return jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+      it('return jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true', () => {
         expect(getJdbcUrl(MYSQL, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
+          'jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true',
         );
       });
     });
@@ -21,9 +21,9 @@ describe('generator - sql - database-url', () => {
       });
     });
     describe('when called for mariadb', () => {
-      it('return jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+      it('return jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false', () => {
         expect(getJdbcUrl(MARIADB, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC',
+          'jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false',
         );
       });
     });
@@ -131,9 +131,9 @@ describe('generator - sql - database-url', () => {
 
   describe('getR2dbcUrl', () => {
     describe('when called for mysql', () => {
-      it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+      it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true', () => {
         expect(getR2dbcUrl(MYSQL, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
+          'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true',
         );
       });
     });
@@ -145,9 +145,9 @@ describe('generator - sql - database-url', () => {
       });
     });
     describe('when called for mariadb', () => {
-      it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+      it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false', () => {
         expect(getR2dbcUrl(MARIADB, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC',
+          'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false',
         );
       });
     });

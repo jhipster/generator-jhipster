@@ -710,7 +710,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -1819,7 +1819,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -2661,7 +2661,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -2859,7 +2859,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -3686,7 +3686,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -4579,7 +4579,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -4777,7 +4777,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmariadb
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
+                  value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
                 - name: SPRING_DATASOURCE_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -5178,7 +5178,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -8630,7 +8630,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
                   value: "true"
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -9415,7 +9415,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -10251,7 +10251,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -10691,7 +10691,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -11708,7 +11708,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -12466,7 +12466,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -12689,7 +12689,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -13418,7 +13418,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -14198,7 +14198,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -14440,7 +14440,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmariadb
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
+                  value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
                 - name: SPRING_DATASOURCE_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -15309,7 +15309,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -18990,7 +18990,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
                   value: "true"
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -19703,7 +19703,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS
@@ -20440,7 +20440,7 @@ spec:
                 - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
                   value: "x-request-id,x-ot-span-context"
                 - name: JAVA_OPTS

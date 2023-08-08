@@ -111,7 +111,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.mariadb.jdbc.Driver',
     hibernateDialect: 'org.hibernate.dialect.MariaDB103Dialect',
     port: ':3306/',
-    extraOptions: '?useLegacyDatetimeCode=false&serverTimezone=UTC',
+    extraOptions: '?useLegacyDatetimeCode=false',
     defaultUsername: 'root',
 
     constraintNameMaxLength: 64,
@@ -125,8 +125,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
     port: ':3306/',
-    extraOptions:
-      '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
+    extraOptions: '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true',
     defaultUsername: 'root',
   },
   [ORACLE]: {
