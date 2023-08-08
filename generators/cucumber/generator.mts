@@ -74,12 +74,13 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
               failonerror="true"
               newenvironment="true"
               maxmemory="512m"
-              classpathref="maven.test.classpath">${
-                application.reactive
-                  ? `
+              classpathref="maven.test.classpath">
+            <jvmarg value="-Dspring.profiles.active=testprod"/>${
+              application.reactive
+                ? `
             <jvmarg value="-XX:+AllowRedefinitionToAddDeleteMethods"/>`
-                  : ''
-              }
+                : ''
+            }
             <arg value="--include-engine"/>
             <arg value="cucumber"/>
             <arg value="--scan-classpath"/>
