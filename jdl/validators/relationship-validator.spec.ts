@@ -190,27 +190,6 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
       });
-      context(`when having a ${MANY_TO_MANY} relationship`, () => {
-        context('when not having an bidirectional relationship', () => {
-          let relationship1;
-          let relationship2;
-
-          before(() => {
-            relationship1 = new JDLRelationship({
-              from: 'A',
-              to: 'B',
-              type: MANY_TO_MANY,
-              injectedFieldInTo: 'a',
-            });
-            relationship2 = new JDLRelationship({
-              from: 'A',
-              to: 'B',
-              type: MANY_TO_MANY,
-              injectedFieldInFrom: 'b',
-            });
-          });
-        });
-      });
       context('with the user entity', () => {
         context(`when having a ${ONE_TO_ONE} relationship`, () => {
           context('having an injected field in the source entity', () => {

@@ -33,7 +33,7 @@ export const gatlingFiles = {
   ],
 };
 
-export function cleanupEntitiesTask({ application, entities }) {}
+export function cleanupEntitiesTask() {}
 
 export default async function writeEntitiesTask(this: Generator, { application, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {

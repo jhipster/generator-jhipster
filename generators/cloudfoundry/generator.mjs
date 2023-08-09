@@ -226,7 +226,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         if (this.abort || !this.cloudfoundry_remote_exists) return;
         this.log.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
 
-        exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
+        exec(`cf restart ${this.cloudfoundryDeployedName}`, () => {
           this.log.log(chalk.green('\nYour app should now be live'));
         });
       },

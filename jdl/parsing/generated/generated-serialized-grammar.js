@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-vars */
+/* eslint-disable unused-imports/no-unused-vars */
 const serializedGrammar = [
     {
         type: 'Rule',

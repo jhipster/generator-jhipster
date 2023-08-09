@@ -29,10 +29,7 @@ export type DeterministicOptionWithDerivedProperties<N extends string, T extends
 >;
 
 // OptionWithDerivedProperties<'aProperty', ['foo', 'bar']> = { aProperty: 'foo' | 'bar'; aPropertyFoo: boolean; aPropertyBar: boolean;  }
-export type OptionWithDerivedProperties<N extends string, T extends string[], A extends any[] = []> = Record<
-  N,
-  Exclude<ArrayToUnion<T>, 'any'> | undefined
-> &
+export type OptionWithDerivedProperties<N extends string, T extends string[]> = Record<N, Exclude<ArrayToUnion<T>, 'any'> | undefined> &
   Record<`${N}${Capitalize<ArrayToUnion<T>>}`, boolean> &
   ('no' extends ArrayToUnion<T> ? Record<`${N}Any`, boolean> : Record<string, never>);
 

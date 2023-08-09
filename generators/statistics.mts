@@ -121,7 +121,7 @@ class Statistics {
     }
   }
 
-  postWithProxy(url, data, config) {
+  postWithProxy(url, data) {
     return this.axiosProxyClient.post(url, data);
   }
 

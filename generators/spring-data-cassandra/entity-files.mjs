@@ -41,7 +41,7 @@ export const entityFiles = {
   ],
 };
 
-export function cleanupCassandraEntityFilesTask({ application, entities }) {}
+export function cleanupCassandraEntityFilesTask() {}
 
 export default async function writeEntityCassandraFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {

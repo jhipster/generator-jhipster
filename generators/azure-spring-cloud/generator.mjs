@@ -291,13 +291,13 @@ ${chalk.red('az extension add --name spring-cloud')}`,
         exec(
           `az spring-cloud app show --resource-group ${this.azureSpringCloudResourceGroupName} \
 --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName}`,
-          (err, stdout) => {
+          err => {
             if (err) {
               this.log.log(chalk.bold('Application does not exist yet, creating it...'));
               exec(
                 `az spring-cloud app create --resource-group ${this.azureSpringCloudResourceGroupName} \
             --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName}`,
-                (err, stdout) => {
+                err => {
                   if (err) {
                     this.abort = true;
                     this.log.error(`Application creation failed! Here is the error: ${err}`);

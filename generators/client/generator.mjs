@@ -98,7 +98,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { clientFramework, testFrameworks, enableTranslation } = this.jhipsterConfigWithDefaults;
+        const { clientFramework, testFrameworks } = this.jhipsterConfigWithDefaults;
         if ([ANGULAR, VUE, REACT].includes(clientFramework)) {
           await this.composeWithJHipster(clientFramework);
         }
