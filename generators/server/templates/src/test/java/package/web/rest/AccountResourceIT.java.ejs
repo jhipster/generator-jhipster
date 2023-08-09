@@ -18,7 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
@@ -55,6 +54,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ if (reactive) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -69,7 +69,8 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
-
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.config.AsyncSyncConfiguration;
 import java.time.Instant;
 <%_ if (authenticationTypeSession && !reactive && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 import java.time.LocalDate;
@@ -84,7 +85,6 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
-import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ if (reactive) { _%>
   <%_ if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
@@ -108,8 +108,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@WithMockUser(value = TEST_USER_LOGIN)
-@IntegrationTest
+@SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class })
 class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
 
@@ -172,6 +171,7 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser (username = TEST_USER_LOGIN)
 <%_ if (reactive) { _%>
     void testAuthenticatedUser() {
         accountWebTestClient
@@ -183,10 +183,7 @@ class AccountResourceIT {
 <%_ } else { _%>
     void testAuthenticatedUser() throws Exception {
         restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> {
-                request.setRemoteUser(TEST_USER_LOGIN);
-                return request;
-            })
+            .with(request -> request)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
@@ -194,6 +191,7 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser (username = TEST_USER_LOGIN)
     void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
@@ -255,7 +253,7 @@ class AccountResourceIT {
     void testGetUnknownAccount() throws Exception {
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isUnauthorized());
 <%_ } _%>
     }
 
