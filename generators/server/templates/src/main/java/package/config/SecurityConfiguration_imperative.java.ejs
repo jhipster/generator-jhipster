@@ -23,7 +23,6 @@ import tech.jhipster.config.JHipsterProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
@@ -255,7 +254,6 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Scope("prototype")
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
         return new MvcRequestMatcher.Builder(introspector);
