@@ -193,7 +193,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -325,7 +325,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -489,7 +489,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -763,7 +763,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -942,7 +942,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -1496,7 +1496,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -1576,7 +1576,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -1657,7 +1657,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>

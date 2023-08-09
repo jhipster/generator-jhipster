@@ -14,8 +14,8 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_R2DBC_URL=r2dbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_R2DBC_URL=r2dbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
+      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
@@ -718,8 +718,8 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
+      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
       - 127.0.0.1:8080:8080
@@ -1192,8 +1192,8 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
