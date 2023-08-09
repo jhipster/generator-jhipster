@@ -17,10 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect, esmocha } from 'esmocha';
-import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { expect, esmocha } from 'esmocha';
+import lodash from 'lodash';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.mjs';

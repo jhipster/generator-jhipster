@@ -27,6 +27,8 @@ import { convertApplicationToJDL } from './json-to-jdl-application-converter.js'
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
 import { Entity } from './types.js';
+import { removeFieldsWithNullishValues } from '../../generators/base/support/config.mjs';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 
 export default {
   convertToJDL,
@@ -101,13 +103,15 @@ function getJDLObjectFromSingleApplication(
 }
 
 function cleanYoRcFileContent(yoRcFileContent) {
-  const [generatorName] = Object.keys(yoRcFileContent);
-  delete yoRcFileContent[generatorName].promptValues;
-  if (yoRcFileContent[generatorName].blueprints) {
-    yoRcFileContent[generatorName].blueprints = yoRcFileContent[generatorName].blueprints.map(blueprint => blueprint.name);
+  for (const key of Object.keys(yoRcFileContent)) {
+    yoRcFileContent[key] = removeFieldsWithNullishValues(yoRcFileContent[key]);
   }
-  if (yoRcFileContent[generatorName].microfrontends) {
-    yoRcFileContent[generatorName].microfrontends = yoRcFileContent[generatorName].microfrontends.map(({ baseName }) => baseName);
+  delete yoRcFileContent[GENERATOR_JHIPSTER].promptValues;
+  if (yoRcFileContent[GENERATOR_JHIPSTER].blueprints) {
+    yoRcFileContent[GENERATOR_JHIPSTER].blueprints = yoRcFileContent[GENERATOR_JHIPSTER].blueprints.map(blueprint => blueprint.name);
+  }
+  if (yoRcFileContent[GENERATOR_JHIPSTER].microfrontends) {
+    yoRcFileContent[GENERATOR_JHIPSTER].microfrontends = yoRcFileContent[GENERATOR_JHIPSTER].microfrontends.map(({ baseName }) => baseName);
   }
   return yoRcFileContent;
 }

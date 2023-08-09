@@ -1,6 +1,6 @@
-import { expect } from 'esmocha';
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
+import { expect } from 'esmocha';
 import { transform } from 'p-transform';
 
 import { createESLintTransform } from './eslint-transform.mjs';

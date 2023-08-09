@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import pathjs from 'path';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
-import pathjs from 'path';
 import normalize from 'normalize-path';
 import runAsync from 'run-async';
 

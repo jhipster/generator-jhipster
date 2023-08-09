@@ -17,20 +17,20 @@
  * limitations under the License.
  */
 import { basename, join as joinPath, dirname, relative, isAbsolute, join } from 'path';
-import { requireNamespace } from '@yeoman/namespace';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
+import { statSync, rmSync, existsSync } from 'fs';
+import assert from 'assert';
+import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
-import { statSync, rmSync, existsSync } from 'fs';
 import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import latestVersion from 'latest-version';
-import assert from 'assert';
 import SharedData from '../base/shared-data.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.mjs';
 import { joinCallbacks, Logger } from '../base/support/index.mjs';
@@ -235,6 +235,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   getTaskNames(): string[] {
     let priorities = super.getTaskNames();
     if (this.options.skipPriorities) {
+      // Make sure yeoman-generator will not throw on empty tasks due to filtered priorities.
+      this.customLifecycle = priorities.length > 0;
       priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;

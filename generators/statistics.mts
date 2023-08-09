@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import os from 'os';
 import { v4 as uuid } from 'uuid';
 import Conf from 'conf';
 import { osLocaleSync } from 'os-locale';
 import axios from 'axios';
-import os from 'os';
 import Insight from 'insight';
 import { packageJson as packagejs } from '../lib/index.mjs';
 

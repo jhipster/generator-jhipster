@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { transform } from 'p-transform';
 import { stat } from 'fs/promises';
 import { createReadStream } from 'fs';
+import { transform } from 'p-transform';
 import { isBinaryFile } from 'isbinaryfile';
 import { type SimpleGit } from 'simple-git';
 import { normalizeLineEndings } from '../../base/support/index.mjs';

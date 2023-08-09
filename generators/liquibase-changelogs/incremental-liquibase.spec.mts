@@ -1,9 +1,9 @@
 import path, { basename, join } from 'path';
-import { expect } from 'esmocha';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
 
-import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers, runResult } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import jdlImporter from '../../jdl/index.mjs';
 
@@ -1152,19 +1152,13 @@ entity Customer {
       {
         entity: jdlApplicationEntitieWithByteTypes,
         bytesFields: true,
-        testContent:
-          '1;geez;1369;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;5650',
-        contentRequired: true,
       },
       {
         entity: jdlApplicationEntitieWithoutByteTypes,
         bytesFields: false,
-        testContent: 'content_type',
-        contentRequired: false,
       },
     ].forEach(eachEntityConfig => {
       describe(`testing ${eachEntityConfig.bytesFields ? 'with' : 'without'} byte fields`, () => {
-        let runResult;
         before(async () => {
           const baseName = 'JhipsterApp';
           const initialState = createImporterFromContent(eachEntityConfig.entity, {
@@ -1175,7 +1169,7 @@ entity Customer {
           const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
           expect(applicationWithEntities).toBeTruthy();
           expect(applicationWithEntities.entities.length).toBe(1);
-          runResult = await helpers
+          await helpers
             .create(generatorPath)
             .withOptions({ ...options, applicationWithEntities })
             .run();
@@ -1188,15 +1182,9 @@ entity Customer {
           runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`]);
         });
         it('should create fake data file with required content', () => {
-          eachEntityConfig.contentRequired
-            ? runResult.assertFileContent(
-                `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`,
-                eachEntityConfig.testContent,
-              )
-            : runResult.assertNoFileContent(
-                `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`,
-                eachEntityConfig.testContent,
-              );
+          expect(
+            runResult.getSnapshot(`**/${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`),
+          ).toMatchSnapshot();
         });
       });
     });

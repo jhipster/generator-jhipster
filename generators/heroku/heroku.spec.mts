@@ -1,5 +1,5 @@
-import sinon from 'sinon';
 import ChildProcess from 'child_process';
+import sinon from 'sinon';
 import { expect } from 'esmocha';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';

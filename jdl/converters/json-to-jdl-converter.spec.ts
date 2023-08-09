@@ -20,9 +20,9 @@
 
 import fs from 'fs';
 import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { fileURLToPath } from 'url';
 import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
 
@@ -367,6 +367,16 @@ describe('jdl - JSONToJDLConverter', () => {
 
       it('should write a JDL file with the application', () => {
         jestExpect(jdl).toMatch(/microfrontends \[foo, bar\]/);
+      });
+    });
+    context('with nullish attributes', () => {
+      it('should not fail', () => {
+        convertSingleContentToJDL({
+          'generator-jhipster': {
+            blueprints: null,
+            microfrontends: undefined,
+          },
+        });
       });
     });
   });

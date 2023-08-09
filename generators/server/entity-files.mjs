@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import fs from 'fs';
 import _ from 'lodash';
 import chalk from 'chalk';
-import fs from 'fs';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
 import {
   moveToJavaEntityPackageSrcDir,

@@ -30,7 +30,7 @@ export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationRes
         !relationship.otherRelationship &&
         (relationship.relationshipType === 'many-to-many' ||
           // OneToOne back reference is required due to filtering
-          relationship.relationshipType === 'one-to-one' ||
+          (relationship.relationshipType === 'one-to-one' && entity.databaseType === 'sql') ||
           (relationship.relationshipType === 'one-to-many' && entity.databaseType !== 'neo4j' && entity.databaseType !== 'no'))
       ) {
         if (relationship.otherEntity.builtIn) {

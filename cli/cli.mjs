@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import semver from 'semver';
 import { dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
+import semver from 'semver';
 import chalk from 'chalk';
 
 import { packageJson } from '../lib/index.mjs';

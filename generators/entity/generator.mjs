@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import chalk from 'chalk';
 import fs from 'fs';
-import _ from 'lodash';
 import path from 'path';
+import chalk from 'chalk';
+import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import prompts from './prompts.mjs';
@@ -121,6 +121,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
     const entityExisted = fs.existsSync(this.destinationPath(filename));
 
+    this.jhipsterConfig.entities = [...(this.jhipsterConfig.entities ?? []), name];
     this.context = {
       name,
       filename,

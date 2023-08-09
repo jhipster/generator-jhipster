@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 import { exec } from 'child_process';
+import _ from 'lodash';
 
 /**
  * This is the DockerCli object. it allows Yeoman to interact with Docker via Docker CLI.

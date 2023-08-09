@@ -98,7 +98,7 @@ public class UserStepDefs extends StepDefs {
     public void setup() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
-        User principal = new User("username", "", true, true, true, true, grantedAuthorities);
+        User principal = new User("admin", "", true, true, true, true, grantedAuthorities);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             principal,
             principal.getPassword(),

@@ -118,7 +118,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -436,7 +436,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -1149,7 +1149,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -1738,7 +1738,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mariadb://\${APPLICATION_NAME}-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
+                  value: jdbc:mariadb://\${APPLICATION_NAME}-mariadb:3306/msmariadb?useLegacyDatetimeCode=false
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -2371,7 +2371,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -3557,7 +3557,7 @@ objects:
                 - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
                   value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -4008,7 +4008,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -4705,7 +4705,7 @@ objects:
                 - name: SPRING_CLOUD_CONSUL_PORT
                   value: 8500
                 - name: SPRING_DATASOURCE_URL
-                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
                 - name: SPRING_DATASOURCE_USERNAME
                   valueFrom:
                     secretKeyRef:

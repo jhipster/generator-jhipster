@@ -6,11 +6,11 @@
     "@cypress/code-coverage": "3.11.0",
     "babel-loader": "9.1.3",
     "babel-plugin-istanbul": "6.1.1",
-    "cypress": "12.17.2",
+    "cypress": "12.17.3",
     "cypress-audit": "1.1.0",
     "eslint-plugin-cypress": "2.13.3",
-    "lighthouse": "10.4.0",
+    "lighthouse": "11.0.0",
     "nyc": "15.1.0",
-    "swagger-ui-dist": "5.1.3"
+    "swagger-ui-dist": "5.3.1"
   }
 }

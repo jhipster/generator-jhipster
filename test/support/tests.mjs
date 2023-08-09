@@ -1,8 +1,8 @@
-import { expect } from 'esmocha';
 import path, { dirname } from 'path';
-import sinon from 'sinon';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
+import sinon from 'sinon';
+import { expect } from 'esmocha';
 
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';

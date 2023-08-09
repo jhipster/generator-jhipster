@@ -18,10 +18,10 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
-import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
+import { jestExpect } from 'esmocha';
+import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../jhipster/index.mjs';
 

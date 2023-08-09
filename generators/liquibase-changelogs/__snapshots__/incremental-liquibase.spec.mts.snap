@@ -1,5 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing with byte fields should create fake data file with required content 1`] = `
+{
+  "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
+    "contents": "id;name;price;description;picture;picture_content_type;specification;specification_content_type;category;inventory
+1;so;27689.83;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;28870
+2;night;13757.31;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;27257
+3;left as;20119.26;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;4484
+4;who pressu;13543.06;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;12192
+5;justify lo;31004.02;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;12654
+6;incidental;10025.34;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;6701
+7;judgementa;987.58;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;19506
+8;pish;16423.03;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;30984
+9;whine conc;0.94;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;20142
+10;meager hit;3205.08;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;31836
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing without byte fields should create fake data file with required content 1`] = `
+{
+  "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
+    "contents": "id;name;age;height;income;expense;savings;category;happy;dob;exact_time;travel_time;moment
+1;so;27690;9228;28869.91;1523.27;11029.18;Laptop;true;2019-12-31;2019-12-31T07:33:17;8479;2019-12-31T09:44:59
+2;snow up;17956;196;6635.36;20119.26;30119.44;Laptop;true;2019-12-31;2019-12-31T05:33:26;27663;2019-12-31T02:26:03
+3;bubble loot;32476;6693;16764.28;2360.94;25178.99;Phone;true;2019-12-31;2019-12-31T22:43:36;21699;2019-12-31T18:00:55
+4;clear-cut vacant;20511;6897;13046.9;2776.1;11256.8;Accessory;false;2019-12-31;2019-12-31T16:07:42;13697;2019-12-31T20:36:00
+5;hedge supposing;1132;30538;4436.81;2931.45;12681.2;Laptop;true;2019-12-31;2019-12-31T11:59:15;7932;2019-12-31T01:19:21
+6;whine concerning pile;0;25903;20141.92;26507.48;24530.15;Phone;false;2019-12-31;2019-12-31T02:06:08;29017;2019-12-31T11:33:28
+7;thousand carelessly tasty;51;20191;8823.52;20755.4;26916.74;Tablet;true;2019-12-31;2019-12-31T17:46:32;12337;2019-12-31T10:52:56
+8;ugh revel shuck;11812;31986;30809.45;16008.41;1218.05;Phone;false;2019-12-31;2019-12-31T20:08:02;27053;2019-12-31T03:28:55
+9;hunch wonderfully;20533;32520;17780.32;14238.39;24671.07;Phone;true;2019-12-31;2019-12-31T19:23:49;24752;2019-12-31T13:02:54
+10;continent madly;25891;12035;16138.39;18899.17;13902.14;Phone;false;2019-12-31;2019-12-31T16:17:43;2955;2019-12-31T04:43:49
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - app - --incremental-changelog regenerating the application should match snapshot 1`] = `
 {
   "src/main/resources/config/liquibase/data/authority.csv": {
@@ -131,16 +171,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;ubiquitous
-2;Awesome Hydrogen fluid
-3;New AI
-4;Bicycle
-5;Chicken Views Mobility
-6;similique elaborate
-7;Officer
-8;Planner Gasoline
-9;sexy
-10;redefine
+1;yuck
+2;for atop
+3;uncurl
+4;elaborate through weep
+5;hopelessly
+6;easily almost obvious
+7;unionize joyously gah
+8;half ink
+9;psst majestically swiftly
+10;ragged
 ",
     "stateCleared": "modified",
   },
@@ -153,7 +193,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -263,16 +303,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;ubiquitous
-2;Awesome Hydrogen fluid
-3;New AI
-4;Bicycle
-5;Chicken Views Mobility
-6;similique elaborate
-7;Officer
-8;Planner Gasoline
-9;sexy
-10;redefine
+1;yuck
+2;for atop
+3;uncurl
+4;elaborate through weep
+5;hopelessly
+6;easily almost obvious
+7;unionize joyously gah
+8;half ink
+9;psst majestically swiftly
+10;ragged
 ",
     "stateCleared": "modified",
   },
@@ -285,7 +325,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -449,7 +489,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -723,7 +763,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -902,7 +942,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -1456,7 +1496,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -1536,7 +1576,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -1617,7 +1657,7 @@ ROLE_USER
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="uuid" dbms="h2"/>
-    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>

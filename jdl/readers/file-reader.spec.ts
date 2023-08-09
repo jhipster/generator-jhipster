@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { jestExpect } from 'esmocha';
 import fs from 'fs';
+import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { readFile, readFiles } from '../readers/file-reader.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';

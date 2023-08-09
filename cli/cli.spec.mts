@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions, no-console */
 import assert from 'assert';
-import { expect, mock, resetAllMocks, fn } from 'esmocha';
 import { fork } from 'child_process';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { expect, mock, resetAllMocks, fn } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { BaseEnvironment } from '@yeoman/types';
-import { join, dirname } from 'path';
 import { coerce } from 'semver';
-import { fileURLToPath } from 'url';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
 
 import { getCommand as actualGetCommonand } from './utils.mjs';

@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'esmocha';
 import { basename, dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
+import { expect } from 'esmocha';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';

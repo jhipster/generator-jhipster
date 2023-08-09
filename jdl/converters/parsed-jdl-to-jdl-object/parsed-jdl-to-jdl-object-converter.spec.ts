@@ -18,10 +18,10 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
-import { expect } from 'chai';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { jestExpect } from 'esmocha';
+import { expect } from 'chai';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';

@@ -1,7 +1,7 @@
 import assert from 'assert';
+import path from 'path';
 import debugBuilder from 'debug';
 import ejs from 'ejs';
-import path from 'path';
 
 import TemplateData from './template-data.mjs';
 
