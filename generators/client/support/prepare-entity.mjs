@@ -18,7 +18,7 @@
  */
 import getTypescriptKeyType from './types-utils.mjs';
 
-export default function prepareEntity(entity) {}
+export default function prepareEntity() {}
 
 export function preparePostEntityClientDerivedProperties(entity) {
   if (entity.primaryKey) {

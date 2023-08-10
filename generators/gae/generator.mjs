@@ -75,7 +75,7 @@ export default class GaeGenerator extends BaseGenerator {
         shelljs.exec(
           'gcloud components list --quiet --filter="Status=Installed OR Status=\\"Update Available\\"" --format="value(id)"',
           { silent: true },
-          (err, stdout, srderr) => {
+          (err, stdout) => {
             if (_.includes(stdout, component)) {
               done();
             } else {
@@ -694,7 +694,7 @@ export default class GaeGenerator extends BaseGenerator {
         shelljs.exec(
           `gcloud sql users list -i jhipster --format="value(name)" --project="${this.gcpProjectId}"`,
           { silent: true },
-          (code, stdout, err) => {
+          (_code, stdout) => {
             if (_.includes(stdout, this.gcpCloudSqlUserName)) {
               this.log.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
               const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${this.gcpProjectId}" --password="..."`;

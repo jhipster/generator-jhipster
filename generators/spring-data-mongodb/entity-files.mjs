@@ -29,7 +29,7 @@ export const entityFiles = {
   ],
 };
 
-export function cleanupMongodbEntityFilesTask({ application, entities }) {}
+export function cleanupMongodbEntityFilesTask() {}
 
 export default async function writeEntityMongodbFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {

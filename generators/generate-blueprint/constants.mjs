@@ -21,7 +21,7 @@ import chalk from 'chalk';
 import * as GENERATOR_LIST from '../generator-list.mjs';
 import { PRIORITY_NAMES_LIST } from '../base-application/priorities.mjs';
 
-const prioritiesForSub = subGenerator => PRIORITY_NAMES_LIST;
+const prioritiesForSub = () => PRIORITY_NAMES_LIST;
 
 export const GENERATE_SNAPSHOTS = 'generateSnapshots';
 export const LINK_JHIPSTER_DEPENDENCY = 'linkJhipsterDependency';

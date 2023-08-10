@@ -601,7 +601,7 @@ function askForField() {
 
         return true;
       },
-      message: answers => {
+      message: () => {
         if (!context.existingEnum) {
           return 'What are the values of your enumeration (separated by comma, no spaces)?';
         }
@@ -995,7 +995,7 @@ function askForRelationship() {
       type: 'input',
       name: 'otherEntityRelationshipName',
       message: 'What is the name of this relationship in the other entity?',
-      default: response => _.lowerFirst(name),
+      default: () => _.lowerFirst(name),
     },
     {
       when: response =>

@@ -329,7 +329,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      setupServerconsts({ control, application }) {
+      setupServerconsts({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
         application.TEST_DIR = TEST_DIR;

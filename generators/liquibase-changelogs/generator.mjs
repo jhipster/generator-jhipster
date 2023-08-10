@@ -101,7 +101,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
               ? // generate id fields first to improve reproducibility
                 [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
               : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
-          fields.forEach((field, idx) => {
+          fields.forEach(field => {
             if (field.derived) {
               Object.defineProperty(rowData, field.fieldName, {
                 get: () => {
@@ -134,7 +134,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
 
   get default() {
     return {
-      prepareRelationshipsForTemplates({ application }) {
+      prepareRelationshipsForTemplates() {
         const entityChanges = this.entityChanges;
         const databaseChangelog = this.databaseChangelog;
         const entity = this.entity;
@@ -220,7 +220,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   // Public API method used by the getter and also by Blueprints
   get postWritingEntities() {
     return this.asPostWritingTaskGroup({
-      writeLiquibaseFiles({ application, source }) {
+      writeLiquibaseFiles({ source }) {
         const entity = this.entity;
         if (entity.skipServer) {
           return {};

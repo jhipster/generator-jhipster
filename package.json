@@ -69,7 +69,7 @@
     "copy-files": "cpy \"jdl/*.json\" \"dist/jdl\" && cpy \"generators/**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" dist/generators",
     "copy-types": "cpy \"generators/**/*.d.(|c|m)ts\" dist/types/generators",
     "ejslint": "ejslint generators/**/*.ejs",
-    "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --max-warnings 50",
+    "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --max-warnings 5",
     "jdl:test": "esmocha jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",

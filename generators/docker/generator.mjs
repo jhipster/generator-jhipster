@@ -172,8 +172,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
 
       packageJsonScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const { databaseType, databaseTypeSql, prodDatabaseType, prodDatabaseTypeNo, prodDatabaseTypeMysql, prodDatabaseTypeOracle } =
-          application;
+        const { databaseType, databaseTypeSql, prodDatabaseType, prodDatabaseTypeNo, prodDatabaseTypeOracle } = application;
         let postServicesSleep;
 
         if (databaseTypeSql) {

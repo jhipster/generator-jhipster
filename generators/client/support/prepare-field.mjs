@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default function prepareField(entityWithConfig, field, generator) {
+export default function prepareField(entityWithConfig, field) {
   if (field.fieldValidateRulesPatternAngular === undefined) {
     field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
       ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')

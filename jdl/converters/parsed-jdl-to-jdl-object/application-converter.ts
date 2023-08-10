@@ -32,10 +32,9 @@ export default { convertApplications };
 /**
  * Converts parsed applications to JDL applications.
  * @param {Array<Object>} parsedApplications - the parsed applications.
- * @param {Object} configuration - a configuration object.
  * @return {Array} the converted JDL applications.
  */
-export function convertApplications(parsedApplications, configuration = {}) {
+export function convertApplications(parsedApplications) {
   if (!parsedApplications) {
     throw new Error('Applications have to be passed so as to be converted.');
   }
