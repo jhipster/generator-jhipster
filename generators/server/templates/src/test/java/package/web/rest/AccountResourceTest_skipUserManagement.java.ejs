@@ -66,7 +66,7 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 <%_ } _%>
 @SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class })
-class AccountResourceIT {
+class AccountResourceTest {
     static final String TEST_USER_LOGIN = "test";
 
     @Autowired
@@ -131,7 +131,7 @@ class AccountResourceIT {
     }
 
     @Test
-    @WithMockUser (username = TEST_USER_LOGIN)
+    @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
         accountWebTestClient

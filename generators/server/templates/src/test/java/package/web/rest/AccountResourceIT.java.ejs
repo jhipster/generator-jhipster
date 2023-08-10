@@ -18,6 +18,7 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
@@ -54,7 +55,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ if (reactive) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -69,8 +69,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
-import <%= packageName %>.config.AsyncSyncConfiguration;
 import java.time.Instant;
 <%_ if (authenticationTypeSession && !reactive && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 import java.time.LocalDate;
@@ -108,7 +106,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class })
+@IntegrationTest
 class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
 
@@ -171,7 +169,7 @@ class AccountResourceIT {
     }
 
     @Test
-    @WithMockUser (username = TEST_USER_LOGIN)
+    @WithMockUser(TEST_USER_LOGIN)
 <%_ if (reactive) { _%>
     void testAuthenticatedUser() {
         accountWebTestClient
@@ -191,7 +189,7 @@ class AccountResourceIT {
     }
 
     @Test
-    @WithMockUser (username = TEST_USER_LOGIN)
+    @WithMockUser(TEST_USER_LOGIN)
     void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);

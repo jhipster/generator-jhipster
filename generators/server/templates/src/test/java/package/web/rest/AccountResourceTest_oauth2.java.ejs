@@ -76,7 +76,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 <%_ } _%>
 SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class, TestSecurityConfiguration.class })
-class AccountResourceIT {
+class AccountResourceTest {
 
 <%_ if (reactive) { _%>
     private Map<String, Object> claims;
@@ -179,7 +179,7 @@ class AccountResourceIT {
     }
 
     @Test
-    @WithMockUser (username = TEST_USER_LOGIN)
+    @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
         webTestClient
