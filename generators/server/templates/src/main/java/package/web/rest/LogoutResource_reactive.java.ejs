@@ -18,7 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
@@ -47,7 +46,7 @@ public class LogoutResource {
      * @param idToken the ID token.
      * @param request a {@link ServerHttpRequest} request.
      * @param session the current {@link WebSession}.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout URL.
+     * @return status {@code 200 (OK)} and a body with a global logout URL.
      */
     @PostMapping("/api/logout")
     public Mono<Map<String, String>> logout(@AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken, ServerHttpRequest request, WebSession session) {

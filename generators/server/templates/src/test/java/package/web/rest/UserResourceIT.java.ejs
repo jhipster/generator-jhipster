@@ -30,7 +30,7 @@ import <%= packageName %>.config.Constants;
 <%_ if (!databaseTypeCassandra && !databaseTypeCouchbase) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
