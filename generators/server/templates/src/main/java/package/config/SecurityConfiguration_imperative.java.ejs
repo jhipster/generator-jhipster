@@ -168,7 +168,7 @@ public class SecurityConfiguration {
                 authz
 <%_ if (!skipClient) { _%>
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
-                    .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
+                    .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp", "/*.woff", "/*.woff2", "/*.ttf", "/*.otf").permitAll()
                     .requestMatchers("/app/**").permitAll()
                     .requestMatchers("/i18n/**").permitAll()
                     .requestMatchers("/content/**").permitAll()
