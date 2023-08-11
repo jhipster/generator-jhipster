@@ -209,7 +209,7 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceTest.java": {
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
@@ -454,7 +454,7 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceTest.java": {
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/LogoutResourceIT.java": {
@@ -657,7 +657,7 @@ exports[`generator - server composing databaseType option no with session should
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceTest.java": {
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
