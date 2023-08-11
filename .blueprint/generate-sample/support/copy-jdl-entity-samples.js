@@ -1,9 +1,6 @@
 import { cpSync, mkdirSync, statSync } from 'fs';
-import { dirname, extname, join } from 'path';
-import { fileURLToPath } from 'url';
-
-const samplesFolder = join(dirname(fileURLToPath(import.meta.url)), '../../samples');
-const jdlEntitiesSamplesFolder = join(samplesFolder, 'jdl-entities');
+import { extname, join } from 'path';
+import { jdlEntitiesSamplesFolder } from '../../constants.js';
 
 const isDirectory = dir => {
   try {
