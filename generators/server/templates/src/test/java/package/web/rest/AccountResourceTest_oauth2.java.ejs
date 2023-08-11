@@ -75,7 +75,7 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class, TestSecurityConfiguration.class })
+@SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class, TestSecurityConfiguration.class })
 class AccountResourceTest {
 
 <%_ if (reactive) { _%>

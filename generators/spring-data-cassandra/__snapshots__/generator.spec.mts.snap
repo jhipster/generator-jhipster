@@ -832,7 +832,7 @@ exports[`generator - cassandra gateway-oauth2-maven-enableTranslation(false)-tec
   "src/test/java/tech/jhipster/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -3079,7 +3079,7 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/package/web/rest/AccountResourceTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -3468,7 +3468,7 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+  "src/test/java/tech/jhipster/web/rest/AccountResourceTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
@@ -3881,7 +3881,7 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/package/web/rest/AccountResourceTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
@@ -4659,7 +4659,7 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/package/web/rest/AccountResourceTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
