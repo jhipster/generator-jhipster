@@ -743,10 +743,10 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey")
             .exchange()
-            .expectStatus().isEqualTo(HttpStatus.UNAUTHORIZED);
+            .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey"))
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isInternalServerError());
 <%_ } _%>
     }
 
@@ -1444,14 +1444,14 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
-            .expectStatus().isEqualTo(HttpStatus.UNAUTHORIZED);
+            .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isInternalServerError());
 <%_ } _%>
     }
 }
