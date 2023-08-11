@@ -32,14 +32,11 @@ import static org.mockito.Mockito.*;
   <%_ } _%>
 <%_ } _%>
 
-import <%= packageName %>.<%= mainClass %>;
-import <%= packageName %>.config.AsyncSyncConfiguration;
-import <%= packageName %>.config.TestSecurityConfiguration;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
@@ -75,8 +72,8 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class, TestSecurityConfiguration.class })
-class AccountResourceTest {
+@IntegrationTest
+class AccountResourceIT {
 
 <%_ if (reactive) { _%>
     private Map<String, Object> claims;

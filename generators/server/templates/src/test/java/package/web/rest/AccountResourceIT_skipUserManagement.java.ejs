@@ -30,8 +30,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
-import <%= packageName %>.config.AsyncSyncConfiguration;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (!reactive) { _%>
@@ -65,8 +63,8 @@ import static org.mockito.Mockito.*;
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@SpringBootTest(classes = { <%= mainClass %>.class, AsyncSyncConfiguration.class })
-class AccountResourceTest {
+@IntegrationTest
+class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
 
     @Autowired
@@ -142,7 +140,7 @@ class AccountResourceTest {
             .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> request})
+            .with(request -> request)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));

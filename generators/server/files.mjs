@@ -172,9 +172,9 @@ const accountFiles = {
       renameTo: moveToJavaPackageTestDir,
       templates: [
         data => {
-          if (data.authenticationTypeOauth2) return 'web/rest/AccountResourceTest_oauth2.java';
+          if (data.authenticationTypeOauth2) return 'web/rest/AccountResourceIT_oauth2.java';
           if (data.generateUserManagement) return 'web/rest/AccountResourceIT.java';
-          return 'web/rest/AccountResourceTest_skipUserManagement.java';
+          return 'web/rest/AccountResourceIT_skipUserManagement.java';
         },
       ],
     },
