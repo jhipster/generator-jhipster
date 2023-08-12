@@ -19,7 +19,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, Form, Input } from 'reactstrap';
-import { Translate, translate, ValidatedTextInput, isEmail } from 'react-jhipster';
+import { Translate, translate, ValidatedTextInput, isEmail, registerReactstrap } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FieldValues, useForm } from 'react-hook-form';
 
@@ -193,12 +193,12 @@ export const UserManagementUpdate = () => {
               type="checkbox"
               name="activated"
               check
-              {...register('activated')}
+              {...registerReactstrap(register, 'activated')}
               disabled={!user.id}
-              label={translate('userManagement.activated')}
             />          
+            {translate('userManagement.activated')}
 <%_ if (enableTranslation) { _%>
-          <Input type="select" name="langKey" label={translate('userManagement.langKey')}>
+          <Input type="select" name="langKey" label={translate('userManagement.langKey')} {...registerReactstrap(register, 'langKey')}>
             {locales.map(locale => (
               <option value={locale} key={locale}>
                 {languages[locale].name}
@@ -206,7 +206,7 @@ export const UserManagementUpdate = () => {
             ))}
           </Input>
 <%_ } _%>
-          <Input type="select" name="authorities" multiple label={translate('userManagement.profiles')}>
+          <Input type="select" name="authorities" multiple label={translate('userManagement.profiles')} {...registerReactstrap(register, 'authorities')}>
             {authorities.map(role => (
               <option value={role} key={role}>
                 {role}
