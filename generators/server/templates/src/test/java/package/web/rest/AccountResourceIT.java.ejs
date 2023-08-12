@@ -246,7 +246,11 @@ class AccountResourceIT {
         accountWebTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+    <%_ if (authenticationTypeSession) { _%>
+            .expectStatus().isEqualTo(HttpStatus.OK);
+    <%_ } else { _%>
             .expectStatus().isEqualTo(HttpStatus.UNAUTHORIZED);
+    <%_ } _%>
 <%_ } else { _%>
     void testGetUnknownAccount() throws Exception {
         restAccountMockMvc.perform(get("/api/account")
