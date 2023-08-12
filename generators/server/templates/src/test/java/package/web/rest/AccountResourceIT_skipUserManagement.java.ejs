@@ -18,7 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import <%= packageName %>.IntegrationTest;
 <%_ if (authenticationTypeJwt) { _%>
 import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +30,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,6 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
 <%_ } _%>
-import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
@@ -64,7 +63,6 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
 class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
@@ -131,6 +129,7 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
         accountWebTestClient
@@ -141,10 +140,7 @@ class AccountResourceIT {
             .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> {
-                request.setRemoteUser(TEST_USER_LOGIN);
-                return request;
-            })
+            .with(request -> request)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));

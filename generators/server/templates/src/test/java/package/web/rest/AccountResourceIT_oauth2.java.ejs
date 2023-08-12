@@ -72,7 +72,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
 class AccountResourceIT {
 
@@ -151,11 +150,11 @@ class AccountResourceIT {
         webTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().is5xxServerError();
+            .expectStatus().is3xxRedirection();
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isUnauthorized());
 <%_ } _%>
     }
 
@@ -177,6 +176,7 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
         webTestClient
@@ -187,10 +187,7 @@ class AccountResourceIT {
             .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> {
-                request.setRemoteUser(TEST_USER_LOGIN);
-                return request;
-            })
+            .with(request -> request)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
