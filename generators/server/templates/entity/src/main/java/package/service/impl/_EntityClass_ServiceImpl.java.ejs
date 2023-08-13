@@ -87,10 +87,6 @@ import java.util.stream.Collectors;
 <%_ if (fieldsContainNoOwnerOneToOne || (paginationNo && searchEngineElasticsearch)) { _%>
 import java.util.stream.StreamSupport;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-
-import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
-<%_ } _%>
 
 /**
  * Service Implementation for managing {@link <%= entityAbsoluteClass %>}.
