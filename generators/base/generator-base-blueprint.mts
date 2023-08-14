@@ -30,6 +30,7 @@ import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
 import CoreGenerator from '../base-core/generator-base.mjs';
+import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.mjs';
 
 /**
  * Base class that contains blueprints support.
@@ -505,7 +506,7 @@ export default class JHipsterBaseBlueprintGenerator<
     extraOptions: ComposeOptions = {},
   ): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
-    if (!this.skipChecks) {
+    if (!this.skipChecks && blueprint !== LOCAL_BLUEPRINT_PACKAGE_NAMESPACE) {
       this._checkBlueprint(blueprint);
     }
 
