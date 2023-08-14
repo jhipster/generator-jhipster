@@ -54,6 +54,7 @@
   "rules": {
     "default-param-last": "off",
     "import/no-unresolved": [2, { "ignore": ["^#[\\w\\d/\\-]+$"] }],
+    "import/prefer-default-export": "off",
     "prettier/prettier": "error",
     "prefer-regex-literals": "off",
     "linebreak-style": 0,
