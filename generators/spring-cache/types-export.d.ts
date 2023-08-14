@@ -1,1 +1,1 @@
-export type { default } from '../base-application/types-export.mjs';
+export type { default } from '../base-application/types-export.js';
