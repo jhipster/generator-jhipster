@@ -103,9 +103,13 @@ export const generateSample = async (
     }
 
     // Generate the application
-    await execa(jhipsterBin, ['--with-entities', '--skip-jhipster-dependencies', '--skip-install', '--no-insight', ...extraArgs], {
-      stdio: 'inherit',
-    });
+    await execa(
+      jhipsterBin,
+      ['--with-entities', '--skip-jhipster-dependencies', '--skip-install', '--skip-checks', '--no-insight', ...extraArgs],
+      {
+        stdio: 'inherit',
+      },
+    );
   }
 
   await execa(jhipsterBin, ['info'], { stdio: 'inherit' });
