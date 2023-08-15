@@ -2,7 +2,7 @@
   "devDependencies": {
     "concurrently": "8.2.0",
     "husky": "8.0.3",
-    "lint-staged": "13.2.3",
+    "lint-staged": "14.0.0",
     "npm": "9.8.1",
     "wait-on": "7.0.1"
   }
