@@ -29,6 +29,7 @@ import org.springframework.core.convert.converter.Converter;
 <%_ if (devDatabaseTypeH2Any) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import org.springframework.http.HttpMethod;
@@ -105,9 +106,6 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 
 <%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
 import static org.springframework.security.config.Customizer.withDefaults;
-<%_ } _%>
-<%_ if (devDatabaseTypeH2Any) { _%>
-import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
 @Configuration
@@ -262,9 +260,9 @@ public class SecurityConfiguration {
 <%_ if (devDatabaseTypeH2Any) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             http
-    <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+  <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
-    <%_ } _%>
+  <%_ } _%>
                 .authorizeHttpRequests(authz -> authz.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll());
         }
 <%_ } _%>
