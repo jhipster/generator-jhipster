@@ -26,6 +26,11 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
+import tech.jhipster.config.JHipsterConstants;
+<%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
@@ -71,11 +76,13 @@ import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
   <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession || devDatabaseTypeH2Any) { _%>
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -104,7 +111,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
+<%_ if (devDatabaseTypeH2Any) { _%>
 
+    private final Environment env;
+<%_ } _%>
+    
     private final JHipsterProperties jHipsterProperties;
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
 
@@ -116,7 +127,10 @@ public class SecurityConfiguration {
     private String issuerUri;
     <%_ } _%>
 
-    public SecurityConfiguration(<% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %> JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(<% if (devDatabaseTypeH2Any) { %>Environment env, <% } %><% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %> JHipsterProperties jHipsterProperties) {
+<%_ if (devDatabaseTypeH2Any) { _%>
+        this.env = env;
+<%_ } _%>       
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
 <%_ } _%>
@@ -137,9 +151,6 @@ public class SecurityConfiguration {
             .cors(withDefaults())
 <%_ } _%>
             .csrf(csrf -> csrf
-<%_ if (devDatabaseTypeH2Any) { _%>
-                .ignoringRequestMatchers("/h2-console/**")
-<%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 // See https://stackoverflow.com/q/74447118/65681
@@ -173,9 +184,6 @@ public class SecurityConfiguration {
                     .requestMatchers("/i18n/**").permitAll()
                     .requestMatchers("/content/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
-<%_ } _%>
-<%_ if (devDatabaseTypeH2Any) { _%>
-                    .requestMatchers("/h2-console/**").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
                     .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
@@ -248,6 +256,15 @@ public class SecurityConfiguration {
                 .jwt(jwt -> jwt
                     .jwtAuthenticationConverter(authenticationConverter())))
             .oauth2Client();
+<%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+            http
+  <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+                .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
+  <%_ } _%>
+                .authorizeHttpRequests(authz -> authz.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll());
+        }
 <%_ } _%>
         return http.build();
     }
