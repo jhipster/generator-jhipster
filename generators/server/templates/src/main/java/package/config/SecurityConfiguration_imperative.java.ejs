@@ -81,7 +81,7 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationTypeSession || devDatabaseTypeH2Any) { _%>
+<%_ if (authenticationTypeSession || devDatabaseTypeH2Any || communicationSpringWebsocket) { _%>
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
@@ -188,8 +188,8 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-                    .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
 <%_ } else { _%>
                     .requestMatchers(mvc.pattern("/api/authenticate")).permitAll()
 <%_ } _%>
@@ -205,7 +205,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/**")).authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
-                    .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/websocket/**")).authenticated()
 <%_ } _%>
                     .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/management/health")).permitAll()
