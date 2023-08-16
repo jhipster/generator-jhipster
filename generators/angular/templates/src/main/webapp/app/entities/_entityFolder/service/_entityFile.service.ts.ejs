@@ -24,9 +24,9 @@ if (paginationPagination || paginationInfiniteScroll) {
 _%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable<%_ if (searchEngineElasticsearch) { _%>, asapScheduler, scheduled<%_ } _%> } from 'rxjs';
+import { Observable<%_ if (searchEngineAny) { _%>, asapScheduler, scheduled<%_ } _%> } from 'rxjs';
 
-<%_ if (searchEngineElasticsearch) {
+<%_ if (searchEngineAny) {
   if (anyFieldIsDateDerived) { _%>
 import { catchError, map } from 'rxjs/operators';
 <% } else { %>
