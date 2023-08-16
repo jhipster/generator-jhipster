@@ -25,7 +25,7 @@ import { RouteLocation } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '../../shared/composables/date-format';
+import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 import <%= entityAngularName %>Update from './<%= entityFileName %>-update.vue';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';

@@ -3,9 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 import { createTestingPinia } from '@pinia/testing';
 
-import { useStore } from '../../store';
+import { useStore } from '@/store';
 import Settings from './settings.vue';
-import { EMAIL_ALREADY_USED_TYPE } from '../../constants';
+import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
 
 type SettingsComponentType = InstanceType<typeof Settings>;
 
