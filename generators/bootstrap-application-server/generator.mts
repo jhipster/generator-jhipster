@@ -94,7 +94,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
       loadingEntities({ application, entitiesToLoad }) {
         for (const { entityName } of entitiesToLoad) {
           const entity = this.sharedData.getEntity(entityName);
-          loadRequiredConfigIntoEntity(entity, application);
+          loadRequiredConfigIntoEntity.call(this, entity, application);
           loadRequiredConfigDerivedProperties(entity);
         }
       },
