@@ -26,7 +26,7 @@ export const GENERATOR_NAME = 'generator-jhipster';
 
 const SUCCESS_MESSAGE = `Congratulations, JHipster execution is complete!
 If you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`;
-const SPONSOR_MESSAGE = 'Sponsored with ❤️  by @oktadev.';
+const SPONSOR_MESSAGE = 'Thanks for using JHipster!';
 
 export const logger = createJHipsterLogger({ namespace: CLI_LOGGER });
 
