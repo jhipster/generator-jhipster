@@ -29,7 +29,6 @@ public class OAuth2Configuration {
                 .authorizationCode()
                 .refreshToken(builder -> builder.clockSkew(Duration.ofMinutes(1)))
                 .clientCredentials()
-                .password()
                 .build()
         );
 
