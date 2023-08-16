@@ -31,31 +31,21 @@ export const entityFiles = {
       templates: [
         'entities/_entityFolder/_entityFile-details.vue',
         'entities/_entityFolder/_entityFile-details.component.ts',
+        'entities/_entityFolder/_entityFile-details.component.spec.ts',
         'entities/_entityFolder/_entityFile.vue',
         'entities/_entityFolder/_entityFile.component.ts',
-        'entities/_entityFolder/_entityFile.service.ts',
-      ],
-    },
-    {
-      condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationBlock,
-      templates: ['entities/_entityFolder/_entityFile-update.vue', 'entities/_entityFolder/_entityFile-update.component.ts'],
-    },
-  ],
-  test: [
-    {
-      condition: generator => !generator.embedded,
-      ...clientAppTestBlock,
-      templates: [
         'entities/_entityFolder/_entityFile.component.spec.ts',
-        'entities/_entityFolder/_entityFile-details.component.spec.ts',
+        'entities/_entityFolder/_entityFile.service.ts',
         'entities/_entityFolder/_entityFile.service.spec.ts',
       ],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientAppTestBlock,
-      templates: ['entities/_entityFolder/_entityFile-update.component.spec.ts'],
+      ...clientApplicationBlock,
+      templates: ['entities/_entityFolder/_entityFile-update.vue',
+        'entities/_entityFolder/_entityFile-update.component.ts',
+        'entities/_entityFolder/_entityFile-update.component.spec.ts',
+      ],
     },
   ],
 };

@@ -58,8 +58,8 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.applicationTypeMicroservice,
-      ...clientTestBlock,
-      templates: ['spec/app/entities/entities-menu.spec.ts'],
+      ...clientApplicationBlock,
+      templates: ['entities/entities-menu.spec.ts'],
     },
   ],
   sass: [

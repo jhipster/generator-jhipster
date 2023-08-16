@@ -25,11 +25,11 @@ import { RouteLocation } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/composables/date-format';
+import { DATE_TIME_LONG_FORMAT } from '../../shared/composables/date-format';
 <%_ } _%>
-import <%= entityAngularName %>Update from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
-import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
+import <%= entityAngularName %>Update from './<%= entityFileName %>-update.vue';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '../../shared/alert/alert.service';
 
 <%_
   const allRelationshipsThatNeedSelectOptions = Object

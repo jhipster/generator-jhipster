@@ -25,9 +25,9 @@ import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { RouteLocation } from 'vue-router';
 
-import <%= entityAngularName %>Details from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
-import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
+import <%= entityAngularName %>Details from './<%= entityFileName %>-details.vue';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '../../shared/alert/alert.service';
 
 type <%= entityAngularName %>DetailsComponentType = InstanceType<typeof <%= entityAngularName %>Details>;
 

@@ -24,9 +24,9 @@ import { vitest } from 'vitest';
 import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 
-import <%= entityAngularName %> from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
-import <%= entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import AlertService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>shared/alert/alert.service';
+import <%= entityAngularName %> from './<%= entityFileName %>.vue';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '../../shared/alert/alert.service';
 
 type <%= entityAngularName %>ComponentType = InstanceType<typeof <%= entityAngularName %>>;
 
