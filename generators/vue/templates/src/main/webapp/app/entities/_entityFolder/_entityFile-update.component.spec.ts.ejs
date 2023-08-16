@@ -29,7 +29,7 @@ import { DATE_TIME_LONG_FORMAT } from '../../shared/composables/date-format';
 <%_ } _%>
 import <%= entityAngularName %>Update from './<%= entityFileName %>-update.vue';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-import AlertService from '../../shared/alert/alert.service';
+import AlertService from '@/shared/alert/alert.service';
 
 <%_
   const allRelationshipsThatNeedSelectOptions = Object
@@ -39,9 +39,9 @@ import AlertService from '../../shared/alert/alert.service';
 _%>
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
-import UserService from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/user/user.service';
+import UserService from '@/entities/user/user.service';
   <%_ } else { _%>
-import <%= relationship.otherEntity.entityAngularName %>Service from '../../<%= relativeToEntityFolderName %>/<%- clientSrcDirRelativeToClientTestDir %>entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
+import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
 
