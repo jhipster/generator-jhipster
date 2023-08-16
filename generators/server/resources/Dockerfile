@@ -10,7 +10,7 @@ LABEL ALIAS=jhipster-control-center
 FROM jhipster/consul-config-loader:v0.4.1
 LABEL ALIAS=consul-config-loader
 
-FROM postgres:15.3
+FROM postgres:15.4
 LABEL ALIAS=postgresql
 
 FROM quay.io/keycloak/keycloak:22.0.1
@@ -33,7 +33,7 @@ LABEL ALIAS=mssql
 
 FROM neo4j:5.10.0
 
-FROM hazelcast/management-center:5.3.1
+FROM hazelcast/management-center:5.3.2
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.21-alpine
@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM confluentinc/cp-zookeeper:7.4.1
 LABEL ALIAS=zookeeper
 
-FROM apachepulsar/pulsar:3.0.0
+FROM apachepulsar/pulsar:3.0.1
 LABEL ALIAS=pulsar
 
 FROM sonarqube:10.1.0-community

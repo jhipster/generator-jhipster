@@ -31,7 +31,7 @@ export const entityFiles = {
   ],
 };
 
-export function cleanupEntitiesTask(this: Generator, { application, entities }) {}
+export function cleanupEntitiesTask() {}
 
 export default async function writeEntitiesTask(this: Generator, { application, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {

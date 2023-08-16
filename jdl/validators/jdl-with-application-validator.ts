@@ -56,7 +56,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
         checkForRelationshipErrors();
         checkForEnumErrors();
         checkDeploymentsErrors();
-        checkForOptionErrors(jdlApplication);
+        checkForOptionErrors();
       });
       checkForRelationshipsBetweenApplications();
     },
@@ -131,7 +131,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForOptionErrors(jdlApplication) {
+  function checkForOptionErrors() {
     if (jdlObject.getOptionQuantity() === 0) {
       return;
     }

@@ -5,6 +5,7 @@ import ch.qos.logback.core.pattern.CompositeConverter;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Marker;
@@ -46,7 +47,8 @@ public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
     @Override
     protected String transform(ILoggingEvent event, String in) {
         AnsiElement element = ELEMENTS.get(getFirstOption());
-        if ((event.getMarker() != null && event.getMarker().contains(CRLF_SAFE_MARKER)) || isLoggerSafe(event)) {
+        List<Marker> markers = event.getMarkerList();
+        if ((markers != null && !markers.isEmpty() && markers.get(0).contains(CRLF_SAFE_MARKER)) || isLoggerSafe(event)) {
             return in;
         }
         String replacement = element == null ? "_" : toAnsiString("_", element);

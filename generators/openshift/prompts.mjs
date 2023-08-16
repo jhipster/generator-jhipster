@@ -53,7 +53,7 @@ export async function askForStorageType() {
   if (this.regenerate) return;
 
   let storageEnabled = false;
-  this.appConfigs.some((appConfig, index) => {
+  this.appConfigs.some(appConfig => {
     if (appConfig.prodDatabaseType !== NO_DATABASE || appConfig.searchEngine === ELASTICSEARCH || appConfig.monitoring === PROMETHEUS) {
       storageEnabled = true;
       return storageEnabled;

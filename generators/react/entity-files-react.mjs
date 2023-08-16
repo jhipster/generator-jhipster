@@ -32,7 +32,7 @@ export const reactFiles = {
     },
     {
       ...clientApplicationBlock,
-      renameTo: (data, filepath) => `${data.clientSrcDir}app/shared/model/${data.entityModelFileName}.model.ts`,
+      renameTo: data => `${data.clientSrcDir}app/shared/model/${data.entityModelFileName}.model.ts`,
       templates: ['entities/_entityFolder/_entityModel.model.ts'],
     },
     {

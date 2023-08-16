@@ -54,6 +54,7 @@
   "rules": {
     "default-param-last": "off",
     "import/no-unresolved": [2, { "ignore": ["^#[\\w\\d/\\-]+$"] }],
+    "import/prefer-default-export": "off",
     "prettier/prettier": "error",
     "prefer-regex-literals": "off",
     "linebreak-style": 0,
@@ -72,7 +73,7 @@
     "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
-      "warn",
+      "error",
       { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
     ],
     "@typescript-eslint/no-explicit-any": "off",

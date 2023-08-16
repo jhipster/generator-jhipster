@@ -8,9 +8,9 @@
     "babel-plugin-istanbul": "6.1.1",
     "cypress": "12.17.3",
     "cypress-audit": "1.1.0",
-    "eslint-plugin-cypress": "2.13.3",
+    "eslint-plugin-cypress": "2.14.0",
     "lighthouse": "11.0.0",
     "nyc": "15.1.0",
-    "swagger-ui-dist": "5.3.1"
+    "swagger-ui-dist": "5.3.2"
   }
 }

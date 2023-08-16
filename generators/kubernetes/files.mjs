@@ -33,7 +33,7 @@ const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { GKE, NGINX } = ingressTypes;
+const { GKE } = ingressTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 

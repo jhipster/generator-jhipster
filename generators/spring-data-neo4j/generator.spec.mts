@@ -1,7 +1,6 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
-import lodash from 'lodash';
 
 import { buildSamplesFromMatrix, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
@@ -11,8 +10,6 @@ import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { mockedGenerators, shouldComposeWithSpringCloudStream, shouldComposeWithLiquibase } from '../server/__test-support/index.mjs';
 import { GENERATOR_SERVER } from '../generator-list.mjs';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

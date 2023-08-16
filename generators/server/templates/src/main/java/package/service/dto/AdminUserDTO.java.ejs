@@ -22,7 +22,7 @@ import <%= packageName %>.config.Constants;
 <% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
 import <%= packageName %>.domain.Authority;<% } %>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 <%_ } _%>
 
 import java.io.Serializable;

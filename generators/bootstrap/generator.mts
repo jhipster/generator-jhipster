@@ -34,6 +34,7 @@ import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import command from './command.mjs';
+import { createRemoveUnusedImportsTransform } from './support/java-unused-imports-transform.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
@@ -155,6 +156,7 @@ export default class BootstrapGenerator extends BaseGenerator {
         ? []
         : [
             createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
+            createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
             createPrettierTransform.call(this, {
               ignoreErrors,
               prettierPackageJson: true,

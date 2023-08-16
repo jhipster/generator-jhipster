@@ -17,21 +17,22 @@
  limitations under the License.
 -%>
 function setupProxy({ tls }) {
+  const serverResources = [
+    '/api',
+    '/services',
+    '/management',
+    '/v3/api-docs',
+    '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
+    '/oauth2',
+    '/login',
+<%_ } _%>
+    '/auth',
+    '/health',
+  ];
   const conf = [
     {
-      context: [
-        '/api',
-        '/services',
-        '/management',
-        '/v3/api-docs',
-        '/h2-console',
-<%_ if (authenticationTypeOauth2) { _%>
-        '/oauth2',
-        '/login',
-<%_ } _%>
-        '/auth',
-        '/health',
-      ],
+      context: serverResources,
       target: `http${tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
       secure: false,
       changeOrigin: tls,

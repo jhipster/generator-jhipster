@@ -116,7 +116,7 @@ export const getH2MavenDefinition = ({
 export const getDatabaseTypeMavenDefinition: (
   databaseType: string,
   options: { inProfile?: string; javaDependencies: Record<string, string> },
-) => DatabaseTypeDependencies = (databaseType, { inProfile, javaDependencies }) => {
+) => DatabaseTypeDependencies = (databaseType, { inProfile }) => {
   const dependenciesForType: Record<string, DatabaseTypeDependencies> = {
     mariadb: {
       jdbc: {

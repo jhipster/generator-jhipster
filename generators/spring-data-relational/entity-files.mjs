@@ -79,7 +79,7 @@ const sqlFiles = {
   ],
 };
 
-export function cleanupEntitiesTask({ application, entities }) {}
+export function cleanupEntitiesTask() {}
 
 export default async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {

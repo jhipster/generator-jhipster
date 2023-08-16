@@ -125,13 +125,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
   <%_ } _%>
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !reactive) { _%>
-
-import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
-<%_ } _%>
 
 /**
- * REST controller for managing {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>}.
+ * REST controller for managing {@link <%= entityAbsoluteClass %>}.
  */
 @RestController
 @RequestMapping("/api")

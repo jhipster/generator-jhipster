@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type Generator from './generator.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask(this: Generator, { application }: any) {}
+export default function cleanupTask() {}

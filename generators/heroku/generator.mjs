@@ -383,7 +383,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.log.verboseInfo('');
               this.prompt(prompts).then(props => {
                 if (props.herokuForceName === 'Yes') {
-                  ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                  ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout) => {
                     if (err) {
                       this.abort = true;
                       this.log.error(err);

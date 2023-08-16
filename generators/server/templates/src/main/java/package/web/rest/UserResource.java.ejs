@@ -19,7 +19,7 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.config.Constants;
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.MailService;
@@ -90,7 +90,7 @@ import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 /**
  * REST controller for managing users.
  * <p>
- * This class accesses the {@link <%= packageName %>.domain.<%= user.persistClass %>} entity, and needs to fetch its collection of authorities.
+ * This class accesses the {@link <%= user.entityAbsoluteClass %>} entity, and needs to fetch its collection of authorities.
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
  * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join

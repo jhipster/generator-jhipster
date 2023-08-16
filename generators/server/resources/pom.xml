@@ -8,7 +8,7 @@
 
     <properties>
         <!-- Dependency versions -->
-        <archunit-junit5.version>1.0.1</archunit-junit5.version>
+        <archunit-junit5.version>1.1.0</archunit-junit5.version>
         <awaitility.version>4.2.0</awaitility.version>
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -21,7 +21,7 @@
         <junit-platform-launcher.version>1.10.0</junit-platform-launcher.version>
         <liquibase.version>4.20.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <micrometer-context-propagation.version>1.0.4</micrometer-context-propagation.version>
+        <micrometer-context-propagation.version>1.0.5</micrometer-context-propagation.version>
         <picocli.version>4.7.4</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.2</typesafe.version>
@@ -31,7 +31,7 @@
         <checkstyle.version>10.12.2</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
-        <gatling-maven-plugin.version>4.4.0</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>4.5.0</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>

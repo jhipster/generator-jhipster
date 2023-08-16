@@ -19,7 +19,6 @@
 package <%= packageName %>.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -41,7 +40,7 @@ public @interface AuthorizedFeignClient {
      * {@link feign.codec.Encoder}, {@link feign.Contract}.
      *
      * @return the custom {@code @Configuration} for the feign client.
-     * @see FeignClientsConfiguration for the defaults.
+     * @see org.springframework.cloud.openfeign.FeignClientsConfiguration for the defaults.
      */
     @AliasFor(annotation = FeignClient.class, attribute = "configuration")
     Class<?>[] configuration() default OAuth2InterceptedFeignConfiguration.class;

@@ -23,7 +23,7 @@ import <%= packageName %>.config.Constants;
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import <%= packageName %>.repository.AuthorityRepository;
     <%_ if (authenticationTypeSession && !reactive) { _%>

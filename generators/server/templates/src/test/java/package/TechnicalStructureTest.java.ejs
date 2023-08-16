@@ -47,7 +47,7 @@ class TechnicalStructureTest {
         .optionalLayer("Service").definedBy("..service..")
         .layer("Security").definedBy("..security..")
 <%_ if (hasDomainLayer) { _%>
-        .layer("Persistence").definedBy("..repository..")
+        .optionalLayer("Persistence").definedBy("..repository..")
         .layer("Domain").definedBy("..domain..")
 <%_ } _%>
 

@@ -279,7 +279,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
-  generateTestEntity(references, index = 'random') {
+  generateTestEntity(references) {
     return entityWithFakeValues(references);
   }
 }

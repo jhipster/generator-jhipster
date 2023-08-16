@@ -21,6 +21,7 @@
   <head>
     <meta charset="UTF-8" />
     <title><%= baseName %> - Swagger UI</title>
+    <base href="/swagger-ui/"/>
     <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
@@ -43,6 +44,7 @@
       };
 
       window.onload = async function () {
+        const serverBaseUri = document.baseURI.replace('swagger-ui/', '');
 <%_ if (authenticationUsesCsrf) { _%>
         function getCSRF() {
           var name = 'XSRF-TOKEN=';
@@ -54,7 +56,10 @@
           }
           return '';
         }
-        const axiosConfig = { timeout: 5000 };
+        const axiosConfig = {
+          timeout: 5000,
+          baseURL: serverBaseUri,
+        };
 <%_ } else { _%>
         const getBearerToken = () => {
           var authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
@@ -68,11 +73,12 @@
         };
         const axiosConfig = {
           timeout: 5000,
+          baseURL: serverBaseUri,
           headers: { Authorization: getBearerToken() },
         };
 <%_ } _%>
 
-        const baseUrl = '/v3/api-docs';
+        const baseUrl = serverBaseUri + 'v3/api-docs';
         let urls;
 <%_ if (!applicationTypeMonolith && serviceDiscoveryAny) { _%>
 

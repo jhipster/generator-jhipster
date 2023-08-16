@@ -21,7 +21,7 @@ package <%= packageName %>.repository;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= user.entityAbsoluteClass %>;
 
 <%_ if (databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.core.CqlIdentifier;
