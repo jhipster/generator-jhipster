@@ -71,8 +71,7 @@ export const generateSample = async (
   }
 
   if (jdlSamples) {
-    const jdlSamples = jdlSamples.split(',');
-    for (const jdlSample of jdlSamples) {
+    for (const jdlSample of jdlSamples.split(',')) {
       if (existsSync(join(jdlSamplesFolder, jdlSample))) {
         cpSync(join(jdlSamplesFolder, jdlSample), destProjectFolder, { recursive: true });
       } else {
