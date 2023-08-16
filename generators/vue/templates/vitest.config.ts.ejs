@@ -35,7 +35,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom', // happy-dom provides a better performance but doesn't have a default url.
-    setupFiles: ['./<%- clientTestDir %>spec/setup.ts'],
+    setupFiles: ['./<%= clientSrcDir %>app/test-setup.ts'],
 <%_ if (applicationTypeGateway && microfrontend) { _%>
     alias: {
   <%_ for (const remote of microfrontends) { _%>

@@ -1,0 +1,116 @@
+import { vitest } from 'vitest';
+import { ref, Ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import { createMemoryHistory, createRouter, Router } from 'vue-router';
+import { Subject } from 'rxjs';
+
+import TrackerService, { useTrackerService } from './tracker.service';
+
+describe('Tracker Service', () => {
+  let trackerService: TrackerService;
+  let TrackerApp: any;
+  let authenticated: Ref<boolean>;
+
+  let mockStomp: any;
+  let router: Router;
+
+  beforeEach(() => {
+    router = createRouter({ history: createMemoryHistory(), routes: [] });
+    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
+    router.afterEach = vitest.fn();
+    authenticated = ref(false);
+
+    const watch$ = new Subject<any>();
+
+    mockStomp = {
+      publish: vitest.fn(),
+      watch: vitest.fn().mockReturnValue(watch$),
+      configure: vitest.fn(),
+      activate: vitest.fn(),
+      deactivate: vitest.fn(),
+      connectionState$: new Subject<any>(),
+    };
+
+    TrackerApp = {
+      name: 'TrackerApp',
+      template: `
+        <div></div>
+      `,
+      setup() {
+        trackerService = useTrackerService({ stomp: mockStomp });
+        trackerService['buildUrl'] = () => '';
+      },
+    };
+  });
+
+  it('Should subscribe router activity', async () => {
+    shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+    expect(router.afterEach).toBeCalledTimes(1);
+  });
+
+  it('Should call activate on authenticated', async () => {
+    // WHEN
+    authenticated.value = true;
+    const wrapper = shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+    await wrapper.vm.$nextTick();
+
+    // THEN
+    expect(mockStomp.activate).toBeCalledTimes(1);
+  });
+
+  it('Should send activity on connected', async () => {
+    // GIVEN
+    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
+    const wrapper = shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+
+    // WHEN
+    mockStomp.connectionState$.next(1);
+    await wrapper.vm.$nextTick();
+
+    // THEN
+    expect(mockStomp.publish).toBeCalledTimes(1);
+    expect(mockStomp.publish).toBeCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
+  });
+
+  it('Should disconnect on logout', async () => {
+    // GIVEN
+    authenticated.value = true;
+    const wrapper = shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          authenticated,
+        },
+      },
+    });
+    await wrapper.vm.n
+
+    // WHEN
+    authenticated.value = false;
+    await wrapper.vm.$nextTick();
+
+    // THEN
+    expect(mockStomp.deactivate).toBeCalledTimes(1);
+  });
+});
