@@ -78,7 +78,7 @@
         };
 <%_ } _%>
 
-        const baseUrl = serverBaseUri + 'v3/api-docs';
+        const baseUrl = 'v3/api-docs';
         let urls;
 <%_ if (!applicationTypeMonolith && serviceDiscoveryAny) { _%>
 
@@ -121,9 +121,9 @@
         if (!urls || urls.length === 0) {
           const response = await axios.get('/management/jhiopenapigroups', axiosConfig);
           if (Array.isArray(response.data)) {
-            urls = response.data.map(({ group, description }) => ({ name: description, url: `${baseUrl}/${group}` }));
+            urls = response.data.map(({ group, description }) => ({ name: description, url: `${serverBaseUri}/${baseUrl}/${group}` }));
           } else {
-            urls = [{ name: 'default', url: baseUrl }];
+            urls = [{ name: 'default', url: `${serverBaseUri}/${baseUrl}` }];
           }
         }
         console.log(`Swagger urls`, urls);
