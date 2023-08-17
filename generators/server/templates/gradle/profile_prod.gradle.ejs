@@ -36,7 +36,7 @@ configurations {
       // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
       force "org.hibernate.orm:hibernate-jcache:${hibernateVersion}"
 <%_ } _%>
-<%_ if (prodDatabaseTypeMariadb && reactive) { _%>
+<%_ if (devDatabaseTypeMariadb && reactive) { _%>
       force "org.mariadb:r2dbc-mariadb:1.1.3"
 <%_ } _%>
     }
