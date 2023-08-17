@@ -27,34 +27,34 @@ const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = (clientSrcDir, clientTestDir) => [
   `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
 
   `${clientSrcDir}app/admin/health/health.component.ts`,
+  `${clientSrcDir}app/admin/health/health.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.vue`,
   `${clientSrcDir}app/admin/health/health-modal.vue`,
   `${clientSrcDir}app/admin/health/health-modal.component.ts`,
+  `${clientSrcDir}app/admin/health/health-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
+  `${clientSrcDir}app/admin/health/health.service.spec.ts`,
 
   `${clientSrcDir}app/admin/logs/logs.component.ts`,
+  `${clientSrcDir}app/admin/logs/logs.component.spec.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
 
   `${clientSrcDir}app/admin/metrics/metrics.component.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.component.spec.ts`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.component.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.vue`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.vue`,
   `${clientSrcDir}app/admin/metrics/metrics.service.ts`,
 
-  `${clientTestDir}spec/app/admin/metrics/metrics.component.spec.ts`,
-  `${clientTestDir}spec/app/admin/metrics/metrics-modal.component.spec.ts`,
 
-  `${clientTestDir}spec/app/admin/logs/logs.component.spec.ts`,
 
-  `${clientTestDir}spec/app/admin/configuration/configuration.component.spec.ts`,
 
-  `${clientTestDir}spec/app/admin/health/health.component.spec.ts`,
-  `${clientTestDir}spec/app/admin/health/health-modal.component.spec.ts`,
-  `${clientTestDir}spec/app/admin/health/health.service.spec.ts`,
 ];
 
 describe(`generator - ${clientFramework}`, () => {
