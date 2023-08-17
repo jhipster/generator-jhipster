@@ -55,8 +55,8 @@ export function loadRequiredConfigDerivedProperties(entity) {
   entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
   entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
   entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
-  entity.searchEngineAny = ![undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
-  entity.searchEngineNo = [undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
+  entity.searchEngineAny = entity.searchEngine && entity.searchEngine !== NO_SEARCH_ENGINE;
+  entity.searchEngineNo = !entity.searchEngineAny;
 }
 
 export function preparePostEntityServerDerivedProperties(entity) {

@@ -133,7 +133,7 @@ describe('<%= entityAngularName %> Service', () => {
         });
 <%_ } _%>
 
-<%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineAny) { _%>
         it('should handle exceptions for searching a <%= entityAngularName %>', () => {
             const queryObject: any = {
                 page: 0,

@@ -19,6 +19,7 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 
+import type BaseGenerator from '../../base-core/index.mjs';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.mjs';
 import { createFaker, parseChangelog, stringHashCode, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { fieldToReference } from './prepare-field.mjs';
@@ -470,7 +471,7 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity(entity, config) {
+export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity, config) {
   _.defaults(entity, {
     applicationType: config.applicationType,
     baseName: config.baseName,
@@ -493,6 +494,16 @@ export function loadRequiredConfigIntoEntity(entity, config) {
     packageName: config.packageName,
     packageFolder: config.packageFolder,
   });
+  if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
+    // If the entity belongs to this application and searchEngine is true.
+    if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
+      // Replace with the searchEngine from the application.
+      entity.searchEngine = config.searchEngine;
+    } else {
+      entity.searchEngine = NO_SEARCH_ENGINE;
+      this?.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+    }
+  }
   if (config.applicationType === MICROSERVICE) {
     _.defaults(entity, {
       microserviceName: config.baseName,
