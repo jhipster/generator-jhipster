@@ -8,26 +8,24 @@
       </div>
       <div class="col-md-8">
         <b-form role="form" v-on:submit.prevent="doLogin()">
-          <b-form-group <% if (!enableTranslation) { %>label="Username" <% } %>v-bind:label="t$('global.form[\'username.label\']')" label-for="username">
+          <b-form-group v-bind:label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
               id="username"
               type="text"
               name="username"
               autofocus
               v-bind:placeholder="t$('global.form[\'username.placeholder\']')"
-              <% if (!enableTranslation) { %>placeholder="Your username" <% } %>
               v-model="login"
               data-cy="username"
             >
             </b-form-input>
           </b-form-group>
-          <b-form-group <% if (!enableTranslation) { %>label="Password" <% } %>v-bind:label="t$('login.form.password')" label-for="password">
+          <b-form-group v-bind:label="t$('login.form.password')" label-for="password">
             <b-form-input
               id="password"
               type="password"
               name="password"
               v-bind:placeholder="t$('login.form[\'password.placeholder\']')"
-              <% if (!enableTranslation) { %>placeholder="Your password" <% } %>
               v-model="password"
               data-cy="password"
             >
