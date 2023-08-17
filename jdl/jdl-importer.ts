@@ -319,8 +319,3 @@ function exportJSONEntities(entities, configuration) {
     },
   });
 }
-
-export default {
-  createImporterFromContent,
-  createImporterFromFiles,
-};

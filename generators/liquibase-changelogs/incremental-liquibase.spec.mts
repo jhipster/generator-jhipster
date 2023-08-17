@@ -5,9 +5,7 @@ import { expect } from 'esmocha';
 
 import { skipPrettierHelpers as helpers, runResult } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import jdlImporter from '../../jdl/index.mjs';
-
-const { createImporterFromContent } = jdlImporter;
+import { createImporterFromContent } from '../../jdl/jdl-importer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
