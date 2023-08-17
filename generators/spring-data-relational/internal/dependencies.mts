@@ -126,7 +126,7 @@ export const getDatabaseTypeMavenDefinition: (
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb', version: '1.1.3' }],
+        dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' }],
       },
     },
     mssql: {
