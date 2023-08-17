@@ -123,6 +123,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
   <%_ } _%>
 
 import java.util.HashSet;
@@ -394,11 +395,10 @@ public class SecurityConfiguration {
                 if (jwt.hasClaim("given_name") && jwt.hasClaim("family_name")) {
                     return Mono.just(jwt);
                 }
-                // Retrieve user info from OAuth provider if not already loaded
-                return users.get(jwt.getSubject(), s -> {
-                    WebClient webClient = WebClient.create();
-
-                    return webClient
+                // Get user info from `users` cache if present
+                return Optional.ofNullable(users.getIfPresent(jwt.getSubject()))
+                    // Retrieve user info from OAuth provider if not already loaded
+                    .orElseGet(() -> WebClient.create()
                         .get()
                         .uri(userInfoUri)
                         .headers(headers -> headers.setBearerAuth(token))
@@ -428,8 +428,10 @@ public class SecurityConfiguration {
                                 })
                                 .claims(claims -> claims.putAll(jwt.getClaims()))
                                 .build()
-                        );
-                });
+                        )
+                        // Put user info into the `users` cache
+                        .doOnNext(newJwt -> users.put(jwt.getSubject(), Mono.just(newJwt)))
+                    );
             }
         };
     }
