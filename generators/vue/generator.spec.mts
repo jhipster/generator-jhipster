@@ -51,10 +51,6 @@ const clientAdminFiles = (clientSrcDir, clientTestDir) => [
   `${clientSrcDir}app/admin/metrics/metrics.vue`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.vue`,
   `${clientSrcDir}app/admin/metrics/metrics.service.ts`,
-
-
-
-
 ];
 
 describe(`generator - ${clientFramework}`, () => {

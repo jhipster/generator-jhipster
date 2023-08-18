@@ -93,4 +93,4 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}spec/app/admin/gateway/gateway.component.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/entities/entities-menu.spec.ts`);
   }
-};
+}

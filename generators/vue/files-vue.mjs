@@ -50,11 +50,7 @@ export const vueFiles = {
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationBlock,
-      templates: [
-        'microfrontends/entities-menu.component.ts',
-        'microfrontends/entities-menu.vue',
-        'microfrontends/entities-router.ts',
-      ],
+      templates: ['microfrontends/entities-menu.component.ts', 'microfrontends/entities-menu.vue', 'microfrontends/entities-router.ts'],
     },
     {
       condition: generator => generator.applicationTypeMicroservice,
@@ -140,10 +136,7 @@ export const vueFiles = {
   accountModule: [
     {
       ...clientApplicationBlock,
-      templates: [
-        'account/account.service.ts',
-        'account/account.service.spec.ts'
-      ],
+      templates: ['account/account.service.ts', 'account/account.service.spec.ts'],
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
@@ -189,16 +182,13 @@ export const vueFiles = {
         'account/sessions/sessions.vue',
         'account/sessions/sessions.component.ts',
         'account/sessions/sessions.component.spec.ts',
-        'account/login.service.spec.ts'
+        'account/login.service.spec.ts',
       ],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
       ...clientApplicationBlock,
-      templates: [
-        'account/login.service.ts',
-        'account/login.service.spec.ts'
-      ],
+      templates: ['account/login.service.ts', 'account/login.service.spec.ts'],
     },
   ],
   adminModule: [
@@ -243,7 +233,7 @@ export const vueFiles = {
         'admin/tracker/tracker.component.ts',
         'admin/tracker/tracker.component.spec.ts',
         'admin/tracker/tracker.service.ts',
-        'admin/tracker/tracker.service.spec.ts'
+        'admin/tracker/tracker.service.spec.ts',
       ],
     },
     {
@@ -269,7 +259,7 @@ export const vueFiles = {
         'admin/gateway/gateway.vue',
         'admin/gateway/gateway.component.ts',
         'admin/gateway/gateway.component.spec.ts',
-        'admin/gateway/gateway.service.ts'
+        'admin/gateway/gateway.service.ts',
       ],
     },
     {
