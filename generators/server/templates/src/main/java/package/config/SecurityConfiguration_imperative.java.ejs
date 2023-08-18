@@ -226,9 +226,9 @@ public class SecurityConfiguration {
                     new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                     new OrRequestMatcher(
   <%_ if (communicationSpringWebsocket) { _%>
-                        new AntPathRequestMatcher("/websocket/**"),
+                        antMatcher("/websocket/**"),
   <%_ } _%>
-                        new AntPathRequestMatcher("/api/**")
+                        antMatcher("/api/**")
                     )
                 )
             )
