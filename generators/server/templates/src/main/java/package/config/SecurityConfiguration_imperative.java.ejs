@@ -81,9 +81,6 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationTypeSession || devDatabaseTypeH2Any || communicationSpringWebsocket) { _%>
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-<%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -104,6 +101,7 @@ import <%= packageName %>.security.oauth2.CustomClaimConverter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 <%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
