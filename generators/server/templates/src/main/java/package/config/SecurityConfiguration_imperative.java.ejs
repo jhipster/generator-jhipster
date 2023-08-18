@@ -180,39 +180,39 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!skipClient) { _%>
-                    .requestMatchers(mvc.pattern("/"), mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
-                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
-                    .requestMatchers(mvc.pattern("/app/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/"), AntPathRequestMatcher.antMatcher("/*.js"), AntPathRequestMatcher.antMatcher("/*.map"), AntPathRequestMatcher.antMatcher("/*.css")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/*.ico"), AntPathRequestMatcher.antMatcher("/*.png"), AntPathRequestMatcher.antMatcher("/*.svg"), AntPathRequestMatcher.antMatcher("/*.webapp")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/app/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/i18n/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/content/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/authenticate")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/authenticate")).permitAll()
 <%_ } else { _%>
-                    .requestMatchers(mvc.pattern("/api/authenticate")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/authenticate")).permitAll()
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/register")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/activate")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/account/reset-password/init")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/account/reset-password/finish")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-                    .requestMatchers(mvc.pattern("/api/auth-info")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth-info")).permitAll()
 <%_ } _%>
-                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
                     .requestMatchers(AntPathRequestMatcher.antMatcher("/websocket/**")).authenticated()
 <%_ } _%>
-                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN))
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/management/health")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/management/health/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/management/info")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/management/prometheus")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (generateUserManagement) { _%>
             .rememberMe(rememberMe ->
