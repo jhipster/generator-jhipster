@@ -1230,6 +1230,15 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/app/main.ts": {
     "stateCleared": "modified",
   },
+  "src/app/microfrontends/entities-menu.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/app/microfrontends/entities-menu.vue": {
+    "stateCleared": "modified",
+  },
+  "src/app/microfrontends/entities-router.ts": {
+    "stateCleared": "modified",
+  },
   "src/app/router/account.ts": {
     "stateCleared": "modified",
   },
@@ -1423,15 +1432,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/swagger-ui/index.html": {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/microfrontends/entities-menu.component.ts": {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/microfrontends/entities-menu.vue": {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/microfrontends/entities-router.ts": {
     "stateCleared": "modified",
   },
   "tsconfig-test.json": {
@@ -1700,6 +1700,15 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/app/main.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/microfrontends/entities-menu.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/microfrontends/entities-menu.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/microfrontends/entities-router.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/router/admin.ts": {
     "stateCleared": "modified",
   },
@@ -1896,15 +1905,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp2/swagger-ui/index.html": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/microfrontends/entities-menu.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/microfrontends/entities-menu.vue": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/microfrontends/entities-router.ts": {
     "stateCleared": "modified",
   },
   "tsconfig-test.json": {
