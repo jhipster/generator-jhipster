@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR, clientAppTestBlock } from '../client/utils.mjs';
+import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR } from '../client/utils.mjs';
 
 export const entityFiles = {
   client: [
@@ -42,7 +42,8 @@ export const entityFiles = {
     {
       condition: generator => !generator.readOnly && !generator.embedded,
       ...clientApplicationBlock,
-      templates: ['entities/_entityFolder/_entityFile-update.vue',
+      templates: [
+        'entities/_entityFolder/_entityFile-update.vue',
         'entities/_entityFolder/_entityFile-update.component.ts',
         'entities/_entityFolder/_entityFile-update.component.spec.ts',
       ],
@@ -89,6 +90,18 @@ export async function postWriteEntityFiles({ application, entities }) {
         pageTitle,
       );
       this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
+    }
+  }
+}
+
+export function cleanupEntitiesFiles(this, { application, entities }) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+    const { entityFolderName, entityFileName, name: entityName } = entity;
+    if (this.isJhipsterVersionLessThan('8.0.0')) {
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
     }
   }
 }

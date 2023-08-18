@@ -56,4 +56,41 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}jest.conf.js`);
     this.removeFile(`${application.clientTestDir}spec/setup.js`);
   }
-}
+  if (this.isJhipsterVersionLessThan('8.0.0')) {
+    this.removeFile(`${application.clientTestDir}spec/setup.ts`);
+    this.removeFile(`${application.clientTestDir}spec/tsconfig.json`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/account.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/core/home/home.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/core/error/error.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/core/ribbon/ribbon.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/shared/alert/alert.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/shared/config/axios-interceptor.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/shared/data/data-utils.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/shared/sort/sorts.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/configuration/configuration.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/health/health.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/health/health-modal.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/health/health.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/logs/logs.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/metrics/metrics.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/login.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/login-form/login-form.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/sessions/sessions.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/login.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/change-password/change-password.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/register/register.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/reset-password/init/reset-password-init.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/settings/settings.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/account/activate/activate.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/tracker/tracker.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/tracker/tracker.service.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/user-management/user-management.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/user-management/user-management-view.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/user-management/user-management-edit.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/admin/gateway/gateway.component.spec.ts`);
+    this.removeFile(`${application.clientTestDir}spec/app/entities/entities-menu.spec.ts`);
+  }
+};
