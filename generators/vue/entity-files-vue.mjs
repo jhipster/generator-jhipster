@@ -96,7 +96,7 @@ export async function postWriteEntityFiles({ application, entities }) {
 
 export function cleanupEntitiesFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    const { entityFolderName, entityFileName, name: entityName } = entity;
+    const { entityFolderName, entityFileName } = entity;
     if (this.isJhipsterVersionLessThan('8.0.0')) {
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);

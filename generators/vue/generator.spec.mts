@@ -25,7 +25,7 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 
 const testSamples = buildClientSamples(commonConfig);
 
-const clientAdminFiles = (clientSrcDir, clientTestDir) => [
+const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.vue`,

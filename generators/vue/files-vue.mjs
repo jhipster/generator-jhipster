@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { clientApplicationBlock, clientTestBlock, clientSrcBlock } from '../client/utils.mjs';
+import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
 
 export const vueFiles = {
   common: [
