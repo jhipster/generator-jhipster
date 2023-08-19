@@ -21,8 +21,10 @@ package <%= packageName %>.config;
 import <%= packageName %>.security.*;
 import tech.jhipster.config.JHipsterProperties;
 
+<%_ if (authenticationTypeSession || devDatabaseTypeH2Any) { _%>
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (authenticationTypeOauth2) { _%>
@@ -179,12 +181,11 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!skipClient) { _%>
-                    .requestMatchers(antMatcher("/index.html"), antMatcher("/*.{js,map,css}")).permitAll()
-                    .requestMatchers(antMatcher("/*.{ico,png,svg,webapp}")).permitAll()
-                    .requestMatchers(antMatcher("/app/**")).permitAll()
-                    .requestMatchers(antMatcher("/i18n/**")).permitAll()
-                    .requestMatchers(antMatcher("/content/**")).permitAll()
-                    .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
@@ -204,7 +205,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/**")).authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
-                    .requestMatchers(antMatcher("/websocket/**")).authenticated()
+                    .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
 <%_ } _%>
                     .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/management/health")).permitAll()
