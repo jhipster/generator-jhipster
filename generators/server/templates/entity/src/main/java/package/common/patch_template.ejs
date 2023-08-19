@@ -32,6 +32,7 @@ _%>
   <%_ } _%>
 <%_ } else { %>
 <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
+  <%_ if (dtoMapstruct || fields.filter(field => !field.id && !field.transient).length > 0) { _%>
     .map(existing<%= entityClass %> -> {
   <%_ if (dtoMapstruct) { _%>
        <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
@@ -49,6 +50,7 @@ _%>
   <% } %>
     return existing<%= entityClass %>;
     })
+  <%_ } %>
   <% if (!updatableEntity) { %>// <%} %>.<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
