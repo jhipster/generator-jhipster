@@ -180,16 +180,14 @@ _%>
     <%_ } _%>
 <%_ } _%>
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
-                                    class="btn btn-info btn-sm"
-                                    data-cy="entityDetailsButton">
+                               class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
                                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">__jhiTransformTranslate__('entity.action.view')</span>
                             </a>
 <%_ if (!readOnly) { _%>
 
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
-                                    class="btn btn-primary btn-sm"
-                                    data-cy="entityEditButton">
+                               class="btn btn-primary btn-sm" data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
                                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">__jhiTransformTranslate__('entity.action.edit')</span>
                             </a>
