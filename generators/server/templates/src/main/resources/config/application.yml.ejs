@@ -378,8 +378,8 @@ jhipster:
   mail:
     from: <%= baseName %>@localhost
   api-docs:
-    default-include-pattern: ${server.servlet.context-path:}/api/**
-    management-include-pattern: ${server.servlet.context-path:}/management/**
+    default-include-pattern: /api/**
+    management-include-pattern: /management/**
     title: <%= humanizedBaseName %> API
     description: <%= humanizedBaseName %> API documentation
     version: 0.0.1
