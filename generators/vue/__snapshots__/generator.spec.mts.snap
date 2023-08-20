@@ -1230,13 +1230,13 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/app/main.ts": {
     "stateCleared": "modified",
   },
-  "src/app/microfrontends/entities-menu.component.ts": {
+  "src/app/microfrontends/entities-menu.component.test.ts": {
     "stateCleared": "modified",
   },
-  "src/app/microfrontends/entities-menu.vue": {
+  "src/app/microfrontends/entities-menu.test.vue": {
     "stateCleared": "modified",
   },
-  "src/app/microfrontends/entities-router.ts": {
+  "src/app/microfrontends/entities-router.test.ts": {
     "stateCleared": "modified",
   },
   "src/app/router/account.ts": {
@@ -1700,13 +1700,13 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/app/main.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/microfrontends/entities-menu.component.ts": {
+  "src/main/webapp2/app/microfrontends/entities-menu.component.test.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/microfrontends/entities-menu.vue": {
+  "src/main/webapp2/app/microfrontends/entities-menu.test.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/microfrontends/entities-router.ts": {
+  "src/main/webapp2/app/microfrontends/entities-router.test.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/router/admin.ts": {
