@@ -45,6 +45,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
 <%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import org.springframework.security.config.Customizer;
+<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -293,7 +296,7 @@ public class SecurityConfiguration {
                     .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic(basic -> basic.disable())
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 <%_ } else { _%>;<%_ } _%>
         return http.build();
     }
