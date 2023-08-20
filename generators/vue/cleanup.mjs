@@ -56,7 +56,7 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}jest.conf.js`);
     this.removeFile(`${application.clientTestDir}spec/setup.js`);
   }
-  if (this.isJhipsterVersionLessThan('8.0.0')) {
+  if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {
     this.removeFile(`${application.clientTestDir}spec/setup.ts`);
     this.removeFile(`${application.clientTestDir}spec/tsconfig.json`);
     this.removeFile(`${application.clientTestDir}spec/app/account/account.service.spec.ts`);
