@@ -29,6 +29,22 @@ trim_trailing_whitespace = false
 ",
     "stateCleared": "modified",
   },
+  ".husky/pre-commit": {
+    "contents": "#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+
+"$(dirname "$0")/../npmw" exec --no-install lint-staged
+",
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": {
+    "contents": "module.exports = {
+  '{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
+};
+",
+    "stateCleared": "modified",
+  },
   ".prettierignore": {
     "contents": "node_modules
 target
@@ -71,9 +87,7 @@ overrides:
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "entities": [],
-    "monorepository": true,
-    "skipCommitHook": true
+    "entities": []
   }
 }
 ",
@@ -245,6 +259,19 @@ To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\
 
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/
+",
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "contents": "{
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "HUSKY_VERSION",
+    "lint-staged": "LINT_STAGED_VERSION"
+  }
+}
 ",
     "stateCleared": "modified",
   },
