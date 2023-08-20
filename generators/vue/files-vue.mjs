@@ -49,7 +49,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.microfrontend,
-      ...clientApplicationBlock,
+      ...clientSrcBlock,
       templates: [
         'microfrontends/entities-menu.component.test.ts',
         'microfrontends/entities-menu.test.vue',
