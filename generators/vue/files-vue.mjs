@@ -50,7 +50,7 @@ export const vueFiles = {
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationBlock,
-      templates: ['microfrontends/entities-menu.component.ts', 'microfrontends/entities-menu.vue', 'microfrontends/entities-router.ts'],
+      templates: ['microfrontends/entities-menu.component.test.ts', 'microfrontends/entities-menu.test.vue', 'microfrontends/entities-router.test.ts'],
     },
     {
       condition: generator => generator.applicationTypeMicroservice,
