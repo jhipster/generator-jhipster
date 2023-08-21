@@ -25,7 +25,7 @@ export const vueFiles = {
       templates: [
         'package.json',
         'tsconfig.json',
-        'tsconfig-test.json',
+        'tsconfig.test.json',
         '.postcssrc.js',
         '.eslintrc.js',
         'vitest.config.ts',

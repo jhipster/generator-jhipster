@@ -434,10 +434,10 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -967,10 +967,10 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -1434,10 +1434,10 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -1907,10 +1907,10 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -2530,10 +2530,10 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp2/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -2973,10 +2973,10 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -3422,10 +3422,10 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "tsconfig.test.json": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
