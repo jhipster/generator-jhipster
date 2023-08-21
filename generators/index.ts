@@ -23,6 +23,8 @@ export {
   DOCKER_DIR as TEMPLATES_DOCKER_DIR,
 } from './generator-constants.mjs';
 
+export type { JHipsterCommandDefinition } from './base/api.mjs';
+
 export { default as GeneratorBase } from './base/index.mjs';
 export { default as GeneratorBaseCore } from './base-core/index.mjs';
 export { default as GeneratorBaseApplication } from './base-application/index.mjs';
