@@ -1,8 +1,11 @@
 {
   "include": [
+    "./cli",
+    "./jdl",
+    "./generators/index.ts",
     "./generators/base",
-    "./generators/core",
     "./generators/base-application",
+    "./generators/base-core",
     "./generators/*/support",
     "./generators/*/type-export.d.ts"
   ],
