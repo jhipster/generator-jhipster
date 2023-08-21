@@ -64,7 +64,7 @@ export default class extends <%= generatorClass %>Generator {
 
   get [<%= generatorClass %>Generator.<%= priority.constant %>]() {
     return {
-  <%_ if (!sbs) { _%>
+  <%_ if (!sbs && !customGenerator) { _%>
       ...super.<%= priority.name %>,
   <%_ } _%>
       async <%= priority.name %>TemplateTask() {
