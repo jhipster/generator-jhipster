@@ -1,0 +1,134 @@
+import { vitest } from 'vitest';
+import { Ref, ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import { RouteLocation } from 'vue-router';
+
+import Error from './error.vue';
+
+import LoginService from '@/account/login.service';
+
+type ErrorComponentType = InstanceType<typeof Error>;
+
+let route: Partial<RouteLocation>;
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+}));
+
+const customErrorMsg = 'An error occurred.';
+
+describe('Error component', () => {
+  let error: ErrorComponentType;
+  let loginService: LoginService;
+  let authenticated: Ref<boolean>;
+
+  beforeEach(() => {
+    route = {};
+    authenticated = ref(false);
+<%_ if (authenticationTypeJwt) { _%>
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
+<%_ } else if (authenticationTypeSession) { _%>
+    loginService = new LoginService({ emit: vitest.fn() });
+    vitest.spyOn(loginService, 'openLogin');
+    vitest.spyOn(loginService, 'logout');
+<%_ } else if (authenticationTypeOauth2) { _%>
+    loginService = { login: vitest.fn(), logout: vitest.fn() };
+<%_ } _%>
+  });
+
+  it('should have retrieve custom error on routing', () => {
+    route = {
+      path: '/custom-error',
+      name: 'CustomMessage',
+      meta: { errorMessage: customErrorMsg },
+    };
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
+      },
+    });
+    error = wrapper.vm;
+
+    expect(error.errorMessage).toBe(customErrorMsg);
+    expect(error.error403).toBeFalsy();
+    expect(error.error404).toBeFalsy();
+<%_ if (!authenticationTypeOauth2) { _%>
+    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
+<%_ } else { _%>
+    expect(loginService.login).toHaveBeenCalledTimes(0);
+<%_ } _%>
+  });
+
+  it('should have set forbidden error on routing', () => {
+    route = {
+      meta: { error403: true },
+    };
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
+      },
+    });
+    error = wrapper.vm;
+
+    expect(error.errorMessage).toBeNull();
+    expect(error.error403).toBeTruthy();
+    expect(error.error404).toBeFalsy();
+<%_ if (!authenticationTypeOauth2) { _%>
+    expect(loginService.openLogin).toHaveBeenCalled();
+<%_ } else { _%>
+    expect(loginService.login).toHaveBeenCalled();
+<%_ } _%>
+  });
+
+  it('should have set not found error on routing', () => {
+    route = {
+      meta: { error404: true },
+    };
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
+      },
+    });
+    error = wrapper.vm;
+
+    expect(error.errorMessage).toBeNull();
+    expect(error.error403).toBeFalsy();
+    expect(error.error404).toBeTruthy();
+<%_ if (!authenticationTypeOauth2) { _%>
+    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
+<%_ } else { _%>
+    expect(loginService.login).toHaveBeenCalledTimes(0);
+<%_ } _%>
+  });
+
+  it('should have set default on no error', () => {
+    const wrapper = shallowMount(Error, {
+      global: {
+        provide: {
+          loginService,
+          authenticated,
+        },
+      },
+    });
+    error = wrapper.vm;
+
+    expect(error.errorMessage).toBeNull();
+    expect(error.error403).toBeFalsy();
+    expect(error.error404).toBeFalsy();
+<%_ if (!authenticationTypeOauth2) { _%>
+    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
+<%_ } else { _%>
+    expect(loginService.login).toHaveBeenCalledTimes(0);
+<%_ } _%>
+  });
+});

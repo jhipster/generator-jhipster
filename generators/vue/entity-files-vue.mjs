@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR, clientAppTestBlock } from '../client/utils.mjs';
+import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR } from '../client/utils.mjs';
 
 export const entityFiles = {
   client: [
@@ -31,31 +31,22 @@ export const entityFiles = {
       templates: [
         'entities/_entityFolder/_entityFile-details.vue',
         'entities/_entityFolder/_entityFile-details.component.ts',
+        'entities/_entityFolder/_entityFile-details.component.spec.ts',
         'entities/_entityFolder/_entityFile.vue',
         'entities/_entityFolder/_entityFile.component.ts',
-        'entities/_entityFolder/_entityFile.service.ts',
-      ],
-    },
-    {
-      condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationBlock,
-      templates: ['entities/_entityFolder/_entityFile-update.vue', 'entities/_entityFolder/_entityFile-update.component.ts'],
-    },
-  ],
-  test: [
-    {
-      condition: generator => !generator.embedded,
-      ...clientAppTestBlock,
-      templates: [
         'entities/_entityFolder/_entityFile.component.spec.ts',
-        'entities/_entityFolder/_entityFile-details.component.spec.ts',
+        'entities/_entityFolder/_entityFile.service.ts',
         'entities/_entityFolder/_entityFile.service.spec.ts',
       ],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientAppTestBlock,
-      templates: ['entities/_entityFolder/_entityFile-update.component.spec.ts'],
+      ...clientApplicationBlock,
+      templates: [
+        'entities/_entityFolder/_entityFile-update.vue',
+        'entities/_entityFolder/_entityFile-update.component.ts',
+        'entities/_entityFolder/_entityFile-update.component.spec.ts',
+      ],
     },
   ],
 };
@@ -99,6 +90,18 @@ export async function postWriteEntityFiles({ application, entities }) {
         pageTitle,
       );
       this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
+    }
+  }
+}
+
+export function cleanupEntitiesFiles({ application, entities }) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+    const { entityFolderName, entityFileName } = entity;
+    if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
     }
   }
 }

@@ -1,0 +1,219 @@
+import { vitest } from 'vitest';
+import AlertService from './alert.service';
+
+describe('Alert Service test suite', () => {
+<%_ if (enableTranslation) { _%>
+  let translationStub: vitest.Mock;
+<%_ } _%>
+  let toastStub: vitest.Mock;
+  let alertService: AlertService;
+
+  beforeEach(() => {
+<%_ if (enableTranslation) { _%>
+    translationStub = vitest.fn();
+<%_ } _%>
+    toastStub = vitest.fn();
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: translationStub } as any,
+<%_ } _%>
+      bvToast: {
+        toast: toastStub,
+      } as any,
+    });
+  });
+
+  it('should show error toast with translation/message', async () => {
+    const message = 'translatedMessage';
+
+    // WHEN
+    alertService.showError(message);
+
+    // THEN
+    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toBeCalledWith(message, {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  });
+
+  it('should show not reachable toast when http status = 0', async () => {
+<%_ if (enableTranslation) { _%>
+    const translationKey = 'error.server.not.reachable';
+<%_ } _%>
+    const message = 'Server not reachable';
+    const httpErrorResponse = {
+      status: 0,
+    };
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockReturnValueOnce(message);
+<%_ } _%>
+
+    // WHEN
+    alertService.showHttpError(httpErrorResponse);
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledWith(translationKey);
+<%_ } _%>
+    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toBeCalledWith(message, {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  });
+
+  it('should show parameterized error toast when http status = 400 and entity headers', async () => {
+<%_ if (enableTranslation) { _%>
+    const translationKey = 'error.update';
+<%_ } _%>
+    const message = 'Updation Error';
+    const httpErrorResponse = {
+      status: 400,
+      headers: {
+        'x-jhipsterapp-error': <% if (enableTranslation) { %>translationKey<% } else {%>message<% } %>,
+        'x-jhipsterapp-params': 'dummyEntity',
+      },
+    };
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockImplementation(key => {
+      if (key === translationKey) {
+        return message;
+      }
+      if (key === 'global.menu.entities.dummyEntity') {
+        return 'DummyEntity';
+      }
+      throw new Error();
+    });
+<%_ } _%>
+
+    // WHEN
+    alertService.showHttpError(httpErrorResponse);
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toBeCalledTimes(2);
+    expect(translationStub).toBeCalledWith(translationKey, { entityName: 'DummyEntity' });
+    expect(translationStub).toBeCalledWith('global.menu.entities.dummyEntity');
+<%_ } _%>
+    expect(toastStub).toBeCalledWith(message, {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  });
+
+  it('should show error toast with data.message when http status = 400 and entity headers', async () => {
+    const message = 'Validation error';
+    const httpErrorResponse = {
+      status: 400,
+      headers: {
+        'x-jhipsterapp-error400': 'error',
+        'x-jhipsterapp-params400': 'dummyEntity',
+      },
+      data: {
+        message,
+        fieldErrors: {
+          field1: 'error1',
+        },
+      },
+    };
+
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockReturnValueOnce(message);
+<%_ } _%>
+
+    // WHEN
+    alertService.showHttpError(httpErrorResponse);
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledWith(message);
+<%_ } _%>
+    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toBeCalledWith(message, {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  });
+
+  it('should show error toast when http status = 404', async () => {
+    <%_ if (enableTranslation) { _%>
+    const translationKey = 'error.http.404';
+    <%_ } _%>
+    const message = 'The page does not exist.';
+    const httpErrorResponse = {
+      status: 404,
+    };
+
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockReturnValueOnce(message);
+<%_ } _%>
+
+    // WHEN
+    alertService.showHttpError(httpErrorResponse);
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledWith(translationKey);
+<%_ } _%>
+    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toBeCalledWith(message, {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  });
+
+  it('should show error toast when http status != 400,404', async () => {
+    const message = 'Error 500';
+    const httpErrorResponse = {
+      status: 500,
+      data: {
+        message,
+      },
+    };
+
+    <%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockReturnValueOnce(message);
+<%_ } _%>
+
+    // WHEN
+    alertService.showHttpError(httpErrorResponse);
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledWith(message);
+<%_ } _%>
+    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toBeCalledWith(message, {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  });
+});

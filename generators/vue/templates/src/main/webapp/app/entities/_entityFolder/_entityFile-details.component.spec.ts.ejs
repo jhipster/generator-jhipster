@@ -1,0 +1,113 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = this.generateTestEntityId(primaryKey.type);
+_%>
+/* tslint:disable max-line-length */
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
+import sinon, { SinonStubbedInstance } from 'sinon';
+import { RouteLocation } from 'vue-router';
+
+import <%= entityAngularName %>Details from './<%= entityFileName %>-details.vue';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
+
+type <%= entityAngularName %>DetailsComponentType = InstanceType<typeof <%= entityAngularName %>Details>;
+
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
+
+describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
+  describe('<%= entityAngularName %> Management Detail Component', () => {
+    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
+    let mountOptions: MountingOptions<<%= entityAngularName %>DetailsComponentType>['global'];
+
+    beforeEach(() => {
+      route = {};
+      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+
+      alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+        i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
+      });
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+        },
+      };
+    });
+
+    describe('Navigate to details', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        route = {
+          params: {
+            <%= entityInstance %>Id: '' + <%- tsKeyId %>,
+          },
+        };
+        const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });
+        const comp = wrapper.vm;
+        // WHEN
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%= entityInstance %>).toMatchObject(<%= entityInstance %>Sample);
+      });
+    });
+
+    describe('Previous state', () => {
+      it('Should go previous state', async () => {
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
+        comp.previousState();
+        await comp.$nextTick();
+
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
+      });
+    });
+  });
+});

@@ -1,0 +1,76 @@
+import LoginService from './login.service';
+<%_ if (!authenticationTypeJwt) { _%>
+import axios from 'axios';
+import sinon from 'sinon';
+
+const axiosStub = {
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post'),
+};
+<%_ } _%>
+
+describe('Login Service test suite', () => {
+  let loginService: LoginService;
+
+  beforeEach(() => {
+    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: vitest.fn() }<% } %>);
+  });
+
+<%_ if (authenticationTypeOauth2) { _%>
+  it('should build url for login', () => {
+    const loc = {href: '', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /accessdenied', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/accessdenied' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /forbidden', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/forbidden' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /accessdenied', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/accessdenied' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /forbidden', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/forbidden' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login behind client proxy', () => {
+    const loc = {href: '', port: '<%= serverPort %>', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost:<%= serverPort %>/oauth2/authorization/oidc');
+  });
+<%_ } _%>
+
+<%_ if (!authenticationTypeJwt) { _%>
+  it('should call global logout when asked to', () => {
+    loginService.logout();
+
+    expect(axiosStub.post.calledWith('api/logout')).toBeTruthy();
+  });
+<%_ } _%>
+});

@@ -1,0 +1,121 @@
+<%_
+const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
+_%>
+import { vitest } from 'vitest';
+import { ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
+
+import AlertService from '@/shared/alert/alert.service';
+import UserManagement from './user-management.vue';
+
+type UserManagementComponentType = InstanceType<typeof UserManagement>;
+
+const axiosStub = {
+  delete: sinon.stub(axios, 'delete'),
+  get: sinon.stub(axios, 'get'),
+  put: sinon.stub(axios, 'put'),
+};
+
+describe('UserManagement Component', () => {
+  let userManagement: UserManagementComponentType;
+  let alertService: AlertService;
+
+  beforeEach(() => {
+    axiosStub.put.reset();
+    axiosStub.get.reset();
+    axiosStub.get.resolves({ headers: {} });
+
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+      bvToast: {
+        toast: vitest.fn(),
+      } as any,
+    });
+
+    const wrapper = shallowMount(UserManagement, {
+      global: {
+        stubs: {
+          bPagination: true,
+          jhiItemCount: true,
+          bModal: true,
+          'router-link': true,
+          'jhi-sort-indicator': true,
+          'font-awesome-icon': true,
+          'b-button': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          currentUsername: ref(''),
+        },
+      },
+    });
+    userManagement = wrapper.vm;
+  });
+
+  describe('OnInit', () => {
+    it('Should call load all on init', async () => {
+      // WHEN
+      userManagement.loadAll();
+      await userManagement.$nextTick();
+
+      // THEN
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+    });
+  });
+
+  describe('setActive', () => {
+    it('Should update user and call load all', async () => {
+      // GIVEN
+      axiosStub.put.resolves({});
+
+      // WHEN
+      userManagement.setActive({ id: <%- tsKeyId %> }, true);
+      await userManagement.$nextTick();
+
+      // THEN
+      expect(axiosStub.put.calledWith(`api/admin/users`, { id: <%- tsKeyId %>, activated: true })).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+    });
+  });
+
+  describe('confirmDelete', () => {
+    it('Should call delete service on confirmDelete', async () => {
+      // GIVEN
+      axiosStub.delete.resolves({
+        headers: {
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
+        },
+      });
+
+      // WHEN
+      userManagement.prepareRemove({ login: <%- tsKeyId %> });
+      userManagement.deleteUser();
+      await userManagement.$nextTick();
+
+      // THEN
+      expect(axiosStub.delete.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+    });
+  });
+<%_ if (!databaseTypeCassandra) { _%>
+
+  describe('change order', () => {
+    it('should change order and invert reverse', () => {
+      // WHEN
+      userManagement.changeOrder('dummy-order');
+
+      // THEN
+      expect(userManagement.propOrder).toEqual('dummy-order');
+      expect(userManagement.reverse).toBe(true);
+    });
+  });
+<%_ } _%>
+});

@@ -1,0 +1,206 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
+/* tslint:disable max-line-length */
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
+import sinon, { SinonStubbedInstance } from 'sinon';
+import { RouteLocation } from 'vue-router';
+
+<%_ if (anyFieldIsTimeDerived) { _%>
+import dayjs from 'dayjs';
+import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
+<%_ } _%>
+import <%= entityAngularName %>Update from './<%= entityFileName %>-update.vue';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
+
+<%_
+  const allRelationshipsThatNeedSelectOptions = Object
+    .values(relationshipsByOtherEntity)
+    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .filter(relationships => relationships.length > 0);
+_%>
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+import UserService from '@/entities/user/user.service';
+  <%_ } else { _%>
+import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
+  <%_ } _%>
+<%_ } _%>
+
+type <%= entityAngularName %>UpdateComponentType = InstanceType<typeof <%= entityAngularName %>Update>;
+
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
+
+describe('Component Tests', () => {
+  let mountOptions: MountingOptions<<%= entityAngularName %>UpdateComponentType>['global'];
+  let alertService: AlertService;
+
+  describe('<%= entityAngularName %> Management Update Component', () => {
+    let comp: <%= entityAngularName %>UpdateComponentType;
+    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
+
+    beforeEach(() => {
+      route = {};
+      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+
+      alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+        i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
+      });
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+            userService: () =>
+              sinon.createStubInstance<UserService>(UserService, {
+                retrieve: sinon.stub().resolves({}),
+              } as any),
+  <%_ } else { _%>
+            <%= relationship.otherEntity.entityInstance %>Service: () =>
+              sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
+                retrieve: sinon.stub().resolves({}),
+              } as any),
+  <%_ } _%>
+<%_ } _%>
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
+    });
+
+<%_ if (anyFieldIsTimeDerived) { _%>
+    describe('load', () => {
+      beforeEach(() => {
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+      });
+      it('Should convert date from string', () => {
+        // GIVEN
+        const date = new Date('2019-10-15T11:42:02Z');
+
+        // WHEN
+        const convertedDate = comp.convertDateTimeFromServer(date);
+
+        // THEN
+        expect(convertedDate).toEqual(dayjs(date).format(DATE_TIME_LONG_FORMAT));
+      });
+
+      it('Should not convert date if date is not present', () => {
+        expect(comp.convertDateTimeFromServer(null)).toBeNull();
+      });
+    });
+<%_ } _%>
+
+    describe('save', () => {
+      it('Should call update service on save for existing entity', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.<%= entityInstance %> = <%= entityInstance %>Sample;
+        <%= entityInstance %>ServiceStub.update.resolves(<%= entityInstance %>Sample);
+
+        // WHEN
+        comp.save();
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.update.calledWith(<%= entityInstance %>Sample)).toBeTruthy();
+        expect(comp.isSaving).toEqual(false);
+      });
+
+      it('Should call create service on save for new entity', async () => {
+        // GIVEN
+        const entity = {};
+        <%= entityInstance %>ServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.<%= entityInstance %> = entity;
+
+        // WHEN
+        comp.save();
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.create.calledWith(entity)).toBeTruthy();
+        expect(comp.isSaving).toEqual(false);
+      });
+    });
+
+    describe('Before route enter', () => {
+      it('Should retrieve data', async () => {
+        // GIVEN
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        <%= entityInstance %>ServiceStub.retrieve.resolves([<%= entityInstance %>Sample]);
+
+        // WHEN
+        route = {
+          params: {
+            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%= entityInstance %>).toMatchObject(<%= entityInstance %>Sample);
+      });
+    });
+
+    describe('Previous state', () => {
+      it('Should go previous state', async () => {
+        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
+        comp.previousState();
+        await comp.$nextTick();
+
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
+      });
+    });
+  });
+});

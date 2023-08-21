@@ -1,0 +1,173 @@
+<%_
+const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
+_%>
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
+import { RouteLocation } from 'vue-router';
+
+import AlertService from '@/shared/alert/alert.service';
+import UserManagementEdit from './user-management-edit.vue';
+
+type UserManagementEditComponentType = InstanceType<typeof UserManagementEdit>;
+
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+describe('UserManagementEdit Component', () => {
+  const axiosStub = {
+    get: sinon.stub(axios, 'get'),
+    post: sinon.stub(axios, 'post'),
+    put: sinon.stub(axios, 'put'),
+  };
+  let mountOptions: MountingOptions<UserManagementEditComponentType>['global'];
+  let alertService: AlertService;
+
+  beforeEach(() => {
+    route = {};
+    alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+      i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+      bvToast: {
+        toast: vitest.fn(),
+      } as any,
+    });
+
+    mountOptions = {
+      stubs: {
+        'font-awesome-icon': true,
+      },
+      provide: {
+        alertService,
+      },
+    };
+
+    axiosStub.get.reset();
+    axiosStub.post.reset();
+    axiosStub.put.reset();
+  });
+
+  describe('init', () => {
+    it('Should load user', async () => {
+      // GIVEN
+      axiosStub.get.withArgs('api/admin/users/' + <%- tsKeyId %>).resolves({});
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+      axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
+<%_ } _%>
+      route = {
+        params: {
+          userId: '' + <%- tsKeyId %>,
+        },
+      };
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+
+      // WHEN
+      await userManagementEdit.$nextTick();
+
+      // THEN
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+      expect(axiosStub.get.calledWith('api/authorities')).toBeTruthy();
+<%_ } _%>
+      expect(axiosStub.get.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
+    });
+    it('Should open create user', async () => {
+      // GIVEN
+      axiosStub.get.resolves({});
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+      axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
+<%_ } _%>
+      route = {
+        params: {},
+      };
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+
+      // WHEN
+      await userManagementEdit.$nextTick();
+
+      // THEN
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+      expect(axiosStub.get.calledWith('api/authorities')).toBeTruthy();
+      expect(axiosStub.get.callCount).toBe(1);
+<%_ } else { _%>
+      expect(axiosStub.get.notCalled).toBeTruthy();
+<%_ } _%>
+    });
+  });
+
+  describe('save', () => {
+    it('Should call update service on save for existing user', async () => {
+      // GIVEN
+      axiosStub.put.resolves({
+        headers: {
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
+        },
+      });
+      axiosStub.get.withArgs('api/admin/users/' + <%- tsKeyId %>).resolves({
+        data: { id: <%- tsKeyId %>, authorities: [] },
+      });
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+      axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
+<%_ } _%>
+      route = {
+        params: {
+          userId: '' + <%- tsKeyId %>,
+        },
+      };
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+      await userManagementEdit.$nextTick();
+
+      // WHEN
+      userManagementEdit.save();
+      await userManagementEdit.$nextTick();
+
+      // THEN
+      expect(axiosStub.put.calledWith('api/admin/users', { id: <%- tsKeyId %>, authorities: [] })).toBeTruthy();
+      expect(userManagementEdit.isSaving).toEqual(false);
+    });
+
+    it('Should call create service on save for new user', async () => {
+      // GIVEN
+      axiosStub.post.resolves({
+        headers: {
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
+        },
+      });
+      axiosStub.get.resolves({});
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+      axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
+<%_ } _%>
+      route = {
+        params: {},
+      };
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+      await userManagementEdit.$nextTick();
+      userManagementEdit.userAccount = { authorities: [] };
+
+      // WHEN
+      userManagementEdit.save();
+      await userManagementEdit.$nextTick();
+
+      // THEN
+      expect(axiosStub.post.calledWith('api/admin/users', {
+        authorities: [],
+<%_ if (!enableTranslation) { _%>
+        langKey: '<%- nativeLanguage %>',
+<%_ } _%>
+      })).toBeTruthy();
+      expect(userManagementEdit.isSaving).toEqual(false);
+    });
+  });
+});
