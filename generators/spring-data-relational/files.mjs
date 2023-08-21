@@ -17,34 +17,38 @@
  * limitations under the License.
  */
 import { mergeSections, addSectionsCondition } from '../base/support/index.mjs';
-import { javaPackageMainTemplatesBlock, javaPackageTestTemplatesBlock } from '../java/support/index.mjs';
-import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import {
+  javaMainPackageTemplatesBlock,
+  javaTestPackageTemplatesBlock,
+  javaTestResourceTemplatesBlock,
+  javaMainResourceTemplatesBlock,
+} from '../java/support/index.mjs';
 
 export const sqlFiles = {
   serverFiles: [
     {
-      ...javaPackageMainTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock(),
       templates: ['config/DatabaseConfiguration.java'],
     },
   ],
   reactiveJavaUserManagement: [
     {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      ...javaPackageMainTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock(),
       templates: ['repository/UserSqlHelper_reactive.java', 'repository/rowmapper/UserRowMapper_reactive.java'],
     },
   ],
   reactiveCommon: [
     {
       condition: generator => generator.reactive,
-      ...javaPackageMainTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock(),
       templates: ['repository/rowmapper/ColumnConverter_reactive.java', 'repository/EntityManager_reactive.java'],
     },
   ],
   hibernate: [
     {
       condition: generator => !generator.reactive,
-      ...javaPackageTestTemplatesBlock(),
+      ...javaTestPackageTemplatesBlock(),
       templates: [
         'config/timezone/HibernateTimeZoneIT.java',
         'repository/timezone/DateTimeWrapper.java',
@@ -54,16 +58,16 @@ export const sqlFiles = {
   ],
   testContainers: [
     {
-      ...javaPackageTestTemplatesBlock(),
+      ...javaTestPackageTemplatesBlock(),
       templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java', 'config/SqlTestContainersSpringContextCustomizerFactory.java'],
     },
     {
-      path: SERVER_TEST_RES_DIR,
+      ...javaTestResourceTemplatesBlock(),
       templates: ['config/application-testdev.yml'],
     },
     {
       condition: generator => !generator.reactive,
-      path: SERVER_TEST_RES_DIR,
+      ...javaTestResourceTemplatesBlock(),
       templates: ['config/application-testprod.yml'],
     },
   ],
@@ -72,7 +76,7 @@ export const sqlFiles = {
 export const h2Files = {
   serverResource: [
     {
-      path: SERVER_MAIN_RES_DIR,
+      ...javaMainResourceTemplatesBlock(),
       templates: ['.h2.server.properties'],
     },
   ],
@@ -81,7 +85,7 @@ export const h2Files = {
 export const mysqlFiles = {
   serverTestSources: [
     {
-      ...javaPackageTestTemplatesBlock(),
+      ...javaTestPackageTemplatesBlock(),
       templates: ['config/MysqlTestContainer.java'],
     },
   ],
@@ -90,7 +94,7 @@ export const mysqlFiles = {
 export const mariadbFiles = {
   serverTestSources: [
     {
-      ...javaPackageTestTemplatesBlock(),
+      ...javaTestPackageTemplatesBlock(),
       templates: ['config/MariadbTestContainer.java'],
     },
   ],
@@ -99,7 +103,7 @@ export const mariadbFiles = {
 export const mssqlFiles = {
   serverTestSources: [
     {
-      ...javaPackageTestTemplatesBlock(),
+      ...javaTestPackageTemplatesBlock(),
       templates: ['config/MsSqlTestContainer.java'],
     },
   ],
@@ -108,7 +112,7 @@ export const mssqlFiles = {
 export const postgresFiles = {
   serverTestSources: [
     {
-      ...javaPackageTestTemplatesBlock(),
+      ...javaTestPackageTemplatesBlock(),
       templates: ['config/PostgreSqlTestContainer.java'],
     },
   ],

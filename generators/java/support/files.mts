@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { SERVER_TEST_SRC_DIR, SERVER_MAIN_SRC_DIR } from '../../generator-constants.mjs';
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../../generator-constants.mjs';
 
 export const replaceFilePathVariables = (data: any, filePath: string) =>
   filePath?.replace(/_package_/, data.packageName)?.replace(/_\w*/, '');
@@ -57,7 +57,7 @@ export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
 export const moveToSrcTestResourcesDir = (data: any, filePath: string) =>
   `${data.srcTestResources}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
-export const javaPackageMainTemplatesBlock = (relativePath: string | any = '') => {
+export const javaMainPackageTemplatesBlock = (relativePath: string | any = '') => {
   relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
   return {
     path: `${SERVER_MAIN_SRC_DIR}_package_/${relativePath}`,
@@ -69,7 +69,27 @@ export const javaPackageMainTemplatesBlock = (relativePath: string | any = '') =
   };
 };
 
-export const javaPackageTestTemplatesBlock = (relativePath: string | any = '') => {
+export const javaMainResourceTemplatesBlock = (relativePath: string | any = '') => {
+  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+  return {
+    path: `${SERVER_MAIN_RES_DIR}${relativePath}`,
+    renameTo: (data: any, filePath: string) =>
+      `${data.srcMainResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
+    ...(typeof relativePath === 'object' ? relativePath : undefined),
+  };
+};
+
+export const javaTestResourceTemplatesBlock = (relativePath: string | any = '') => {
+  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+  return {
+    path: `${SERVER_TEST_RES_DIR}${relativePath}`,
+    renameTo: (data: any, filePath: string) =>
+      `${data.srcTestResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
+    ...(typeof relativePath === 'object' ? relativePath : undefined),
+  };
+};
+
+export const javaTestPackageTemplatesBlock = (relativePath: string | any = '') => {
   relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
   return {
     path: `${SERVER_TEST_SRC_DIR}_package_/${relativePath}`,
