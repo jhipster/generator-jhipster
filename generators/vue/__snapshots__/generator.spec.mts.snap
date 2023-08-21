@@ -1416,13 +1416,13 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "src/microfrontends/entities-menu.component.test.ts": {
+  "src/microfrontends/entities-menu-test.vue": {
     "stateCleared": "modified",
   },
-  "src/microfrontends/entities-menu.test.vue": {
+  "src/microfrontends/entities-menu.component-test.ts": {
     "stateCleared": "modified",
   },
-  "src/microfrontends/entities-router.test.ts": {
+  "src/microfrontends/entities-router-test.ts": {
     "stateCleared": "modified",
   },
   "src/robots.txt": {
@@ -1889,13 +1889,13 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/microfrontends/entities-menu.component.test.ts": {
+  "src/main/webapp2/microfrontends/entities-menu-test.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/microfrontends/entities-menu.test.vue": {
+  "src/main/webapp2/microfrontends/entities-menu.component-test.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/microfrontends/entities-router.test.ts": {
+  "src/main/webapp2/microfrontends/entities-router-test.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp2/robots.txt": {
