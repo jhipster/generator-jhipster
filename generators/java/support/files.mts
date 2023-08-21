@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_SRC_DIR } from '../../generator-constants.mjs';
+
 export const replaceFilePathVariables = (data: any, filePath: string) =>
   filePath?.replace(/_package_/, data.packageName)?.replace(/_\w*/, '');
 
@@ -54,3 +56,27 @@ export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
 
 export const moveToSrcTestResourcesDir = (data: any, filePath: string) =>
   `${data.srcTestResources}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
+
+export const javaPackageMainTemplatesBlock = (relativePath: string | any = '') => {
+  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+  return {
+    path: `${SERVER_MAIN_SRC_DIR}_package_/${relativePath}`,
+    renameTo: (data: any, filePath: string) =>
+      `${data.javaPackageSrcDir}${relativePath}${data.entityJavaPackageFolder ?? ''}${
+        replaceEntityFilePathVariables(data, filePath) ?? ''
+      }`,
+    ...(typeof relativePath === 'object' ? relativePath : undefined),
+  };
+};
+
+export const javaPackageTestTemplatesBlock = (relativePath: string | any = '') => {
+  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+  return {
+    path: `${SERVER_TEST_SRC_DIR}_package_/${relativePath}`,
+    renameTo: (data: any, filePath: string) =>
+      `${data.javaPackageTestDir}${relativePath}${data.entityJavaPackageFolder ?? ''}${
+        replaceEntityFilePathVariables(data, filePath) ?? ''
+      }`,
+    ...(typeof relativePath === 'object' ? relativePath : undefined),
+  };
+};

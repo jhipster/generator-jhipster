@@ -17,38 +17,34 @@
  * limitations under the License.
  */
 import { mergeSections, addSectionsCondition } from '../base/support/index.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.mjs';
-import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import { javaPackageMainTemplatesBlock, javaPackageTestTemplatesBlock } from '../java/support/index.mjs';
+import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
   serverFiles: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
+      ...javaPackageMainTemplatesBlock(),
       templates: ['config/DatabaseConfiguration.java'],
     },
   ],
   reactiveJavaUserManagement: [
     {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
+      ...javaPackageMainTemplatesBlock(),
       templates: ['repository/UserSqlHelper_reactive.java', 'repository/rowmapper/UserRowMapper_reactive.java'],
     },
   ],
   reactiveCommon: [
     {
       condition: generator => generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageSrcDir,
+      ...javaPackageMainTemplatesBlock(),
       templates: ['repository/rowmapper/ColumnConverter_reactive.java', 'repository/EntityManager_reactive.java'],
     },
   ],
   hibernate: [
     {
       condition: generator => !generator.reactive,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
+      ...javaPackageTestTemplatesBlock(),
       templates: [
         'config/timezone/HibernateTimeZoneIT.java',
         'repository/timezone/DateTimeWrapper.java',
@@ -58,8 +54,7 @@ export const sqlFiles = {
   ],
   testContainers: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
+      ...javaPackageTestTemplatesBlock(),
       templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java', 'config/SqlTestContainersSpringContextCustomizerFactory.java'],
     },
     {
@@ -86,8 +81,7 @@ export const h2Files = {
 export const mysqlFiles = {
   serverTestSources: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
+      ...javaPackageTestTemplatesBlock(),
       templates: ['config/MysqlTestContainer.java'],
     },
   ],
@@ -96,8 +90,7 @@ export const mysqlFiles = {
 export const mariadbFiles = {
   serverTestSources: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
+      ...javaPackageTestTemplatesBlock(),
       templates: ['config/MariadbTestContainer.java'],
     },
   ],
@@ -106,8 +99,7 @@ export const mariadbFiles = {
 export const mssqlFiles = {
   serverTestSources: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
+      ...javaPackageTestTemplatesBlock(),
       templates: ['config/MsSqlTestContainer.java'],
     },
   ],
@@ -116,8 +108,7 @@ export const mssqlFiles = {
 export const postgresFiles = {
   serverTestSources: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
+      ...javaPackageTestTemplatesBlock(),
       templates: ['config/PostgreSqlTestContainer.java'],
     },
   ],

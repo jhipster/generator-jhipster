@@ -32,14 +32,14 @@ const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL } = databaseTypes;
 
 export default function prepareEntity(entity) {
   const { entityPackage, packageName, packageFolder, persistClass } = entity;
-  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder = packageFolder } = entity;
+  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder } = entity;
   if (entityPackage) {
     entityJavaPackageFolder = `${entityPackage.replace(/\./g, '/')}/`;
     entityAbsolutePackage = [packageName, entityPackage].join('.');
     entityAbsoluteFolder = path.join(packageFolder, entityJavaPackageFolder);
   }
   entityAbsoluteFolder = normalizePathEnd(entityAbsoluteFolder);
-  entity.entityJavaPackageFolder = entityJavaPackageFolder;
+  entity.entityJavaPackageFolder = entityJavaPackageFolder ?? '';
   entity.entityAbsolutePackage = entityAbsolutePackage;
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
