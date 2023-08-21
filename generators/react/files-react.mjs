@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
 
 export const files = {
   common: [
@@ -43,7 +43,7 @@ export const files = {
   ],
   reactApp: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'app.tsx',
         'index.tsx',
@@ -62,48 +62,48 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['config/translation.ts'],
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['config/websocket-middleware.ts'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['app.scss', '_bootstrap-variables.scss'],
     },
   ],
   reactEntities: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/reducers.ts', 'entities/menu.tsx', 'entities/routes.tsx'],
     },
   ],
   reactMain: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/home/home.tsx', 'modules/login/logout.tsx'],
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/login/login.tsx', 'modules/login/login-modal.tsx'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/login/login-redirect.tsx'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/home/home.scss'],
     },
   ],
   reducers: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/reducers/index.ts',
         'shared/reducers/reducer.utils.ts',
@@ -113,19 +113,19 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/locale.ts'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/user-management.ts'],
     },
   ],
   accountModule: [
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'modules/account/index.tsx',
         'modules/account/activate/activate.tsx',
@@ -143,13 +143,13 @@ export const files = {
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/account/sessions/sessions.tsx', 'modules/account/sessions/sessions.reducer.ts'],
     },
   ],
   adminModule: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'modules/administration/index.tsx',
         'modules/administration/administration.reducer.ts',
@@ -159,7 +159,7 @@ export const files = {
     },
     {
       condition: generator => generator.withAdminUi,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'modules/administration/configuration/configuration.tsx',
         'modules/administration/health/health.tsx',
@@ -170,12 +170,12 @@ export const files = {
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/tracker/tracker.tsx'],
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'modules/administration/user-management/index.tsx',
         'modules/administration/user-management/user-management.tsx',
@@ -187,13 +187,13 @@ export const files = {
     },
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/gateway/gateway.tsx'],
     },
   ],
   reactShared: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         // layouts
         'shared/layout/footer/footer.tsx',
@@ -222,21 +222,21 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/layout/menus/locale.tsx'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/util/url-utils.ts'],
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.communicationSpringWebsocket,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/util/cookie-utils.ts'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/layout/header/header.scss',
         'shared/layout/footer/footer.scss',
@@ -251,18 +251,18 @@ export const files = {
     },
     {
       condition: generator => generator.microfrontend,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['main.tsx', 'shared/error/error-loading.tsx'],
     },
     {
       condition: generator => generator.microfrontend && generator.applicationTypeGateway,
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['microfrontends/entities-menu.tsx', 'microfrontends/entities-routes.tsx'],
     },
   ],
   clientTestFw: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'config/axios-interceptor.spec.ts',
         'config/notification-middleware.spec.ts',
@@ -279,7 +279,7 @@ export const files = {
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         // 'spec/app/modules/account/register/register.spec.tsx',
         'modules/account/register/register.reducer.spec.ts',
@@ -290,17 +290,17 @@ export const files = {
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/user-management/user-management.reducer.spec.ts'],
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/locale.spec.ts'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/user-management.spec.ts'],
     },
   ],

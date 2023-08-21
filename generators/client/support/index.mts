@@ -23,3 +23,4 @@ export * from './prepare-entity.mjs';
 export { default as prepareField } from './prepare-field.mjs';
 export * from './template-utils.mjs';
 export * from './update-languages.mjs';
+export * from './files.mjs';

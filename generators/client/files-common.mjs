@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientSrcBlock } from './utils.mjs';
+import { clientSrcTemplatesBlock } from './support/files.mjs';
 
 export const files = {
   common: [
@@ -28,7 +28,7 @@ export const files = {
       templates: ['webpack/webpack.microfrontend.js.jhi'],
     },
     {
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: [
         'manifest.webapp',
         'content/images/jhipster_family_member_0.svg',
@@ -62,13 +62,13 @@ export const files = {
     },
     {
       condition: generator => generator.enableI18nRTL && !generator.clientFrameworkReact && !generator.clientFrameworkAngular,
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['content/scss/rtl.scss'],
     },
   ],
   swagger: [
     {
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['swagger-ui/index.html', 'swagger-ui/dist/images/throbber.gif'],
     },
   ],

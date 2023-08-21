@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock } from '../client/support/files.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 export const entityFiles = {
   client: [
     {
-      path: `${CLIENT_TEMPLATES_APP_DIR}entities/_entityFolder/`,
-      renameTo: (data, filepath) => `${data.clientSrcDir}app/shared/model/${replaceEntityFilePath(data, filepath)}`,
+      ...clientApplicationTemplatesBlock('shared/model/'),
+      path: `${CLIENT_MAIN_SRC_DIR}app/entities/_entityFolder/`,
       templates: ['_entityModel.model.ts'],
     },
     {
       condition: generator => !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder/_entityFile-details.vue',
         'entities/_entityFolder/_entityFile-details.component.ts',
@@ -41,7 +42,7 @@ export const entityFiles = {
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder/_entityFile-update.vue',
         'entities/_entityFolder/_entityFile-update.component.ts',
