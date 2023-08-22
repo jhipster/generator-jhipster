@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (!customGenerator && !sbs) { _%>
 import chalk from 'chalk';
+<%_ } _%>
 <&_
  // Register sections and max allowed fragments, 0 for unlimited.
   fragments.registerSections({
@@ -27,6 +29,9 @@ import chalk from 'chalk';
 -&>
 <%_ if (!application.dynamic) { _%>
 import <%= generatorClass %>Generator from 'generator-jhipster/generators/<%= jhipsterGenerator %>';
+<%_ } _%>
+<%_ if (priorities.find(priority => priority.name == 'initializing')) { _%>
+import command from './command.mjs';
 <%_ } _%>
 
 <%_ if (application.dynamic) { _%>
@@ -40,22 +45,21 @@ export async function createGenerator(env) {
 <%_ } else { _%>
 export default class extends <%= generatorClass %>Generator {
 <%_ } _%>
-<%_ if (!customGenerator || sbs) { _%>
+<%_ if (sbs) { _%>
+  constructor(args, opts, features) {
+    super(args, opts, { ...features, sbsBlueprint: true });
+  }
+
+<%_ } else if (!customGenerator) { _%>
   constructor(args, opts, features) {
     super(args, opts, features);
 
     if (this.options.help) return;
-  <%_ if (!customGenerator) { _%>
 
     if (!this.jhipsterContext) {
       throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints <%= application.baseName %>')}`);
     }
-    <%_ if (sbs) { _%>
-
-    this.sbsBlueprint = true
-    <%_ } _%>
-  <%_ } _%>
-}
+  }
 
 <%_ } _%>
 <% for (const priority of priorities) { %>
@@ -63,23 +67,30 @@ export default class extends <%= generatorClass %>Generator {
 <& if (!fragments.<%- priority.name %>Section()) { -&>
 
   get [<%= generatorClass %>Generator.<%= priority.constant %>]() {
-    return {
+    return this.<%= priority.asTaskGroup %>({
   <%_ if (!sbs && !customGenerator) { _%>
       ...super.<%= priority.name %>,
   <%_ } _%>
-      async <%= priority.name %>TemplateTask() {
-  <%_ if (priority.name == 'writing') { %>
+      async <%= priority.name %>TemplateTask(
+  <%_ if (priority.name == 'writing') { _%>
+        { application }
+  <%_ } _%>
+      ) {
+  <%_ if (priority.name == 'initializing') { _%>
+        this.parseJHipsterArguments(command.arguments);
+        this.parseJHipsterOptions(command.options);
+  <%_ } else if (priority.name == 'writing') { _%>
         await this.writeFiles({
           sections: {
             files: [
               { templates: ['template-file-<%= jhipsterGenerator %>'] },
             ],
           },
-          context: this,
+          context: application,
         });
-  <%_ } %>
+  <%_ } _%>
       },
-    };
+    });
   }
 <& } -&>
 <% } %>

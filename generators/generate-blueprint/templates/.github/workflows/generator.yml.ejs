@@ -30,5 +30,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: <%- nodeVersion.split('.', 2)[0] %>
+          cache: 'npm'
       - run: npm ci
       - run: npm run test

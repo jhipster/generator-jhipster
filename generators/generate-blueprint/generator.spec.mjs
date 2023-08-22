@@ -100,6 +100,9 @@ describe(`generator - ${generator}`, () => {
       it('should write java files with gradle build tool and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
 {
+  ".blueprint/app/command.mjs": {
+    "stateCleared": "modified",
+  },
   ".blueprint/app/generator.mjs": {
     "stateCleared": "modified",
   },

@@ -16,13 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-module.exports = {
-  recursive: true,
-  reporter: 'spec',
-  slow: 0,
-  timeout: 30000,
-  ui: 'bdd',
-  extension: ['spec.js', 'spec.cjs', 'spec.mjs'],
-  exclude: ['**/resources/**', '**/node_modules/**'],
-  parallel: true,
+/**
+ * @type {import('generator-jhipster').JHipsterCommandDefinition}
+ */
+const command = {
+  options: {},
 };
+
+export default command;
