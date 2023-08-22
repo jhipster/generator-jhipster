@@ -1,6 +1,6 @@
 import Generator from './index.mjs';
 
 // Remove generics support
-type BaseApplicationGenerator = typeof Generator;
+class GeneratorBaseApplication extends Generator {}
 
-export default BaseApplicationGenerator;
+export default GeneratorBaseApplication;
