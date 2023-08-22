@@ -27,20 +27,22 @@ export function addRoute({
   pageTitle,
   modulePath,
   moduleName,
+  children,
 }: {
   needle: string;
   route: string;
   modulePath: string;
   pageTitle?: string;
   moduleName?: string;
+  children?: boolean;
 }) {
   const routePath = `path: '${route}',`;
   // prettier-ignore
   const contentToAdd = `
     {
       ${routePath}${pageTitle ? `
-      data: { pageTitle: '${pageTitle}' },` : ''}
-      loadChildren: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
+      title: '${pageTitle}',` : ''}
+      load${children ? 'Children' : 'Component'}: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
     },`;
   return createNeedleCallback({
     needle,
