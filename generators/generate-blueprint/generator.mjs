@@ -271,7 +271,7 @@ export default class extends BaseGenerator {
             'yeoman-test': `${mainDependencies['yeoman-test']}`,
           },
           engines: {
-            node: `>=${packagejs.engines.node}`,
+            node: packagejs.engines.node,
           },
           imports: {
             '#test-utils': './test/utils.mjs',
