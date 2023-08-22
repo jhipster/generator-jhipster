@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Stream;
 <%_ } _%>
-<%_ if (databaseTypeCassandra || reactive) { _%>
+<%_ if (databaseTypeCassandra || user.primaryKey.hasUUID) { _%>
 
 import java.util.UUID;
 <%_ } _%>

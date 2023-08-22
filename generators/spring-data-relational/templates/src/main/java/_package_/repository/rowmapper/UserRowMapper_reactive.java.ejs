@@ -20,7 +20,9 @@ package <%= packageName %>.repository.rowmapper;
 
 
 import java.time.Instant;
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
+<%_ } _%>
 import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
