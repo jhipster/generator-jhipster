@@ -20,7 +20,16 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
+import {
+  MAIN_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_MAIN_SRC_DIR,
+  SERVER_TEST_RES_DIR,
+  SERVER_TEST_SRC_DIR,
+  TEST_DIR,
+  dockerContainers,
+  javaDependencies,
+} from '../generator-constants.mjs';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.mjs';
 import {
   loadRequiredConfigDerivedProperties,
@@ -28,10 +37,12 @@ import {
   getPomVersionProperties,
   getGradleLibsVersionsProperties,
   addEntitiesOtherRelationships,
+  hibernateSnakeCase,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
+import { normalizePathEnd } from '../base/support/path.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -81,6 +92,23 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         this.loadDerivedServerConfig(application);
+      },
+      prepareForTemplates({ application: app }) {
+        const application: any = app;
+        // Application name modified, using each technology's conventions
+        application.frontendAppName = this.getFrontendAppName(application.baseName);
+        application.mainClass = this.getMainClassName(application.baseName);
+
+        application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
+
+        application.mainJavaDir = SERVER_MAIN_SRC_DIR;
+        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
+        application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
+        application.testJavaDir = SERVER_TEST_SRC_DIR;
+        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
+        application.testResourceDir = SERVER_TEST_RES_DIR;
+        application.srcMainDir = MAIN_DIR;
+        application.srcTestDir = TEST_DIR;
       },
     });
   }

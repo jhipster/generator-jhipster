@@ -204,11 +204,13 @@ export default class extends BaseGenerator {
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
             name: priority,
+            asTaskGroup: `as${upperFirst(priority)}TaskGroup`,
             constant: `${snakeCase(priority).toUpperCase()}`,
           }));
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
-          const jhipsterGenerator = customGenerator ? 'base' : generator;
+          const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
+            js: this.jhipsterConfig.js,
             application: this.application,
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
@@ -248,13 +250,13 @@ export default class extends BaseGenerator {
           type: 'module',
           files: ['generators'],
           scripts: {
-            ejslint: "ejslint generators/**/*.ejs && ejslint generators/**/*.ejs -d '&'",
+            ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            esmocha: 'esmocha generators --no-insight --forbid-only',
             pretest: 'npm run prettier:check && npm run lint',
-            test: 'npm run esmocha',
-            'update-snapshot': 'npm run esmocha -- --update-snapshot',
+            test: 'vitest run',
+            'update-snapshot': 'vitest run --update',
+            vitest: 'vitest',
           },
           dependencies: {
             chalk: `${mainDependencies.chalk}`,
@@ -266,12 +268,12 @@ export default class extends BaseGenerator {
             'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
             'eslint-plugin-import': `${mainDependencies['eslint-plugin-import']}`,
             'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
-            esmocha: `${mainDependencies.esmocha}`,
+            vitest: '0.34.2',
             prettier: `${mainDependencies.prettier}`,
             'yeoman-test': `${mainDependencies['yeoman-test']}`,
           },
           engines: {
-            node: `>=${packagejs.engines.node}`,
+            node: packagejs.engines.node,
           },
           imports: {
             '#test-utils': './test/utils.mjs',

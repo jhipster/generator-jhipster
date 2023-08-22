@@ -98,7 +98,7 @@ import {
   testFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
-import { createBase64Secret, createSecret, normalizePathEnd, createNeedleCallback } from '../base/support/index.mjs';
+import { createBase64Secret, createSecret, createNeedleCallback } from '../base/support/index.mjs';
 import command from './command.mjs';
 import { addJavaAnnotation } from '../java/support/index.mjs';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
@@ -379,21 +379,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const SPRING_BOOT_VERSION = application.javaDependencies['spring-boot'];
         application.addSpringMilestoneRepository =
           ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC');
-
-        // Application name modified, using each technology's conventions
-        application.frontendAppName = this.getFrontendAppName(application.baseName);
-        application.mainClass = this.getMainClassName(application.baseName);
-
-        application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
-
-        application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
-        application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
-        application.testJavaDir = SERVER_TEST_SRC_DIR;
-        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
-        application.testResourceDir = SERVER_TEST_RES_DIR;
-        application.srcMainDir = MAIN_DIR;
-        application.srcTestDir = TEST_DIR;
       },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {

@@ -1,6 +1,6 @@
-import { createHelpers } from 'yeoman-test';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { createHelpers } from 'yeoman-test';
 // eslint-disable-next-line import/no-unresolved
 import { EnvironmentBuilder } from 'generator-jhipster/cli';
 import { createJHipsterLogger } from 'generator-jhipster/generators/base/support';

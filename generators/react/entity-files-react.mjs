@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationBlock } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock } from '../client/support/files.mjs';
 
 export const reactFiles = {
   client: [
     {
       condition: generator => !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder/_entityFile-detail.tsx',
         'entities/_entityFolder/_entityFile.tsx',
@@ -31,20 +31,20 @@ export const reactFiles = {
       ],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       renameTo: data => `${data.clientSrcDir}app/shared/model/${data.entityModelFileName}.model.ts`,
       templates: ['entities/_entityFolder/_entityModel.model.ts'],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/_entityFolder/_entityFile-delete-dialog.tsx', 'entities/_entityFolder/_entityFile-update.tsx'],
     },
   ],
   test: [
     {
       condition: generator => !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/_entityFolder/_entityFile-reducer.spec.ts'],
     },
   ],

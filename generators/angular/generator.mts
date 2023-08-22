@@ -33,6 +33,10 @@ import {
   addToEntitiesMenu,
   translateAngularFilesTransform,
   isTranslatedAngularFile,
+  addRoute,
+  addItemToMenu,
+  addItemToAdminMenu,
+  addIconImport,
 } from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
@@ -88,11 +92,38 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
         application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!;
       },
-      addNeedles({ source }) {
+      addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
           const { application, entities } = param;
           this.addEntitiesToModule({ application, entities });
           this.addEntitiesToMenu({ application, entities });
+        };
+
+        source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
+          this.editFile(
+            `${application.srcMainWebapp}app/admin/admin-routing.module.ts`,
+            addRoute({
+              needle: 'add-admin-route',
+              ...args,
+            }),
+          );
+
+        source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
+          this.editFile(
+            `${application.srcMainWebapp}app/layouts/navbar/navbar.component.html`,
+            addItemToAdminMenu({
+              enableTranslation: application.enableTranslation,
+              jhiPrefix: application.jhiPrefix,
+              ...args,
+            }),
+          );
+          source.addIconImport({ icon: args.icon });
+        };
+
+        source.addIconImport = args => {
+          const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
+          this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
       },
     });

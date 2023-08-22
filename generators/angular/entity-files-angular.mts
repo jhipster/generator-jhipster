@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 import type { GeneratorDefinition } from '../base-application/generator.mjs';
-import { clientApplicationBlock } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock } from '../client/support/files.mjs';
 import CoreGenerator from '../base-core/index.mjs';
 
 export const angularFiles = {
   client: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/_entityFolder/_entityFile.model.ts', 'entities/_entityFolder/_entityFile.test-samples.ts'],
     },
     {
       condition: generator => !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder/_entityFile.routes.ts',
         'entities/_entityFolder/detail/_entityFile-detail.component.html',
@@ -45,7 +45,7 @@ export const angularFiles = {
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder/update/_entityFile-form.service.ts',
         'entities/_entityFolder/update/_entityFile-form.service.spec.ts',

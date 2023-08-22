@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
 
 export const files = {
   common: [
@@ -41,17 +41,17 @@ export const files = {
   ],
   sass: [
     {
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
     },
   ],
   angularApp: [
     {
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['main.ts', 'bootstrap.ts', 'declarations.d.ts'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
     },
   ],
@@ -62,13 +62,13 @@ export const files = {
     },
     {
       condition: generator => generator.microfrontend && generator.applicationTypeGateway,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['core/microfrontend/index.ts'],
     },
   ],
   angularMain: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         // entities
         'entities/entity-navbar-items.ts',
@@ -97,28 +97,28 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['layouts/navbar/active-menu.directive.ts'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['layouts/profiles/page-ribbon.component.scss', 'layouts/navbar/navbar.component.scss', 'home/home.component.scss'],
     },
     // login
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       condition: generator => !generator.authenticationTypeOauth2,
       templates: ['login/login.component.ts', 'login/login.component.html', 'login/login.model.ts'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       condition: generator => generator.authenticationTypeOauth2,
       templates: ['login/logout.model.ts'],
     },
   ],
   angularAccountModule: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       condition: generator => generator.generateUserManagement,
       templates: [
         'account/account.route.ts',
@@ -153,7 +153,7 @@ export const files = {
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'account/sessions/sessions.route.ts',
         'account/sessions/session.model.ts',
@@ -166,7 +166,7 @@ export const files = {
   angularAdminModule: [
     {
       condition: generator => !generator.applicationTypeMicroservice,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/admin-routing.module.ts',
         'admin/docs/docs.component.ts',
@@ -176,7 +176,7 @@ export const files = {
     },
     {
       condition: generator => generator.withAdminUi,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         // admin modules
         'admin/configuration/configuration.component.ts',
@@ -219,12 +219,12 @@ export const files = {
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['sockjs-client.polyfill.ts'],
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/tracker/tracker.component.ts',
         'admin/tracker/tracker.component.html',
@@ -234,7 +234,7 @@ export const files = {
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/user-management/user-management.route.ts',
         'admin/user-management/user-management.model.ts',
@@ -251,7 +251,7 @@ export const files = {
     },
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/gateway/gateway-route.model.ts',
         'admin/gateway/gateway.component.ts',
@@ -262,7 +262,7 @@ export const files = {
   ],
   angularCore: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'core/config/application-config.service.ts',
         'core/config/application-config.service.spec.ts',
@@ -298,23 +298,23 @@ export const files = {
     },
     {
       condition: generator => generator.authenticationTypeJwt,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['core/interceptor/auth.interceptor.ts'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['config/language.constants.ts', 'config/translation.config.ts'],
     },
   ],
   angularShared: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/shared.module.ts',
         'shared/date/index.ts',
@@ -343,7 +343,7 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/language/index.ts',
         'shared/language/translation.module.ts',
@@ -354,7 +354,7 @@ export const files = {
   ],
   angularAuthService: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'core/auth/state-storage.service.ts',
         'shared/auth/has-any-authority.directive.ts',
@@ -366,24 +366,24 @@ export const files = {
     },
     {
       condition: generator => generator.authenticationTypeJwt,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['core/auth/auth-jwt.service.ts', 'core/auth/auth-jwt.service.spec.ts'],
     },
     {
       condition: generator => generator.authenticationUsesCsrf,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['core/auth/auth-session.service.ts'],
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.communicationSpringWebsocket,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['core/auth/csrf.service.ts'],
     },
   ],
   clientTestFw: [
     {
       condition: generator => generator.withAdminUi,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/configuration/configuration.component.spec.ts',
         'admin/configuration/configuration.service.spec.ts',
@@ -397,7 +397,7 @@ export const files = {
       ],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/auth/has-any-authority.directive.spec.ts',
         'core/util/event-manager.service.spec.ts',
@@ -419,12 +419,12 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['shared/language/translate.directive.spec.ts'],
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'account/activate/activate.component.spec.ts',
         'account/activate/activate.service.spec.ts',
@@ -442,12 +442,12 @@ export const files = {
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['login/login.component.spec.ts'],
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/user-management/list/user-management.component.spec.ts',
         'admin/user-management/detail/user-management-detail.component.spec.ts',
@@ -458,7 +458,7 @@ export const files = {
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['account/sessions/sessions.component.spec.ts'],
     },
   ],

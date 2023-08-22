@@ -23,13 +23,13 @@ export const files = {
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
       templates: [
-        '.github/workflows/generator.yml',
         '.eslintrc.json',
-        '.mocharc.cjs',
+        '.github/workflows/generator.yml',
+        '.prettierignore.jhi.blueprint',
         'README.md',
         'test/utils.mjs',
         'tsconfig.json',
-        '.prettierignore.jhi.blueprint',
+        'vitest.config.ts',
       ],
     },
     {
@@ -48,12 +48,16 @@ export const generatorFiles = {
     {
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [{ file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') }],
+      templates: [
+        { file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') },
+        { file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
+      ],
     },
     {
       path: 'generators/generator',
+      condition: ctx => ctx.priorities.find(priority => priority.name === 'initializing'),
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [{ file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') }],
+      templates: [{ file: 'command.mjs', renameTo: ctx => (ctx.js ? 'command.js' : 'command.mjs') }],
     },
     {
       path: 'generators/generator',

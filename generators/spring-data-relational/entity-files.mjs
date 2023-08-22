@@ -16,33 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.mjs';
 
 const sqlFiles = {
   sqlFiles: [
     {
       condition: generator => !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
     },
     {
       condition: generator => !generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
     },
     {
       condition: generator => !generator.reactive && generator.enableHibernateCache,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
     },
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.containsBagRelationships,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: [
         'repository/_EntityClass_RepositoryWithBagRelationships.java',
         'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
@@ -50,26 +45,22 @@ const sqlFiles = {
     },
     {
       condition: generator => generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: ['domain/_PersistClass_.java.jhi.spring_data_reactive'],
     },
     {
       condition: generator => generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: ['domain/_PersistClass_.java.jhi.spring_data_persistable'],
     },
     {
       condition: generator => generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: ['domain/_PersistClass_Callback.java'],
     },
     {
       condition: generator => generator.reactive && !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock(),
       templates: [
         'repository/_EntityClass_RepositoryInternalImpl_reactive.java',
         'repository/_EntityClass_SqlHelper_reactive.java',
@@ -88,8 +79,7 @@ export default async function writeEntitiesTask({ application, entities }) {
         blocks: [
           {
             condition: generator => generator.reactive && generator.requiresPersistableImplementation,
-            path: `${SERVER_MAIN_SRC_DIR}package/`,
-            renameTo: moveToJavaEntityPackageSrcDir,
+            ...javaMainPackageTemplatesBlock(),
             templates: ['domain/_PersistClass_Callback.java'],
           },
         ],
