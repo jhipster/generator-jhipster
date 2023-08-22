@@ -19,30 +19,34 @@
 import type { Entity } from '../../base-application/index.mjs';
 import type { BaseApplication, CommonClientServerApplication } from '../../base-application/types.mjs';
 import { createNeedleCallback } from '../../base/support/needles.mjs';
+import { upperFirstCamelCase } from '../../base/support/string.mjs';
 import { joinCallbacks } from '../../base/support/write-files.mjs';
 
 export function addRoute({
   needle,
   route,
   pageTitle,
+  title,
   modulePath,
   moduleName,
-  children,
+  component,
 }: {
   needle: string;
   route: string;
   modulePath: string;
   pageTitle?: string;
+  title?: string;
   moduleName?: string;
-  children?: boolean;
+  component?: boolean;
 }) {
   const routePath = `path: '${route}',`;
   // prettier-ignore
   const contentToAdd = `
     {
       ${routePath}${pageTitle ? `
-      title: '${pageTitle}',` : ''}
-      load${children ? 'Children' : 'Component'}: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
+      data: { pageTitle: '${pageTitle}' },` : ''}${title ? `
+      title: '${title}',` : ''}
+      load${component ? 'Component' : 'Children'}: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
     },`;
   return createNeedleCallback({
     needle,
@@ -69,6 +73,58 @@ export function addEntitiesRoute({ application, entities }: { application: Commo
     }),
   );
 }
+
+type MenuItem = {
+  jhiPrefix: string;
+  enableTranslation?: boolean;
+  route: string;
+  translationKey?: string;
+  icon?: string;
+  name?: string;
+};
+
+export function addItemToMenu({
+  needle,
+  enableTranslation,
+  jhiPrefix,
+  icon = 'asterisk',
+  route,
+  translationKey,
+  name = '',
+}: MenuItem & { needle: string }) {
+  const routerLink = `routerLink="/${route}"`;
+  const contentToAdd = `
+        <li>
+          <a class="dropdown-item" ${routerLink} routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+            <fa-icon icon="${icon}" [fixedWidth]="true"></fa-icon>
+            <span${enableTranslation ? ` ${jhiPrefix}Translate="${translationKey}"` : ''}>${name}</span>
+          </a>
+        </li>`;
+  return createNeedleCallback({
+    needle,
+    contentToAdd,
+    contentToCheck: routerLink,
+  });
+}
+
+export const addItemToAdminMenu = (menu: MenuItem) =>
+  addItemToMenu({
+    needle: 'add-element-to-admin-menu',
+    ...menu,
+  });
+
+export const addIconImport = ({ icon }: { icon: string }) => {
+  const iconImport = `fa${upperFirstCamelCase(icon)}`;
+  return createNeedleCallback({
+    needle: 'jhipster-needle-add-icon-import',
+    contentToCheck: new RegExp(`\\b${iconImport}\\b`),
+    contentToAdd: (content, { indentPrefix }) =>
+      content.replace(
+        /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
+        `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`,
+      ),
+  });
+};
 
 export function addToEntitiesMenu({ application, entities }: { application: BaseApplication; entities: Entity[] }) {
   const { enableTranslation, jhiPrefix } = application;

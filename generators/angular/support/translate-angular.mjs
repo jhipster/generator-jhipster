@@ -62,7 +62,7 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
  * @param {import('../generator-base.js')} generator reference to the generator
  * @param {string} content html content
  * @param {string} jsKey
- * @returns string with pageTitle replaced
+ * @returns string with jsKey value replaced
  */
 function replaceJSTranslation(getWebappTranslation, content, jsKey) {
   return replaceTranslationKeysWithText(getWebappTranslation, content, `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+)['|"]`, {

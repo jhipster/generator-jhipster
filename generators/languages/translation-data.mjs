@@ -24,6 +24,11 @@ import { clientI18nFiles } from './files.mjs';
 const { get } = _;
 
 export default class TranslationData {
+  control;
+  translations;
+  env;
+  generator;
+
   constructor(generator, control) {
     this.generator = generator;
     this.control = control;
