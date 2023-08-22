@@ -48,15 +48,16 @@ export const generatorFiles = {
     {
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [{ file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') }],
+      templates: [
+        { file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') },
+        { file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
+      ],
     },
     {
       path: 'generators/generator',
+      condition: ctx => ctx.priorities.find(priority => priority.name === 'initializing'),
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [
-        { file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
-        { file: 'command.mjs', renameTo: ctx => (ctx.js ? 'command.js' : 'command.mjs') },
-      ],
+      templates: [{ file: 'command.mjs', renameTo: ctx => (ctx.js ? 'command.js' : 'command.mjs') }],
     },
     {
       path: 'generators/generator',

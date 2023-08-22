@@ -30,7 +30,7 @@ import chalk from 'chalk';
 <%_ if (!application.dynamic) { _%>
 import <%= generatorClass %>Generator from 'generator-jhipster/generators/<%= jhipsterGenerator %>';
 <%_ } _%>
-<%_ if (priorities.find(priority => priority.name == 'initializing')) { _%>
+<%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
 import command from './command.mjs';
 <%_ } _%>
 
@@ -72,14 +72,14 @@ export default class extends <%= generatorClass %>Generator {
       ...super.<%= priority.name %>,
   <%_ } _%>
       async <%= priority.name %>TemplateTask(
-  <%_ if (priority.name == 'writing') { _%>
+  <%_ if (priority.name === 'writing') { _%>
         { application }
   <%_ } _%>
       ) {
-  <%_ if (priority.name == 'initializing') { _%>
+  <%_ if (priority.name === 'initializing') { _%>
         this.parseJHipsterArguments(command.arguments);
         this.parseJHipsterOptions(command.options);
-  <%_ } else if (priority.name == 'writing') { _%>
+  <%_ } else if (priority.name === 'writing') { _%>
         await this.writeFiles({
           sections: {
             files: [
