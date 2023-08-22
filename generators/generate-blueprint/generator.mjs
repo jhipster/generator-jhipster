@@ -254,8 +254,8 @@ export default class extends BaseGenerator {
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
             pretest: 'npm run prettier:check && npm run lint',
-            test: 'vitest -- run',
-            'update-snapshot': 'vitest -- --update',
+            test: 'vitest run',
+            'update-snapshot': 'vitest run --update',
             vitest: 'vitest',
           },
           dependencies: {
