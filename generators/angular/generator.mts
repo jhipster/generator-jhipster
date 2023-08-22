@@ -108,13 +108,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
             }),
           );
 
-        source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle'>) => {
+        source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
           this.editFile(
             `${application.srcMainWebapp}app/layouts/navbar/navbar.component.html`,
             addItemToAdminMenu({
               enableTranslation: application.enableTranslation,
-              ...args,
               jhiPrefix: application.jhiPrefix,
+              ...args,
             }),
           );
           source.addIconImport({ icon: args.icon });
