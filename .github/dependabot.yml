@@ -37,6 +37,18 @@ updates:
         versions: ['>=19']
 
   - package-ecosystem: 'npm'
+    directory: '/generators/generate-blueprint/resources/'
+    schedule:
+      interval: 'daily'
+      time: '12:00'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    labels:
+      - 'blueprint :paw_prints:'
+      - 'theme: dependencies'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'npm'
     directory: '/generators/angular/resources/'
     rebase-strategy: 'auto'
     schedule:

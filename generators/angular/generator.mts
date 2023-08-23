@@ -117,7 +117,9 @@ export default class AngularGenerator extends BaseApplicationGenerator {
               ...args,
             }),
           );
-          source.addIconImport({ icon: args.icon });
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
         };
 
         source.addIconImport = args => {
