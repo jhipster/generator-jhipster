@@ -43,6 +43,7 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
+  jhipsterBootstrap?: boolean;
 };
 
 // eslint-disable-next-line no-use-before-define

@@ -45,6 +45,10 @@ import { GRADLE_VERSION } from '../gradle/constants.mjs';
 import { normalizePathEnd } from '../base/support/path.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
+  constructor(args: any, options: any, features: any) {
+    super(args, options, { jhipsterBootstrap: false, ...features });
+  }
+
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
