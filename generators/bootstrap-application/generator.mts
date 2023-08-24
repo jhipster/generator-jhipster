@@ -37,7 +37,7 @@ const {
 
 export default class BootstrapApplicationGenerator extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
-    super(args, options, features);
+    super(args, options, { jhipsterBootstrap: false, ...features });
 
     if (this.options.help) return;
 

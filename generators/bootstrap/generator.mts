@@ -51,7 +51,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   skipPrettier?: boolean;
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
+    super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
   }
 
   beforeQueue() {

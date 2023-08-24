@@ -22,7 +22,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
-    super(args, options, features);
+    super(args, options, { jhipsterBootstrap: false, ...features });
 
     if (this.options.help) return;
 

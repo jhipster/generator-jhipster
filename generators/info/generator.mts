@@ -29,7 +29,7 @@ import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../bas
 
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { customInstallTask: true, customCommitTask: true, ...features });
+    super(args, options, { jhipsterBootstrap: false, customInstallTask: true, customCommitTask: true, ...features });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
