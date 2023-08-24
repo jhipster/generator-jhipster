@@ -29,7 +29,9 @@ export default class extends BaseGenerator {
   get [BaseGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
       async promptOptions() {
-        await promptSamplesFolder.call(this);
+        if (this.codeWorkspace) {
+          await promptSamplesFolder.call(this);
+        }
       },
     });
   }
