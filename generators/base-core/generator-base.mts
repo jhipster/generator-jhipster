@@ -559,7 +559,10 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     Object.assign(destination, this.prepareDependencies(source));
   }
 
-  loadNodeDependenciesFromPackageJson(destination: Record<string, string>, packageJsonFile: string): void {
+  loadNodeDependenciesFromPackageJson(
+    destination: Record<string, string>,
+    packageJsonFile: string = this.templatePath('../resources/package.json'),
+  ): void {
     const { devDependencies, dependencies } = this.fs.readJSON(packageJsonFile, {}) as any;
     this.loadNodeDependencies(destination, { ...devDependencies, ...dependencies });
   }

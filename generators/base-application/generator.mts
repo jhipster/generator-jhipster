@@ -27,6 +27,7 @@ import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs
 import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 import { SpringBootSourceType } from '../server/types.mjs';
+import { ClientSourceType } from '../client/types.mjs';
 
 const { upperFirst } = _;
 
@@ -62,7 +63,7 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType;
+export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType & ClientSourceType;
 
 export type JHipsterApplication = BaseApplication & Partial<CommonClientServerApplication>;
 

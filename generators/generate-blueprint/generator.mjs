@@ -236,7 +236,7 @@ export default class extends BaseGenerator {
   }
 
   get postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
       packageJson() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
@@ -244,6 +244,10 @@ export default class extends BaseGenerator {
           ...packagejs.dependencies,
           ...packagejs.devDependencies,
         };
+        this.loadNodeDependenciesFromPackageJson(
+          mainDependencies,
+          this.fetchFromInstalledJHipster('generate-blueprint/resources/package.json'),
+        );
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
           keywords: ['yeoman-generator', 'jhipster-blueprint', 'jhipster-7'],
@@ -253,10 +257,10 @@ export default class extends BaseGenerator {
             ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier:check && npm run lint',
+            pretest: 'npm run prettier-check && npm run lint',
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
-            vitest: 'vitest',
+            vitest: mainDependencies.vitest,
           },
           dependencies: {
             chalk: `${mainDependencies.chalk}`,
@@ -268,7 +272,7 @@ export default class extends BaseGenerator {
             'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
             'eslint-plugin-import': `${mainDependencies['eslint-plugin-import']}`,
             'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
-            vitest: '0.34.2',
+            vitest: mainDependencies.vitest,
             prettier: `${mainDependencies.prettier}`,
             'yeoman-test': `${mainDependencies['yeoman-test']}`,
           },
@@ -310,7 +314,7 @@ export default class extends BaseGenerator {
           });
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.POST_WRITING]() {
