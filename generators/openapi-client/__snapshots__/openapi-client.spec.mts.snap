@@ -26,7 +26,7 @@ package.json
     "openapi-client:petstore": "openapi-generator-cli generate -g spring -i petstore-openapi-3.yml -p library=spring-cloud -p apiPackage=com.mycompany.myapp.client.petstore.api -p modelPackage=com.mycompany.myapp.client.petstore.model -p basePackage=com.mycompany.myapp.client -p configPackage=com.mycompany.myapp.client.petstore -p title=petstore -p artifactId=petstore -p supportingFiles=ApiKeyRequestInterceptor.java --skip-validate-spec"
   },
   "dependencies": {
-    "@openapitools/openapi-generator-cli": "2.6.0"
+    "@openapitools/openapi-generator-cli": "2.7.0"
   }
 }
 ",
@@ -82,7 +82,7 @@ package.json
     "openapi-client:petstore": "openapi-generator-cli generate -g spring -i petstore-openapi-3.yml -p library=spring-cloud -p apiPackage=com.mycompany.myapp.client.petstore.api -p modelPackage=com.mycompany.myapp.client.petstore.model -p basePackage=com.mycompany.myapp.client -p configPackage=com.mycompany.myapp.client.petstore -p title=petstore -p artifactId=petstore -p supportingFiles=ApiKeyRequestInterceptor.java --skip-validate-spec"
   },
   "dependencies": {
-    "@openapitools/openapi-generator-cli": "2.6.0"
+    "@openapitools/openapi-generator-cli": "2.7.0"
   }
 }
 ",
@@ -121,7 +121,7 @@ paths:
               schema:
                 type: string
           content:
-            application/json:    
+            application/json:
               schema:
                 $ref: "#/components/schemas/Pets"
         default:

@@ -26,7 +26,7 @@ export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
 export const NODE_VERSION = '18.16.1';
-export const OPENAPI_GENERATOR_CLI_VERSION = '2.6.0';
+export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
 
 export const javaDependencies: Record<string, string> = {
   /**
