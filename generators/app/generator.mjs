@@ -379,8 +379,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
        * At this point every other generator should already be configured, so, enforce defaults fallback.
        */
       saveConfigWithDefaults() {
-        this.setConfigDefaults();
-
         this._validateAppConfiguration();
       },
 
@@ -431,7 +429,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  _validateAppConfiguration(config = this.jhipsterConfig) {
+  _validateAppConfiguration(config = this.jhipsterConfigWithDefaults) {
     if (config.entitySuffix === config.dtoSuffix) {
       throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
     }

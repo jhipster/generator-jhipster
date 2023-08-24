@@ -35,21 +35,27 @@ import {
 } from './internal/needles.mjs';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (this.options.help) return;
-
-    this.config.defaults({
-      buildTool: GRADLE,
-    });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
       await this.composeWithBlueprints(GENERATOR_GRADLE);
     }
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configure() {
+        if (this.jhipsterConfigWithDefaults.buildTool !== GRADLE) {
+          this.config.defaults({
+            buildTool: GRADLE,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get preparing() {

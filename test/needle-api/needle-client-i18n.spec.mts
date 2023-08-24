@@ -20,10 +20,6 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
 
   get [LanguagesGenerator.WRITING]() {
     const customPhaseSteps = {
-      addElementInTranslation() {
-        this.addElementTranslationKey('my_key', 'My Value', 'en');
-        this.addElementTranslationKey('ma_cle', 'Ma Valeur', 'fr');
-      },
       addAdminElementTranslationKey() {
         this.addAdminElementTranslationKey('my_admin_key', 'My Admin Value', 'en');
         this.addAdminElementTranslationKey('ma_cle_admin', 'Ma Valeur Admin', 'fr');

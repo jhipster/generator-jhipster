@@ -20,11 +20,6 @@ import chalk from 'chalk';
 import needleClient from './needle-client.mjs';
 
 export default class extends needleClient {
-  addElementTranslationKey(key: string, value: string, language: string, webappSrcDir: string) {
-    const errorMessage = ' not added as a new entity in the menu.';
-    this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-element', webappSrcDir);
-  }
-
   addAdminElementTranslationKey(key: string, value: string, language: string, webappSrcDir: string) {
     const errorMessage = ' not added as a new entry in the admin menu.';
     this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-admin-element', webappSrcDir);

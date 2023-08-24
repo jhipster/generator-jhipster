@@ -198,12 +198,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       loadConfig() {
         this.parseJHipsterOptions(command.options);
       },
-
-      setupRequiredConfig() {
-        if (!this.jhipsterConfig.applicationType) {
-          this.jhipsterConfig.applicationType = 'monolith';
-        }
-      },
     });
   }
 
@@ -513,7 +507,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entityConfig.incrementalChangelog === undefined) {
           // Keep entity's original incrementalChangelog option.
           entityConfig.incrementalChangelog =
-            this.jhipsterConfig.incrementalChangelog &&
+            application.incrementalChangelog &&
             !existsSync(
               this.destinationPath(
                 `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`,
@@ -706,16 +700,16 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         packageJsonConfigStorage.packaging = application.defaultPackaging;
         packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
-      packageJsonBackendScripts() {
+      packageJsonBackendScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${application.packageName}=OFF`;
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 
-        const buildTool = this.jhipsterConfig.buildTool;
+        const buildTool = application.buildTool;
         let e2ePackage = 'target/e2e';
         if (buildTool === MAVEN) {
-          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
+          const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
             'app:start': './mvnw',
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
@@ -731,7 +725,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === GRADLE) {
-          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp -x webapp_test';
+          const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
           e2ePackage = 'e2e';
           scriptsStorage.set({
             'app:start': './gradlew',
@@ -766,7 +760,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
       packageJsonE2eScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
+        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw';
         // TODO add e2eTests property to application.
         if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);

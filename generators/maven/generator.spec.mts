@@ -22,7 +22,6 @@ import { expect } from 'esmocha';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
-import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import { GENERATOR_MAVEN } from '../generator-list.mjs';
 import MavenGenerator from './generator.mjs';
 
@@ -46,9 +45,6 @@ describe(`generator - ${generator}`, () => {
     it('should generate only maven files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
-    it('should set buildTool config', () => {
-      runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { buildTool: 'maven' } });
-    });
   });
   describe('with empty configuration', () => {
     before(async () => {
@@ -56,9 +52,6 @@ describe(`generator - ${generator}`, () => {
     });
     it('should generate only maven files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
-    });
-    it('should set buildTool config', () => {
-      runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { buildTool: 'maven' } });
     });
   });
 
