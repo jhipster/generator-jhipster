@@ -157,8 +157,8 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      formatSonarProperties() {
-        this.queueTransformStream(createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
+      async formatSonarProperties() {
+        this.queueTransformStream(await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
           name: 'prettifying sonar-project.properties',
           streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('sonar-project.properties') },
         });

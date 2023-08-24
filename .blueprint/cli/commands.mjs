@@ -22,6 +22,10 @@ const defaultCommands = {
     desc: 'Prepare a code-workspace for jhipster development',
     blueprint: '@jhipster/jhipster-dev',
   },
+  'from-issue': {
+    desc: 'Generate a sample from issue',
+    blueprint: '@jhipster/jhipster-dev',
+  },
   'generate-sample': {
     desc: 'Generate a test sample',
     blueprint: '@jhipster/jhipster-dev',
