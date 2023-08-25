@@ -11,7 +11,7 @@ export type ApplicationWithConfig = {
 
 export type JHipsterGeneratorOptions = BaseOptions & {
   applicationWithConfig?: ApplicationWithConfig;
-  positionalArguments: unknown[];
+  positionalArguments?: unknown[];
   jhipsterContext?: any;
   skipYoResolve?: boolean;
   ignoreErrors?: boolean;

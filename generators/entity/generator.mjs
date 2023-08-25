@@ -296,12 +296,12 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get composing() {
-    return {
+    return this.asComposingTaskGroup({
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
+          generatorArgs: this.options.singleEntity ? [this.context.name] : [],
           generatorOptions: {
-            entities: this.options.singleEntity ? [this.context.name] : undefined,
             regenerate: true,
             writeEveryEntity: false,
             composedEntities: [this.context.name],
@@ -310,7 +310,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
           },
         });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {

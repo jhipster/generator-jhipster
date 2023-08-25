@@ -282,7 +282,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
-    const { positionalArguments = [] } = this.options;
+    const { positionalArguments = this._args ?? [] } = this.options;
     const argumentEntries = Object.entries(jhipsterArguments);
     if (positionalArguments.length > argumentEntries.length) {
       throw new Error('More arguments than allowed');
@@ -347,7 +347,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       ...options,
       generatorOptions: {
         ...this.options,
-        positionalArguments: [],
+        positionalArguments: undefined,
         configOptions: this.configOptions,
         ...options?.generatorOptions,
       } as any,
