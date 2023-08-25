@@ -95,124 +95,18 @@ Before you submit your pull request consider the following guidelines:
 - Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed Pull Request
   that relates to your submission.
 - If you want to modify the JHipster generator, read our [Development](DEVELOPMENT.md)
-- Make your changes in a new git branch
-
-  ```shell
-  git checkout -b my-fix-branch main
-  ```
-
-- Create your patch, **including appropriate test cases**.
 - Follow our [Coding Rules](#rules).
-- Generate a new JHipster project, and ensure that all tests pass
-
-  ```shell
-  mvnw verify -Pprod
-  ```
-
-- Test that the new project runs correctly:
-
-  ```shell
-  mvnw spring-boot:run
-  ```
-
-- You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#running-integration-tests-locally)
-
-- Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](#commit-message-format).
-
-  ```shell
-  git commit -a
-  ```
-
-  Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
-
-- Push your branch to GitHub:
-
-  ```shell
-  git push origin my-fix-branch
-  ```
-
 - In GitHub, send a pull request to `jhipster/generator-jhipster:main`.
-- If we suggest changes then
-
-  - Make the required updates.
-  - Re-run the JHipster tests on your sample generated project to ensure tests are still passing.
-  - Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
-
-    ```shell
-    git rebase main -i
-    git push -f
-    ```
+- **Every CI tests must pass**.
 
 That's it! Thank you for your contribution!
-
-#### Resolving merge conflicts ("This branch has conflicts that must be resolved")
-
-Sometimes your PR will have merge conflicts with the upstream repository's main branch. There are several ways to solve this but if not done correctly this can end up as a true nightmare. So here is one method that works quite well.
-
-- First, fetch the latest information from the main
-
-  ```shell
-  git fetch upstream
-  ```
-
-- Rebase your branch against the upstream/main
-
-  ```shell
-  git rebase upstream/main
-  ```
-
-- Git will stop rebasing at the first merge conflict and indicate which file is in conflict. Edit the file, resolve the conflict then
-
-  ```shell
-  git add <the file that was in conflict>
-  git rebase --continue
-  ```
-
-- The rebase will continue up to the next conflict. Repeat the previous step until all files are merged and the rebase ends successfully.
-- Re-run the JHipster tests on your sample generated project to ensure tests are still passing.
-- Force push to your GitHub repository (this will update your Pull Request)
-
-  ```shell
-  git push -f
-  ```
-
-#### After your pull request is merged
-
-After your pull request is merged, you can safely delete your branch and pull the changes
-from the main (upstream) repository:
-
-- Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
-
-  ```shell
-  git push origin --delete my-fix-branch
-  ```
-
-- Check out the main branch:
-
-  ```shell
-  git checkout main -f
-  ```
-
-- Delete the local branch:
-
-  ```shell
-  git branch -D my-fix-branch
-  ```
-
-- Update your main with the latest upstream version:
-
-  ```shell
-  git pull --ff upstream main
-  ```
 
 ## <a name="rules"></a> Coding Rules
 
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
 - All features or bug fixes **must be tested** by one or more tests.
-- Most `generator-jhipster` files **must follow** the eslint and prettier configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
-- Generated project files **must follow** the eslint and prettier configuration defined at the generated project root, which is based on each technology rules.
+- Most files formatting are checked by prettier and eslint.
 - EJS files uses a 2 spaces identation for templates logic and follows the generated file rules for the templating parts.
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
