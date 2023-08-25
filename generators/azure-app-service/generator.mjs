@@ -19,6 +19,7 @@
 /* eslint-disable consistent-return */
 import fs from 'fs';
 import { exec } from 'child_process';
+import os from 'os';
 import chalk from 'chalk';
 import runAsync from 'run-async';
 
@@ -32,7 +33,9 @@ import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenPluginConfiguration } from './templates.mjs';
 
-const { MAVEN } = buildToolTypes;
+const isWin32 = os.platform() === 'win32';
+
+const { MAVEN, GRADLE } = buildToolTypes;
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
 const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
@@ -633,5 +636,33 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`,
 
   get [BaseGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  /**
+   * @private
+   * run a command using the configured Java build tool.
+   *
+   * @param {String} buildTool - maven | gradle
+   * @param {String} profile - dev | prod
+   * @param {String} command - the command (goal/task) to run
+   * @param {Function} cb - callback when build is complete
+   * @returns {object} the command line and its result
+   */
+  runJavaBuildCommand(buildTool, profile, command, cb) {
+    let buildCmd = `mvnw -ntp -DskipTests=true -B ${command}`;
+
+    if (buildTool === GRADLE) {
+      buildCmd = `gradlew -x ${command}`;
+    }
+
+    if (!isWin32) {
+      buildCmd = `./${buildCmd}`;
+    }
+    buildCmd += ` -P${profile}`;
+    this.log.verboseInfo(`Running command: '${chalk.bold(buildCmd)}'`);
+    return {
+      stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+      buildCmd,
+    };
   }
 }

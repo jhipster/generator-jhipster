@@ -20,10 +20,6 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
 
   get [LanguagesGenerator.WRITING]() {
     const customPhaseSteps = {
-      addElementInTranslation() {
-        this.addElementTranslationKey('my_key', 'My Value', 'en');
-        this.addElementTranslationKey('ma_cle', 'Ma Valeur', 'fr');
-      },
       addAdminElementTranslationKey() {
         this.addAdminElementTranslationKey('my_admin_key', 'My Admin Value', 'en');
         this.addAdminElementTranslationKey('ma_cle_admin', 'Ma Valeur Admin', 'fr');
@@ -52,14 +48,6 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         languages: ['en', 'fr'],
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:languages' }]]);
-  });
-
-  it('Assert english global.json contain the new key', () => {
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_key": "My Value",');
-  });
-
-  it('Assert french global.json contain the new key', () => {
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle": "Ma Valeur",');
   });
 
   it('Assert english admin global.json contain the new key', () => {

@@ -29,6 +29,8 @@ import {
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
+import { getDefaultAppName } from '../project-name/support/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -48,6 +50,24 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      defaults() {
+        if (!this.options.reproducible) {
+          this.config.defaults({
+            jhipsterVersion: packageJson.version,
+            baseName: getDefaultAppName(this),
+            creationTimestamp: new Date().getTime(),
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.configuring;
   }
 
   get preparing() {

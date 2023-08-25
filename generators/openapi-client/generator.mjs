@@ -198,4 +198,18 @@ export default class OpenapiClientGenerator extends BaseGenerator {
       additionalContent: other,
     });
   }
+
+  /**
+   * @private
+   * Rewrite the specified file with provided content at the needle location
+   *
+   * @param {string} filePath - path of the source file to rewrite
+   * @param {string} needle - needle to look for where content will be inserted
+   * @param {string} content - content to be written
+   * @returns {boolean} true if the body has changed.
+   */
+  rewriteFile(filePath, needle, content) {
+    const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
+    return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
+  }
 }

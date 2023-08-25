@@ -21,7 +21,6 @@ import path from 'path';
 import fs from 'fs';
 import { exec } from 'child_process';
 import os from 'os';
-import chalk from 'chalk';
 import _ from 'lodash';
 import { type Storage } from 'yeoman-generator';
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
@@ -34,7 +33,6 @@ import {
   parseCreationTimestamp,
   getHipster,
 } from './support/index.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
   getDBTypeFromDBValue,
@@ -68,7 +66,6 @@ import {
   NODE_VERSION,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
@@ -95,18 +92,6 @@ const isWin32 = os.platform() === 'win32';
  * Class the contains the methods that should be refactored and converted to typescript.
  */
 export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGenerator {
-  /**
-   * @private
-   * Add a new element in the "global.json" translations.
-   *
-   * @param {string} key - Key for the menu entry
-   * @param {string} value - Default translated value
-   * @param {string} language - The language to which this translation should be added
-   */
-  addElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
-    this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
-  }
-
   /**
    * @private
    * Add a new element in the admin section of "global.json" translations.
@@ -195,20 +180,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
       this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
     }
     return formatDateForChangelog(now);
-  }
-
-  /**
-   * @private
-   * Rewrite the specified file with provided content at the needle location
-   *
-   * @param {string} filePath - path of the source file to rewrite
-   * @param {string} needle - needle to look for where content will be inserted
-   * @param {string} content - content to be written
-   * @returns {boolean} true if the body has changed.
-   */
-  rewriteFile(filePath, needle, content) {
-    const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
-    return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
   }
 
   /**
@@ -354,34 +325,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
-    return {
-      stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
-      buildCmd,
-    };
-  }
-
-  /**
-   * @private
-   * run a command using the configured Java build tool.
-   *
-   * @param {String} buildTool - maven | gradle
-   * @param {String} profile - dev | prod
-   * @param {String} command - the command (goal/task) to run
-   * @param {Function} cb - callback when build is complete
-   * @returns {object} the command line and its result
-   */
-  runJavaBuildCommand(buildTool, profile, command, cb) {
-    let buildCmd = `mvnw -ntp -DskipTests=true -B ${command}`;
-
-    if (buildTool === GRADLE) {
-      buildCmd = `gradlew -x ${command}`;
-    }
-
-    if (!isWin32) {
-      buildCmd = `./${buildCmd}`;
-    }
-    buildCmd += ` -P${profile}`;
-    this.log.verboseInfo(`Running command: '${chalk.bold(buildCmd)}'`);
     return {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,
@@ -1221,19 +1164,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       pages: [],
     });
     return configWithDefaults;
-  }
-
-  setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
-    const jhipsterVersion = packageJson.version;
-    const baseName = getDefaultAppName(this);
-    const creationTimestamp = new Date().getTime();
-
-    this.config.defaults({
-      ...defaults,
-      jhipsterVersion,
-      baseName,
-      creationTimestamp,
-    });
   }
 
   /**

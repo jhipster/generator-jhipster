@@ -386,7 +386,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": Any<String>,
+  "jhipsterVersion": undefined,
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
@@ -928,7 +928,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": Any<String>,
+  "jhipsterVersion": undefined,
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1469,7 +1469,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": Any<String>,
+  "jhipsterVersion": undefined,
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",

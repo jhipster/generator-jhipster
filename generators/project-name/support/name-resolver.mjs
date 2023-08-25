@@ -22,7 +22,7 @@ import { isReproducible } from '../../base/support/index.mjs';
 
 const getDefaultName = generator => {
   const defaultName = 'jhipster';
-  if (isReproducible(generator)) {
+  if (generator && isReproducible(generator)) {
     return defaultName;
   }
   return /^[a-zA-Z0-9_-]+$/.test(path.basename(process.cwd()))

@@ -31,16 +31,6 @@ import { createPomStorage, type PomStorage } from './support/index.mjs';
 export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   pomStorage!: PomStorage;
 
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    if (this.options.help) return;
-
-    this.config.defaults({
-      buildTool: MAVEN,
-    });
-  }
-
   async beforeQueue() {
     this.pomStorage = createPomStorage(this);
 
@@ -48,6 +38,22 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
       await this.composeWithBlueprints(GENERATOR_MAVEN);
     }
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configure() {
+        if (this.jhipsterConfigWithDefaults.buildTool !== MAVEN) {
+          this.config.defaults({
+            buildTool: MAVEN,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get preparing() {
