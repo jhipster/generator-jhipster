@@ -33,7 +33,7 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
+      issues: write
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
@@ -147,7 +147,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: application
     permissions:
-      pull-requests: write
+      issues: write
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
