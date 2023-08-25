@@ -39,7 +39,7 @@ jobs:
         with:
           issue: ${{ inputs.issue || github.event.issue.id }}
           message: |
-            [Checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            JHipster is [checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
   application:
     name: Check issue ${{ inputs.issue || github.event.issue.id }}
     runs-on: 'ubuntu-20.04'
@@ -110,9 +110,12 @@ jobs:
       - name: 'TESTS: backend'
         id: backend
         run: npm run ci:backend:test --if-present
+        continue-on-error: true
         timeout-minutes: 15
       - name: 'TESTS: frontend'
+        id: frontend
         run: npm run ci:frontend:test --if-present
+        continue-on-error: true
         timeout-minutes: 15
       - name: 'TESTS: packaging'
         run: npm run ci:e2e:package --if-present
@@ -142,7 +145,10 @@ jobs:
     outputs:
       yo-rc: ${{ steps.project.outputs.yo-rc }}
       entities-jdl: ${{ steps.project.outputs.entities-jdl }}
-      result: ${{ steps.project.outputs.result }}
+      application: ${{ steps.project.outputs.result }}
+      frontend-check: ${{ steps.frontend.status }}
+      backend-check: ${{ steps.backend.status }}
+      e2e-check: ${{ steps.e2e.status }}
   result-comment:
     runs-on: ubuntu-latest
     needs: application
@@ -153,7 +159,10 @@ jobs:
         with:
           issue: ${{ inputs.issue || github.event.issue.id }}
           message: |
-            [Sample run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            JHipster has completed the [sample check](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             `.yo-rc.json`: ${{ needs.application.outputs.yo-rc }}
-            `entities jdl`: ${{ needs.application.outputs.entities-jdl }}
-            `application`: ${{ needs.application.outputs.result }}
+            Entities JDL: ${{ needs.application.outputs.entities-jdl }}
+            Application: ${{ needs.application.outputs.application }}
+            Frontend: ${{ needs.application.outputs.frontend }}
+            Backend: ${{ needs.application.outputs.backend }}
+            E2E: ${{ needs.application.outputs.e2e }}
