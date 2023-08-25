@@ -152,6 +152,7 @@ jobs:
   result-comment:
     runs-on: ubuntu-latest
     needs: application
+    if: always()
     permissions:
       issues: write
     steps:
