@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: Issue CI
+name: Issue Check
 on:
   issues:
     types: [reopened]
@@ -31,7 +31,7 @@ permissions:
   contents: read
 jobs:
   applications:
-    name: Issue ${{ inputs.issue || github.event.issue.id }}
+    name: Check issue ${{ inputs.issue || github.event.issue.id }}
     runs-on: 'ubuntu-20.04'
     defaults:
       run:
