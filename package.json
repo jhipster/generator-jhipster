@@ -161,6 +161,7 @@
     "yeoman-generator": "6.0.0-rc.4"
   },
   "devDependencies": {
+    "@actions/core": "1.10.0",
     "@node-loaders/esbuildx": "1.2.0",
     "@types/chai": "4.3.5",
     "@types/glob": "npm:noist@1.0.0",
@@ -192,8 +193,7 @@
     "sort-keys": "5.0.0",
     "typescript": "5.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "8.0.0-rc.1",
-    "@actions/core": "1.10.0"
+    "yeoman-test": "8.0.0-rc.1"
   },
   "engines": {
     "node": "^18.13.0 || >= 20.2.0",
