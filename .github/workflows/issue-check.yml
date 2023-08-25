@@ -37,6 +37,7 @@ jobs:
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
+          issue: ${{ inputs.issue || github.event.issue.id }}
           message: |
             [Checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
   application:
@@ -150,6 +151,7 @@ jobs:
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
+          issue: ${{ inputs.issue || github.event.issue.id }}
           message: |
             [Sample run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             `.yo-rc.json`: ${{ needs.application.outputs.yo-rc }}
