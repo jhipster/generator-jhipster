@@ -16,15 +16,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type JHipsterCommandDefinition } from '../../generators/base/api.mjs';
+import { JHipsterCommandDefinition } from '../../generators/base/api.mjs';
 
 const command: JHipsterCommandDefinition = {
-  arguments: {},
-  options: {
-    samplePath: {
+  arguments: {
+    issue: {
       type: String,
-      description: 'Relative or absolute path',
+    },
+  },
+  options: {
+    owner: {
+      type: String,
+      description: 'Github repository owner',
+      default: 'jhipster',
       scope: 'generator',
+    },
+    repository: {
+      type: String,
+      description: 'Github repository',
+      default: 'generator-jhipster',
+      scope: 'generator',
+    },
+    codeWorkspace: {
+      type: Boolean,
+      description: 'Register to code workspace',
+      default: true,
+      scope: 'generator',
+    },
+    projectFolder: {
+      type: String,
+      description: 'Folder to generate the sample',
+      scope: 'generator',
+      env: 'JHI_FOLDER_APP',
     },
   },
 };

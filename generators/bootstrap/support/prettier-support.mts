@@ -29,7 +29,7 @@ import type CoreGenerator from '../../base-core/index.mjs';
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
-export const createPrettierTransform = function (
+export const createPrettierTransform = async function (
   this: CoreGenerator,
   options: {
     ignoreErrors?: boolean;
@@ -40,6 +40,10 @@ export const createPrettierTransform = function (
     prettierOptions?: prettier.Options;
   } = {},
 ) {
+  // prettier cache is global, generators may execute more than one commit.
+  // In case prettier config is committed to disk at later commits, the cache may be outdated.
+  await prettier.clearConfigCache();
+
   const { ignoreErrors = false, extensions = '*', prettierPackageJson, prettierJava, prettierProperties, prettierOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });

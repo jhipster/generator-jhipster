@@ -287,6 +287,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     if (positionalArguments.length > argumentEntries.length) {
       throw new Error('More arguments than allowed');
     }
+
     argumentEntries.forEach(([argumentName, argumentDef], index) => {
       if (positionalArguments.length > index) {
         const argument = positionalArguments[index];
@@ -296,6 +297,9 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         throw new Error(`Missing required argument ${argumentName}`);
       }
     });
+
+    // Arguments should only be parsed by the root generator, cleanup to don't be forwarded.
+    this.options.positionalArguments = [];
   }
 
   /**

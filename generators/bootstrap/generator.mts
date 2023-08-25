@@ -157,7 +157,7 @@ export default class BootstrapGenerator extends BaseGenerator {
         : [
             createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
             createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
-            createPrettierTransform.call(this, {
+            await createPrettierTransform.call(this, {
               ignoreErrors,
               prettierPackageJson: true,
               prettierJava: !this.jhipsterConfig.skipServer,

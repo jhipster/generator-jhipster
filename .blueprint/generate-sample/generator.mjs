@@ -21,7 +21,7 @@ export default class extends BaseGenerator {
     return this.asPromptingTaskGroup({
       async promptOptions() {
         if (this.global) {
-          promptSamplesFolder.call(this);
+          await promptSamplesFolder.call(this);
         }
       },
     });
@@ -37,7 +37,7 @@ export default class extends BaseGenerator {
         if (this.global) {
           await this.composeWithJHipster('@jhipster/jhipster-dev:code-workspace', {
             generatorOptions: {
-              sampleName: this.sampleName,
+              samplePath: this.sampleName,
             },
           });
         }
