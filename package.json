@@ -192,7 +192,8 @@
     "sort-keys": "5.0.0",
     "typescript": "5.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "8.0.0-rc.1"
+    "yeoman-test": "8.0.0-rc.1",
+    "@actions/core": "1.10.0"
   },
   "engines": {
     "node": "^18.13.0 || >= 20.2.0",
