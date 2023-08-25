@@ -207,17 +207,15 @@ export default class JdlGenerator extends BaseGenerator {
           if (this.applications.length === 0) {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(GENERATOR_ENTITIES, {
-              generatorOptions: {
-                ...generatorOptions,
-                entities: entities.map(entity => entity.name),
-              },
+              generatorArgs: entities.map(entity => entity.name),
+              generatorOptions,
             });
           } else {
             for (const app of this.applications) {
               await this.composeWithJHipster(GENERATOR_ENTITIES, {
+                generatorArgs: app.entities.map(entity => entity.name),
                 generatorOptions: {
                   ...generatorOptions,
-                  entities: app.entities.map(entity => entity.name),
                   destinationRoot: app.folder ? this.destinationPath(app.folder) : undefined,
                 },
               });

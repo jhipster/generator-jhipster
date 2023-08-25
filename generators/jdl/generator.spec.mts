@@ -98,7 +98,7 @@ describe(`generator - ${generator}`, () => {
       it('should compose with entities', () => {
         const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
         expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.objectContaining({ entities: ['Foo'] })]);
+        expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should write expected files', () => {
@@ -123,7 +123,7 @@ describe(`generator - ${generator}`, () => {
       it('should compose with entities', () => {
         const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
         expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.objectContaining({ entities: ['Foo'] })]);
+        expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should write expected files', () => {
@@ -247,7 +247,7 @@ describe(`generator - ${generator}`, () => {
       it('should compose with entities', () => {
         const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
         expect(mock.callCount).toBe(2);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.objectContaining({ entities: ['Bar'] })]);
+        expect(mock.lastCall.args).toStrictEqual([['Bar'], expect.any(Object)]);
       });
       it('should not compose with app', () => {
         const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
