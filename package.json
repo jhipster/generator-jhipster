@@ -169,7 +169,7 @@
     "@types/node": "18.17.9",
     "@types/shelljs": "0.8.12",
     "@types/sinon-chai": "3.2.9",
-    "chai": "4.3.7",
+    "chai": "4.3.8",
     "chokidar": "3.5.3",
     "concurrently": "8.2.1",
     "cpy-cli": "5.0.0",
