@@ -146,9 +146,9 @@ jobs:
       yo-rc: ${{ steps.project.outputs.yo-rc }}
       entities-jdl: ${{ steps.project.outputs.entities-jdl }}
       application: ${{ steps.project.outputs.result }}
-      frontend-check: ${{ steps.frontend.status }}
-      backend-check: ${{ steps.backend.status }}
-      e2e-check: ${{ steps.e2e.status }}
+      frontend-check: ${{ steps.frontend.outcome }}
+      backend-check: ${{ steps.backend.outcome }}
+      e2e-check: ${{ steps.e2e.outcome }}
   result-comment:
     runs-on: ubuntu-latest
     needs: application
@@ -164,6 +164,6 @@ jobs:
             `.yo-rc.json`: ${{ needs.application.outputs.yo-rc }}
             Entities JDL: ${{ needs.application.outputs.entities-jdl }}
             Application: ${{ needs.application.outputs.application }}
-            Frontend: ${{ needs.application.outputs.frontend }}
-            Backend: ${{ needs.application.outputs.backend }}
-            E2E: ${{ needs.application.outputs.e2e }}
+            Frontend check: ${{ needs.application.outputs.frontend-check }}
+            Backend check: ${{ needs.application.outputs.backend-check }}
+            E2E check: ${{ needs.application.outputs.e2e-check }}
