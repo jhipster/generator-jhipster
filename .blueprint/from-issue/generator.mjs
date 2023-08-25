@@ -1,5 +1,5 @@
 import { Octokit } from 'octokit';
-import { setOutput,  } from '@actions/core';
+import { setOutput } from '@actions/core';
 import BaseGenerator from '../../generators/base/index.mjs';
 import command from './command.mjs';
 import { promptSamplesFolder } from '../support.mjs';
