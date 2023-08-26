@@ -142,7 +142,7 @@ jobs:
           name: screenshots-${{ inputs.issue || github.event.issue.number }}
           path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs
-        if: success() || failure()
+        if: always()
         uses: jwalton/gh-docker-logs@v2
     outputs:
       yo-rc: ${{ steps.project.outputs.yo-rc }}
@@ -154,7 +154,7 @@ jobs:
   result-comment:
     runs-on: ubuntu-latest
     needs: application
-    if: always()
+    if: success() || failure()
     permissions:
       issues: write
     steps:
