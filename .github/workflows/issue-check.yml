@@ -20,7 +20,7 @@
 name: Issue Check
 on:
   issues:
-    types: [reopened]
+    types: [reopened, labeled]
   workflow_dispatch:
     inputs:
       issue:
@@ -34,6 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'area: check' }}
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
@@ -42,6 +43,7 @@ jobs:
             JHipster is [checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
   application:
     name: Check issue ${{ inputs.issue || github.event.issue.id }}
+    needs: comment
     runs-on: 'ubuntu-20.04'
     defaults:
       run:
@@ -140,7 +142,7 @@ jobs:
           name: screenshots-${{ inputs.issue || github.event.issue.id }}
           path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs
-        if: always()
+        if: success() || failure()
         uses: jwalton/gh-docker-logs@v2
     outputs:
       yo-rc: ${{ steps.project.outputs.yo-rc }}
