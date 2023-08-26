@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'area: check' }}
+    if: "${{ github.event.action != 'labeled' || github.event.label.name == 'area: check' }}"
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
