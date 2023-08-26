@@ -38,11 +38,11 @@ jobs:
     steps:
       - uses: mshick/add-pr-comment@v2.8.1
         with:
-          issue: ${{ inputs.issue || github.event.issue.id }}
+          issue: ${{ inputs.issue || github.event.issue.number }}
           message: |
             JHipster is [checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
   application:
-    name: Check issue ${{ inputs.issue || github.event.issue.id }}
+    name: Check issue ${{ inputs.issue || github.event.issue.number }}
     needs: comment
     runs-on: 'ubuntu-20.04'
     defaults:
@@ -100,7 +100,7 @@ jobs:
         run: $JHI_SCRIPTS/10-install-jhipster.sh
       - name: 'GENERATION: project'
         id: project
-        run: jhipster from-issue ${{ inputs.issue || github.event.issue.id }} --no-code-workspace
+        run: jhipster from-issue ${{ inputs.issue || github.event.issue.number }} --no-code-workspace
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
@@ -133,13 +133,13 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always() && steps.backend.outcome == 'failure'
         with:
-          name: log-${{ inputs.issue || github.event.issue.id }}
+          name: log-${{ inputs.issue || github.event.issue.number }}
           path: ${{ steps.setup.outputs.application-path }}/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v3
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ inputs.issue || github.event.issue.id }}
+          name: screenshots-${{ inputs.issue || github.event.issue.number }}
           path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs
         if: success() || failure()
@@ -158,9 +158,22 @@ jobs:
     permissions:
       issues: write
     steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
+            github.rest.issues.listLabelsOnIssue({...issue}).then(response => {
+              const labels = response.data
+              for (const label of labels) {
+                  if (label.name == 'area: check') {
+                      github.rest.issues.removeLabel({...issue, name: label.name})
+                  }
+              }
+            })
       - uses: mshick/add-pr-comment@v2.8.1
         with:
-          issue: ${{ inputs.issue || github.event.issue.id }}
+          issue: ${{ inputs.issue || github.event.issue.number }}
           message: |
             JHipster has completed the [sample check](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             `.yo-rc.json`: ${{ needs.application.outputs.yo-rc }}
