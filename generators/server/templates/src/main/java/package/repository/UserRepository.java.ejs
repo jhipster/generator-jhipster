@@ -288,7 +288,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 }
 <%_ } else if (databaseTypeSql && reactive) { _%>
 @Repository
-public interface UserRepository extends R2dbcRepository<<%= user.persistClass %>, <% if (authenticationTypeOauth2) { %>String<% } else { %>Long<% } %>>, UserRepositoryInternal {
+public interface UserRepository extends R2dbcRepository<<%= user.persistClass %>, <% if (authenticationTypeOauth2) { %>String<% } else { %><%= user.primaryKey.type %><% } %>>, UserRepositoryInternal {
 
   <%_ if (!authenticationTypeOauth2) { _%>
     Mono<<%= user.persistClass %>> findOneByActivationKey(String activationKey);
