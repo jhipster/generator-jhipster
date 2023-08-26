@@ -1,4 +1,5 @@
 import { Octokit } from 'octokit';
+import { setOutput } from '@actions/core';
 import BaseGenerator from '../../generators/base/index.mjs';
 import command from './command.mjs';
 import { promptSamplesFolder } from '../support.mjs';
@@ -7,6 +8,15 @@ import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.mj
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+
+const YO_RC_OUTPUT = 'yo-rc';
+const ENTITIES_JDL_OUTPUT = 'entities-jdl';
+const RESULT_OUTPUT = 'result';
+
+const BLANK = 'blank';
+const VALID = 'valid';
+const ERROR = 'error';
+const SUCCESS = 'successfully generated';
 
 export default class extends BaseGenerator {
   issue;
@@ -53,9 +63,19 @@ export default class extends BaseGenerator {
         let match;
         while ((match = regexp.exec(issue.data.body)) !== null) {
           if (match.groups.title.includes('.yo-rc.json file')) {
-            this.yoRcContent = JSON.parse(match.groups.body);
+            try {
+              if (match.groups.body) {
+                this.yoRcContent = JSON.parse(match.groups.body);
+                setOutput(YO_RC_OUTPUT, VALID);
+              } else {
+                setOutput(YO_RC_OUTPUT, BLANK);
+              }
+            } catch {
+              setOutput(YO_RC_OUTPUT, ERROR);
+            }
           } else if (match.groups.title.includes('JDL entity definitions')) {
             this.jdlEntities = match.groups.body?.trim();
+            setOutput(ENTITIES_JDL_OUTPUT, this.jdlEntities ? VALID : BLANK);
           }
         }
 
@@ -80,17 +100,23 @@ export default class extends BaseGenerator {
     return this.asEndTaskGroup({
       async generateSample() {
         if (this.jdlEntities) {
-          await this.runNonInteractive({
-            cwd: this.projectFolder,
-            inline: this.jdlEntities,
-            generatorOptions: {
-              jsonOnly: true,
-            },
-          });
+          try {
+            await this.runNonInteractive({
+              cwd: this.projectFolder,
+              inline: this.jdlEntities,
+              generatorOptions: {
+                jsonOnly: true,
+              },
+            });
+          } catch (error) {
+            setOutput(ENTITIES_JDL_OUTPUT, ERROR);
+            throw error;
+          }
         }
         if (this.yoRcContent) {
           await this.runNonInteractive({ cwd: this.projectFolder, generatorOptions: { withEntities: true } });
         }
+        setOutput(RESULT_OUTPUT, SUCCESS);
 
         if (this.codeWorkspace) {
           await this.composeWithJHipster('@jhipster/jhipster-dev:code-workspace', {
