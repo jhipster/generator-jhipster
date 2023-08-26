@@ -91,7 +91,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-<%_ if (user.primaryKey.hasUUID) { _%>
+<%_ if (user.primaryKey.hasUUID || (databaseTypeSql && reactive && requiresPersistableImplementation)) { _%>
 import java.util.UUID;
 <%_ } _%>
 
