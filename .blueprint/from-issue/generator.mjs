@@ -13,10 +13,10 @@ const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';
 const RESULT_OUTPUT = 'result';
 
-const BLANK = 'Blank';
-const OK = 'Ok';
-const ERROR = 'Error';
-const SUCCESS = 'Successfully generated';
+const BLANK = 'blank';
+const OK = 'ok';
+const ERROR = 'error';
+const SUCCESS = 'successfully generated';
 
 export default class extends BaseGenerator {
   issue;
