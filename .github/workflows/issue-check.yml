@@ -158,6 +158,19 @@ jobs:
     permissions:
       issues: write
     steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
+            github.rest.issues.listLabelsOnIssue({...issue}).then(response => {
+              const labels = response.data
+              for (const label of labels) {
+                  if (label.name == 'area: check') {
+                      github.rest.issues.removeLabel({...issue, name: label.name})
+                  }
+              }
+            })
       - uses: mshick/add-pr-comment@v2.8.1
         with:
           issue: ${{ inputs.issue || github.event.issue.number }}
