@@ -91,7 +91,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-<%_ if (user.primaryKey.hasUUID || (databaseTypeSql && reactive && requiresPersistableImplementation)) { _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -134,7 +134,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<UUID><% } %> {
+public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
 
     private static final long serialVersionUID = 1L;
 
