@@ -14,7 +14,7 @@ const ENTITIES_JDL_OUTPUT = 'entities-jdl';
 const RESULT_OUTPUT = 'result';
 
 const BLANK = 'blank';
-const OK = 'ok';
+const VALID = 'valid';
 const ERROR = 'error';
 const SUCCESS = 'successfully generated';
 
@@ -66,7 +66,7 @@ export default class extends BaseGenerator {
             try {
               if (match.groups.body) {
                 this.yoRcContent = JSON.parse(match.groups.body);
-                setOutput(YO_RC_OUTPUT, OK);
+                setOutput(YO_RC_OUTPUT, VALID);
               } else {
                 setOutput(YO_RC_OUTPUT, BLANK);
               }
@@ -75,7 +75,7 @@ export default class extends BaseGenerator {
             }
           } else if (match.groups.title.includes('JDL entity definitions')) {
             this.jdlEntities = match.groups.body?.trim();
-            setOutput(ENTITIES_JDL_OUTPUT, this.jdlEntities ? OK : BLANK);
+            setOutput(ENTITIES_JDL_OUTPUT, this.jdlEntities ? VALID : BLANK);
           }
         }
 
