@@ -584,21 +584,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/languages/templates/template-file-languages.ejs": {
     "stateCleared": "modified",
   },
-  "generators/liquibase-changelogs/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/templates/template-file-liquibase-changelogs.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/liquibase/command.mjs": {
     "stateCleared": "modified",
   },

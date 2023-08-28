@@ -41,7 +41,6 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_KUBERNETES_KNATIVE": "kubernetes-knative",
   "GENERATOR_LANGUAGES": "languages",
   "GENERATOR_LIQUIBASE": "liquibase",
-  "GENERATOR_LIQUIBASE_CHANGELOGS": "liquibase-changelogs",
   "GENERATOR_MAVEN": "maven",
   "GENERATOR_OPENAPI_CLIENT": "openapi-client",
   "GENERATOR_OPENSHIFT": "openshift",

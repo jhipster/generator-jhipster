@@ -1,7 +1,7 @@
 import { expect } from 'esmocha';
 import formatAsLiquibaseRemarks from './formatting.mjs';
 
-describe('generator - liquibase-changelogs - support - formatting', () => {
+describe('generator - liquibase - support - formatting', () => {
   describe('formatAsLiquibaseRemarks', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {

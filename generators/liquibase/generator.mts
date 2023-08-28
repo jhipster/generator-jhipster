@@ -17,26 +17,24 @@
  * limitations under the License.
  */
 import fs from 'fs';
+import _ from 'lodash';
 
-import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import BaseEntityChangesGenerator from '../base-entity-changes/index.mjs';
+import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
 import {
   prepareField as prepareFieldForLiquibase,
   postPrepareEntity,
-  relationshipEquals,
-  relationshipNeedsForeignKeyRecreationOnly,
   prepareRelationshipForLiquibase,
+  liquibaseComment,
 } from './support/index.mjs';
-import { addEntitiesOtherRelationships, prepareEntity as prepareEntityForServer } from '../server/support/index.mjs';
+import { prepareEntity as prepareEntityForServer } from '../server/support/index.mjs';
 import {
-  loadEntitiesOtherSide,
   prepareEntityPrimaryKeyForTemplates,
   prepareRelationship,
   prepareField,
   prepareEntity,
   loadRequiredConfigIntoEntity,
-  loadEntitiesAnnotations,
 } from '../base-application/support/index.mjs';
 import mavenPlugin from './support/maven-plugin.mjs';
 import {
@@ -45,16 +43,17 @@ import {
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.mjs';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.mjs';
+import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.mjs';
+import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 
-const BASE_CHANGELOG = {
-  addedFields: [],
-  removedFields: [],
-  addedRelationships: [],
-  removedRelationships: [],
-  relationshipsToRecreateForeignKeysOnly: [],
-};
-export default class LiquibaseGenerator extends BaseApplicationGenerator {
+const {
+  CommonDBTypes: { LONG: TYPE_LONG },
+} = fieldTypes;
+
+export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   recreateInitialChangelog: boolean;
+  numberOfRows: number;
+  databaseChangelogs: any[] = [];
 
   constructor(args: any, options: any, features: any) {
     super(args, options, { skipParseOptions: false, ...features });
@@ -66,6 +65,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
 
     this.recreateInitialChangelog = this.options.recreateInitialChangelog ?? false;
+    this.numberOfRows = 10;
   }
 
   async beforeQueue() {
@@ -78,8 +78,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
-        application.liquibaseDefaultSchemaName =
-          application.databaseTypeSql && application.devDatabaseTypeMysql && application.baseName ? application.baseName : '';
+        application.liquibaseDefaultSchemaName = '';
       },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
@@ -102,7 +101,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [BaseEntityChangesGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -116,7 +115,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+  get [BaseEntityChangesGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
@@ -128,7 +127,7 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+  get [BaseEntityChangesGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
@@ -140,43 +139,90 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+  get [BaseEntityChangesGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {
     return this.asDefaultTaskGroup({
-      async calculateChangelogs({ application, entities }) {
-        if (!application.databaseTypeSql || this.options.skipDbChangelog) {
+      async calculateChangelogs({ application, entities, entityChanges }) {
+        if (!application.databaseTypeSql || this.options.skipDbChangelog || !entityChanges) {
           return;
         }
+
+        for (const databaseChangelog of entityChanges) {
+          if (!databaseChangelog.newEntity) {
+            // Previous entities are not prepared using default jhipster priorities.
+            // Prepare them.
+            const { previousEntity: entity } = databaseChangelog;
+            loadRequiredConfigIntoEntity(entity, this.jhipsterConfigWithDefaults);
+            prepareEntity(entity, this, application);
+            prepareEntityForServer(entity);
+            if (!entity.embedded && !entity.primaryKey) {
+              prepareEntityPrimaryKeyForTemplates(entity, this);
+            }
+            for (const field of entity.fields ?? []) {
+              prepareField(entity, field, this);
+              prepareFieldForLiquibase(entity, field);
+            }
+            for (const relationship of entity.relationships ?? []) {
+              prepareRelationship(entity, relationship, this, true);
+              prepareRelationshipForLiquibase(entity, relationship);
+            }
+            postPrepareEntity({ application, entity });
+          }
+        }
+
         const entitiesToWrite =
           this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
-        const diffs = this._generateChangelogFromFiles(application);
+        // Write only specified entities changelogs.
+        const changes = entityChanges.filter(
+          databaseChangelog => entitiesToWrite!.length === 0 || entitiesToWrite!.includes(databaseChangelog.entityName),
+        );
 
-        for (const [fieldChanges] of diffs) {
-          if (fieldChanges.type === 'entity-new') {
-            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
-          }
-          if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
-            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, fieldChanges);
+        for (const databaseChangelog of changes) {
+          if (databaseChangelog.newEntity) {
+            this.databaseChangelogs.push(this.prepareChangelog({ databaseChangelog, application }));
+          } else if (databaseChangelog.addedFields.length > 0 || databaseChangelog.removedFields.length > 0) {
+            this.databaseChangelogs.push(
+              this.prepareChangelog({
+                databaseChangelog: {
+                  ...databaseChangelog,
+                  fieldChangelog: true,
+                  addedRelationships: [],
+                  removedRelationships: [],
+                  relationshipsToRecreateForeignKeysOnly: [],
+                },
+                application,
+              }),
+            );
           }
         }
-        // eslint-disable-next-line no-unused-vars
-        for (const [_fieldChanges, relationshipChanges] of diffs) {
+        // Relationships needs to be added later to make sure every related field is already added.
+        for (const databaseChangelog of changes) {
           if (
-            relationshipChanges &&
-            relationshipChanges.incremental &&
-            (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
+            databaseChangelog.incremental &&
+            (databaseChangelog.addedRelationships.length > 0 || databaseChangelog.removedRelationships.length > 0)
           ) {
-            await this._composeWithIncrementalChangelogProvider(entitiesToWrite, relationshipChanges);
+            this.databaseChangelogs.push(
+              this.prepareChangelog({
+                databaseChangelog: {
+                  ...databaseChangelog,
+                  relationshipChangelog: true,
+                  addedFields: [],
+                  removedFields: [],
+                },
+                application,
+              }),
+            );
           }
         }
+        this.databaseChangelogs = this.databaseChangelogs.filter(Boolean);
       },
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [BaseEntityChangesGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -195,8 +241,20 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [BaseEntityChangesGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      writeChangelogs() {
+        return Promise.all(this.databaseChangelogs.map(databaseChangelog => this.writeChangelog({ databaseChangelog })));
+      },
+    });
+  }
+
+  get [BaseEntityChangesGenerator.WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting() {
@@ -331,150 +389,279 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [BaseEntityChangesGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      postWriteChangelogs({ source }) {
+        return Promise.all(this.databaseChangelogs.map(databaseChangelog => this.postWriteChangelog({ source, databaseChangelog })));
+      },
+    });
+  }
+
+  get [BaseEntityChangesGenerator.POST_WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   /* ======================================================================== */
   /* private methods use within generator                                     */
   /* ======================================================================== */
 
-  _composeWithIncrementalChangelogProvider(entities: any[], databaseChangelog: any) {
-    const skipWriting = entities!.length !== 0 && !entities!.includes(databaseChangelog.entityName);
-    return this.composeWithJHipster(GENERATOR_LIQUIBASE_CHANGELOGS, {
-      generatorOptions: {
-        databaseChangelog,
-        skipWriting,
-      } as any,
-    });
+  isChangelogNew({ entityName, changelogDate }) {
+    return !fs.existsSync(
+      this.destinationPath(`src/main/resources/config/liquibase/changelog/${changelogDate}_added_entity_${entityName}.xml`),
+    );
   }
 
   /**
-   * Generate changelog from differences between the liquibase entity and current entity.
+   * Write files for new entities.
    */
-  _generateChangelogFromFiles(application: any) {
-    const oldEntitiesConfig = Object.fromEntries(
-      this.getExistingEntityNames()
-        .filter(entityName => fs.existsSync(this.getEntityConfigPath(entityName)))
-        .map(entityName => [
-          entityName,
-          { name: entityName, ...JSON.parse(fs.readFileSync(this.getEntityConfigPath(entityName)).toString()) },
-        ]),
-    );
-
-    if (application.generateBuiltInUserEntity) {
-      const user = this.sharedData.getEntity('User');
-      oldEntitiesConfig.User = user;
+  _writeLiquibaseFiles({ context: writeContext, changelogData }) {
+    const promises: any[] = [];
+    const context = {
+      ...writeContext,
+      skipFakeData: changelogData.skipFakeData,
+      fields: changelogData.allFields,
+      allFields: changelogData.allFields,
+      relationships: changelogData.relationships,
+    };
+    // Write initial liquibase files
+    promises.push(this.writeFiles({ sections: addEntityFiles, context }));
+    if (!changelogData.skipFakeData) {
+      promises.push(this.writeFiles({ sections: fakeFiles, context }));
     }
 
-    const entities = Object.values(oldEntitiesConfig);
-    loadEntitiesAnnotations(entities);
-    loadEntitiesOtherSide(entities);
-    addEntitiesOtherRelationships(entities);
+    return Promise.all(promises);
+  }
 
-    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
-      loadRequiredConfigIntoEntity(entity, this.jhipsterConfigWithDefaults);
-      prepareEntity(entity, this, application);
-      prepareEntityForServer(entity);
-      if (!entity.embedded && !entity.primaryKey) {
-        prepareEntityPrimaryKeyForTemplates(entity, this);
-      }
-      for (const field of entity.fields ?? []) {
-        prepareField(entity, field, this);
-        prepareFieldForLiquibase(entity, field);
-      }
-      for (const relationship of entity.relationships ?? []) {
-        prepareRelationship(entity, relationship, this, true);
-        prepareRelationshipForLiquibase(entity, relationship);
-      }
-      postPrepareEntity({ application, entity });
+  /**
+   * Write files for new entities.
+   */
+  _addLiquibaseFilesReferences({ entity, databaseChangelog, source }) {
+    const fileName = `${databaseChangelog.changelogDate}_added_entity_${entity.entityClass}`;
+    source.addLiquibaseChangelog({ changelogName: fileName, section: entity.incremental ? 'incremental' : 'base' });
+
+    if (entity.anyRelationshipIsOwnerSide) {
+      const constFileName = `${databaseChangelog.changelogDate}_added_entity_constraints_${entity.entityClass}`;
+      source.addLiquibaseChangelog({ changelogName: constFileName, section: entity.incremental ? 'incremental' : 'constraints' });
+    }
+  }
+
+  /**
+   * Write files for updated entities.
+   */
+  _writeUpdateFiles({ context: writeContext, changelogData }) {
+    const {
+      addedFields,
+      allFields,
+      removedFields,
+      addedRelationships,
+      removedRelationships,
+      hasFieldConstraint,
+      hasRelationshipConstraint,
+      shouldWriteAnyRelationship,
+      relationshipsToRecreateForeignKeysOnly,
+    } = changelogData;
+
+    const context = {
+      ...writeContext,
+      skipFakeData: changelogData.skipFakeData,
+      addedFields,
+      removedFields,
+      fields: addedFields,
+      allFields,
+      hasFieldConstraint,
+      addedRelationships,
+      removedRelationships,
+      relationships: addedRelationships,
+      hasRelationshipConstraint,
+      shouldWriteAnyRelationship,
+      relationshipsToRecreateForeignKeysOnly,
+    };
+
+    const promises: Promise<any>[] = [];
+    promises.push(this.writeFiles({ sections: updateEntityFiles, context }));
+
+    if (!changelogData.skipFakeData && (changelogData.addedFields.length > 0 || shouldWriteAnyRelationship)) {
+      promises.push(this.writeFiles({ sections: fakeFiles, context }));
+      promises.push(this.writeFiles({ sections: updateMigrateFiles, context }));
     }
 
-    // Compare entity changes and create changelogs
-    return this.getExistingEntityNames().map(entityName => {
-      const newConfig: any = this.sharedData.getEntity(entityName);
-      const newFields: any[] = (newConfig.fields || []).filter((field: any) => !field.transient);
-      const newRelationships: any[] = newConfig.relationships || [];
+    if (hasFieldConstraint || shouldWriteAnyRelationship) {
+      promises.push(this.writeFiles({ sections: updateConstraintsFiles, context }));
+    }
+    return Promise.all(promises);
+  }
 
-      if (
-        this.recreateInitialChangelog ||
-        !application.incrementalChangelog ||
-        !oldEntitiesConfig[entityName] ||
-        !fs.existsSync(
-          this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`),
-        )
-      ) {
-        return [
-          {
-            ...BASE_CHANGELOG,
-            incremental: newConfig.incrementalChangelog,
-            changelogDate: newConfig.changelogDate,
-            type: 'entity-new',
-            entityName,
-          },
-        ];
-      }
-      (this as any)._debug(`Calculating diffs for ${entityName}`);
+  /**
+   * Write files for updated entities.
+   */
+  _addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source }) {
+    source.addLiquibaseIncrementalChangelog({ changelogName: `${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}` });
 
-      const oldConfig: any = oldEntitiesConfig[entityName];
+    if (!changelogData.skipFakeData && (changelogData.addedFields.length > 0 || changelogData.shouldWriteAnyRelationship)) {
+      source.addLiquibaseIncrementalChangelog({
+        changelogName: `${databaseChangelog.changelogDate}_updated_entity_migrate_${entity.entityClass}`,
+      });
+    }
 
-      const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
-      const oldFieldNames: string[] = oldFields.filter(field => !field.id).map(field => field.fieldName);
-      const newFieldNames: string[] = newFields.filter(field => !field.id).map(field => field.fieldName);
+    if (changelogData.hasFieldConstraint || changelogData.shouldWriteAnyRelationship) {
+      source.addLiquibaseIncrementalChangelog({
+        changelogName: `${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}`,
+      });
+    }
+  }
 
-      // Calculate new fields
-      const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
-      const addedFields = addedFieldNames.map(fieldName => newFields.find(field => fieldName === field.fieldName));
-      // Calculate removed fields
-      const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
-      const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName));
+  /**
+   * @private
+   * Format As Liquibase Remarks
+   *
+   * @param {string} text - text to format
+   * @param {boolean} addRemarksTag - add remarks tag
+   * @returns formatted liquibase remarks
+   */
+  formatAsLiquibaseRemarks(text, addRemarksTag = false) {
+    return liquibaseComment(text, addRemarksTag);
+  }
 
-      const oldRelationships: any[] = oldConfig.relationships || [];
+  prepareChangelog({ databaseChangelog, application }) {
+    if (!databaseChangelog.changelogDate) {
+      databaseChangelog.changelogDate = this.dateFormatForLiquibase();
+    }
+    const entity = databaseChangelog.entity;
 
-      // Calculate changed/newly added relationships
-      const addedRelationships = newRelationships.filter(
-        newRelationship =>
-          // id changes are not supported
-          !newRelationship.id &&
-          // check if the same relationship wasn't already part of the old config
-          !oldRelationships.some(oldRelationship => relationshipEquals(oldRelationship, newRelationship)),
-      );
+    if (entity.skipServer) {
+      return undefined;
+    }
 
-      // Calculate to be removed relationships
-      const removedRelationships = oldRelationships.filter(
-        oldRelationship =>
-          // id changes are not supported
-          !oldRelationship.id &&
-          // check if there are relationships not anymore in the new config
-          !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship)),
-      );
+    // eslint-disable-next-line no-nested-ternary
+    const entityChanges = databaseChangelog.changelogData;
+    entityChanges.skipFakeData = application.skipFakeData || entity.skipFakeData;
 
-      // calcualte relationships that only need a foreign key recreation from the ones that are added
-      // we need both the added and the removed ones here
-      const relationshipsToRecreateForeignKeysOnly = addedRelationships
-        .filter(addedRelationship =>
-          removedRelationships.some(removedRelationship =>
-            relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship),
-          ),
-        )
-        .concat(
-          removedRelationships.filter(removedRelationship =>
-            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship)),
-          ),
-        );
+    entityChanges.allFields = entity.fields.filter(field => !field.transient);
 
-      return [
-        { ...BASE_CHANGELOG, incremental: true, type: 'entity-update', entityName, addedFields, removedFields },
-        {
-          ...BASE_CHANGELOG,
-          incremental: true,
-          type: 'entity-update',
-          entityName,
-          addedRelationships,
-          removedRelationships,
-          relationshipsToRecreateForeignKeysOnly,
-        },
-      ];
+    if (databaseChangelog.newEntity) {
+      entityChanges.fields = entityChanges.allFields;
+    } else {
+      entityChanges.addedFields = databaseChangelog.addedFields.filter(field => !field.transient);
+      entityChanges.removedFields = databaseChangelog.removedFields.filter(field => !field.transient);
+    }
+
+    const seed = `${entity.entityClass}-liquibase`;
+    this.resetEntitiesFakeData(seed);
+
+    entity.liquibaseFakeData = [];
+
+    // fakeDataCount must be limited to the size of required unique relationships.
+    Object.defineProperty(entity, 'fakeDataCount', {
+      get: () => {
+        const uniqueRelationships = entity.relationships.filter(rel => rel.unique && (rel.relationshipRequired || rel.id));
+        return _.min([entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
+      },
+      configurable: true,
     });
+
+    for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
+      const rowData = {};
+      const fields = databaseChangelog.newEntity
+        ? // generate id fields first to improve reproducibility
+          [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
+        : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
+      fields.forEach(field => {
+        if (field.derived) {
+          Object.defineProperty(rowData, field.fieldName, {
+            get: () => {
+              if (!field.derivedEntity.liquibaseFakeData || rowNumber >= field.derivedEntity.liquibaseFakeData.length) {
+                return undefined;
+              }
+              return field.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
+            },
+          });
+          return;
+        }
+        let data;
+        if (field.id && field.fieldType === TYPE_LONG) {
+          data = rowNumber + 1;
+        } else {
+          data = field.generateFakeData();
+        }
+        rowData[field.fieldName] = data;
+      });
+
+      entity.liquibaseFakeData.push(rowData);
+    }
+
+    if (databaseChangelog.newEntity) {
+      entityChanges.relationships = entity.relationships;
+    } else {
+      entityChanges.addedRelationships = databaseChangelog.addedRelationships;
+      entityChanges.removedRelationships = databaseChangelog.removedRelationships;
+      entityChanges.relationshipsToRecreateForeignKeysOnly = databaseChangelog.relationshipsToRecreateForeignKeysOnly;
+    }
+
+    /* Required by the templates */
+    databaseChangelog.writeContext = {
+      entity,
+      databaseChangelog,
+      changelogDate: databaseChangelog.changelogDate,
+      databaseType: entity.databaseType,
+      prodDatabaseType: entity.prodDatabaseType,
+      authenticationType: entity.authenticationType,
+      jhiPrefix: entity.jhiPrefix,
+      reactive: application.reactive,
+      incrementalChangelog: application.incrementalChangelog,
+      recreateInitialChangelog: this.recreateInitialChangelog,
+    };
+
+    if (databaseChangelog.newEntity) {
+      return databaseChangelog;
+    }
+
+    entityChanges.requiresUpdateChangelogs =
+      entityChanges.addedFields.length > 0 ||
+      entityChanges.removedFields.length > 0 ||
+      entityChanges.addedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
+      entityChanges.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable);
+
+    if (entityChanges.requiresUpdateChangelogs) {
+      entityChanges.hasFieldConstraint = entityChanges.addedFields.some(field => field.unique || !field.nullable);
+      entityChanges.hasRelationshipConstraint = entityChanges.addedRelationships.some(
+        relationship =>
+          (relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) && (relationship.unique || !relationship.nullable),
+      );
+      entityChanges.shouldWriteAnyRelationship = entityChanges.addedRelationships.some(
+        relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable,
+      );
+    }
+
+    return databaseChangelog;
+  }
+
+  writeChangelog({ databaseChangelog }) {
+    const { writeContext: context, changelogData } = databaseChangelog;
+    if (databaseChangelog.newEntity) {
+      return this._writeLiquibaseFiles({ context, changelogData });
+    }
+    if (changelogData.requiresUpdateChangelogs) {
+      return this._writeUpdateFiles({ context, changelogData });
+    }
+    return undefined;
+  }
+
+  postWriteChangelog({ databaseChangelog, source }) {
+    const { entity, changelogData } = databaseChangelog;
+    if (entity.skipServer) {
+      return undefined;
+    }
+
+    if (databaseChangelog.newEntity) {
+      return this._addLiquibaseFilesReferences({ entity, databaseChangelog, source });
+    }
+    if (changelogData.requiresUpdateChangelogs) {
+      return this._addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source });
+    }
+    return undefined;
   }
 }

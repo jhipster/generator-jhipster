@@ -56,7 +56,6 @@ export const GENERATOR_KUBERNETES_HELM = 'kubernetes-helm';
 export const GENERATOR_KUBERNETES_KNATIVE = 'kubernetes-knative';
 export const GENERATOR_LANGUAGES = 'languages';
 export const GENERATOR_LIQUIBASE = 'liquibase';
-export const GENERATOR_LIQUIBASE_CHANGELOGS = 'liquibase-changelogs';
 export const GENERATOR_MAVEN = 'maven';
 export const GENERATOR_OPENAPI_CLIENT = 'openapi-client';
 export const GENERATOR_OPENSHIFT = 'openshift';

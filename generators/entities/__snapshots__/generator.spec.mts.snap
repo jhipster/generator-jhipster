@@ -325,12 +325,15 @@ exports[`generator - entities regenerating all entities should match source call
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
+      "section": "base",
     },
     {
       "changelogName": "20160926101211_added_entity_Bar",
+      "section": "base",
     },
     {
       "changelogName": "20160926101212_added_entity_Skip",
+      "section": "base",
     },
   ],
 }
@@ -661,12 +664,15 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
+      "section": "base",
     },
     {
       "changelogName": "20160926101211_added_entity_Bar",
+      "section": "base",
     },
     {
       "changelogName": "20160926101212_added_entity_Skip",
+      "section": "base",
     },
   ],
 }
@@ -902,9 +908,11 @@ exports[`generator - entities regenerating some entities should match source cal
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
+      "section": "base",
     },
     {
       "changelogName": "20160926101211_added_entity_Bar",
+      "section": "base",
     },
   ],
 }

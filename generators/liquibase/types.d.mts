@@ -1,9 +1,10 @@
 import type { Entity } from '../base-application/index.mjs';
 
 export type LiquibaseChangelog = { changelogName: string };
+export type LiquibaseChangelogSection = LiquibaseChangelog & { section?: 'base' | 'incremental' | 'constraints' };
 
 export type LiquibaseSourceType = {
-  addLiquibaseChangelog?(changelog: LiquibaseChangelog): void;
+  addLiquibaseChangelog?(changelog: LiquibaseChangelogSection): void;
   addLiquibaseIncrementalChangelog?(changelog: LiquibaseChangelog): void;
   addLiquibaseConstraintsChangelog?(changelog: LiquibaseChangelog): void;
 };
