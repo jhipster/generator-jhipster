@@ -41,7 +41,6 @@ configurations {
 }
 
 dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   <%_ if (devDatabaseTypeH2Any) { _%>
     <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-h2"
