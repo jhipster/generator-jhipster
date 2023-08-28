@@ -40,7 +40,7 @@ FROM memcached:1.6.21-alpine
 
 FROM redis:7.2.0
 
-FROM confluentinc/cp-kafka:7.4.1
+FROM confluentinc/cp-kafka:7.5.0
 LABEL ALIAS=kafka
 
 FROM confluentinc/cp-zookeeper:7.5.0
