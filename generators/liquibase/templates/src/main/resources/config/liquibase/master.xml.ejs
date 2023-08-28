@@ -19,7 +19,7 @@
   <%_ } _%>
     <property name="blobType" value="blob" dbms="h2"/>
 <%_ } _%>
-<%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
+<%_ if (prodDatabaseTypeMysql) { _%>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="floatType" value="float" dbms="mysql"/>
     <property name="clobType" value="clob" dbms="mysql"/>
@@ -27,7 +27,7 @@
     <property name="uuidType" value="varchar(36)" dbms="mysql"/>
     <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
 <%_ } _%>
-<%_ if (devDatabaseTypeMariadb || prodDatabaseTypeMariadb) { _%>
+<%_ if (prodDatabaseTypeMariadb) { _%>
     <property name="now" value="now()" dbms="mariadb"/>
     <property name="floatType" value="float" dbms="mariadb"/>
     <property name="clobType" value="clob" dbms="mariadb"/>
@@ -35,7 +35,7 @@
     <property name="uuidType" value="varchar(36)" dbms="mariadb"/>
     <property name="datetimeType" value="datetime(6)" dbms="mariadb"/>
 <%_ } _%>
-<%_ if (devDatabaseTypePostgres || prodDatabaseTypePostgres) { _%>
+<%_ if (prodDatabaseTypePostgres) { _%>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
     <property name="floatType" value="float4" dbms="postgresql"/>
     <property name="clobType" value="clob" dbms="postgresql"/>
@@ -51,7 +51,7 @@
     <property name="uuidType" value="uuid" dbms="postgresql"/>
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 <%_ } _%>
-<%_ if (devDatabaseTypeOracle || prodDatabaseTypeOracle) { _%>
+<%_ if (prodDatabaseTypeOracle) { _%>
     <property name="now" value="sysdate" dbms="oracle"/>
     <property name="floatType" value="float" dbms="oracle"/>
     <property name="clobType" value="clob" dbms="oracle"/>
@@ -59,7 +59,7 @@
     <property name="uuidType" value="uuid" dbms="oracle"/>
     <property name="datetimeType" value="datetime" dbms="oracle"/>
 <%_ } _%>
-<%_ if (devDatabaseTypeMssql || prodDatabaseTypeMssql) { _%>
+<%_ if (prodDatabaseTypeMssql) { _%>
     <property name="now" value="GETDATE()" dbms="mssql"/>
     <property name="floatType" value="float" dbms="mssql"/>
     <property name="clobType" value="clob" dbms="mssql"/>
