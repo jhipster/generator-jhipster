@@ -4,7 +4,7 @@
     "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@fortawesome/vue-fontawesome": "3.0.3",
     "@vuelidate/core": "2.0.3",
-    "@vuelidate/validators": "2.0.3",
+    "@vuelidate/validators": "2.0.4",
     "@vueuse/core": "10.3.0",
     "axios": "1.4.0",
     "bootstrap": "4.6.2",
