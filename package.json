@@ -167,7 +167,7 @@
     "@types/glob": "npm:noist@1.0.0",
     "@types/minimatch": "npm:noist@1.0.0",
     "@types/mocha": "10.0.1",
-    "@types/node": "18.17.11",
+    "@types/node": "18.17.12",
     "@types/shelljs": "0.8.12",
     "@types/sinon-chai": "3.2.9",
     "chai": "4.3.8",
