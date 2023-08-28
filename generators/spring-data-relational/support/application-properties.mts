@@ -19,8 +19,27 @@
 
 import { getDatabaseData } from './database-data.mjs';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.mjs';
+import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
-export default function prepareSqlApplicationProperties(application: any) {
+const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_MEMORY, H2_DISK } = databaseTypes;
+
+export default function prepareSqlApplicationProperties({ application }: { application: any }) {
+  application.devDatabaseTypeH2Disk = application.devDatabaseType === H2_DISK;
+  application.devDatabaseTypeH2Memory = application.devDatabaseType === H2_MEMORY;
+  application.devDatabaseTypeH2Any = application.devDatabaseTypeH2Disk || application.devDatabaseTypeH2Memory;
+  application.devDatabaseTypeMariadb = application.devDatabaseType === MARIADB;
+  application.devDatabaseTypeMssql = application.devDatabaseType === MSSQL;
+  application.devDatabaseTypeMysql = application.devDatabaseType === MYSQL;
+  application.devDatabaseTypeOracle = application.devDatabaseType === ORACLE;
+  application.devDatabaseTypePostgres = application.devDatabaseType === POSTGRESQL;
+
+  application.prodDatabaseTypeH2Disk = application.prodDatabaseType === H2_DISK;
+  application.prodDatabaseTypeMariadb = application.prodDatabaseType === MARIADB;
+  application.prodDatabaseTypeMssql = application.prodDatabaseType === MSSQL;
+  application.prodDatabaseTypeMysql = application.prodDatabaseType === MYSQL;
+  application.prodDatabaseTypeOracle = application.prodDatabaseType === ORACLE;
+  application.prodDatabaseTypePostgres = application.prodDatabaseType === POSTGRESQL;
+
   const devDatabaseData = getDatabaseData(application.devDatabaseType);
   const prodDatabaseData = getDatabaseData(application.prodDatabaseType);
 

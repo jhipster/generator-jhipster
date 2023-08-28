@@ -85,7 +85,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asLoadingTaskGroup({
       loadApplication({ application, control }) {
         this.loadAppConfig(undefined, application);
-        loadLanguagesConfig(application, this.jhipsterConfigWithDefaults, control);
+        loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {

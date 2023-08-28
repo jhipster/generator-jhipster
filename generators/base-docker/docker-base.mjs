@@ -21,6 +21,7 @@ import chalk from 'chalk';
 
 import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../base/support/index.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -95,13 +96,15 @@ export function loadConfigs() {
   this.microserviceNb = 0;
   const serverPort = 8080;
 
+  const getJhipsterConfig = yoRcPath => this.createStorage(yoRcPath, GENERATOR_JHIPSTER);
+
   // Loading configs
   this.log.debug(`Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     this.log.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = getConfigWithDefaults(removeFieldsWithNullishValues(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
+      const config = getConfigWithDefaults(removeFieldsWithNullishValues(getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       config.composePort = serverPort + index;
       this.log.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
 

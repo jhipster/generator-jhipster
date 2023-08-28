@@ -22,11 +22,9 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import os from 'os';
 import _ from 'lodash';
-import { type Storage } from 'yeoman-generator';
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
 import {
   formatDateForChangelog,
-  normalizePathEnd,
   createJHipster7Context,
   upperFirstCamelCase,
   removeFieldsWithNullishValues,
@@ -44,48 +42,30 @@ import {
 } from '../server/support/index.mjs';
 import {
   databaseTypes,
-  monitoringTypes,
   authenticationTypes,
   buildToolTypes,
-  cacheTypes,
-  websocketTypes,
   testFrameworkTypes,
   applicationTypes,
-  serviceDiscoveryTypes,
-  searchEngineTypes,
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-import { getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../spring-data-relational/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
+import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, NODE_VERSION } from '../generator-constants.mjs';
 import {
-  SERVER_MAIN_SRC_DIR,
-  SERVER_TEST_SRC_DIR,
-  SERVER_MAIN_RES_DIR,
-  SERVER_TEST_RES_DIR,
-  CLIENT_MAIN_SRC_DIR,
-  CLIENT_TEST_SRC_DIR,
-  NODE_VERSION,
-  CLIENT_DIST_DIR,
-} from '../generator-constants.mjs';
-import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/index.mjs';
+  loadDerivedPlatformConfig,
+  loadDerivedServerConfig,
+  loadPlatformConfig,
+  loadServerAndPlatformConfig,
+  loadServerConfig,
+} from '../server/support/config.mjs';
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-const GENERATOR_JHIPSTER = 'generator-jhipster';
-const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
+const { CASSANDRA } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
-const { PROMETHEUS, ELK } = monitoringTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
-const { GRADLE, MAVEN } = buildToolTypes;
-const { SPRING_WEBSOCKET } = websocketTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { GRADLE } = buildToolTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
-const NO_CACHE = cacheTypes.NO;
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
 
@@ -828,16 +808,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * @param {Object} dest - destination context to use default is context
    */
-  loadDerivedMicroserviceAppConfig(dest: any = this) {
+  loadDerivedAppConfig(dest: any = this) {
     dest.jhiPrefixCapitalized = _.upperFirst(dest.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(dest.jhiPrefix);
-  }
-
-  /**
-   * @param {Object} dest - destination context to use default is context
-   */
-  loadDerivedAppConfig(dest: any = this) {
-    (this as any).loadDerivedMicroserviceAppConfig(dest);
     dest.applicationTypeGateway = dest.applicationType === GATEWAY;
     dest.applicationTypeMonolith = dest.applicationType === MONOLITH;
     dest.applicationTypeMicroservice = dest.applicationType === MICROSERVICE;
@@ -938,188 +911,48 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Load translation configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @deprecated
    */
-  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
-    loadLanguagesConfig(dest, config);
-  }
-
-  /**
-   * Load server configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {Object} config - config to load config from
-   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
-   */
-  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
-    dest.packageName = config.packageName;
-    dest.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
-    dest.serverPort = config.serverPort;
-
-    dest.srcMainJava = SERVER_MAIN_SRC_DIR;
-    dest.srcMainResources = SERVER_MAIN_RES_DIR;
-    dest.srcMainWebapp = CLIENT_MAIN_SRC_DIR;
-    dest.srcTestJava = SERVER_TEST_SRC_DIR;
-    dest.srcTestResources = SERVER_TEST_RES_DIR;
-    dest.srcTestJavascript = CLIENT_TEST_SRC_DIR;
-
-    dest.buildTool = config.buildTool;
-
-    dest.databaseType = config.databaseType;
-    dest.databaseMigration = config.databaseMigration;
-    dest.devDatabaseType = config.devDatabaseType;
-    dest.prodDatabaseType = config.prodDatabaseType;
-    dest.incrementalChangelog = config.incrementalChangelog;
-    dest.reactive = config.reactive;
-    dest.searchEngine = config.searchEngine;
-    dest.cacheProvider = config.cacheProvider;
-    dest.enableHibernateCache = config.enableHibernateCache;
-    dest.serviceDiscoveryType = config.serviceDiscoveryType;
-
-    dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
-    dest.messageBroker = config.messageBroker;
-    dest.websocket = config.websocket;
-    dest.embeddableLaunchScript = config.embeddableLaunchScript;
-
-    dest.enableGradleEnterprise = config.enableGradleEnterprise;
-
-    if (config.gradleEnterpriseHost) {
-      if (config.gradleEnterpriseHost.startsWith('https://')) {
-        dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
-      } else {
-        dest.gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
-      }
-    }
-  }
-
-  loadServerAndPlatformConfig(dest: any = this) {
-    if (!dest.serviceDiscoveryType) {
-      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
-    }
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-  }
-
-  /**
-   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
-   */
-  loadDerivedServerConfig(dest: any = this) {
-    if (!dest.packageFolder) {
-      dest.packageFolder = `${dest.packageName.replace(/\./g, '/')}/`;
-    }
-
-    dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
-    dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
-
-    if (!dest.websocket) {
-      dest.websocket = NO_WEBSOCKET;
-    }
-    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
-
-    if (!dest.searchEngine) {
-      dest.searchEngine = NO_SEARCH_ENGINE;
-    }
-    dest.searchEngineNo = dest.searchEngine === NO_SEARCH_ENGINE;
-    dest.searchEngineAny = !dest.searchEngineNo;
-    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-
-    if (!dest.messageBroker) {
-      dest.messageBroker = MESSAGE_BROKER_NO;
-    }
-    dest.messageBrokerKafka = dest.messageBroker === MESSAGE_BROKER_KAFKA;
-    dest.messageBrokerPulsar = dest.messageBroker === MESSAGE_BROKER_PULSAR;
-    dest.messageBrokerAny = dest.messageBroker && dest.messageBroker !== MESSAGE_BROKER_NO;
-
-    dest.buildToolGradle = dest.buildTool === GRADLE;
-    dest.buildToolMaven = dest.buildTool === MAVEN;
-    dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
-
-    dest.temporaryDir = dest.buildToolGradle ? 'build/' : 'target/';
-    const buildDestinationDir = `${dest.temporaryDir}${dest.buildToolGradle ? 'resources/main/' : 'classes/'}`;
-    dest.clientDistDir = `${buildDestinationDir}${CLIENT_DIST_DIR}`;
-
-    dest.cacheProviderNo = !dest.cacheProvider || dest.cacheProvider === NO_CACHE;
-    dest.cacheProviderCaffeine = dest.cacheProvider === CAFFEINE;
-    dest.cacheProviderEhcache = dest.cacheProvider === EHCACHE;
-    dest.cacheProviderHazelcast = dest.cacheProvider === HAZELCAST;
-    dest.cacheProviderInfinispan = dest.cacheProvider === INFINISPAN;
-    dest.cacheProviderMemcached = dest.cacheProvider === MEMCACHED;
-    dest.cacheProviderRedis = dest.cacheProvider === REDIS;
-    dest.cacheProviderAny = dest.cacheProvider && dest.cacheProvider !== NO_CACHE;
-
-    dest.devDatabaseTypeH2Disk = dest.devDatabaseType === H2_DISK;
-    dest.devDatabaseTypeH2Memory = dest.devDatabaseType === H2_MEMORY;
-    dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
-    dest.devDatabaseTypeMariadb = dest.devDatabaseType === MARIADB;
-    dest.devDatabaseTypeMssql = dest.devDatabaseType === MSSQL;
-    dest.devDatabaseTypeMysql = dest.devDatabaseType === MYSQL;
-    dest.devDatabaseTypeOracle = dest.devDatabaseType === ORACLE;
-    dest.devDatabaseTypePostgres = dest.devDatabaseType === POSTGRESQL;
-
-    dest.prodDatabaseTypeH2Disk = dest.prodDatabaseType === H2_DISK;
-    dest.prodDatabaseTypeMariadb = dest.prodDatabaseType === MARIADB;
-    dest.prodDatabaseTypeMssql = dest.prodDatabaseType === MSSQL;
-    dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
-    dest.prodDatabaseTypeOracle = dest.prodDatabaseType === ORACLE;
-    dest.prodDatabaseTypePostgres = dest.prodDatabaseType === POSTGRESQL;
-
-    dest.databaseTypeNo = dest.databaseType === NO_DATABASE;
-    dest.databaseTypeSql = dest.databaseType === SQL;
-    dest.databaseTypeCassandra = dest.databaseType === CASSANDRA;
-    dest.databaseTypeCouchbase = dest.databaseType === COUCHBASE;
-    dest.databaseTypeMongodb = dest.databaseType === MONGODB;
-    dest.databaseTypeNeo4j = dest.databaseType === NEO4J;
-    dest.databaseTypeMysql = dest.databaseType === SQL && (dest.devDatabaseType === MYSQL || dest.prodDatabaseType === MYSQL);
-    dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
-    dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
-    dest.databaseTypeAny = !dest.databaseTypeNo;
-
-    dest.databaseMigrationLiquibase = dest.databaseMigration ? dest.databaseMigration === 'liquibase' : dest.databaseType === SQL;
-
-    dest.imperativeOrReactive = dest.reactive ? 'reactive' : 'imperative';
-
-    dest.authenticationUsesCsrf = [OAUTH2, SESSION].includes(dest.authenticationType);
-
-    if (dest.databaseTypeSql) {
-      prepareSqlApplicationProperties(dest);
-    }
-
-    (this as any).loadServerAndPlatformConfig(dest);
-  }
-
-  /**
-   * @param {Object} config - config to load config from
-   * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
-   */
-  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
-    dest.serviceDiscoveryType = config.serviceDiscoveryType;
-    dest.monitoring = config.monitoring;
-    (this as any).loadDerivedPlatformConfig(dest);
-  }
-
-  /**
-   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
-   * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
-   */
-  loadDerivedPlatformConfig(dest: any = this) {
-    dest.monitoringELK = dest.monitoring === ELK;
-    dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
-    (this as any).loadServerAndPlatformConfig(dest);
+  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, application: any = this) {
+    loadLanguagesConfig({ application, config });
   }
 
   /**
    * @deprecated
-   * Get all the generator configuration from the .yo-rc.json file
-   * @param {string} yoRcPath - .yo-rc.json folder.
    */
-  getJhipsterConfig(yoRcPath): Storage {
-    return this.createStorage(yoRcPath, GENERATOR_JHIPSTER);
+  loadServerConfig(config = this.jhipsterConfigWithDefaults, application: any = this) {
+    loadServerConfig({ config, application });
+  }
+
+  /**
+   * @deprecated
+   */
+  loadServerAndPlatformConfig(application: any = this) {
+    loadServerAndPlatformConfig({ application });
+  }
+
+  /**
+   * @deprecated
+   */
+  loadDerivedServerConfig(application: any = this) {
+    loadDerivedServerConfig({ application });
+    (this as any).loadServerAndPlatformConfig(application);
+  }
+
+  /**
+   * @deprecated
+   */
+  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, application: any = this) {
+    loadPlatformConfig({ config, application });
+    (this as any).loadDerivedPlatformConfig(application);
+  }
+
+  /**
+   * @deprecated
+   */
+  loadDerivedPlatformConfig(application: any = this) {
+    loadDerivedPlatformConfig({ application });
+    (this as any).loadServerAndPlatformConfig(application);
   }
 
   /**
