@@ -27,6 +27,7 @@ import { askForControllerActions } from './prompts.mjs';
 import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_CONTROLLER } from '../generator-list.mjs';
 import { applicationOptions, cacheTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+import { getMainClassName } from '../java/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const cacheProviders = cacheTypes;
@@ -168,7 +169,7 @@ export default class SpringControllerGenerator extends BaseGenerator {
             ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*']
             : this.mockRequestImports;
 
-        this.mainClass = this.getMainClassName();
+        this.mainClass = getMainClassName({ baseName: this.jhipsterConfig.baseName });
 
         this.controllerActions.forEach(action => {
           action.actionPath = _.kebabCase(action.actionName);

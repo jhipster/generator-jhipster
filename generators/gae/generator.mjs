@@ -33,6 +33,8 @@ import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../
 import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradleDependencyCallback, addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
+import { getFrontendAppName } from '../base/support/index.mjs';
+import { getMainClassName } from '../java/support/index.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -106,10 +108,10 @@ export default class GaeGenerator extends BaseGenerator {
       loadConfig() {
         const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || CLIENT_MAIN_SRC_DIR;
-        this.mainClass = this.getMainClassName();
+        this.mainClass = getMainClassName({ baseName: this.jhipsterConfig.baseName });
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-        this.frontendAppName = this.getFrontendAppName();
+        this.frontendAppName = getFrontendAppName({ baseName: this.jhipsterConfig.baseName });
         this.gcpProjectId = configuration.get('gcpProjectId');
         this.gcpCloudSqlInstanceName = configuration.get('gcpCloudSqlInstanceName');
         this.gcpCloudSqlUserName = configuration.get('gcpCloudSqlUserName');

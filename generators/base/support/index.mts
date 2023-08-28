@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export * from './basename.mjs';
 export * from './configuration-helpers/options.mjs';
 export * from './config.mjs';
 export * from './contents.mjs';

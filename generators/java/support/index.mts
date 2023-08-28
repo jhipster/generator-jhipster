@@ -21,3 +21,4 @@ export * from './checks/index.mjs';
 export * from './files.mjs';
 export { default as generatedAnnotationTransform } from './generated-annotation-transform.mjs';
 export { default as packageInfoTransform } from './package-info-transform.mjs';
+export * from './util.mjs';

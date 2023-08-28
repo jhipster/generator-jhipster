@@ -43,6 +43,8 @@ import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 import { normalizePathEnd } from '../base/support/path.mjs';
+import { getFrontendAppName } from '../base/support/index.mjs';
+import { getMainClassName } from '../java/support/index.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -100,8 +102,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
       prepareForTemplates({ application: app }) {
         const application: any = app;
         // Application name modified, using each technology's conventions
-        application.frontendAppName = this.getFrontendAppName(application.baseName);
-        application.mainClass = this.getMainClassName(application.baseName);
+        application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
+        application.mainClass = getMainClassName({ baseName: application.baseName });
 
         application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
 

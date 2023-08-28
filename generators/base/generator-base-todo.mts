@@ -32,6 +32,7 @@ import {
   removeFieldsWithNullishValues,
   parseCreationTimestamp,
   getHipster,
+  getFrontendAppName,
 } from './support/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
@@ -184,15 +185,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
 
   /**
    * @private
-   * Get a name suitable for microservice
-   * @param {string} microserviceName
-   */
-  getMicroserviceAppName(microserviceName) {
-    return _.camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
-  }
-
-  /**
-   * @private
    * get a table column name in JHipster preferred style.
    *
    * @param {string} value - table column name string
@@ -268,33 +260,11 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   }
 
   /**
-   * @private
-   * get the frontend application name.
-   * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
-   */
-  getFrontendAppName(baseName = this.jhipsterConfig.baseName) {
-    const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-    return name.match(/^\d/) ? 'App' : name;
-  }
-
-  /**
    * get the an upperFirst camelCase value.
    * @param {string} value string to convert
    */
   upperFirstCamelCase(value) {
     return upperFirstCamelCase(value);
-  }
-
-  /**
-   * @private
-   * get the java main class name.
-   * @param {string} baseName of application
-   */
-  getMainClassName(baseName = (this as any).baseName) {
-    const main = _.upperFirst((this as any).getMicroserviceAppName(baseName));
-    const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
-
-    return acceptableForJava.test(main) ? main : 'Application';
   }
 
   /**
@@ -963,7 +933,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientThemeDark = dest.clientThemeVariant === 'dark';
 
     if (dest.baseName) {
-      dest.frontendAppName = (this as any).getFrontendAppName(dest.baseName);
+      dest.frontendAppName = getFrontendAppName({ baseName: dest.baseName });
     }
   }
 
