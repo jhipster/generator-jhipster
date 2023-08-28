@@ -19,7 +19,7 @@
 import assert from 'assert';
 import _ from 'lodash';
 import escapeStringRegexp from 'escape-string-regexp';
-import CoreGenerator from '../../base-core/generator-base.mjs';
+import CoreGenerator from '../../base-core/index.mjs';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.mjs';
 import { joinCallbacks } from './write-files.mjs';
 
