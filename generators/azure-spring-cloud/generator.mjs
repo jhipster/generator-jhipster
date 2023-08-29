@@ -31,6 +31,7 @@ import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
 import { mavenProfile } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
+import { getFrontendAppName } from '../base/support/index.mjs';
 
 const { MEMCACHED } = cacheTypes;
 
@@ -82,7 +83,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-        this.frontendAppName = this.getFrontendAppName();
+        this.frontendAppName = getFrontendAppName({ baseName: this.jhipsterConfig.baseName });
         this.azureSpringCloudResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureSpringCloudServiceName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');

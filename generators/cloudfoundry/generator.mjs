@@ -29,6 +29,7 @@ import statistics from '../statistics.mjs';
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { getFrontendAppName } from '../base/support/index.mjs';
 
 const { MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -66,7 +67,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
         this.env.options.appPath = configuration.get('appPath') || CLIENT_MAIN_SRC_DIR;
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-        this.frontendAppName = this.getFrontendAppName();
+        this.frontendAppName = getFrontendAppName({ baseName: this.jhipsterConfig.baseName });
       },
     };
   }

@@ -16,46 +16,6 @@ BaseGenerator.log = msg => {
 BaseGenerator.logger = createJHipsterLogger();
 
 describe('generator - base', () => {
-  describe('getFrontendAppName', () => {
-    describe('when called with name having App', () => {
-      it('returns the frontend app name', () => {
-        BaseGenerator.jhipsterConfig = { baseName: 'myAmazingApp' };
-        expect(BaseGenerator.getFrontendAppName()).to.equal('myAmazingApp');
-      });
-    });
-    describe('when called with name', () => {
-      it('returns the frontend app name with the App suffix added', () => {
-        BaseGenerator.jhipsterConfig = { baseName: 'myAwesomeProject' };
-        expect(BaseGenerator.getFrontendAppName()).to.equal('myAwesomeProjectApp');
-      });
-    });
-    describe('when called with name starting with a digit', () => {
-      it('returns the default frontend app name - App', () => {
-        BaseGenerator.jhipsterConfig = { baseName: '1derful' };
-        expect(BaseGenerator.getFrontendAppName()).to.equal('App');
-      });
-    });
-  });
-  describe('getMainClassName', () => {
-    describe('when called with name', () => {
-      it('return the app name', () => {
-        BaseGenerator.baseName = 'myTest';
-        expect(BaseGenerator.getMainClassName()).to.equal('MyTestApp');
-      });
-    });
-    describe('when called with name having App', () => {
-      it('return the app name', () => {
-        BaseGenerator.baseName = 'myApp';
-        expect(BaseGenerator.getMainClassName()).to.equal('MyApp');
-      });
-    });
-    describe('when called with name having invalid java chars', () => {
-      it('return the default app name', () => {
-        BaseGenerator.baseName = '9myApp';
-        expect(BaseGenerator.getMainClassName()).to.equal('Application');
-      });
-    });
-  });
   describe('dateFormatForLiquibase', () => {
     let base;
     let options;

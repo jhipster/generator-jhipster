@@ -24,6 +24,7 @@ import { SERVER_MAIN_SRC_DIR, OPENAPI_GENERATOR_CLI_VERSION } from '../generator
 import { applicationOptions, buildToolTypes, applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
 import { addGradleDependencyCallback, addGradlePropertyCallback } from '../gradle/internal/needles.mjs';
 import { getPomVersionProperties } from '../server/support/dependabot-maven.mjs';
+import { getMainClassName } from '../java/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -194,7 +195,7 @@ export function customizeFiles() {
       }
 
       this.javaDir = `${SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
-      const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
+      const mainClassFile = `${this.javaDir + getMainClassName({ baseName: this.jhipsterConfig.baseName })}.java`;
 
       if (this.applicationType !== MICROSERVICE || ![JWT].includes(this.authenticationType)) {
         this.rewriteFile(
@@ -212,7 +213,7 @@ export function customizeFiles() {
       }
 
       this.javaDir = `${SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
-      const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
+      const mainClassFile = `${this.javaDir + getMainClassName({ baseName: this.jhipsterConfig.baseName })}.java`;
 
       this.rewriteFile(
         mainClassFile,

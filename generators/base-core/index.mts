@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 
-export { default } from './generator-base.mjs';
+export { default } from './generator.mjs';

@@ -29,7 +29,7 @@ import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norm
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
-import CoreGenerator from '../base-core/generator-base.mjs';
+import CoreGenerator from '../base-core/index.mjs';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.mjs';
 
 /**

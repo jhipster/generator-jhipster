@@ -21,7 +21,7 @@ import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.mjs';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.mjs';
-import { createFaker, parseChangelog, stringHashCode, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { createFaker, parseChangelog, stringHashCode, upperFirstCamelCase, getMicroserviceAppName } from '../../base/support/index.mjs';
 import { fieldToReference } from './prepare-field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
 import {
@@ -153,7 +153,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     if (!entityWithConfig.microserviceName) {
       throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
     }
-    entityWithConfig.microserviceAppName = generator.getMicroserviceAppName(entityWithConfig.microserviceName);
+    entityWithConfig.microserviceAppName = getMicroserviceAppName({ microserviceName: entityWithConfig.microserviceName });
     entityWithConfig.skipServer = true;
   }
 
