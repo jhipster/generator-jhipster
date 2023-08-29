@@ -40,6 +40,10 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.devDatabaseTypeOracle = application.prodDatabaseTypeOracle && !application.devDatabaseTypeH2Any;
   application.devDatabaseTypePostgres = application.prodDatabaseTypePostgres && !application.devDatabaseTypeH2Any;
 
+  if (!application.databaseTypeSql) {
+    return;
+  }
+
   const devDatabaseData = getDatabaseData(application.devDatabaseType);
   const prodDatabaseData = getDatabaseData(application.prodDatabaseType);
 

@@ -44,6 +44,7 @@ import {
   addLiquibaseConstraintsChangelogCallback,
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.mjs';
+import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.mjs';
 
 const BASE_CHANGELOG = {
   addedFields: [],
@@ -83,6 +84,11 @@ export default class LiquibaseGenerator extends BaseApplicationGenerator {
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
+        }
+
+        if (!application.databaseTypeSql) {
+          // Add sql related derived properties
+          prepareSqlApplicationProperties({ application });
         }
       },
       addNeedles({ source, application }) {
