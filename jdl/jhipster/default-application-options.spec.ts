@@ -313,8 +313,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the database type option to sql', () => {
         expect(options.databaseType).to.equal('sql');
       });
-      it('should set the development database type option to h2Disk', () => {
-        expect(options.devDatabaseType).to.equal('h2Disk');
+      it('should set the development database type option to the same that production database', () => {
+        expect(options.devDatabaseType).to.equal(options.prodDatabaseType);
       });
       it('should set the hibernate cache enabling option to true', () => {
         expect(options.enableHibernateCache).to.be.true;

@@ -29,7 +29,7 @@ import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/optio
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;
-const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, H2_DISK, POSTGRESQL } = databaseTypes;
+const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, POSTGRESQL } = databaseTypes;
 const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
@@ -176,7 +176,7 @@ export function getConfigForDatabaseType(options: any = {}): any {
       options[PROD_DATABASE_TYPE] = POSTGRESQL;
     }
     if (options[DEV_DATABASE_TYPE] === undefined) {
-      options[DEV_DATABASE_TYPE] = H2_DISK;
+      options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
     }
   } else if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
     if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
