@@ -153,7 +153,7 @@
     "semver": "7.5.4",
     "shelljs": "0.8.5",
     "simple-git": "3.19.1",
-    "type-fest": "4.2.0",
+    "type-fest": "4.3.1",
     "uuid": "9.0.0",
     "winston": "3.10.0",
     "yaml": "2.3.1",
