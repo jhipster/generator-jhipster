@@ -19,41 +19,22 @@
 import assert from 'assert';
 import path from 'path';
 import fs from 'fs';
-import _ from 'lodash';
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
-import {
-  formatDateForChangelog,
-  createJHipster7Context,
-  upperFirstCamelCase,
-  parseCreationTimestamp,
-  getHipster,
-  getFrontendAppName,
-} from './support/index.mjs';
+import { formatDateForChangelog, createJHipster7Context, parseCreationTimestamp } from './support/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import { getDBTypeFromDBValue, getFKConstraintName, getUXConstraintName } from '../server/support/index.mjs';
 import {
-  databaseTypes,
-  authenticationTypes,
-  testFrameworkTypes,
-  applicationTypes,
-  clientFrameworkTypes,
-} from '../../jdl/jhipster/index.mjs';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, NODE_VERSION } from '../generator-constants.mjs';
-import {
+  getDBTypeFromDBValue,
+  getFKConstraintName,
+  getUXConstraintName,
   loadDerivedPlatformConfig,
   loadDerivedServerConfig,
   loadPlatformConfig,
   loadServerAndPlatformConfig,
   loadServerConfig,
-} from '../server/support/config.mjs';
-
-const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-const { CASSANDRA } = databaseTypes;
-const NO_DATABASE = databaseTypes.NO;
-const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+} from '../server/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
+import { loadClientConfig, loadDerivedClientConfig } from '../client/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
 
 /**
  * Class the contains the methods that should be refactored and converted to typescript.
@@ -629,162 +610,31 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Load app configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @deprecated
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
-    if ((this as any).useVersionPlaceholders) {
-      dest.nodeVersion = 'NODE_VERSION';
-    } else {
-      dest.nodeVersion = NODE_VERSION;
-    }
-
-    dest.jhipsterVersion = config.jhipsterVersion;
-    dest.baseName = config.baseName;
-    dest.applicationType = config.applicationType;
-    dest.reactive = config.reactive;
-    dest.jhiPrefix = config.jhiPrefix;
-    dest.skipFakeData = config.skipFakeData;
-    dest.entitySuffix = config.entitySuffix;
-    dest.dtoSuffix = config.dtoSuffix;
-    dest.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
-    dest.microfrontend = config.microfrontend;
-    dest.microfrontends = config.microfrontends;
-
-    dest.skipServer = config.skipServer;
-    dest.skipCommitHook = config.skipCommitHook;
-    dest.blueprints = config.blueprints || [];
-    dest.skipClient = config.skipClient;
-    dest.prettierJava = config.prettierJava;
-    dest.pages = config.pages;
-    dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
-    dest.withAdminUi = config.withAdminUi;
-    dest.gatewayServerPort = config.gatewayServerPort;
-
-    dest.capitalizedBaseName = config.capitalizedBaseName;
-    dest.dasherizedBaseName = config.dasherizedBaseName;
-    dest.humanizedBaseName = config.humanizedBaseName;
-    dest.projectDescription = config.projectDescription;
-
-    dest.testFrameworks = config.testFrameworks || [];
-
-    dest.gatlingTests = dest.testFrameworks.includes(GATLING);
-    dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
-    dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
-
-    dest.authenticationType = config.authenticationType;
-    dest.rememberMeKey = config.rememberMeKey;
-    dest.jwtSecretKey = config.jwtSecretKey;
-    dest.fakerSeed = config.fakerSeed;
-    dest.skipUserManagement = config.skipUserManagement;
+    loadAppConfig({ config, application: dest, useVersionPlaceholders: (this as any).useVersionPlaceholders });
   }
 
   /**
-   * @param {Object} dest - destination context to use default is context
+   * @deprecated
    */
   loadDerivedAppConfig(dest: any = this) {
-    dest.jhiPrefixCapitalized = _.upperFirst(dest.jhiPrefix);
-    dest.jhiPrefixDashed = _.kebabCase(dest.jhiPrefix);
-    dest.applicationTypeGateway = dest.applicationType === GATEWAY;
-    dest.applicationTypeMonolith = dest.applicationType === MONOLITH;
-    dest.applicationTypeMicroservice = dest.applicationType === MICROSERVICE;
-
-    // Application name modified, using each technology's conventions
-    if (dest.baseName) {
-      dest.camelizedBaseName = _.camelCase(dest.baseName);
-      dest.hipster = getHipster(dest.baseName);
-      dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
-      dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
-      dest.lowercaseBaseName = dest.baseName.toLowerCase();
-      dest.upperFirstCamelCaseBaseName = upperFirstCamelCase(dest.baseName);
-      dest.humanizedBaseName =
-        dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
-      dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
-      dest.endpointPrefix = dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
-    }
-
-    if (dest.microfrontends && dest.microfrontends.length > 0) {
-      dest.microfrontends.forEach(microfrontend => {
-        const { baseName } = microfrontend;
-        microfrontend.lowercaseBaseName = baseName.toLowerCase();
-        microfrontend.capitalizedBaseName = _.upperFirst(baseName);
-        microfrontend.endpointPrefix = `services/${microfrontend.lowercaseBaseName}`;
-      });
-    } else if (dest.microfrontend) {
-      dest.microfrontends = [];
-    }
-    dest.microfrontend =
-      dest.microfrontend ||
-      (dest.applicationTypeMicroservice && !dest.skipClient) ||
-      (dest.applicationTypeGateway && dest.microfrontends && dest.microfrontends.length > 0);
-
-    if (dest.microfrontend && dest.applicationTypeMicroservice && !dest.gatewayServerPort) {
-      dest.gatewayServerPort = 8080;
-    }
-
-    dest.authenticationTypeSession = dest.authenticationType === SESSION;
-    dest.authenticationTypeJwt = dest.authenticationType === JWT;
-    dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
-
-    dest.generateAuthenticationApi = dest.applicationType === MONOLITH || dest.applicationType === GATEWAY;
-    const authenticationApiWithUserManagement = dest.authenticationType !== OAUTH2 && dest.generateAuthenticationApi;
-    dest.generateUserManagement = !dest.skipUserManagement && dest.databaseType !== NO_DATABASE && authenticationApiWithUserManagement;
-    dest.generateInMemoryUserCredentials = !dest.generateUserManagement && authenticationApiWithUserManagement;
-
-    // TODO make UserEntity optional on relationships for microservices and oauth2
-    // TODO check if we support syncWithIdp using jwt authentication
-    // Used for relationships and syncWithIdp
-    const usesSyncWithIdp = dest.authenticationType === OAUTH2 && dest.databaseType !== NO_DATABASE;
-    dest.generateBuiltInUserEntity = dest.generateUserManagement || usesSyncWithIdp;
-
-    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && dest.databaseType !== CASSANDRA;
+    loadDerivedAppConfig({ application: dest });
   }
 
   /**
-   * Load client configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @deprecated
    */
   loadClientConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {
-    dest.clientPackageManager = config.clientPackageManager;
-    dest.clientFramework = config.clientFramework;
-    dest.clientTheme = config.clientTheme;
-    dest.clientThemeVariant = config.clientThemeVariant;
-    dest.devServerPort = config.devServerPort;
-
-    dest.clientSrcDir = config.clientSrcDir || CLIENT_MAIN_SRC_DIR;
-    dest.clientTestDir = config.clientTestDir || CLIENT_TEST_SRC_DIR;
+    loadClientConfig({ config, application: dest });
   }
 
   /**
-   * @param {Object} dest - destination context to use default is context
+   * @deprecated
    */
   loadDerivedClientConfig(dest: any = this) {
-    dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
-    dest.clientFrameworkReact = dest.clientFramework === REACT;
-    dest.clientFrameworkVue = dest.clientFramework === VUE;
-    dest.clientFrameworkNo = dest.clientFramework === CLIENT_FRAMEWORK_NO;
-    dest.clientFrameworkAny = dest.clientFramework && dest.clientFramework !== CLIENT_FRAMEWORK_NO;
-    if (dest.microfrontend === undefined) {
-      if (dest.applicationTypeMicroservice) {
-        dest.microfrontend = dest.clientFrameworkAny;
-      } else if (dest.applicationTypeGateway) {
-        dest.microfrontend = dest.microfrontends && dest.microfrontends.length > 0;
-      }
-    }
-    dest.clientThemeNone = dest.clientTheme === 'none';
-    dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
-    dest.clientThemeLight = dest.clientThemeVariant === 'light';
-    dest.clientThemeDark = dest.clientThemeVariant === 'dark';
-
-    if (dest.baseName) {
-      dest.frontendAppName = getFrontendAppName({ baseName: dest.baseName });
-    }
+    loadDerivedClientConfig({ application: dest });
   }
 
   /**

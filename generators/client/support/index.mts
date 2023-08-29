@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export * from './config.mjs';
 export { default as getTypescriptKeyType, getTypescriptType } from './types-utils.mjs';
 export { default as generateEntityClientFields } from './entity-definition.mjs';
 export { default as prepareEntity } from './prepare-entity.mjs';
