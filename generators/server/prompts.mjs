@@ -213,7 +213,7 @@ export async function askForServerSideOpts({ control }) {
       name: DEV_DATABASE_TYPE,
       message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
       choices: response =>
-        [
+        [SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)].concat([
           {
             value: H2_DISK,
             name: 'H2 with disk-based persistence',
@@ -222,7 +222,7 @@ export async function askForServerSideOpts({ control }) {
             value: H2_MEMORY,
             name: 'H2 with in-memory persistence',
           },
-        ].concat(SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
+        ]),
       default: this.jhipsterConfigWithDefaults.devDatabaseType,
     },
     {
