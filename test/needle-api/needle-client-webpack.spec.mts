@@ -4,8 +4,6 @@ import { CLIENT_WEBPACK_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
-const assetFrom = 'source';
-const assetTo = 'target';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
@@ -22,7 +20,6 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   get [ClientGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       webpackPhase() {
-        this.copyExternalAssetsInWebpack(assetFrom, assetTo);
         this.addWebpackConfig('{devServer:{}}');
       },
     };
@@ -55,10 +52,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
       return generateAppWithClientFramework(ANGULAR);
     });
 
-    it('Assert external asset is added to webpack.custom.js', async () => {
-      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
-    });
-
     it('should add webpack config to webpack.custom.js', async () => {
       runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, '{ devServer: {} }');
     });
@@ -69,9 +62,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
       return generateAppWithClientFramework(REACT);
     });
 
-    it('Assert external asset is added to webpack.common.js', async () => {
-      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
-    });
     it('should add webpack config to webpack.common.js', async () => {
       runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
     });
@@ -82,9 +72,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
       return generateAppWithClientFramework(VUE);
     });
 
-    it('Assert external asset is added to webpack.common.js', async () => {
-      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
-    });
     it('should add webpack config to webpack.common.js', async () => {
       runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
     });

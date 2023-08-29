@@ -27,21 +27,6 @@ export default class extends needleClient {
     return clientFramework === ANGULAR ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js` : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
   }
 
-  copyExternalAssets(source: string, target: string, clientFramework?: string) {
-    const errorMessage = 'Resource path not added to JHipster app.';
-    let assetBlock = '';
-    if (source && target) {
-      assetBlock = `{ from: '${source}', to: '${target}' },`;
-    }
-    const rewriteFileModel = this.generateFileModel(
-      this._getWebpackFile(clientFramework),
-      'jhipster-needle-add-assets-to-webpack',
-      assetBlock,
-    );
-
-    this.addBlockContentToFile(rewriteFileModel, errorMessage);
-  }
-
   addWebpackConfig(config: string, clientFramework: string) {
     config = `,${config}`;
     const rewriteFileModel = this.generateFileModel(this._getWebpackFile(clientFramework), 'jhipster-needle-add-webpack-config', config);

@@ -69,18 +69,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
 
   /**
    * @private
-   * Add a new element in the admin section of "global.json" translations.
-   *
-   * @param {string} key - Key for the menu entry
-   * @param {string} value - Default translated value
-   * @param {string} language - The language to which this translation should be added
-   */
-  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
-    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
    * Add a new entity in the "global.json" translations.
    *
    * @param {string} key - Key for the entity name
@@ -89,17 +77,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
    */
   addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Copy third-party library resources path.
-   *
-   * @param {string} sourceFolder - third-party library resources source path
-   * @param {string} targetFolder - third-party library resources destination path
-   */
-  copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
-    this.needleApi.clientWebpack.copyExternalAssets(sourceFolder, targetFolder);
   }
 
   /**
