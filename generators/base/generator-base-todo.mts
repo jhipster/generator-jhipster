@@ -30,13 +30,7 @@ import {
   getFrontendAppName,
 } from './support/index.mjs';
 import { detectLanguage, loadLanguagesConfig } from '../languages/support/index.mjs';
-import {
-  getDBTypeFromDBValue,
-  hibernateSnakeCase,
-  calculateDbName,
-  getFKConstraintName,
-  getUXConstraintName,
-} from '../server/support/index.mjs';
+import { getDBTypeFromDBValue, getFKConstraintName, getUXConstraintName } from '../server/support/index.mjs';
 import {
   databaseTypes,
   authenticationTypes,
@@ -136,33 +130,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
 
   /**
    * @private
-   * get a table column name in JHipster preferred style.
-   *
-   * @param {string} value - table column name string
-   */
-  getColumnName(value) {
-    return hibernateSnakeCase(value);
-  }
-
-  /**
-   * @private
-   * get a constraint name for tables in JHipster preferred style
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} columnOrRelationName - name of the column or related entity
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   * @param {string} prefix - constraintName prefix for the constraintName
-   * @param {string} suffix - constraintName suffix for the constraintName
-   */
-  getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
-    const result = calculateDbName(entityName, columnOrRelationName, { prodDatabaseType, noSnakeCase, prefix, suffix });
-    (this as any).validateResult(result);
-    return result.value;
-  }
-
-  /**
-   * @private
    * get a foreign key constraint name for tables in JHipster preferred style.
    *
    * @param {string} entityName - name of the entity
@@ -189,33 +156,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
     const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
     (this as any).validateResult(result);
     return result.value;
-  }
-
-  /**
-   * Print an error message.
-   *
-   * @param {string} msg - message to print
-   */
-  error(msg) {
-    this.log.error();
-    throw new Error(`${msg}`);
-  }
-
-  /**
-   * Print a success message.
-   *
-   * @param {string} msg - message to print
-   */
-  success(msg) {
-    this.log.ok(msg);
-  }
-
-  /**
-   * get the an upperFirst camelCase value.
-   * @param {string} value string to convert
-   */
-  upperFirstCamelCase(value) {
-    return upperFirstCamelCase(value);
   }
 
   /**
