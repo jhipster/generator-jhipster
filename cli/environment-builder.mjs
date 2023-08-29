@@ -45,14 +45,7 @@ function loadYoRc(filePath = '.yo-rc.json') {
 
 const createEnvironment = (options = {}) => {
   options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
-
-  // Remove after migration to environment 3.
-  const configOptions = {};
-  const sharedOptions = {
-    ...options.sharedOptions,
-    configOptions,
-  };
-  return new Environment({ newErrorHandler: true, ...options, sharedOptions });
+  return new Environment({ newErrorHandler: true, ...options });
 };
 
 export default class EnvironmentBuilder {

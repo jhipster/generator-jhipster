@@ -293,7 +293,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       },
 
       validate() {
-        if (this.skipServer && this.skipClient) {
+        if (!this.skipChecks && this.jhipsterConfig.skipServer && this.jhipsterConfig.skipClient) {
           throw new Error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
       },

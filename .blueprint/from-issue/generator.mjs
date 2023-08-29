@@ -132,7 +132,6 @@ export default class extends BaseGenerator {
   async runNonInteractive({ cwd, inline, generatorOptions: customOptions }) {
     const envOptions = { cwd, logCwd: this.destinationPath() };
     const generatorOptions = { ...this.options, skipPriorities: ['prompting'], skipInstall: true, inline, ...customOptions };
-    delete generatorOptions.configOptions;
     delete generatorOptions.sharedData;
     const envBuilder = await EnvironmentBuilder.createDefaultBuilder(envOptions);
     const env = envBuilder.getEnvironment();

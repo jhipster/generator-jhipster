@@ -104,7 +104,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * @deprecated
    */
-  configOptions!: Record<string, any>;
   jhipsterTemplatesFolders!: string[];
 
   blueprintStorage?: Storage;
@@ -146,9 +145,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
     let jhipsterOldVersion = null;
     if (!this.options.help) {
-      // JHipster runtime config that should not be stored to .yo-rc.json.
-      this.configOptions = this.options.configOptions || {};
-
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster');
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
@@ -352,7 +348,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       generatorOptions: {
         ...this.options,
         positionalArguments: undefined,
-        configOptions: this.configOptions,
         ...options?.generatorOptions,
       } as any,
     });

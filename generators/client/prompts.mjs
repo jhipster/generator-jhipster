@@ -59,7 +59,7 @@ export async function askForClient({ control }) {
   );
 
   if (answers.clientFramework === NO_CLIENT_FRAMEWORK) {
-    this.skipClient = this.jhipsterConfig.skipClient = true;
+    this.jhipsterConfig.skipClient = true;
     this.cancelCancellableTasks();
   }
 }

@@ -1,12 +1,173 @@
 import _ from 'lodash';
 import { NODE_VERSION } from '../../generator-constants.mjs';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
-import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { getHipster, parseCreationTimestamp, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
+import detectLanguage from '../../languages/support/detect-language.mjs';
 
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CASSANDRA, NO: NO_DATABASE } = databaseTypes;
+
+/**
+ * Load common options to be stored.
+ * @deprecated
+ */
+export const loadStoredAppOptions = ({ options, sharedData, jhipsterConfig, log }) => {
+  // Parse options only once.
+  if (sharedData.get('optionsParsed')) return;
+  sharedData.set('optionsParsed', true);
+
+  // Load stored options
+  if (options.skipJhipsterDependencies !== undefined) {
+    jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
+  }
+  if (options.incrementalChangelog !== undefined) {
+    jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
+  }
+  if (options.withAdminUi !== undefined) {
+    jhipsterConfig.withAdminUi = options.withAdminUi;
+  }
+  if (options.skipClient) {
+    jhipsterConfig.skipClient = true;
+  }
+  if (options.applicationType) {
+    jhipsterConfig.applicationType = options.applicationType;
+  }
+  if (options.skipServer) {
+    jhipsterConfig.skipServer = true;
+  }
+  if (options.skipFakeData) {
+    jhipsterConfig.skipFakeData = true;
+  }
+  if (options.skipUserManagement) {
+    jhipsterConfig.skipUserManagement = true;
+  }
+  if (options.skipCheckLengthOfIdentifier) {
+    jhipsterConfig.skipCheckLengthOfIdentifier = true;
+  }
+
+  if (options.skipCommitHook) {
+    jhipsterConfig.skipCommitHook = true;
+  }
+
+  if (options.baseName) {
+    jhipsterConfig.baseName = options.baseName;
+  }
+  if (options.db) {
+    const databaseType = getDBTypeFromDBValue(options.db);
+    if (databaseType) {
+      jhipsterConfig.databaseType = databaseType;
+    } else if (!jhipsterConfig.databaseType) {
+      throw new Error(`Could not detect databaseType for database ${options.db}`);
+    }
+    jhipsterConfig.devDatabaseType = options.db;
+    jhipsterConfig.prodDatabaseType = options.db;
+  }
+  if (options.auth) {
+    jhipsterConfig.authenticationType = options.auth;
+  }
+  if (options.searchEngine) {
+    jhipsterConfig.searchEngine = options.searchEngine;
+  }
+  if (options.build) {
+    jhipsterConfig.buildTool = options.build;
+  }
+  if (options.websocket) {
+    jhipsterConfig.websocket = options.websocket;
+  }
+  if (options.jhiPrefix !== undefined) {
+    jhipsterConfig.jhiPrefix = options.jhiPrefix;
+  }
+  if (options.entitySuffix !== undefined) {
+    jhipsterConfig.entitySuffix = options.entitySuffix;
+  }
+  if (options.dtoSuffix !== undefined) {
+    jhipsterConfig.dtoSuffix = options.dtoSuffix;
+  }
+  if (options.clientFramework) {
+    jhipsterConfig.clientFramework = options.clientFramework;
+  }
+  if (options.testFrameworks) {
+    jhipsterConfig.testFrameworks = [...new Set([...(jhipsterConfig.testFrameworks || []), ...options.testFrameworks])];
+  }
+  if (options.cypressCoverage !== undefined) {
+    jhipsterConfig.cypressCoverage = options.cypressCoverage;
+  }
+  if (options.cypressAudit !== undefined) {
+    jhipsterConfig.cypressAudit = options.cypressAudit;
+  }
+  if (options.enableTranslation !== undefined) {
+    jhipsterConfig.enableTranslation = options.enableTranslation;
+  }
+  if (options.language) {
+    // workaround double options parsing, remove once generator supports skipping parse options
+    const languages = options.language.flat();
+    if (languages.length === 1 && languages[0] === 'false') {
+      jhipsterConfig.enableTranslation = false;
+    } else {
+      jhipsterConfig.languages = [...(jhipsterConfig.languages || []), ...languages];
+    }
+  }
+  if (options.nativeLanguage) {
+    if (typeof options.nativeLanguage === 'string') {
+      jhipsterConfig.nativeLanguage = options.nativeLanguage;
+      if (!jhipsterConfig.languages) {
+        jhipsterConfig.languages = [options.nativeLanguage];
+      }
+    } else if (options.nativeLanguage === true) {
+      jhipsterConfig.nativeLanguage = detectLanguage();
+    }
+  }
+
+  if (options.creationTimestamp) {
+    const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
+    if (creationTimestamp) {
+      sharedData.get('configOptions').creationTimestamp = creationTimestamp;
+      if (jhipsterConfig.creationTimestamp === undefined) {
+        jhipsterConfig.creationTimestamp = creationTimestamp;
+      }
+    } else {
+      log?.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
+    }
+  }
+
+  if (options.pkType) {
+    jhipsterConfig.pkType = options.pkType;
+  }
+
+  if (options.cacheProvider !== undefined) {
+    jhipsterConfig.cacheProvider = options.cacheProvider;
+  }
+
+  if (options.enableHibernateCache !== undefined) {
+    jhipsterConfig.enableHibernateCache = options.enableHibernateCache;
+  }
+
+  if (options.microfrontend) {
+    jhipsterConfig.microfrontend = options.microfrontend;
+  }
+
+  if (options.reactive !== undefined) {
+    jhipsterConfig.reactive = options.reactive;
+  }
+
+  if (options.enableSwaggerCodegen !== undefined) {
+    jhipsterConfig.enableSwaggerCodegen = options.enableSwaggerCodegen;
+  }
+
+  if (options.clientPackageManager) {
+    jhipsterConfig.clientPackageManager = options.clientPackageManager;
+  }
+  if (jhipsterConfig.clientPackageManager) {
+    const usingNpm = jhipsterConfig.clientPackageManager === 'npm';
+    if (!usingNpm) {
+      log?.warn(`Using unsupported package manager: ${jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+      options.skipInstall = true;
+    }
+  }
+};
 
 /**
  * Load app configs into application.
