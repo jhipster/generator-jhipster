@@ -111,7 +111,7 @@
     "@yeoman/transform": "1.2.0",
     "@yeoman/types": "1.0.1",
     "aws-sdk": "2.1446.0",
-    "axios": "1.4.0",
+    "axios": "1.5.0",
     "chalk": "4.1.2",
     "chevrotain": "11.0.3",
     "commander": "11.0.0",
