@@ -19,15 +19,12 @@
 import assert from 'assert';
 import path from 'path';
 import fs from 'fs';
-import { exec } from 'child_process';
-import os from 'os';
 import _ from 'lodash';
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
 import {
   formatDateForChangelog,
   createJHipster7Context,
   upperFirstCamelCase,
-  removeFieldsWithNullishValues,
   parseCreationTimestamp,
   getHipster,
   getFrontendAppName,
@@ -43,11 +40,9 @@ import {
 import {
   databaseTypes,
   authenticationTypes,
-  buildToolTypes,
   testFrameworkTypes,
   applicationTypes,
   clientFrameworkTypes,
-  getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, NODE_VERSION } from '../generator-constants.mjs';
@@ -63,16 +58,15 @@ const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CASSANDRA } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { GRADLE } = buildToolTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
-
-const isWin32 = os.platform() === 'win32';
 
 /**
  * Class the contains the methods that should be refactored and converted to typescript.
  */
 export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGenerator {
+  abstract get jhipsterConfigWithDefaults(): any;
+
   /**
    * @private
    * Add a new element in the admin section of "global.json" translations.
@@ -245,40 +239,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
    */
   upperFirstCamelCase(value) {
     return upperFirstCamelCase(value);
-  }
-
-  /**
-   * build a generated application.
-   *
-   * @param {String} buildTool - maven | gradle
-   * @param {String} profile - dev | prod
-   * @param {Boolean} buildWar - build a war instead of a jar
-   * @param {Function} cb - callback when build is complete
-   * @returns {object} the command line and its result
-   */
-  buildApplication(buildTool, profile, buildWar, cb) {
-    let buildCmd = 'mvnw -ntp verify -B';
-
-    if (buildTool === GRADLE) {
-      buildCmd = 'gradlew';
-      if (buildWar) {
-        buildCmd += ' bootWar';
-      } else {
-        buildCmd += ' bootJar';
-      }
-    }
-    if (buildWar) {
-      buildCmd += ' -Pwar';
-    }
-
-    if (!isWin32) {
-      buildCmd = `./${buildCmd}`;
-    }
-    buildCmd += ` -P${profile}`;
-    return {
-      stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
-      buildCmd,
-    };
   }
 
   /**
@@ -953,20 +913,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDerivedPlatformConfig(application: any = this) {
     loadDerivedPlatformConfig({ application });
     (this as any).loadServerAndPlatformConfig(application);
-  }
-
-  /**
-   * JHipster config with default values fallback
-   */
-  get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
-    _.defaults(configWithDefaults, {
-      skipFakeData: false,
-      skipCheckLengthOfIdentifier: false,
-      enableGradleEnterprise: false,
-      pages: [],
-    });
-    return configWithDefaults;
   }
 
   /**

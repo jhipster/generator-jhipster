@@ -30,6 +30,7 @@ import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants
 import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
+import { buildApplication } from '../base-docker/utils.mjs';
 
 const { MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -169,7 +170,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
         this.log.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
-        const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
+        const child = buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
           if (err) {
             this.log.error(err);
           }

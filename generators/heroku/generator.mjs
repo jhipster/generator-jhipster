@@ -43,6 +43,7 @@ import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
+import { buildApplication } from '../base-docker/utils.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -650,7 +651,7 @@ export default class HerokuGenerator extends BaseGenerator {
         const done = this.async();
         this.log.log(chalk.bold('\nBuilding application'));
 
-        const child = this.buildApplication(this.buildTool, 'prod', false, err => {
+        const child = buildApplication(this.buildTool, 'prod', false, err => {
           if (err) {
             this.abort = true;
             this.log.error(err);

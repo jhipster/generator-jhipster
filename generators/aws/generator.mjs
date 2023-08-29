@@ -25,6 +25,7 @@ import AwsFactory from './lib/aws.mjs';
 import statistics from '../statistics.mjs';
 import { GENERATOR_AWS } from '../generator-list.mjs';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { buildApplication } from '../base-docker/utils.mjs';
 
 const { MYSQL, POSTGRESQL, MARIADB } = databaseTypes;
 
@@ -133,7 +134,7 @@ export default class AwsGenerator extends BaseGenerator {
         const cb = this.async();
         this.log.log(chalk.bold('Building application'));
 
-        const child = this.buildApplication(this.buildTool, 'prod', true, err => {
+        const child = buildApplication(this.buildTool, 'prod', true, err => {
           if (err) {
             throw new Error(err);
           } else {
