@@ -20,10 +20,11 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
+import _ from 'lodash';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
-import { packageNameToNamespace } from './support/index.mjs';
+import { packageNameToNamespace, removeFieldsWithNullishValues } from './support/index.mjs';
 import JHipsterBaseGenerator from './generator-base-todo.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
@@ -31,6 +32,9 @@ import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
 import CoreGenerator from '../base-core/index.mjs';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.mjs';
+import { getConfigWithDefaults } from '../../jdl/index.js';
+
+const { defaults } = _;
 
 /**
  * Base class that contains blueprints support.
@@ -394,6 +398,20 @@ export default class JHipsterBaseBlueprintGenerator<
    */
   asEndTaskGroup(taskGroup: GenericTaskGroup<this, Definition['endTaskParam']>): GenericTaskGroup<this, Definition['endTaskParam']> {
     return taskGroup;
+  }
+
+  /**
+   * JHipster config with default values fallback
+   */
+  get jhipsterConfigWithDefaults() {
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
+    defaults(configWithDefaults, {
+      skipFakeData: false,
+      skipCheckLengthOfIdentifier: false,
+      enableGradleEnterprise: false,
+      pages: [],
+    });
+    return configWithDefaults;
   }
 
   /**

@@ -32,6 +32,7 @@ import { JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenPluginConfiguration } from './templates.mjs';
+import { buildApplication } from '../base-docker/utils.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -594,7 +595,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`,
         const done = this.async();
         this.log.log(chalk.bold('\nBuilding application'));
 
-        const child = this.buildApplication(this.buildTool, 'prod', false, err => {
+        const child = buildApplication(this.buildTool, 'prod', false, err => {
           if (err) {
             this.abort = true;
             throw new Error(err);

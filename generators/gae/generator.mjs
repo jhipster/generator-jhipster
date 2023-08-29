@@ -888,7 +888,7 @@ export default class GaeGenerator extends BaseGenerator {
                 const done = this.async();
                 this.log.log(chalk.bold('\nBuilding application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod', (err) => {
+                const child = buildApplication(this.buildTool, 'prod', (err) => {
                     if (err) {
                         this.abort = true;
                         this.log.error(err);

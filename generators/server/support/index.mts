@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export * from './config.mjs';
 export * from './doc.mjs';
 export * from './database.mjs';
 export * from './dependabot-maven.mjs';

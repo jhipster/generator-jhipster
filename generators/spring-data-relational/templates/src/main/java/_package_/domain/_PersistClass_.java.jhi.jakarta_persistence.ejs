@@ -22,7 +22,7 @@
 -%>
 <&_ if (fragment.importSection) { -&>
 import jakarta.persistence.*;
-<%_ if ((databaseTypePostgres && anyFieldHasTextContentType) || (anyFieldIsUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
+<%_ if ((prodDatabaseTypePostgres && anyFieldHasTextContentType) || (anyFieldIsUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb))) { _%>
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 <%_ } _%>
@@ -56,7 +56,7 @@ import org.hibernate.type.SqlTypes;
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
-  <%_ } else if (field.fieldTypeUUID && (databaseTypeMysql || databaseTypeMariadb)) { _%>
+  <%_ } else if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else { _%>

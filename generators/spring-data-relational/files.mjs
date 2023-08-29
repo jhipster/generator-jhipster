@@ -121,10 +121,10 @@ export const postgresFiles = {
 export const serverFiles = mergeSections(
   sqlFiles,
   addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
-  addSectionsCondition(mysqlFiles, context => context.devDatabaseTypeMysql || context.prodDatabaseTypeMysql),
-  addSectionsCondition(mariadbFiles, context => context.devDatabaseTypeMariadb || context.prodDatabaseTypeMariadb),
-  addSectionsCondition(mssqlFiles, context => context.devDatabaseTypeMssql || context.prodDatabaseTypeMssql),
-  addSectionsCondition(postgresFiles, context => context.devDatabaseTypePostgres || context.prodDatabaseTypePostgres),
+  addSectionsCondition(mysqlFiles, context => context.prodDatabaseTypeMysql),
+  addSectionsCondition(mariadbFiles, context => context.prodDatabaseTypeMariadb),
+  addSectionsCondition(mssqlFiles, context => context.prodDatabaseTypeMssql),
+  addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgres),
 );
 
 export default async function writeSqlFiles({ application }) {

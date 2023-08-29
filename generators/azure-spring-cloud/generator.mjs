@@ -32,6 +32,7 @@ import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
 import { mavenProfile } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
+import { buildApplication } from '../base-docker/utils.mjs';
 
 const { MEMCACHED } = cacheTypes;
 
@@ -436,7 +437,7 @@ for more detailed information.`,
         const done = this.async();
         this.log.log(chalk.bold('\nBuilding application'));
 
-        const child = this.buildApplication(this.buildTool, 'prod,azure', false, err => {
+        const child = buildApplication(this.buildTool, 'prod,azure', false, err => {
           if (err) {
             this.abort = true;
             this.log.error(err);
