@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname, relative, isAbsolute, join } from 'path';
+import { basename, join as joinPath, dirname, relative, isAbsolute, join, extname } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import { statSync, rmSync, existsSync } from 'fs';
@@ -33,7 +33,7 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.mjs';
-import { joinCallbacks, Logger } from '../base/support/index.mjs';
+import { createJHipster7Context, joinCallbacks, Logger } from '../base/support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -104,7 +104,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * @deprecated
    */
-  configOptions!: Record<string, any>;
   jhipsterTemplatesFolders!: string[];
 
   blueprintStorage?: Storage;
@@ -146,9 +145,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
     let jhipsterOldVersion = null;
     if (!this.options.help) {
-      // JHipster runtime config that should not be stored to .yo-rc.json.
-      this.configOptions = this.options.configOptions || {};
-
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster');
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
@@ -173,8 +169,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     if (this.options.help) {
       return;
     }
-
-    this.parseJHipsterOptions(command.options);
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 
@@ -352,7 +346,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       generatorOptions: {
         ...this.options,
         positionalArguments: undefined,
-        configOptions: this.configOptions,
         ...options?.generatorOptions,
       } as any,
     });
@@ -436,8 +429,262 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * write the given files using provided options.
    */
-  writeFiles<DataType = any>(options: WriteFileOptions<this, DataType>): Promise<string[]> {
-    return (this as any).internalWriteFiles(options);
+  async writeFiles<DataType = any>(options: WriteFileOptions<this, DataType>): Promise<string[]> {
+    const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
+    assert(paramCount > 0, 'One of sections, blocks or templates is required');
+    assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
+
+    const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options as any;
+    const { _: commonSpec = {} } = sections || {};
+    const { transform: sectionTransform = [] } = commonSpec;
+    const startTime = new Date().getMilliseconds();
+
+    /* Build lookup order first has preference.
+     * Example
+     * rootTemplatesPath = ['reactive', 'common']
+     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
+     *
+     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
+     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
+     * /.../generator-jhispter/server/templates/reactive/templatePath
+     * /.../generator-jhispter/server/templates/common/templatePath
+     */
+    let rootTemplatesAbsolutePath;
+    if (!rootTemplatesPath) {
+      rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders;
+    } else if (typeof rootTemplatesPath === 'string' && isAbsolute(rootTemplatesPath)) {
+      rootTemplatesAbsolutePath = rootTemplatesPath;
+    } else {
+      rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders
+        .map(templateFolder => [].concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
+        .flat();
+    }
+
+    const normalizeEjs = file => file.replace('.ejs', '');
+    const resolveCallback = (val, fallback?) => {
+      if (val === undefined) {
+        if (typeof fallback === 'function') {
+          return resolveCallback(fallback);
+        }
+        return fallback;
+      }
+      if (typeof val === 'boolean' || typeof val === 'string') {
+        return val;
+      }
+      if (typeof val === 'function') {
+        return val.call(this, context) || false;
+      }
+      throw new Error(`Type not supported ${val}`);
+    };
+
+    const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs, transform, binary }) => {
+      const extension = extname(sourceFile);
+      const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
+      const ejsFile = appendEjs || extension === '.ejs';
+      let targetFile;
+      if (typeof destinationFile === 'function') {
+        targetFile = resolveCallback(destinationFile);
+      } else {
+        targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
+      }
+
+      let sourceFileFrom;
+      if (Array.isArray(rootTemplatesAbsolutePath)) {
+        // Look for existing templates
+        const existingTemplates = rootTemplatesAbsolutePath
+          .map(rootPath => this.templatePath(rootPath, sourceFile))
+          .filter(templateFile => existsSync(appendEjs ? `${templateFile}.ejs` : templateFile));
+
+        if (existingTemplates.length > 1) {
+          const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
+templates: ${JSON.stringify(existingTemplates, null, 2)}`;
+          if (existingTemplates.length > 2) {
+            this.log.warn(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+          } else {
+            this.log.debug(moreThanOneMessage);
+          }
+        }
+        sourceFileFrom = existingTemplates.shift();
+
+        if (sourceFileFrom === undefined) {
+          throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
+        }
+      } else if (typeof rootTemplatesAbsolutePath === 'string') {
+        sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
+      } else {
+        sourceFileFrom = this.templatePath(sourceFile);
+      }
+      if (appendEjs) {
+        sourceFileFrom = `${sourceFileFrom}.ejs`;
+      }
+
+      if (!ejsFile) {
+        await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
+      } else {
+        let useAsync = true;
+        if (context.entityClass) {
+          if (!context.baseName) {
+            throw new Error('baseName is require at templates context');
+          }
+          const sourceBasename = basename(sourceFileFrom);
+          const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
+          Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
+            entity.resetFakerSeed(seed);
+          });
+          // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
+          useAsync = false;
+        }
+
+        const renderOptions = {
+          ...(options?.renderOptions ?? {}),
+          // Set root for ejs to lookup for partials.
+          root: rootTemplatesAbsolutePath,
+          // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
+          cache: false,
+        };
+        const copyOptions = { noGlob: true };
+        // TODO drop for v8 final release
+        const data = (this as any).jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
+        if (useAsync) {
+          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+        } else {
+          (this as any).renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+        }
+      }
+      if (!isBinary && transform && transform.length) {
+        (this as any).editFile(targetFile, ...transform);
+      }
+      return targetFile;
+    };
+
+    let parsedBlocks = blocks;
+    if (sections) {
+      assert(typeof sections === 'object', 'sections must be an object');
+      const parsedSections = Object.entries(sections)
+        .map(([sectionName, sectionBlocks]) => {
+          if (sectionName.startsWith('_')) return undefined;
+          assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
+          return { sectionName, sectionBlocks };
+        })
+        .filter(Boolean);
+
+      parsedBlocks = parsedSections
+        .map(({ sectionName, sectionBlocks }: any) => {
+          return sectionBlocks.map((block, blockIdx) => {
+            const blockSpecPath = `${sectionName}[${blockIdx}]`;
+            assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
+            return { blockSpecPath, ...block };
+          });
+        })
+        .flat();
+    }
+
+    let parsedTemplates;
+    if (parsedBlocks) {
+      parsedTemplates = parsedBlocks
+        .map((block, blockIdx) => {
+          const {
+            blockSpecPath = `${blockIdx}`,
+            path: blockPathValue = './',
+            from: blockFromCallback,
+            to: blockToCallback,
+            condition: blockConditionCallback,
+            transform: blockTransform = [],
+            renameTo: blockRenameTo,
+          } = block;
+          assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
+          assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
+          const condition = resolveCallback(blockConditionCallback);
+          if (condition !== undefined && !condition) {
+            return undefined;
+          }
+          if (typeof blockPathValue === 'function') {
+            throw new Error(`Block path should be static for ${blockSpecPath}`);
+          }
+          const blockPath = resolveCallback(blockFromCallback, blockPathValue);
+          const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
+          return block.templates.map((fileSpec, fileIdx) => {
+            const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
+            assert(
+              typeof fileSpec === 'object' || typeof fileSpec === 'string' || typeof fileSpec === 'function',
+              `File must be an object, a string or a function for ${fileSpecPath}`,
+            );
+            if (typeof fileSpec === 'function') {
+              fileSpec = fileSpec.call(this, context);
+            }
+            let { noEjs } = fileSpec;
+            let derivedTransform;
+            if (typeof blockTransform === 'boolean') {
+              noEjs = !blockTransform;
+              derivedTransform = [...methodTransform, ...sectionTransform];
+            } else {
+              derivedTransform = [...methodTransform, ...sectionTransform, ...blockTransform];
+            }
+            if (typeof fileSpec === 'string') {
+              const sourceFile = join(blockPath, fileSpec);
+              let destinationFile;
+              if (blockRenameTo) {
+                destinationFile = this.destinationPath(blockRenameTo.call(this, context, fileSpec, this));
+              } else {
+                destinationFile = this.destinationPath(blockTo, fileSpec);
+              }
+              return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
+            }
+
+            const { options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
+            let { sourceFile, destinationFile } = fileSpec;
+
+            if (typeof fileTransform === 'boolean') {
+              noEjs = !fileTransform;
+            } else if (Array.isArray(fileTransform)) {
+              derivedTransform = [...derivedTransform, ...fileTransform];
+            } else if (fileTransform !== undefined) {
+              throw new Error(`Transform ${fileTransform} value is not supported`);
+            }
+
+            const normalizedFile = resolveCallback(sourceFile || file);
+            sourceFile = join(blockPath, normalizedFile);
+            destinationFile = this.destinationPath(blockTo, join(resolveCallback(destinationFile || renameTo, normalizedFile)));
+
+            const override = resolveCallback(fileSpec.override);
+            if (override !== undefined && !override && (this as any).fs.exists(destinationFile)) {
+              this.log.debug(`skipping file ${destinationFile}`);
+              return undefined;
+            }
+
+            // TODO remove for jhipster 8
+            if (noEjs === undefined) {
+              const { method } = fileSpec;
+              if (method === 'copy') {
+                noEjs = true;
+              }
+            }
+
+            return {
+              sourceFile,
+              destinationFile,
+              options,
+              transform: derivedTransform,
+              noEjs,
+              binary,
+            };
+          });
+        })
+        .flat()
+        .filter(template => template);
+    } else {
+      parsedTemplates = templates.map(template => {
+        if (typeof template === 'string') {
+          return { sourceFile: template, destinationFile: template };
+        }
+        return template;
+      });
+    }
+
+    const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
+    this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
+    return files.filter(file => file);
   }
 
   /**

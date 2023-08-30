@@ -143,7 +143,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
           const generatorName = this.clientsToGenerate[cliName].generatorName;
           const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
           if (!stderr) {
-            this.success(`Succesfully generated ${cliName} ${generatorName} client`);
+            this.log.ok(`Succesfully generated ${cliName} ${generatorName} client`);
           } else {
             this.log.error(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
           }

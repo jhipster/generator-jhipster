@@ -35,6 +35,7 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.mjs';
 import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.mjs';
+import { upperFirstCamelCase } from '../base/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -270,5 +271,13 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    */
   addAppSCSSStyle(style, comment) {
     this.needleApi.clientReact.addAppSCSSStyle(style, comment);
+  }
+
+  /**
+   * get the an upperFirst camelCase value.
+   * @param {string} value string to convert
+   */
+  upperFirstCamelCase(value) {
+    return upperFirstCamelCase(value);
   }
 }

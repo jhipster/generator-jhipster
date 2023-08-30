@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
+export * from './config.mjs';
 export { default as checkNode } from './check-node.mjs';

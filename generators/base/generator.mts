@@ -421,8 +421,8 @@ export default class JHipsterBaseBlueprintGenerator<
   protected async composeWithBlueprints(subGen: string, options?: ComposeOptions) {
     this.delegateToBlueprint = false;
 
-    if (!this.configOptions.blueprintConfigured) {
-      this.configOptions.blueprintConfigured = true;
+    if (!this.sharedData.get('blueprintConfigured')) {
+      this.sharedData.set('blueprintConfigured', true);
       await this._configureBlueprints();
     }
 

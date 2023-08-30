@@ -128,9 +128,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return {
       validate() {
         if (this.languagesToApply.length > 0) {
-          if (this.skipClient) {
+          if (this.jhipsterConfig.skipClient) {
             this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
-          } else if (this.skipServer) {
+          } else if (this.jhipsterConfig.skipServer) {
             this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
           } else {
             this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
