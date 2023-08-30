@@ -39,6 +39,7 @@ import {
 } from '../kubernetes/kubernetes-base.mjs';
 import statistics from '../statistics.mjs';
 import { kubernetesPlatformTypes, buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+import { getJdbcUrl } from '../spring-data-relational/support/index.mjs';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;
@@ -240,5 +241,16 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
   }
 }

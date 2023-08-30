@@ -39,6 +39,7 @@ import {
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { writeFiles } from './files.mjs';
+import { getJdbcUrl } from '../spring-data-relational/support/index.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -287,5 +288,16 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   _loadDerivedOpenshiftConfig(dest = this) {
     dest.storageTypeEphemeral = dest.storageType === EPHEMERAL;
     dest.storageTypePersistent = dest.storageType === PERSISTENT;
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
   }
 }

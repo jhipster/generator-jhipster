@@ -34,6 +34,7 @@ import {
   getReactiveMavenDefinition,
 } from './internal/dependencies.mjs';
 import { hibernateSnakeCase } from '../server/support/string.mjs';
+import { getJdbcUrl, getR2dbcUrl } from './support/index.mjs';
 
 const { SQL } = databaseTypes;
 
@@ -160,5 +161,27 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
    */
   getColumnName(value) {
     return hibernateSnakeCase(value);
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
+  }
+
+  /**
+   * @private
+   * Returns the R2DBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getR2DBCUrl(databaseType, options = {}) {
+    return getR2dbcUrl(databaseType, options);
   }
 }

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
-import { parseCreationTimestamp } from './support/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
   loadDerivedPlatformConfig,
@@ -26,7 +25,6 @@ import {
   loadServerAndPlatformConfig,
   loadServerConfig,
 } from '../server/support/index.mjs';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
 import { loadClientConfig, loadDerivedClientConfig } from '../client/support/index.mjs';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
 
@@ -64,14 +62,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   parseCommonRuntimeOptions(options: any = this.options, dest = this.sharedData.get('configOptions')) {
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
-    }
-    if (this.sharedData.get('creationTimestamp') === undefined && options.creationTimestamp) {
-      const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
-      if (creationTimestamp) {
-        this.sharedData.set('creationTimestamp', creationTimestamp);
-      } else {
-        this.log.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
-      }
     }
     if (options.reproducible !== undefined) {
       this.sharedData.set('reproducible', options.reproducible);
@@ -165,27 +155,5 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   loadDerivedPlatformConfig(application: any = this) {
     loadDerivedPlatformConfig({ application });
     (this as any).loadServerAndPlatformConfig(application);
-  }
-
-  /**
-   * @private
-   * Returns the JDBC URL for a databaseType
-   *
-   * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
-   */
-  getJDBCUrl(databaseType, options = {}) {
-    return getJdbcUrl(databaseType, options);
-  }
-
-  /**
-   * @private
-   * Returns the R2DBC URL for a databaseType
-   *
-   * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
-   */
-  getR2DBCUrl(databaseType, options = {}) {
-    return getR2dbcUrl(databaseType, options);
   }
 }
