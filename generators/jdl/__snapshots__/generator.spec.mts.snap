@@ -217,7 +217,7 @@ Options:
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --message-broker <value>                 message broker
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
-  --prettier-tab-width                     Default tab width for prettier
+  --prettier-tab-width <value>             Default tab width for prettier
   --with-admin-ui                          Generate administrative user interface
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
