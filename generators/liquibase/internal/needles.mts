@@ -18,7 +18,13 @@
  */
 
 import { createNeedleCallback } from '../../base/support/needles.mjs';
-import { LiquibaseChangelog } from '../types.mjs';
+import { LiquibaseChangelog, LiquibaseChangelogSection } from '../types.mjs';
+
+const changelogType = {
+  base: 'liquibase-add-changelog',
+  incremental: 'liquibase-add-incremental-changelog',
+  constraints: 'liquibase-add-constraints-changelog',
+};
 
 const addLiquibaseChangelogToMasterCallback = ({ changelogName, needle }: LiquibaseChangelog & { needle: string }) =>
   createNeedleCallback({
@@ -26,11 +32,11 @@ const addLiquibaseChangelogToMasterCallback = ({ changelogName, needle }: Liquib
     contentToAdd: `<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`,
   });
 
-export const addLiquibaseChangelogCallback = ({ changelogName }: LiquibaseChangelog) =>
-  addLiquibaseChangelogToMasterCallback({ needle: 'liquibase-add-changelog', changelogName });
+export const addLiquibaseChangelogCallback = ({ changelogName, section = 'base' }: LiquibaseChangelogSection) =>
+  addLiquibaseChangelogToMasterCallback({ needle: changelogType[section], changelogName });
 
 export const addLiquibaseIncrementalChangelogCallback = ({ changelogName }: LiquibaseChangelog) =>
-  addLiquibaseChangelogToMasterCallback({ needle: 'liquibase-add-incremental-changelog', changelogName });
+  addLiquibaseChangelogCallback({ changelogName, section: 'incremental' });
 
 export const addLiquibaseConstraintsChangelogCallback = ({ changelogName }: LiquibaseChangelog) =>
-  addLiquibaseChangelogToMasterCallback({ needle: 'liquibase-add-constraints-changelog', changelogName });
+  addLiquibaseChangelogCallback({ changelogName, section: 'constraints' });

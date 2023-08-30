@@ -107,6 +107,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/base-application/templates/template-file-base-application.ejs": {
     "stateCleared": "modified",
   },
+  "generators/base-core/command.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-core/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-core/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-core/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-core/templates/template-file-base-core.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/base-docker/command.mjs": {
     "stateCleared": "modified",
   },
@@ -120,6 +135,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/base-docker/templates/template-file-base-docker.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/command.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/templates/template-file-base-entity-changes.ejs": {
     "stateCleared": "modified",
   },
   "generators/base/command.mjs": {
@@ -582,21 +612,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/languages/templates/template-file-languages.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/liquibase-changelogs/templates/template-file-liquibase-changelogs.ejs": {
     "stateCleared": "modified",
   },
   "generators/liquibase/command.mjs": {

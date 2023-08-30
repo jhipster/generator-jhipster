@@ -19,6 +19,7 @@ exports[`generator - entity --single-entity when regenerating with default confi
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
+      "section": "base",
     },
   ],
 }

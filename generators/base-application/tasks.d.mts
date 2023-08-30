@@ -3,6 +3,7 @@ import { ControlTaskParam, BaseGeneratorDefinition, SourceTaskParam, GenericSour
 import { CommonClientServerApplication } from './types.mjs';
 import { Entity, Field, Relationship } from './types/index.mjs';
 import { ClientSourceType } from '../client/types.mjs';
+import { BaseChangelog } from '../base-entity-changes/types.js';
 
 export type GenericApplicationDefinition<ApplicationType = CommonClientServerApplication> = {
   applicationType: ApplicationType;
@@ -66,7 +67,6 @@ export type BaseApplicationGeneratorDefinition<
     | 'loadingTaskParam'
     | 'preparingTaskParam'
     | 'defaultTaskParam'
-    | 'writingTaskParam'
     | 'postWritingTaskParam'
     | 'preConflictsTaskParam'
     | 'installTaskParam'
@@ -74,8 +74,9 @@ export type BaseApplicationGeneratorDefinition<
     | 'endTaskParam',
     ApplicationTaskParam<Definition>
   > &
+  Record<'writingTaskParam', ApplicationTaskParam<Definition> & { configChanges?: Record<string, { newValue: any; oldValue: any }> }> &
   // Add entities to existing priorities
-  Record<'defaultTaskParam', EntitiesTaskParam<Definition>> &
+  Record<'defaultTaskParam', EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] }> &
   // Add application and control to new priorities
   Record<
     | 'configuringEachEntityTaskParam'
@@ -96,6 +97,6 @@ export type BaseApplicationGeneratorDefinition<
     preparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<Definition>;
     preparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<Definition>;
     postPreparingEachEntityTaskParam: EachEntityTaskParam<Definition>;
-    writingEntitiesTaskParam: EntitiesTaskParam<Definition>;
-    postWritingEntitiesTaskParam: SourceTaskParam<Definition> & EntitiesTaskParam<Definition>;
+    writingEntitiesTaskParam: EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] };
+    postWritingEntitiesTaskParam: SourceTaskParam<Definition> & EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] };
   };
