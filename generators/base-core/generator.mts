@@ -19,7 +19,7 @@
 import { basename, join as joinPath, dirname, relative, isAbsolute, join, extname } from 'path';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
-import { statSync, rmSync, existsSync } from 'fs';
+import { statSync, rmSync, existsSync, readFileSync } from 'fs';
 import assert from 'assert';
 import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
@@ -51,7 +51,7 @@ import { CommonClientServerApplication, type BaseApplication } from '../base-app
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
 import command from '../base/command.mjs';
-import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
+import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.mjs';
 
 const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -224,6 +224,28 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     if (priorityName === POST_WRITING || priorityName === PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
+    }
+    if (priorityName === WRITING) {
+      if (existsSync(this.destinationPath(YO_RC_FILE))) {
+        try {
+          const oldConfig = JSON.parse(readFileSync(this.destinationPath(YO_RC_FILE)).toString())[GENERATOR_JHIPSTER];
+          const newConfig: any = this.config.getAll();
+          const keys = [...new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])];
+          const configChanges = Object.fromEntries(
+            keys
+              .filter(key =>
+                Array.isArray(newConfig[key])
+                  ? newConfig[key].length === oldConfig[key].length &&
+                    newConfig[key].find((element, index) => element !== oldConfig[key][index])
+                  : newConfig[key] !== oldConfig[key],
+              )
+              .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
+          );
+          return [{ control, configChanges }];
+        } catch {
+          // Fail to parse
+        }
+      }
     }
     return [{ control }];
   }

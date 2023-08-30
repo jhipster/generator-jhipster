@@ -67,7 +67,6 @@ export type BaseApplicationGeneratorDefinition<
     | 'loadingTaskParam'
     | 'preparingTaskParam'
     | 'defaultTaskParam'
-    | 'writingTaskParam'
     | 'postWritingTaskParam'
     | 'preConflictsTaskParam'
     | 'installTaskParam'
@@ -75,6 +74,7 @@ export type BaseApplicationGeneratorDefinition<
     | 'endTaskParam',
     ApplicationTaskParam<Definition>
   > &
+  Record<'writingTaskParam', ApplicationTaskParam<Definition> & { configChanges?: Record<string, { newValue: any; oldValue: any }> }> &
   // Add entities to existing priorities
   Record<'defaultTaskParam', EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] }> &
   // Add application and control to new priorities

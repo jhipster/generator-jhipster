@@ -97,6 +97,7 @@ export const TEST_DIR = 'src/test/';
 export const CLIENT_DIST_DIR = 'static/';
 
 export const GENERATOR_JHIPSTER = 'generator-jhipster';
+export const YO_RC_FILE = '.yo-rc.json';
 
 export const JHIPSTER_CONFIG_DIR = '.jhipster';
 export const DOCKER_DIR = `${MAIN_DIR}docker/`;
