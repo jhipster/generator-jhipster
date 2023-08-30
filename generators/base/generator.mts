@@ -33,6 +33,7 @@ import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.mjs';
 import CoreGenerator from '../base-core/index.mjs';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.mjs';
 import { getConfigWithDefaults } from '../../jdl/index.js';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { defaults } = _;
 
@@ -57,7 +58,7 @@ export default class JHipsterBaseBlueprintGenerator<
     }
 
     this.loadRuntimeOptions();
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
 
     this.sbsBlueprint = this.features.sbsBlueprint ?? false;
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';

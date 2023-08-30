@@ -102,6 +102,7 @@ import { createBase64Secret, createSecret, createNeedleCallback } from '../base/
 import command from './command.mjs';
 import { addJavaAnnotation } from '../java/support/index.mjs';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -155,7 +156,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   fakeKeytool;
 
   async beforeQueue() {
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
@@ -74,7 +75,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     if (!this.fromBlueprint) {

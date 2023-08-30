@@ -23,6 +23,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../gen
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
 
 export default class DockerGenerator extends BaseApplicationGenerator {
   hasServicesFile = false;
@@ -238,5 +239,27 @@ export default class DockerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
+  }
+
+  /**
+   * @private
+   * Returns the R2DBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getR2DBCUrl(databaseType, options = {}) {
+    return getR2dbcUrl(databaseType, options);
   }
 }

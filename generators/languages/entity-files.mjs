@@ -16,10 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 import { getEnumInfo } from '../base-application/support/index.mjs';
-
-const { startCase } = _;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -91,7 +88,6 @@ export function writeEntityFiles() {
       for (const entity of entitiesToWriteTranslationFor) {
         for (const lang of this.languagesToApply) {
           await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
-          this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
         }
       }
     },

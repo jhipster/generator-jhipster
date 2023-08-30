@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { NODE_VERSION } from '../../generator-constants.mjs';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
-import { getHipster, parseCreationTimestamp, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
 
@@ -14,7 +14,10 @@ const { CASSANDRA, NO: NO_DATABASE } = databaseTypes;
  * Load common options to be stored.
  * @deprecated
  */
-export const loadStoredAppOptions = ({ options, sharedData, jhipsterConfig, log }) => {
+export function loadStoredAppOptions(
+  this: any,
+  { options = this.options, sharedData = this.sharedData, jhipsterConfig = this.jhipsterConfig, log = this.log } = {},
+) {
   // Parse options only once.
   if (sharedData.get('optionsParsed')) return;
   sharedData.set('optionsParsed', true);
@@ -121,18 +124,6 @@ export const loadStoredAppOptions = ({ options, sharedData, jhipsterConfig, log 
     }
   }
 
-  if (options.creationTimestamp) {
-    const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
-    if (creationTimestamp) {
-      sharedData.get('configOptions').creationTimestamp = creationTimestamp;
-      if (jhipsterConfig.creationTimestamp === undefined) {
-        jhipsterConfig.creationTimestamp = creationTimestamp;
-      }
-    } else {
-      log?.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
-    }
-  }
-
   if (options.pkType) {
     jhipsterConfig.pkType = options.pkType;
   }
@@ -167,7 +158,7 @@ export const loadStoredAppOptions = ({ options, sharedData, jhipsterConfig, log 
       options.skipInstall = true;
     }
   }
-};
+}
 
 /**
  * Load app configs into application.

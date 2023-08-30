@@ -34,6 +34,9 @@ import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/inde
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import upgradeFilesTask from './upgrade-files-task.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
+
+const { startCase } = _;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -86,7 +89,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       return;
     }
 
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     // Validate languages passed as argument.
@@ -208,17 +211,29 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get preparing() {
-    return {
-      prepareForTemplates({ application }) {
+    return this.asPreparingTaskGroup({
+      prepareForTemplates({ application, source }) {
         if (application.enableTranslation) {
           if (this.options.regenerate) {
             this.languagesToApply = application.languages;
           } else {
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
+
+          source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
+            this.mergeDestinationJson(`${application.clientSrcDir}i18n/${language}/global.json`, {
+              global: {
+                menu: {
+                  entities: {
+                    [translationKey]: translationValue,
+                  },
+                },
+              },
+            });
+          };
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -358,6 +373,26 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      addEntities({ entities, source }) {
+        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+          for (const language of this.languagesToApply) {
+            source.addEntityTranslationKey?.({
+              language,
+              translationKey: entity.entityTranslationKeyMenu,
+              translationValue: entity.entityClassHumanized ?? startCase(entity.entityClass),
+            });
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   migrateLanguages(languagesToMigrate) {
