@@ -192,7 +192,7 @@ export default class JHipsterCommand extends Command {
       cmdString = `-${optionDefinition.alias}, `;
     }
     cmdString = `${cmdString}${longOption}`;
-    if (optionDefinition.type === String) {
+    if (optionDefinition.type === String || typeof optionDefinition.type === 'function') {
       cmdString = optionDefinition.required !== false ? `${cmdString} <value>` : `${cmdString} [value]`;
     } else if (optionDefinition.type === Array) {
       cmdString = optionDefinition.required !== false ? `${cmdString} <value...>` : `${cmdString} [value...]`;
