@@ -34,6 +34,7 @@ import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/inde
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import upgradeFilesTask from './upgrade-files-task.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { startCase } = _;
 
@@ -88,7 +89,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       return;
     }
 
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     // Validate languages passed as argument.

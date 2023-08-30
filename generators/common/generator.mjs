@@ -32,12 +32,13 @@ import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 import command from './command.mjs';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { REACT, ANGULAR } = clientFrameworkTypes;
 
 export default class CommonGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);

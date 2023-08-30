@@ -19,6 +19,7 @@
 import { preparePostEntityClientDerivedProperties } from '../client/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -26,7 +27,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
 
     if (this.options.help) return;
 
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
   }
 

@@ -36,6 +36,7 @@ import { DOCKER_DIR } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -47,7 +48,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
     if (this.options.help) return;
 
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
   }
 
   async beforeQueue() {

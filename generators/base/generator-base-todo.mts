@@ -26,7 +26,7 @@ import {
   loadServerConfig,
 } from '../server/support/index.mjs';
 import { loadClientConfig, loadDerivedClientConfig } from '../client/support/index.mjs';
-import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
 
 /**
  * Class the contains the methods that should be refactored and converted to typescript.
@@ -54,14 +54,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
     if (options.reproducible !== undefined) {
       this.sharedData.set('reproducible', options.reproducible);
     }
-  }
-
-  /**
-   * Load common options to be stored.
-   * @deprecated
-   */
-  loadStoredAppOptions(options: any = this.options) {
-    loadStoredAppOptions({ jhipsterConfig: this.jhipsterConfig, sharedData: this.sharedData, options, log: this.log });
   }
 
   /**

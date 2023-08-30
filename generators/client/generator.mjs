@@ -30,6 +30,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, G
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { createNeedleCallback } from '../base/support/index.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -40,7 +41,7 @@ const { CYPRESS } = testFrameworkTypes;
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.

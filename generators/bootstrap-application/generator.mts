@@ -31,6 +31,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -43,7 +44,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
     if (this.options.help) return;
 
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
   }
 

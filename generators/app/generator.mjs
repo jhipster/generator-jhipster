@@ -21,7 +21,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { checkNode } from './support/index.mjs';
+import { checkNode, loadStoredAppOptions } from './support/index.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.mjs';
@@ -262,7 +262,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
     this.loadRuntimeOptions();
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
