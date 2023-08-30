@@ -170,8 +170,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       return;
     }
 
-    this.parseJHipsterOptions(command.options);
-
     this.registerPriorities(CUSTOM_PRIORITIES);
 
     if (this.getFeatures().jhipsterBootstrap ?? true) {
