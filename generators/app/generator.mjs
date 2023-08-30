@@ -166,12 +166,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       type: String,
     });
 
-    // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
-    this.option('creation-timestamp', {
-      description: 'Project creation timestamp (used for reproducible builds)',
-      type: String,
-    });
-
     this.option('incremental-changelog', {
       description: 'Creates incremental database changelogs',
       type: Boolean,

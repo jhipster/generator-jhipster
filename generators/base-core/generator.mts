@@ -33,7 +33,7 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.mjs';
-import { createJHipster7Context, joinCallbacks, Logger } from '../base/support/index.mjs';
+import { createJHipster7Context, formatDateForChangelog, joinCallbacks, Logger } from '../base/support/index.mjs';
 
 import type {
   JHipsterGeneratorOptions,
@@ -141,12 +141,14 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       hide: true,
     });
 
-    this.parseJHipsterOptions(command.options);
-
     let jhipsterOldVersion = null;
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster');
+
+      /* Options parsing must be executed after forcing jhipster storage namespace */
+      this.parseJHipsterOptions(command.options);
+
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
@@ -316,6 +318,55 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
     // Arguments should only be parsed by the root generator, cleanup to don't be forwarded.
     this.options.positionalArguments = [];
+  }
+
+  /**
+   * Generate a date to be used by Liquibase changelogs.
+   *
+   * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
+   *                                 Set false to create a changelog date incrementing the last one.
+   * @return {String} Changelog date.
+   */
+  dateFormatForLiquibase(reproducible = this.sharedData.get('reproducible')) {
+    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
+    const creationTimestamp =
+      this.sharedData.get('creationTimestamp') ?? this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
+    let now = new Date();
+    // Miliseconds is ignored for changelogDate.
+    now.setMilliseconds(0);
+    // Run reproducible timestamp when regenerating the project with with-entities option.
+    if (reproducible || creationTimestamp) {
+      if (this.sharedData.get('reproducibleLiquibaseTimestamp')) {
+        // Counter already started.
+        now = this.sharedData.get('reproducibleLiquibaseTimestamp');
+      } else {
+        // Create a new counter
+        const newCreationTimestamp = creationTimestamp ?? this.config.get('creationTimestamp');
+        now = newCreationTimestamp ? new Date(newCreationTimestamp as any) : now;
+        now.setMilliseconds(0);
+      }
+      now.setMinutes(now.getMinutes() + 1);
+      this.sharedData.set('reproducibleLiquibaseTimestamp', now);
+
+      // Reproducible build can create future timestamp, save it.
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
+        this.config.set('lastLiquibaseTimestamp', now.getTime());
+      }
+    } else {
+      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
+      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      if (lastLiquibaseTimestamp) {
+        lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
+        if (lastLiquibaseTimestamp >= now) {
+          now = lastLiquibaseTimestamp;
+          now.setSeconds(now.getSeconds() + 1);
+          now.setMilliseconds(0);
+        }
+      }
+      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
+    }
+    return formatDateForChangelog(now);
   }
 
   /**

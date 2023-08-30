@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { parseCreationTimestamp } from './support/timestamp.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -48,6 +49,11 @@ const command: JHipsterCommandDefinition = {
     skipJhipsterDependencies: {
       description: "Don't write jhipster dependencies to package.json.",
       type: Boolean,
+      scope: 'storage',
+    },
+    creationTimestamp: {
+      description: 'Project creation timestamp (used for reproducible builds)',
+      type: parseCreationTimestamp,
       scope: 'storage',
     },
   },

@@ -11,6 +11,7 @@ export type ApplicationWithConfig = {
 
 export type JHipsterGeneratorOptions = BaseOptions & {
   applicationWithConfig?: ApplicationWithConfig;
+  creationTimestamp?: string;
   positionalArguments?: unknown[];
   jhipsterContext?: any;
   skipYoResolve?: boolean;
@@ -19,7 +20,6 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   applicationWithEntities?: any;
   blueprints?: string;
   blueprint?: any;
-  configOptions: any;
   reproducible?: boolean;
   applicationId?: string;
   sharedData: any;

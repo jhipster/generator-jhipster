@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
-import { formatDateForChangelog, parseCreationTimestamp } from './support/index.mjs';
+import { parseCreationTimestamp } from './support/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
   loadDerivedPlatformConfig,
@@ -58,53 +58,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   }
 
   /**
-   * Generate a date to be used by Liquibase changelogs.
-   *
-   * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
-   *                                 Set false to create a changelog date incrementing the last one.
-   * @return {String} Changelog date.
-   */
-  dateFormatForLiquibase(reproducible = this.sharedData.get('configOptions').reproducible) {
-    const configOptions = this.sharedData.get('configOptions');
-    let now = new Date();
-    // Miliseconds is ignored for changelogDate.
-    now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with with-entities option.
-    if (reproducible || configOptions.creationTimestamp) {
-      if (configOptions.reproducibleLiquibaseTimestamp) {
-        // Counter already started.
-        now = configOptions.reproducibleLiquibaseTimestamp;
-      } else {
-        // Create a new counter
-        const creationTimestamp = configOptions.creationTimestamp || this.config.get('creationTimestamp');
-        now = creationTimestamp ? new Date(creationTimestamp) : now;
-        now.setMilliseconds(0);
-      }
-      now.setMinutes(now.getMinutes() + 1);
-      configOptions.reproducibleLiquibaseTimestamp = now;
-
-      // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
-      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
-        this.config.set('lastLiquibaseTimestamp', now.getTime());
-      }
-    } else {
-      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
-      if (lastLiquibaseTimestamp) {
-        lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
-        if (lastLiquibaseTimestamp >= now) {
-          now = lastLiquibaseTimestamp;
-          now.setSeconds(now.getSeconds() + 1);
-          now.setMilliseconds(0);
-        }
-      }
-      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
-    }
-    return formatDateForChangelog(now);
-  }
-
-  /**
    * Parse runtime options.
    * @deprecated
    */
@@ -115,22 +68,16 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
     if (options.debug !== undefined) {
       dest.isDebugEnabled = options.debug;
     }
-    if (options.skipPrompts !== undefined) {
-      dest.skipPrompts = options.skipPrompts;
-    }
-    if (options.skipClient !== undefined) {
-      dest.skipClient = options.skipClient;
-    }
-    if (dest.creationTimestamp === undefined && options.creationTimestamp) {
+    if (this.sharedData.get('creationTimestamp') === undefined && options.creationTimestamp) {
       const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
       if (creationTimestamp) {
-        dest.creationTimestamp = creationTimestamp;
+        this.sharedData.set('creationTimestamp', creationTimestamp);
       } else {
         this.log.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
       }
     }
     if (options.reproducible !== undefined) {
-      dest.reproducible = options.reproducible;
+      this.sharedData.set('reproducible', options.reproducible);
     }
   }
 
@@ -149,9 +96,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   loadRuntimeOptions(config = this.sharedData.get('configOptions'), dest: any = this) {
     dest.withEntities = config.withEntities;
     dest.isDebugEnabled = config.isDebugEnabled;
-    dest.logo = config.logo;
-    config.backendName = config.backendName || 'Java';
-    dest.backendName = config.backendName;
   }
 
   /**

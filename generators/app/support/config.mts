@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { NODE_VERSION } from '../../generator-constants.mjs';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
-import { getHipster, parseCreationTimestamp, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
 
@@ -118,18 +118,6 @@ export const loadStoredAppOptions = ({ options, sharedData, jhipsterConfig, log 
       }
     } else if (options.nativeLanguage === true) {
       jhipsterConfig.nativeLanguage = detectLanguage();
-    }
-  }
-
-  if (options.creationTimestamp) {
-    const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
-    if (creationTimestamp) {
-      sharedData.get('configOptions').creationTimestamp = creationTimestamp;
-      if (jhipsterConfig.creationTimestamp === undefined) {
-        jhipsterConfig.creationTimestamp = creationTimestamp;
-      }
-    } else {
-      log?.warn(`Error parsing creationTimestamp ${options.creationTimestamp}.`);
     }
   }
 

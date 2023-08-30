@@ -33,7 +33,6 @@ Options:
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
   --blueprint <value>                      DEPRECATED: Specify a generator blueprint to use for the sub generators
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
-  --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --legacy-db-names                        Generate database names with jhipster 6 compatibility.

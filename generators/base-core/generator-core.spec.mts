@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
 import Base from './index.mjs';
-import { parseChangelog } from './support/timestamp.mjs';
-import { createJHipsterLogger } from './support/logger.mjs';
+import { parseChangelog } from '../base/support/timestamp.mjs';
+import { createJHipsterLogger } from '../base/support/logger.mjs';
 
 const BaseGenerator: any = Base.prototype;
 

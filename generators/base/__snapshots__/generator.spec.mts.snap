@@ -19,6 +19,7 @@ Options:
   --experimental                Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   -d, --debug                   Enable debugger
   --skip-jhipster-dependencies  Don't write jhipster dependencies to package.json.
+  --creation-timestamp          Project creation timestamp (used for reproducible builds)
   -h, --help                    display help for command
 
 Commands:
