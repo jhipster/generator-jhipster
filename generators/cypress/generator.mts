@@ -223,8 +223,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           },
         });
       },
-      configureCoverage({ application }) {
-        const { cypressCoverage, clientFramework, clientFrameworkAngular, dasherizedBaseName } = application;
+      configureCoverage({ application, source }) {
+        const { cypressCoverage, clientFrameworkAngular, dasherizedBaseName } = application;
         if (!cypressCoverage) return;
         this.packageJson.merge({
           devDependencies: {
@@ -245,8 +245,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
         if (clientFrameworkAngular) {
           // Add 'ng build --configuration instrumenter' support
           this.createStorage('angular.json').setPath(`projects.${dasherizedBaseName}.architect.build.configurations.instrumenter`, {});
-          this.addWebpackConfig(
-            `targetOptions.configuration === 'instrumenter'
+          source.addWebpackConfig?.({
+            config: `targetOptions.configuration === 'instrumenter'
       ? {
           module: {
             rules: [
@@ -268,8 +268,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           },
         }
       : {}`,
-            clientFramework,
-          );
+          });
         }
       },
     });

@@ -35,6 +35,7 @@ import {
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
 import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
+import { createNeedleCallback } from '../base/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -77,7 +78,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
+      prepareForTemplates({ application, source }) {
         application.clientWebappDir = `${application.clientSrcDir}app/`;
         application.webappEnumerationsDir = `${application.clientWebappDir}shared/model/enumerations/`;
         application.clientSpecDir = `${application.clientTestDir}spec/`;
@@ -85,6 +86,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
         // Can be dropped if tests are moved near implementation
         application.applicationRootRelativeToClientTestDir = `${relative(application.clientSpecDir, '.')}/`;
         application.clientSrcDirRelativeToClientTestDir = `${relative(application.clientSpecDir, application.clientWebappDir)}/`;
+
+        source.addWebpackConfig = args => {
+          const webpackPath = 'webpack/webpack.common.js';
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+          this.editFile(
+            webpackPath,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-webpack-config',
+              contentToAdd: `,${args.config}`,
+            }),
+          );
+        };
       },
     });
   }
