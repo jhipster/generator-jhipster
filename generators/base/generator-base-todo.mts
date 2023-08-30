@@ -20,8 +20,6 @@ import JHipsterBaseCoreGenerator from '../base-core/index.mjs';
 import { formatDateForChangelog, parseCreationTimestamp } from './support/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 import {
-  getFKConstraintName,
-  getUXConstraintName,
   loadDerivedPlatformConfig,
   loadDerivedServerConfig,
   loadPlatformConfig,
@@ -104,36 +102,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
       this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
     }
     return formatDateForChangelog(now);
-  }
-
-  /**
-   * @private
-   * get a foreign key constraint name for tables in JHipster preferred style.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} relationshipName - name of the related entity
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   */
-  getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
-    (this as any).validateResult(result);
-    return result.value;
-  }
-
-  /**
-   * @private
-   * get a unique constraint name for tables in JHipster preferred style.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} columnName - name of the column
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   */
-  getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
-    (this as any).validateResult(result);
-    return result.value;
   }
 
   /**
