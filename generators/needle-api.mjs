@@ -22,7 +22,6 @@ import ClientAngular from './angular/needle-api/needle-client-angular.mjs';
 import ClientReact from './react/needle-api/needle-client-react.mjs';
 import ClientVue from './client/needle-api/needle-client-vue.mjs';
 import ClientWebpack from './client/needle-api/needle-client-webpack.mjs';
-import ClientI18n from './client/needle-api/needle-client-i18n.mjs';
 
 export default class NeedleApi {
   constructor(generator) {
@@ -32,6 +31,5 @@ export default class NeedleApi {
     this.clientReact = new ClientReact(generator);
     this.clientVue = new ClientVue(generator);
     this.clientWebpack = new ClientWebpack(generator);
-    this.clientI18n = new ClientI18n(generator);
   }
 }

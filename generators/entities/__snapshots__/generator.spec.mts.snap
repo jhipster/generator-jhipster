@@ -322,6 +322,38 @@ exports[`generator - entities regenerating all entities should match source call
       "relationships": [],
     },
   ],
+  "addEntityTranslationKey": [
+    {
+      "language": "en",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+    {
+      "language": "fr",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+    {
+      "language": "en",
+      "translationKey": "bar",
+      "translationValue": "Bar",
+    },
+    {
+      "language": "fr",
+      "translationKey": "bar",
+      "translationValue": "Bar",
+    },
+    {
+      "language": "en",
+      "translationKey": "skip",
+      "translationValue": "Skip",
+    },
+    {
+      "language": "fr",
+      "translationKey": "skip",
+      "translationValue": "Skip",
+    },
+  ],
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
@@ -661,6 +693,38 @@ exports[`generator - entities regenerating selected entities with writeEveryEnti
       "relationships": [],
     },
   ],
+  "addEntityTranslationKey": [
+    {
+      "language": "en",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+    {
+      "language": "fr",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+    {
+      "language": "en",
+      "translationKey": "bar",
+      "translationValue": "Bar",
+    },
+    {
+      "language": "fr",
+      "translationKey": "bar",
+      "translationValue": "Bar",
+    },
+    {
+      "language": "en",
+      "translationKey": "skip",
+      "translationValue": "Skip",
+    },
+    {
+      "language": "fr",
+      "translationKey": "skip",
+      "translationValue": "Skip",
+    },
+  ],
   "addLiquibaseChangelog": [
     {
       "changelogName": "20160926101210_added_entity_Foo",
@@ -903,6 +967,28 @@ exports[`generator - entities regenerating some entities should match source cal
     {
       "entityAbsoluteClass": "com.mycompany.myapp.domain.Bar",
       "relationships": [],
+    },
+  ],
+  "addEntityTranslationKey": [
+    {
+      "language": "en",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+    {
+      "language": "fr",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+    {
+      "language": "en",
+      "translationKey": "bar",
+      "translationValue": "Bar",
+    },
+    {
+      "language": "fr",
+      "translationKey": "bar",
+      "translationValue": "Bar",
     },
   ],
   "addLiquibaseChangelog": [

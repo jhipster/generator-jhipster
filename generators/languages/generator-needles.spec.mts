@@ -1,8 +1,8 @@
-import { defaultHelpers as helpers, result as runResult } from '../support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
 
-import LanguagesGenerator from '../../generators/languages/index.mjs';
-import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
-import { getGenerator } from '../support/index.mjs';
+import LanguagesGenerator from './index.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import { getGenerator } from '../../test/support/index.mjs';
 
 const generatorPath = getGenerator('languages');
 
@@ -18,14 +18,13 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
     this.sbsBlueprint = true;
   }
 
-  get [LanguagesGenerator.WRITING]() {
-    const customPhaseSteps = {
-      addEntityTranslationKey() {
-        this.addEntityTranslationKey('my_entity_key', 'My Entity Value', 'en');
-        this.addEntityTranslationKey('ma_cle_entite', 'Ma Valeur Entite', 'fr');
+  get [LanguagesGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
+      addEntityTranslationKey({ source }) {
+        source.addEntityTranslationKey?.({ translationKey: 'my_entity_key', translationValue: 'My Entity Value', language: 'en' });
+        source.addEntityTranslationKey?.({ translationKey: 'ma_cle_entite', translationValue: 'Ma Valeur Entite', language: 'fr' });
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
@@ -47,10 +46,10 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
   });
 
   it('Assert english entity global.json contain the new key', () => {
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_entity_key": "My Entity Value",');
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_entity_key": "My Entity Value"');
   });
 
   it('Assert french entity global.json contain the new key', () => {
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle_entite": "Ma Valeur Entite",');
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle_entite": "Ma Valeur Entite"');
   });
 });

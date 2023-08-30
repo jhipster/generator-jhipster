@@ -28,6 +28,7 @@ import type { BaseApplication, CommonClientServerApplication } from './types.mjs
 import { getEntitiesFromDir } from './support/index.mjs';
 import { SpringBootSourceType } from '../server/types.mjs';
 import { ClientSourceType } from '../client/types.mjs';
+import { LanguageSourceType } from '../languages/types.js';
 
 const { upperFirst } = _;
 
@@ -63,7 +64,7 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType & ClientSourceType;
+export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType & ClientSourceType & LanguageSourceType;
 
 export type JHipsterApplication = BaseApplication & Partial<CommonClientServerApplication>;
 
