@@ -65,9 +65,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
     if (options.withEntities !== undefined) {
       dest.withEntities = options.withEntities;
     }
-    if (options.debug !== undefined) {
-      dest.isDebugEnabled = options.debug;
-    }
     if (this.sharedData.get('creationTimestamp') === undefined && options.creationTimestamp) {
       const creationTimestamp = parseCreationTimestamp(options.creationTimestamp);
       if (creationTimestamp) {
@@ -95,7 +92,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
    */
   loadRuntimeOptions(config = this.sharedData.get('configOptions'), dest: any = this) {
     dest.withEntities = config.withEntities;
-    dest.isDebugEnabled = config.isDebugEnabled;
   }
 
   /**
