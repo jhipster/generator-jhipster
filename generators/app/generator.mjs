@@ -99,13 +99,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       type: Boolean,
     });
 
-    // This adds support for a `--with-entities` flag
-    this.option('with-entities', {
-      alias: 'e',
-      description: 'Regenerate the existing entities if any',
-      type: Boolean,
-    });
-
     // This adds support for a `--jhi-prefix` flag
     this.option('jhi-prefix', {
       description: 'Add prefix before services, controllers and states name',
@@ -210,11 +203,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       type: String,
     });
 
-    this.option('reproducible', {
-      description: 'Try to reproduce changelog',
-      type: Boolean,
-    });
-
     this.option('client-package-manager', {
       description: 'Force an unsupported client package manager',
       type: String,
@@ -263,7 +251,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {

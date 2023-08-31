@@ -56,6 +56,17 @@ const command: JHipsterCommandDefinition = {
       type: parseCreationTimestamp,
       scope: 'storage',
     },
+    reproducible: {
+      description: 'Try to reproduce changelog',
+      type: Boolean,
+      scope: 'control',
+    },
+    withEntities: {
+      alias: 'e',
+      description: 'Regenerate the existing entities if any',
+      type: Boolean,
+      scope: 'control',
+    },
   },
 };
 

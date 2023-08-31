@@ -3,6 +3,13 @@ export type Control = {
   ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;
   useVersionPlaceholders?: boolean;
+  reproducible?: boolean;
+  withEntities?: boolean;
+  /**
+   * Configure blueprints once per application.
+   */
+  blueprintConfigured?: boolean;
+  reproducibleLiquibaseTimestamp?: Date;
 
   loadClientTranslations?: () => Promise<void>;
 };

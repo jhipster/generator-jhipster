@@ -22,7 +22,6 @@ Options:
   --skip-user-management                   Skip the user management module during app generation
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
-  -e, --with-entities                      Regenerate the existing entities if any
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
@@ -41,7 +40,6 @@ Options:
   --enable-translation                     Enable translation
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   --pk-type <value>                        Default primary key type (beta)
-  --reproducible                           Try to reproduce changelog
   --client-package-manager <value>         Force an unsupported client package manager
   --cypress-coverage                       Enable Cypress code coverage report generation
   --cypress-audit                          Enable cypress-audit/lighthouse report generation

@@ -35,27 +35,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   abstract get jhipsterConfigWithDefaults(): any;
 
   /**
-   * Parse runtime options.
-   * @deprecated
-   */
-  parseCommonRuntimeOptions(options: any = this.options, dest = this.sharedData.get('configOptions')) {
-    if (options.withEntities !== undefined) {
-      dest.withEntities = options.withEntities;
-    }
-    if (options.reproducible !== undefined) {
-      this.sharedData.set('reproducible', options.reproducible);
-    }
-  }
-
-  /**
-   * Load runtime options into dest.
-   * @deprecated
-   */
-  loadRuntimeOptions(config = this.sharedData.get('configOptions'), dest: any = this) {
-    dest.withEntities = config.withEntities;
-  }
-
-  /**
    * @deprecated
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest: any = this) {

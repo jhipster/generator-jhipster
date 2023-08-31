@@ -20,6 +20,8 @@ Options:
   -d, --debug                   Enable debugger
   --skip-jhipster-dependencies  Don't write jhipster dependencies to package.json.
   --creation-timestamp <value>  Project creation timestamp (used for reproducible builds)
+  --reproducible                Try to reproduce changelog
+  -e, --with-entities           Regenerate the existing entities if any
   -h, --help                    display help for command
 
 Commands:

@@ -58,9 +58,6 @@ export default class BootstrapGenerator extends BaseGenerator {
   beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    // Load common runtime options.
-    this.parseCommonRuntimeOptions();
-
     // Force npm override later if needed
     (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;

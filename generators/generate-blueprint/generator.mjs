@@ -70,9 +70,6 @@ export default class extends BaseGenerator {
           this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
         }
       },
-      loadRuntimeOptions() {
-        this.loadRuntimeOptions();
-      },
     };
   }
 

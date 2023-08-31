@@ -29,16 +29,6 @@ import { generateTestEntity as entityWithFakeValues } from '../client/support/in
 const { ANGULAR } = clientFrameworkTypes;
 
 export default class CypressGenerator extends BaseApplicationGenerator {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, features);
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.loadRuntimeOptions();
-  }
-
   async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);

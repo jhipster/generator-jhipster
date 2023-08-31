@@ -45,7 +45,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     if (this.options.help) return;
 
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
   }
 
   async beforeQueue() {

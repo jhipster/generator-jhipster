@@ -73,12 +73,4 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
   getEntitiesMap() {
     return this._storage.sharedEntities;
   }
-
-  get(key) {
-    return this._storage.props[key];
-  }
-
-  set(key, value) {
-    this._storage.props[key] = value;
-  }
 }

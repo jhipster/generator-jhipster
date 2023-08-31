@@ -90,7 +90,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     }
 
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
 
     // Validate languages passed as argument.
     // Additional languages, will not replace current ones.
