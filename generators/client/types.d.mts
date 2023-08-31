@@ -33,4 +33,8 @@ export type ClientSourceType = {
   addIconImport?(args: Parameters<typeof addIconImport>[0]): void;
   addAdminRoute?(args: Omit<Parameters<typeof addRoute>[0], 'needle'>): void;
   addItemToAdminMenu?(args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>): void;
+  /**
+   * Add webpack config.
+   */
+  addWebpackConfig?(args: { config: string });
 };

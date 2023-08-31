@@ -231,16 +231,15 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         }
       },
 
-      microfrontend({ application }) {
+      microfrontend({ application, source }) {
         if (!application.microfrontend) return;
         if (application.clientFrameworkAngular) {
           const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
-          this.addWebpackConfig(
-            `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
-            application.clientFramework,
-          );
+          source.addWebpackConfig({
+            config: `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
+          });
         } else if (application.clientFrameworkVue || application.clientFrameworkReact) {
-          this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })", application.clientFramework);
+          source.addWebpackConfig({ config: "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })" });
         } else {
           throw new Error(`Client framework ${application.clientFramework} doesn't support microfrontends`);
         }

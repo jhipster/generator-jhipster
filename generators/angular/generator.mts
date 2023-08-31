@@ -46,6 +46,7 @@ import {
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
+import { createNeedleCallback } from '../base/support/index.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -126,6 +127,19 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
+        };
+
+        source.addWebpackConfig = args => {
+          const webpackPath = 'webpack/webpack.custom.js';
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+          this.editFile(
+            webpackPath,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-webpack-config',
+              contentToAdd: `,${args.config}`,
+            }),
+          );
         };
       },
     });

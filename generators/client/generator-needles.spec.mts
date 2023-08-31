@@ -1,6 +1,6 @@
-import { basicHelpers as helpers, result as runResult, getGenerator } from '../support/index.mjs';
-import ClientGenerator from '../../generators/client/index.mjs';
-import { CLIENT_WEBPACK_DIR } from '../../generators/generator-constants.mjs';
+import { basicHelpers as helpers, result as runResult, getGenerator } from '../../test/support/index.mjs';
+import ClientGenerator from './index.mjs';
+import { CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
@@ -8,22 +8,15 @@ const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
-    super(args, opts, features);
-
-    if (!this.jhipsterContext) {
-      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
-    }
-
-    this.sbsBlueprint = true;
+    super(args, opts, { ...features, sbsBlueprint: true });
   }
 
   get [ClientGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
-      webpackPhase() {
-        this.addWebpackConfig('{devServer:{}}');
+    return this.asPostWritingTaskGroup({
+      webpackPhase({ source }) {
+        source.addWebpackConfig({ config: '{devServer:{}}' });
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 

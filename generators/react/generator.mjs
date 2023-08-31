@@ -35,7 +35,7 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.mjs';
 import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.mjs';
-import { upperFirstCamelCase } from '../base/support/index.mjs';
+import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -84,8 +84,21 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
+      prepareForTemplates({ application, source }) {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+
+        source.addWebpackConfig = args => {
+          const webpackPath = 'webpack/webpack.common.js';
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+          this.editFile(
+            webpackPath,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-webpack-config',
+              contentToAdd: `,${args.config}`,
+            }),
+          );
+        };
       },
     });
   }

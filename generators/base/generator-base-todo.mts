@@ -35,15 +35,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   abstract get jhipsterConfigWithDefaults(): any;
 
   /**
-   * Add webpack config.
-   *
-   * @param {string} config - webpack config to be merged
-   */
-  addWebpackConfig(config, clientFramework) {
-    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
-  }
-
-  /**
    * Parse runtime options.
    * @deprecated
    */
