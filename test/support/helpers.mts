@@ -163,7 +163,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
   withControl(sharedControl: Record<string, any>): this {
     this.sharedControl = {};
     Object.assign(this.sharedControl, sharedControl);
-    return this.withSharedApplication({ sharedData: this.sharedControl });
+    return this.withSharedApplication({ control: this.sharedControl });
   }
 
   private withSharedApplication(sharedApplication: Record<string, any>): this {

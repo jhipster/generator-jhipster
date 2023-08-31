@@ -982,6 +982,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     });
   }
 
+  private calculateApplicationId(applicationPath: string) {
+    const dirname = basename(applicationPath);
+    return `${createHash('shake256', { outputLength: 1 }).update(applicationPath, 'utf8').digest('hex')}-${dirname}`;
+  }
+
+  protected getApplication(applicationFolder: string) {
+    return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
+  }
+
   private createSharedData({
     jhipsterOldVersion,
     help,
@@ -989,11 +998,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     jhipsterOldVersion: string | null;
     help?: boolean;
   }): SharedData<BaseApplication> {
-    const destinationPath = this.destinationPath();
-    const dirname = basename(destinationPath);
-    const applicationId =
-      this.options.applicationId ??
-      `${createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex')}-${dirname}`;
+    const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
     }

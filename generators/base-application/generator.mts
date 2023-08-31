@@ -313,13 +313,13 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  getArgsForPriority(priorityName) {
+  getArgsForPriority(priorityName): any[] {
     const args = super.getArgsForPriority(priorityName);
     let firstArg = this.getTaskFirstArgForPriority(priorityName);
     if (args.length > 0) {
       firstArg = { ...args[0], ...firstArg };
     }
-    return [firstArg] as any;
+    return [firstArg];
   }
 
   /**

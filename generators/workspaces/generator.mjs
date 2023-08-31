@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
-import path from 'path';
+import { existsSync } from 'fs';
 
 import { GENERATOR_ANGULAR, GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
-import BaseGenerator from '../base/index.mjs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 import { getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
 import { removeFieldsWithNullishValues } from '../base/support/config.mjs';
 import command from './command.mjs';
@@ -32,10 +31,9 @@ import command from './command.mjs';
  * Base class for a generator that can be extended through a blueprint.
  *
  * @class
- * @extends {BaseGenerator}
+ * @extends {BaseWorkspacesGenerator}
  */
-export default class WorkspacesGenerator extends BaseGenerator {
-  workspacesFolders;
+export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   workspaces;
   generateApplications;
   generateWith;
@@ -49,7 +47,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       loadConfig() {
         this.parseJHipsterOptions(command.options);
 
@@ -59,41 +57,32 @@ export default class WorkspacesGenerator extends BaseGenerator {
         // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
         this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
       },
-    };
+    });
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       async configure() {
         this.jhipsterConfig.baseName = this.jhipsterConfig.baseName || 'workspaces';
       },
-    };
+    });
   }
 
-  get [BaseGenerator.CONFIGURING]() {
+  get [BaseWorkspacesGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
-    return {
+    return this.asComposingTaskGroup({
       async composeGit() {
         if (this.options.monorepository || this.jhipsterConfig.monorepository) {
           await this.composeWithJHipster(GENERATOR_GIT);
         }
       },
-    };
-  }
-
-  get [BaseGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get default() {
-    return {
       async generateApplications() {
         if (!this.generateApplications) {
           return;
@@ -102,36 +91,27 @@ export default class WorkspacesGenerator extends BaseGenerator {
         if (typeof this.generateApplications === 'function') {
           await this.generateApplications.call(this);
         } else {
-          for (const appName of this.workspacesFolders) {
+          for (const appName of this.applicationFolders) {
             await this.composeWithJHipster(this.generateWith, { generatorOptions: { destinationRoot: this.destinationPath(appName) } });
           }
         }
       },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
 
-        const packages = [...(this.workspacesConfig.packages ?? [])];
-        this.workspacesFolders.forEach(workspace => !packages.includes(workspace) && packages.push(workspace));
-        let dockerCompose;
-
-        const dir = fs.opendirSync('./');
-        let dirent = await dir.read();
-        while (dirent) {
-          if (dirent.isDirectory()) {
-            if (dirent.name === 'docker-compose') {
-              dockerCompose = true;
-            } else if (fs.existsSync(path.join(dir.path, dirent.name, 'package.json'))) {
-              if (!packages.includes(dirent.name)) {
-                packages.push(dirent.name);
-              }
-            }
-          }
-          dirent = await dir.read();
+        if (existsSync(this.destinationPath('docker-compose'))) {
+          this.workspacesConfig.dockerCompose = true;
         }
-        dir.closeSync();
-
-        this.workspacesConfig.dockerCompose = dockerCompose;
-        this.workspacesConfig.packages = packages;
+        this.workspacesConfig.packages = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.applicationFolders])];
       },
 
       configurePackageManager() {
@@ -147,15 +127,15 @@ export default class WorkspacesGenerator extends BaseGenerator {
         this.packages = this.workspacesConfig.packages;
         this.env.options.nodePackageManager = this.workspacesConfig.clientPackageManager;
       },
-    };
+    });
   }
 
-  get [BaseGenerator.DEFAULT]() {
+  get [BaseWorkspacesGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
       generatePackageJson() {
         if (!this.generateWorkspaces) return;
 
@@ -196,10 +176,10 @@ export default class WorkspacesGenerator extends BaseGenerator {
           });
         }
       },
-    };
+    });
   }
 
-  get [BaseGenerator.POST_WRITING]() {
+  get [BaseWorkspacesGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
