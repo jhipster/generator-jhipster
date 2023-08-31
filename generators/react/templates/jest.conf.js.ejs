@@ -20,7 +20,8 @@ module.exports = {
     '<rootDir>/<%= clientTestDir %>'
   ],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
-    '\\.(css|scss)$': 'identity-obj-proxy'
+    '\\.(css|scss)$': 'identity-obj-proxy',
+    'sinon': require.resolve('sinon/pkg/sinon.js')
   }),
   reporters: [
     'default',
