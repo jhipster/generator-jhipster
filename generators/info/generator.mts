@@ -31,7 +31,13 @@ import { replaceSensitiveConfig } from './support/utils.mjs';
 
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { jhipsterBootstrap: false, customInstallTask: true, customCommitTask: true, ...features });
+    super(args, options, {
+      jhipsterBootstrap: false,
+      storeJHipsterVersion: false,
+      customInstallTask: true,
+      customCommitTask: true,
+      ...features,
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -51,15 +57,24 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
       displayConfiguration() {
         // Omit sensitive information.
-        const result = JSON.stringify(replaceSensitiveConfig(this.readDestinationJSON(YO_RC_FILE)), null, 2);
-        console.log(`\n##### **JHipster configuration, a \`${YO_RC_FILE}\` file generated in the root folder**\n`);
-        console.log(`\n<details>\n<summary>${YO_RC_FILE} file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        const yoRc = this.readDestinationJSON(YO_RC_FILE);
+        if (yoRc) {
+          const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
+          console.log(`\n##### **JHipster configuration, a \`${YO_RC_FILE}\` file generated in the root folder**\n`);
+          console.log(`\n<details>\n<summary>${YO_RC_FILE} file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        } else {
+          console.log('\n##### **JHipster configuration not found**\n');
+        }
 
         if (this.jhipsterConfig.packages && this.jhipsterConfig.packages.length > 0) {
           for (const pkg of this.jhipsterConfig.packages) {
             const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
-            const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
-            console.log(`\n<details>\n<summary>${YO_RC_FILE} file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+            if (yoRc) {
+              const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
+              console.log(`\n<details>\n<summary>${YO_RC_FILE} file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+            } else {
+              console.log(`\n##### **JHipster configuration for ${pkg} not found**\n`);
+            }
           }
         }
       },
