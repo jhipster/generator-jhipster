@@ -30,7 +30,7 @@ const { DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY
  * This is the base class for a generator that generates entities.
  */
 export default class BaseWorkspacesGenerator extends BaseGenerator {
-  applicationFolders?: string[];
+  appsFolders?: string[];
   directoryPath!: string;
 
   constructor(args, options, features) {
@@ -61,7 +61,7 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
   }
 
   protected async resolveApplicationFolders() {
-    return (this.applicationFolders ?? []).map(appFolder => this.destinationPath(this.directoryPath ?? '.', appFolder));
+    return (this.appsFolders ?? []).map(appFolder => this.destinationPath(this.directoryPath ?? '.', appFolder));
   }
 
   async bootstrapApplications() {
@@ -80,7 +80,7 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
     return [
       {
         ...first,
-        applications: (this.applicationFolders ?? []).map(
+        applications: (this.appsFolders ?? []).map(
           appFolder => this.getSharedApplication(this.destinationPath(this.directoryPath ?? '.', appFolder))?.sharedApplication,
         ),
       },
