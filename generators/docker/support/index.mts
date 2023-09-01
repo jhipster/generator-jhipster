@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export * from './check-docker.mjs';
+export * from './docker-compose-file.mjs';

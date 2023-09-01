@@ -18,7 +18,7 @@
  */
 /* eslint-disable camelcase */
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { createDockerComposeFile, createDockerExtendedServices } from '../base-docker/utils.mjs';
+import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';

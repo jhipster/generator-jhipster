@@ -1,5 +1,5 @@
 import { expect } from 'esmocha';
-import { createDockerComposeFile } from './utils.mjs';
+import { createDockerComposeFile } from './docker-compose-file.mjs';
 
 describe('generator - base-docker - utils', () => {
   describe('createDockerComposeFile', () => {
