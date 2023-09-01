@@ -26,6 +26,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
+import { YO_RC_FILE } from '../generator-constants.mjs';
+import { replaceSensitiveConfig } from './support/utils.mjs';
 
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
@@ -40,7 +42,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
       async checkJHipster() {
         try {
-          const { stdout } = await this.spawnCommand('npm', ['list', 'generator-jhipster'], { stdio: 'pipe' });
+          const { stdout } = await this.spawnCommand('npm list generator-jhipster', { stdio: 'pipe' });
           console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
         } catch (error) {
           console.log(`\n\`\`\`\n${(error as any).stdout}\`\`\`\n`);
@@ -49,15 +51,15 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
       displayConfiguration() {
         // Omit sensitive information.
-        const result = JSON.stringify({ ...this.jhipsterConfig, jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
-        console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
-        console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        const result = JSON.stringify(replaceSensitiveConfig(this.readDestinationJSON(YO_RC_FILE)), null, 2);
+        console.log(`\n##### **JHipster configuration, a \`${YO_RC_FILE}\` file generated in the root folder**\n`);
+        console.log(`\n<details>\n<summary>${YO_RC_FILE} file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
 
         if (this.jhipsterConfig.packages && this.jhipsterConfig.packages.length > 0) {
           for (const pkg of this.jhipsterConfig.packages) {
-            const yoRc = this.readDestinationJSON(`${pkg}/.yo-rc.json`);
-            const result = JSON.stringify({ ...yoRc['generator-jhipster'], jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
-            console.log(`\n<details>\n<summary>.yo-rc.json file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+            const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
+            const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
+            console.log(`\n<details>\n<summary>${YO_RC_FILE} file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
           }
         }
       },
