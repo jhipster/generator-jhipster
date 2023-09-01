@@ -44,6 +44,11 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
   jhipsterBootstrap?: boolean;
+  /**
+   * Store current version at .yo-rc.json.
+   * Defaults to true.
+   */
+  storeJHipsterVersion?: boolean;
 };
 
 // eslint-disable-next-line no-use-before-define

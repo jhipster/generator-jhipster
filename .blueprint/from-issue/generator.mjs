@@ -65,7 +65,8 @@ export default class extends BaseGenerator {
           if (match.groups.title.includes('.yo-rc.json file')) {
             try {
               if (match.groups.body) {
-                this.yoRcContent = JSON.parse(match.groups.body);
+                const yoRcContent = JSON.parse(match.groups.body);
+                this.yoRcContent = yoRcContent[GENERATOR_JHIPSTER] ? yoRcContent : { [GENERATOR_JHIPSTER]: yoRcContent };
                 setOutput(YO_RC_OUTPUT, VALID);
               } else {
                 setOutput(YO_RC_OUTPUT, BLANK);
@@ -84,10 +85,10 @@ export default class extends BaseGenerator {
           const yoRcFile = join(this.projectFolder, '.yo-rc.json');
           try {
             const { jwtSecretKey } = this.readDestinationJSON(yoRcFile)?.[GENERATOR_JHIPSTER];
-            this.yoRcContent.jwtSecretKey = jwtSecretKey;
+            this.yoRcContent[GENERATOR_JHIPSTER].jwtSecretKey = jwtSecretKey;
           } catch {}
 
-          this.writeDestinationJSON(yoRcFile, { [GENERATOR_JHIPSTER]: this.yoRcContent });
+          this.writeDestinationJSON(yoRcFile, this.yoRcContent);
         }
         if (this.jdlEntities) {
           this.writeDestination(this.destinationPath(this.projectFolder, 'entities.jdl'), this.jdlEntities);
