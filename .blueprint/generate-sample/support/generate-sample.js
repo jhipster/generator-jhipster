@@ -16,6 +16,8 @@ import {
   samplesFolder,
 } from '../../constants.js';
 
+const commonCliOptions = ['--skip-jhipster-dependencies', '--skip-checks', '--skip-install', '--no-insight'];
+
 export const generateSample = async (
   sampleName = process.argv.length > 2 ? process.argv[2] : process.env.JHI_APP,
   {
@@ -81,9 +83,7 @@ export const generateSample = async (
 
     const files = globSync('*.jdl');
     // Generate the application using every jdl file
-    await execa(jhipsterBin, ['jdl', ...files, '--skip-jhipster-dependencies', '--skip-install', '--no-insight', ...extraArgs], {
-      stdio: 'inherit',
-    });
+    await execa(jhipsterBin, ['jdl', ...files, ...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
   } else {
     const isDailySample = isDaily(appSample);
     cpSync(
@@ -98,17 +98,11 @@ export const generateSample = async (
     if (jdlEntity) {
       // Generate jdl entities
       const files = globSync('*.jdl');
-      await execa(jhipsterBin, ['jdl', ...files, '--json-only', '--no-insight'], { stdio: 'inherit' });
+      await execa(jhipsterBin, ['jdl', ...files, '--json-only', ...commonCliOptions], { stdio: 'inherit' });
     }
 
     // Generate the application
-    await execa(
-      jhipsterBin,
-      ['--with-entities', '--skip-jhipster-dependencies', '--skip-install', '--skip-checks', '--no-insight', ...extraArgs],
-      {
-        stdio: 'inherit',
-      },
-    );
+    await execa(jhipsterBin, ['--with-entities', ...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
   }
 
   await execa(jhipsterBin, ['info'], { stdio: 'inherit' });
