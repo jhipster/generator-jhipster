@@ -28,7 +28,11 @@ on:
       - 'main'
       - '**maintenance'
     paths:
-      - 'generators/*client/**'
+      - '.github/workflows/devserver.yml'
+      - 'generators/angular/**'
+      - 'generators/client/**'
+      - 'generators/react/**'
+      - 'generators/vue/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
@@ -38,6 +42,7 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
+      client: ${{ steps.build.outputs.client }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
         uses: actions/checkout@v4
@@ -112,12 +117,6 @@ jobs:
       - name: 'E2E: Run'
         id: e2e
         run: npm run e2e:devserver --if-present
-      - name: 'BACKEND: Store failure logs'
-        uses: actions/upload-artifact@v4
-        if: always() && steps.backend.outcome == 'failure'
-        with:
-          name: log-${{ matrix.app-sample }}
-          path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
