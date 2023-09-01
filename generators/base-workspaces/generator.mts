@@ -20,7 +20,7 @@
 import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import BaseGenerator from '../base/index.mjs';
-import { PRIORITY_NAMES } from '../base/priorities.mjs';
+import { PRIORITY_NAMES, QUEUES } from '../base/priorities.mjs';
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
@@ -32,6 +32,21 @@ const { DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY
 export default class BaseWorkspacesGenerator extends BaseGenerator {
   applicationFolders?: string[];
   directoryPath!: string;
+
+  constructor(args, options, features) {
+    super(args, options, features);
+
+    if (!this.options.help) {
+      this.queueTask({
+        async method() {
+          await (this as any).bootstrapApplications();
+        },
+        taskName: 'bootstrapApplications',
+        cancellable: true,
+        queueName: QUEUES.PREPARING_QUEUE,
+      });
+    }
+  }
 
   protected async findApplicationFolders() {
     const directoryPath = this.directoryPath ?? '.';
@@ -62,6 +77,14 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
     }
 
     const [first, ...others] = args ?? [];
-    return [{ ...first, applications: (this.applicationFolders ?? []).map(appFolder => this.getApplication(appFolder)) }, ...others];
+    return [
+      {
+        ...first,
+        applications: (this.applicationFolders ?? []).map(
+          appFolder => this.getSharedApplication(this.destinationPath(this.directoryPath ?? '.', appFolder))?.sharedApplication,
+        ),
+      },
+      ...others,
+    ];
   }
 }

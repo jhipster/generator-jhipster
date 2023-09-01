@@ -21,10 +21,7 @@ import { existsSync } from 'fs';
 
 import { GENERATOR_ANGULAR, GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
 
-import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
-import { getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
-import { removeFieldsWithNullishValues } from '../base/support/config.mjs';
 import command from './command.mjs';
 
 /**
@@ -114,10 +111,11 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         this.workspacesConfig.packages = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.applicationFolders])];
       },
 
-      configurePackageManager() {
+      configurePackageManager({ applications }) {
         if (this.workspacesConfig.clientPackageManager || !this.generateWorkspaces) return;
 
-        this.workspacesConfig.clientPackageManager = this._detectNodePackageManager();
+        this.workspacesConfig.clientPackageManager =
+          this.options.clientPackageManager ?? applications.find(app => app.clientPackageManager)?.clientPackageManager ?? 'npm';
       },
 
       async loadConfig() {
@@ -136,7 +134,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      generatePackageJson() {
+      generatePackageJson({ applications }) {
         if (!this.generateWorkspaces) return;
 
         const {
@@ -158,13 +156,12 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
           scripts: {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
             'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
-            ...this._getOtherScripts(),
-            ...this._createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
-            ...this._createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
+            ...this.getOtherScripts(),
+            ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
+            ...this.createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
 
-        const applications = this.loadApplications();
         if (applications.some(app => app.clientFrameworkAngular)) {
           this.packageJson.merge({
             devDependencies: {
@@ -183,24 +180,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
-  _detectNodePackageManager() {
-    if (this.options.clientPackageManager !== undefined) {
-      return this.options.clientPackageManager;
-    }
-
-    if (this.workspacesConfig.packages && this.workspacesConfig.packages.length > 0) {
-      const appPackageJson = this.readDestinationJSON(`${this.workspacesConfig.packages[0]}/.yo-rc.json`);
-      const nodePackageManager =
-        appPackageJson && appPackageJson[GENERATOR_JHIPSTER] && appPackageJson[GENERATOR_JHIPSTER].clientPackageManager;
-      if (nodePackageManager) {
-        return nodePackageManager;
-      }
-    }
-
-    return 'npm';
-  }
-
-  _getOtherScripts() {
+  getOtherScripts() {
     if (this.dockerCompose) {
       return {
         'docker-compose': 'docker compose -f docker-compose/docker-compose.yml up --wait',
@@ -211,7 +191,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return {};
   }
 
-  _createConcurrentlyScript(...scripts) {
+  createConcurrentlyScript(...scripts) {
     const scriptsList = scripts
       .map(script => {
         const packageScripts = this.packages.map(packageName => [
@@ -225,29 +205,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return Object.fromEntries(scriptsList);
   }
 
-  _createWorkspacesScript(...scripts) {
+  createWorkspacesScript(...scripts) {
     return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
-  }
-
-  loadApplications() {
-    return this.workspacesConfig.packages
-      .map(appPath => {
-        const appConfig = this.readDestinationJSON(`${appPath}/.yo-rc.json`)[GENERATOR_JHIPSTER];
-        if (!appConfig) return undefined;
-
-        const app = getConfigWithDefaults(removeFieldsWithNullishValues(appConfig));
-
-        this.loadAppConfig(app, app);
-        this.loadServerConfig(app, app);
-        this.loadClientConfig(app, app);
-        this.loadPlatformConfig(app, app);
-
-        this.loadDerivedAppConfig(app);
-        this.loadDerivedClientConfig(app);
-        this.loadDerivedServerConfig(app);
-        this.loadDerivedPlatformConfig(app);
-        return app;
-      })
-      .filter(app => app);
   }
 }
