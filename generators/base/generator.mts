@@ -57,7 +57,6 @@ export default class JHipsterBaseBlueprintGenerator<
       return;
     }
 
-    this.loadRuntimeOptions();
     loadStoredAppOptions.call(this);
 
     this.sbsBlueprint = this.features.sbsBlueprint ?? false;
@@ -422,8 +421,9 @@ export default class JHipsterBaseBlueprintGenerator<
   protected async composeWithBlueprints(subGen: string, options?: ComposeOptions) {
     this.delegateToBlueprint = false;
 
-    if (!this.sharedData.get('blueprintConfigured')) {
-      this.sharedData.set('blueprintConfigured', true);
+    const control = this.sharedData.getControl();
+    if (!control.blueprintConfigured) {
+      control.blueprintConfigured = true;
       await this._configureBlueprints();
     }
 

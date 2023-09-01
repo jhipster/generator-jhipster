@@ -14,13 +14,10 @@ const { CASSANDRA, NO: NO_DATABASE } = databaseTypes;
  * Load common options to be stored.
  * @deprecated
  */
-export function loadStoredAppOptions(
-  this: any,
-  { options = this.options, sharedData = this.sharedData, jhipsterConfig = this.jhipsterConfig, log = this.log } = {},
-) {
+export function loadStoredAppOptions(this: any, { options = this.options, jhipsterConfig = this.jhipsterConfig, log = this.log } = {}) {
   // Parse options only once.
-  if (sharedData.get('optionsParsed')) return;
-  sharedData.set('optionsParsed', true);
+  if (this.sharedData.getControl().optionsParsed) return;
+  this.sharedData.getControl().optionsParsed = true;
 
   // Load stored options
   if (options.skipJhipsterDependencies !== undefined) {

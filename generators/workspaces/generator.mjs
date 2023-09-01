@@ -46,8 +46,6 @@ export default class WorkspacesGenerator extends BaseGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_WORKSPACES);
     }
-
-    this.loadRuntimeOptions();
   }
 
   get initializing() {

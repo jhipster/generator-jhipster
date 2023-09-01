@@ -157,7 +157,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
 
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);

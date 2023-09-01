@@ -56,8 +56,6 @@ export default class PageGenerator extends BaseApplicationGenerator {
     }
     this.pageName = this.options.pageName;
     this.page = this.options.page || {};
-
-    this.loadRuntimeOptions();
   }
 
   async beforeQueue() {

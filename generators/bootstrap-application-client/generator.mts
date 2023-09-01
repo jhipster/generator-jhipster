@@ -28,7 +28,6 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     if (this.options.help) return;
 
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
   }
 
   async beforeQueue() {

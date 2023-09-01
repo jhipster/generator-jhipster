@@ -39,7 +39,6 @@ const { REACT, ANGULAR } = clientFrameworkTypes;
 export default class CommonGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     await this.dependsOnJHipster(GENERATOR_GIT);

@@ -76,7 +76,6 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     loadStoredAppOptions.call(this);
-    this.loadRuntimeOptions();
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITIES);

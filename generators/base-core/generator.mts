@@ -146,13 +146,15 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster');
 
-      /* Options parsing must be executed after forcing jhipster storage namespace */
-      this.parseJHipsterOptions(command.options);
-
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
       jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
+      this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help }) as any;
+
+      /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
+      this.parseJHipsterOptions(command.options);
+
       // Don't write jhipsterVersion to .yo-rc.json when reproducible
       if (
         this.options.namespace.startsWith('jhipster:') &&
@@ -163,8 +165,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         this.jhipsterConfig.jhipsterVersion = packageJson.version;
       }
     }
-
-    this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help }) as any;
 
     this.logger = this.log as any;
 
@@ -327,18 +327,19 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    *                                 Set false to create a changelog date incrementing the last one.
    * @return {String} Changelog date.
    */
-  dateFormatForLiquibase(reproducible = this.sharedData.get('reproducible')) {
+  dateFormatForLiquibase(reproducible?: boolean) {
+    const control = this.sharedData.getControl();
+    reproducible = reproducible ?? control.reproducible;
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
-    const creationTimestamp =
-      this.sharedData.get('creationTimestamp') ?? this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
+    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
     // Miliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with with-entities option.
     if (reproducible || creationTimestamp) {
-      if (this.sharedData.get('reproducibleLiquibaseTimestamp')) {
+      if (control.reproducibleLiquibaseTimestamp) {
         // Counter already started.
-        now = this.sharedData.get('reproducibleLiquibaseTimestamp');
+        now = control.reproducibleLiquibaseTimestamp;
       } else {
         // Create a new counter
         const newCreationTimestamp = creationTimestamp ?? this.config.get('creationTimestamp');
@@ -346,7 +347,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         now.setMilliseconds(0);
       }
       now.setMinutes(now.getMinutes() + 1);
-      this.sharedData.set('reproducibleLiquibaseTimestamp', now);
+      control.reproducibleLiquibaseTimestamp = now;
 
       // Reproducible build can create future timestamp, save it.
       const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
