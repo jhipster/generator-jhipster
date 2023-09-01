@@ -43,7 +43,7 @@ import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
-import { buildApplication } from '../base-docker/utils.mjs';
+import { buildApplication } from '../server/internal/index.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;

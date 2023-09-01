@@ -25,7 +25,7 @@ import AwsFactory from './lib/aws.mjs';
 import statistics from '../statistics.mjs';
 import { GENERATOR_AWS } from '../generator-list.mjs';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
-import { buildApplication } from '../base-docker/utils.mjs';
+import { buildApplication } from '../server/internal/index.mjs';
 
 const { MYSQL, POSTGRESQL, MARIADB } = databaseTypes;
 
