@@ -25,6 +25,21 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
 ",
     "stateCleared": "modified",
   },
+  "09-kafka/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleKafka",
+    "entities": [],
+    "messageBroker": "kafka",
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
@@ -408,6 +423,36 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["02-mysql", "03-psql"],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1303,6 +1348,20 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
@@ -1946,6 +2005,35 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway", "02-mysql"],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2759,6 +2847,20 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway"],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -3641,6 +3743,78 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway", "02-mysql", "03-psql", "04-mongo", "07-mariadb"],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -5092,6 +5266,22 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
 ",
     "stateCleared": "modified",
   },
+  "08-monolith/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
@@ -5460,6 +5650,21 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
     "packages": ["02-mysql"],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -8447,6 +8652,21 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
 ",
     "stateCleared": "modified",
   },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
@@ -9075,6 +9295,20 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "packages": ["01-gateway"],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }

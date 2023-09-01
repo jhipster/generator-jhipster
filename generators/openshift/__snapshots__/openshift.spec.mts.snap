@@ -24,6 +24,35 @@ exports[`generator - OpenShift gateway and one microservice with mysql should ma
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "ocp/jhgate/jhgate-deployment.yml": {
     "contents": "#
 # Application template.
@@ -1050,6 +1079,92 @@ exports[`generator - OpenShift gateway with multiple microservices backed by mys
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "05-cassandra/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mscassandra",
+    "databaseType": "cassandra",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -3392,6 +3507,22 @@ exports[`generator - OpenShift monolith application should match files snapshot 
 ",
     "stateCleared": "modified",
   },
+  "08-monolith/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "ocp/ocp-apply.sh": {
     "contents": "#!/usr/bin/env sh
 # Use this script to run oc commands to create resources in the selected namespace. Files are ordered
@@ -3909,6 +4040,20 @@ exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -4606,6 +4751,36 @@ exports[`generator - OpenShift two microservices backed by mysql and postgres wi
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
   }
 }
 ",
