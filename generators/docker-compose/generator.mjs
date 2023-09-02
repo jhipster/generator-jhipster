@@ -38,6 +38,7 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
+import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.mjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -329,7 +330,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   get loading() {
     return {
       loadPlatformConfig() {
-        this.loadDeploymentConfig(this);
+        loadDeploymentConfig.call(this);
       },
     };
   }

@@ -40,7 +40,7 @@ import {
 import statistics from '../statistics.mjs';
 import { kubernetesPlatformTypes, buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 import { getJdbcUrl } from '../spring-data-relational/support/index.mjs';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
+import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import { checkDocker } from '../docker/support/index.mjs';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
@@ -158,7 +158,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
           this.loadDerivedAppConfig(element);
           this.loadDerivedServerConfig(element);
         });
-        this.loadDeploymentConfig(this);
+        loadDeploymentConfig.call(this);
         derivedKubernetesPlatformProperties(this);
       },
     };

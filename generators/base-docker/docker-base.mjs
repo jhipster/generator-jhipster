@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../base/support/index.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
+import { loadDeploymentConfig } from '../base-workspaces/internal/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -130,7 +131,7 @@ export function setClusteredApps() {
 }
 
 export function loadFromYoRc() {
-  this.loadDeploymentConfig();
+  loadDeploymentConfig.call(this);
 
   this.useKafka = false;
   this.usePulsar = false;

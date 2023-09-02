@@ -70,7 +70,7 @@ async function askForApplicationType() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.deploymentApplicationType = props.deploymentApplicationType;
 }
 
@@ -96,7 +96,7 @@ async function askForGatewayType() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.gatewayType = props.gatewayType;
 }
 
@@ -134,7 +134,7 @@ async function askForPath() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.directoryPath = props.directoryPath;
   // Patch the path if there is no trailing "/"
   if (!this.directoryPath.endsWith('/')) {
@@ -167,14 +167,14 @@ async function askForApps() {
       type: 'checkbox',
       name: 'chosenApps',
       message: messageAskForApps,
-      choices: this.appsFolders,
+      choices: this.appsFolders ?? [],
       default: this.defaultAppsFolders,
       validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
     },
   ];
 
   const props = await this.prompt(prompts);
-  this.appsFolders = props.chosenApps;
+  this.appsFolders = this.jhipsterConfig.appsFolders = props.chosenApps;
   loadConfigs.call(this);
 }
 
@@ -202,7 +202,7 @@ async function askForClustersMode() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.clusteredDbApps = props.clusteredDbApps;
   setClusteredApps.call(this);
 }
@@ -232,7 +232,7 @@ async function askForMonitoring() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.monitoring = props.monitoring;
 }
 
@@ -295,7 +295,7 @@ async function askForServiceDiscovery() {
       },
     ];
 
-    const props = this.prompt(prompts);
+    const props = this.prompt(prompts, this.config);
     this.serviceDiscoveryType = props.serviceDiscoveryType;
   }
 }
@@ -316,7 +316,7 @@ async function askForAdminPassword() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.adminPassword = props.adminPassword;
   this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
 }
@@ -336,7 +336,7 @@ async function askForDockerRepositoryName() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.dockerRepositoryName = props.dockerRepositoryName;
 }
 
@@ -355,7 +355,7 @@ async function askForDockerPushCommand() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.dockerPushCommand = props.dockerPushCommand;
 }
 

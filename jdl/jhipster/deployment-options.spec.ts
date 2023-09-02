@@ -52,8 +52,8 @@ describe('jdl - DeploymentOptions', () => {
       context('when passing no args', () => {
         it('should return docker deployment config', () => {
           expect(Options.defaults()).to.eql({
-            appsFolders: new Set(),
-            clusteredDbApps: new Set(),
+            appsFolders: [],
+            clusteredDbApps: [],
             directoryPath: '../',
             gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
@@ -64,8 +64,8 @@ describe('jdl - DeploymentOptions', () => {
       context('when passing kubernetes as arg', () => {
         it('should return kubernetes deployment config', () => {
           expect(Options.defaults('kubernetes')).to.eql({
-            appsFolders: new Set(),
-            clusteredDbApps: new Set(),
+            appsFolders: [],
+            clusteredDbApps: [],
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
@@ -83,8 +83,8 @@ describe('jdl - DeploymentOptions', () => {
       context('when passing openshift as arg', () => {
         it('should return openshift deployment config', () => {
           expect(Options.defaults('openshift')).to.eql({
-            appsFolders: new Set(),
-            clusteredDbApps: new Set(),
+            appsFolders: [],
+            clusteredDbApps: [],
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',

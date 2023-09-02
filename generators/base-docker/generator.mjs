@@ -16,20 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 
 import prompts from './docker-prompts.mjs';
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { loadFromYoRc, checkDocker, checkImages, generateJwtSecret } from './docker-base.mjs';
 import statistics from '../statistics.mjs';
-import { applicationOptions, deploymentOptions } from '../../jdl/jhipster/index.mjs';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
-
-const { OptionNames } = applicationOptions;
-const { Options: DeploymentOptions } = deploymentOptions;
-
-const { JWT_SECRET_KEY } = OptionNames;
 
 /**
  * @class
@@ -79,20 +72,5 @@ export default class BaseDockerGenerator extends BaseWorkspacesGenerator {
       checkImages,
       generateJwtSecret,
     };
-  }
-
-  loadDeploymentConfig(
-    config = _.defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
-    dest = this,
-  ) {
-    dest.appsFolders = config.appsFolders;
-    dest.directoryPath = config.directoryPath;
-    dest.gatewayType = config.gatewayType;
-    dest.clusteredDbApps = config.clusteredDbApps;
-    dest.dockerRepositoryName = config.dockerRepositoryName;
-    dest.dockerPushCommand = config.dockerPushCommand;
-    dest.adminPassword = config.adminPassword;
-    dest.jwtSecretKey = config[JWT_SECRET_KEY];
-    this.loadPlatformConfig(config, dest);
   }
 }
