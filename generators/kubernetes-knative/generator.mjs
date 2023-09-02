@@ -27,7 +27,7 @@ import BaseWorkspacesGenerator from '../base-docker/index.mjs';
 import prompts from './prompts.mjs';
 import { writeFiles } from './files.mjs';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.mjs';
-import { checkImages, generateJwtSecret, configureImageNames } from '../base-docker/docker-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
 import {
   checkHelm,
   checkKubernetes,

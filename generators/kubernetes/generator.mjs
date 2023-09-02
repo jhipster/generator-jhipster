@@ -28,7 +28,7 @@ import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs
 import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 import statistics from '../statistics.mjs';
 
-import { checkImages, generateJwtSecret, configureImageNames } from '../base-docker/docker-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
 import {
   checkKubernetes,
   loadConfig,

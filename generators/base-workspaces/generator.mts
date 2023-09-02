@@ -66,7 +66,9 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
 
   async bootstrapApplications() {
     for (const resolvedApplicationFolder of await this.resolveApplicationFolders()) {
-      await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, { generatorOptions: { destinationRoot: resolvedApplicationFolder } });
+      await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
+        generatorOptions: { destinationRoot: resolvedApplicationFolder },
+      } as any);
     }
   }
 

@@ -23,6 +23,7 @@ import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
 import runAsync from 'run-async';
 
+import prompts from './docker-prompts.mjs';
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
 import { writeFiles } from './files.mjs';
@@ -39,6 +40,9 @@ import {
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
 import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.mjs';
+import { loadFromYoRc, checkDocker, checkImages, generateJwtSecret } from '../base-workspaces/internal/docker-base.mjs';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
+import statistics from '../statistics.mjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -63,7 +67,9 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
 
   get initializing() {
     return {
-      ...super.initializing,
+      loadDockerDependenciesTask,
+      checkDocker,
+      loadFromYoRc,
 
       checkDockerCompose: runAsync(function () {
         if (this.skipChecks) return;
@@ -103,7 +109,17 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get prompting() {
-    return super.prompting;
+    return {
+      askForApplicationType: prompts.askForApplicationType,
+      askForGatewayType: prompts.askForGatewayType,
+      askForPath: prompts.askForPath,
+      askForApps: prompts.askForApps,
+      askForClustersMode: prompts.askForClustersMode,
+      askForMonitoring: prompts.askForMonitoring,
+      askForConsoleOptions: prompts.askForConsoleOptions,
+      askForServiceDiscovery: prompts.askForServiceDiscovery,
+      askForAdminPassword: prompts.askForAdminPassword,
+    };
   }
 
   get [BaseDockerGenerator.PROMPTING]() {
@@ -117,7 +133,12 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      ...super.configuring,
+      insight() {
+        statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
+      },
+
+      checkImages,
+      generateJwtSecret,
 
       saveConfig() {
         this.config.set({

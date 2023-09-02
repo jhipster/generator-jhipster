@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import dockerPrompts from '../base-docker/docker-prompts.mjs';
+import dockerPrompts from '../docker-compose/docker-prompts.mjs';
 import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.mjs';
 
 import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';

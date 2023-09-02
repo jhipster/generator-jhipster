@@ -19,15 +19,15 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../base/support/index.mjs';
-import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
-import { loadDeploymentConfig } from '../base-workspaces/internal/index.mjs';
+import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../../base/support/index.mjs';
+import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../../jdl/jhipster/index.mjs';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.mjs';
+import { loadDeploymentConfig } from '../../base-workspaces/internal/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
-export { checkDocker } from '../docker/support/index.mjs';
+export { checkDocker } from '../../docker/support/index.mjs';
 
 /**
  * Check Images

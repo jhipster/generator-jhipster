@@ -25,7 +25,7 @@ import BaseWorkspacesGenerator from '../base-docker/index.mjs';
 import prompts from '../kubernetes/prompts.mjs';
 import { writeFiles } from './files.mjs';
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.mjs';
-import { checkImages, generateJwtSecret, configureImageNames } from '../base-docker/docker-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
 import {
   checkKubernetes,
   checkHelm,

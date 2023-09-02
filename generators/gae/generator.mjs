@@ -27,7 +27,7 @@ import runAsync from 'run-async';
 import BaseGenerator from '../base/index.mjs';
 import { GENERATOR_GAE } from '../generator-list.mjs';
 import statistics from '../statistics.mjs';
-import dockerPrompts from '../base-docker/docker-prompts.mjs';
+import dockerPrompts from '../docker-compose/docker-prompts.mjs';
 import { CLIENT_MAIN_SRC_DIR, MAIN_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';

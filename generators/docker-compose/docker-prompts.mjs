@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 
-import { loadConfigs, setClusteredApps } from './docker-base.mjs';
+import { loadConfigs, setClusteredApps } from '../base-workspaces/internal/docker-base.mjs';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 import { convertSecretToBase64 } from '../base/support/index.mjs';
 

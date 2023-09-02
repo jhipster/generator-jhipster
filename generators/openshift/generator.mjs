@@ -25,7 +25,7 @@ import BaseWorkspacesGenerator from '../base-docker/index.mjs';
 
 import prompts from './prompts.mjs';
 import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';
-import { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames } from '../base-docker/docker-base.mjs';
+import { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
 import { setupKubernetesConstants } from '../kubernetes/kubernetes-base.mjs';
 import statistics from '../statistics.mjs';
 
