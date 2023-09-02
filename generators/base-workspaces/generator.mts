@@ -25,12 +25,12 @@ import { YO_RC_FILE } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import command from './command.mjs';
 
-const { DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
+const { LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class BaseWorkspacesGenerator extends BaseGenerator {
+export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
   appsFolders?: string[];
   directoryPath!: string;
 
@@ -51,8 +51,7 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
     }
   }
 
-  protected async findApplicationFolders() {
-    const directoryPath = this.directoryPath ?? '.';
+  protected async findApplicationFolders(directoryPath = this.directoryPath ?? '.') {
     return (await readdir(this.destinationPath(directoryPath), { withFileTypes: true }))
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name)
@@ -63,8 +62,11 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
       );
   }
 
-  protected async resolveApplicationFolders() {
-    return (this.appsFolders ?? []).map(appFolder => this.destinationPath(this.directoryPath ?? '.', appFolder));
+  protected async resolveApplicationFolders({
+    directoryPath = this.directoryPath,
+    appsFolders = this.appsFolders ?? [],
+  }: { directoryPath?: string; appsFolders?: string[] } = {}) {
+    return appsFolders.map(appFolder => this.destinationPath(directoryPath ?? '.', appFolder));
   }
 
   async bootstrapApplications() {
@@ -77,17 +79,31 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
 
   getArgsForPriority(priorityName): any {
     const args = super.getArgsForPriority(priorityName);
-    if (![DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END].includes(priorityName)) {
+    if (![LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END].includes(priorityName)) {
       return args;
     }
-
     const [first, ...others] = args ?? [];
+    const deployment = this.getSharedApplication(this.destinationPath()).sharedDeployment;
+    if (![DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END].includes(priorityName)) {
+      return [
+        {
+          ...first,
+          deployment,
+        },
+        ...others,
+      ];
+    }
+    const applications = (this.appsFolders ?? []).map((appFolder, index) => {
+      const application = this.getSharedApplication(this.destinationPath(this.directoryPath ?? '.', appFolder))?.sharedApplication;
+      application.appFolder = appFolder;
+      application.composePort = 8080 + index;
+      return application;
+    });
     return [
       {
         ...first,
-        applications: (this.appsFolders ?? []).map(
-          appFolder => this.getSharedApplication(this.destinationPath(this.directoryPath ?? '.', appFolder))?.sharedApplication,
-        ),
+        deployment,
+        applications,
       },
       ...others,
     ];

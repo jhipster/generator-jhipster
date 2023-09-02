@@ -23,8 +23,8 @@ import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
 import runAsync from 'run-async';
 
-import prompts from './docker-prompts.mjs';
-import BaseDockerGenerator from '../base-workspaces/index.mjs';
+import { existsSync } from 'fs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import { writeFiles } from './files.mjs';
 import {
@@ -32,24 +32,23 @@ import {
   applicationTypes,
   cacheTypes,
   databaseTypes,
-  messageBrokerTypes,
   monitoringTypes,
   serviceDiscoveryTypes,
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { stringHashCode, createFaker } from '../base/support/index.mjs';
+import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret, normalizePathEnd } from '../base/support/index.mjs';
 import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.mjs';
-import { loadFromYoRc, checkDocker, checkImages, generateJwtSecret } from '../base-workspaces/internal/docker-base.mjs';
+import { checkDocker } from '../base-workspaces/internal/docker-base.mjs';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import statistics from '../statistics.mjs';
+import command from './command.mjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
-const { PROMETHEUS } = monitoringTypes;
-const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
+const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
+const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
-const { KAFKA, PULSAR } = messageBrokerTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
 const { OAUTH2 } = authenticationTypes;
 
@@ -58,7 +57,7 @@ const { OAUTH2 } = authenticationTypes;
  * @class
  * @extends {import('../base/index.mjs')}
  */
-export default class DockerComposeGenerator extends BaseDockerGenerator {
+export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
@@ -67,10 +66,23 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
 
   get initializing() {
     return {
-      loadDockerDependenciesTask,
-      checkDocker,
-      loadFromYoRc,
+      sayHello() {
+        this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+        this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+      },
 
+      parseArguments() {
+        this.parseJHipsterArguments(command.arguments);
+        if (this.appsFolders?.length > 0) {
+          this.jhipsterConfig.appsFolders = this.appsFolders;
+        }
+        this.parseJHipsterOptions(command.options);
+
+        if (this.appsFolder || this.jhipsterConfig.appsFolders) {
+          this.regenerate = true;
+        }
+      },
+      checkDocker,
       checkDockerCompose: runAsync(function () {
         if (this.skipChecks) return;
 
@@ -104,91 +116,282 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.INITIALIZING]() {
+  get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
     return {
-      askForApplicationType: prompts.askForApplicationType,
-      askForGatewayType: prompts.askForGatewayType,
-      askForPath: prompts.askForPath,
-      askForApps: prompts.askForApps,
-      askForClustersMode: prompts.askForClustersMode,
-      askForMonitoring: prompts.askForMonitoring,
-      askForConsoleOptions: prompts.askForConsoleOptions,
-      askForServiceDiscovery: prompts.askForServiceDiscovery,
-      askForAdminPassword: prompts.askForAdminPassword,
+      async askForOptions() {
+        if (this.regenerate && !this.options.askAnswered) return;
+
+        await this.prompt(
+          [
+            {
+              type: 'input',
+              name: 'directoryPath',
+              message: 'Enter the root directory where your applications are located',
+              default: '../',
+              validate: async input => {
+                const path = this.destinationPath(input);
+                if (existsSync(path)) {
+                  const applications = await this.findApplicationFolders(path);
+                  return applications.length === 0 ? `No application found in ${path}` : true;
+                }
+                return `${path} is not a directory or doesn't exist`;
+              },
+            },
+            /*
+            {
+              type: 'list',
+              name: 'deploymentApplicationType',
+              message: 'Which *type* of application would you like to deploy?',
+              choices: [
+                {
+                  value: MONOLITH,
+                  name: 'Monolithic application',
+                },
+                {
+                  value: MICROSERVICE,
+                  name: 'Microservice application',
+                },
+              ],
+              default: MONOLITH,
+            },
+            {
+              type: 'list',
+              name: 'gatewayType',
+              when: answers => answers.deploymentApplicationType === MICROSERVICE,
+              message: 'Which *type* of gateway would you like to use?',
+              choices: [
+                {
+                  value: 'SpringCloudGateway',
+                  name: 'JHipster gateway based on Spring Cloud Gateway',
+                },
+              ],
+              default: 'SpringCloudGateway',
+            },
+            */
+          ],
+          this.config,
+        );
+      },
+      async askForPath() {
+        if (this.regenerate) return;
+
+        const directoryPath = this.jhipsterConfig.directoryPath;
+        const appsFolders = (await this.findApplicationFolders(directoryPath)).filter(
+          app => app !== 'jhipster-registry' && app !== 'registry',
+        );
+        this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
+
+        await this.prompt(
+          [
+            {
+              type: 'checkbox',
+              name: 'appsFolders',
+              message: 'Which applications do you want to include in your configuration?',
+              choices: appsFolders,
+              default: appsFolders,
+              validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
+            },
+            {
+              type: 'list',
+              name: 'monitoring',
+              message: 'Do you want to setup monitoring for your applications ?',
+              choices: [
+                {
+                  value: NO_MONITORING,
+                  name: 'No',
+                },
+                {
+                  value: PROMETHEUS,
+                  name: 'Yes, for metrics only with Prometheus',
+                },
+              ],
+              default: NO_MONITORING,
+            },
+          ],
+          this.config,
+        );
+      },
     };
   }
 
-  get [BaseDockerGenerator.PROMPTING]() {
+  get [BaseWorkspacesGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
     return {
-      sayHello() {
-        this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-        this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+      configureDeployment() {
+        this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
+        this.jhipsterConfig.jwtSecretKey = this.jhipsterConfig.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get loading() {
+    return {
+      loadDeployment({ deployment }) {
+        this.appsFolders = this.jhipsterConfig.appsFolders;
+        this.directoryPath = this.jhipsterConfig.directoryPath ?? './';
+
+        deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
+
+        loadDockerDependenciesTask.call(this, { context: deployment });
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get default() {
+    return {
+      async askForClustersMode({ applications }) {
+        if (this.regenerate) return;
+
+        const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder);
+        if (clusteredDbApps.length === 0) return;
+
+        await this.prompt(
+          [
+            {
+              type: 'checkbox',
+              name: 'clusteredDbApps',
+              message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
+              choices: clusteredDbApps,
+              default: clusteredDbApps,
+            },
+          ],
+          this.config,
+        );
+      },
+      async askForServiceDiscovery({ applications }) {
+        if (this.regenerate) return;
+
+        const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
+        if (serviceDiscoveryEnabledApps.length === 0) {
+          this.jhipsterConfig.serviceDiscoveryType = 'no';
+          return;
+        }
+
+        if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryConsul)) {
+          this.jhipsterConfig.serviceDiscoveryType = CONSUL;
+          this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
+        } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryEureka)) {
+          this.jhipsterConfig.serviceDiscoveryType = EUREKA;
+          this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
+        } else {
+          this.log.warn(
+            chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'),
+          );
+          this.log.verboseInfo('Your service discovery enabled apps:');
+          serviceDiscoveryEnabledApps.forEach(app => {
+            this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
+          });
+
+          await this.prompt(
+            [
+              {
+                type: 'list',
+                name: 'serviceDiscoveryType',
+                message: 'Which Service Discovery registry and Configuration server would you like to use ?',
+                choices: [
+                  {
+                    value: CONSUL,
+                    name: 'Consul',
+                  },
+                  {
+                    value: EUREKA,
+                    name: 'JHipster Registry',
+                  },
+                  {
+                    value: NO_SERVICE_DISCOVERY,
+                    name: 'No Service Discovery and Configuration',
+                  },
+                ],
+                default: CONSUL,
+              },
+              {
+                type: 'input',
+                when: answers => answers.serviceDiscoveryType === EUREKA,
+                name: 'adminPassword',
+                message: 'Enter the admin password used to secure the JHipster Registry',
+                default: 'admin',
+                validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
+              },
+            ],
+            this.config,
+          );
+        }
+      },
+
+      configurePassword() {
+        if (this.jhipsterConfig.serviceDiscoveryType !== EUREKA) return;
+
+        this.jhipsterConfig.adminPasswordBase64 = convertSecretToBase64(this.jhipsterConfig.adminPassword);
+      },
+
+      checkImages({ applications }) {
+        this.log.log('\nChecking Docker images in applications directories...');
+
+        let imagePath = '';
+        let runCommand = '';
+        this.hasWarning = false;
+        this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
+        applications.forEach(application => {
+          if (application.buildToolGradle) {
+            imagePath = this.destinationPath(this.directoryPath, application.appFolder, 'build/jib-cache');
+            runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
+          } else if (application.buildToolMaven) {
+            imagePath = this.destinationPath(this.directoryPath, application.appFolder, '/target/jib-cache');
+            runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${
+              process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''
+            }`;
+          }
+          if (!existsSync(imagePath)) {
+            this.hasWarning = true;
+            this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath, application.appFolder)}\n`;
+          }
+        });
+      },
+
+      loadPlatformConfig({ deployment }) {
+        loadDeploymentConfig.call(this, { deployment });
       },
 
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
       },
 
-      checkImages,
-      generateJwtSecret,
+      prepareDeployment({ deployment, applications }) {
+        deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
+        deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
+        deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
+        deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
+        deployment.entryPort = 8080;
 
-      saveConfig() {
-        this.config.set({
-          appsFolders: this.appsFolders,
-          directoryPath: this.directoryPath,
-          gatewayType: this.gatewayType,
-          clusteredDbApps: this.clusteredDbApps,
-          monitoring: this.monitoring,
-          serviceDiscoveryType: this.serviceDiscoveryType,
-          jwtSecretKey: this.jwtSecretKey,
-        });
-      },
-    };
-  }
-
-  get [BaseDockerGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get loading() {
-    return {
-      loadPlatformConfig() {
-        loadDeploymentConfig.call(this);
-      },
-    };
-  }
-
-  get [BaseDockerGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get default() {
-    return {
-      loadConfig({ applications }) {
-        this.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
-        this.useKafka = applications.some(appConfig => appConfig.messageBroker === KAFKA);
-        this.usePulsar = applications.some(appConfig => appConfig.messageBroker === PULSAR);
-        this.entryPort = 8080;
+        deployment.appConfigs = applications;
       },
 
-      async setAppsYaml() {
+      async setAppsYaml({ deployment, applications }) {
         const faker = await createFaker();
 
-        this.appsYaml = [];
-        this.keycloakRedirectUris = '';
-        this.includesApplicationTypeGateway = false;
-        this.appConfigs.forEach(appConfig => {
+        deployment.appsYaml = [];
+        deployment.keycloakRedirectUris = '';
+        deployment.includesApplicationTypeGateway = false;
+        applications.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
+          appConfig.clusteredDb = deployment.clusteredDbApps?.includes(appConfig.appFolder);
           const parentConfiguration = {};
-          const path = this.destinationPath(this.directoryPath + appConfig.appFolder);
+          const path = this.destinationPath(this.directoryPath, appConfig.appFolder);
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services.app;
@@ -203,16 +406,16 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             );
           }
           if (appConfig.applicationType === GATEWAY) {
-            this.includesApplicationTypeGateway = true;
+            deployment.includesApplicationTypeGateway = true;
           }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-            if (this.keycloakSecrets === undefined && appConfig.authenticationType === OAUTH2) {
+            if (deployment.keycloakSecrets === undefined && appConfig.authenticationType === OAUTH2) {
               faker.seed(stringHashCode(appConfig.baseName));
-              this.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
+              deployment.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
             }
-            this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
+            deployment.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
-              this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
+              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
             }
             // Split ports by ":" and take last 2 elements to skip the hostname/IP if present
             const ports = yamlConfig.ports[0].split(':').slice(-2);
@@ -251,17 +454,17 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             });
           }
 
-          if (appConfig.applicationType === MONOLITH && this.monitoring === PROMETHEUS) {
+          if (appConfig.applicationType === MONOLITH && deployment.monitoring === PROMETHEUS) {
             yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
           }
 
-          if (this.serviceDiscoveryType === EUREKA) {
+          if (deployment.serviceDiscoveryType === EUREKA) {
             // Set the JHipster Registry password
-            yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
+            yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${deployment.adminPassword}`);
           }
 
-          const hasNoServiceDiscovery = !this.serviceDiscoveryType && this.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+          const hasNoServiceDiscovery = !deployment.serviceDiscoveryType && deployment.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
           if (hasNoServiceDiscovery && appConfig.skipClient) {
             yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
           }
@@ -321,8 +524,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           // Add Memcached support
           const cacheProvider = appConfig.cacheProvider;
           if (cacheProvider === MEMCACHED) {
-            this.useMemcached = true;
-            const memcachedYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/memcached.yml`));
+            const memcachedYaml = jsyaml.load(deployment.fs.read(`${path}/src/main/docker/memcached.yml`));
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -330,14 +532,14 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
 
           // Add Redis support
           if (cacheProvider === REDIS) {
-            this.useRedis = true;
+            deployment.useRedis = true;
             const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
           }
           // Expose authenticationType
-          this.authenticationType = appConfig.authenticationType;
+          deployment.authenticationType = appConfig.authenticationType;
 
           // Dump the file
           let yamlString = jsyaml.dump(parentConfiguration, { indent: 2, lineWidth: -1 });
@@ -348,15 +550,24 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             yamlArray[j] = `  ${yamlArray[j]}`;
           }
           yamlString = yamlArray.join('\n');
-          this.appsYaml.push(yamlString);
+          deployment.appsYaml.push(yamlString);
 
-          this.skipClient = appConfig.skipClient;
+          deployment.skipClient = appConfig.skipClient;
         });
+      },
+      preparePrometheusFiles({ deployment, applications }) {
+        if (deployment.monitoring !== PROMETHEUS) return;
+
+        // Generate a list of target apps to monitor for the prometheus config
+        const appsToMonitor = applications.map(application => `        - ${application.baseName}:${application.composePort}`);
+
+        // Format the application target list as a YAML array
+        deployment.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
       },
     };
   }
 
-  get [BaseDockerGenerator.DEFAULT]() {
+  get [BaseWorkspacesGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -364,13 +575,13 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return writeFiles();
   }
 
-  get [BaseDockerGenerator.WRITING]() {
+  get [BaseWorkspacesGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
     return {
-      end() {
+      end({ applications }) {
         if (this.hasWarning) {
           this.log.warn('Docker Compose configuration generated, but no Jib cache found');
           this.log.warn('If you forgot to generate the Docker image for this application, please run:');
@@ -379,20 +590,21 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
         this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
-        if (this.gatewayNb + this.monolithicNb > 1) {
+        const uiApplications = applications.filter(
+          app => (app.applicationTypeGateway || app.applicationTypeMonolith) && app.clientFrameworkAny,
+        );
+        if (uiApplications.length > 0) {
           this.log.log('\nYour applications will be accessible on these URLs:');
-          this.appConfigs.forEach(appConfig => {
-            if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-              this.log.verboseInfo(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
-            }
-          });
+          for (const application of uiApplications) {
+            this.log.verboseInfo(`\t- ${application.baseName}: http://localhost:${application.composePort}`);
+          }
           this.log.log('\n');
         }
       },
     };
   }
 
-  get [BaseDockerGenerator.END]() {
+  get [BaseWorkspacesGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 }

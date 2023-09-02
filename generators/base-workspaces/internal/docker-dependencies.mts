@@ -19,9 +19,9 @@
 import { dockerContainers as elasticDockerContainer } from '../../generator-constants.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../../docker/utils.mjs';
 
-export async function loadDockerDependenciesTask(this: any) {
+export async function loadDockerDependenciesTask(this: any, { context = this } = {}) {
   const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
-  this.dockerContainers = this.prepareDependencies(
+  context.dockerContainers = this.prepareDependencies(
     {
       ...elasticDockerContainer,
       ...getDockerfileContainers(dockerfile),

@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 
-import { loadConfigs, setClusteredApps } from '../base-workspaces/internal/docker-base.mjs';
+import { loadConfigs } from '../base-workspaces/internal/docker-base.mjs';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 import { convertSecretToBase64 } from '../base/support/index.mjs';
 
@@ -204,7 +204,6 @@ async function askForClustersMode() {
 
   const props = await this.prompt(prompts, this.config);
   this.clusteredDbApps = props.clusteredDbApps;
-  setClusteredApps.call(this);
 }
 
 /**
@@ -295,7 +294,7 @@ async function askForServiceDiscovery() {
       },
     ];
 
-    const props = this.prompt(prompts, this.config);
+    const props = await this.prompt(prompts, this.config);
     this.serviceDiscoveryType = props.serviceDiscoveryType;
   }
 }

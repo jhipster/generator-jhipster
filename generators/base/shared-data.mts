@@ -28,6 +28,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     }
     // Backward compatibility sharedData
     this._storage = storage;
+    this._storage.sharedDeployment = this._storage.sharedDeployment || {};
     this._storage.sharedEntities = this._storage.sharedEntities || {};
     this._storage.sharedApplication = this._storage.sharedApplication || {
       nodeDependencies: {},

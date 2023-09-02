@@ -31,39 +31,30 @@ export function writeFiles() {
       }
     },
 
-    writeDockerCompose() {
-      this.writeFile('docker-compose.yml.ejs', 'docker-compose.yml');
-      this.writeFile('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
+    writeDockerCompose({ deployment }) {
+      this.writeFile('docker-compose.yml.ejs', 'docker-compose.yml', deployment);
+      this.writeFile('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md', deployment);
     },
 
-    writeRegistryFiles() {
-      if (this.serviceDiscoveryAny) {
-        this.writeFile('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
+    writeRegistryFiles({ deployment }) {
+      if (deployment.serviceDiscoveryAny) {
+        this.writeFile('central-server-config/application.yml.ejs', 'central-server-config/application.yml', deployment);
       }
     },
 
-    writeKeycloakFiles() {
-      if (this.authenticationType === OAUTH2 && this.applicationType !== MICROSERVICE) {
-        this.writeFile('realm-config/keycloak-health-check.sh', 'realm-config/keycloak-health-check.sh');
-        this.writeFile('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
+    writeKeycloakFiles({ deployment }) {
+      if (deployment.authenticationType === OAUTH2 && deployment.applicationType !== MICROSERVICE) {
+        this.writeFile('realm-config/keycloak-health-check.sh', 'realm-config/keycloak-health-check.sh', deployment);
+        this.writeFile('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json', deployment);
       }
     },
 
-    writePrometheusFiles() {
-      if (this.monitoring !== PROMETHEUS) return;
+    writePrometheusFiles({ deployment }) {
+      if (deployment.monitoring !== PROMETHEUS) return;
 
-      // Generate a list of target apps to monitor for the prometheus config
-      const appsToMonitor = [];
-      for (let i = 0; i < this.appConfigs.length; i++) {
-        appsToMonitor.push(`        - ${this.appConfigs[i].baseName}:${this.appConfigs[i].composePort}`);
-      }
-
-      // Format the application target list as a YAML array
-      this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
-
-      this.writeFile('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
-      this.writeFile('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
-      this.writeFile('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
+      this.writeFile('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml', deployment);
+      this.writeFile('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml', deployment);
+      this.writeFile('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml', deployment);
     },
   };
 }

@@ -35,7 +35,6 @@ export function loadDeploymentConfig(
 ) {
   deployment.appsFolders = config.appsFolders;
   deployment.directoryPath = config.directoryPath;
-  deployment.gatewayType = config.gatewayType;
   deployment.clusteredDbApps = config.clusteredDbApps;
   deployment.dockerRepositoryName = config.dockerRepositoryName;
   deployment.dockerPushCommand = config.dockerPushCommand;
