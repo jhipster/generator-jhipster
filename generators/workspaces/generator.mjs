@@ -19,7 +19,7 @@
 
 import { existsSync } from 'fs';
 
-import { GENERATOR_ANGULAR, GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
+import { GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 import command from './command.mjs';
@@ -137,21 +137,14 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
       generatePackageJson({ applications }) {
         if (!this.generateWorkspaces) return;
 
-        const {
-          dependencies: { rxjs },
-          devDependencies: { webpack: webpackVersion },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
-
-        const {
-          devDependencies: { concurrently },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'));
-
+        const findDependencyVersion = dependency =>
+          applications.find(app => app.nodeDependencies[dependency])?.nodeDependencies[dependency];
         this.packageJson.merge({
           workspaces: {
             packages: this.packages,
           },
           devDependencies: {
-            concurrently,
+            concurrently: findDependencyVersion('concurrently'),
           },
           scripts: {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
@@ -165,10 +158,10 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         if (applications.some(app => app.clientFrameworkAngular)) {
           this.packageJson.merge({
             devDependencies: {
-              rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
+              rxjs: findDependencyVersion('rxjs'), // Set version to workaround https://github.com/npm/cli/issues/4437
             },
             overrides: {
-              webpack: webpackVersion,
+              webpack: findDependencyVersion('webpack'),
             },
           });
         }

@@ -158,12 +158,24 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  get preparing() {
+  get loading() {
     return {
-      loadConfig() {
-        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
-        this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
-        this.usePulsar = this.appConfigs.some(appConfig => appConfig.messageBroker === PULSAR);
+      loadPlatformConfig() {
+        loadDeploymentConfig.call(this);
+      },
+    };
+  }
+
+  get [BaseDockerGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get default() {
+    return {
+      loadConfig({ applications }) {
+        this.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.useKafka = applications.some(appConfig => appConfig.messageBroker === KAFKA);
+        this.usePulsar = applications.some(appConfig => appConfig.messageBroker === PULSAR);
         this.entryPort = 8080;
       },
 
@@ -344,20 +356,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get loading() {
-    return {
-      loadPlatformConfig() {
-        loadDeploymentConfig.call(this);
-      },
-    };
-  }
-
-  get [BaseDockerGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseDockerGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
