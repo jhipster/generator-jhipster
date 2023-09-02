@@ -23,6 +23,7 @@ import BaseGenerator from '../base/index.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base/priorities.mjs';
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import command from './command.mjs';
 
 const { DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
@@ -45,6 +46,8 @@ export default class BaseWorkspacesGenerator extends BaseGenerator {
         cancellable: true,
         queueName: QUEUES.PREPARING_QUEUE,
       });
+
+      this.parseJHipsterOptions(command.options);
     }
   }
 

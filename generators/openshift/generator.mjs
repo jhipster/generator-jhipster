@@ -21,7 +21,7 @@ import chalk from 'chalk';
 import shelljs from 'shelljs';
 import runAsync from 'run-async';
 
-import BaseWorkspacesGenerator from '../base-docker/index.mjs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import prompts from './prompts.mjs';
 import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';

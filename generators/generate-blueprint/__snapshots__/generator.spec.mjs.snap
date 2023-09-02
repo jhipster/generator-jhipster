@@ -122,21 +122,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/base-core/templates/template-file-base-core.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-docker/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/base-docker/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/base-docker/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/base-docker/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/base-docker/templates/template-file-base-docker.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/base-entity-changes/command.mjs": {
     "stateCleared": "modified",
   },
@@ -150,6 +135,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/base-entity-changes/templates/template-file-base-entity-changes.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/command.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/templates/template-file-base-workspaces.ejs": {
     "stateCleared": "modified",
   },
   "generators/base/command.mjs": {

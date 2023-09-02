@@ -20,7 +20,7 @@
 import fs from 'fs';
 import chalk from 'chalk';
 
-import BaseWorkspacesGenerator from '../base-docker/index.mjs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import prompts from '../kubernetes/prompts.mjs';
 import { writeFiles } from './files.mjs';

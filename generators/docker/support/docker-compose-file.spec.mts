@@ -1,7 +1,7 @@
 import { expect } from 'esmocha';
 import { createDockerComposeFile } from './docker-compose-file.mjs';
 
-describe('generator - base-docker - utils', () => {
+describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {
     it('should return a docker compose file header with default name', () => {
       expect(createDockerComposeFile()).toMatchInlineSnapshot(`

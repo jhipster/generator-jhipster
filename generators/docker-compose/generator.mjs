@@ -24,7 +24,7 @@ import normalize from 'normalize-path';
 import runAsync from 'run-async';
 
 import prompts from './docker-prompts.mjs';
-import BaseDockerGenerator from '../base-docker/index.mjs';
+import BaseDockerGenerator from '../base-workspaces/index.mjs';
 
 import { writeFiles } from './files.mjs';
 import {
