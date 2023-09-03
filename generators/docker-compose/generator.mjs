@@ -156,27 +156,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       async askForMonitoring() {
         if (this.regenerate) return;
 
-        await this.prompt(
-          [
-            {
-              type: 'list',
-              name: 'monitoring',
-              message: 'Do you want to setup monitoring for your applications ?',
-              choices: [
-                {
-                  value: NO_MONITORING,
-                  name: 'No',
-                },
-                {
-                  value: PROMETHEUS,
-                  name: 'Yes, for metrics only with Prometheus',
-                },
-              ],
-              default: NO_MONITORING,
-            },
-          ],
-          this.config,
-        );
+        await this.askForMonitoring();
       },
     };
   }
@@ -222,99 +202,16 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       async askForClustersMode({ applications }) {
         if (this.regenerate) return;
 
-        const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder);
-        if (clusteredDbApps.length === 0) return;
-
-        await this.prompt(
-          [
-            {
-              type: 'checkbox',
-              name: 'clusteredDbApps',
-              message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
-              choices: clusteredDbApps,
-              default: clusteredDbApps,
-            },
-          ],
-          this.config,
-        );
+        await this.askForClustersMode({ applications });
       },
       async askForServiceDiscovery({ applications }) {
         if (this.regenerate) return;
 
-        const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
-        if (serviceDiscoveryEnabledApps.length === 0) {
-          this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
-          return;
-        }
-
-        if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryConsul)) {
-          this.jhipsterConfig.serviceDiscoveryType = CONSUL;
-          this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
-        } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryEureka)) {
-          this.jhipsterConfig.serviceDiscoveryType = EUREKA;
-          this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
-        } else {
-          this.log.warn(
-            chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'),
-          );
-          this.log.verboseInfo('Your service discovery enabled apps:');
-          serviceDiscoveryEnabledApps.forEach(app => {
-            this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
-          });
-
-          await this.prompt(
-            [
-              {
-                type: 'list',
-                name: 'serviceDiscoveryType',
-                message: 'Which Service Discovery registry and Configuration server would you like to use ?',
-                choices: [
-                  {
-                    value: CONSUL,
-                    name: 'Consul',
-                  },
-                  {
-                    value: EUREKA,
-                    name: 'JHipster Registry',
-                  },
-                  {
-                    value: NO_SERVICE_DISCOVERY,
-                    name: 'No Service Discovery and Configuration',
-                  },
-                ],
-                default: CONSUL,
-              },
-            ],
-            this.config,
-          );
-        }
-        if (this.jhipsterConfig.serviceDiscoveryType === EUREKA) {
-          await this.prompt(
-            [
-              {
-                type: 'input',
-                name: 'adminPassword',
-                message: 'Enter the admin password used to secure the JHipster Registry',
-                default: 'admin',
-                validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
-              },
-            ],
-            this.config,
-          );
-        }
+        await this.askForServiceDiscovery({ applications });
       },
 
       loadPlatformConfig({ deployment }) {
-        const config = this.deploymentConfigWithDefaults;
-        deployment.clusteredDbApps = config.clusteredDbApps;
-        deployment.adminPassword = config.adminPassword;
-        if (deployment.adminPassword) {
-          deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
-        }
-        deployment.jwtSecretKey = config.jwtSecretKey;
-        loadPlatformConfig({ config, application: deployment });
-        loadDerivedPlatformConfig({ application: deployment });
-        loadDerivedServerAndPlatformProperties({ application: deployment });
+        this.loadDeploymentConfig({ deployment });
       },
 
       insight() {
@@ -322,16 +219,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       },
 
       prepareDeployment({ deployment, applications }) {
-        deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
-        deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
-        deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
-        deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
-        deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
-        deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
-        deployment.entryPort = 8080;
-
-        deployment.appConfigs = applications;
-        deployment.applications = applications;
+        this.prepareDeploymentDerivedProperties({ deployment, applications });
       },
 
       async setAppsYaml({ deployment, applications }) {
@@ -569,5 +457,137 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get deploymentConfigWithDefaults() {
     return defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
+  }
+
+  loadDeploymentConfig({ deployment }) {
+    const config = this.deploymentConfigWithDefaults;
+    deployment.clusteredDbApps = config.clusteredDbApps;
+    deployment.adminPassword = config.adminPassword;
+    deployment.jwtSecretKey = config.jwtSecretKey;
+    loadPlatformConfig({ config, application: deployment });
+    loadDerivedPlatformConfig({ application: deployment });
+    loadDerivedServerAndPlatformProperties({ application: deployment });
+  }
+
+  prepareDeploymentDerivedProperties({ deployment, applications }) {
+    if (deployment.adminPassword) {
+      deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
+    }
+    deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
+    deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
+    deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
+    deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
+    deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
+    deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
+    deployment.entryPort = 8080;
+
+    deployment.appConfigs = applications;
+    deployment.applications = applications;
+  }
+
+  async askForMonitoring() {
+    await this.prompt(
+      [
+        {
+          type: 'list',
+          name: 'monitoring',
+          message: 'Do you want to setup monitoring for your applications ?',
+          choices: [
+            {
+              value: NO_MONITORING,
+              name: 'No',
+            },
+            {
+              value: PROMETHEUS,
+              name: 'Yes, for metrics only with Prometheus',
+            },
+          ],
+          default: NO_MONITORING,
+        },
+      ],
+      this.config,
+    );
+  }
+
+  async askForClustersMode({ applications }) {
+    const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder);
+    if (clusteredDbApps.length === 0) return;
+
+    await this.prompt(
+      [
+        {
+          type: 'checkbox',
+          name: 'clusteredDbApps',
+          message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
+          choices: clusteredDbApps,
+          default: clusteredDbApps,
+        },
+      ],
+      this.config,
+    );
+  }
+
+  async askForServiceDiscovery({ applications }) {
+    const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
+    if (serviceDiscoveryEnabledApps.length === 0) {
+      this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+      return;
+    }
+
+    if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryConsul)) {
+      this.jhipsterConfig.serviceDiscoveryType = CONSUL;
+      this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
+    } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryEureka)) {
+      this.jhipsterConfig.serviceDiscoveryType = EUREKA;
+      this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
+    } else {
+      this.log.warn(
+        chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'),
+      );
+      this.log.verboseInfo('Your service discovery enabled apps:');
+      serviceDiscoveryEnabledApps.forEach(app => {
+        this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
+      });
+
+      await this.prompt(
+        [
+          {
+            type: 'list',
+            name: 'serviceDiscoveryType',
+            message: 'Which Service Discovery registry and Configuration server would you like to use ?',
+            choices: [
+              {
+                value: CONSUL,
+                name: 'Consul',
+              },
+              {
+                value: EUREKA,
+                name: 'JHipster Registry',
+              },
+              {
+                value: NO_SERVICE_DISCOVERY,
+                name: 'No Service Discovery and Configuration',
+              },
+            ],
+            default: CONSUL,
+          },
+        ],
+        this.config,
+      );
+    }
+    if (this.jhipsterConfig.serviceDiscoveryType === EUREKA) {
+      await this.prompt(
+        [
+          {
+            type: 'input',
+            name: 'adminPassword',
+            message: 'Enter the admin password used to secure the JHipster Registry',
+            default: 'admin',
+            validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
+          },
+        ],
+        this.config,
+      );
+    }
   }
 }
