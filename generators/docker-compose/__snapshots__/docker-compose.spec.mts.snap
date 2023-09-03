@@ -2652,8 +2652,8 @@ scrape_configs:
     metrics_path: /management/prometheus
     static_configs:
     - targets:
-        - jhgate:8080
-        - msmysql:8081
+      - jhgate:8080
+      - msmysql:8081
 ",
     "stateCleared": "modified",
   },

@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 import { applicationOptions, deploymentOptions } from '../../../jdl/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig, loadServerAndPlatformConfig } from '../../server/support/index.mjs';
+import { loadDerivedPlatformConfig, loadPlatformConfig, loadDerivedServerAndPlatformProperties } from '../../server/support/index.mjs';
 import type { GeneratorBaseCore } from '../../index.js';
 
 const { OptionNames } = applicationOptions;
@@ -42,5 +42,5 @@ export function loadDeploymentConfig(
   deployment.jwtSecretKey = config[JWT_SECRET_KEY];
   loadPlatformConfig({ config, application: deployment });
   loadDerivedPlatformConfig({ application: deployment });
-  loadServerAndPlatformConfig({ application: deployment });
+  loadDerivedServerAndPlatformProperties({ application: deployment });
 }

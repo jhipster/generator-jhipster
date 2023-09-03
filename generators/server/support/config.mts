@@ -101,7 +101,7 @@ export const loadDerivedPlatformConfig = ({ application }: { application: Platfo
   application.monitoringPrometheus = application.monitoring === PROMETHEUS;
 };
 
-export const loadServerAndPlatformConfig = ({ application }: { application: any }) => {
+export const loadDerivedServerAndPlatformProperties = ({ application }: { application: any }) => {
   if (!application.serviceDiscoveryType) {
     application.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
   }
@@ -180,5 +180,5 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
     prepareSqlApplicationProperties({ application });
   }
 
-  loadServerAndPlatformConfig({ application });
+  loadDerivedServerAndPlatformProperties({ application });
 };

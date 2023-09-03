@@ -19,11 +19,14 @@
 
 import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
+import chalk from 'chalk';
+
 import BaseGenerator from '../base/index.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base/priorities.mjs';
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import command from './command.mjs';
+import { normalizePathEnd } from '../base/support/path.mjs';
 
 const { LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
@@ -49,6 +52,55 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
 
       this.parseJHipsterOptions(command.options);
     }
+  }
+
+  protected loadWorkspacesConfig() {
+    this.appsFolders = this.jhipsterConfig.appsFolders;
+    this.directoryPath = this.jhipsterConfig.directoryPath ?? './';
+  }
+
+  protected configureWorkspacesConfig() {
+    this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
+  }
+
+  protected async askForWorkspacesConfig() {
+    await this.prompt(
+      [
+        {
+          type: 'input',
+          name: 'directoryPath',
+          message: 'Enter the root directory where your applications are located',
+          default: '../',
+          validate: async input => {
+            const path = this.destinationPath(input);
+            if (existsSync(path)) {
+              const applications = await this.findApplicationFolders(path);
+              return applications.length === 0 ? `No application found in ${path}` : true;
+            }
+            return `${path} is not a directory or doesn't exist`;
+          },
+        },
+      ],
+      this.config,
+    );
+
+    const directoryPath = this.jhipsterConfig.directoryPath;
+    const appsFolders = (await this.findApplicationFolders(directoryPath)).filter(app => app !== 'jhipster-registry' && app !== 'registry');
+    this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
+
+    await this.prompt(
+      [
+        {
+          type: 'checkbox',
+          name: 'appsFolders',
+          message: 'Which applications do you want to include in your configuration?',
+          choices: appsFolders,
+          default: appsFolders,
+          validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
+        },
+      ],
+      this.config,
+    );
   }
 
   protected async findApplicationFolders(directoryPath = this.directoryPath ?? '.') {

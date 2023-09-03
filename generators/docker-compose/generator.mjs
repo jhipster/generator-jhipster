@@ -16,28 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { existsSync } from 'fs';
 import pathjs from 'path';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
 import runAsync from 'run-async';
+import _ from 'lodash';
 
-import { existsSync } from 'fs';
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import { writeFiles } from './files.mjs';
-import { monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret, normalizePathEnd } from '../base/support/index.mjs';
-import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.mjs';
+import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret } from '../base/support/index.mjs';
 import { checkDocker } from '../base-workspaces/internal/docker-base.mjs';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import statistics from '../statistics.mjs';
 import command from './command.mjs';
+import { loadDerivedPlatformConfig, loadPlatformConfig, loadDerivedServerAndPlatformProperties } from '../server/support/index.mjs';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
+const { Options: DeploymentOptions } = deploymentOptions;
+const { defaults } = _;
 
 /* eslint-disable consistent-return */
 /**
@@ -112,23 +115,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       async askForOptions() {
         if (this.regenerate && !this.options.askAnswered) return;
 
+        await this.askForWorkspacesConfig();
+        /*
         await this.prompt(
           [
-            {
-              type: 'input',
-              name: 'directoryPath',
-              message: 'Enter the root directory where your applications are located',
-              default: '../',
-              validate: async input => {
-                const path = this.destinationPath(input);
-                if (existsSync(path)) {
-                  const applications = await this.findApplicationFolders(path);
-                  return applications.length === 0 ? `No application found in ${path}` : true;
-                }
-                return `${path} is not a directory or doesn't exist`;
-              },
-            },
-            /*
             {
               type: 'list',
               name: 'deploymentApplicationType',
@@ -158,30 +148,16 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
               ],
               default: 'SpringCloudGateway',
             },
-            */
           ],
           this.config,
         );
+        */
       },
-      async askForPath() {
+      async askForMonitoring() {
         if (this.regenerate) return;
-
-        const directoryPath = this.jhipsterConfig.directoryPath;
-        const appsFolders = (await this.findApplicationFolders(directoryPath)).filter(
-          app => app !== 'jhipster-registry' && app !== 'registry',
-        );
-        this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
 
         await this.prompt(
           [
-            {
-              type: 'checkbox',
-              name: 'appsFolders',
-              message: 'Which applications do you want to include in your configuration?',
-              choices: appsFolders,
-              default: appsFolders,
-              validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
-            },
             {
               type: 'list',
               name: 'monitoring',
@@ -211,8 +187,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get configuring() {
     return {
-      configureDeployment() {
-        this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
+      configureWorkspaces() {
+        this.configureWorkspacesConfig();
+      },
+      configureBaseDeployment() {
         this.jhipsterConfig.jwtSecretKey = this.jhipsterConfig.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
       },
     };
@@ -224,10 +202,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get loading() {
     return {
-      loadDeployment({ deployment }) {
-        this.appsFolders = this.jhipsterConfig.appsFolders;
-        this.directoryPath = this.jhipsterConfig.directoryPath ?? './';
-
+      loadWorkspacesConfig() {
+        this.loadWorkspacesConfig();
+      },
+      loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
         loadDockerDependenciesTask.call(this, { context: deployment });
@@ -326,38 +304,17 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         }
       },
 
-      configurePassword() {
-        if (this.jhipsterConfig.serviceDiscoveryType !== EUREKA) return;
-
-        this.jhipsterConfig.adminPasswordBase64 = convertSecretToBase64(this.jhipsterConfig.adminPassword);
-      },
-
-      checkImages({ applications }) {
-        this.log.log('\nChecking Docker images in applications directories...');
-
-        let imagePath = '';
-        let runCommand = '';
-        this.hasWarning = false;
-        this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
-        applications.forEach(application => {
-          if (application.buildToolGradle) {
-            imagePath = this.destinationPath(this.directoryPath, application.appFolder, 'build/jib-cache');
-            runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
-          } else if (application.buildToolMaven) {
-            imagePath = this.destinationPath(this.directoryPath, application.appFolder, '/target/jib-cache');
-            runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${
-              process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''
-            }`;
-          }
-          if (!existsSync(imagePath)) {
-            this.hasWarning = true;
-            this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath, application.appFolder)}\n`;
-          }
-        });
-      },
-
       loadPlatformConfig({ deployment }) {
-        loadDeploymentConfig.call(this, { deployment });
+        const config = this.deploymentConfigWithDefaults;
+        deployment.clusteredDbApps = config.clusteredDbApps;
+        deployment.adminPassword = config.adminPassword;
+        if (deployment.adminPassword) {
+          deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
+        }
+        deployment.jwtSecretKey = config.jwtSecretKey;
+        loadPlatformConfig({ config, application: deployment });
+        loadDerivedPlatformConfig({ application: deployment });
+        loadDerivedServerAndPlatformProperties({ application: deployment });
       },
 
       insight() {
@@ -370,18 +327,18 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
         deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
         deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
+        deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
         deployment.entryPort = 8080;
 
         deployment.appConfigs = applications;
+        deployment.applications = applications;
       },
 
       async setAppsYaml({ deployment, applications }) {
         const faker = await createFaker();
 
-        deployment.appsYaml = [];
         deployment.keycloakRedirectUris = '';
-        deployment.includesApplicationTypeGateway = false;
-        applications.forEach(appConfig => {
+        deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           appConfig.clusteredDb = deployment.clusteredDbApps?.includes(appConfig.appFolder);
           const parentConfiguration = {};
@@ -398,9 +355,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
                 return [`${lowercaseBaseName}-${serviceName}`, config];
               }),
             );
-          }
-          if (appConfig.applicationTypeGateway) {
-            deployment.includesApplicationTypeGateway = true;
           }
           if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) {
             if (deployment.keycloakSecrets === undefined && appConfig.authenticationTypeOauth2) {
@@ -542,19 +496,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             yamlArray[j] = `  ${yamlArray[j]}`;
           }
           yamlString = yamlArray.join('\n');
-          deployment.appsYaml.push(yamlString);
-
-          deployment.skipClient = appConfig.skipClient;
+          return yamlString;
         });
-      },
-      preparePrometheusFiles({ deployment, applications }) {
-        if (deployment.monitoring !== PROMETHEUS) return;
-
-        // Generate a list of target apps to monitor for the prometheus config
-        const appsToMonitor = applications.map(application => `        - ${application.baseName}:${application.composePort}`);
-
-        // Format the application target list as a YAML array
-        deployment.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
       },
     };
   }
@@ -574,13 +517,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   get end() {
     return {
       end({ applications }) {
-        if (this.hasWarning) {
-          this.log.warn('Docker Compose configuration generated, but no Jib cache found');
-          this.log.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.log.log(chalk.red(this.warningMessage));
-        } else {
-          this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
-        }
+        this.checkApplicationsDockerImages({ applications });
+
         this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
         const uiApplications = applications.filter(
           app => (app.applicationTypeGateway || app.applicationTypeMonolith) && app.clientFrameworkAny,
@@ -598,5 +536,38 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get [BaseWorkspacesGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  checkApplicationsDockerImages({ applications }) {
+    this.log.log('\nChecking Docker images in applications directories...');
+
+    let imagePath = '';
+    let runCommand = '';
+    let hasWarning = false;
+    let warningMessage = 'To generate the missing Docker image(s), please run:\n';
+    applications.forEach(application => {
+      if (application.buildToolGradle) {
+        imagePath = this.destinationPath(this.directoryPath, application.appFolder, 'build/jib-cache');
+        runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
+      } else if (application.buildToolMaven) {
+        imagePath = this.destinationPath(this.directoryPath, application.appFolder, '/target/jib-cache');
+        runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
+      }
+      if (!existsSync(imagePath)) {
+        hasWarning = true;
+        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath, application.appFolder)}\n`;
+      }
+    });
+    if (hasWarning) {
+      this.log.warn('Docker Compose configuration generated, but no Jib cache found');
+      this.log.warn('If you forgot to generate the Docker image for this application, please run:');
+      this.log.log(chalk.red(warningMessage));
+    } else {
+      this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+    }
+  }
+
+  get deploymentConfigWithDefaults() {
+    return defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
   }
 }
