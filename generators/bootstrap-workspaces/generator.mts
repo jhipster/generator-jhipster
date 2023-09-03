@@ -38,7 +38,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   get prompting() {
     return this.asPromptingTaskGroup({
       async askForOptions() {
-        if (!this.customWorkspacesConfig && this.sharedWorkspaces.existingWorkspaces && !this.options.askAnswered) return;
+        if (this.customWorkspacesConfig || (this.sharedWorkspaces.existingWorkspaces && !this.options.askAnswered)) return;
 
         await this.askForWorkspacesConfig();
       },
@@ -83,5 +83,17 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get [BaseWorkspacesGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get loadingWorkspaces() {
+    return {
+      loadWorkspacesConfig({ workspaces }) {
+        (this as any).loadWorkspacesConfig({ context: workspaces });
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 }

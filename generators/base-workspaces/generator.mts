@@ -66,9 +66,9 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
     }
   }
 
-  protected loadWorkspacesConfig() {
-    this.appsFolders = this.jhipsterConfig.appsFolders;
-    this.directoryPath = this.jhipsterConfig.directoryPath ?? './';
+  protected loadWorkspacesConfig({ context = this } = {}) {
+    context.appsFolders = this.jhipsterConfig.appsFolders;
+    context.directoryPath = this.jhipsterConfig.directoryPath ?? './';
   }
 
   protected configureWorkspacesConfig() {
