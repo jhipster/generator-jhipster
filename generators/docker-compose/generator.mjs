@@ -27,15 +27,7 @@ import { existsSync } from 'fs';
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import { writeFiles } from './files.mjs';
-import {
-  authenticationTypes,
-  applicationTypes,
-  cacheTypes,
-  databaseTypes,
-  monitoringTypes,
-  serviceDiscoveryTypes,
-  searchEngineTypes,
-} from '../../jdl/jhipster/index.mjs';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret, normalizePathEnd } from '../base/support/index.mjs';
 import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.mjs';
@@ -44,13 +36,8 @@ import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mj
 import statistics from '../statistics.mjs';
 import command from './command.mjs';
 
-const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
-const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = databaseTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
-const { MEMCACHED, REDIS } = cacheTypes;
-const { OAUTH2 } = authenticationTypes;
 
 /* eslint-disable consistent-return */
 /**
@@ -376,6 +363,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
         deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
         deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
+        deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
         deployment.entryPort = 8080;
 
         deployment.appConfigs = applications;
@@ -405,11 +393,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
               }),
             );
           }
-          if (appConfig.applicationType === GATEWAY) {
+          if (appConfig.applicationTypeGateway) {
             deployment.includesApplicationTypeGateway = true;
           }
-          if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-            if (deployment.keycloakSecrets === undefined && appConfig.authenticationType === OAUTH2) {
+          if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) {
+            if (deployment.keycloakSecrets === undefined && appConfig.authenticationTypeOauth2) {
               faker.seed(stringHashCode(appConfig.baseName));
               deployment.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
             }
@@ -454,7 +442,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             });
           }
 
-          if (appConfig.applicationType === MONOLITH && deployment.monitoring === PROMETHEUS) {
+          if (appConfig.applicationTypeMonolith && deployment.monitoring === PROMETHEUS) {
             yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
           }
@@ -472,8 +460,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           parentConfiguration[lowercaseBaseName] = yamlConfig;
 
           // Add database configuration
-          const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
-          if (database !== NO_DATABASE && database !== ORACLE) {
+          if (appConfig.databaseTypeAny && !appConfig.prodDatabaseTypeOracle) {
+            const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
@@ -481,7 +469,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             // Don't export database ports
             delete databaseYamlConfig.ports;
 
-            if (database === CASSANDRA) {
+            if (appConfig.databaseTypeCassandra) {
               // migration service config
               const cassandraMigrationYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
               const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
@@ -492,7 +480,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
               parentConfiguration[`${databaseServiceName}-migration`] = cassandraMigrationConfig;
             }
 
-            if (database === COUCHBASE) {
+            if (appConfig.databaseTypeCouchbase) {
               databaseYamlConfig.build.context = relativePath;
             }
 
@@ -502,28 +490,27 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
               dbNodeConfig.build.context = relativePath;
               databaseYamlConfig = clusterDbYaml.services[database];
               delete databaseYamlConfig.ports;
-              if (database === COUCHBASE) {
+              if (appConfig.databaseTypeCouchbase) {
                 databaseYamlConfig.build.context = relativePath;
               }
               parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
-              if (database === MONGODB) {
+              if (appConfig.databaseTypeMongodb) {
                 parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${database}-config`];
               }
             }
 
             parentConfiguration[databaseServiceName] = databaseYamlConfig;
           }
-          // Add search engine configuration
-          const searchEngine = appConfig.searchEngine;
-          if (searchEngine === ELASTICSEARCH) {
+          if (appConfig.searchEngineElasticsearch) {
+            // Add search engine configuration
+            const searchEngine = appConfig.searchEngine;
             const searchEngineYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
             const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
           // Add Memcached support
-          const cacheProvider = appConfig.cacheProvider;
-          if (cacheProvider === MEMCACHED) {
+          if (appConfig.cacheProviderMemcached) {
             const memcachedYaml = jsyaml.load(deployment.fs.read(`${path}/src/main/docker/memcached.yml`));
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
@@ -531,8 +518,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           }
 
           // Add Redis support
-          if (cacheProvider === REDIS) {
-            deployment.useRedis = true;
+          if (appConfig.cacheProviderRedis) {
             const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
