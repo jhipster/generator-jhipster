@@ -29,7 +29,7 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import { writeFiles } from './files.mjs';
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
 import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret } from '../base/support/index.mjs';
 import { checkDocker } from '../base-workspaces/internal/docker-base.mjs';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
@@ -57,7 +57,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     }
     this.existingDeployment = Boolean(this.jhipsterConfig.appsFolders);
 
-    // await this.dependsOnJHipster('bootstrap-workspaces');
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
     }
@@ -109,32 +109,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return {
-      async askForOptions() {
-        if (this.existingDeployment && !this.options.askAnswered) return;
-
-        await this.askForWorkspacesConfig();
-      },
-    };
-  }
-
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuring() {
-    return {
-      configureWorkspaces() {
-        this.configureWorkspacesConfig();
-      },
-    };
-  }
-
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {

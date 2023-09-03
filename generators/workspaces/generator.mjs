@@ -19,7 +19,7 @@
 
 import { existsSync } from 'fs';
 
-import { GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 import command from './command.mjs';
@@ -38,6 +38,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   generateWorkspaces;
 
   async beforeQueue() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } });
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_WORKSPACES);
     }
@@ -49,7 +51,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         this.parseJHipsterOptions(command.options);
 
         // Generate workspaces file only when option passed or regenerating
-        this.generateWorkspaces = this.workspaces !== false || !!this.packageJson.get('workspaces');
+        this.generateWorkspaces = this.workspaces !== false || !!this.packageJson?.get('workspaces');
 
         // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
         this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
@@ -65,6 +67,15 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return this.asConfiguringTaskGroup({
       async configure() {
         this.jhipsterConfig.baseName = this.jhipsterConfig.baseName || 'workspaces';
+      },
+      async configureUsingFiles() {
+        if (!this.generateWorkspaces) return;
+
+        if (existsSync(this.destinationPath('docker-compose'))) {
+          this.workspacesConfig.dockerCompose = true;
+        }
+        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
+        delete this.workspacesConfig.packages;
       },
     });
   }
@@ -100,36 +111,25 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get default() {
+  get loadingWorkspaces() {
     return this.asDefaultTaskGroup({
-      async configureUsingFiles() {
-        if (!this.generateWorkspaces) return;
-
-        if (existsSync(this.destinationPath('docker-compose'))) {
-          this.workspacesConfig.dockerCompose = true;
-        }
-        this.workspacesConfig.packages = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
-      },
-
       configurePackageManager({ applications }) {
         if (this.workspacesConfig.clientPackageManager || !this.generateWorkspaces) return;
 
         this.workspacesConfig.clientPackageManager =
           this.options.clientPackageManager ?? applications.find(app => app.clientPackageManager)?.clientPackageManager ?? 'npm';
       },
-
       async loadConfig() {
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
-        this.packages = this.workspacesConfig.packages;
         this.env.options.nodePackageManager = this.workspacesConfig.clientPackageManager;
       },
     });
   }
 
-  get [BaseWorkspacesGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
   get postWriting() {
@@ -141,7 +141,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
           applications.find(app => app.nodeDependencies[dependency])?.nodeDependencies[dependency];
         this.packageJson.merge({
           workspaces: {
-            packages: this.packages,
+            packages: this.appsFolders,
           },
           devDependencies: {
             concurrently: findDependencyVersion('concurrently'),
@@ -187,11 +187,11 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   createConcurrentlyScript(...scripts) {
     const scriptsList = scripts
       .map(script => {
-        const packageScripts = this.packages.map(packageName => [
+        const packageScripts = this.appsFolders.map(packageName => [
           `${script}:${packageName}`,
           `npm run ${script} --workspace ${packageName} --if-present`,
         ]);
-        packageScripts.push([script, `concurrently ${this.packages.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
+        packageScripts.push([script, `concurrently ${this.appsFolders.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
         return packageScripts;
       })
       .flat();

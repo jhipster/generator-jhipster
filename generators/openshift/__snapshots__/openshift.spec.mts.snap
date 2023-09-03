@@ -7,7 +7,6 @@ exports[`generator - OpenShift gateway and one microservice with mysql should ma
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -16,39 +15,9 @@ exports[`generator - OpenShift gateway and one microservice with mysql should ma
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
-    "packages": ["01-gateway", "02-mysql"],
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -1061,7 +1030,6 @@ exports[`generator - OpenShift gateway with multiple microservices backed by mys
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -1070,103 +1038,9 @@ exports[`generator - OpenShift gateway with multiple microservices backed by mys
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "05-cassandra",
-      "07-mariadb"
-    ],
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "04-mongo/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmongodb",
-    "databaseType": "mongodb",
-    "entities": [],
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "05-cassandra/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mscassandra",
-    "databaseType": "cassandra",
-    "entities": [],
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "07-mariadb/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmariadb",
-    "entities": [],
-    "prodDatabaseType": "mariadb",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -3492,7 +3366,6 @@ exports[`generator - OpenShift monolith application should match files snapshot 
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "deploymentApplicationType": "monolith",
     "directoryPath": "./",
@@ -3501,26 +3374,9 @@ exports[`generator - OpenShift monolith application should match files snapshot 
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
-    "packages": ["08-monolith"],
     "registryReplicas": 2,
     "serviceDiscoveryType": false,
     "storageType": "ephemeral"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "08-monolith/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleMysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8080
   }
 }
 ",
@@ -4031,7 +3887,6 @@ exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -4040,24 +3895,9 @@ exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
-    "packages": ["01-gateway"],
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
   }
 }
 ",
@@ -4743,7 +4583,6 @@ exports[`generator - OpenShift two microservices backed by mysql and postgres wi
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -4752,40 +4591,9 @@ exports[`generator - OpenShift two microservices backed by mysql and postgres wi
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
     "openshiftNamespace": "default",
-    "packages": ["02-mysql", "03-psql"],
     "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
     "storageType": "ephemeral"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
   }
 }
 ",

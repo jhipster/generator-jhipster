@@ -22,7 +22,7 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
-import { PRIORITY_NAMES, QUEUES, CUSTOM_PRIORITIES } from './priorities.mjs';
+import { PRIORITY_NAMES, CUSTOM_PRIORITIES } from './priorities.mjs';
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import command from './command.mjs';
@@ -61,15 +61,6 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
 
     if (!this.options.help) {
       this.registerPriorities(CUSTOM_PRIORITIES);
-
-      this.queueTask({
-        async method() {
-          await (this as any).bootstrapApplications();
-        },
-        taskName: 'bootstrapApplications',
-        cancellable: true,
-        queueName: QUEUES.PREPARING_QUEUE,
-      });
 
       this.parseJHipsterOptions(command.options);
     }
@@ -179,10 +170,12 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
     const [first, ...others] = args ?? [];
     const sharedData = this.getSharedApplication(this.destinationPath());
     const deployment = sharedData.sharedDeployment;
+    const workspaces = sharedData.sharedWorkspaces;
     const applications = sharedData.workspacesApplications;
     return [
       {
         ...first,
+        workspaces,
         deployment,
         applications,
       },

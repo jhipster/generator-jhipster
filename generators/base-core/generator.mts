@@ -987,7 +987,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return `${createHash('shake256', { outputLength: 1 }).update(applicationPath, 'utf8').digest('hex')}-${dirname}`;
   }
 
-  protected getSharedApplication(applicationFolder: string) {
+  protected getSharedApplication(applicationFolder: string = this.destinationPath()) {
     return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
   }
 

@@ -7,7 +7,6 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -19,37 +18,6 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["02-mysql", "03-psql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1108,7 +1076,6 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1120,21 +1087,6 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1949,7 +1901,6 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1961,36 +1912,6 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway", "02-mysql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -3018,7 +2939,6 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3030,21 +2950,6 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -3865,7 +3770,6 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3877,79 +3781,6 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway", "02-mysql", "03-psql", "04-mongo", "07-mariadb"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "04-mongo/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmongodb",
-    "databaseType": "mongodb",
-    "entities": [],
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "07-mariadb/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmariadb",
-    "entities": [],
-    "prodDatabaseType": "mariadb",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -5705,7 +5536,6 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -5717,22 +5547,6 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
-    "packages": ["02-mysql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -8900,7 +8714,6 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -8912,22 +8725,6 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["02-mysql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -9698,7 +9495,6 @@ exports[`generator - Knative Using Helm generator type only gateway should match
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -9710,21 +9506,6 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -10548,7 +10329,6 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -10560,37 +10340,6 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["02-mysql", "03-psql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -11571,7 +11320,6 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -11583,21 +11331,6 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -12341,7 +12074,6 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -12353,36 +12085,6 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway", "02-mysql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -13324,7 +13026,6 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -13336,21 +13037,6 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -14101,7 +13787,6 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
       "11-mssql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -14113,101 +13798,6 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb",
-      "11-mssql"
-    ],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "04-mongo/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmongodb",
-    "databaseType": "mongodb",
-    "entities": [],
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "07-mariadb/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmariadb",
-    "entities": [],
-    "prodDatabaseType": "mariadb",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "11-mssql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmssqldb",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mssql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -16333,7 +15923,6 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -16345,22 +15934,6 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
-    "packages": ["02-mysql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -19751,7 +19324,6 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -19763,22 +19335,6 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["02-mysql"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -20477,7 +20033,6 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -20489,21 +20044,6 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
