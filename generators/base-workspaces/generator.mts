@@ -22,18 +22,37 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
-import { PRIORITY_NAMES, QUEUES } from '../base/priorities.mjs';
+import { PRIORITY_NAMES, QUEUES, CUSTOM_PRIORITIES } from './priorities.mjs';
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import command from './command.mjs';
 import { normalizePathEnd } from '../base/support/path.mjs';
 
-const { LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
+const {
+  PROMPTING_WORKSPACES,
+  CONFIGURING_WORKSPACES,
+  LOADING_WORKSPACES,
+  PREPARING_WORKSPACES,
+  DEFAULT,
+  WRITING,
+  POST_WRITING,
+  PRE_CONFLICTS,
+  INSTALL,
+  END,
+} = PRIORITY_NAMES;
 
 /**
  * This is the base class for a generator that generates entities.
  */
 export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
+  static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
+
+  static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
+
+  static LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
+
+  static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
+
   appsFolders?: string[];
   directoryPath!: string;
 
@@ -41,6 +60,8 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
     super(args, options, features);
 
     if (!this.options.help) {
+      this.registerPriorities(CUSTOM_PRIORITIES);
+
       this.queueTask({
         async method() {
           await (this as any).bootstrapApplications();
@@ -64,6 +85,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
   }
 
   protected async askForWorkspacesConfig() {
+    let appsFolders;
     await this.prompt(
       [
         {
@@ -80,22 +102,20 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
             return `${path} is not a directory or doesn't exist`;
           },
         },
-      ],
-      this.config,
-    );
-
-    const directoryPath = this.jhipsterConfig.directoryPath;
-    const appsFolders = (await this.findApplicationFolders(directoryPath)).filter(app => app !== 'jhipster-registry' && app !== 'registry');
-    this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
-
-    await this.prompt(
-      [
         {
           type: 'checkbox',
           name: 'appsFolders',
+          when: async answers => {
+            const directoryPath = answers.directoryPath;
+            appsFolders = (await this.findApplicationFolders(directoryPath)).filter(
+              app => app !== 'jhipster-registry' && app !== 'registry',
+            );
+            this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
+            return true;
+          },
           message: 'Which applications do you want to include in your configuration?',
-          choices: appsFolders,
-          default: appsFolders,
+          choices: () => appsFolders,
+          default: () => appsFolders,
           validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
         },
       ],
@@ -131,20 +151,24 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
 
   getArgsForPriority(priorityName): any {
     const args = super.getArgsForPriority(priorityName);
-    if (![LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END].includes(priorityName)) {
+    if (
+      ![
+        PROMPTING_WORKSPACES,
+        CONFIGURING_WORKSPACES,
+        LOADING_WORKSPACES,
+        PREPARING_WORKSPACES,
+        DEFAULT,
+        WRITING,
+        POST_WRITING,
+        PRE_CONFLICTS,
+        INSTALL,
+        END,
+      ].includes(priorityName)
+    ) {
       return args;
     }
     const [first, ...others] = args ?? [];
     const deployment = this.getSharedApplication(this.destinationPath()).sharedDeployment;
-    if (![DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END].includes(priorityName)) {
-      return [
-        {
-          ...first,
-          deployment,
-        },
-        ...others,
-      ];
-    }
     const applications = (this.appsFolders ?? []).map((appFolder, index) => {
       const application = this.getSharedApplication(this.destinationPath(this.directoryPath ?? '.', appFolder))?.sharedApplication;
       application.appFolder = appFolder;

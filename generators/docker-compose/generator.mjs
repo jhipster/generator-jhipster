@@ -48,7 +48,16 @@ const { defaults } = _;
  * @extends {import('../base/index.mjs')}
  */
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
+  existingDeployment;
+
   async beforeQueue() {
+    this.parseJHipsterArguments(command.arguments);
+    if (this.appsFolders?.length > 0) {
+      this.jhipsterConfig.appsFolders = this.appsFolders;
+    }
+    this.existingDeployment = Boolean(this.jhipsterConfig.appsFolders);
+
+    // await this.dependsOnJHipster('bootstrap-workspaces');
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
     }
@@ -61,16 +70,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      parseArguments() {
-        this.parseJHipsterArguments(command.arguments);
-        if (this.appsFolders?.length > 0) {
-          this.jhipsterConfig.appsFolders = this.appsFolders;
-        }
+      parseOptions() {
         this.parseJHipsterOptions(command.options);
-
-        if (this.appsFolder || this.jhipsterConfig.appsFolders) {
-          this.regenerate = true;
-        }
       },
       checkDocker,
       checkDockerCompose: runAsync(function () {
@@ -113,50 +114,9 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   get prompting() {
     return {
       async askForOptions() {
-        if (this.regenerate && !this.options.askAnswered) return;
+        if (this.existingDeployment && !this.options.askAnswered) return;
 
         await this.askForWorkspacesConfig();
-        /*
-        await this.prompt(
-          [
-            {
-              type: 'list',
-              name: 'deploymentApplicationType',
-              message: 'Which *type* of application would you like to deploy?',
-              choices: [
-                {
-                  value: MONOLITH,
-                  name: 'Monolithic application',
-                },
-                {
-                  value: MICROSERVICE,
-                  name: 'Microservice application',
-                },
-              ],
-              default: MONOLITH,
-            },
-            {
-              type: 'list',
-              name: 'gatewayType',
-              when: answers => answers.deploymentApplicationType === MICROSERVICE,
-              message: 'Which *type* of gateway would you like to use?',
-              choices: [
-                {
-                  value: 'SpringCloudGateway',
-                  name: 'JHipster gateway based on Spring Cloud Gateway',
-                },
-              ],
-              default: 'SpringCloudGateway',
-            },
-          ],
-          this.config,
-        );
-        */
-      },
-      async askForMonitoring() {
-        if (this.regenerate) return;
-
-        await this.askForMonitoring();
       },
     };
   }
@@ -170,9 +130,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       configureWorkspaces() {
         this.configureWorkspacesConfig();
       },
-      configureBaseDeployment() {
-        this.jhipsterConfig.jwtSecretKey = this.jhipsterConfig.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
-      },
     };
   }
 
@@ -185,11 +142,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       loadWorkspacesConfig() {
         this.loadWorkspacesConfig();
       },
-      loadBaseDeployment({ deployment }) {
-        deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
-
-        loadDockerDependenciesTask.call(this, { context: deployment });
-      },
     };
   }
 
@@ -197,31 +149,76 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
-  get default() {
+  get promptingWorkspaces() {
     return {
+      async askForMonitoring() {
+        if (this.existingDeployment) return;
+
+        await this.askForMonitoring();
+      },
       async askForClustersMode({ applications }) {
-        if (this.regenerate) return;
+        if (this.existingDeployment) return;
 
         await this.askForClustersMode({ applications });
       },
       async askForServiceDiscovery({ applications }) {
-        if (this.regenerate) return;
+        if (this.existingDeployment) return;
 
         await this.askForServiceDiscovery({ applications });
       },
+    };
+  }
 
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
+  }
+
+  get configuringWorkspaces() {
+    return {
+      configureBaseDeployment() {
+        this.jhipsterConfig.jwtSecretKey = this.jhipsterConfig.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+  }
+
+  get loadingWorkspaces() {
+    return {
+      loadBaseDeployment({ deployment }) {
+        deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
+
+        loadDockerDependenciesTask.call(this, { context: deployment });
+      },
       loadPlatformConfig({ deployment }) {
         this.loadDeploymentConfig({ deployment });
       },
+    };
+  }
 
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
-      },
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+  }
 
+  get preparingWorkspaces() {
+    return {
       prepareDeployment({ deployment, applications }) {
         this.prepareDeploymentDerivedProperties({ deployment, applications });
       },
+    };
+  }
 
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
+  }
+
+  get default() {
+    return {
+      insight() {
+        statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
+      },
       async setAppsYaml({ deployment, applications }) {
         const faker = await createFaker();
 
