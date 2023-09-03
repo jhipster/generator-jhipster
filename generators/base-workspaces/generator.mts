@@ -134,19 +134,28 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
       );
   }
 
-  protected async resolveApplicationFolders({
+  private async resolveApplicationFolders({
     directoryPath = this.directoryPath,
     appsFolders = this.appsFolders ?? [],
   }: { directoryPath?: string; appsFolders?: string[] } = {}) {
-    return appsFolders.map(appFolder => this.destinationPath(directoryPath ?? '.', appFolder));
+    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.destinationPath(directoryPath ?? '.', appFolder)]));
   }
 
   async bootstrapApplications() {
-    for (const resolvedApplicationFolder of await this.resolveApplicationFolders()) {
+    const resolvedApplicationFolders = await this.resolveApplicationFolders();
+    for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
       await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
-        generatorOptions: { destinationRoot: resolvedApplicationFolder },
+        generatorOptions: { destinationRoot: resolvedFolder },
       } as any);
     }
+    this.getSharedApplication(this.destinationPath()).workspacesApplications = Object.entries(resolvedApplicationFolders).map(
+      ([appFolder, resolvedFolder], index) => {
+        const application = this.getSharedApplication(resolvedFolder)?.sharedApplication;
+        application.appFolder = appFolder;
+        application.composePort = 8080 + index;
+        return application;
+      },
+    );
   }
 
   getArgsForPriority(priorityName): any {
@@ -168,13 +177,9 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
       return args;
     }
     const [first, ...others] = args ?? [];
-    const deployment = this.getSharedApplication(this.destinationPath()).sharedDeployment;
-    const applications = (this.appsFolders ?? []).map((appFolder, index) => {
-      const application = this.getSharedApplication(this.destinationPath(this.directoryPath ?? '.', appFolder))?.sharedApplication;
-      application.appFolder = appFolder;
-      application.composePort = 8080 + index;
-      return application;
-    });
+    const sharedData = this.getSharedApplication(this.destinationPath());
+    const deployment = sharedData.sharedDeployment;
+    const applications = sharedData.workspacesApplications;
     return [
       {
         ...first,
