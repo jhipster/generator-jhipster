@@ -19,9 +19,9 @@
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 
-import { loadConfigs } from '../base-workspaces/internal/docker-base.mjs';
-import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
-import { convertSecretToBase64 } from '../base/support/index.mjs';
+import { loadConfigs } from './docker-base.mjs';
+import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../jdl/jhipster/index.mjs';
+import { convertSecretToBase64 } from '../../base/support/index.mjs';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;

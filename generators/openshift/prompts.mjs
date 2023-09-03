@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { databaseTypes, monitoringTypes, searchEngineTypes, openshiftPlatformTypes } from '../../jdl/jhipster/index.mjs';
-import dockerPrompts from '../docker-compose/docker-prompts.mjs';
+import dockerPrompts from '../base-workspaces/internal/docker-prompts.mjs';
 
 const { ELASTICSEARCH } = searchEngineTypes;
 const { PROMETHEUS } = monitoringTypes;

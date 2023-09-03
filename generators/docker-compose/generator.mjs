@@ -265,7 +265,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
         const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
         if (serviceDiscoveryEnabledApps.length === 0) {
-          this.jhipsterConfig.serviceDiscoveryType = 'no';
+          this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
           return;
         }
 
@@ -306,9 +306,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
                 ],
                 default: CONSUL,
               },
+            ],
+            this.config,
+          );
+        }
+        if (this.jhipsterConfig.serviceDiscoveryType === EUREKA) {
+          await this.prompt(
+            [
               {
                 type: 'input',
-                when: answers => answers.serviceDiscoveryType === EUREKA,
                 name: 'adminPassword',
                 message: 'Enter the admin password used to secure the JHipster Registry',
                 default: 'admin',
