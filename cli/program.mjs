@@ -293,6 +293,7 @@ export const buildJHipster = async ({
   commands,
   printLogo,
   printBlueprintLogo,
+  devBlueprintPath,
   env,
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   loadCommand = async key => {
@@ -302,7 +303,8 @@ export const buildJHipster = async ({
   defaultCommand,
 } = {}) => {
   // eslint-disable-next-line chai-friendly/no-unused-expressions
-  createEnvBuilder = createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups }));
+  createEnvBuilder =
+    createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath }));
   envBuilder = envBuilder ?? (await createEnvBuilder());
   env = env ?? envBuilder.getEnvironment();
   commands = commands ?? { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()) };

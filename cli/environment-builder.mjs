@@ -32,8 +32,7 @@ import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const enableDevBlueprint = process.env.JHIPSTER_DEV_BLUEPRINT === 'true';
-const devBlueprintPath = path.join(__dirname, '../.blueprint');
+const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(__dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 
 function loadYoRc(filePath = '.yo-rc.json') {
@@ -49,6 +48,8 @@ const createEnvironment = (options = {}) => {
 };
 
 export default class EnvironmentBuilder {
+  devBlueprintPath;
+
   /**
    * Creates a new EnvironmentBuilder with a new Environment.
    *
@@ -99,12 +100,11 @@ export default class EnvironmentBuilder {
     this.env = env;
   }
 
-  async prepare({ blueprints, lookups } = {}) {
+  async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath } = {}) {
+    this.devBlueprintPath = existsSync(devBlueprintPath) ? devBlueprintPath : undefined;
     await this._lookupJHipster();
     await this._lookupLocalBlueprint();
-    if (enableDevBlueprint) {
-      await this._lookupDevBlueprint();
-    }
+    await this._lookupDevBlueprint();
     this._loadBlueprints(blueprints);
     await this._lookups(lookups);
     await this._lookupBlueprints();
@@ -116,7 +116,7 @@ export default class EnvironmentBuilder {
     return [
       ...Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName)),
       '@jhipster/jhipster-local',
-      ...(enableDevBlueprint ? [devBlueprintNamespace] : []),
+      ...(this.devBlueprintPath ? [devBlueprintNamespace] : []),
     ];
   }
 
@@ -173,12 +173,10 @@ export default class EnvironmentBuilder {
   }
 
   async _lookupDevBlueprint() {
-    if (existsSync(devBlueprintPath)) {
-      // Register jhipster generators.
-      const generators = await this.env.lookup({ packagePaths: [devBlueprintPath], lookups: ['.'] });
-      if (generators.length > 0) {
-        this.env.alias(/^@jhipster\/jhipster-dev(:(.*))?$/, '.blueprint$1');
-      }
+    // Register jhipster generators.
+    const generators = await this.env.lookup({ packagePaths: [this.devBlueprintPath], lookups: ['.'] });
+    if (generators.length > 0) {
+      this.env.alias(/^@jhipster\/jhipster-dev(:(.*))?$/, '.blueprint$1');
     }
     return this;
   }
@@ -256,9 +254,9 @@ export default class EnvironmentBuilder {
    */
   async getBlueprintCommands() {
     let blueprintsPackagePath = await this._getBlueprintPackagePaths();
-    if (enableDevBlueprint) {
+    if (this.devBlueprintPath) {
       blueprintsPackagePath = blueprintsPackagePath ?? [];
-      blueprintsPackagePath.push([devBlueprintNamespace, devBlueprintPath]);
+      blueprintsPackagePath.push([devBlueprintNamespace, this.devBlueprintPath]);
     }
     return this._getBlueprintCommands(blueprintsPackagePath);
   }
