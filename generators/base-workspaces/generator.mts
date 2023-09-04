@@ -136,7 +136,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
     const resolvedApplicationFolders = await this.resolveApplicationFolders();
     for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
       await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
-        generatorOptions: { destinationRoot: resolvedFolder },
+        generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
       } as any);
     }
     this.getSharedApplication(this.destinationPath()).workspacesApplications = Object.entries(resolvedApplicationFolders).map(
