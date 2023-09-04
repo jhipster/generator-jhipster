@@ -44,11 +44,6 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'generator',
     },
-    unidirectionalRelationships: {
-      description: 'Generate unidirectional relationships',
-      type: Boolean,
-      scope: 'generator',
-    },
   },
   import: [GENERATOR_APP, GENERATOR_WORKSPACES],
 };
