@@ -336,7 +336,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     let now = new Date();
     // Miliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with with-entities option.
+    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
     if (reproducible || creationTimestamp) {
       if (control.reproducibleLiquibaseTimestamp) {
         // Counter already started.

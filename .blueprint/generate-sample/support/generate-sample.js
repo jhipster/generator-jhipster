@@ -102,7 +102,7 @@ export const generateSample = async (
     }
 
     // Generate the application
-    await execa(jhipsterBin, ['--with-entities', ...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
+    await execa(jhipsterBin, [...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
   }
 
   await execa(jhipsterBin, ['info'], { stdio: 'inherit' });

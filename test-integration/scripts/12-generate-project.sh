@@ -71,7 +71,7 @@ else
     fi
 
     cd "$JHI_FOLDER_APP"
-    eval "$JHI_CLI --force --no-insight --skip-checks --with-entities --skip-jhipster-dependencies $@"
+    eval "$JHI_CLI --force --no-insight --skip-checks --skip-jhipster-dependencies $@"
 
 fi
 

@@ -115,7 +115,7 @@ export default class extends BaseGenerator {
           }
         }
         if (this.yoRcContent) {
-          await this.runNonInteractive({ cwd: this.projectFolder, generatorOptions: { withEntities: true } });
+          await this.runNonInteractive({ cwd: this.projectFolder });
         }
         setOutput(RESULT_OUTPUT, SUCCESS);
 

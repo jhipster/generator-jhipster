@@ -79,64 +79,60 @@ describe('generator - base', () => {
         expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog('20300101000002').getTime());
       });
     });
-    describe('with withEntities option', () => {
+    describe('with reproducible=false argument', () => {
+      let firstChangelogDate;
+      let secondChangelogDate;
+      beforeEach(() => {
+        firstChangelogDate = base.dateFormatForLiquibase(false);
+        secondChangelogDate = base.dateFormatForLiquibase(false);
+      });
+      it('should return a valid changelog date', () => {
+        expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+        expect(/^\d{14}$/.test(secondChangelogDate)).to.be.true;
+      });
+      it('should return a reproducible changelog date incremental to lastLiquibaseTimestamp', () => {
+        expect(firstChangelogDate).to.not.be.equal(secondChangelogDate);
+      });
+      it('should save lastLiquibaseTimestamp', () => {
+        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog(secondChangelogDate).getTime());
+      });
+    });
+    describe('with a past creationTimestamp option', () => {
+      let firstChangelogDate;
+      let secondChangelogDate;
+
       before(() => {
-        options = { withEntities: true };
+        options = { creationTimestamp: '2000-01-01' };
       });
       after(() => {
         options = undefined;
       });
-      describe('with reproducible=false argument', () => {
-        let firstChangelogDate;
-        let secondChangelogDate;
-        beforeEach(() => {
-          firstChangelogDate = base.dateFormatForLiquibase(false);
-          secondChangelogDate = base.dateFormatForLiquibase(false);
-        });
-        it('should return a valid changelog date', () => {
-          expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
-          expect(/^\d{14}$/.test(secondChangelogDate)).to.be.true;
-        });
-        it('should return a reproducible changelog date incremental to lastLiquibaseTimestamp', () => {
-          expect(firstChangelogDate).to.not.be.equal(secondChangelogDate);
-        });
-        it('should save lastLiquibaseTimestamp', () => {
-          expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog(secondChangelogDate).getTime());
-        });
+
+      beforeEach(() => {
+        firstChangelogDate = base.dateFormatForLiquibase();
+        secondChangelogDate = base.dateFormatForLiquibase();
       });
-      describe('with a past creationTimestamp option', () => {
-        let firstChangelogDate;
-        let secondChangelogDate;
-        before(() => {
-          options.creationTimestamp = '2000-01-01';
-        });
-        beforeEach(() => {
-          firstChangelogDate = base.dateFormatForLiquibase();
-          secondChangelogDate = base.dateFormatForLiquibase();
-        });
-        it('should return a valid changelog date', () => {
-          expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
-        });
-        it('should return a past changelog date', () => {
-          expect(firstChangelogDate.startsWith('2000')).to.be.true;
-        });
-        it('should return a reproducible changelog date', () => {
-          expect(firstChangelogDate).to.be.equal('20000101000100');
-          expect(secondChangelogDate).to.be.equal('20000101000200');
-        });
-        it('should save lastLiquibaseTimestamp', () => {
-          expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog('20000101000200').getTime());
-        });
+      it('should return a valid changelog date', () => {
+        expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
       });
-      describe('with a future creationTimestamp option', () => {
-        it('should throw', async () => {
-          options.creationTimestamp = '2030-01-01';
-          const Dummy = helpers.createDummyGenerator(Base);
-          const env = await helpers.createTestEnv();
-          expect(() => new Dummy({ ...options, env, sharedData: {} })).to.throw(
-            /^Creation timestamp should not be in the future: 2030-01-01\.$/,
-          );
-        });
+      it('should return a past changelog date', () => {
+        expect(firstChangelogDate.startsWith('2000')).to.be.true;
+      });
+      it('should return a reproducible changelog date', () => {
+        expect(firstChangelogDate).to.be.equal('20000101000100');
+        expect(secondChangelogDate).to.be.equal('20000101000200');
+      });
+      it('should save lastLiquibaseTimestamp', () => {
+        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog('20000101000200').getTime());
+      });
+    });
+    describe('with a future creationTimestamp option', () => {
+      it('should throw', async () => {
+        const Dummy = helpers.createDummyGenerator(Base);
+        const env = await helpers.createTestEnv();
+        expect(() => new Dummy({ ...options, creationTimestamp: '2030-01-01', env, sharedData: {} })).to.throw(
+          /^Creation timestamp should not be in the future: 2030-01-01\.$/,
+        );
       });
     });
   });
