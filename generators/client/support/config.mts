@@ -1,14 +1,13 @@
 import { clientFrameworkTypes } from '../../../jdl/index.js';
 import { getFrontendAppName } from '../../base/support/basename.mjs';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../../generator-constants.mjs';
-import { ClientApplication } from '../types.mjs';
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 /**
  * Load client configs into application.
  */
-export const loadClientConfig = ({ config, application }: { config: any; application: ClientApplication }) => {
+export const loadClientConfig = ({ config, application }: { config: any; application: any }) => {
   (application as any).clientPackageManager = config.clientPackageManager;
   application.clientFramework = config.clientFramework;
   (application as any).clientTheme = config.clientTheme;
@@ -22,7 +21,7 @@ export const loadClientConfig = ({ config, application }: { config: any; applica
 /**
  * Load client derived properties.
  */
-export const loadDerivedClientConfig = ({ application }: { application: ClientApplication }) => {
+export const loadDerivedClientConfig = ({ application }: { application: any }) => {
   application.clientFrameworkAngular = application.clientFramework === ANGULAR;
   application.clientFrameworkReact = application.clientFramework === REACT;
   application.clientFrameworkVue = application.clientFramework === VUE;

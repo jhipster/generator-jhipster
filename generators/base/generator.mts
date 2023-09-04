@@ -25,7 +25,6 @@ import _ from 'lodash';
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace, removeFieldsWithNullishValues } from './support/index.mjs';
-import JHipsterBaseGenerator from '../base-core/index.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
@@ -42,7 +41,7 @@ const { defaults } = _;
  */
 export default class JHipsterBaseBlueprintGenerator<
   Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition,
-> extends JHipsterBaseGenerator {
+> extends CoreGenerator {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;

@@ -21,7 +21,6 @@ import {
   SERVER_TEST_SRC_DIR,
 } from '../../generator-constants.mjs';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../../server/options/index.mjs';
-import { SpringBootApplication } from '../types.mjs';
 import { PlatformApplication } from '../../base-application/types.mjs';
 
 const { SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
@@ -42,7 +41,7 @@ const NO_SEARCH_ENGINE = searchEngineTypes.NO;
  * all variables should be set to dest,
  * all variables should be referred from config,
  */
-export const loadServerConfig = ({ config, application }: { config: any; application: SpringBootApplication }) => {
+export const loadServerConfig = ({ config, application }: { config: any; application: any }) => {
   application.packageName = config.packageName;
   application.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
   (application as any).serverPort = config.serverPort;
