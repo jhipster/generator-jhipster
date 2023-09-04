@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
 import path from 'path';
 
 import { applicationTypes } from '../jhipster/index.mjs';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
-import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
+import { doesFileExist } from '../utils/file-utils.js';
 import { areEntitiesEqual } from '../utils/object-utils.js';
 
 let configuration: any = {};
@@ -32,7 +31,6 @@ let configuration: any = {};
  * @param {Object} passedConfiguration - the object having the keys:
  * @param {Array<JSONEntity>} passedConfiguration.entities - the entity objects to export.
  * @param {Boolean} passedConfiguration.forceNoFiltering - whether to filter out unchanged entities.
- * @param {Boolean} passedConfiguration.skipFileGeneration - whether to skip file write to disk.
  * @param {Object} passedConfiguration.application - the application where the entities should be exported.
  * @param {Boolean} passedConfiguration.application.forSeveralApplications - whether to create the .jhipster folder
  *          inside a specific application's folder.
@@ -53,10 +51,6 @@ export default function exportEntities(passedConfiguration) {
   if (shouldFilterOutEntitiesBasedOnMicroservice()) {
     configuration.entities = filterOutEntitiesByMicroservice();
   }
-  if (!passedConfiguration.skipFileGeneration) {
-    createJHipsterJSONFolder(subFolder);
-    writeEntities(subFolder);
-  }
   return configuration.entities;
 }
 
@@ -68,14 +62,6 @@ function init(passedConfiguration) {
 }
 
 /**
- * Creates the JHipster entity folder, if possible.
- * @param subFolder the folder (to create) in which the JHipster entity folder will be.
- */
-function createJHipsterJSONFolder(subFolder) {
-  createFolderIfItDoesNotExist(path.join(subFolder, '.jhipster'));
-}
-
-/**
  * Writes entities in a sub folder.
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
@@ -83,17 +69,6 @@ function updateEntities(subFolder) {
   return configuration.entities.map(entity => {
     const filePath = path.join(subFolder, toFilePath(entity.name));
     return updateEntityToGenerateWithExistingOne(filePath, entity);
-  });
-}
-
-/**
- * Writes entities in a sub folder.
- * @param subFolder the folder (to create) in which the JHipster entity folder will be.
- */
-function writeEntities(subFolder) {
-  configuration.entities.forEach(entity => {
-    const filePath = path.join(subFolder, toFilePath(entity.name));
-    fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
   });
 }
 

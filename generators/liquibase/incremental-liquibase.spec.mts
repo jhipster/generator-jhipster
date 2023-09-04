@@ -207,7 +207,6 @@ describe('generator - app - --incremental-changelog', function () {
     before(async () => {
       const initialState = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -218,7 +217,6 @@ describe('generator - app - --incremental-changelog', function () {
         .withOptions({ ...options, applicationWithEntities })
         .run();
       const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -278,7 +276,6 @@ entity Customer {
 `,
         {
           ...options,
-          skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
         },
       ).import();
@@ -299,7 +296,6 @@ entity Customer {
 }
 `,
         {
-          skipFileGeneration: true,
           ...options,
         },
       ).import();
@@ -363,7 +359,6 @@ entity Customer {
 `,
         {
           ...options,
-          skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
         },
       ).import();
@@ -384,7 +379,6 @@ entity Customer {
 }
 `,
         {
-          skipFileGeneration: true,
           ...options,
         },
       ).import();
@@ -450,7 +444,6 @@ entity Customer {
 `,
         {
           ...options,
-          skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
         },
       ).import();
@@ -470,7 +463,6 @@ entity Customer {
 }
 `,
         {
-          skipFileGeneration: true,
           ...options,
         },
       ).import();
@@ -535,7 +527,6 @@ entity Customer {
 `,
         {
           ...options,
-          skipFileGeneration: true,
           creationTimestampConfig: options.creationTimestamp,
         },
       ).import();
@@ -555,7 +546,6 @@ entity Customer {
 }
 `,
         {
-          skipFileGeneration: true,
           ...options,
         },
       ).import();
@@ -612,7 +602,6 @@ entity Customer {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -624,7 +613,6 @@ entity Customer {
         .run();
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -679,7 +667,6 @@ entity Customer {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -691,7 +678,6 @@ entity Customer {
         .run();
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -756,7 +742,6 @@ entity Customer {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -768,7 +753,6 @@ entity Customer {
         .run();
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -781,7 +765,6 @@ entity Customer {
         .run();
 
       const thirdState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlers, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -881,7 +864,6 @@ entity Customer {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -893,7 +875,6 @@ entity Customer {
         .run();
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -906,7 +887,6 @@ entity Customer {
         .run();
 
       const thirdState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlersAndChangedNaming, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -1016,7 +996,6 @@ entity Customer {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -1079,7 +1058,6 @@ entity Customer {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
         ...options,
-        skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
@@ -1091,7 +1069,6 @@ entity Customer {
         .run();
 
       const state = createImporterFromContent(jdlApplicationWithEntities, {
-        skipFileGeneration: true,
         ...options,
       }).import();
       runResult = await runResult
@@ -1160,7 +1137,6 @@ entity Customer {
           const baseName = 'JhipsterApp';
           const initialState = createImporterFromContent(eachEntityConfig.entity, {
             ...options,
-            skipFileGeneration: true,
             creationTimestampConfig: options.creationTimestamp,
           }).import();
           const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];

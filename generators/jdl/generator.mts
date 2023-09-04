@@ -145,7 +145,6 @@ export default class JdlGenerator extends BaseGenerator {
           applicationType: this.options.applicationType,
           skipUserManagement: this.options.skipUserManagement,
           forceNoFiltering: true,
-          skipFileGeneration: true,
         };
 
         const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration);

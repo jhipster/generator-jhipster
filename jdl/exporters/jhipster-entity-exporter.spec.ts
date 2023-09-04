@@ -26,7 +26,7 @@ import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../jhipster/index.mjs';
 
 import entityOptions from '../jhipster/entity-options.js';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist } from '../utils/file-utils.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
@@ -55,7 +55,6 @@ describe('jdl - JHipsterEntityExporter', () => {
     context('when passing valid arguments', () => {
       context('for only entities and a monolith app', () => {
         let entities;
-        let aEntityContent;
         let returned;
 
         beforeEach(() => {
@@ -88,14 +87,10 @@ describe('jdl - JHipsterEntityExporter', () => {
               type: MONOLITH,
             },
           });
-          aEntityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
         });
 
         it('should return the exported entities', () => {
           expect(returned).to.deep.equal(entities);
-        });
-        it('should export the entities', () => {
-          expect(aEntityContent).to.deep.equal(entities[0]);
         });
       });
       context('when not exporting entities', () => {
@@ -119,11 +114,9 @@ describe('jdl - JHipsterEntityExporter', () => {
       });
       context('when exporting the same entity', () => {
         let entities;
-        let previousChangelogDate;
-        let newChangelogDate;
         let returned;
 
-        beforeEach(done => {
+        beforeEach(() => {
           entities = [
             {
               name: 'A',
@@ -153,18 +146,6 @@ describe('jdl - JHipsterEntityExporter', () => {
               type: MONOLITH,
             },
           });
-          previousChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
-          setTimeout(() => {
-            exportEntities({
-              entities,
-              application: {
-                name: 'MyApp',
-                type: MONOLITH,
-              },
-            });
-            newChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
-            done();
-          }, 1000);
         });
 
         it('should return the exported entities', () => {
@@ -192,9 +173,6 @@ describe('jdl - JHipsterEntityExporter', () => {
   },
 ]
 `);
-        });
-        it('should export it with same changelogDate', () => {
-          expect(newChangelogDate).to.equal(previousChangelogDate);
         });
       });
       context('when passing an application name and application type', () => {
@@ -394,12 +372,6 @@ describe('jdl - JHipsterEntityExporter', () => {
 ]
 `);
           });
-          it('should export every entity', () => {
-            expect(doesFileExist('.jhipster/Client.json'));
-            expect(doesFileExist('.jhipster/Location.json'));
-            expect(doesFileExist('.jhipster/LocalStore.json'));
-            expect(doesFileExist('.jhipster/Product.json'));
-          });
         });
         context('inside a microservice', () => {
           context('and when entities without the microservice option are passed', () => {
@@ -509,12 +481,6 @@ describe('jdl - JHipsterEntityExporter', () => {
               });
             });
 
-            it('should export every entity', () => {
-              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-                expect(doesFileExist(`.jhipster/${entityName}.json`)).to.be.true;
-              });
-            });
-
             it('should return every entity', () => {
               expect(returnedContent.length).to.be.equal(7);
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
@@ -594,74 +560,10 @@ describe('jdl - JHipsterEntityExporter', () => {
               });
             });
 
-            it('should export the entities that should be inside the microservice', () => {
-              expect(doesFileExist('.jhipster/Client.json'));
-              expect(doesFileExist('.jhipster/Location.json'));
-            });
-
             it('should return the entities that should be inside the microservice', () => {
               expect(returnedContent.length).to.be.equal(2);
             });
           });
-        });
-      });
-      context('when exporting updated entities', () => {
-        let originalContent;
-        let newContent;
-        let returnedContent;
-
-        beforeEach(() => {
-          originalContent = {
-            fields: [
-              {
-                fieldName: 'myEnum',
-                fieldType: 'MyEnum',
-                fieldValues: 'FRENCH,ENGLISH',
-              },
-            ],
-            relationships: [],
-            changelogDate: '42',
-            javadoc: '',
-            entityTableName: 'a',
-            dto: NO_DTO,
-            pagination: NO_PAGINATION,
-            service: NO_SERVICE,
-            fluentMethods: true,
-            jpaMetamodelFiltering: false,
-            applications: [],
-          };
-          createFolderIfItDoesNotExist('.jhipster');
-          fs.writeFileSync(path.join('.jhipster', 'A.json'), JSON.stringify({ ...originalContent, customAttribute: '42' }));
-          const changedContent = {
-            ...JSON.parse(JSON.stringify(originalContent)),
-            name: 'A',
-            changelogDate: '43',
-          };
-          const entities = [changedContent];
-          returnedContent = exportEntities({
-            entities,
-            application: {
-              name: 'MyApp',
-              type: MONOLITH,
-            },
-          });
-          newContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
-        });
-
-        it('should merge the existing content with the new one', () => {
-          expect(newContent).to.deep.equal({
-            ...originalContent,
-            name: 'A',
-            customAttribute: '42',
-          });
-        });
-
-        it('should keep changelogDate original value', () => {
-          expect(newContent.customAttribute).to.equal('42');
-        });
-
-        it('should return the new content', () => {
-          expect(newContent).to.deep.equal(returnedContent[0]);
         });
       });
     });

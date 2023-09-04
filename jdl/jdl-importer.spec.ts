@@ -60,14 +60,13 @@ relationship OneToMany {
   A{user} to User with builtInEntity
 }
 `,
-          { applicationName: 'MyApp', databaseType: databaseTypes.SQL, skipFileGeneration: true },
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
         ).import();
         jestExpect(importState.exportedEntities[0].relationships[0].relationshipWithBuiltInEntity).toBe(true);
       });
     });
     context('when not parsing applications', () => {
       const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
-      let filesExist: any = true;
       let returned;
 
       before(() => {
@@ -88,26 +87,10 @@ relationship OneToMany {
             exportedEntity.javadoc = exportedEntity.javadoc || '';
             return exportedEntity;
           });
-        filesExist = ENTITY_NAMES.reduce(
-          (result, entityName) => result && fse.statSync(path.join('.jhipster', `${entityName}.json`)).isFile(),
-        );
-      });
-
-      after(() => {
-        fse.removeSync('.jhipster');
       });
 
       it('should return the final state', () => {
         jestExpect(returned).toMatchSnapshot();
-      });
-      it('should create the files', () => {
-        expect(filesExist).to.be.true;
-      });
-      ENTITY_NAMES.forEach(entityName => {
-        it(`should export entity ${entityName}`, () => {
-          const entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
-          jestExpect(entityContent).toMatchSnapshot();
-        });
       });
     });
     context('when passing an existing application config', () => {
@@ -139,22 +122,10 @@ relationship OneToOne {
         returned = importer.import();
       });
 
-      after(() => {
-        fse.unlinkSync('.yo-rc.json');
-        fse.removeSync('.jhipster');
-      });
-
       it('should return the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
         expect(returned.exportedDeployments).to.have.lengthOf(0);
-      });
-      it('should create the app config file in the same folder', () => {
-        expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
-      });
-      it('should create the entity folder in the same folder', () => {
-        expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
-        expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach(application => {
@@ -187,17 +158,6 @@ relationship OneToOne {
         expect(returned.exportedApplications).to.have.lengthOf(2);
         expect(Object.keys(returned.exportedApplicationsWithEntities).length).to.equal(2);
         expect(returned.exportedDeployments).to.have.lengthOf(0);
-      });
-      it('should create the folders and the .yo-rc.json files', () => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
-          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
-        });
-      });
-      it('should create the entity folder in only one app folder', () => {
-        expect(fse.existsSync(path.join(APPLICATION_NAMES[0], '.jhipster'))).to.be.false;
-        expect(fse.statSync(path.join(APPLICATION_NAMES[1], '.jhipster')).isDirectory()).to.be.true;
-        expect(fse.statSync(path.join(APPLICATION_NAMES[1], '.jhipster', 'BankAccount.json')).isFile()).to.be.true;
       });
       it('should export the application contents', () => {
         expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[0]].entities).to.have.lengthOf(0);
@@ -236,22 +196,10 @@ relationship OneToOne {
         returned = importer.import();
       });
 
-      after(() => {
-        fse.unlinkSync('.yo-rc.json');
-        fse.removeSync('.jhipster');
-      });
-
       it('should return the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
         expect(returned.exportedDeployments).to.have.lengthOf(0);
-      });
-      it('should create the app config file in the same folder', () => {
-        expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
-      });
-      it('should create the entity folder in the same folder', () => {
-        expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
-        expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach(application => {
@@ -266,28 +214,15 @@ relationship OneToOne {
     });
     context('when parsing one JDL application and entities with entity and dto suffixes', () => {
       let returned;
-      let content;
 
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'application_with_entity_dto_suffixes.jdl')]);
         returned = importer.import();
-
-        content = JSON.parse(fse.readFileSync('.yo-rc.json', 'utf-8'));
-      });
-
-      after(() => {
-        fse.unlinkSync('.yo-rc.json');
-        fse.removeSync('.jhipster');
       });
 
       it('should return the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
-      });
-      it('should create the app config file in the same folder', () => {
-        expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
-        expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
-        expect(content['generator-jhipster'].dtoSuffix).to.equal('DTO');
       });
 
       it('should return the corresponding exportedApplicationsWithEntities', () => {
@@ -302,36 +237,18 @@ relationship OneToOne {
       });
     });
     context('when parsing JDL applications and exporting them', () => {
-      const contents: any[] = [];
-      const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
+      let contents: any;
 
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'applications2.jdl')]);
-        importer.import();
-        APPLICATION_NAMES.forEach(applicationName => {
-          contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
-        });
+        contents = importer.import();
       });
 
-      after(() => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          fse.removeSync(applicationName);
-        });
-      });
-
-      it('should create the folders and the .yo-rc.json files', () => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
-          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
-        });
-      });
       it('should export the application contents', () => {
         jestExpect(contents).toMatchSnapshot();
       });
     });
     context('when parsing multiple JDL files with applications and entities', () => {
-      const APPLICATION_NAMES = ['myFirstApp', 'mySecondApp', 'myThirdApp'];
-      const ENTITY_NAMES = ['A', 'B', 'E', 'F']; // C & D don't get to be generated
       let importState;
       before(() => {
         const importer = createImporterFromFiles([
@@ -341,51 +258,11 @@ relationship OneToOne {
         importState = importer.import();
       });
 
-      after(() => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          fse.removeSync(path.join(applicationName));
-        });
-      });
-
       it('should generate correct import state', () => {
         expect(importState.exportedApplications.length).to.eql(3);
         expect(importState.exportedEntities.length).to.eql(4);
       });
 
-      APPLICATION_NAMES.forEach(applicationName => {
-        it(`should export ${applicationName} applications`, () => {
-          expect(fse.statSync(path.join(applicationName)).isDirectory()).to.be.true;
-          const appConfPath = path.join(applicationName, '.yo-rc.json');
-          expect(fse.statSync(appConfPath).isFile()).to.be.true;
-          const readJSON = JSON.parse(fse.readFileSync(appConfPath, 'utf-8').toString());
-          jestExpect(readJSON).toMatchSnapshot();
-        });
-      });
-
-      APPLICATION_NAMES.forEach(applicationName => {
-        it(`should export the entities for ${applicationName}`, () => {
-          let readJSON;
-          expect(fse.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
-          switch (applicationName) {
-            case 'myFirstApp': // A, B, E, F
-              ENTITY_NAMES.forEach(entityName => {
-                readJSON = JSON.parse(fse.readFileSync(path.join(applicationName, '.jhipster', `${entityName}.json`), 'utf-8').toString());
-                jestExpect(readJSON).toMatchSnapshot();
-              });
-              break;
-            case 'mySecondApp': // only E
-              readJSON = JSON.parse(fse.readFileSync(path.join(applicationName, '.jhipster', 'E.json'), 'utf-8').toString());
-              jestExpect(readJSON).toMatchSnapshot();
-              break;
-            case 'myThirdApp': // only F
-              readJSON = JSON.parse(fse.readFileSync(path.join(applicationName, '.jhipster', 'F.json'), 'utf-8').toString());
-              jestExpect(readJSON).toMatchSnapshot();
-              break;
-            default:
-            // nothing to do
-          }
-        });
-      });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         importState.exportedApplications.forEach(application => {
           const applicationConfig = application['generator-jhipster'];
@@ -410,10 +287,6 @@ relationship OneToOne {
         });
       });
 
-      after(() => {
-        fse.removeSync('.jhipster');
-      });
-
       it('does not fail', () => {
         importer.import();
       });
@@ -427,10 +300,6 @@ relationship OneToOne {
           databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
-      });
-
-      after(() => {
-        fse.removeSync('.jhipster');
       });
 
       it('sets the options', () => {
@@ -452,7 +321,6 @@ relationship OneToOne {
     });
     context('when parsing a JDL with a pattern validation', () => {
       let returned;
-      let entityContent;
 
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'regex_validation.jdl')], {
@@ -461,18 +329,10 @@ relationship OneToOne {
           databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
-        entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Customer.json'), { encoding: 'utf8' }));
-      });
-
-      after(() => {
-        fse.removeSync('.jhipster');
       });
 
       it('escapes the back-slash in the returned object', () => {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
-      });
-      it('escapes the back-slash in the written entity file', () => {
-        expect(entityContent.fields[0].fieldValidateRulesPattern).to.equal('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
       });
     });
     context('when parsing a JDL with a pattern validation containing a quote', () => {
@@ -487,46 +347,20 @@ relationship OneToOne {
         returned = importer.import();
       });
 
-      after(() => {
-        fse.removeSync('.jhipster');
-      });
-
       it('escapes the quote', () => {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
       });
     });
     context('when parsing JDL applications and deployment config', () => {
-      const contents: any[] = [];
-      const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
+      let importState: any;
 
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'applications3.jdl')]);
-        importer.import();
-        APPLICATION_NAMES.forEach(applicationName => {
-          contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
-        });
-        contents.push(JSON.parse(fse.readFileSync(path.join('docker-compose', '.yo-rc.json'), 'utf-8')));
+        importState = importer.import();
       });
 
-      after(() => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          fse.removeSync(applicationName);
-        });
-        fse.removeSync('docker-compose');
-      });
-
-      it('should create the folders and the .yo-rc.json files', () => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
-          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
-        });
-      });
-      it('should create the docker-compose folder with .yo-rc.json file', () => {
-        expect(fse.statSync(path.join('docker-compose', '.yo-rc.json')).isFile()).to.be.true;
-        expect(fse.statSync('docker-compose').isDirectory()).to.be.true;
-      });
       it('should export the application & deployment contents', () => {
-        jestExpect(contents).toMatchSnapshot();
+        jestExpect(importState).toMatchSnapshot();
       });
     });
     context('when parsing deployment config', () => {
@@ -547,46 +381,12 @@ relationship OneToOne {
         });
       });
 
-      it('should create the folders and the .yo-rc.json files', () => {
-        DEPLOYMENT_NAMES.forEach(name => {
-          expect(fse.statSync(path.join(name, '.yo-rc.json')).isFile()).to.be.true;
-          expect(fse.statSync(name).isDirectory()).to.be.true;
-        });
-      });
       it('should export the deployment contents', () => {
         jestExpect(contents).toMatchSnapshot();
       });
     });
-    context('when parsing JDL applications and deployment config with a realistic sample', () => {
-      const contents: any[] = [];
-      const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
-
-      before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'realistic_sample.jdl')]);
-        importer.import();
-        FOLDER_NAMES.forEach(applicationName => {
-          contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
-        });
-      });
-
-      after(() => {
-        FOLDER_NAMES.forEach(applicationName => {
-          fse.removeSync(applicationName);
-        });
-      });
-
-      it('should create the folders and the .yo-rc.json files', () => {
-        FOLDER_NAMES.forEach(applicationName => {
-          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
-          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
-        });
-      });
-      it('should export the application & deployment contents', () => {
-        jestExpect(contents).toMatchSnapshot();
-      });
-    });
     context('when parsing entities and enums with custom values', () => {
-      let exported;
+      let importState;
 
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'enum_with_values.jdl')], {
@@ -594,187 +394,13 @@ relationship OneToOne {
           applicationType: 'monolith',
           databaseType: 'sql',
         });
-        importer.import();
-        exported = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Environment.json'), 'utf-8'));
-      });
-
-      after(() => {
-        fse.removeSync('.jhipster');
+        importState = importer.import();
       });
 
       it('should export them', () => {
-        expect(exported.fields[0].fieldValues).to.equal(
+        expect(importState.exportedEntities[0].fields[0].fieldValues).to.equal(
           'ARCHIVE (archive),DEV (development),INTEGRATION (integration),PROD (production),TEST (test),UAT (uat),NON_PROD (nonProd)',
         );
-      });
-    });
-    context('when parsing JDL applications with options inside', () => {
-      let entityA;
-      let entityB;
-      let entityCInTata;
-      let entityCInTutu;
-      let entityD;
-      let entityE;
-      let entityF;
-
-      before(() => {
-        const importer = createImporterFromContent(
-          `application {
-  config {
-    applicationType monolith
-    baseName tata
-  }
-  entities A, B, C
-  paginate A, C with pagination
-}
-application {
-  config {
-    applicationType monolith
-    baseName tutu
-  }
-  entities C, D, E
-  dto D with mapstruct
-}
-entity A
-entity B
-entity C
-entity D
-entity E
-entity F
-
-paginate * with infinite-scroll
-`,
-        );
-        importer.import();
-        entityA = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'A.json'), 'utf-8'));
-        entityB = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'B.json'), 'utf-8'));
-        entityCInTata = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'C.json'), 'utf-8'));
-        entityCInTutu = JSON.parse(fse.readFileSync(path.join('tutu', '.jhipster', 'C.json'), 'utf-8'));
-        entityD = JSON.parse(fse.readFileSync(path.join('tutu', '.jhipster', 'D.json'), 'utf-8'));
-        entityE = JSON.parse(fse.readFileSync(path.join('tutu', '.jhipster', 'E.json'), 'utf-8'));
-        entityF =
-          fse.pathExistsSync(path.join('tata', '.jhipster', 'F.json')) || fse.pathExistsSync(path.join('tutu', '.jhipster', 'F.json'));
-      });
-
-      after(() => {
-        fse.removeSync('tata');
-        fse.removeSync('tutu');
-      });
-
-      it('should set them', () => {
-        jestExpect(entityA).toMatchInlineSnapshot(`
-          {
-            "applications": [
-              "tata",
-            ],
-            "entityTableName": "a",
-            "fields": [],
-            "name": "A",
-            "pagination": "pagination",
-            "relationships": [],
-          }
-        `);
-        jestExpect(entityB).toMatchInlineSnapshot(`
-          {
-            "applications": [
-              "tata",
-            ],
-            "entityTableName": "b",
-            "fields": [],
-            "name": "B",
-            "pagination": "infinite-scroll",
-            "relationships": [],
-          }
-        `);
-        jestExpect(entityCInTata).toMatchInlineSnapshot(`
-          {
-            "applications": [
-              "tata",
-              "tutu",
-            ],
-            "entityTableName": "c",
-            "fields": [],
-            "name": "C",
-            "pagination": "pagination",
-            "relationships": [],
-          }
-        `);
-        jestExpect(entityCInTutu).toMatchInlineSnapshot(`
-          {
-            "applications": [
-              "tata",
-              "tutu",
-            ],
-            "entityTableName": "c",
-            "fields": [],
-            "name": "C",
-            "pagination": "pagination",
-            "relationships": [],
-          }
-        `);
-        jestExpect(entityD).toMatchInlineSnapshot(`
-          {
-            "applications": [
-              "tutu",
-            ],
-            "dto": "mapstruct",
-            "entityTableName": "d",
-            "fields": [],
-            "name": "D",
-            "pagination": "infinite-scroll",
-            "relationships": [],
-            "service": "serviceClass",
-          }
-        `);
-        jestExpect(entityE).toMatchInlineSnapshot(`
-          {
-            "applications": [
-              "tutu",
-            ],
-            "entityTableName": "e",
-            "fields": [],
-            "name": "E",
-            "pagination": "infinite-scroll",
-            "relationships": [],
-          }
-        `);
-      });
-      it('should not generate entity not in any app', () => {
-        expect(entityF).to.be.false;
-      });
-    });
-    context('when passing the skipFileGeneration option', () => {
-      before(() => {
-        expect(fse.existsSync('.yo-rc.json')).to.be.false;
-        expect(fse.existsSync('.jhipster')).to.be.false;
-
-        const importer = createImporterFromContent(
-          `application {
-  config {
-    applicationType monolith
-    baseName tata
-    clientFramework angular
-  }
-  entities A
-}
-
-entity A
-
-paginate * with infinite-scroll
-`,
-          {
-            skipFileGeneration: true,
-          },
-        );
-        importer.import();
-      });
-
-      it('should not write the .yo-rc.json file', () => {
-        expect(fse.existsSync('.yo-rc.json')).to.be.false;
-      });
-
-      it('should not create the .jhipster folder', () => {
-        expect(fse.existsSync('.jhipster')).to.be.false;
       });
     });
     context('when passing the unidirectionalRelationships option', () => {
@@ -834,11 +460,6 @@ ${entities}`,
           returned = importer.import();
         });
 
-        after(() => {
-          fse.unlinkSync('.yo-rc.json');
-          fse.removeSync('.jhipster');
-        });
-
         it('should return the import state', () => {
           expect(returned.exportedEntities).to.have.lengthOf(2);
           expect(returned.exportedApplications).to.have.lengthOf(1);
@@ -859,21 +480,6 @@ ${entities}`,
         });
       });
     });
-    context('when not exporting entities but only applications', () => {
-      before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'application.jdl')]);
-        importer.import();
-      });
-      after(() => {
-        fse.removeSync('.yo-rc.json');
-      });
-      it('should export the .yo-rc.json file', () => {
-        expect(fse.existsSync('.yo-rc.json')).to.be.true;
-      });
-      it('should not create the .jhipster folder', () => {
-        expect(fse.existsSync('.jhipster')).to.be.false;
-      });
-    });
     context('when importing a JDL application with blueprints', () => {
       let importState;
       let parameter;
@@ -886,9 +492,6 @@ ${entities}`,
           },
         };
         importState = importer.import(logger as Console);
-      });
-      after(() => {
-        fse.removeSync('.yo-rc.json');
       });
 
       it('should return the blueprints attributes in the application', () => {
@@ -915,9 +518,6 @@ relationship OneToMany {
           databaseType: 'neo4j',
         });
         importState = importer.import();
-      });
-      after(() => {
-        fse.removeSync('.jhipster');
       });
 
       it('should not generate a bidirectional one-to-many relationship', () => {
@@ -946,10 +546,6 @@ use mapstruct, elasticsearch for A, B except C`;
           databaseType: 'sql',
         });
         importState = importer.import();
-      });
-      after(() => {
-        fse.removeSync('.jhipster');
-        fse.unlinkSync('.yo-rc.json');
       });
 
       it('should add the options', () => {
@@ -1011,10 +607,6 @@ relationship OneToOne {
         relationshipOnDestination = imported.exportedEntities[1].relationships[0];
       });
 
-      after(() => {
-        fse.removeSync('.jhipster');
-      });
-
       it('should export them', () => {
         jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
           {
@@ -1054,7 +646,6 @@ relationship OneToOne {
   }
 }
 `,
-          { skipFileGeneration: true },
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
@@ -1078,7 +669,6 @@ relationship OneToOne {
   }
 }
 `,
-          { skipFileGeneration: true },
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].clientFramework).toBe(NO_CLIENT_FRAMEWORK);

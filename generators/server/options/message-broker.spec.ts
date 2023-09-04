@@ -9,9 +9,7 @@ describe('generators - server - jdl - messageBroker', () => {
       let state: ImportState;
 
       before(() => {
-        const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} ${optionValue} } }`, {
-          skipFileGeneration: true,
-        });
+        const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} ${optionValue} } }`);
         state = importer.import();
       });
 
@@ -22,7 +20,7 @@ describe('generators - server - jdl - messageBroker', () => {
   });
   describe('with invalid value', () => {
     it('should set expected value', () => {
-      const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} foo } }`, { skipFileGeneration: true });
+      const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} foo } }`);
       expect(() => importer.import()).toThrow(/Unknown value 'foo' for option 'messageBroker'./);
     });
   });
