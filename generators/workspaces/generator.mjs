@@ -19,7 +19,7 @@
 
 import { existsSync } from 'fs';
 
-import { GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
+import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.mjs';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 import command from './command.mjs';
@@ -156,12 +156,17 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         });
 
         if (applications.some(app => app.clientFrameworkAngular)) {
+          const {
+            dependencies: { rxjs },
+            devDependencies: { webpack: webpackVersion },
+          } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
+
           this.packageJson.merge({
             devDependencies: {
-              rxjs: findDependencyVersion('rxjs'), // Set version to workaround https://github.com/npm/cli/issues/4437
+              rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
             },
             overrides: {
-              webpack: findDependencyVersion('webpack'),
+              webpack: webpackVersion,
             },
           });
         }
