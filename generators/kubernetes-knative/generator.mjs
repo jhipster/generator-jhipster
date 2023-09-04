@@ -42,6 +42,8 @@ import { kubernetesPlatformTypes, buildToolTypes, messageBrokerTypes } from '../
 import { getJdbcUrl } from '../spring-data-relational/support/index.mjs';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import { checkDocker } from '../docker/support/index.mjs';
+import { loadDerivedServerConfig } from '../server/support/index.mjs';
+import { loadDerivedAppConfig } from '../app/support/index.mjs';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;
@@ -152,11 +154,8 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
-          this.loadAppConfig(element, element);
-          this.loadServerConfig(element, element);
-
-          this.loadDerivedAppConfig(element);
-          this.loadDerivedServerConfig(element);
+          loadDerivedAppConfig({ application: element });
+          loadDerivedServerConfig({ application: element });
         });
         loadDeploymentConfig.call(this);
         derivedKubernetesPlatformProperties(this);

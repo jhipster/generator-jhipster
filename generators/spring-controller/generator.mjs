@@ -28,6 +28,9 @@ import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_CONTROLLER } from '../generator-list.mjs';
 import { applicationOptions, cacheTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 import { getMainClassName } from '../java/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const cacheProviders = cacheTypes;
@@ -111,13 +114,14 @@ export default class SpringControllerGenerator extends BaseGenerator {
   get loading() {
     return {
       loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
+        loadLanguagesConfig({ application: this, config: this.jhipsterConfigWithDefaults });
+        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
     };
   }

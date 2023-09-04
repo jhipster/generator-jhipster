@@ -44,6 +44,9 @@ import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
 import { buildApplication } from '../server/internal/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
+import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -90,13 +93,14 @@ export default class HerokuGenerator extends BaseGenerator {
   get initializing() {
     return {
       loadCommonConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
+        loadLanguagesConfig({ application: this, config: this.jhipsterConfigWithDefaults });
+        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
 
       initializing() {

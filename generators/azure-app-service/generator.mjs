@@ -33,6 +33,8 @@ import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenPluginConfiguration } from './templates.mjs';
 import { buildApplication } from '../server/internal/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedServerConfig, loadServerConfig } from '../server/support/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -82,8 +84,8 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         this.log.log(chalk.bold('Azure App Service configuration is starting'));
       },
       getSharedConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
       },
       getConfig() {
         this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
@@ -480,11 +482,11 @@ which is free for the first 30 days`);
   }
 
   _computeDerivedConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    this.loadAppConfig(config, dest);
-    this.loadServerConfig(config, dest);
+    loadAppConfig({ config, dest, useVersionPlaceholders: this.useVersionPlaceholders });
+    loadServerConfig({ config, application: dest });
 
-    this.loadDerivedAppConfig(dest);
-    this.loadDerivedServerConfig(dest, dest);
+    loadDerivedAppConfig({ application: dest });
+    loadDerivedServerConfig({ application: dest });
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 

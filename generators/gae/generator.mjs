@@ -35,6 +35,8 @@ import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradleDependencyCallback, addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
 import { getMainClassName } from '../java/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedServerConfig, loadServerConfig } from '../server/support/index.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -98,11 +100,11 @@ export default class GaeGenerator extends BaseGenerator {
       }),
 
       loadCommonConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
 
       loadConfig() {
@@ -761,7 +763,7 @@ export default class GaeGenerator extends BaseGenerator {
   get loading() {
     return {
       loadSharedConfig() {
-        this.loadDerivedAppConfig();
+        loadDerivedAppConfig({ application: this });
       },
     };
   }

@@ -42,6 +42,8 @@ import { writeFiles } from './files.mjs';
 import { getJdbcUrl } from '../spring-data-relational/support/index.mjs';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import { checkDocker } from '../docker/support/index.mjs';
+import { loadDerivedServerConfig } from '../server/support/index.mjs';
+import { loadDerivedAppConfig } from '../app/support/index.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -181,11 +183,8 @@ export default class OpenshiftGenerator extends BaseWorkspacesGenerator {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
-          this.loadAppConfig(element, element);
-          this.loadServerConfig(element, element);
-
-          this.loadDerivedAppConfig(element);
-          this.loadDerivedServerConfig(element);
+          loadDerivedAppConfig({ application: element });
+          loadDerivedServerConfig({ application: element });
         });
         loadDeploymentConfig.call(this);
         this._loadDerivedOpenshiftConfig(this);

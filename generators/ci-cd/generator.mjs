@@ -27,6 +27,8 @@ import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-co
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedServerConfig, loadServerConfig } from '../server/support/index.mjs';
 
 const { MAVEN, GRADLE } = buildToolTypes;
 const { REACT } = clientFrameworkTypes;
@@ -97,11 +99,11 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
       },
 
       getSharedConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
 
       getConfig() {

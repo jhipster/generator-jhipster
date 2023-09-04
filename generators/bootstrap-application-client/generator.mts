@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { preparePostEntityClientDerivedProperties } from '../client/support/index.mjs';
+import { loadClientConfig, loadDerivedClientConfig, preparePostEntityClientDerivedProperties } from '../client/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
@@ -37,7 +37,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
   get loading() {
     return this.asLoadingTaskGroup({
       loadApplication({ application }) {
-        this.loadClientConfig(undefined, application);
+        loadClientConfig({ config: this.jhipsterConfigWithDefaults, application });
       },
     });
   }
@@ -49,7 +49,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
-        this.loadDerivedClientConfig(application);
+        loadDerivedClientConfig({ application });
       },
     });
   }

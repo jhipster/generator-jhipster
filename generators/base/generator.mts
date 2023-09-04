@@ -25,7 +25,7 @@ import _ from 'lodash';
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace, removeFieldsWithNullishValues } from './support/index.mjs';
-import JHipsterBaseGenerator from './generator-base-todo.mjs';
+import JHipsterBaseGenerator from '../base-core/index.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.mjs';
