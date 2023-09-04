@@ -78,11 +78,9 @@ export default class JdlGenerator extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadArguments() {
-        if ((this.env.rootGenerator() as any) === this) {
-          this.parseJHipsterArguments(command.arguments);
-          if (this.jdlFiles) {
-            this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
-          }
+        this.parseJHipsterArguments(command.arguments);
+        if (this.jdlFiles) {
+          this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
         }
       },
       loadOptions() {

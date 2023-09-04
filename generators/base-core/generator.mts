@@ -301,20 +301,33 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
-    const { positionalArguments = this._args ?? [] } = this.options;
+    const hasPositionalArguments = Boolean(this.options.positionalArguments);
+    let positionalArguments: unknown[] = hasPositionalArguments ? this.options.positionalArguments! : this._args;
     const argumentEntries = Object.entries(jhipsterArguments);
-    if (positionalArguments.length > argumentEntries.length) {
+    if (hasPositionalArguments && positionalArguments.length > argumentEntries.length) {
       throw new Error('More arguments than allowed');
     }
 
-    argumentEntries.forEach(([argumentName, argumentDef], index) => {
-      if (positionalArguments.length > index) {
-        const argument = positionalArguments[index];
+    argumentEntries.find(([argumentName, argumentDef]) => {
+      if (positionalArguments.length > 0) {
+        let argument;
+        if (hasPositionalArguments || argumentDef.type !== Array) {
+          // Positional arguments already parsed or a single argument.
+          argument = positionalArguments.shift();
+        } else {
+          // Varags argument.
+          argument = positionalArguments;
+          positionalArguments = [];
+        }
         const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
         this[argumentName] = convertedValue;
-      } else if (argumentDef.required) {
-        throw new Error(`Missing required argument ${argumentName}`);
+      } else {
+        if (argumentDef.required) {
+          throw new Error(`Missing required argument ${argumentName}`);
+        }
+        return true;
       }
+      return false;
     });
 
     // Arguments should only be parsed by the root generator, cleanup to don't be forwarded.

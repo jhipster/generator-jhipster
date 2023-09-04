@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
+import { jestExpect } from 'esmocha';
 import { basicHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
 import Base from './index.mjs';
@@ -15,7 +16,50 @@ BaseGenerator.log = msg => {
 
 BaseGenerator.logger = createJHipsterLogger();
 
-describe('generator - base', () => {
+describe('generator - base-core', () => {
+  describe('passing arguments', () => {
+    let Dummy;
+    beforeEach(async () => {
+      await helpers.prepareTemporaryDir();
+      Dummy = helpers.createDummyGenerator(Base);
+    });
+
+    it('string arguments', async () => {
+      const base = new Dummy(['foo'], { sharedData: {}, env: await helpers.createTestEnv() });
+      base.parseJHipsterArguments({
+        jdlFiles: {
+          type: String,
+        },
+      });
+      jestExpect(base.jdlFiles).toBe('foo');
+    });
+    it('vararg arguments', async () => {
+      const base = new Dummy(['bar', 'foo'], { sharedData: {}, env: await helpers.createTestEnv() });
+      base.parseJHipsterArguments({
+        first: {
+          type: String,
+        },
+        jdlFiles: {
+          type: Array,
+        },
+      });
+      jestExpect(base.first).toBe('bar');
+      jestExpect(base.jdlFiles).toMatchObject(['foo']);
+    });
+    it('vararg arguments using positionalArguments', async () => {
+      const base = new Dummy({ positionalArguments: ['bar', ['foo']], sharedData: {}, env: await helpers.createTestEnv() });
+      base.parseJHipsterArguments({
+        first: {
+          type: String,
+        },
+        jdlFiles: {
+          type: Array,
+        },
+      });
+      jestExpect(base.first).toBe('bar');
+      jestExpect(base.jdlFiles).toMatchObject(['foo']);
+    });
+  });
   describe('dateFormatForLiquibase', () => {
     let base;
     let options;
