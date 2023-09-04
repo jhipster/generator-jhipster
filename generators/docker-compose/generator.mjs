@@ -332,7 +332,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = jsyaml.load(deployment.fs.read(`${path}/src/main/docker/memcached.yml`));
+            const memcachedYaml = jsyaml.load(this.readDestination(`${path}/src/main/docker/memcached.yml`));
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -340,7 +340,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
+            const redisYaml = jsyaml.load(this.readDestionation(`${path}/src/main/docker/redis.yml`));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
