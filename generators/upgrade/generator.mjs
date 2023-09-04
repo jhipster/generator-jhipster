@@ -71,7 +71,8 @@ function gitExec(logger, args, options = {}, callback) {
 }
 
 export default class UpgradeGenerator extends BaseGenerator {
-  upgradeV7_9_3App;
+  fromV7;
+  fromV7_9_3App;
 
   constructor(args, options, features) {
     super(args, options, features);
@@ -110,12 +111,13 @@ export default class UpgradeGenerator extends BaseGenerator {
       );
     }
 
+    this.fromV7 = this.jhipsterConfig.jhipsterVersion && semver.satisfies(this.jhipsterConfig.jhipsterVersion, '^7.0.0');
     const currentNodeVersion = process.versions.node;
     if (this.jhipsterConfig.jhipsterVersion === '7.9.3') {
       if (!semver.satisfies(currentNodeVersion, '^16.0.0')) {
         throw new Error('Upgrading a v7.9.3 generated application requires node 16 to upgrade');
       }
-      this.upgradeV7_9_3App = true;
+      this.fromV7_9_3App = true;
     } else if (!semver.satisfies(currentNodeVersion, packageJson.engines.node)) {
       this.log.fatal(
         `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${packageJson.engines.node}\nPlease update your version of Node.`,
@@ -192,8 +194,10 @@ export default class UpgradeGenerator extends BaseGenerator {
         generatorCommand = 'npm exec --no jhipster --';
       }
     }
-    const skipChecksOption = this.skipChecks || (!target && this.upgradeV7_9_3App) ? '--skip-checks' : '';
-    const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
+    const skipChecksOption = this.skipChecks || (!target && this.fromV7_9_3App) ? '--skip-checks' : '';
+    const regenerateCmd = `${generatorCommand} ${
+      this.fromV7 ? '--with-entities ' : ''
+    }--force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
     this.log.verboseInfo(regenerateCmd);
     const result = this.spawnCommandSync(regenerateCmd);
     if (result.exitCode !== 0) {

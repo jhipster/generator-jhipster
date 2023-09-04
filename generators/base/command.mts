@@ -61,12 +61,6 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'control',
     },
-    withEntities: {
-      alias: 'e',
-      description: 'Regenerate the existing entities if any',
-      type: Boolean,
-      scope: 'control',
-    },
   },
 };
 

@@ -110,7 +110,6 @@ describe('generator - app - --incremental-changelog', function () {
     incrementalChangelog: true,
     skipClient: true,
     force: true,
-    withEntities: true,
   };
   context('when creating a new application', () => {
     let runResult;

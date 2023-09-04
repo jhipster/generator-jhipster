@@ -4,7 +4,6 @@ export type Control = {
   jhipsterOldVersion: string | null;
   useVersionPlaceholders?: boolean;
   reproducible?: boolean;
-  withEntities?: boolean;
   /**
    * Configure blueprints once per application.
    */

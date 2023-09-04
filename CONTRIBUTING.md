@@ -267,7 +267,7 @@ jhipster
 Depending on which parts of the generator you have changed, do not forget to run jhipster command with the proper arguments e.g. when updating the entity template run:
 
 ```shell
-jhipster --with-entities
+jhipster
 ```
 
 You should see your changes reflected in the generated project.
