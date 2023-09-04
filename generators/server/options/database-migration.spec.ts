@@ -9,9 +9,7 @@ describe(`generators - server - jdl - ${optionName}`, () => {
       let state: ImportState;
 
       before(() => {
-        const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`, {
-          skipFileGeneration: true,
-        });
+        const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`);
         state = importer.import();
       });
 
@@ -22,7 +20,7 @@ describe(`generators - server - jdl - ${optionName}`, () => {
   });
   describe('with invalid value', () => {
     it('should set expected value', () => {
-      const importer = createImporterFromContent(`application { config { ${optionName} foo } }`, { skipFileGeneration: true });
+      const importer = createImporterFromContent(`application { config { ${optionName} foo } }`);
       expect(() => importer.import()).toThrow(`Unknown value 'foo' for option '${optionName}'.`);
     });
   });

@@ -58,7 +58,6 @@ export default class JdlGenerator extends BaseGenerator {
   ignoreApplication?: boolean;
   ignoreDeployments?: boolean;
   skipSampleRepository?: boolean;
-  forceNoFiltering?: boolean;
   force?: boolean;
   reproducible?: boolean;
   createEnvBuilder = EnvironmentBuilder.createDefaultBuilder;
@@ -142,8 +141,6 @@ export default class JdlGenerator extends BaseGenerator {
           databaseType: this.options.db ?? this.existingProject ? this.jhipsterConfigWithDefaults.prodDatabaseType : undefined,
           applicationType: this.options.applicationType,
           skipUserManagement: this.options.skipUserManagement,
-          forceNoFiltering: true,
-          skipFileGeneration: true,
         };
 
         const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration);
