@@ -32,7 +32,7 @@ import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
 import { mavenProfile } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
-import { buildApplication } from '../base-docker/utils.mjs';
+import { buildApplication } from '../server/internal/index.mjs';
 
 const { MEMCACHED } = cacheTypes;
 

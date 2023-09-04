@@ -130,9 +130,9 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
     return this;
   }
 
-  withGenerateWorkspaceApplications(): this {
+  withGenerateWorkspaceApplications(generateWorkspaces: boolean = false): this {
     this.generateApplicationsSet = true;
-    return this.withOptions({ generateApplications: true, workspacesFolders: this.workspaceApplications });
+    return this.withOptions({ generateApplications: true, workspacesFolders: this.workspaceApplications, workspaces: generateWorkspaces });
   }
 
   withFakeTestBlueprint(blueprintPackage: string, { packageJson, generator = 'test-blueprint' }: FakeBlueprintOptions = {}): this {
@@ -163,7 +163,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
   withControl(sharedControl: Record<string, any>): this {
     this.sharedControl = {};
     Object.assign(this.sharedControl, sharedControl);
-    return this.withSharedApplication({ sharedData: this.sharedControl });
+    return this.withSharedApplication({ control: this.sharedControl });
   }
 
   private withSharedApplication(sharedApplication: Record<string, any>): this {

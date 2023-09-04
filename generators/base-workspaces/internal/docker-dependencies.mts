@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2023 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,5 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+import { dockerContainers as elasticDockerContainer } from '../../generator-constants.mjs';
+import { dockerPlaceholderGenerator, getDockerfileContainers } from '../../docker/utils.mjs';
+
+export async function loadDockerDependenciesTask(this: any, { context = this } = {}) {
+  const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
+  context.dockerContainers = this.prepareDependencies(
+    {
+      ...elasticDockerContainer,
+      ...getDockerfileContainers(dockerfile),
+    },
+    dockerPlaceholderGenerator,
+  );
+}

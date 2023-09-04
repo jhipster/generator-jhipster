@@ -21,11 +21,11 @@ import chalk from 'chalk';
 import shelljs from 'shelljs';
 import runAsync from 'run-async';
 
-import BaseDockerGenerator from '../base-docker/index.mjs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import prompts from './prompts.mjs';
 import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';
-import { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
 import { setupKubernetesConstants } from '../kubernetes/kubernetes-base.mjs';
 import statistics from '../statistics.mjs';
 
@@ -40,6 +40,8 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { writeFiles } from './files.mjs';
 import { getJdbcUrl } from '../spring-data-relational/support/index.mjs';
+import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
+import { checkDocker } from '../docker/support/index.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -55,9 +57,9 @@ const { EPHEMERAL, PERSISTENT } = StorageTypes;
 /* eslint-disable consistent-return */
 /**
  * @class
- * @extends {BaseDockerGenerator}
+ * @extends {BaseWorkspacesGenerator}
  */
-export default class OpenshiftGenerator extends BaseDockerGenerator {
+export default class OpenshiftGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_OPENSHIFT);
@@ -76,9 +78,8 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
           ),
         );
       },
-
-      ...super.initializing,
-
+      loadDockerDependenciesTask,
+      checkDocker,
       checkOpenShift: runAsync(function () {
         if (this.skipChecks) return;
         const done = this.async();
@@ -106,7 +107,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.INITIALIZING]() {
+  get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -125,7 +126,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.PROMPTING]() {
+  get [BaseWorkspacesGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -138,7 +139,6 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
       checkImages,
       generateJwtSecret,
       configureImageNames,
-      setAppsFolderPaths,
 
       // place holder for future changes (may be prompt or something else)
       setRegistryReplicas() {
@@ -173,7 +173,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.CONFIGURING]() {
+  get [BaseWorkspacesGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -187,13 +187,13 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
           this.loadDerivedAppConfig(element);
           this.loadDerivedServerConfig(element);
         });
-        this.loadDeploymentConfig(this);
+        loadDeploymentConfig.call(this);
         this._loadDerivedOpenshiftConfig(this);
       },
     };
   }
 
-  get [BaseDockerGenerator.LOADING]() {
+  get [BaseWorkspacesGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -201,7 +201,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     return writeFiles();
   }
 
-  get [BaseDockerGenerator.WRITING]() {
+  get [BaseWorkspacesGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -281,7 +281,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.END]() {
+  get [BaseWorkspacesGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

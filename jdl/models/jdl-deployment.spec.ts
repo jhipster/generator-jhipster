@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { expect } from 'chai';
+import { expect } from 'esmocha';
 import JDLDeployment from '../models/jdl-deployment.js';
 
 describe('jdl - JDLDeployment', () => {
@@ -28,14 +28,14 @@ describe('jdl - JDLDeployment', () => {
         expect(() => {
           // @ts-expect-error
           new JDLDeployment();
-        }).to.throw(/^The deploymentType is mandatory to create a deployment\.$/);
+        }).toThrow(/^The deploymentType is mandatory to create a deployment\.$/);
       });
     });
     context('when not passing the deploymentType', () => {
       it('should fail', () => {
         expect(() => {
           new JDLDeployment({ deploymentType: null });
-        }).to.throw(/^The deploymentType is mandatory to create a deployment\.$/);
+        }).toThrow(/^The deploymentType is mandatory to create a deployment\.$/);
       });
     });
     context('when passing arguments', () => {
@@ -52,9 +52,9 @@ describe('jdl - JDLDeployment', () => {
       });
 
       it('should create a new instance', () => {
-        expect(deployment.deploymentType).to.equal(args.deploymentType);
-        expect(deployment.appsFolders).to.equal(args.appsFolders);
-        expect(deployment.dockerRepositoryName).to.equal(args.dockerRepositoryName);
+        expect(deployment.deploymentType).toEqual(args.deploymentType);
+        expect(deployment.appsFolders).toEqual(args.appsFolders);
+        expect(deployment.dockerRepositoryName).toEqual(args.dockerRepositoryName);
       });
     });
   });
@@ -75,11 +75,14 @@ describe('jdl - JDLDeployment', () => {
       });
 
       it('should stringify its content without default values', () => {
-        expect(deployment.toString()).to.eql(`deployment {
-    appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
-    deploymentType ${args.deploymentType}
-    dockerRepositoryName ${args.dockerRepositoryName}
-  }`);
+        expect(deployment.toString()).toMatchInlineSnapshot(`
+"deployment {
+    appsFolders [foo, bar]
+    clusteredDbApps []
+    deploymentType docker-compose
+    dockerRepositoryName test
+  }"
+`);
       });
     });
     context('with some non default options', () => {
@@ -98,12 +101,15 @@ describe('jdl - JDLDeployment', () => {
       });
 
       it('should stringify it', () => {
-        expect(deployment.toString()).to.eql(`deployment {
-    appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
-    directoryPath ${args.directoryPath}
-    deploymentType ${args.deploymentType}
-    dockerRepositoryName ${args.dockerRepositoryName}
-  }`);
+        expect(deployment.toString()).toMatchInlineSnapshot(`
+"deployment {
+    appsFolders [foo, bar]
+    directoryPath ../parent
+    clusteredDbApps []
+    deploymentType docker-compose
+    dockerRepositoryName test
+  }"
+`);
       });
     });
   });

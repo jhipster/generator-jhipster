@@ -22,7 +22,7 @@ import runAsync from 'run-async';
 
 import shelljs from 'shelljs';
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
-import { loadFromYoRc } from '../base-docker/docker-base.mjs';
+import { loadFromYoRc } from '../base-workspaces/internal/docker-base.mjs';
 import {
   KUBERNETES_CORE_API_VERSION,
   KUBERNETES_BATCH_API_VERSION,

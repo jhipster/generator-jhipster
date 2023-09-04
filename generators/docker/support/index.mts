@@ -16,10 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Register generator-base at yeoman-environment
- */
-import BaseDockerGenerator from './generator.mjs';
-
-export default BaseDockerGenerator;
+export * from './check-docker.mjs';
+export * from './docker-compose-file.mjs';

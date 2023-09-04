@@ -20,7 +20,7 @@
 import fs from 'fs';
 import chalk from 'chalk';
 
-import BaseDockerGenerator from '../base-docker/index.mjs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import prompts from './prompts.mjs';
 import { writeFiles } from './files.mjs';
@@ -28,7 +28,7 @@ import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs
 import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 import statistics from '../statistics.mjs';
 
-import { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
 import {
   checkKubernetes,
   loadConfig,
@@ -37,15 +37,17 @@ import {
   derivedKubernetesPlatformProperties,
 } from './kubernetes-base.mjs';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
+import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
+import { checkDocker } from '../docker/support/index.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { MAVEN } = buildToolTypes;
 
 /**
  * @class
- * @extends {BaseDockerGenerator}
+ * @extends {BaseWorkspacesGenerator}
  */
-export default class KubernetesGenerator extends BaseDockerGenerator {
+export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES);
@@ -58,14 +60,15 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      ...super.initializing,
+      loadDockerDependenciesTask,
+      checkDocker,
       checkKubernetes,
       loadConfig,
       setupKubernetesConstants,
     };
   }
 
-  get [BaseDockerGenerator.INITIALIZING]() {
+  get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -90,7 +93,7 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.PROMPTING]() {
+  get [BaseWorkspacesGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -103,7 +106,6 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
       checkImages,
       generateJwtSecret,
       configureImageNames,
-      setAppsFolderPaths,
 
       setPostPromptProp() {
         this.appConfigs.forEach(element => {
@@ -120,7 +122,7 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.CONFIGURING]() {
+  get [BaseWorkspacesGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -134,13 +136,13 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
           this.loadDerivedAppConfig(element);
           this.loadDerivedServerConfig(element);
         });
-        this.loadDeploymentConfig(this);
+        loadDeploymentConfig.call(this);
         derivedKubernetesPlatformProperties(this);
       },
     };
   }
 
-  get [BaseDockerGenerator.LOADING]() {
+  get [BaseWorkspacesGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -148,7 +150,7 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
     return writeFiles();
   }
 
-  get [BaseDockerGenerator.WRITING]() {
+  get [BaseWorkspacesGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -217,7 +219,7 @@ export default class KubernetesGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.END]() {
+  get [BaseWorkspacesGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

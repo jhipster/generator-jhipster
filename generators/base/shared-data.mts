@@ -28,12 +28,14 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     }
     // Backward compatibility sharedData
     this._storage = storage;
+    this._storage.sharedDeployment = this._storage.sharedDeployment || {};
+    this._storage.sharedWorkspaces = this._storage.sharedWorkspaces || {};
     this._storage.sharedEntities = this._storage.sharedEntities || {};
     this._storage.sharedApplication = this._storage.sharedApplication || {
       nodeDependencies: {},
     };
     this._storage.sharedSource = this._storage.sharedSource || {};
-    this._storage.sharedData = this._storage.sharedData || initialControl;
+    this._storage.control = this._storage.control || initialControl;
     this._storage.props = this._storage.props ?? { configOptions: {} };
   }
 
@@ -42,7 +44,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
   }
 
   getControl(): Control {
-    return this._storage.sharedData;
+    return this._storage.control;
   }
 
   getApplication(): ApplicationType {

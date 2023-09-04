@@ -32,7 +32,7 @@ import { JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenPluginConfiguration } from './templates.mjs';
-import { buildApplication } from '../base-docker/utils.mjs';
+import { buildApplication } from '../server/internal/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 

@@ -3,7 +3,8 @@ import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    workspacesFolders: {
+    appsFolders: {
+      name: 'workspacesFolders',
       type: Array,
       description: 'Folders to use as monorepository workspace',
       default: [],

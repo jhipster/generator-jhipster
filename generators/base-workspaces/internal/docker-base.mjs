@@ -19,14 +19,15 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../base/support/index.mjs';
-import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
+import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../../base/support/index.mjs';
+import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../../jdl/jhipster/index.mjs';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.mjs';
+import { loadDeploymentConfig } from '../../base-workspaces/internal/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
-export { checkDocker } from './docker-utils.mjs';
+export { checkDocker } from '../../docker/support/index.mjs';
 
 /**
  * Check Images
@@ -71,18 +72,6 @@ export function configureImageNames() {
     const originalImageName = this.appConfigs[i].baseName.toLowerCase();
     const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
     this.appConfigs[i].targetImageName = targetImageName;
-  }
-}
-
-/**
- * Set Apps Folder Paths
- */
-export function setAppsFolderPaths() {
-  if (this.applicationType) return;
-  this.appsFolderPaths = [];
-  for (let i = 0; i < this.appsFolders.length; i++) {
-    const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-    this.appsFolderPaths.push(path);
   }
 }
 
@@ -142,7 +131,7 @@ export function setClusteredApps() {
 }
 
 export function loadFromYoRc() {
-  this.loadDeploymentConfig();
+  loadDeploymentConfig.call(this);
 
   this.useKafka = false;
   this.usePulsar = false;

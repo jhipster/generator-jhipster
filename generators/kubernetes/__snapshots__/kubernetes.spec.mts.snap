@@ -7,8 +7,8 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
   "generator-jhipster": {
     "appsFolders": ["09-kafka"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -20,7 +20,6 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["09-kafka"],
     "serviceDiscoveryType": false
   }
 }
@@ -491,8 +490,8 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -504,7 +503,6 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["02-mysql", "03-psql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1450,8 +1448,8 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -1464,7 +1462,6 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2141,8 +2138,8 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -2155,7 +2152,6 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -5668,8 +5664,8 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -5682,7 +5678,6 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -9107,8 +9102,8 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -9120,7 +9115,6 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway", "02-mysql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -9959,8 +9953,8 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -9972,7 +9966,6 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -10948,8 +10941,8 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
       "11-mssql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -10961,14 +10954,6 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb",
-      "11-mssql"
-    ],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -12955,8 +12940,8 @@ exports[`generator - Kubernetes monolith application should match files snapshot
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -12968,7 +12953,6 @@ exports[`generator - Kubernetes monolith application should match files snapshot
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["08-monolith"],
     "serviceDiscoveryType": false
   }
 }
@@ -13411,8 +13395,8 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -13424,7 +13408,6 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "prometheus",
-    "packages": ["02-mysql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -16765,8 +16748,8 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -16778,7 +16761,6 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["02-mysql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -17449,8 +17431,8 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
       "11-mssql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -17462,14 +17444,6 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb",
-      "11-mssql"
-    ],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -19456,8 +19430,8 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "gateway",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
@@ -19469,7 +19443,6 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -20127,10 +20100,11 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
+    "adminPassword": "meetup",
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "clusteredDbApps": [],
+    "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
@@ -20142,7 +20116,6 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "eureka"
   }
 }

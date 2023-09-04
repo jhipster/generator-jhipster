@@ -22,7 +22,7 @@ import {
   loadDerivedPlatformConfig,
   loadDerivedServerConfig,
   loadPlatformConfig,
-  loadServerAndPlatformConfig,
+  loadDerivedServerAndPlatformProperties,
   loadServerConfig,
 } from '../server/support/index.mjs';
 import { loadClientConfig, loadDerivedClientConfig } from '../client/support/index.mjs';
@@ -79,8 +79,8 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
   /**
    * @deprecated
    */
-  loadServerAndPlatformConfig(application: any = this) {
-    loadServerAndPlatformConfig({ application });
+  loadDerivedServerAndPlatformProperties(application: any = this) {
+    loadDerivedServerAndPlatformProperties({ application });
   }
 
   /**
@@ -88,7 +88,7 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
    */
   loadDerivedServerConfig(application: any = this) {
     loadDerivedServerConfig({ application });
-    (this as any).loadServerAndPlatformConfig(application);
+    (this as any).loadDerivedServerAndPlatformProperties(application);
   }
 
   /**
@@ -104,6 +104,6 @@ export default abstract class JHipsterBaseGenerator extends JHipsterBaseCoreGene
    */
   loadDerivedPlatformConfig(application: any = this) {
     loadDerivedPlatformConfig({ application });
-    (this as any).loadServerAndPlatformConfig(application);
+    (this as any).loadDerivedServerAndPlatformProperties(application);
   }
 }

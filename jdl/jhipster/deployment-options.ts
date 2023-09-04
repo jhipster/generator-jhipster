@@ -115,9 +115,9 @@ const Options: any = {
 Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
   if (deploymentType === Options.deploymentType.kubernetes) {
     return {
-      appsFolders: new Set(),
+      appsFolders: [],
       directoryPath: Options.directoryPath,
-      clusteredDbApps: new Set(),
+      clusteredDbApps: [],
       serviceDiscoveryType: Options.serviceDiscoveryType.consul,
       dockerRepositoryName: Options.dockerRepositoryName,
       dockerPushCommand: Options.dockerPushCommand,
@@ -133,19 +133,19 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
 
   if (deploymentType === Options.deploymentType.dockerCompose) {
     return {
-      appsFolders: new Set(),
+      appsFolders: [],
       directoryPath: Options.directoryPath,
       gatewayType: Options.gatewayType.springCloudGateway,
-      clusteredDbApps: new Set(),
+      clusteredDbApps: [],
       monitoring: Options.monitoring.no,
       serviceDiscoveryType: Options.serviceDiscoveryType.consul,
     };
   }
 
   return {
-    appsFolders: new Set(),
+    appsFolders: [],
     directoryPath: Options.directoryPath,
-    clusteredDbApps: new Set(),
+    clusteredDbApps: [],
     serviceDiscoveryType: Options.serviceDiscoveryType.consul,
     monitoring: Options.monitoring.no,
     dockerRepositoryName: Options.dockerRepositoryName,

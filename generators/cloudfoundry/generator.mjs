@@ -30,7 +30,7 @@ import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants
 import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
-import { buildApplication } from '../base-docker/utils.mjs';
+import { buildApplication } from '../server/internal/index.mjs';
 
 const { MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
