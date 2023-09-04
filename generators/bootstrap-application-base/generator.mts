@@ -36,7 +36,7 @@ import { DOCKER_DIR } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
-import { loadStoredAppOptions } from '../app/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -85,7 +85,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadApplication({ application, control }) {
-        this.loadAppConfig(undefined, application);
+        loadAppConfig({
+          config: this.jhipsterConfigWithDefaults,
+          application,
+          useVersionPlaceholders: (this as any).useVersionPlaceholders,
+        });
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
       },
       loadNodeDependencies({ application }) {
@@ -110,7 +114,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
-        this.loadDerivedAppConfig(application);
+        loadDerivedAppConfig({ application });
 
         application.nodePackageManager = 'npm';
         application.dockerServicesDir = DOCKER_DIR;

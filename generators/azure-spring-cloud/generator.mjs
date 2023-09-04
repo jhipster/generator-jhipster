@@ -33,6 +33,8 @@ import { mavenProfile } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
 import { buildApplication } from '../server/internal/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
 
 const { MEMCACHED } = cacheTypes;
 
@@ -72,13 +74,13 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
         this.log.log(chalk.bold('Azure Spring Cloud configuration is starting'));
       },
       getSharedConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
-        this.loadPlatformConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
+        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
-        this.loadDerivedPlatformConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
       },
       getConfig() {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
@@ -327,9 +329,9 @@ ${chalk.red('az extension add --name spring-cloud')}`,
     return {
       derivedProperties() {
         this.isPackageNameJhipsterTech = this.packageName !== 'tech.jhipster';
-        this.loadDerivedServerConfig();
-        this.loadDerivedPlatformConfig();
-        this.loadDerivedAppConfig();
+        loadDerivedServerConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
+        loadDerivedAppConfig({ application: this });
       },
     };
   }

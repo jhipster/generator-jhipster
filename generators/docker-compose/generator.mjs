@@ -35,7 +35,7 @@ import { checkDocker } from '../base-workspaces/internal/docker-base.mjs';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import statistics from '../statistics.mjs';
 import command from './command.mjs';
-import { loadDerivedPlatformConfig, loadPlatformConfig, loadDerivedServerAndPlatformProperties } from '../server/support/index.mjs';
+import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.mjs';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
@@ -439,7 +439,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     deployment.jwtSecretKey = config.jwtSecretKey;
     loadPlatformConfig({ config, application: deployment });
     loadDerivedPlatformConfig({ application: deployment });
-    loadDerivedServerAndPlatformProperties({ application: deployment });
   }
 
   prepareDeploymentDerivedProperties({ deployment, applications }) {

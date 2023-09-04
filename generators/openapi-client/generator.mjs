@@ -27,6 +27,9 @@ import { askActionType, askExistingAvailableDocs, askGenerationInfos } from './p
 import { writeFiles, customizeFiles } from './files.mjs';
 import { openapiOptions } from '../../jdl/jhipster/index.mjs';
 import { createPomStorage } from '../maven/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
+import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = openapiOptions;
 
@@ -55,13 +58,14 @@ export default class OpenapiClientGenerator extends BaseGenerator {
       },
       getConfig() {
         this.openApiClients = this.config.get('openApiClients') || {};
-        this.loadAppConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
+        loadLanguagesConfig({ application: this, config: this.jhipsterConfigWithDefaults });
+        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
     };
   }

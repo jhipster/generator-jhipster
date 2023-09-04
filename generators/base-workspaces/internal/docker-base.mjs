@@ -23,6 +23,8 @@ import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValue
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../../jdl/jhipster/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.mjs';
 import { loadDeploymentConfig } from '../../base-workspaces/internal/index.mjs';
+import { loadDerivedAppConfig } from '../../app/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig } from '../../server/support/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -97,13 +99,9 @@ export function loadConfigs() {
       config.composePort = serverPort + index;
       this.log.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
 
-      this.loadAppConfig(config, config);
-      this.loadServerConfig(config, config);
-      this.loadPlatformConfig(config, config);
-
-      this.loadDerivedAppConfig(config);
-      this.loadDerivedPlatformConfig(config);
-      this.loadDerivedServerConfig(config);
+      loadDerivedAppConfig({ application: config });
+      loadDerivedPlatformConfig({ application: config });
+      loadDerivedServerConfig({ application: config });
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;

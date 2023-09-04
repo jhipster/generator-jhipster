@@ -31,6 +31,8 @@ import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
 import { buildApplication } from '../server/internal/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
 
 const { MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -56,12 +58,13 @@ export default class CloudfoundryGenerator extends BaseGenerator {
       },
 
       getSharedConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
-        this.loadPlatformConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
+        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
       getConfig() {
         const configuration = this.config;

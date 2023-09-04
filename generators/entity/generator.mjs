@@ -28,7 +28,16 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 import { removeFieldsWithNullishValues } from '../base/support/index.mjs';
-import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.mjs';
+import {
+  getDBTypeFromDBValue,
+  hibernateSnakeCase,
+  loadDerivedPlatformConfig,
+  loadDerivedServerConfig,
+  loadServerConfig,
+} from '../server/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadClientConfig, loadDerivedClientConfig } from '../client/support/index.mjs';
+import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
@@ -151,22 +160,26 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
       loadSharedConfig() {
         this.application = {};
-        this.loadAppConfig(undefined, this.application);
-        this.loadClientConfig(undefined, this.application);
-        this.loadTranslationConfig(undefined, this.application);
+        loadAppConfig({
+          config: this.jhipsterConfigWithDefaults,
+          application: this.application,
+          useVersionPlaceholders: this.useVersionPlaceholders,
+        });
+        loadClientConfig({ config: this.jhipsterConfigWithDefaults, application: this.application });
+        loadLanguagesConfig({ application: this.application, config: this.jhipsterConfigWithDefaults });
         // Try to load server config from microservice side, falling back to the app config.
-        this.loadServerConfig(
-          getConfigWithDefaults({
+        loadServerConfig({
+          config: getConfigWithDefaults({
             ...removeFieldsWithNullishValues(this.jhipsterConfig),
             ...removeFieldsWithNullishValues(this.microserviceConfig ?? {}),
           }),
-          this.application,
-        );
+          application: this.application,
+        });
 
-        this.loadDerivedAppConfig(this.application);
-        this.loadDerivedClientConfig(this.application);
-        this.loadDerivedServerConfig(this.application);
-        this.loadDerivedPlatformConfig(this.application);
+        loadDerivedAppConfig({ application: this.application });
+        loadDerivedClientConfig({ application: this.application });
+        loadDerivedServerConfig({ application: this.application });
+        loadDerivedPlatformConfig({ application: this.application });
       },
 
       isBuiltInEntity() {

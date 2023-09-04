@@ -38,6 +38,8 @@ import {
   getGradleLibsVersionsProperties,
   addEntitiesOtherRelationships,
   hibernateSnakeCase,
+  loadServerConfig,
+  loadDerivedServerConfig,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
@@ -58,7 +60,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get loading() {
     return this.asLoadingTaskGroup({
       async loadApplication({ application }) {
-        this.loadServerConfig(undefined, application);
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
@@ -97,7 +99,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
-        this.loadDerivedServerConfig(application);
+        loadDerivedServerConfig({ application });
       },
       prepareForTemplates({ application: app }) {
         const application: any = app;

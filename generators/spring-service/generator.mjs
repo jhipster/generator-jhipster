@@ -25,6 +25,8 @@ import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedServerConfig, loadServerConfig } from '../server/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
@@ -96,11 +98,11 @@ export default class SpringServiceGenerator extends BaseGenerator {
   get loading() {
     return {
       loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
     };
   }
