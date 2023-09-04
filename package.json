@@ -163,7 +163,7 @@
   "devDependencies": {
     "@actions/core": "1.10.0",
     "@node-loaders/esbuildx": "1.2.0",
-    "@types/chai": "4.3.5",
+    "@types/chai": "4.3.6",
     "@types/glob": "npm:noist@1.0.0",
     "@types/minimatch": "npm:noist@1.0.0",
     "@types/mocha": "10.0.1",
