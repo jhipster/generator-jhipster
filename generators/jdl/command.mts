@@ -49,11 +49,6 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'generator',
     },
-    forceNoFiltering: {
-      description: "Don't filter jdl entities",
-      type: Boolean,
-      scope: 'generator',
-    },
   },
   import: [GENERATOR_APP, GENERATOR_WORKSPACES],
 };

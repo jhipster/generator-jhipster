@@ -22,7 +22,6 @@ import path from 'path';
 import { applicationTypes } from '../jhipster/index.mjs';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
 import { doesFileExist } from '../utils/file-utils.js';
-import { areEntitiesEqual } from '../utils/object-utils.js';
 
 let configuration: any = {};
 
@@ -30,7 +29,6 @@ let configuration: any = {};
  * Exports the passed entities to JSON.
  * @param {Object} passedConfiguration - the object having the keys:
  * @param {Array<JSONEntity>} passedConfiguration.entities - the entity objects to export.
- * @param {Boolean} passedConfiguration.forceNoFiltering - whether to filter out unchanged entities.
  * @param {Object} passedConfiguration.application - the application where the entities should be exported.
  * @param {Boolean} passedConfiguration.application.forSeveralApplications - whether to create the .jhipster folder
  *          inside a specific application's folder.
@@ -45,9 +43,6 @@ export default function exportEntities(passedConfiguration) {
   }
   const subFolder = passedConfiguration.application.forSeveralApplications ? configuration.application.name : '';
   configuration.entities = updateEntities(subFolder);
-  if (!configuration.forceNoFiltering) {
-    configuration.entities = filterOutUnchangedEntities(subFolder);
-  }
   if (shouldFilterOutEntitiesBasedOnMicroservice()) {
     configuration.entities = filterOutEntitiesByMicroservice();
   }
@@ -81,13 +76,6 @@ function updateEntityToGenerateWithExistingOne(filePath, entity) {
     }
   }
   return entity;
-}
-
-function filterOutUnchangedEntities(subFolder) {
-  return configuration.entities.filter(entity => {
-    const filePath = path.join(subFolder, toFilePath(entity.name));
-    return !(doesFileExist(filePath) && areEntitiesEqual(readJSONFile(filePath), entity));
-  });
 }
 
 function shouldFilterOutEntitiesBasedOnMicroservice() {

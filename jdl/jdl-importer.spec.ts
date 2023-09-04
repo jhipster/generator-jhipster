@@ -66,7 +66,6 @@ relationship OneToMany {
       });
     });
     context('when not parsing applications', () => {
-      const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
       let returned;
 
       before(() => {

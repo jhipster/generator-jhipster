@@ -18,15 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import fs from 'fs';
-import path from 'path';
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../jhipster/index.mjs';
 
 import entityOptions from '../jhipster/entity-options.js';
-import { createFolderIfItDoesNotExist, doesDirectoryExist } from '../utils/file-utils.js';
+import { doesDirectoryExist } from '../utils/file-utils.js';
 import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;

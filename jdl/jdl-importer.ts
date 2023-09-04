@@ -47,7 +47,6 @@ const { uniqBy } = _;
  * @param {String} configuration.applicationName - deprecated, the application's name, optional if parsing applications
  * @param {String} configuration.applicationType - deprecated, the application type, optional if parsing applications
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
- * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
@@ -71,7 +70,6 @@ export function createImporterFromFiles(files, configuration?: any) {
  * @param {String} configuration.applicationName - deprecated, the application's name, optional if parsing applications
  * @param {String} configuration.applicationType - deprecated, the application type, optional if parsing applications
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
- * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Array} configuration.blueprints - the blueprints used.
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
@@ -217,8 +215,6 @@ function importOnlyEntities(jdlObject, configuration) {
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-  const { forceNoFiltering } = configuration;
-
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
@@ -242,7 +238,6 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
       applicationName,
       applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: false,
-      forceNoFiltering,
     });
     importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
     importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
@@ -251,8 +246,6 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-  const { forceNoFiltering } = configuration;
-
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
@@ -271,7 +264,6 @@ function importApplicationsAndEntities(jdlObject, configuration) {
       applicationName,
       applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: true,
-      forceNoFiltering,
     });
     const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
     importState.exportedApplicationsWithEntities[applicationName] = {
@@ -288,7 +280,6 @@ function importDeployments(deployments) {
 }
 
 function exportJSONEntities(entities, configuration) {
-  const { forceNoFiltering } = configuration;
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
 
@@ -299,7 +290,6 @@ function exportJSONEntities(entities, configuration) {
 
   return exportEntities({
     entities,
-    forceNoFiltering,
     application: {
       name: baseName,
       type: applicationType,
