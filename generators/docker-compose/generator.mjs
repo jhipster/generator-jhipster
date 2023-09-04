@@ -340,7 +340,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = jsyaml.load(this.readDestionation(`${path}/src/main/docker/redis.yml`));
+            const redisYaml = jsyaml.load(this.readDestination(`${path}/src/main/docker/redis.yml`));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
