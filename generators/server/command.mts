@@ -57,6 +57,10 @@ const command: JHipsterCommandDefinition = {
       type: String,
       scope: 'storage',
     },
+    skipDbChangelog: {
+      description: 'Skip the generation of database migrations',
+      type: Boolean,
+    },
     websocket: {
       description: 'Provide websocket option for the application when skipping server side generation',
       type: String,

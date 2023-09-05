@@ -149,10 +149,7 @@ describe(`generator - ${generator}`, () => {
       it('should compose with app', () => {
         const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
         expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([
-          [],
-          expect.not.objectContaining({ applicationWithEntities: expect.any(Object), entitiesToImport: expect.any(Array) }),
-        ]);
+        expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -177,10 +174,7 @@ describe(`generator - ${generator}`, () => {
       it('should compose with app', () => {
         const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
         expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([
-          [],
-          expect.not.objectContaining({ applicationWithEntities: expect.any(Object), entitiesToImport: expect.any(Array) }),
-        ]);
+        expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();

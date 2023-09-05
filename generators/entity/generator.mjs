@@ -315,9 +315,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
           generatorArgs: this.options.singleEntity ? [this.context.name] : [],
           generatorOptions: {
-            regenerate: true,
-            writeEveryEntity: false,
-            composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,
           },
