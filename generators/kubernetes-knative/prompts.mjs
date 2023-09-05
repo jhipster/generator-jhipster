@@ -29,7 +29,7 @@ export default {
 };
 
 async function askForGeneratorType() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
@@ -50,6 +50,6 @@ async function askForGeneratorType() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.generatorType = props.generatorType;
 }

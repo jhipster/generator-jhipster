@@ -166,3 +166,13 @@ deployment {
   monitoring no
   serviceDiscoveryType consul
 }
+
+/* kubernetes is missing cassandra templates
+deployment {
+  deploymentType kubernetes,
+  appsFolders [gateway, store, blog, notification]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType consul
+}
+*/

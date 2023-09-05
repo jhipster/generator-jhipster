@@ -7,20 +7,19 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
   "generator-jhipster": {
     "appsFolders": ["09-kafka"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
-    "istio": false,
+    "ingressDomain": null,
+    "ingressType": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": "no"
   }
 }
 ",
@@ -490,12 +489,12 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
@@ -1448,7 +1447,6 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -2138,7 +2136,6 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -5664,7 +5661,6 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -9102,12 +9098,12 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
@@ -9953,16 +9949,16 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
+    "ingressType": null,
     "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesServiceType": null,
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
@@ -10946,7 +10942,8 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
@@ -12940,20 +12937,19 @@ exports[`generator - Kubernetes monolith application should match files snapshot
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
-    "istio": false,
+    "ingressDomain": null,
+    "ingressType": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": "no"
   }
 }
 ",
@@ -13395,12 +13391,12 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
@@ -16748,12 +16744,12 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
@@ -17436,7 +17432,8 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
@@ -19430,12 +19427,12 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "gateway",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
@@ -19587,6 +19584,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+              value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
               value: " -Xmx256m -Xms256m"
             - name: SERVER_SHUTDOWN
@@ -20103,13 +20102,12 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
     "adminPassword": "meetup",
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
-    "ingressDomain": "",
-    "istio": false,
+    "ingressDomain": null,
+    "ingressType": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -20285,6 +20283,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+              value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
               value: " -Xmx256m -Xms256m"
             - name: SERVER_SHUTDOWN

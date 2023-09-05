@@ -28,9 +28,8 @@ const { PROMETHEUS } = monitoringTypes;
 const monitoring = monitoringTypes;
 
 const NO_MONITORING = monitoring.NO;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 export default {
   askForApplicationType,
   askForGatewayType,
@@ -49,7 +48,7 @@ export default {
  * Ask For Application Type
  */
 async function askForApplicationType() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
@@ -78,7 +77,7 @@ async function askForApplicationType() {
  * Ask For Gateway Type
  */
 async function askForGatewayType() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   if (this.deploymentApplicationType !== MICROSERVICE) return;
 
   const prompts = [
@@ -104,7 +103,7 @@ async function askForGatewayType() {
  * Ask For Path
  */
 async function askForPath() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const deploymentApplicationType = this.deploymentApplicationType;
   let messageAskForPath;
@@ -158,7 +157,7 @@ async function askForPath() {
  * Ask For Apps
  */
 async function askForApps() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
@@ -168,7 +167,7 @@ async function askForApps() {
       name: 'chosenApps',
       message: messageAskForApps,
       choices: this.appsFolders ?? [],
-      default: this.defaultAppsFolders,
+      default: this.jhipsterConfig.appsFolders,
       validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
     },
   ];
@@ -182,7 +181,7 @@ async function askForApps() {
  * Ask For Clusters Mode
  */
 async function askForClustersMode() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const clusteredDbApps = [];
   this.appConfigs.forEach((appConfig, index) => {
@@ -210,7 +209,7 @@ async function askForClustersMode() {
  * Ask For Monitoring
  */
 async function askForMonitoring() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
@@ -239,7 +238,7 @@ async function askForMonitoring() {
  * Ask For Service Discovery
  */
 async function askForServiceDiscovery() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const serviceDiscoveryEnabledApps = [];
   this.appConfigs.forEach(appConfig => {
@@ -252,15 +251,15 @@ async function askForServiceDiscovery() {
   });
 
   if (serviceDiscoveryEnabledApps.length === 0) {
-    this.serviceDiscoveryType = false;
+    this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
     return;
   }
 
   if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === CONSUL)) {
-    this.serviceDiscoveryType = CONSUL;
+    this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = CONSUL;
     this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
   } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === EUREKA)) {
-    this.serviceDiscoveryType = EUREKA;
+    this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = EUREKA;
     this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
     this.log.warn(
@@ -303,7 +302,8 @@ async function askForServiceDiscovery() {
  * Ask For Admin Password
  */
 async function askForAdminPassword() {
-  if (this.regenerate || this.serviceDiscoveryType !== EUREKA) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+  if (this.serviceDiscoveryType !== EUREKA) return;
 
   const prompts = [
     {
@@ -324,7 +324,7 @@ async function askForAdminPassword() {
  * Ask For Docker Repository Name
  */
 async function askForDockerRepositoryName() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
@@ -343,7 +343,7 @@ async function askForDockerRepositoryName() {
  * Ask For Docker Push Command
  */
 async function askForDockerPushCommand() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
