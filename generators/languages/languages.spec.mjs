@@ -115,9 +115,9 @@ describe('generator - languages', () => {
         before(() =>
           helpers
             .run(generatorPath)
-            .withOptions({ ignoreNeedlesError: true })
-            .withLocalConfig({ enableTranslation: true, nativeLanguage: language.languageTag })
-            .withOptions({ languages: [language.languageTag], baseName: 'jhipster' }),
+            .withArguments([language.languageTag])
+            .withJHipsterConfig({ enableTranslation: true, nativeLanguage: language.languageTag })
+            .withOptions({ ignoreNeedlesError: true }),
         );
         containsLanguageFiles(language.languageTag);
       });
@@ -155,7 +155,7 @@ describe('generator - languages', () => {
       );
       containsLanguageFiles('fr');
     });
-    describe('using options', () => {
+    describe('using arguments', () => {
       before(() =>
         helpers
           .run(generatorPath)
@@ -195,13 +195,14 @@ describe('generator - languages', () => {
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
-    describe('using options', () => {
+    describe('using arguments', () => {
       before(() =>
         helpers
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true })
+          .withArguments(['en'])
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ nativeLanguage: 'fr', languages: ['en'], baseName: 'jhipster' }),
+          .withOptions({ nativeLanguage: 'fr', baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
@@ -239,7 +240,8 @@ describe('generator - languages', () => {
           .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'en' })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ languages: ['fr', 'de'], baseName: 'jhipster' }),
+          .withArguments(['fr', 'de'])
+          .withOptions({ baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('de');
@@ -273,17 +275,14 @@ describe('generator - languages', () => {
       });
     });
 
-    describe('using options', () => {
+    describe('using arguments', () => {
       before(async () => {
         const result = await createClientProject().withJHipsterConfig({
           clientFramework: 'vue',
           enableTranslation: true,
           nativeLanguage: 'en',
         });
-        await result
-          .create('jhipster:languages')
-          .withOptions({ languages: ['fr', 'de'], baseName: 'jhipster' })
-          .run();
+        await result.create('jhipster:languages').withArguments(['fr', 'de']).withOptions({ baseName: 'jhipster' }).run();
       });
       describe('for native language translation', () => {
         containsLanguageFiles('en');

@@ -23,6 +23,7 @@ import {
   GENERATOR_COMMON,
   GENERATOR_CYPRESS,
   GENERATOR_GIT,
+  GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
 } from '../generator-list.mjs';
 
@@ -114,12 +115,6 @@ const command: JHipsterCommandDefinition = {
       description: "Don't fail on prettier errors.",
       type: Boolean,
     },
-    nativeLanguage: {
-      alias: 'n',
-      description: 'Set application native language',
-      type: String,
-      required: false,
-    },
     enableTranslation: {
       description: 'Enable translation',
       type: Boolean,
@@ -152,7 +147,15 @@ const command: JHipsterCommandDefinition = {
     },
   },
   loadGeneratorOptions: true,
-  import: [GENERATOR_BOOTSTRAP, GENERATOR_SERVER, GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_CYPRESS],
+  import: [
+    GENERATOR_BOOTSTRAP,
+    GENERATOR_SERVER,
+    GENERATOR_CLIENT,
+    GENERATOR_COMMON,
+    GENERATOR_GIT,
+    GENERATOR_CYPRESS,
+    GENERATOR_LANGUAGES,
+  ],
 };
 
 export default command;

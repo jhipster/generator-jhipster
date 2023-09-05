@@ -25,7 +25,6 @@ Options:
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --ignore-errors                          Don't fail on prettier errors.
-  -n, --native-language [value]            Set application native language
   --enable-translation                     Enable translation
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   --pk-type <value>                        Default primary key type (beta)
@@ -43,6 +42,7 @@ Options:
   --message-broker <value>                 message broker
   --reactive                               Generate a reactive backend
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
+  --skip-db-changelog                      Skip the generation of database migrations
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)

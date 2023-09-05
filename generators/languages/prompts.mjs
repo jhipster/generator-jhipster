@@ -50,7 +50,7 @@ export async function askForLanguages({ control }) {
   if (!this.askForMoreLanguages) {
     return;
   }
-  const currentLanguages = this.jhipsterConfigWithDefaults.languages ?? [];
+  const currentLanguages = this.jhipsterConfig.languages ?? [];
   const answers = await this.prompt([
     {
       type: 'checkbox',
