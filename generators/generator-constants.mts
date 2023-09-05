@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-beta.3';
 // Version of Java
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
