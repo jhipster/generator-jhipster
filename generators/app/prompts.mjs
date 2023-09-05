@@ -19,16 +19,9 @@
 import chalk from 'chalk';
 import statistics from '../statistics.mjs';
 
-import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { applicationTypes } from '../../jdl/jhipster/index.mjs';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
-const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
-
-export default {
-  askForInsightOptIn,
-  askForApplicationType,
-  askForTestOpts,
-};
 
 export async function askForInsightOptIn() {
   if (!statistics.shouldWeAskForOptIn()) return;
@@ -119,29 +112,4 @@ export async function askForApplicationType({ control }) {
   const { applicationType } = this.jhipsterConfig;
   // TODO drop for v8, setting the generator with config is deprecated
   this.applicationType = applicationType;
-}
-
-export async function askForTestOpts({ control }) {
-  if (control.existingProject && this.options.askAnswered !== true) return;
-
-  const config = this.jhipsterConfigWithDefaults;
-  const choices = [];
-  if (!config.skipClient) {
-    // all client side test frameworks should be added here
-    choices.push({ name: 'Cypress', value: CYPRESS });
-  }
-  if (!config.skipServer) {
-    // all server side test frameworks should be added here
-    choices.push({ name: 'Gatling', value: GATLING }, { name: 'Cucumber', value: CUCUMBER });
-  }
-  const PROMPT = {
-    type: 'checkbox',
-    name: 'testFrameworks',
-    message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
-    choices,
-    default: config.testFrameworks,
-  };
-
-  const answers = await this.prompt(PROMPT);
-  this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
 }

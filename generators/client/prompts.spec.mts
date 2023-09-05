@@ -18,10 +18,10 @@ const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR } = clientFrameworkTypes;
 const { MAVEN } = buildToolTypes;
 
-const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
+const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:languages', 'jhipster:entity'];
 
-describe('generator - app - prompts', () => {
-  describe('testFrameworks prompt', () => {
+describe('generator - client - prompts', () => {
+  describe('clientTestFrameworks prompt', () => {
     describe('with cypress value', () => {
       let runResult;
       before(async () => {
@@ -39,11 +39,12 @@ describe('generator - app - prompts', () => {
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['en', 'fr'],
-            testFrameworks: [CYPRESS],
+            clientTestFrameworks: [CYPRESS],
             buildTool: MAVEN,
             clientFramework: ANGULAR,
             clientTheme: 'none',
           })
+          .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
       });
 

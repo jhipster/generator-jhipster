@@ -23,7 +23,7 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode, loadStoredAppOptions } from './support/index.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
-import prompts from './prompts.mjs';
+import { askForApplicationType, askForInsightOptIn } from './prompts.mjs';
 import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
@@ -287,8 +287,8 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return {
-      askForInsightOptIn: prompts.askForInsightOptIn,
-      askForApplicationType: prompts.askForApplicationType,
+      askForInsightOptIn,
+      askForApplicationType,
     };
   }
 
@@ -354,7 +354,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
-      askForTestOpts: prompts.askForTestOpts,
 
       /**
        * At this point every other generator should already be configured, so, enforce defaults fallback.

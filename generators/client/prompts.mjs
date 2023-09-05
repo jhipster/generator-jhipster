@@ -17,11 +17,13 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import _ from 'lodash';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { httpsGet } from '../base/support/index.mjs';
 
-const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+const { ANGULAR, REACT, VUE, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
+const { CYPRESS } = testFrameworkTypes;
+const { intersection } = _;
 
 export async function askForClient({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
@@ -196,4 +198,20 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       },
     );
   });
+}
+
+export async function askForClientTestOpts({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
+
+  const defaultValues = intersection([CYPRESS], this.jhipsterConfigWithDefaults.testFrameworks);
+  const answers = await this.prompt([
+    {
+      type: 'checkbox',
+      name: 'clientTestFrameworks',
+      message: 'Besides Jest/Vitest, which testing frameworks would you like to use?',
+      choices: [{ name: 'Cypress', value: CYPRESS }],
+      default: defaultValues,
+    },
+  ]);
+  this.jhipsterConfig.testFrameworks = [...new Set([...(this.jhipsterConfig.testFrameworks ?? []), ...answers.clientTestFrameworks])];
 }
