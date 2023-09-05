@@ -43,10 +43,12 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
   before(async () => {
     await helpers
       .runJHipster('angular')
+      .withJHipsterConfig({
+        skipServer: true,
+      })
       .withOptions({
         defaults: true,
         blueprint: 'myblueprint2',
-        skipServer: true,
       })
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]]);
   });
