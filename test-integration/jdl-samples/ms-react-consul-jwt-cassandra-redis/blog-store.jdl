@@ -167,6 +167,7 @@ deployment {
   serviceDiscoveryType consul
 }
 
+/* kubernetes is missing cassandra templates
 deployment {
   deploymentType kubernetes,
   appsFolders [gateway, store, blog, notification]
@@ -174,3 +175,4 @@ deployment {
   monitoring no
   serviceDiscoveryType consul
 }
+*/
