@@ -4,12 +4,6 @@ import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkType
 import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
-import serverCommand from '../../server/command.mjs';
-import clientCommand from '../../client/command.mjs';
-import cypressCommand from '../../cypress/command.mjs';
-import appCommand from '../../app/command.mjs';
-import commonCommand from '../../common/command.mjs';
-import liquibaseCommand from '../../liquibase/command.mjs';
 
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -24,13 +18,6 @@ export function loadStoredAppOptions(this: any, { options = this.options, jhipst
   // Parse options only once.
   if (this.sharedData.getControl().optionsParsed) return;
   this.sharedData.getControl().optionsParsed = true;
-
-  this.parseJHipsterOptions(serverCommand.options);
-  this.parseJHipsterOptions(clientCommand.options);
-  this.parseJHipsterOptions(cypressCommand.options);
-  this.parseJHipsterOptions(appCommand.options);
-  this.parseJHipsterOptions(commonCommand.options);
-  this.parseJHipsterOptions(liquibaseCommand.options);
 
   if (options.db) {
     const databaseType = getDBTypeFromDBValue(options.db);

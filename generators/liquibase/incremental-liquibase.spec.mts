@@ -107,6 +107,8 @@ describe('generator - app - --incremental-changelog', function () {
   this.timeout(45000);
   const options = {
     creationTimestamp: '2020-01-01',
+  };
+  const config = {
     incrementalChangelog: true,
     skipClient: true,
     force: true,
@@ -114,7 +116,7 @@ describe('generator - app - --incremental-changelog', function () {
   context('when creating a new application', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withJHipsterConfig().withOptions(options).withMockedGenerators(mockedGenerators);
+      runResult = await helpers.run(generatorPath).withJHipsterConfig(config).withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
     after(() => runResult.cleanup());
@@ -134,6 +136,7 @@ describe('generator - app - --incremental-changelog', function () {
       before(async () => {
         runResult = await helpers
           .create(generatorPath)
+          .withJHipsterConfig(config)
           .withOptions(options)
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
@@ -170,6 +173,7 @@ describe('generator - app - --incremental-changelog', function () {
       before(async () => {
         runResult = await helpers
           .create(generatorPath)
+          .withJHipsterConfig(config)
           .withOptions({ ...options, recreateInitialChangelog: true })
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
@@ -214,6 +218,7 @@ describe('generator - app - --incremental-changelog', function () {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
       const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
@@ -284,6 +289,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(1);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -367,6 +373,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(1);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -452,6 +459,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(1);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -535,6 +543,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(1);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -609,6 +618,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -674,6 +684,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -749,6 +760,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -871,6 +883,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -1003,6 +1016,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
     });
@@ -1065,6 +1079,7 @@ entity Customer {
       expect(applicationWithEntities.entities.length).toBe(2);
       runResult = await helpers
         .create(generatorPath)
+        .withJHipsterConfig(config)
         .withOptions({ ...options, applicationWithEntities })
         .run();
 
@@ -1144,6 +1159,7 @@ entity Customer {
           expect(applicationWithEntities.entities.length).toBe(1);
           await helpers
             .create(generatorPath)
+            .withJHipsterConfig(config)
             .withOptions({ ...options, applicationWithEntities })
             .run();
         });
