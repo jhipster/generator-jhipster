@@ -37,7 +37,7 @@ import {
   addSpringFactory,
   hibernateSnakeCase,
 } from './support/index.mjs';
-import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
+import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.mjs';
 
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
@@ -202,6 +202,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
+      askForServerTestOpts,
       askForServerSideOpts,
       askForOptionalItems,
     });
