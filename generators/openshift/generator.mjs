@@ -80,6 +80,9 @@ export default class OpenshiftGenerator extends BaseWorkspacesGenerator {
           ),
         );
       },
+      existingDeployment() {
+        this.regenerate = this.regenerate || this.config.existed;
+      },
       loadDockerDependenciesTask,
       checkDocker,
       checkOpenShift: runAsync(function () {
@@ -138,8 +141,39 @@ export default class OpenshiftGenerator extends BaseWorkspacesGenerator {
         statistics.sendSubGenEvent('generator', GENERATOR_OPENSHIFT);
       },
 
-      checkImages,
       generateJwtSecret,
+    };
+  }
+
+  get [BaseWorkspacesGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get loading() {
+    return {
+      loadFromYoRc,
+      loadConfig() {
+        this.openshiftNamespace = this.config.get('openshiftNamespace');
+        this.storageType = this.config.get('storageType');
+        this.registryReplicas = this.config.get('registryReplicas');
+      },
+      loadSharedConfig() {
+        this.appConfigs.forEach(element => {
+          loadDerivedAppConfig({ application: element });
+          loadDerivedServerConfig({ application: element });
+        });
+        loadDeploymentConfig.call(this);
+        this._loadDerivedOpenshiftConfig(this);
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return {
       configureImageNames,
 
       // place holder for future changes (may be prompt or something else)
@@ -156,44 +190,11 @@ export default class OpenshiftGenerator extends BaseWorkspacesGenerator {
           return false;
         });
       },
-
-      saveConfig() {
-        this.config.set({
-          appsFolders: this.appsFolders,
-          directoryPath: this.directoryPath,
-          clusteredDbApps: this.clusteredDbApps,
-          serviceDiscoveryType: this.serviceDiscoveryType,
-          monitoring: this.monitoring,
-          jwtSecretKey: this.jwtSecretKey,
-          dockerRepositoryName: this.dockerRepositoryName,
-          dockerPushCommand: this.dockerPushCommand,
-          openshiftNamespace: this.openshiftNamespace,
-          storageType: this.storageType,
-          registryReplicas: this.registryReplicas,
-        });
-      },
     };
   }
 
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get loading() {
-    return {
-      loadSharedConfig() {
-        this.appConfigs.forEach(element => {
-          loadDerivedAppConfig({ application: element });
-          loadDerivedServerConfig({ application: element });
-        });
-        loadDeploymentConfig.call(this);
-        this._loadDerivedOpenshiftConfig(this);
-      },
-    };
-  }
-
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -206,6 +207,7 @@ export default class OpenshiftGenerator extends BaseWorkspacesGenerator {
 
   get end() {
     return {
+      checkImages,
       displayOpenshiftDeploymentProcedure() {
         if (this.hasWarning) {
           this.log.warn('OpenShift configuration generated, but no Jib cache found');

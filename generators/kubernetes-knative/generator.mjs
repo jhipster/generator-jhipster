@@ -27,12 +27,11 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 import prompts from './prompts.mjs';
 import { writeFiles } from './files.mjs';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.mjs';
-import { checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.mjs';
 import {
   checkHelm,
   checkKubernetes,
   loadConfig,
-  saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
@@ -67,6 +66,9 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
+      },
+      existingDeployment() {
+        this.regenerate = this.regenerate || this.config.existed;
       },
       loadDockerDependenciesTask,
       checkDocker,
@@ -129,20 +131,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
         statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES_KNATIVE);
       },
 
-      checkImages,
       generateJwtSecret,
-      configureImageNames,
-
-      setPostPromptProp() {
-        this.appConfigs.forEach(element => {
-          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === KAFKA) {
-            this.useKafka = true;
-          }
-        });
-        this.useKeycloak = false;
-      },
-      saveConfig,
     };
   }
 
@@ -152,6 +141,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
 
   get loading() {
     return {
+      loadFromYoRc,
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
           loadDerivedAppConfig({ application: element });
@@ -167,6 +157,26 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
+  get preparing() {
+    return {
+      configureImageNames,
+
+      setPostPromptProp() {
+        this.appConfigs.forEach(element => {
+          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
+          if (element.messageBroker === KAFKA) {
+            this.useKafka = true;
+          }
+        });
+        this.useKeycloak = false;
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return writeFiles();
   }
@@ -177,6 +187,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
 
   get end() {
     return {
+      checkImages,
       deploy() {
         if (this.hasWarning) {
           this.log.warn('Kubernetes Knative configuration generated, but no Jib cache found');

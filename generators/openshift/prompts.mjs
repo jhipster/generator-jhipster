@@ -34,7 +34,7 @@ export default {
 };
 
 export async function askForOpenShiftNamespace() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
@@ -45,12 +45,12 @@ export async function askForOpenShiftNamespace() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.openshiftNamespace = props.openshiftNamespace;
 }
 
 export async function askForStorageType() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   let storageEnabled = false;
   this.appConfigs.some(appConfig => {
@@ -85,6 +85,6 @@ export async function askForStorageType() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.storageType = props.storageType;
 }

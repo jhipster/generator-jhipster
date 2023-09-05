@@ -166,3 +166,11 @@ deployment {
   monitoring no
   serviceDiscoveryType consul
 }
+
+deployment {
+  deploymentType kubernetes-helm,
+  appsFolders [gateway, store, blog, notification]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType consul
+}

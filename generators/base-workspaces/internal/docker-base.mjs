@@ -62,7 +62,7 @@ export function checkImages() {
  */
 export function generateJwtSecret() {
   if (this.jwtSecretKey === undefined) {
-    this.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
+    this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
   }
 }
 
@@ -136,26 +136,15 @@ export function loadFromYoRc() {
   this.useMemcached = false;
   this.useRedis = false;
 
-  // Current implementation loads appsFolders into defaultAppsFolders
-  this.defaultAppsFolders = this.appsFolders;
-  delete this.appsFolders;
-
-  if (this.defaultAppsFolders !== undefined) {
-    this.log.log('\nFound .yo-rc.json config file...');
+  loadConfigs.call(this);
+  if (this.microserviceNb > 0 || this.gatewayNb > 0) {
+    this.deploymentApplicationType = MICROSERVICE;
+  } else {
+    this.deploymentApplicationType = MONOLITH;
   }
-
-  if (this.regenerate) {
-    this.appsFolders = this.defaultAppsFolders;
-    loadConfigs.call(this);
-    if (this.microserviceNb > 0 || this.gatewayNb > 0) {
-      this.deploymentApplicationType = MICROSERVICE;
-    } else {
-      this.deploymentApplicationType = MONOLITH;
-    }
-    setClusteredApps.call(this);
-    if (!this.adminPassword) {
-      this.adminPassword = 'admin'; // TODO find a better way to do this
-      this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
-    }
+  setClusteredApps.call(this);
+  if (!this.adminPassword) {
+    this.adminPassword = 'admin'; // TODO find a better way to do this
+    this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
   }
 }

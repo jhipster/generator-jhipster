@@ -33,6 +33,9 @@ describe('generator - OpenShift', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_OPENSHIFT))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -73,6 +76,9 @@ describe('generator - OpenShift', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_OPENSHIFT))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -113,6 +119,9 @@ describe('generator - OpenShift', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_OPENSHIFT))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -156,6 +165,9 @@ describe('generator - OpenShift', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_OPENSHIFT))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -207,6 +219,9 @@ describe('generator - OpenShift', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_OPENSHIFT))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',

@@ -7,16 +7,13 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -1076,16 +1073,13 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "example.com",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -1901,16 +1895,13 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -2939,16 +2930,13 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "example.com",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -3776,10 +3764,8 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -5536,16 +5522,13 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
     "serviceDiscoveryType": "consul"
   }
@@ -8714,16 +8697,13 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -9495,16 +9475,13 @@ exports[`generator - Knative Using Helm generator type only gateway should match
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
     "generatorType": "helm",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -10329,16 +10306,13 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -11320,16 +11294,13 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "example.com",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -12074,16 +12045,13 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -13026,16 +12994,13 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "example.com",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -13793,10 +13758,8 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -15923,16 +15886,13 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
     "serviceDiscoveryType": "consul"
   }
@@ -18613,7 +18573,7 @@ spec:
     - name: http
       port: 3000
       targetPort: 3000
-  type:
+  type: LoadBalancer
   selector:
     app: jhipster-grafana
 ---
@@ -19324,16 +19284,13 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }
@@ -20033,16 +19990,13 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
     "generatorType": "k8s",
     "ingressDomain": "",
-    "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
-    "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
   }

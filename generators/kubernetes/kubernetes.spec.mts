@@ -56,6 +56,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'gateway',
           directoryPath: './',
@@ -101,6 +104,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           directoryPath: './',
           chosenApps,
@@ -145,6 +151,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -189,6 +198,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -233,6 +245,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -277,6 +292,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -328,6 +346,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -378,6 +399,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -425,6 +449,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -481,6 +508,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -523,6 +553,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -565,6 +598,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -611,6 +647,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -655,6 +694,9 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',

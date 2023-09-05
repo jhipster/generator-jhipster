@@ -28,14 +28,8 @@ import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs
 import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 import statistics from '../statistics.mjs';
 
-import { checkImages, generateJwtSecret, configureImageNames } from '../base-workspaces/internal/docker-base.mjs';
-import {
-  checkKubernetes,
-  loadConfig,
-  saveConfig,
-  setupKubernetesConstants,
-  derivedKubernetesPlatformProperties,
-} from './kubernetes-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.mjs';
+import { checkKubernetes, loadConfig, setupKubernetesConstants, derivedKubernetesPlatformProperties } from './kubernetes-base.mjs';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
 import { checkDocker } from '../docker/support/index.mjs';
@@ -61,6 +55,9 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+      },
+      existingDeployment() {
+        this.regenerate = this.regenerate || this.config.existed;
       },
       loadDockerDependenciesTask,
       checkDocker,
@@ -105,22 +102,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES);
       },
 
-      checkImages,
       generateJwtSecret,
-      configureImageNames,
-
-      setPostPromptProp() {
-        this.appConfigs.forEach(element => {
-          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === KAFKA) {
-            this.useKafka = true;
-          }
-        });
-        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
-        this.usesIngress = this.kubernetesServiceType === 'Ingress';
-        this.useKeycloak = this.usesOauth2 && this.usesIngress;
-      },
-      saveConfig,
     };
   }
 
@@ -130,6 +112,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
 
   get loading() {
     return {
+      loadFromYoRc,
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
           loadDerivedAppConfig({ application: element });
@@ -145,6 +128,28 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
+  get preparing() {
+    return {
+      configureImageNames,
+
+      setPostPromptProp() {
+        this.appConfigs.forEach(element => {
+          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
+          if (element.messageBroker === KAFKA) {
+            this.useKafka = true;
+          }
+        });
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.usesIngress = this.kubernetesServiceType === 'Ingress';
+        this.useKeycloak = this.usesOauth2 && this.usesIngress;
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return writeFiles();
   }
@@ -155,6 +160,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
 
   get end() {
     return {
+      checkImages,
       deploy() {
         if (this.hasWarning) {
           this.log.warn(`${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);

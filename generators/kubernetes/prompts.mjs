@@ -40,7 +40,7 @@ export default {
 };
 
 export async function askForKubernetesNamespace() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const prompts = [
     {
@@ -51,12 +51,12 @@ export async function askForKubernetesNamespace() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.kubernetesNamespace = props.kubernetesNamespace;
 }
 
 export async function askForKubernetesServiceType() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
 
   const istio = this.istio;
 
@@ -84,12 +84,12 @@ export async function askForKubernetesServiceType() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.kubernetesServiceType = props.kubernetesServiceType;
 }
 
 export async function askForIngressType() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   const kubernetesServiceType = this.kubernetesServiceType;
 
   const prompts = [
@@ -112,12 +112,12 @@ export async function askForIngressType() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.ingressType = props.ingressType;
 }
 
 export async function askForIngressDomain() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   const kubernetesServiceType = this.kubernetesServiceType;
   const istio = this.istio;
   this.ingressDomain = this.ingressDomain && this.ingressDomain.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
@@ -177,7 +177,7 @@ export async function askForIngressDomain() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   if (props.ingressDomain === 'none') {
     this.ingressDomain = '';
   } else {
@@ -186,7 +186,7 @@ export async function askForIngressDomain() {
 }
 
 export async function askForIstioSupport() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   if (this.deploymentApplicationType === MONOLITH) {
     this.istio = false;
     return;
@@ -211,12 +211,12 @@ export async function askForIstioSupport() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.istio = props.istio;
 }
 
 export async function askForPersistentStorage() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   let usingDataBase = false;
   this.appConfigs.forEach(appConfig => {
     if (appConfig.prodDatabaseType !== NO_DATABASE) {
@@ -244,12 +244,12 @@ export async function askForPersistentStorage() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
 }
 
 export async function askForStorageClassName() {
-  if (this.regenerate) return;
+  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   const kubernetesUseDynamicStorage = this.kubernetesUseDynamicStorage;
 
   const prompts = [
@@ -262,7 +262,7 @@ export async function askForStorageClassName() {
     },
   ];
 
-  const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts, this.config);
   // Add the StorageClass value only if dynamic storage is enabled
   if (kubernetesUseDynamicStorage) {
     this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();

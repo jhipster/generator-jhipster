@@ -84,6 +84,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -126,6 +129,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -170,6 +176,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -214,6 +223,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -263,6 +275,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -312,6 +327,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -370,6 +388,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -410,6 +431,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -449,6 +473,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -496,6 +523,9 @@ describe('generator - Kubernetes Helm', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+        .withOptions({
+          askAnswered: true,
+        })
         .withAnswers({
           deploymentApplicationType: 'microservice',
           directoryPath: './',

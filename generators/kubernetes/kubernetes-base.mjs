@@ -86,15 +86,16 @@ export const checkHelm = runAsync(function () {
 
 export function loadConfig() {
   loadFromYoRc.call(this);
-  this.kubernetesNamespace = this.config.get('kubernetesNamespace');
-  this.kubernetesServiceType = this.config.get('kubernetesServiceType');
-  this.ingressType = this.config.get('ingressType');
-  this.ingressDomain = this.config.get('ingressDomain');
-  this.istio = this.config.get('istio');
+  const kubernetesWithDefaults = _.defaults({}, this.jhipsterConfig, defaultKubernetesConfig);
+  this.kubernetesNamespace = kubernetesWithDefaults.kubernetesNamespace;
+  this.kubernetesServiceType = kubernetesWithDefaults.kubernetesServiceType;
+  this.ingressType = kubernetesWithDefaults.ingressType;
+  this.ingressDomain = kubernetesWithDefaults.ingressDomain;
+  this.istio = kubernetesWithDefaults.istio;
   this.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
-  this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
-  this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
-  this.generatorType = this.config.get('generatorType');
+  this.kubernetesUseDynamicStorage = kubernetesWithDefaults.kubernetesUseDynamicStorage;
+  this.kubernetesStorageClassName = kubernetesWithDefaults.kubernetesStorageClassName;
+  this.generatorType = kubernetesWithDefaults.generatorType;
 }
 
 export function saveConfig() {
@@ -134,7 +135,7 @@ export function setupKubernetesConstants() {
   this.KUBERNETES_RBAC_API_VERSION = KUBERNETES_RBAC_API_VERSION;
 }
 
-export function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
+export function derivedKubernetesPlatformProperties(dest = this) {
   dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
   dest.ingressTypeNginx = dest.ingressType === NGINX;
   dest.ingressTypeGke = dest.ingressType === GKE;
