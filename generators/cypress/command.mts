@@ -16,5 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const command: JHipsterCommandDefinition = {
+  options: {
+    cypressCoverage: {
+      description: 'Enable Cypress code coverage report generation',
+      type: Boolean,
+      scope: 'storage',
+    },
+    cypressAudit: {
+      description: 'Enable cypress-audit/lighthouse report generation',
+      type: Boolean,
+      scope: 'storage',
+    },
+  },
+};
+
+export default command;

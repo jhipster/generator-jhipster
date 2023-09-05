@@ -61,6 +61,15 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'control',
     },
+    skipPrompts: {
+      description: 'Skip prompts',
+      type: Boolean,
+    },
+    ignoreNeedlesError: {
+      description: 'Ignore needles failures',
+      type: Boolean,
+      hide: true,
+    },
   },
 };
 

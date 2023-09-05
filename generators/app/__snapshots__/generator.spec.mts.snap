@@ -7,15 +7,8 @@ exports[`generator - app help should print expected information 1`] = `
 
 Options:
   --auto-crlf                              Detect line endings
-  --skip-cache                             Do not remember prompt answers (default: false)
-  --skip-install                           Do not automatically install dependencies (default: false)
-  --force-install                          Fail on install dependencies error (default: false)
-  --ask-answered                           Show prompts for already configured options (default: false)
-  --skip-prompts                           Skip prompts
   --defaults                               Execute jhipster with default config
-  --base-name <value>                      Application base name
   --application-type <value>               Application type to generate
-  --client-framework <value>               Provide client framework for the application
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
   --skip-commit-hook                       Skip adding husky commit hooks
@@ -27,36 +20,40 @@ Options:
   --dto-suffix <value>                     Add suffix after dtos name
   --auth <value>                           Provide authentication type for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
-  --build <value>                          Provide build tool for the application when skipping server side generation
-  --websocket <value>                      Provide websocket option for the application when skipping server side generation
-  --search-engine <value>                  Provide search engine for the application when skipping server side generation
-  --blueprint <value>                      DEPRECATED: Specify a generator blueprint to use for the sub generators
+  --blueprint <value...>                   DEPRECATED: Specify a generator blueprint to use for the sub generators
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
-  --legacy-db-names                        Generate database names with jhipster 6 compatibility.
   --ignore-errors                          Don't fail on prettier errors.
   -n, --native-language [value]            Set application native language
   --enable-translation                     Enable translation
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   --pk-type <value>                        Default primary key type (beta)
   --client-package-manager <value>         Force an unsupported client package manager
-  --cypress-coverage                       Enable Cypress code coverage report generation
-  --cypress-audit                          Enable cypress-audit/lighthouse report generation
   --microfrontend                          Force generation of experimental microfrontend support
   --test-frameworks <value...>             Test frameworks to be generated
-  --reactive                               Generate a reactive backend
-  --enable-swagger-codegen                 API first development using OpenAPI-generator
+  --skip-cache                             Do not remember prompt answers (default: false)
+  --skip-install                           Do not automatically install dependencies (default: false)
+  --force-install                          Fail on install dependencies error (default: false)
+  --ask-answered                           Show prompts for already configured options (default: false)
+  --build <value>                          Provide build tool for the application when skipping server side generation
   --cache-provider <value>                 Cache provider
+  --enable-swagger-codegen                 API first development using OpenAPI-generator
   --enable-hibernate-cache                 Enable hibernate cache
-  --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
-  --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --message-broker <value>                 message broker
+  --reactive                               Generate a reactive backend
+  --search-engine <value>                  Provide search engine for the application when skipping server side generation
+  --websocket <value>                      Provide websocket option for the application when skipping server side generation
+  --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
+  --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
+  --client-framework <value>               Provide client framework for the application
   --prettier-tab-width <value>             Default tab width for prettier
   --with-admin-ui                          Generate administrative user interface
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
+  --cypress-coverage                       Enable Cypress code coverage report generation
+  --cypress-audit                          Enable cypress-audit/lighthouse report generation
   -h, --help                               display help for command
 "
 `;

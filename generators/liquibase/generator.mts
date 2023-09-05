@@ -45,6 +45,7 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.mjs';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
+import command from './command.mjs';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG },
@@ -73,6 +74,18 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadConfig() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseEntityChangesGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get preparing() {
