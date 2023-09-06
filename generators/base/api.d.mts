@@ -35,6 +35,7 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   blueprints?: string;
   blueprint?: any;
   jhipsterContext?: any;
+  composeWithLocalBlueprint?: boolean;
 
   /* generate-blueprint options */
   localBlueprint?: boolean;

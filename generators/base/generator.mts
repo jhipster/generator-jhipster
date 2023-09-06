@@ -427,7 +427,7 @@ export default class JHipsterBaseBlueprintGenerator<
     }
 
     let blueprints = this.jhipsterConfig.blueprints || [];
-    if (this.options.localBlueprint) {
+    if (this.options.composeWithLocalBlueprint) {
       blueprints = blueprints.concat({ name: '@jhipster/local' });
     }
     const composedBlueprints: any[] = [];

@@ -166,7 +166,7 @@ export default class EnvironmentBuilder {
       const generators = await this.env.lookup({ packagePaths: [localBlueprintPath], lookups: ['.'] });
       if (generators.length > 0) {
         this.env.alias(/^@jhipster\/jhipster-local(:(.*))?$/, '.blueprint$1');
-        this.env.sharedOptions.localBlueprint = true;
+        this.env.sharedOptions.composeWithLocalBlueprint = true;
       }
     }
     return this;
