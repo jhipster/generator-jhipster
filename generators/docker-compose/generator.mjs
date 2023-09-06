@@ -19,10 +19,8 @@
 import { existsSync } from 'fs';
 import pathjs from 'path';
 import chalk from 'chalk';
-import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
-import runAsync from 'run-async';
 import _ from 'lodash';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
@@ -73,36 +71,31 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.parseJHipsterOptions(command.options);
       },
       checkDocker,
-      checkDockerCompose: runAsync(function () {
+      async checkDockerCompose() {
         if (this.skipChecks) return;
 
-        const done = this.async();
-
-        shelljs.exec('docker compose version', { silent: true }, (code, stdout, stderr) => {
-          if (stderr) {
-            this.log.error(
-              chalk.red(
-                'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
-                  '         Read https://docs.docker.com/compose/install/\n',
-              ),
-            );
-          } else {
-            const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
-            const composeVersionMajor = composeVersion.split('.')[0];
-            const composeVersionMinor = composeVersion.split('.')[1];
-            if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-              this.log.error(
-                chalk.red(
-                  `$Docker Compose version 1.6.0 or later is not installed on your computer.
+        const { stdout, exitCode } = await this.spawnCommand('docker compose version');
+        if (exitCode !== 0) {
+          this.log.error(
+            chalk.red(
+              'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
+                '         Read https://docs.docker.com/compose/install/\n',
+            ),
+          );
+        }
+        const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
+        const composeVersionMajor = composeVersion.split('.')[0];
+        const composeVersionMinor = composeVersion.split('.')[1];
+        if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
+          this.log.error(
+            chalk.red(
+              `$Docker Compose version 1.6.0 or later is not installed on your computer.
                                              Docker Compose version found: ${composeVersion}
                                              Read https://docs.docker.com/compose/install`,
-                ),
-              );
-            }
-          }
-          done();
-        });
-      }),
+            ),
+          );
+        }
+      },
     };
   }
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import os from 'os';
-import { exec } from 'child_process';
+import { execaCommandSync } from 'execa';
 import { buildToolTypes } from '../../../jdl/index.js';
 
 const { GRADLE } = buildToolTypes;
@@ -32,7 +32,7 @@ const isWin32 = os.platform() === 'win32';
  * @param {Function} cb - callback when build is complete
  * @returns {object} the command line and its result
  */
-export const buildApplication = (buildTool, profile, buildWar, cb) => {
+export const buildApplication = (buildTool, profile, buildWar) => {
   let buildCmd = 'mvnw -ntp verify -B';
 
   if (buildTool === GRADLE) {
@@ -52,7 +52,7 @@ export const buildApplication = (buildTool, profile, buildWar, cb) => {
   }
   buildCmd += ` -P${profile}`;
   return {
-    stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+    stdout: execaCommandSync(buildCmd).stdout.toString(),
     buildCmd,
   };
 };
