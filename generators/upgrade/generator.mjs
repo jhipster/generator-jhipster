@@ -26,7 +26,6 @@ import gitignore from 'parse-gitignore';
 import latestVersion from 'latest-version';
 
 import BaseGenerator from '../base/index.mjs';
-import { upgradeFilesTask as upgradeLanguagesFilesTask } from '../languages/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 import { parseBluePrints } from '../base/internal/index.mjs';
@@ -133,14 +132,6 @@ export default class UpgradeGenerator extends BaseGenerator {
     const gitCheckout = this.gitExec(args, { silent: this.silent });
     if (gitCheckout.code !== 0) throw new Error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
     this.log.ok(`Checked out branch "${branch}"`);
-  }
-
-  _upgradeFiles() {
-    if (upgradeLanguagesFilesTask.call(this)) {
-      const gitCommit = this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent });
-      if (gitCommit.code !== 0) throw new Error(`Unable to prepare upgrade:\n${gitCommit.stderr}`);
-      this.log.ok('Upgrade preparation');
-    }
   }
 
   _cleanUp() {
@@ -439,10 +430,6 @@ export default class UpgradeGenerator extends BaseGenerator {
         ).then(() => {
           this.log.ok('Done upgrading blueprints');
         });
-      },
-
-      upgradeFiles() {
-        this._upgradeFiles();
       },
 
       generateWithTargetVersion() {
