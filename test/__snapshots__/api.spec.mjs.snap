@@ -25,7 +25,6 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_ENTITIES": "entities",
   "GENERATOR_ENTITY": "entity",
   "GENERATOR_EXPORT_JDL": "export-jdl",
-  "GENERATOR_GAE": "gae",
   "GENERATOR_GATLING": "gatling",
   "GENERATOR_GENERATE_BLUEPRINT": "generate-blueprint",
   "GENERATOR_GIT": "git",
