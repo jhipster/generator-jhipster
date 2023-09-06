@@ -16,7 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const removedV8 = 'Command removed at v8.';
+import chalk from "chalk";
+
+const removedV8 = chalk.yellow(`
+
+Generator removed at v8 due to lack of maintenace.
+If you have insterest in this generator fill a feature request at jhipster bug tracker.
+`);
 
 const defaultCommands = {
   add: {
