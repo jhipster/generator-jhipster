@@ -17,20 +17,65 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
-import { GENERATOR_JAVA } from '../generator-list.mjs';
+import { GENERATOR_JAVA, GENERATOR_LIQUIBASE } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    jhipsterDependenciesVersion: {
-      description: 'jhipster-dependencies version to use, this option is not persisted',
+    buildTool: {
+      name: 'build',
+      description: 'Provide build tool for the application when skipping server side generation',
       type: String,
-      env: 'JHIPSTER_DEPENDENCIES_VERSION',
-      scope: 'generator',
+      scope: 'storage',
+    },
+    cacheProvider: {
+      description: 'Cache provider',
+      type: String,
+      scope: 'storage',
+    },
+    enableSwaggerCodegen: {
+      description: 'API first development using OpenAPI-generator',
+      type: Boolean,
+      scope: 'storage',
+    },
+    enableHibernateCache: {
+      description: 'Enable hibernate cache',
+      type: Boolean,
+      scope: 'storage',
+    },
+    messageBroker: {
+      description: 'message broker',
+      type: String,
+      scope: 'storage',
+    },
+    reactive: {
+      description: 'Generate a reactive backend',
+      type: Boolean,
+      scope: 'storage',
+    },
+    searchEngine: {
+      description: 'Provide search engine for the application when skipping server side generation',
+      type: String,
+      scope: 'storage',
+    },
+    skipDbChangelog: {
+      description: 'Skip the generation of database migrations',
+      type: Boolean,
+    },
+    websocket: {
+      description: 'Provide websocket option for the application when skipping server side generation',
+      type: String,
+      scope: 'storage',
     },
     projectVersion: {
       description: 'project version to use, this option is not persisted',
       type: String,
       env: 'JHI_PROJECT_VERSION',
+      scope: 'generator',
+    },
+    jhipsterDependenciesVersion: {
+      description: 'jhipster-dependencies version to use, this option is not persisted',
+      type: String,
+      env: 'JHIPSTER_DEPENDENCIES_VERSION',
       scope: 'generator',
     },
     fakeKeytool: {
@@ -40,13 +85,8 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
       hide: true,
     },
-    messageBroker: {
-      description: 'message broker',
-      type: String,
-      scope: 'storage',
-    },
   },
-  import: [GENERATOR_JAVA],
+  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE],
 };
 
 export default command;

@@ -111,43 +111,6 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
-    describe('selected entities with writeEveryEntity', () => {
-      before(async () => {
-        await helpers
-          .run(generatorPath)
-          .withJHipsterConfig()
-          .withArguments(['Foo', 'Bar'])
-          .withOptions({
-            regenerate: true,
-            force: true,
-            writeEveryEntity: true,
-            ignoreNeedlesError: true,
-            applicationWithEntities,
-          })
-          .withMockedSource();
-      });
-
-      it('should match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
-      });
-
-      it('should match source calls', () => {
-        expect(runResult.sourceCallsArg).toMatchSnapshot();
-      });
-
-      it('should create files for entity Foo', () => {
-        runResult.assertFile(fooFiles);
-      });
-
-      it('should create files for the entity Bar', () => {
-        runResult.assertFile(barFiles);
-      });
-
-      it('should create files for the entity Skip', () => {
-        runResult.assertFile(skipFiles);
-      });
-    });
-
     describe('all entities', () => {
       before(async () => {
         await helpers

@@ -38,6 +38,7 @@ import {
 import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
 import { loadClientConfig, loadDerivedClientConfig } from '../client/support/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
+import command from './command.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
@@ -45,84 +46,12 @@ const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'argument', skipParseOptions: false, ...features });
-
-    // This makes `name` a required argument.
-    this.argument('name', {
-      type: String,
-      required: true,
-      description: 'Entity name',
-    });
-
-    // This method adds support for a `--[no-]regenerate` flag
-    this.option('regenerate', {
-      description: 'Regenerate the entity without presenting an option to update it',
-      type: Boolean,
-      default: false,
-    });
-
-    this.option('table-name', {
-      description: 'Specify table name that will be used by the entity',
-      type: String,
-    });
-
-    // This method adds support for a `--[no-]fluent-methods` flag
-    this.option('fluent-methods', {
-      description: 'Generate fluent methods in entity beans to allow chained object construction',
-      type: Boolean,
-    });
-
-    // This adds support for a `--angular-suffix` flag
-    this.option('angular-suffix', {
-      description: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
-      type: String,
-    });
-
-    // This adds support for a `--client-root-folder` flag
-    this.option('client-root-folder', {
-      description:
-        'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
-      type: String,
-    });
-
-    // This adds support for a `--skip-ui-grouping` flag
-    this.option('skip-ui-grouping', {
-      description: 'Disables the UI grouping behaviour for entity client side code',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-server` flag
-    this.option('skip-server', {
-      description: 'Skip the server-side code generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-client` flag
-    this.option('skip-client', {
-      description: 'Skip the client-side code generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-db-changelog` flag
-    this.option('skip-db-changelog', {
-      description: 'Skip the generation of database changelog (liquibase for sql databases)',
-      type: Boolean,
-    });
-
-    // This adds support for a `--db` flag
-    this.option('db', {
-      description: 'Provide DB option for the application when using skip-server flag',
-      type: String,
-    });
-
-    this.option('single-entity', {
-      description: 'Regenerate only a single entity, relationships can be not correctly generated',
-      type: Boolean,
-    });
+    super(args, options, { unique: 'argument', ...features });
   }
 
-  async _postConstruct() {
-    const name = _.upperFirst(this.options.name).replace('.json', '');
+  async beforeQueue() {
+    this.parseJHipsterArguments(command.arguments);
+    const name = _.upperFirst(this.name).replace('.json', '');
     this.entityStorage = this.getEntityConfig(name, true);
     this.entityConfig = this.entityStorage.createProxy();
 
@@ -315,9 +244,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
           generatorArgs: this.options.singleEntity ? [this.context.name] : [],
           generatorOptions: {
-            regenerate: true,
-            writeEveryEntity: false,
-            composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,
           },

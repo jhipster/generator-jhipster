@@ -25,10 +25,12 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
     return helpers
       .create(getGenerator('client'))
       .withOptions({
-        build: 'maven',
-        auth: 'jwt',
-        db: 'mysql',
         blueprint: 'myblueprint',
+      })
+      .withJHipsterConfig({
+        buildTool: 'maven',
+        authenticationType: 'jwt',
+        prodDatabaseType: 'mysql',
         skipServer: true,
         baseName: 'jhipster',
         clientFramework,

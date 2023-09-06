@@ -19,42 +19,6 @@ export function loadStoredAppOptions(this: any, { options = this.options, jhipst
   if (this.sharedData.getControl().optionsParsed) return;
   this.sharedData.getControl().optionsParsed = true;
 
-  // Load stored options
-  if (options.skipJhipsterDependencies !== undefined) {
-    jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
-  }
-  if (options.incrementalChangelog !== undefined) {
-    jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
-  }
-  if (options.withAdminUi !== undefined) {
-    jhipsterConfig.withAdminUi = options.withAdminUi;
-  }
-  if (options.skipClient) {
-    jhipsterConfig.skipClient = true;
-  }
-  if (options.applicationType) {
-    jhipsterConfig.applicationType = options.applicationType;
-  }
-  if (options.skipServer) {
-    jhipsterConfig.skipServer = true;
-  }
-  if (options.skipFakeData) {
-    jhipsterConfig.skipFakeData = true;
-  }
-  if (options.skipUserManagement) {
-    jhipsterConfig.skipUserManagement = true;
-  }
-  if (options.skipCheckLengthOfIdentifier) {
-    jhipsterConfig.skipCheckLengthOfIdentifier = true;
-  }
-
-  if (options.skipCommitHook) {
-    jhipsterConfig.skipCommitHook = true;
-  }
-
-  if (options.baseName) {
-    jhipsterConfig.baseName = options.baseName;
-  }
   if (options.db) {
     const databaseType = getDBTypeFromDBValue(options.db);
     if (databaseType) {
@@ -65,41 +29,8 @@ export function loadStoredAppOptions(this: any, { options = this.options, jhipst
     jhipsterConfig.devDatabaseType = options.db;
     jhipsterConfig.prodDatabaseType = options.db;
   }
-  if (options.auth) {
-    jhipsterConfig.authenticationType = options.auth;
-  }
-  if (options.searchEngine) {
-    jhipsterConfig.searchEngine = options.searchEngine;
-  }
-  if (options.build) {
-    jhipsterConfig.buildTool = options.build;
-  }
-  if (options.websocket) {
-    jhipsterConfig.websocket = options.websocket;
-  }
-  if (options.jhiPrefix !== undefined) {
-    jhipsterConfig.jhiPrefix = options.jhiPrefix;
-  }
-  if (options.entitySuffix !== undefined) {
-    jhipsterConfig.entitySuffix = options.entitySuffix;
-  }
-  if (options.dtoSuffix !== undefined) {
-    jhipsterConfig.dtoSuffix = options.dtoSuffix;
-  }
-  if (options.clientFramework) {
-    jhipsterConfig.clientFramework = options.clientFramework;
-  }
   if (options.testFrameworks) {
     jhipsterConfig.testFrameworks = [...new Set([...(jhipsterConfig.testFrameworks || []), ...options.testFrameworks])];
-  }
-  if (options.cypressCoverage !== undefined) {
-    jhipsterConfig.cypressCoverage = options.cypressCoverage;
-  }
-  if (options.cypressAudit !== undefined) {
-    jhipsterConfig.cypressAudit = options.cypressAudit;
-  }
-  if (options.enableTranslation !== undefined) {
-    jhipsterConfig.enableTranslation = options.enableTranslation;
   }
   if (options.language) {
     // workaround double options parsing, remove once generator supports skipping parse options
@@ -121,33 +52,6 @@ export function loadStoredAppOptions(this: any, { options = this.options, jhipst
     }
   }
 
-  if (options.pkType) {
-    jhipsterConfig.pkType = options.pkType;
-  }
-
-  if (options.cacheProvider !== undefined) {
-    jhipsterConfig.cacheProvider = options.cacheProvider;
-  }
-
-  if (options.enableHibernateCache !== undefined) {
-    jhipsterConfig.enableHibernateCache = options.enableHibernateCache;
-  }
-
-  if (options.microfrontend) {
-    jhipsterConfig.microfrontend = options.microfrontend;
-  }
-
-  if (options.reactive !== undefined) {
-    jhipsterConfig.reactive = options.reactive;
-  }
-
-  if (options.enableSwaggerCodegen !== undefined) {
-    jhipsterConfig.enableSwaggerCodegen = options.enableSwaggerCodegen;
-  }
-
-  if (options.clientPackageManager) {
-    jhipsterConfig.clientPackageManager = options.clientPackageManager;
-  }
   if (jhipsterConfig.clientPackageManager) {
     const usingNpm = jhipsterConfig.clientPackageManager === 'npm';
     if (!usingNpm) {

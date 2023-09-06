@@ -16,5 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+import serverCommand from '../server/command.mjs';
+
+const command: JHipsterCommandDefinition = {
+  arguments: {
+    entities: {
+      type: Array,
+      required: false,
+      description: 'Entities to regenerate.',
+    },
+  },
+  options: {
+    skipDbChangelog: serverCommand.options.skipDbChangelog,
+  },
+};
+
+export default command;

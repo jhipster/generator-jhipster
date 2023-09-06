@@ -34,7 +34,7 @@ import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/inde
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import upgradeFilesTask from './upgrade-files-task.mjs';
-import { loadStoredAppOptions } from '../app/support/index.mjs';
+import command from './command.mjs';
 
 const { startCase } = _;
 
@@ -46,88 +46,55 @@ const { startCase } = _;
  */
 export default class LanguagesGenerator extends BaseApplicationGenerator {
   supportedLanguages;
+  languages;
   /**
    * Languages to be generated.
    * Can be incremental or every language.
    */
   languagesToApply;
-
-  constructor(args, options, features) {
-    super(args, options, { skipParseOptions: false, ...features });
-
-    this.option('skip-prompts', {
-      description: 'Skip prompts',
-      type: Boolean,
-      hide: true,
-      default: false,
-    });
-    // This makes it possible to pass `languages` by argument
-    this.argument('languages', {
-      type: Array,
-      required: false,
-      description: 'Languages',
-    });
-
-    // This adds support for a `--skip-client` flag
-    this.option('skip-client', {
-      description: 'Skip installing client files',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-server` flag
-    this.option('skip-server', {
-      description: 'Skip installing server files',
-      type: Boolean,
-    });
-
-    this.option('regenerate', {
-      description: 'Regenerate languages files',
-      type: Boolean,
-    });
-
-    if (this.options.help) {
-      return;
-    }
-
-    loadStoredAppOptions.call(this);
-
-    // Validate languages passed as argument.
-    // Additional languages, will not replace current ones.
-    this.languagesToApply = [this.options.nativeLanguage, ...(this.options.languages ?? [])].filter(Boolean);
-  }
+  composedBlueprints;
 
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+
     if (!this.fromBlueprint) {
       this.supportedLanguages = supportedLanguages;
-      const composedBlueprints = await this.composeWithBlueprints('languages', {
-        generatorOptions: {
-          languages: this.languagesToApply,
-          arguments: this.options.languages,
-        },
+      this.composedBlueprints = await this.composeWithBlueprints('languages', {
+        generatorArgs: this.options.languages,
       });
-      for (const blueprint of composedBlueprints) {
-        if (blueprint.supportedLanguages) {
-          this.supportedLanguages = [...this.supportedLanguages, ...blueprint.supportedLanguages];
-        }
-      }
-      if (this.languagesToApply.length > 0) {
-        const unsupportedLanguage = this.languagesToApply.find(lang => !findLanguageForTag(lang, this.supportedLanguages));
-        if (unsupportedLanguage) {
-          throw new Error(
-            `Unsupported language "${unsupportedLanguage}" passed as argument to language generator.` +
-              `\nSupported languages: ${this.supportedLanguages
-                .map(language => `\n  ${_.padEnd(language.languageTag, 5)} (${language.name})`)
-                .join('')}`,
-          );
-        }
-      }
     }
   }
 
   // Public API method used by the getter and also by Blueprints
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
+      parseCli() {
+        this.parseJHipsterArguments(command.arguments);
+        this.parseJHipsterOptions(command.options);
+      },
+      languagesToApply() {
+        // Validate languages passed as argument.
+        // Additional languages, will not replace current ones.
+        this.languagesToApply = [this.options.nativeLanguage, ...(this.languages ?? [])].filter(Boolean);
+      },
+      validateSupportedLanguages() {
+        for (const blueprint of this.composedBlueprints) {
+          if (blueprint.supportedLanguages) {
+            this.supportedLanguages = [...this.supportedLanguages, ...blueprint.supportedLanguages];
+          }
+        }
+        if (this.languagesToApply.length > 0) {
+          const unsupportedLanguage = this.languagesToApply.find(lang => !findLanguageForTag(lang, this.supportedLanguages));
+          if (unsupportedLanguage) {
+            throw new Error(
+              `Unsupported language "${unsupportedLanguage}" passed as argument to language generator.` +
+                `\nSupported languages: ${this.supportedLanguages
+                  .map(language => `\n  ${_.padEnd(language.languageTag, 5)} (${language.name})`)
+                  .join('')}`,
+            );
+          }
+        }
+      },
       validate() {
         if (this.languagesToApply.length > 0) {
           if (this.jhipsterConfig.skipClient) {
@@ -142,7 +109,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       exportControl({ control }) {
         control.supportedLanguages = this.supportedLanguages;
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -151,7 +118,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       checkPrompts({ control }) {
         const { enableTranslation, languages } = this.jhipsterConfig;
         const showPrompts = this.options.askAnswered || this.env.rootGenerator() === this;
@@ -161,7 +128,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       },
       askI18n,
       askForLanguages,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {

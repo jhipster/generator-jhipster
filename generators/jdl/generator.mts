@@ -137,8 +137,8 @@ export default class JdlGenerator extends BaseGenerator {
       },
       async parseJDL() {
         const configuration = {
-          applicationName: this.options.baseName ?? this.existingProject ? this.jhipsterConfig.baseName : undefined,
-          databaseType: this.options.db ?? this.existingProject ? this.jhipsterConfigWithDefaults.prodDatabaseType : undefined,
+          applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
+          databaseType: this.options.db ?? (this.existingProject ? this.jhipsterConfigWithDefaults.prodDatabaseType : undefined),
           applicationType: this.options.applicationType,
           skipUserManagement: this.options.skipUserManagement,
         };

@@ -16,5 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const command: JHipsterCommandDefinition = {
+  arguments: {
+    languages: {
+      description: 'Languages to generate',
+      type: Array,
+      required: false,
+    },
+  },
+  options: {
+    nativeLanguage: {
+      alias: 'n',
+      description: 'Set application native language',
+      type: String,
+      required: false,
+    },
+    regenerate: {
+      description: 'Regenerate languages files',
+      type: Boolean,
+    },
+  },
+};
+
+export default command;

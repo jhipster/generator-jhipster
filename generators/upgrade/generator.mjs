@@ -31,6 +31,7 @@ import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 import { parseBluePrints } from '../base/internal/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
+import command from './command.mjs';
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -74,57 +75,6 @@ export default class UpgradeGenerator extends BaseGenerator {
   fromV7;
   fromV7_9_3App;
 
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    // This adds support for a `--target-version` flag
-    this.option('target-version', {
-      description: 'Upgrade to a specific version instead of the latest',
-      type: String,
-    });
-    // This adds support for a `--target-blueprint-versions` flag
-    this.option('target-blueprint-versions', {
-      description: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
-      type: String,
-    });
-
-    // This adds support for a `--silent` flag
-    this.option('silent', {
-      description: 'Hides output of the generation process',
-      type: Boolean,
-      default: false,
-    });
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.force = this.options.force;
-    this.targetJhipsterVersion = this.options.targetVersion;
-    this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
-    this.skipInstall = this.options.skipInstall;
-    this.silent = this.options.silent;
-
-    if (!this.config.existed) {
-      throw new Error(
-        "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it.",
-      );
-    }
-
-    this.fromV7 = this.jhipsterConfig.jhipsterVersion && semver.satisfies(this.jhipsterConfig.jhipsterVersion, '^7.0.0');
-    const currentNodeVersion = process.versions.node;
-    if (this.jhipsterConfig.jhipsterVersion === '7.9.3') {
-      if (!semver.satisfies(currentNodeVersion, '^16.0.0')) {
-        throw new Error('Upgrading a v7.9.3 generated application requires node 16 to upgrade');
-      }
-      this.fromV7_9_3App = true;
-    } else if (!semver.satisfies(currentNodeVersion, packageJson.engines.node)) {
-      this.log.fatal(
-        `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${packageJson.engines.node}\nPlease update your version of Node.`,
-      );
-    }
-  }
-
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       displayLogo() {
@@ -132,6 +82,32 @@ export default class UpgradeGenerator extends BaseGenerator {
         this.log.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
       },
 
+      loadOptions() {
+        if (!this.config.existed) {
+          throw new Error(
+            "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it.",
+          );
+        }
+
+        this.parseJHipsterOptions(command.options);
+
+        this.force = this.options.force;
+        this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
+        this.skipInstall = this.options.skipInstall;
+
+        this.fromV7 = this.jhipsterConfig.jhipsterVersion && semver.satisfies(this.jhipsterConfig.jhipsterVersion, '^7.0.0');
+        const currentNodeVersion = process.versions.node;
+        if (this.jhipsterConfig.jhipsterVersion === '7.9.3') {
+          if (!semver.satisfies(currentNodeVersion, '^16.0.0')) {
+            throw new Error('Upgrading a v7.9.3 generated application requires node 16 to upgrade');
+          }
+          this.fromV7_9_3App = true;
+        } else if (!semver.satisfies(currentNodeVersion, packageJson.engines.node)) {
+          this.log.fatal(
+            `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${packageJson.engines.node}\nPlease update your version of Node.`,
+          );
+        }
+      },
       parseBlueprints() {
         this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')) || [];
       },

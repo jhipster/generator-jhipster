@@ -124,23 +124,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       ...features,
     });
 
-    this.option('skip-prompts', {
-      description: 'Skip prompts',
-      type: Boolean,
-    });
-
-    this.option('skip-prettier', {
-      description: 'Skip prettier',
-      type: Boolean,
-      hide: true,
-    });
-
-    this.option('ignore-needles-error', {
-      description: 'Ignore needles failures',
-      type: Boolean,
-      hide: true,
-    });
-
     let jhipsterOldVersion = null;
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */

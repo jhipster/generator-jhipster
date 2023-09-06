@@ -19,7 +19,13 @@
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 
 const command: JHipsterCommandDefinition = {
-  options: {},
+  options: {
+    clientFramework: {
+      description: 'Provide client framework for the application',
+      type: String,
+      scope: 'storage',
+    },
+  },
 };
 
 export default command;
