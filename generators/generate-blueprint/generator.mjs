@@ -257,7 +257,7 @@ export default class extends BaseGenerator {
             pretest: 'npm run prettier-check && npm run lint',
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
-            vitest: mainDependencies.vitest,
+            vitest: 'vitest',
           },
           devDependencies: {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
