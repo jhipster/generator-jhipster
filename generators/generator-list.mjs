@@ -19,7 +19,6 @@
 
 export const GENERATOR_ANGULAR = 'angular';
 export const GENERATOR_APP = 'app';
-export const GENERATOR_AZURE_SPRING_CLOUD = 'azure-spring-cloud';
 export const GENERATOR_BASE = 'base';
 export const GENERATOR_BASE_APPLICATION = 'base-application';
 export const GENERATOR_BASE_CORE = 'base-core';
