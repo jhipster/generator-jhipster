@@ -167,7 +167,7 @@ export const buildCommands = async ({
 }) => {
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
-    const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, useOptions = {} } = opts;
+    const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, removed, useOptions = {} } = opts;
     program
       .command(cmdName, '', { isDefault: cmdName === defaultCommand })
       .description(desc + (blueprint ? chalk.yellow(` (blueprint: ${blueprint})`) : ''))
@@ -180,6 +180,10 @@ export const buildCommands = async ({
       })
       .lazyBuildCommand(async function (operands) {
         logger.debug(`cmd: lazyBuildCommand ${cmdName} ${operands}`);
+        if (removed) {
+          logger.fatal(removed);
+          return;
+        }
         const command = this;
 
         if (cmdName === 'run') {

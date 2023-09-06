@@ -4,7 +4,6 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
 {
   "GENERATOR_ANGULAR": "angular",
   "GENERATOR_APP": "app",
-  "GENERATOR_AWS": "aws",
   "GENERATOR_AZURE_APP_SERVICE": "azure-app-service",
   "GENERATOR_AZURE_SPRING_CLOUD": "azure-spring-cloud",
   "GENERATOR_BASE": "base",

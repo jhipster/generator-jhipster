@@ -26,6 +26,7 @@ const defaultCommands = {
   },
   aws: {
     desc: 'Deploy the current application to Amazon Web Services',
+    removed: 'Command removed at v8.',
   },
   'azure-app-service': {
     desc: 'Deploy the current application to Azure App Service',
