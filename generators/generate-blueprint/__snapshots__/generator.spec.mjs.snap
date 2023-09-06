@@ -599,21 +599,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/openapi-client/templates/template-file-openapi-client.ejs": {
     "stateCleared": "modified",
   },
-  "generators/openshift/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openshift/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openshift/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openshift/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openshift/templates/template-file-openshift.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/page/command.mjs": {
     "stateCleared": "modified",
   },

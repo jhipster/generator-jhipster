@@ -131,6 +131,7 @@ const defaultCommands = {
   },
   openshift: {
     desc: 'Deploy the current application to OpenShift',
+    removed: removedV8,
   },
   page: {
     desc: 'Create a new page. (Supports vue clients)',
