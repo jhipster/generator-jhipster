@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const removedV8 = 'Command removed at v8.';
 
 const defaultCommands = {
   add: {
@@ -26,10 +27,11 @@ const defaultCommands = {
   },
   aws: {
     desc: 'Deploy the current application to Amazon Web Services',
-    removed: 'Command removed at v8.',
+    removed: removedV8,
   },
   'azure-app-service': {
     desc: 'Deploy the current application to Azure App Service',
+    removed: removedV8,
   },
   'azure-spring-cloud': {
     desc: 'Deploy the current application to Azure Spring Cloud',

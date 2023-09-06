@@ -47,21 +47,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/app/templates/template-file-app.ejs": {
     "stateCleared": "modified",
   },
-  "generators/azure-app-service/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/azure-app-service/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/azure-app-service/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/azure-app-service/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/azure-app-service/templates/template-file-azure-app-service.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/azure-spring-cloud/command.mjs": {
     "stateCleared": "modified",
   },
