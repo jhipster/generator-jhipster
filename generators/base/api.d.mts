@@ -64,6 +64,7 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
+  checkBlueprint?: boolean;
   jhipsterBootstrap?: boolean;
   /**
    * Store current version at .yo-rc.json.

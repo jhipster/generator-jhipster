@@ -259,9 +259,6 @@ export default class extends BaseGenerator {
             'update-snapshot': 'vitest run --update',
             vitest: mainDependencies.vitest,
           },
-          dependencies: {
-            chalk: `${mainDependencies.chalk}`,
-          },
           devDependencies: {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
             eslint: `${mainDependencies.eslint}`,
