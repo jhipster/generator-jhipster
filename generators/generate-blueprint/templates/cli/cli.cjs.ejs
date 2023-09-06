@@ -7,6 +7,7 @@ const { version, bin } = require('../package.json');
 // Allows blueprints to be aliased.
 const packagePath = dirname(__dirname);
 const packageFolderName = basename(packagePath);
+const devBlueprintPath = join(packagePath, '.blueprint');
 
 (async () => {
   const { runJHipster, done, logger } = await import('generator-jhipster/cli');
@@ -16,6 +17,7 @@ const packageFolderName = basename(packagePath);
     executableName,
     executableVersion: version,
     defaultCommand: 'app',
+    devBlueprintPath,
     blueprints: {
       [packageFolderName]: version,
     },

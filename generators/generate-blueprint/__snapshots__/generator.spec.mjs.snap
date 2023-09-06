@@ -2,6 +2,21 @@
 
 exports[`generator - generate-blueprint with all option should match snapshot 1`] = `
 {
+  ".blueprint/cli/commands.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/command.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/index.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/templates/samples/sample.jdl": {
+    "stateCleared": "modified",
+  },
   ".eslintrc.json": {
     "stateCleared": "modified",
   },
@@ -883,6 +898,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
 
 exports[`generator - generate-blueprint with default config should write files and match snapshot 1`] = `
 {
+  ".blueprint/cli/commands.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/command.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/index.mjs": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/templates/samples/sample.jdl": {
+    "stateCleared": "modified",
+  },
   ".eslintrc.json": {
     "stateCleared": "modified",
   },

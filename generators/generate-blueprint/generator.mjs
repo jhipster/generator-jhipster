@@ -189,10 +189,12 @@ export default class extends BaseGenerator {
   get writing() {
     return {
       async writing() {
+        this.application.sampleWritten = this.jhipsterConfig.sampleWritten;
         await this.writeFiles({
           sections: files,
           context: this.application,
         });
+        this.jhipsterConfig.sampleWritten = true;
       },
       async writingGenerators() {
         if (!this.application[GENERATORS]) return;
