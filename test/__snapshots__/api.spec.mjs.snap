@@ -17,7 +17,6 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_BOOTSTRAP_WORKSPACES": "bootstrap-workspaces",
   "GENERATOR_CI_CD": "ci-cd",
   "GENERATOR_CLIENT": "client",
-  "GENERATOR_CLOUDFOUNDRY": "cloudfoundry",
   "GENERATOR_COMMON": "common",
   "GENERATOR_CUCUMBER": "cucumber",
   "GENERATOR_CYPRESS": "cypress",

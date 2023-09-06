@@ -242,21 +242,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/client/templates/template-file-client.ejs": {
     "stateCleared": "modified",
   },
-  "generators/cloudfoundry/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cloudfoundry/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cloudfoundry/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cloudfoundry/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/cloudfoundry/templates/template-file-cloudfoundry.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/common/command.mjs": {
     "stateCleared": "modified",
   },

@@ -42,6 +42,7 @@ const defaultCommands = {
   },
   cloudfoundry: {
     desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry',
+    removed: removedV8,
   },
   'docker-compose': {
     desc: 'Create all required Docker deployment configuration for the selected applications',
