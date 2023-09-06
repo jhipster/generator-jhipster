@@ -20,8 +20,8 @@ import chalk from "chalk";
 
 const removedV8 = chalk.yellow(`
 
-Generator removed at v8 due to lack of maintenace.
-If you have insterest in this generator fill a feature request at jhipster bug tracker.
+This sub-generator is no longer maintained and has been removed from JHipster starting from v8.
+If you are interested in maintaining this sub-generator fill a feature request on the JHipster bug tracker.
 `);
 
 const defaultCommands = {
