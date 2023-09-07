@@ -1,18 +1,21 @@
 /* eslint-disable max-classes-per-file */
 import { esmocha } from 'esmocha';
-import type { BaseEnvironmentOptions } from '@yeoman/types';
+import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator, GeneratorOptions, GetGeneratorOptions } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
-import { GeneratorConstructor } from 'yeoman-test/dist/helpers.js';
 import _ from 'lodash';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { BaseEntity } from '../../generators/base-application/index.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
-import { GENERATOR_WORKSPACES } from '../../generators/generator-list.mjs';
+import EnvironmentBuilder from '../cli/environment-builder.mjs';
+import { BaseEntity } from '../generators/base-application/index.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
+import { GENERATOR_WORKSPACES } from '../generators/generator-list.mjs';
 import getGenerator from './get-generator.mjs';
-import deploymentTestSamples from './deployment-samples.mjs';
-import { createJHipsterLogger, normalizePathEnd } from '../../generators/base/support/index.mjs';
-import BaseGenerator from '../../generators/base/index.mjs';
+import deploymentTestSamples from '../test/support/deployment-samples.mjs';
+import { createJHipsterLogger, normalizePathEnd } from '../generators/base/support/index.mjs';
+import BaseGenerator from '../generators/base/index.mjs';
+import type { JHipsterGeneratorOptions } from '../generators/base/api.mjs';
+
+type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>
+type GeneratorTestOptions = JHipsterGeneratorOptions;
 
 const { set } = _;
 
@@ -83,12 +86,12 @@ export const createBlueprintFiles = (
   };
 };
 
-class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> extends RunContext<GeneratorType> {
-  public sharedSource: Record<string, esmocha.Mock>;
-  private sharedApplication: Record<string, any>;
-  private sharedControl: Record<string, any>;
+class JHipsterRunContext extends RunContext<GeneratorTestType> {
+  public sharedSource!: Record<string, any>;
+  private sharedApplication!: Record<string, any>;
+  private sharedControl!: Record<string, any>;
   private workspaceApplications: string[] = [];
-  private commonWorkspacesConfig: Record<string, unknown>;
+  private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
 
   withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
@@ -179,7 +182,7 @@ class JHipsterRunContext<GeneratorType extends YeomanGenerator = BaseGenerator> 
     return this;
   }
 
-  async run(): Promise<RunResult<GeneratorType>> {
+  async run(): Promise<RunResult<GeneratorTestType>> {
     const runResult = await super.run();
     if (this.sharedSource) {
       const sourceCallsArg = Object.fromEntries(
@@ -211,19 +214,20 @@ class JHipsterTest extends YeomanTest {
     this.adapterOptions = { log: createJHipsterLogger() };
   }
 
-  run<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
-    GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
+  // @ts-ignore
+  run<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
+    GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
     envOptions?: BaseEnvironmentOptions | undefined,
-  ): JHipsterRunContext<GeneratorType> {
-    return super.run(GeneratorOrNamespace, settings, envOptions).withAdapterOptions({ log: createJHipsterLogger() }) as any;
+  ): JHipsterRunContext {
+    return super.run<GeneratorType>(GeneratorOrNamespace, settings, envOptions).withAdapterOptions({ log: createJHipsterLogger() }) as any;
   }
 
-  runJHipster<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
+  runJHipster<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined,
-  ): JHipsterRunContext<GeneratorType> {
+    envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext {
     return this.run(getGenerator(jhipsterGenerator), settings, envOptions);
   }
 
@@ -248,21 +252,22 @@ class JHipsterTest extends YeomanTest {
     return this.run(blueprintNS).withGenerators([[BlueprintedGenerator, { namespace: blueprintNS }]]);
   }
 
-  create<GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>>(
-    GeneratorOrNamespace: string | GeneratorConstructor<GeneratorType>,
+  // @ts-ignore
+  create<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
+    GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined,
-  ): JHipsterRunContext<GeneratorType> {
-    return super.create(GeneratorOrNamespace, settings, envOptions) as any;
+    envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext {
+    return super.create<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }
 
   createJHipster<
-    GeneratorType extends YeomanGenerator<YeomanGenerator.GeneratorOptions> = YeomanGenerator<YeomanGenerator.GeneratorOptions>,
+    GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>,
   >(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: Options | undefined,
-  ): JHipsterRunContext<GeneratorType> {
+    envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext {
     return this.create(getGenerator(jhipsterGenerator), settings, envOptions);
   }
 
@@ -288,6 +293,7 @@ export function createTestHelpers(options: any = {}) {
   helper.environmentOptions = { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions };
   helper.generatorOptions = { ...DEFAULT_TEST_OPTIONS, ...options.generatorOptions };
   helper.createEnv = (...args) => EnvironmentBuilder.createEnv(...args) as any;
+  // @ts-ignore
   helper.getRunContextType = () => JHipsterRunContext;
   return helper;
 }

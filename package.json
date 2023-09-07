@@ -53,13 +53,17 @@
       "types": "./dist/types/generators/*/types-export.d.ts",
       "default": "./dist/generators/*/index.mjs"
     },
+    "./generators/*/support": {
+      "types": "./dist/types/generators/*/support/index.d.mts",
+      "default": "./dist/generators/*/support/index.mjs"
+    },
     "./jdl": {
       "types": "./dist/types/jdl/index.d.ts",
       "default": "./dist/jdl/index.js"
     },
-    "./generators/*/support": {
-      "types": "./dist/types/generators/*/support/index.d.mts",
-      "default": "./dist/generators/*/support/index.mjs"
+    "./testing": {
+      "types": "./dist/types/testing/index.d.mts",
+      "default": "./dist/testing/index.mjs"
     }
   },
   "main": "./dist/generators/index.js",
