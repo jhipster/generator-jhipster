@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import _ from 'lodash';
 import { JDLRelationshipType, RelationshipType, relationshipTypes } from '../basic-types/relationships.js';
-import { camelCase, upperFirst } from '../utils/string-utils.js';
+
+const { camelCase, upperFirst } = _;
 
 export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 
-export const relationshipTypeExists = relationship => Object.values(relationshipTypes).includes(asJdlRelationshipType(relationship));
+export const relationshipTypeExists = (relationship: JDLRelationshipType) => Object.values(relationshipTypes).includes(relationship);
 
 export default relationshipTypes;
