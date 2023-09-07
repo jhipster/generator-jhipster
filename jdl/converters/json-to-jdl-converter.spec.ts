@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
-import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

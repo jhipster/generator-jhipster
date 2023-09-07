@@ -1,8 +1,7 @@
-import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult, getGenerator } from '../../test/support/index.mjs';
 
 import LanguagesGenerator from './index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { getGenerator } from '../../test/support/index.mjs';
 
 const generatorPath = getGenerator('languages');
 

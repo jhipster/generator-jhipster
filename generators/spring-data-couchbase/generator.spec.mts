@@ -21,10 +21,15 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { buildServerMatrix, extendMatrix, entitiesSimple as entities, buildSamplesFromMatrix } from '../../test/support/index.mjs';
+import {
+  buildServerMatrix,
+  extendMatrix,
+  entitiesSimple as entities,
+  buildSamplesFromMatrix,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {

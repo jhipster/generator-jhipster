@@ -5,7 +5,7 @@ import lodash from 'lodash';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers, result } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, result } from '../../test/support/index.mjs';
 
 import { GENERATOR_CUCUMBER } from '../generator-list.mjs';
 

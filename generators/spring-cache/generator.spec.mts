@@ -3,10 +3,9 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { fromMatrix } from '../../test/support/index.mjs';
+import { fromMatrix, defaultHelpers as helpers, result } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers, result } from '../../test/support/helpers.mjs';
 
 import { GENERATOR_SPRING_CACHE } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';

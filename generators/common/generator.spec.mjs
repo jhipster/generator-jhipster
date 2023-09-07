@@ -21,10 +21,9 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { defaultHelpers as helpers, basicHelpers, runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, basicHelpers, runResult, checkEnforcements } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { checkEnforcements } from '../../test/support/index.mjs';
 import { GENERATOR_COMMON } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;

@@ -3,10 +3,14 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { buildClientSamples, checkEnforcements, entitiesClientSamples as entities } from '../../test/support/index.mjs';
+import {
+  buildClientSamples,
+  checkEnforcements,
+  entitiesClientSamples as entities,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';

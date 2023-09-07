@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { GENERATOR_MAVEN } from '../generator-list.mjs';
 import MavenGenerator from './generator.mjs';
 
