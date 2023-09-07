@@ -271,13 +271,14 @@ export default class extends BaseGenerator {
             'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
             vitest: mainDependencies.vitest,
             prettier: `${mainDependencies.prettier}`,
-            'yeoman-test': `${mainDependencies['yeoman-test']}`,
+            /*
+             * yeoman-test version is loaded through generator-jhipster peer dependency.
+             * generator-jhipster uses a fixed version, blueprints must set a compatible range.
+             */
+            'yeoman-test': '>=8.0.0-rc.1',
           },
           engines: {
             node: packagejs.engines.node,
-          },
-          imports: {
-            '#test-utils': './test/utils.mjs',
           },
         });
       },

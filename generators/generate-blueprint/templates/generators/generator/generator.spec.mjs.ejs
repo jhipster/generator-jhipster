@@ -18,7 +18,7 @@
 -%>
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { helpers, lookups } from '#test-utils';
+import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
 const SUB_GENERATOR = '<%= subGenerator %>';
 <%_ if (customGenerator) { _%>
@@ -29,21 +29,18 @@ const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
 describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
-    let result;
     beforeAll(async function() {
-      result = await helpers
-        .create(<%= customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
+      await helpers
+        .run(<%= customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
+        .withJHipsterConfig()
         .withOptions({
-          reproducible: true,
-          defaults: true,
-          baseName: 'jhipster',
           ignoreNeedlesError: true,
 <%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
 <%_ } _%>
         })
-        .withLookups(lookups)
-        .run();
+        .withJHipsterLookup()
+        .withParentBlueprintLookup();
     });
 
     it('should succeed', () => {

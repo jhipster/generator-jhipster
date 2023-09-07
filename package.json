@@ -199,6 +199,14 @@
     "yeoman-assert": "3.1.1",
     "yeoman-test": "8.0.0-rc.1"
   },
+  "peerDependencies": {
+    "yeoman-test": "8.0.0-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "yeoman-test": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": "^18.13.0 || >= 20.2.0",
     "npm": ">=8.0.0"
