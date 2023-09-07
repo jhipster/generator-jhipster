@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 import { basename, join } from 'path';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
-import { BaseEntity } from '../generators/base-application/index.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.mjs';
 import getGenerator from './get-generator.mjs';
@@ -14,6 +13,7 @@ import BaseGenerator from '../generators/base/index.mjs';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.mjs';
 import { getPackageRoot, isDistFolder } from '../lib/index.mjs';
 
+type BaseEntity = any;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
 
