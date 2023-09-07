@@ -14,7 +14,7 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "README.md": {
     "stateCleared": "modified",
   },
-  "cli/cli.mjs": {
+  "cli/cli.cjs": {
     "stateCleared": "modified",
   },
   "generators/angular/command.mjs": {
@@ -898,7 +898,7 @@ exports[`generator - generate-blueprint with default config should write files a
   "README.md": {
     "stateCleared": "modified",
   },
-  "cli/cli.mjs": {
+  "cli/cli.cjs": {
     "stateCleared": "modified",
   },
   "package.json": {

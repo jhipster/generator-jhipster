@@ -286,7 +286,7 @@ export default class extends BaseGenerator {
         const { baseName, cliName = `jhipster-${baseName}` } = this.application;
         this.packageJson.merge({
           bin: {
-            [cliName]: `cli/cli.${this.jhipsterConfig.js ? '' : 'm'}js`,
+            [cliName]: `cli/cli.cjs`,
           },
           files: ['cli', 'generators'],
         });
