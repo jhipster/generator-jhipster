@@ -23,7 +23,7 @@ import {
   JDL_RELATIONSHIP_MANY_TO_ONE,
   JDL_RELATIONSHIP_ONE_TO_MANY,
   JDL_RELATIONSHIP_ONE_TO_ONE,
-} from '../../models/jdl-relationship.js';
+} from '../../basic-types/relationships.js';
 import createTokenFromConfig from './token-creator.js';
 
 const relationshipTypeCategoryToken = createTokenFromConfig({ name: 'RELATIONSHIP_TYPE', pattern: Lexer.NA });

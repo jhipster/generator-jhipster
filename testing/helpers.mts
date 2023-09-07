@@ -168,7 +168,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   /**
    * Lookup generators at generator-jhipster's parent at a npm repository
    * @param lookups generators relative folder
-   * @returns 
+   * @returns
    */
   withParentBlueprintLookup(lookups = ['generators']): this {
     const packageRootParent = join(getPackageRoot(), '..');

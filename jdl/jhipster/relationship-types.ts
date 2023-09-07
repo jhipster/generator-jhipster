@@ -17,15 +17,10 @@
  * limitations under the License.
  */
 
-import { asJdlRelationshipType } from '../converters/parsed-jdl-to-jdl-object/relationship-converter.js';
-import { JDLRelationshipType } from '../models/jdl-relationship.js';
+import { JDLRelationshipType, RelationshipType, relationshipTypes } from '../basic-types/relationships.js';
+import { camelCase, upperFirst } from '../utils/string-utils.js';
 
-const relationshipTypes: Record<'ONE_TO_ONE' | 'ONE_TO_MANY' | 'MANY_TO_ONE' | 'MANY_TO_MANY', JDLRelationshipType> = {
-  ONE_TO_ONE: 'OneToOne',
-  ONE_TO_MANY: 'OneToMany',
-  MANY_TO_ONE: 'ManyToOne',
-  MANY_TO_MANY: 'ManyToMany',
-};
+export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 
 export const relationshipTypeExists = relationship => Object.values(relationshipTypes).includes(asJdlRelationshipType(relationship));
 

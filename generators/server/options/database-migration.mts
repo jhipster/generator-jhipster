@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JHipsterOptionDefinition } from '../../app/jdl/types.mjs';
+import { JHipsterOptionDefinition } from '../../../jdl/types/types.mjs';
 
 export const DATABASE_MIGRATION = 'databaseMigration';
 export const DATABASE_MIGRATION_LIQUIBASE = 'liquibase';

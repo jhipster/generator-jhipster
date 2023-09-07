@@ -21,8 +21,8 @@ import {
   JDLApplicationOptionType,
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
-} from '../../../jdl/models/jdl-application-definition.js';
-import { JDLValidatorOption, JDLValidatorOptionType } from '../../../jdl/parsing/validator.js';
+} from '../models/jdl-application-definition.ts';
+import { JDLValidatorOption, JDLValidatorOptionType } from '../parsing/validator.ts';
 
 export type JDLTokenConfig = Pick<ITokenConfig, 'name' | 'pattern'>;
 
