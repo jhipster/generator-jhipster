@@ -56,12 +56,6 @@ export default class JHipsterBaseBlueprintGenerator<
       return;
     }
 
-    if (this.getFeatures().checkBlueprint) {
-      if (!this.jhipsterContext) {
-        throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints ionic')}`);
-      }
-    }
-
     loadStoredAppOptions.call(this);
 
     this.sbsBlueprint = this.features.sbsBlueprint ?? false;
@@ -73,6 +67,12 @@ export default class JHipsterBaseBlueprintGenerator<
 
       // jhipsterContext is the original generator
       this.jhipsterContext = jhipsterContext;
+
+      if (this.getFeatures().checkBlueprint) {
+        if (!this.jhipsterContext) {
+          throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints ionic')}`);
+        }
+      }
 
       try {
         // Fallback to the original generator if the file does not exists in the blueprint.
