@@ -7,6 +7,7 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -1073,6 +1074,7 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -1895,6 +1897,7 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -2930,6 +2933,7 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -3759,6 +3763,7 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
     ],
     "baseName": "workspaces",
     "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -5522,6 +5527,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -8697,6 +8703,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -9475,6 +9482,7 @@ exports[`generator - Knative Using Helm generator type only gateway should match
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
@@ -10306,6 +10314,7 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -11294,6 +11303,7 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -12045,6 +12055,7 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -12994,6 +13005,7 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -13753,6 +13765,7 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
     ],
     "baseName": "workspaces",
     "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -15886,6 +15899,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -19284,6 +19298,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -19990,6 +20005,7 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
