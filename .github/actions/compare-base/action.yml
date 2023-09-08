@@ -60,10 +60,14 @@ runs:
     - name: 'MERGE: quirks'
       id: quirks
       run: |
-        # docker-compose is not reproducible, copy old config
+        # docker-compose and kubernetes are not reproducible, copy old config
         ls "$JHI_FOLDER_APP/docker-compose" \
           && mkdir "${{ inputs.application-path }}/docker-compose" \
           && cp "$JHI_FOLDER_APP/docker-compose"/.yo-rc.json "${{ inputs.application-path }}/docker-compose" \
+          || true
+        ls "$JHI_FOLDER_APP/kubernetes" \
+          && mkdir "${{ inputs.application-path }}/kubernetes" \
+          && cp "$JHI_FOLDER_APP/kubernetes"/.yo-rc.json "${{ inputs.application-path }}/kubernetes" \
           || true
       shell: bash
     - name: 'MERGE: merge base project'

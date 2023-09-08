@@ -7,6 +7,7 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
   "generator-jhipster": {
     "appsFolders": ["09-kafka"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -394,6 +395,7 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1281,6 +1283,7 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -1929,6 +1932,7 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -2741,6 +2745,7 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -3623,6 +3628,7 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
     ],
     "baseName": "workspaces",
     "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -5067,6 +5073,7 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -5439,6 +5446,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -8419,6 +8427,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
@@ -9052,6 +9061,7 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
+    "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",

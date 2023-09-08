@@ -86,13 +86,17 @@ export const checkHelm = runAsync(function () {
 
 export function loadConfig() {
   loadFromYoRc.call(this);
+  if (!this.jhipsterConfig.dbRandomPassword) {
+    this.jhipsterConfig.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
+  }
+
   const kubernetesWithDefaults = _.defaults({}, this.jhipsterConfig, defaultKubernetesConfig);
   this.kubernetesNamespace = kubernetesWithDefaults.kubernetesNamespace;
   this.kubernetesServiceType = kubernetesWithDefaults.kubernetesServiceType;
   this.ingressType = kubernetesWithDefaults.ingressType;
   this.ingressDomain = kubernetesWithDefaults.ingressDomain;
   this.istio = kubernetesWithDefaults.istio;
-  this.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
+  this.dbRandomPassword = kubernetesWithDefaults.dbRandomPassword;
   this.kubernetesUseDynamicStorage = kubernetesWithDefaults.kubernetesUseDynamicStorage;
   this.kubernetesStorageClassName = kubernetesWithDefaults.kubernetesStorageClassName;
   this.generatorType = kubernetesWithDefaults.generatorType;
