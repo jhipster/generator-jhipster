@@ -29,7 +29,15 @@ export const files = {
         'README.md',
         'tsconfig.json',
         'vitest.config.ts',
+        '.blueprint/cli/commands.mjs',
+        '.blueprint/generate-sample/command.mjs',
+        '.blueprint/generate-sample/generator.mjs',
+        '.blueprint/generate-sample/index.mjs',
       ],
+    },
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && !ctx.sampleWritten,
+      templates: ['.blueprint/generate-sample/templates/samples/sample.jdl'],
     },
     {
       condition: ctx => ctx.cli,

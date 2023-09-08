@@ -30,6 +30,7 @@ import { SpringBootSourceType } from '../server/types.mjs';
 import { ClientSourceType } from '../client/types.mjs';
 import { LanguageSourceType } from '../languages/types.js';
 import command from './command.mjs';
+import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
 
 const { upperFirst } = _;
 
@@ -99,7 +100,7 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  constructor(args, options, features) {
+  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
 
     if (this.options.help) {

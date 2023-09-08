@@ -35,6 +35,7 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   blueprints?: string;
   blueprint?: any;
   jhipsterContext?: any;
+  composeWithLocalBlueprint?: boolean;
 
   /* generate-blueprint options */
   localBlueprint?: boolean;
@@ -63,6 +64,7 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
+  checkBlueprint?: boolean;
   jhipsterBootstrap?: boolean;
   /**
    * Store current version at .yo-rc.json.

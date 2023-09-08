@@ -25,7 +25,7 @@ import {
   createPrettierTransform,
   createForceWriteConfigFilesTransform,
   autoCrlfTransform,
-  isPrettierConfigFile,
+  isPrettierConfigFilePath,
   createSortConfigFilesTransform,
   createESLintTransform,
 } from './support/index.mjs';
@@ -38,7 +38,7 @@ import { createRemoveUnusedImportsTransform } from './support/java-unused-import
 import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
-const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
+const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
 
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -87,6 +87,12 @@ export default class BootstrapGenerator extends BaseGenerator {
     return {
       queueTransform() {
         this.queueMultistepTransform();
+
+        this.env.sharedFs.on('change', filePath => {
+          if (createMultiStepTransform().templateFileFs.isTemplate(filePath)) {
+            this.queueMultistepTransform();
+          }
+        });
       },
     };
   }
@@ -97,9 +103,14 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
-      async commitPrettierConfig() {
-        const filter = file => isFilePending(file) && isPrettierConfigFile(file);
-        await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
+      async queueCommitPrettierConfig() {
+        await this.queueCommitPrettierConfig();
+
+        this.env.sharedFs.on('change', filePath => {
+          if (isPrettierConfigFilePath(filePath)) {
+            this.queueCommitPrettierConfig();
+          }
+        });
       },
     };
   }
@@ -125,16 +136,23 @@ export default class BootstrapGenerator extends BaseGenerator {
       queueName: MULTISTEP_TRANSFORM_QUEUE,
       once: true,
     });
+  }
 
-    const onChangeListener = file => {
-      if (createMultiStepTransform().templateFileFs.isTemplate(file)) {
-        this.queueMultistepTransform();
-      } else {
-        this.env.sharedFs.once('change', onChangeListener);
-      }
-    };
+  queueCommitPrettierConfig() {
+    this.queueTask({
+      method: async () => {
+        await this.commitPrettierConfig();
+      },
+      taskName: 'commitPrettierConfig',
+      queueName: PRE_CONFLICTS_QUEUE,
+      once: true,
+    });
+  }
 
-    this.env.sharedFs.once('change', onChangeListener);
+  async commitPrettierConfig() {
+    const filter = file => isFilePending(file) && isPrettierConfigFilePath(file.path);
+    await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
+    this.log.ok('committed prettier configuration files');
   }
 
   /**

@@ -761,15 +761,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
           const applicationEndpoint = application.applicationTypeMicroservice
-            ? `http-get://localhost:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
-            : 'http-get://localhost:$npm_package_config_backend_port/management/health';
+            ? `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
+            : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
 
           scriptsStorage.set({
             'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
-            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
+            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
           });
         }
       },
@@ -793,11 +793,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             .join(' && ');
 
           scriptsStorage.set({
-            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health`,
+            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:$npm_package_config_backend_port/management/health`,
             ...Object.fromEntries(
               microservices.map(ms => [
                 `ci:server:await:${ms}`,
-                `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
+                `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${serverPort}/services/${ms}/management/health/readiness`,
               ]),
             ),
             'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,

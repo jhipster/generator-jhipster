@@ -302,8 +302,10 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
           argument = positionalArguments;
           positionalArguments = [];
         }
-        const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
-        this[argumentName] = convertedValue;
+        if (argument !== undefined) {
+          const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
+          this[argumentName] = convertedValue;
+        }
       } else {
         if (argumentDef.required) {
           throw new Error(`Missing required argument ${argumentName}`);

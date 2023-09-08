@@ -27,7 +27,8 @@ import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import type CoreGenerator from '../../base-core/index.mjs';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
-export const isPrettierConfigFile = (file: MemFsEditorFile) => minimatch.match(file.path);
+export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
+export const isPrettierConfigFile = (file: MemFsEditorFile) => isPrettierConfigFilePath(file.path);
 
 export const createPrettierTransform = async function (
   this: CoreGenerator,
