@@ -29,7 +29,7 @@ import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 import { fieldTypes, unaryOptions, binaryOptions, relationshipOptions } from '../jhipster/index.mjs';
 import { Entity, Field, Relationship } from './types.js';
-import { asJdlRelationshipType } from './parsed-jdl-to-jdl-object/relationship-converter.js';
+import { asJdlRelationshipType } from '../jhipster/relationship-types.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;

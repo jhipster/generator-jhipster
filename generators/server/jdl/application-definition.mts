@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../app/jdl/types.mjs';
+import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.mjs';
 import databaseMigrationOption from '../options/database-migration.mjs';
 import messageBrokerOption from '../options/message-broker.mjs';
 

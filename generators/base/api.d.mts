@@ -10,33 +10,53 @@ export type ApplicationWithConfig = {
 };
 
 export type JHipsterGeneratorOptions = BaseOptions & {
-  applicationWithConfig?: ApplicationWithConfig;
-  creationTimestamp?: string;
-  positionalArguments?: unknown[];
-  jhipsterContext?: any;
-  skipYoResolve?: boolean;
-  ignoreErrors?: boolean;
+  /* cli options */
   commandName: string;
-  applicationWithEntities?: any;
-  blueprints?: string;
-  blueprint?: any;
-  reproducible?: boolean;
-  applicationId?: string;
+  positionalArguments?: unknown[];
+
+  /* yeoman options */
+  skipYoResolve?: boolean;
   sharedData: any;
+  force?: boolean;
+
+  /* base options */
+  applicationId?: string;
+  applicationWithConfig?: ApplicationWithConfig;
+  applicationWithEntities?: any;
+  creationTimestamp?: string;
+  ignoreErrors?: boolean;
   ignoreNeedlesError?: boolean;
+  reproducible?: boolean;
   skipPriorities?: string[];
   skipWriting?: boolean;
   entities?: string[];
+
+  /* blueprint options */
+  blueprints?: string;
+  blueprint?: any;
+  jhipsterContext?: any;
+
+  /* generate-blueprint options */
   localBlueprint?: boolean;
+
+  /* jdl generator options */
+  jdlFile?: string;
+
+  /* application options */
   baseName?: string;
   db?: string;
   applicationType?: string;
   skipUserManagement?: boolean;
-  force?: boolean;
   skipDbChangelog?: boolean;
-  jdlFile?: string;
   recreateInitialChangelog?: boolean;
+
+  /* workspaces options */
+  generateApplications?: boolean;
+  generateWorkspaces?: boolean;
+  generateWith?: string;
   monorepository?: boolean;
+  workspaces?: boolean;
+  workspacesFolders?: string[];
 };
 
 export type JHipsterGeneratorFeatures = BaseFeatures & {

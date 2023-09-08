@@ -22,7 +22,7 @@ import { expect } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const { snakeCase } = lodash;

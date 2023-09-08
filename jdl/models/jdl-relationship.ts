@@ -16,29 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { validations } from '../jhipster/index.mjs';
+import { RelationshipSide, JDLRelationshipType } from '../basic-types/relationships.js';
+import { Validations } from '../jhipster/index.mjs';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
 
-const {
-  Validations: { REQUIRED },
-} = validations;
+const { REQUIRED } = Validations;
 
-export const JDL_RELATIONSHIP_ONE_TO_ONE = 'OneToOne';
-export const JDL_RELATIONSHIP_ONE_TO_MANY = 'OneToMany';
-export const JDL_RELATIONSHIP_MANY_TO_ONE = 'ManyToOne';
-export const JDL_RELATIONSHIP_MANY_TO_MANY = 'ManyToMany';
-
-export type JDLRelationshipSide = 'left' | 'right';
-
-export type JDLRelationshipType =
-  | typeof JDL_RELATIONSHIP_ONE_TO_ONE
-  | typeof JDL_RELATIONSHIP_ONE_TO_MANY
-  | typeof JDL_RELATIONSHIP_MANY_TO_ONE
-  | typeof JDL_RELATIONSHIP_MANY_TO_MANY;
 export type JDLRelationshipOptions = Record<'global' | 'source' | 'destination', Record<string, any>>;
 
 export type JDLRelationshipModel = {
-  side: JDLRelationshipSide | undefined;
+  side: RelationshipSide | undefined;
   from: string;
   to: string;
   type: JDLRelationshipType;
@@ -52,7 +39,7 @@ export type JDLRelationshipModel = {
 };
 
 export default class JDLRelationship implements JDLRelationshipModel {
-  side: JDLRelationshipSide | undefined;
+  side: RelationshipSide | undefined;
   from: string;
   to: string;
   type: JDLRelationshipType;

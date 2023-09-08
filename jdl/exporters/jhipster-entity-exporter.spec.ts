@@ -25,7 +25,7 @@ import { applicationTypes } from '../jhipster/index.mjs';
 
 import entityOptions from '../jhipster/entity-options.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
-import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
 const { MONOLITH, MICROSERVICE } = applicationTypes;

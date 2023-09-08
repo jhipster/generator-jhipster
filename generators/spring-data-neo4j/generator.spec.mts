@@ -2,10 +2,14 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 
-import { buildSamplesFromMatrix, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import {
+  buildSamplesFromMatrix,
+  buildServerMatrix,
+  entitiesSimple as entities,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from '../server/index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { mockedGenerators, shouldComposeWithSpringCloudStream, shouldComposeWithLiquibase } from '../server/__test-support/index.mjs';

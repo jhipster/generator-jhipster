@@ -1,6 +1,6 @@
 import { expect } from 'esmocha';
 
-import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import BaseApplicationGenerator from '../base-application/generator.mjs';
 import { GENERATOR_ENTITY } from '../generator-list.mjs';

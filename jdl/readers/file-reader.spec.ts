@@ -21,7 +21,7 @@ import fs from 'fs';
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { readFile, readFiles } from '../readers/file-reader.js';
-import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
 describe('jdl - FileReader', () => {
   beforeEach(async () => {

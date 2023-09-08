@@ -27,7 +27,6 @@ export const files = {
         '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
         'README.md',
-        'test/utils.mjs',
         'tsconfig.json',
         'vitest.config.ts',
       ],

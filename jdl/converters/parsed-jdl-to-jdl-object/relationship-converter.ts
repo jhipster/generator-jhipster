@@ -17,17 +17,12 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
-import JDLRelationship, { JDLRelationshipType } from '../../models/jdl-relationship.js';
-import { lowerFirst, upperFirst } from '../../utils/string-utils.js';
+import JDLRelationship from '../../models/jdl-relationship.js';
+import { lowerFirst } from '../../utils/string-utils.js';
 import { formatComment } from '../../utils/format-utils.js';
-import { RelationshipType } from '../types.js';
-
-const { camelCase } = _;
+import { asJdlRelationshipType } from '../../jhipster/relationship-types.js';
 
 export default { convertRelationships };
-
-export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 
 /**
  * Converts parsed relationships to JDLRelationship objects.

@@ -21,9 +21,14 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { fromMatrix, extendMatrix, AuthenticationTypeMatrix, checkEnforcements } from '../../test/support/index.mjs';
+import {
+  fromMatrix,
+  extendMatrix,
+  AuthenticationTypeMatrix,
+  checkEnforcements,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CYPRESS } from '../generator-list.mjs';

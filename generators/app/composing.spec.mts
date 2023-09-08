@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { GENERATOR_APP } from '../generator-list.mjs';
 
 const allMockedComposedGenerators = [

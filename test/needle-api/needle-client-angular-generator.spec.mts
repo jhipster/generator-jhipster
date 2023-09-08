@@ -1,4 +1,4 @@
-import { defaultHelpers as helpers, runResult } from '../support/helpers.mjs';
+import { defaultHelpers as helpers, runResult } from '../support/index.mjs';
 
 import AngularGenerator from '../../generators/angular/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';

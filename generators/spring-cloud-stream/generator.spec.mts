@@ -22,9 +22,8 @@ import { expect } from 'esmocha';
 import lodash from 'lodash';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import { buildSamplesFromMatrix, buildServerMatrix } from '../../test/support/index.mjs';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 

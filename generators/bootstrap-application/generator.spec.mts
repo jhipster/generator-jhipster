@@ -22,7 +22,7 @@ import { expect } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.mjs';
-import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 

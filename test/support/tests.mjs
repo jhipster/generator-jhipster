@@ -6,7 +6,7 @@ import { expect } from 'esmocha';
 
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
-import { skipPrettierHelpers as helpers } from './helpers.mjs';
+import { skipPrettierHelpers as helpers } from '../../testing/index.mjs';
 import * as GeneratorList from '../../generators/generator-list.mjs';
 import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.mjs';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.mjs';

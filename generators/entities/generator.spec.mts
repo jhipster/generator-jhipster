@@ -24,7 +24,7 @@ import lodash from 'lodash';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
-import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
 const { snakeCase } = lodash;
 const __filename = fileURLToPath(import.meta.url);

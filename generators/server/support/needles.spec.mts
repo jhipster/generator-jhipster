@@ -18,7 +18,7 @@
  */
 import { expect } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../../test/support/index.mjs';
 import { GENERATOR_SERVER } from '../../generator-list.mjs';
 import { insertContentIntoApplicationProperties } from './needles.mjs';
 

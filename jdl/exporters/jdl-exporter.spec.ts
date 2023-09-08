@@ -27,7 +27,7 @@ import { JDLEntity } from '../models/index.mjs';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../models/jdl-application.js';
 import { applicationOptions, clientFrameworkTypes } from '../jhipster/index.mjs';
-import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {

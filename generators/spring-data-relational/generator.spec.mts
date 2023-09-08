@@ -3,10 +3,15 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { buildServerMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from '../../test/support/index.mjs';
+import {
+  buildServerMatrix,
+  extendMatrix,
+  extendFilteredMatrix,
+  buildSamplesFromMatrix,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from '../server/index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import {

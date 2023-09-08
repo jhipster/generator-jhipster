@@ -1,7 +1,7 @@
 import { expect } from 'esmocha';
 
 import { detectCrLf } from './auto-crlf-transform.mjs';
-import { defaultHelpers as helpers } from '../../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../../test/support/index.mjs';
 
 describe('generator - bootstrap - utils', () => {
   describe('::detectCrLf', () => {

@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 
-import { skipPrettierHelpers as helpers, runResult } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers, runResult } from '../../test/support/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { createImporterFromContent } from '../../jdl/jdl-importer.js';
 
