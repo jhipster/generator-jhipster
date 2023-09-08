@@ -126,7 +126,7 @@
     "dot-properties": "1.0.1",
     "ejs": "3.1.9",
     "escape-string-regexp": "5.0.0",
-    "eslint": "8.48.0",
+    "eslint": "8.49.0",
     "eslint-plugin-import": "2.28.1",
     "eslint-plugin-unused-imports": "3.0.0",
     "execa": "8.0.1",
