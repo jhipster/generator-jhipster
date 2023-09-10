@@ -46,7 +46,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 <%_ } _%>
 import org.springframework.security.web.SecurityFilterChain;
 <%_ if (!skipClient || authenticationUsesCsrf) { _%>
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.www.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import tech.jhipster.web.filter.CookieCsrfFilter;
@@ -163,11 +163,11 @@ public class SecurityConfiguration {
                 .disable())
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-            .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+            .addFilterAfter(new SpaWebFilter(), UsernamePasswordAuthenticationFilter.class)
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
   <%_ if (authenticationUsesCsrf) { _%>
-            .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
+            .addFilterAfter(new CookieCsrfFilter(), UsernamePasswordAuthenticationFilter.class)
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipClient) { _%>
