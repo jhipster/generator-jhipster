@@ -46,7 +46,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 <%_ } _%>
 import org.springframework.security.web.SecurityFilterChain;
 <%_ if (!skipClient || authenticationUsesCsrf) { _%>
-import org.springframework.security.web.authentication.www.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import tech.jhipster.web.filter.CookieCsrfFilter;
