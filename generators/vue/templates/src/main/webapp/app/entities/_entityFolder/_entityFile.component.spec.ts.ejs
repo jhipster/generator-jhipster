@@ -21,8 +21,8 @@ const tsKeyId = this.generateTestEntityId(primaryKey.type);
 _%>
 /* tslint:disable max-line-length */
 import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import { shallowMount, type MountingOptions } from '@vue/test-utils';
+import sinon, { type SinonStubbedInstance } from 'sinon';
 
 import <%= entityAngularName %> from './<%= entityFileName %>.vue';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';

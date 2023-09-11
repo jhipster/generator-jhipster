@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from 'axios';
+import axios, { type AxiosPromise } from 'axios';
 
 export default class HealthService {
   public separator: string;

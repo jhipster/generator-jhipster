@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from 'axios';
+import axios, { type AxiosPromise } from 'axios';
 
 export default class LogsService {
   public changeLevel(name: string, configuredLevel: string): AxiosPromise<any> {

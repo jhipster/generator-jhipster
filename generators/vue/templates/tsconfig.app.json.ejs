@@ -1,0 +1,13 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["<%= clientSrcDir %>/**/*", "<%= clientSrcDir %>app/**/*.vue"],
+  "exclude": ["<%= clientSrcDir %>app/**/*.spec.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "<%= clientSrcDir %>app",
+    "outDir": "<%= temporaryDir %>out-tsc/dist",
+    "paths": {
+      "@/*": ["./<%= clientSrcDir %>app/*"]
+    }
+  }
+}

@@ -1,8 +1,8 @@
-import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
+import { type ComputedRef, defineComponent, inject, type Ref, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import LoginService from '@/account/login.service';
+import type LoginService from '@/account/login.service';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({

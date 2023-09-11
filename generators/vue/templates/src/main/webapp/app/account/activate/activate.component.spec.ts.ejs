@@ -1,5 +1,5 @@
 import { vitest } from 'vitest';
-import { shallowMount, ComponentMountingOptions } from '@vue/test-utils';
+import { shallowMount, type ComponentMountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 

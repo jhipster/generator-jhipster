@@ -5,7 +5,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -434,28 +434,22 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -466,7 +460,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -967,28 +961,22 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -999,7 +987,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -1434,10 +1422,19 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -1469,7 +1466,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -1907,10 +1904,19 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp2/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -1942,7 +1948,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -2530,28 +2536,22 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp2/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -2562,7 +2562,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -2973,28 +2973,22 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -3005,7 +2999,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -3422,28 +3416,22 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
+  "tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }

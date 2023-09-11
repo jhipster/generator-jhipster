@@ -158,6 +158,26 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addIndexAsset({ source, application }) {
+        if (application.microfrontend) return;
+        source.addExternalResourceToRoot({
+          resource: '<script>const global = globalThis;</script>',
+          comment: 'Workaround https://github.com/axios/axios/issues/5622',
+        });
+        source.addExternalResourceToRoot({
+          resource: `<script type="module" src="./app/${application.microfrontend ? 'index.ts' : 'main.ts'}"></script>`,
+          comment: 'Load vue main',
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       postWriteEntityFiles,

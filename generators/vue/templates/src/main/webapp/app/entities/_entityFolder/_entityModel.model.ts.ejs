@@ -27,12 +27,12 @@ const enumImports = this.generateEntityClientEnumImports(fields.filter(field => 
   importedPath = importedPath.replace('app/', '@/');
 _%>
 <%_ if (importedType !== "I".concat(entityAngularName)) { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
+import { type <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
 <%_ }); _%>
 
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
+import { type <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 export interface I<%= entityAngularName %> {
     <%_ variablesWithTypes.forEach(variablesWithType => { _%>

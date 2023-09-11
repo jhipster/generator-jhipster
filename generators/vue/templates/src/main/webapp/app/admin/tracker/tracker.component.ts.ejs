@@ -1,11 +1,11 @@
-import { defineComponent, inject, ref, Ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, inject, ref, type Ref, onMounted, onUnmounted } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { Subscription } from 'rxjs';
+import { type Subscription } from 'rxjs';
 
 import { useDateFormat } from '@/shared/composables'
-import TrackerService from './tracker.service';
+import type TrackerService from './tracker.service';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({
