@@ -36,6 +36,7 @@ import {
 } from '../generator-list.mjs';
 
 import { applicationTypes, applicationOptions, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import command from './command.mjs';
 
 const { MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
@@ -64,6 +65,9 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         if (!this.skipChecks) {
           await this.checkForNewVersion();
         }
+      },
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
       },
 
       validate() {

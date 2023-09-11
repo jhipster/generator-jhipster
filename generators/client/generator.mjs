@@ -31,6 +31,7 @@ import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, G
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { createNeedleCallback } from '../base/support/index.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
+import command from './command.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -50,6 +51,18 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
