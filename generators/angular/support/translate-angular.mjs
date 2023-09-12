@@ -19,6 +19,8 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
+import { createJhiTransformTranslateReplacer, createJhiTransformTranslateStringifyReplacer } from '../../languages/support/index.mjs';
+
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 
 const JHI_TRANSLATE_REGEX = /(\n?\s*[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/.source;
@@ -102,27 +104,35 @@ function replaceErrorMessage(getWebappTranslation, content) {
  * @type {import('../generator-base.js').EditFileCallback}
  * @this {import('../generator-base.js')}
  */
-// eslint-disable-next-line import/prefer-default-export
-export const createTranslationReplacer = getWebappTranslation =>
-  function replaceAngularTranslations(content, filePath) {
+export const createTranslationReplacer = (getWebappTranslation, enableTranslation) => {
+  const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
+  const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
+  return function replaceAngularTranslations(content, filePath) {
     if (/\.html$/.test(filePath)) {
-      content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
-      content = replacePlaceholders(getWebappTranslation, content);
+      if (!enableTranslation) {
+        content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
+        content = replacePlaceholders(getWebappTranslation, content);
+      }
+      content = htmlJhiTranslateReplacer(content);
+      content = htmlJhiTranslateStringifyReplacer(content);
     }
-    if (/(:?route|module)\.ts$/.test(filePath)) {
-      content = replacePageTitles(getWebappTranslation, content);
-    }
-    if (/error\.route\.ts$/.test(filePath)) {
-      content = replaceErrorMessage(getWebappTranslation, content);
+    if (!enableTranslation) {
+      if (/(:?route|module)\.ts$/.test(filePath)) {
+        content = replacePageTitles(getWebappTranslation, content);
+      }
+      if (/error\.route\.ts$/.test(filePath)) {
+        content = replaceErrorMessage(getWebappTranslation, content);
+      }
     }
     return content;
   };
+};
 
 const minimatch = new Minimatch('**/*{.html,.route.ts,.module.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
-const translateAngularFilesTransform = getWebappTranslation => {
-  const translate = createTranslationReplacer(getWebappTranslation);
+const translateAngularFilesTransform = (getWebappTranslation, enableTranslation) => {
+  const translate = createTranslationReplacer(getWebappTranslation, enableTranslation);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
   });
