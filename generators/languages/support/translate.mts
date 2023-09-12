@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{[^}]*\}))?\s*\)/g.source;
+const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:(?!\}\))[\s\S])*\}))?\)/gs.source;
 
 function getTranslationValue(getWebappTranslation, key, data) {
   return getWebappTranslation(key, data) || undefined;
@@ -61,26 +61,14 @@ export const replaceTranslationKeysWithText = (
 
     let data;
     if (interpolate) {
-      const interpolateMatches = interpolate.matchAll(/(?<field>[^{\s:,}]+)(?::\s*(?<value>[^,}]+))?/g);
       data = {};
-      for (const interpolateMatch of interpolateMatches) {
-        const field = interpolateMatch!.groups!.field;
-        let value: any = interpolateMatch!.groups!.value;
-        if (value === undefined) {
-          value = key;
+      try {
+        const interpolateValues = JSON.parse(interpolate);
+        for (const [field, value] of Object.entries(interpolateValues)) {
+          data[field] = value;
         }
-        value = value.trim();
-        if (/^\d+$/.test(value)) {
-          // convert integer
-          value = parseInt(value, 10);
-        } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
-          // extract string value
-          value = value.substring(1, value.length - 2);
-        } else {
-          // wrap expression
-          value = `{${value}}`;
-        }
-        data[field] = value;
+      } catch {
+        throw new Error(`Translation interpolations values should be a JSON, ${interpolate}`);
       }
     }
 

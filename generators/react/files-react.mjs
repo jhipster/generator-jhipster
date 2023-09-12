@@ -306,12 +306,8 @@ export const files = {
   ],
 };
 
-export async function writeFiles({ application, control }) {
+export async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
-
-  if (!application.enableTranslation) {
-    await control.loadClientTranslations?.();
-  }
 
   await this.writeFiles({
     sections: files,

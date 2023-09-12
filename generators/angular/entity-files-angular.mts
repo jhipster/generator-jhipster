@@ -60,16 +60,11 @@ export const angularFiles = {
   ],
 };
 
-export async function writeEntitiesFiles(
-  this: CoreGenerator,
-  { application, entities, control }: GeneratorDefinition['writingEntitiesTaskParam'],
-) {
-  await control.loadClientTranslations?.();
-
+export async function writeEntitiesFiles(this: CoreGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: angularFiles,
-      context: { ...application, ...entity, getWebappTranslation: control.getWebappTranslation },
+      context: { ...application, ...entity },
     });
   }
 }

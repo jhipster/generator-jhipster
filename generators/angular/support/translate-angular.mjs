@@ -105,7 +105,7 @@ function replaceErrorMessage(getWebappTranslation, content) {
  * @this {import('../generator-base.js')}
  */
 export const createTranslationReplacer = (getWebappTranslation, enableTranslation) => {
-  const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
+  const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation);
   const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
   return function replaceAngularTranslations(content, filePath) {
     if (/\.html$/.test(filePath)) {
@@ -113,6 +113,10 @@ export const createTranslationReplacer = (getWebappTranslation, enableTranslatio
         content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
         content = replacePlaceholders(getWebappTranslation, content);
       }
+      content = htmlJhiTranslateReplacer(content);
+      content = htmlJhiTranslateStringifyReplacer(content);
+    }
+    if (/\.ts$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
     }
@@ -128,7 +132,7 @@ export const createTranslationReplacer = (getWebappTranslation, enableTranslatio
   };
 };
 
-const minimatch = new Minimatch('**/*{.html,.route.ts,.module.ts}');
+const minimatch = new Minimatch('**/*{.html,.component.ts,.route.ts,.module.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
 const translateAngularFilesTransform = (getWebappTranslation, enableTranslation) => {

@@ -29,7 +29,7 @@
     <div [ngSwitch]="account !== null">
       <div class="alert alert-success" *ngSwitchCase="true">
         <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
-          [translateValues]="{ username: account.login }">__jhiTransformTranslate__('home.logged.message', { username: '{{ account.login }}' })</span>
+          [translateValues]="{ username: account.login }">__jhiTransformTranslate__('home.logged.message', { "username": "{{ account.login }}" })</span>
       </div>
 
       <div class="alert alert-warning" *ngSwitchCase="false">

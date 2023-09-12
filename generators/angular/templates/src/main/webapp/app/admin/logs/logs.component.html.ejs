@@ -34,7 +34,7 @@
     <div class="spinner-border"></div>
   </div>
 
-  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }">__jhiTransformTranslate__('logs.nbloggers', { total: '{{ loggers.length }}' })</p>
+  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })</p>
 
   <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
   <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />

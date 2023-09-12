@@ -19,7 +19,7 @@
 <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-      <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: settingsForm.value.login }" *ngIf="settingsForm.value.login">__jhiTransformTranslate__('settings.title', { username: '{{ settingsForm.value.login }}' })</h2>
+      <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: settingsForm.value.login }" *ngIf="settingsForm.value.login">__jhiTransformTranslate__('settings.title', { "username": "{{ settingsForm.value.login }}" })</h2>
 
       <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="settings.messages.success">__jhiTransformTranslate__('settings.messages.success')</div>
 

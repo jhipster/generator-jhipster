@@ -18,95 +18,62 @@
  */
 import { inspect } from 'node:util';
 import _ from 'lodash';
-import { entityClientI18nFiles } from './entity-files.mjs';
-import { clientI18nFiles } from './files.mjs';
+import { passthrough } from '@yeoman/transform';
+import { Minimatch } from 'minimatch';
+import { clearFileState } from 'mem-fs-editor/state';
 
 const { get } = _;
 
+export const createTranslationsFilter = ({ clientSrcDir, nativeLanguage, fallbackLanguage }) => {
+  const pattern =
+    !fallbackLanguage || nativeLanguage === fallbackLanguage
+      ? `**/${clientSrcDir}i18n/${nativeLanguage}/*.json`
+      : `**/${clientSrcDir}i18n/{${nativeLanguage},${fallbackLanguage}}/*.json`;
+  const minimatch = new Minimatch(pattern);
+  return filePath => {
+    return minimatch.match(filePath);
+  };
+};
+
+export const createTranslationsFileFilter = opts => {
+  const filter = createTranslationsFilter(opts);
+  return file => filter(file.path);
+};
+
 export default class TranslationData {
-  control;
   translations;
-  env;
   generator;
 
-  constructor(generator, control) {
+  constructor({ generator, translations }) {
     this.generator = generator;
-    this.control = control;
-
-    if (!this.control.clientTranslations) {
-      this.control.clientTranslations = {};
-    }
-
-    this.translations = this.control.clientTranslations;
-    this.env = this.generator.env;
+    this.translations = translations;
   }
 
-  /**
-   * Load entity client native translation.
-   */
-  async loadEntityClientTranslations(application, entity) {
-    const { frontendAppName, nativeLanguage = 'en' } = application;
-    const rootTemplatesPath = this.generator.fetchFromInstalledJHipster('languages/templates');
-    const translationFiles = await this.generator.writeFiles({
-      sections: entityClientI18nFiles,
-      rootTemplatesPath,
-      context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: 'en' },
+  loadFromStreamTransform({ clientSrcDir, nativeLanguage, fallbackLanguage = 'en' }) {
+    const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
+    const minimatchNative = new Minimatch(`**/${clientSrcDir}i18n/${nativeLanguage}/*.json`);
+    return passthrough(file => {
+      if (filter(file)) {
+        const contents = JSON.parse(file.contents.toString());
+        this.mergeTranslation(contents, !minimatchNative.match(file.path));
+      }
     });
-
-    // Add entities to menu translation.
-    this.translations.global.menu.entities[entity.entityTranslationKeyMenu] = entity.entityClassHumanized;
-
-    if (nativeLanguage && nativeLanguage !== 'en') {
-      translationFiles.push(
-        ...(await this.generator.writeFiles({
-          sections: entityClientI18nFiles,
-          rootTemplatesPath,
-          context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: nativeLanguage },
-        })),
-      );
-    }
-    for (const translationFile of translationFiles) {
-      _.merge(this.translations, this.generator.readDestinationJSON(translationFile));
-      delete this.env.sharedFs.get(translationFile).state;
-    }
   }
 
-  /**
-   * Load client native translation.
-   */
-  async loadClientTranslations(application) {
-    const { nativeLanguage } = application;
-    const rootTemplatesPath = this.generator.fetchFromInstalledJHipster('languages/templates/');
-
-    // Prepare and load en translation
-    const translationFiles = await this.generator.writeFiles({
-      sections: clientI18nFiles,
-      rootTemplatesPath,
-      context: {
-        ...application,
-        lang: 'en',
-        clientSrcDir: '__tmp__',
-      },
+  clearTranslationsStatusTransform({ clientSrcDir, nativeLanguage, fallbackLanguage = 'en' }) {
+    const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
+    return passthrough(file => {
+      if (filter(file)) {
+        clearFileState(file);
+      }
     });
+  }
 
-    // Prepare and load native translation
-    if (nativeLanguage && nativeLanguage !== 'en') {
-      translationFiles.push(
-        ...(await this.generator.writeFiles({
-          sections: clientI18nFiles,
-          rootTemplatesPath,
-          context: {
-            ...application,
-            lang: application.nativeLanguage,
-            clientSrcDir: '__tmp__',
-          },
-        })),
-      );
-    }
-
-    for (const translationFile of translationFiles) {
-      _.merge(this.translations, this.generator.readDestinationJSON(translationFile));
-      delete this.env.sharedFs.get(translationFile).state;
+  mergeTranslation(translation, fallback) {
+    if (fallback) {
+      _.defaultsDeep(this.translations, translation);
+    } else {
+      _.merge(this.translations, translation);
     }
   }
 

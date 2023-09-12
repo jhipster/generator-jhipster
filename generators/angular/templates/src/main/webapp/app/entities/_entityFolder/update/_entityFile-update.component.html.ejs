@@ -19,7 +19,7 @@
 <div class="d-flex justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createOrEditLabel">__jhiTransformTranslate__(i18nKeyPrefix + '.home.createOrEditLabel')</h2>
+            <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createOrEditLabel">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.home.createOrEditLabel')</h2>
 
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
@@ -109,23 +109,23 @@ _%>
     <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.minlength" <%= jhiPrefix %>Translate="entity.validation.minlength" [translateValues]="{ min: <%= field.fieldValidateRulesMinlength %> }">__jhiTransformTranslate__('entity.validation.minlength', { min: field.fieldValidateRulesMinlength })</small>
+                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.minlength" <%= jhiPrefix %>Translate="entity.validation.minlength" [translateValues]="{ min: <%= field.fieldValidateRulesMinlength %> }">__jhiTransformTranslate__('entity.validation.minlength', { "min": <%- field.fieldValidateRulesMinlength %> })</small>
     <%_ } _%>
     <%_ if (field.fieldValidationMaxLength) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxlength" <%= jhiPrefix %>Translate="entity.validation.maxlength" [translateValues]="{ max: <%= field.fieldValidateRulesMaxlength %> }">__jhiTransformTranslate__('entity.validation.maxlength', { max: field.fieldValidateRulesMaxlength })</small>
+                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxlength" <%= jhiPrefix %>Translate="entity.validation.maxlength" [translateValues]="{ max: <%= field.fieldValidateRulesMaxlength %> }">__jhiTransformTranslate__('entity.validation.maxlength', { "max": <%- field.fieldValidateRulesMaxlength %> })</small>
     <%_ } _%>
     <%_ if (field.fieldValidationMin) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.min" <%= jhiPrefix %>Translate="entity.validation.min" [translateValues]="{ min: <%= field.fieldValidateRulesMin %> }">__jhiTransformTranslate__('entity.validation.min', { min: field.fieldValidateRulesMin })</small>
+                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.min" <%= jhiPrefix %>Translate="entity.validation.min" [translateValues]="{ min: <%= field.fieldValidateRulesMin %> }">__jhiTransformTranslate__('entity.validation.min', { "min": <%- field.fieldValidateRulesMin %> })</small>
     <%_ } _%>
     <%_ if (field.fieldValidationMax) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.max" <%= jhiPrefix %>Translate="entity.validation.max" [translateValues]="{ max: <%= field.fieldValidateRulesMax %> }">__jhiTransformTranslate__('entity.validation.max', { max: field.fieldValidateRulesMax })</small>
+                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.max" <%= jhiPrefix %>Translate="entity.validation.max" [translateValues]="{ max: <%= field.fieldValidateRulesMax %> }">__jhiTransformTranslate__('entity.validation.max', { "max": <%- field.fieldValidateRulesMax %> })</small>
     <%_ } _%>
     <%_ if (field.fieldValidationPattern) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.pattern" <%= jhiPrefix %>Translate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">__jhiTransformTranslate__('entity.validation.pattern', { pattern: fieldNameHumanized })</small>
+                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.pattern" <%= jhiPrefix %>Translate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">__jhiTransformTranslate__('entity.validation.pattern', { "pattern": "<%- fieldNameHumanized %>" })</small>
     <%_ } _%>
     <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>
                         <small class="form-text text-danger"
@@ -149,7 +149,7 @@ _%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 
                 <div class="mb-3">
-                    <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>">__jhiTransformTranslate__(translationKey)</label>
+                    <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>">__jhiTransformTranslate__('<%- translationKey %>')</label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= propertyName %>" name="<%= relationshipName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
     <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
@@ -164,7 +164,7 @@ _%>
   <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
 
                 <div class="mb-3">
-                    <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>">__jhiTransformTranslate__(translationKey)</label>
+                    <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>">__jhiTransformTranslate__('<%- translationKey %>')</label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= propertyName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
                         <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
