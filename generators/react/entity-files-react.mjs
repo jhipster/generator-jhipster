@@ -50,11 +50,7 @@ export const reactFiles = {
   ],
 };
 
-export async function writeEntitiesFiles({ application, entities, control }) {
-  if (!application.enableTranslation) {
-    await control.loadClientTranslations?.();
-  }
-
+export async function writeEntitiesFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: reactFiles,
