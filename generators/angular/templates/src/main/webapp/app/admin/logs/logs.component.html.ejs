@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <div class="table-responsive" *ngIf="loggers">
-  <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading"><%- getWebappTranslation('logs.title') %></h2>
+  <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">__jhiTransformTranslate__('logs.title')</h2>
 
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
   <div class="float-end">
@@ -34,16 +34,16 @@
     <div class="spinner-border"></div>
   </div>
 
-  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }"><%- getWebappTranslation('logs.nbloggers', { total: '{{ loggers.length }}' }) %></p>
+  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }">__jhiTransformTranslate__('logs.nbloggers', { total: '{{ loggers.length }}' })</p>
 
-  <span <%= jhiPrefix %>Translate="logs.filter"><%- getWebappTranslation('logs.filter') %></span>
+  <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
   <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
 
   <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
     <thead>
       <tr <%= jhiPrefix %>Sort [(predicate)]="orderProp" [(ascending)]="ascending" (sortChange)="filterAndSort()">
-        <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name"><%- getWebappTranslation('logs.table.name') %></span> <fa-icon icon="sort"></fa-icon></th>
-        <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level"><%- getWebappTranslation('logs.table.level') %></span> <fa-icon icon="sort"></fa-icon></th>
+        <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name">__jhiTransformTranslate__('logs.table.name')</span> <fa-icon icon="sort"></fa-icon></th>
+        <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level">__jhiTransformTranslate__('logs.table.level')</span> <fa-icon icon="sort"></fa-icon></th>
       </tr>
     </thead>
 

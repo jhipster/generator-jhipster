@@ -18,10 +18,10 @@
 -%>
 <div>
   <h2>
-    <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading"><%- getWebappTranslation('health.title') %></span>
+    <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading">__jhiTransformTranslate__('health.title')</span>
 
     <button class="btn btn-primary float-end" (click)="refresh()">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button"><%- getWebappTranslation('health["refresh.button"]') %></span>
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button">__jhiTransformTranslate__('health["refresh.button"]')</span>
     </button>
   </h2>
 
@@ -29,9 +29,9 @@
     <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
       <thead>
         <tr>
-          <th scope="col" <%= jhiPrefix %>Translate="health.table.service"><%- getWebappTranslation('health.table.service') %></th>
-          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status"><%- getWebappTranslation('health.table.status') %></th>
-          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details"><%- getWebappTranslation('health.details.details') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="health.table.service">__jhiTransformTranslate__('health.table.service')</th>
+          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status">__jhiTransformTranslate__('health.table.status')</th>
+          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details">__jhiTransformTranslate__('health.details.details')</th>
         </tr>
       </thead>
       <tbody *ngIf="health">
@@ -49,7 +49,7 @@
               [ngClass]="getBadgeClass(componentHealth.value!.status)"
               <%= jhiPrefix %>Translate="{{ 'health.status.' + componentHealth.value!.status }}"
             >
-              {{ <%- JSON.stringify(getWebappTranslation('health.status')) %>[componentHealth.value!.status || 'UNKNOWN'] }}
+              {{ __jhiTransformTranslateStringify__('health.status')[componentHealth.value!.status || 'UNKNOWN'] }}
             </span>
           </td>
           <td class="text-center">
