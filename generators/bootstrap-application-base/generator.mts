@@ -20,6 +20,7 @@ import assert from 'assert';
 import os from 'os';
 import _ from 'lodash';
 import chalk from 'chalk';
+import { passthrough } from '@yeoman/transform';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import {
@@ -272,6 +273,41 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.preparingEachEntityRelationship;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      task({ application }) {
+        const isPackageJson = file => file.path === this.destinationPath('package.json');
+        const populateNullValues = dependencies => {
+          if (!dependencies) return;
+          for (const key of Object.keys(dependencies)) {
+            if (dependencies[key] === null && application.nodeDependencies[key]) {
+              dependencies[key] = application.nodeDependencies[key];
+            }
+          }
+        };
+        this.queueTransformStream(
+          passthrough(file => {
+            if (file.contents && isPackageJson(file)) {
+              const content = JSON.parse(file.contents.toString());
+              populateNullValues(content.dependencies);
+              populateNullValues(content.devDependencies);
+              populateNullValues(content.peerDependencies);
+              file.contents = Buffer.from(`${JSON.stringify(content, null, 2)}\n`);
+            }
+          }),
+          {
+            name: 'updating package.json dependency versions',
+            streamOptions: { filter: isPackageJson },
+          },
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 
   /**
