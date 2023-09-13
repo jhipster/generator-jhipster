@@ -32,7 +32,7 @@ const { MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 
 const { MAPSTRUCT } = MapperTypes;
-const { LONG, UUID } = CommonDBTypes;
+const { INTEGER, LONG, UUID } = CommonDBTypes;
 
 const { snakeCase, upperFirst } = _;
 
@@ -51,7 +51,7 @@ export default function prepareField(entityWithConfig, field, generator) {
 
   if (field.id && entityWithConfig.primaryKey) {
     if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
+      field.autoGenerate = !entityWithConfig.primaryKey.composite && [INTEGER, LONG, UUID].includes(field.fieldType);
     }
 
     if (!field.autoGenerate) {

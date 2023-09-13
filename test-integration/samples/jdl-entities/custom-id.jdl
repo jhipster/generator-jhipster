@@ -1,4 +1,12 @@
 /*
+ * Integer custom id
+ */
+@ChangelogDate(20200804035100)
+entity EntityIntegerId {
+  id Integer
+}
+
+/*
  * UUID custom id
  */
 @ChangelogDate(20200804035300)

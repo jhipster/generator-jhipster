@@ -165,7 +165,7 @@ _%>
 <%_ if (noPropertyEntity) { _%>
     if (form.controls.<%= primaryKey.name %>.disabled) {
       // form.value returns <%= primaryKey.name %> with null value for FormGroup with only one FormControl
-      return {};
+      return { <%= primaryKey.name %>: null };
     }
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
