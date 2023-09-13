@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title><%= baseName %> - Swagger UI</title>
-    <base href="/swagger-ui/"/>
+    <base href="/swagger-ui/" />
     <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
@@ -91,20 +91,23 @@
             urls = (
               await Promise.allSettled(
                 services.map(async service => {
-                  return axios.get(`/services/${service}/management/jhiopenapigroups`, axiosConfig).then(response => {
-                    if (Array.isArray(response.data)) {
-                      return response.data.map(({ group, description }) => ({
-                        name: description,
-                        url: `/services/${service}${baseUrl}/${group}`,
-                      }));
-                    }
-                    return undefined;
-                  }).catch(() => {
-                    return axios
-                      .get(`/services/${service}${baseUrl}`, axiosConfig)
-                      .then(() => [{ url: `/services/${service}${baseUrl}`, name: `${service} (default)` }]);
-                  });
-                })
+                  return axios
+                    .get(`/services/${service}/management/jhiopenapigroups`, axiosConfig)
+                    .then(response => {
+                      if (Array.isArray(response.data)) {
+                        return response.data.map(({ group, description }) => ({
+                          name: description,
+                          url: `/services/${service}/${baseUrl}/${group}`,
+                        }));
+                      }
+                      return undefined;
+                    })
+                    .catch(() => {
+                      return axios
+                        .get(`/services/${service}/${baseUrl}`, axiosConfig)
+                        .then(() => [{ url: `/services/${service}/${baseUrl}`, name: `${service} (default)` }]);
+                    });
+                }),
               )
             )
               .filter(settled => settled.status === 'fulfilled')
