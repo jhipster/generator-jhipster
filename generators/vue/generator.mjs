@@ -138,9 +138,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
       writeEntityFiles,
       async queueTranslateTransform({ control, application }) {
         const { enableTranslation, clientSrcDir } = application;
-        if (!application.enableTranslation) {
-          await control.loadClientTranslations?.();
-        }
         const { getWebappTranslation } = control;
         this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
           name: 'translating webapp',

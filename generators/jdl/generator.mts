@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { extname } from 'path';
-import { existsSync } from 'fs';
 import { QueuedAdapter } from '@yeoman/adapter';
 import _ from 'lodash';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
@@ -106,7 +105,7 @@ export default class JdlGenerator extends BaseGenerator {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
             this.jdlFiles.map(toJdlFile).map(async filename => {
-              if (!existsSync(this.destinationPath(filename))) {
+              if (!this.readDestination(filename)) {
                 this.log.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
                 return downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
               }

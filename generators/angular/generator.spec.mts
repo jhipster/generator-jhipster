@@ -13,7 +13,6 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 import Generator from './index.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -77,16 +76,6 @@ const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/admin/metrics/metrics.service.spec.ts`,
 ];
 
-class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
-  get [BaseApplicationGenerator.PREPARING]() {
-    return {
-      mockTranslations({ control }) {
-        control.getWebappTranslation = () => 'translations';
-      },
-    };
-  }
-}
-
 describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -108,8 +97,8 @@ describe(`generator - ${clientFramework}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
-          .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
-          .withMockedGenerators(['jhipster:common']);
+          .withControl({ getWebappTranslation: () => 'translations' })
+          .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
       after(() => runResult.cleanup());

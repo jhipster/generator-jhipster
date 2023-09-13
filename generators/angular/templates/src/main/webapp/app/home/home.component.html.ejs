@@ -22,43 +22,41 @@
   </div>
 
   <div class="col-md-9">
-    <h1 class="display-4"><span <%= jhiPrefix %>Translate="home.title"><%- getWebappTranslation('home.title') %></span> (<%= humanizedBaseName %>)</h1>
+    <h1 class="display-4"><span <%= jhiPrefix %>Translate="home.title">__jhiTransformTranslate__('home.title')</span> (<%= humanizedBaseName %>)</h1>
 
-    <p class="lead" <%= jhiPrefix %>Translate="home.subtitle"><%- getWebappTranslation('home.subtitle') %></p>
+    <p class="lead" <%= jhiPrefix %>Translate="home.subtitle">__jhiTransformTranslate__('home.subtitle')</p>
 
     <div [ngSwitch]="account !== null">
       <div class="alert alert-success" *ngSwitchCase="true">
         <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
-          [translateValues]="{ username: account.login }"><%- getWebappTranslation('home.logged.message', { username: '{{ account.login }}' }) %></span>
+          [translateValues]="{ username: account.login }">__jhiTransformTranslate__('home.logged.message', { "username": "{{ account.login }}" })</span>
       </div>
 
       <div class="alert alert-warning" *ngSwitchCase="false">
-        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix"><%- getWebappTranslation('global.messages.info.authenticated.prefix') %></span>
-        <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link"><%- getWebappTranslation('global.messages.info.authenticated.link') %></a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix"><%- getWebappTranslation('global.messages.info.authenticated.suffix') %></span>
+        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix">__jhiTransformTranslate__('global.messages.info.authenticated.prefix')</span>
+        <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link">__jhiTransformTranslate__('global.messages.info.authenticated.link')</a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix">__jhiTransformTranslate__('global.messages.info.authenticated.suffix')</span>
       </div>
       <%_ if (generateUserManagement) { _%>
 
       <div class="alert alert-warning" *ngSwitchCase="false">
-        <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount"><%- getWebappTranslation('global.messages.info.register.noaccount') %></span>&nbsp;
-        <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link"><%- getWebappTranslation('global.messages.info.register.link') %></a>
+        <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">__jhiTransformTranslate__('global.messages.info.register.noaccount')</span>&nbsp;
+        <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">__jhiTransformTranslate__('global.messages.info.register.link')</a>
       </div>
       <%_ } _%>
     </div>
 
-    <p <%= jhiPrefix %>Translate="home.question">
-      <%- getWebappTranslation('home.question') %>
-    </p>
+    <p <%= jhiPrefix %>Translate="home.question">__jhiTransformTranslate__('home.question')</p>
 
     <ul>
-      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.homepage"><%- getWebappTranslation('home.link.homepage') %></a></li>
-      <li><a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.stackoverflow"><%- getWebappTranslation('home.link.stackoverflow') %></a></li>
-      <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.bugtracker"><%- getWebappTranslation('home.link.bugtracker') %></a></li>
-      <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.chat"><%- getWebappTranslation('home.link.chat') %></a></li>
-      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.follow"><%- getWebappTranslation('home.link.follow') %></a></li>
+      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.homepage">__jhiTransformTranslate__('home.link.homepage')</a></li>
+      <li><a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.stackoverflow">__jhiTransformTranslate__('home.link.stackoverflow')</a></li>
+      <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.bugtracker">__jhiTransformTranslate__('home.link.bugtracker')</a></li>
+      <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.chat">__jhiTransformTranslate__('home.link.chat')</a></li>
+      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.follow">__jhiTransformTranslate__('home.link.follow')</a></li>
     </ul>
 
     <p>
-      <span <%= jhiPrefix %>Translate="home.like"><%- getWebappTranslation('home.like') %></span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.github"><%- getWebappTranslation('home.github') %></a>!
+      <span <%= jhiPrefix %>Translate="home.like">__jhiTransformTranslate__('home.like')</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.github">__jhiTransformTranslate__('home.github')</a>!
     </p>
   </div>
 </div>

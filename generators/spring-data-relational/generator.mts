@@ -35,6 +35,7 @@ import {
 } from './internal/dependencies.mjs';
 import { hibernateSnakeCase } from '../server/support/string.mjs';
 import { getJdbcUrl, getR2dbcUrl } from './support/index.mjs';
+import command from './command.mjs';
 
 const { SQL } = databaseTypes;
 
@@ -44,6 +45,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_DATA_RELATIONAL);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get composing() {

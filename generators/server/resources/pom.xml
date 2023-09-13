@@ -19,7 +19,7 @@
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.3</jaxb-runtime.version>
         <junit-platform-launcher.version>1.10.0</junit-platform-launcher.version>
-        <liquibase.version>4.23.1</liquibase.version>
+        <liquibase.version>4.23.2</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.0.5</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
@@ -30,7 +30,7 @@
         <!-- Plugin versions -->
         <checkstyle.version>10.12.3</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
-        <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.5.0</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
@@ -41,7 +41,7 @@
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <maven-enforcer-plugin.version>3.4.0</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>

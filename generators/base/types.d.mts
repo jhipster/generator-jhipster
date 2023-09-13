@@ -9,6 +9,4 @@ export type Control = {
    */
   blueprintConfigured?: boolean;
   reproducibleLiquibaseTimestamp?: Date;
-
-  loadClientTranslations?: () => Promise<void>;
 };

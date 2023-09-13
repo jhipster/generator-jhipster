@@ -126,7 +126,7 @@ export default class BaseApplicationGenerator<
       if (this.options.applicationWithEntities.entities) {
         const entities = this.options.applicationWithEntities.entities.map(entity => {
           const entityName = _.upperFirst(entity.name);
-          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+          const file = this.getEntityConfigPath(entityName);
           this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
           return entityName;
         });
@@ -137,12 +137,20 @@ export default class BaseApplicationGenerator<
   }
 
   /**
+   * Get Entities configuration path
+   * @returns
+   */
+  getEntitiesConfigPath(...args) {
+    return this.destinationPath(JHIPSTER_CONFIG_DIR, ...args);
+  }
+
+  /**
    * Get Entity configuration path
    * @param entityName Entity name
    * @returns
    */
   getEntityConfigPath(entityName: string) {
-    return this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+    return this.getEntitiesConfigPath(`${upperFirst(entityName)}.json`);
   }
 
   /**
@@ -171,7 +179,7 @@ export default class BaseApplicationGenerator<
       return e1.definition.changelogDate - e2.definition.changelogDate;
     }
 
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+    const configDir = this.getEntitiesConfigPath();
 
     const entities: { name: string; definition: Record<string, any> }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {

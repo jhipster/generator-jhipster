@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
-import { GENERATOR_JAVA, GENERATOR_LIQUIBASE } from '../generator-list.mjs';
+import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -86,7 +86,7 @@ const command: JHipsterCommandDefinition = {
       hide: true,
     },
   },
-  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE],
+  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };
 
 export default command;

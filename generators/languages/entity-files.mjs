@@ -80,13 +80,14 @@ export function writeEntityFiles() {
     },
 
     async writeClientFiles({ application, entities }) {
-      if (!application.enableTranslation || application.skipClient) return;
+      if (application.skipClient) return;
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtIn);
 
       // Copy each
       const { clientSrcDir, frontendAppName } = application;
+      const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       for (const entity of entitiesToWriteTranslationFor) {
-        for (const lang of this.languagesToApply) {
+        for (const lang of languagesToApply) {
           await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
         }
       }

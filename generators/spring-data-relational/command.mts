@@ -16,8 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './languages.mjs';
-export { default as generateDateTimeFormat } from './json/dates.mjs';
-export { default as detectLanguage } from './detect-language.mjs';
-export { default as loadLanguagesConfig } from './load-config.mjs';
-export * from './translate.mjs';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const command: JHipsterCommandDefinition = {
+  options: {
+    devDatabaseType: {
+      description: 'Development database',
+      type: String,
+      scope: 'storage',
+    },
+  },
+};
+
+export default command;

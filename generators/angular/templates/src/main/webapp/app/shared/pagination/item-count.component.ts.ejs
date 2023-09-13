@@ -31,7 +31,7 @@ import TranslateDirective from '../language/translate.directive';
 <%_ if (enableTranslation) { _%>
     <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
 <%_ } else { _%>
-    <div><%- getWebappTranslation('global.item-count') %></div>
+    <div>__jhiTransformTranslate__('global.item-count')</div>
 <%_ } _%>
   `,
 <%_ if (enableTranslation) { _%>

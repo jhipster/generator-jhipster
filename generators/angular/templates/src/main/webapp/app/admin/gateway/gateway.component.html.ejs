@@ -18,22 +18,22 @@
 -%>
 <div>
   <h2>
-    <span id="gateway-page-heading" <%= jhiPrefix %>Translate="gateway.title"><%- getWebappTranslation('gateway.title') %></span>
+    <span id="gateway-page-heading" <%= jhiPrefix %>Translate="gateway.title">__jhiTransformTranslate__('gateway.title')</span>
 
     <button class="btn btn-primary float-end" (click)="refresh()" (disabled)="updatingRoutes">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="gateway.refresh.button"><%- getWebappTranslation('gateway.refresh.button') %></span>
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="gateway.refresh.button">__jhiTransformTranslate__('gateway.refresh.button')</span>
     </button>
   </h2>
 
-  <h3 <%= jhiPrefix %>Translate="gateway.routes.title"><%- getWebappTranslation('gateway.routes.title') %></h3>
+  <h3 <%= jhiPrefix %>Translate="gateway.routes.title">__jhiTransformTranslate__('gateway.routes.title')</h3>
 
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="gateway-page-heading">
       <thead>
         <tr>
-          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.url"><%- getWebappTranslation('gateway.routes.url') %></th>
-          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.service"><%- getWebappTranslation('gateway.routes.service') %></th>
-          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.servers"><%- getWebappTranslation('gateway.routes.servers') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.url">__jhiTransformTranslate__('gateway.routes.url')</th>
+          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.service">__jhiTransformTranslate__('gateway.routes.service')</th>
+          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.servers">__jhiTransformTranslate__('gateway.routes.servers')</th>
         </tr>
       </thead>
       <tbody>
@@ -41,9 +41,7 @@
           <td>{{ route.path }}</td>
           <td>{{ route.serviceId }}</td>
           <td>
-            <div *ngIf="route.serviceInstances.length === 0" class="label label-danger" <%= jhiPrefix %>Translate="gateway.routes.error">
-              <%- getWebappTranslation('gateway.routes.error') %>
-            </div>
+            <div *ngIf="route.serviceInstances.length === 0" class="label label-danger" <%= jhiPrefix %>Translate="gateway.routes.error">__jhiTransformTranslate__('gateway.routes.error')</div>
 
             <div class="table-responsive">
               <table class="table table-striped" *ngIf="route">
