@@ -704,21 +704,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-cloud-stream/templates/template-file-spring-cloud-stream.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-controller/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-controller/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-controller/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-controller/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-controller/templates/template-file-spring-controller.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/spring-data-cassandra/command.mjs": {
     "stateCleared": "modified",
   },
@@ -807,21 +792,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-data-relational/templates/template-file-spring-data-relational.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-service/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-service/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-service/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-service/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-service/templates/template-file-spring-service.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-websocket/command.mjs": {
