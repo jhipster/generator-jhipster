@@ -62,9 +62,22 @@ export type JHipsterGeneratorOptions = BaseOptions & {
 
 export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
+  /**
+   * Wraps write context and shows removed fields and replacements if exists.
+   */
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
   checkBlueprint?: boolean;
+  /**
+   * Compose with bootstrap generator.
+   *
+   * Bootstrap generator adds support to:
+   *  - multistep templates.
+   *  - sort jhipster configuration json.
+   *  - force jhipster configuration commit.
+   *  - earlier prettier config commit for correct prettier.
+   *  - prettier and eslint.
+   */
   jhipsterBootstrap?: boolean;
   /**
    * Store current version at .yo-rc.json.
@@ -168,6 +181,17 @@ export type JHipsterOptions = Record<string, JHipsterOption>;
 export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
   options: JHipsterOptions;
+  /**
+   * Import options from a generator.
+   * @example ['server', 'jhipster-blueprint:server']
+   */
   import?: string[];
+  /**
+   * Override options from the generator been blueprinted.
+   */
+  override?: boolean;
+  /**
+   * Load old options definition (yeoman's `this.options()`) from the generator.
+   */
   loadGeneratorOptions?: boolean;
 };

@@ -49,7 +49,12 @@ export default class extends <%= generatorClass %>Generator {
 
 <%_ } else if (!customGenerator) { _%>
   constructor(args, opts, features) {
-    super(args, opts, { ...features, checkBlueprint: true });
+    super(args, opts, {
+      ...features,
+      checkBlueprint: true,
+      // Dropped it once migration is done.
+      jhipster7Migration: true,
+    });
   }
 
 <%_ } _%>

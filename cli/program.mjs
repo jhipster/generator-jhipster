@@ -49,25 +49,47 @@ export const printJHipsterLogo = () => {
   console.log(logo);
 };
 
-const buildAllDependencies = async (generatorNames, { env }) => {
+const buildAllDependencies = async (generatorNames, { env, blueprintNamespaces }) => {
   const allDependencies = {};
-  const buildGeneratorDependencies = async dependencyName => {
-    const meta = await env.getGeneratorMeta(dependencyName.includes(':') ? dependencyName : `${JHIPSTER_NS}:${dependencyName}`);
-    if (!meta) {
-      return;
+
+  const registerDependency = async ({ namespace, blueprintNamespace }) => {
+    const meta = await env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
+    if (meta) {
+      allDependencies[namespace] = { meta, blueprintNamespace };
     }
-    allDependencies[dependencyName] = meta;
-    const generatorModule = await meta.importModule();
-    if (generatorModule.command) {
-      for (const dependency of generatorModule.command.import ?? []) {
-        if (!allDependencies[dependency]) {
-          await buildGeneratorDependencies(dependency);
+    return meta?.importModule();
+  };
+
+  const lookupDependencyOptions = async ({ namespace, blueprintNamespace }) => {
+    const lookupGeneratorAndImports = async ({ namespace, blueprintNamespace }) => {
+      const module = await registerDependency({ namespace, blueprintNamespace });
+      if (module?.command?.import) {
+        for (const generator of module?.command?.import ?? []) {
+          await lookupDependencyOptions({ namespace: generator, blueprintNamespace });
+        }
+      }
+      return module?.command?.override;
+    };
+
+    let overridden = false;
+    if (!namespace.includes(':')) {
+      for (const nextBlueprint of blueprintNamespaces) {
+        const blueprintSubGenerator = `${nextBlueprint}:${namespace}`;
+        if (!allDependencies[blueprintSubGenerator]) {
+          if (await lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint })) {
+            overridden = true;
+          }
         }
       }
     }
+
+    if (!overridden && !allDependencies[namespace]) {
+      await lookupGeneratorAndImports({ namespace, blueprintNamespace });
+    }
   };
+
   for (const generatorName of generatorNames) {
-    await buildGeneratorDependencies(generatorName);
+    await lookupDependencyOptions({ namespace: generatorName });
   }
   return allDependencies;
 };
@@ -210,6 +232,7 @@ export const buildCommands = async ({
         if (!cliOnly) {
           const generator = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : cmdName;
           const generatorMeta = env.getGeneratorMeta(generator.includes(':') ? generator : `${JHIPSTER_NS}:${generator}`);
+
           if (!generatorMeta) {
             return;
           }
@@ -218,25 +241,19 @@ export const buildCommands = async ({
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
           const boostrapGen = ['bootstrap', generator];
-          const allDependencies = await buildAllDependencies(boostrapGen, { env });
-          for (const [metaName, generatorMeta] of Object.entries(allDependencies)) {
-            await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
-          }
-
-          if (!blueprint) {
-            // Register blueprint specific options.
-            for (const blueprintNamespace of envBuilder.getBlueprintsNamespaces() ?? []) {
-              for (const generatorName of Object.keys(allDependencies).filter(ns => !ns.includes(':'))) {
-                const generatorNamespace = `${blueprintNamespace}:${generatorName}`;
-                const blueprintMeta = env.getGeneratorMeta(generatorNamespace);
-                if (blueprintMeta) {
-                  const blueprintOptionDescription = chalk.yellow(` (blueprint option: ${blueprintNamespace.replace(/^jhipster-/, '')})`);
-                  await addCommandGeneratorOptions(command, blueprintMeta, {
-                    blueprintOptionDescription,
-                    info: `Error parsing options for generator ${generatorNamespace}`,
-                  });
-                }
-              }
+          const allDependencies = await buildAllDependencies(boostrapGen, {
+            env,
+            blueprintNamespaces: blueprint ? [] : envBuilder.getBlueprintsNamespaces(),
+          });
+          for (const [metaName, { meta: generatorMeta, blueprintNamespace }] of Object.entries(allDependencies)) {
+            if (blueprintNamespace) {
+              const blueprintOptionDescription = chalk.yellow(` (blueprint option: ${blueprintNamespace.replace(/^jhipster-/, '')})`);
+              await addCommandGeneratorOptions(command, generatorMeta, {
+                blueprintOptionDescription,
+                info: `Error parsing options for generator ${metaName}`,
+              });
+            } else {
+              await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
             }
           }
         }
