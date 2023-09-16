@@ -41,23 +41,23 @@ const adminUrl = 'api/admin/users';
 
 export const getUsers = createAsyncThunk('userManagement/fetch_users', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return axios.get<IUser[]>(requestUrl);
+  return await axios.get<IUser[]>(requestUrl);
 });
 
 export const getUsersAsAdmin = createAsyncThunk('userManagement/fetch_users_as_admin', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${adminUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return axios.get<IUser[]>(requestUrl);
+  return await axios.get<IUser[]>(requestUrl);
 });
 
 export const getRoles = createAsyncThunk('userManagement/fetch_roles', async () => {
-  return axios.get<any[]>(`api/authorities`);
+  return await axios.get<any[]>(`api/authorities`);
 });
 
 export const getUser = createAsyncThunk(
   'userManagement/fetch_user',
   async (id: string) => {
     const requestUrl = `${adminUrl}/${id}`;
-    return axios.get<IUser>(requestUrl);
+    return await axios.get<IUser>(requestUrl);
   },
   { serializeError: serializeAxiosError }
 );

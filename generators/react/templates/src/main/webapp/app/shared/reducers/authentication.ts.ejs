@@ -63,12 +63,12 @@ export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% 
 <%_ } _%>
 };
 
-export const getAccount = createAsyncThunk('authentication/get_account', async () => axios.get<any>('api/account'), {
+export const getAccount = createAsyncThunk('authentication/get_account', async () => await axios.get<any>('api/account'), {
   serializeError: serializeAxiosError,
 });
 
 <%_ if (authenticationTypeSession) { _%>
-export const authenticate = createAsyncThunk('authentication/login', async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
+export const authenticate = createAsyncThunk('authentication/login', async (data: string) => await axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
   serializeError: serializeAxiosError,
 });
 
@@ -86,7 +86,7 @@ interface IAuthParams {
   rememberMe?: boolean;
 }
 
-export const authenticate = createAsyncThunk('authentication/login', async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth), {
+export const authenticate = createAsyncThunk('authentication/login', async (auth: IAuthParams) => await axios.post<any>('api/authenticate', auth), {
   serializeError: serializeAxiosError,
 });
 
@@ -123,7 +123,7 @@ export const logout: () => AppThunk = () => dispatch => {
   dispatch(logoutSession());
 };
 <%_ } else { _%>
-export const logoutServer = createAsyncThunk('authentication/logout', async () => axios.post<any>('api/logout', {}), {
+export const logoutServer = createAsyncThunk('authentication/logout', async () => await axios.post<any>('api/logout', {}), {
   serializeError: serializeAxiosError,
 });
 
