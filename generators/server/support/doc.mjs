@@ -41,7 +41,7 @@ export const formatDocAsJavaDoc = (text, indentSize = 0) => {
   }
   text = escapeDoubleQuotes(text);
   const indent = ' '.repeat(indentSize);
-  const rows = ['/**', ...text.split('/n').map(row => ` * ${row}`), ' */'].map(row => `${indent}${row}`);
+  const rows = ['/**', ...text.split('\\n').map(row => ` * ${row}`), ' */'].map(row => `${indent}${row}`);
   return rows.join('\n');
 };
 
