@@ -32,11 +32,11 @@ class <%= persistClass %>Test {
         TestUtil.equalsVerifier(<%= persistClass %>.class);
 <%_if (!embedded) { _%>
         <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
-        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeInteger) { %>1<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
         <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
         assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
-        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>2L<% } else if (primaryKey.typeString) { %>"id2"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeInteger) { %>2<% } else if (primaryKey.typeLong) { %>2L<% } else if (primaryKey.typeString) { %>"id2"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
         <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);

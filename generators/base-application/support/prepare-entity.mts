@@ -45,7 +45,7 @@ const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
-const { BOOLEAN, LONG, STRING, UUID } = CommonDBTypes;
+const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
 const { NO: NO_DTO, MAPSTRUCT } = MapperTypes;
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const { SERVICE_IMPL } = ServiceTypes;
@@ -268,9 +268,11 @@ export function derivedPrimaryKeyProperties(primaryKey) {
   _.defaults(primaryKey, {
     hasUUID: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === UUID),
     hasLong: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === LONG),
+    hasInteger: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === INTEGER),
     typeUUID: primaryKey.type === UUID,
     typeString: primaryKey.type === STRING,
     typeLong: primaryKey.type === LONG,
+    typeInteger: primaryKey.type === INTEGER,
     typeNumeric: !primaryKey.composite && primaryKey.fields[0].fieldTypeNumeric,
   });
 }

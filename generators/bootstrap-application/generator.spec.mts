@@ -309,6 +309,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -580,6 +582,7 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
+    "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
     "ids": [
@@ -601,6 +604,7 @@ describe(`generator - ${generator}`, () => {
     "relationships": [],
     "tsType": "string",
     "type": "UUID",
+    "typeInteger": false,
     "typeLong": false,
     "typeNumeric": false,
     "typeString": false,
@@ -785,6 +789,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -840,6 +846,7 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
+    "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
     "ids": [
@@ -861,6 +868,7 @@ describe(`generator - ${generator}`, () => {
     "relationships": [],
     "tsType": "string",
     "type": "UUID",
+    "typeInteger": false,
     "typeLong": false,
     "typeNumeric": false,
     "typeString": false,
@@ -1097,6 +1105,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -1152,6 +1162,7 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
+    "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
     "ids": [
@@ -1173,6 +1184,7 @@ describe(`generator - ${generator}`, () => {
     "relationships": [],
     "tsType": "string",
     "type": "UUID",
+    "typeInteger": false,
     "typeLong": false,
     "typeNumeric": false,
     "typeString": false,
