@@ -986,16 +986,23 @@
                                         <include>target/classes/static/**/*.*</include>
                                         <include>package-lock.json</include>
                                         <include>package.json</include>
-                                        <include>webpack/*.*</include>
                                         <include>tsconfig.json</include>
   <%_ if (clientFrameworkAngular) { _%>
                                         <include>tsconfig.app.json</include>
+                                        <include>webpack/*.*</include>
   <%_ } _%>
   <%_ if (clientFrameworkReact) { _%>
                                         <include>.postcss.config.js</include>
+                                        <include>webpack/*.*</include>
   <%_ } _%>
   <%_ if (clientFrameworkVue) { _%>
+                                        <include>tsconfig.app.json</include>
                                         <include>.postcssrc.js</include>
+    <%_ if (microfrontend) { _%>
+                                        <include>webpack/*.*</include>
+    <%_ } else { _%>
+                                        <include>vite.config.ts</include>
+    <%_ } _%>
   <%_ } _%>
                                     </includes>
                                     <excludes>

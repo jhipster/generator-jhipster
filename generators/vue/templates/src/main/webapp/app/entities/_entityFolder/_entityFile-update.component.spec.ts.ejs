@@ -19,9 +19,9 @@
 <%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
 import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
-import { RouteLocation } from 'vue-router';
+import { shallowMount, type MountingOptions } from '@vue/test-utils';
+import sinon, { type SinonStubbedInstance } from 'sinon';
+import { type RouteLocation } from 'vue-router';
 
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';

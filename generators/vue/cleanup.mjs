@@ -93,4 +93,13 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile(`${application.clientTestDir}spec/app/admin/gateway/gateway.component.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/entities/entities-menu.spec.ts`);
   }
+  if (this.isJhipsterVersionLessThan('8.0.0-beta.4') && !application.microfrontend) {
+    this.removeFile('.eslintrc.js');
+    this.removeFile('tsconfig.test.json');
+    this.removeFile('webpack/config.js');
+    this.removeFile('webpack/vue.utils.js');
+    this.removeFile('webpack/webpack.common.js');
+    this.removeFile('webpack/webpack.dev.js');
+    this.removeFile('webpack/webpack.prod.js');
+  }
 }

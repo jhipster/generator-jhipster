@@ -1,4 +1,4 @@
-import { createRouter as createVueRouter, createWebHistory<% if (applicationTypeGateway && microfrontend) { %>, RouteRecordRaw<% } %> } from 'vue-router';
+import { createRouter as createVueRouter, createWebHistory<% if (applicationTypeGateway && microfrontend) { %>, type RouteRecordRaw<% } %> } from 'vue-router';
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
@@ -47,8 +47,8 @@ export const lazyRoutes = Promise.all([
     .then(<%= remote.lowercaseBaseName %>Router => {
       router.addRoute(<%= remote.lowercaseBaseName %>Router.default as RouteRecordRaw);
       return <%= remote.lowercaseBaseName %>Router.default;
-    }).catch(() => {
-      console.log("Error loading <%= remote.lowercaseBaseName %> menus. Make sure it's up.");
+    }).catch(error => {
+      console.log(`Error loading <%= remote.lowercaseBaseName %> menus. Make sure it's up. ${error}`);
     }),
   <%_ } _%>
 ]);

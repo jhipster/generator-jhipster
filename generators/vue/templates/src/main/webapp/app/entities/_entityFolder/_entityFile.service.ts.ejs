@@ -2,7 +2,7 @@ import axios from 'axios';
 <% if (!paginationNo) { %>
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 <% } %>
-import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 
 const baseApiUrl = '<%= entityApi %>api/<%= entityApiUrl %>';
 <%_ if (searchEngineAny) { _%>

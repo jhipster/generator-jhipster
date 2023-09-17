@@ -49,43 +49,61 @@
     "pinia": "<%= nodeDependencies.pinia %>",
     "vue": "<%= nodeDependencies['vue'] %>",
 <%_ if (enableTranslation) { _%>
+    "deepmerge": null,
     "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
 <%_ } _%>
     "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
+<%_ if (microfrontend) { _%>
+    "@originjs/vite-plugin-federation": "1.2.3",
+    "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
+    "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
+    "css-loader": "<%= nodeDependencies['css-loader'] %>",
+    "css-minimizer-webpack-plugin": "<%= nodeDependencies['css-minimizer-webpack-plugin'] %>",
+    "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
+  <%_ if (enableTranslation) { _%>
+    "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
+    "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
+  <%_ } _%>
+    "mini-css-extract-plugin": "<%= nodeDependencies['mini-css-extract-plugin'] %>",
+    "postcss-loader": "<%= nodeDependencies['postcss-loader'] %>",
+    "sass-loader": "<%= nodeDependencies['sass-loader'] %>",
+    "terser-webpack-plugin": "<%= nodeDependencies['terser-webpack-plugin'] %>",
+    "ts-loader": "<%= nodeDependencies['ts-loader'] %>",
+    "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
+    "vue-style-loader": "<%= nodeDependencies['vue-style-loader'] %>",
+    "webpack": "<%= nodeDependencies['webpack'] %>",
+    "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
+    "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
+    "webpack-dev-server": "<%= nodeDependencies['webpack-dev-server'] %>",
+    "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
+    "workbox-webpack-plugin": "<%= nodeDependencies['workbox-webpack-plugin'] %>",
+<%_ } _%>
     "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@rushstack/eslint-patch": "<%= nodeDependencies['@rushstack/eslint-patch'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "@types/sinon": "<%= nodeDependencies['@types/sinon'] %>",
+    "@tsconfig/node18": null,
     "@vue/compiler-sfc": "<%= nodeDependencies.vue %>",
     "@vitejs/plugin-vue": "<%= nodeDependencies['@vitejs/plugin-vue'] %>",
     "@vitest/coverage-v8": "<%= nodeDependencies.vitest %>",
     "@vue/eslint-config-prettier": "<%= nodeDependencies['@vue/eslint-config-prettier'] %>",
     "@vue/eslint-config-typescript": "<%= nodeDependencies['@vue/eslint-config-typescript'] %>",
     "@vue/test-utils": "<%= nodeDependencies['@vue/test-utils'] %>",
+    "@vue/tsconfig": null,
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
-    "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
-    "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
-    "css-loader": "<%= nodeDependencies['css-loader'] %>",
-    "css-minimizer-webpack-plugin": "<%= nodeDependencies['css-minimizer-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
   <%_ blueprints.forEach(blueprint => { _%>
     "<%= blueprint.name %>": "<%= blueprint.version %>",
   <%_ }); _%>
 <%_ } _%>
-    "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
-<%_ if (enableTranslation) { _%>
-    "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
-    "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
-<%_ } _%>
+    "flush-promises": null,
     "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
-    "mini-css-extract-plugin": "<%= nodeDependencies['mini-css-extract-plugin'] %>",
     "numeral": "<%= nodeDependencies['numeral'] %>",
     "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
-    "postcss-loader": "<%= nodeDependencies['postcss-loader'] %>",
     "postcss-url": "<%= nodeDependencies['postcss-url'] %>",
     "prettier": "<%= nodeDependencies['prettier'] %>",
 <%_ if (!skipServer) { _%>
@@ -96,26 +114,17 @@
     "cypress": "<%= nodeDependencies['cypress'] %>",
 <%_ } _%>
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
+    "rollup-plugin-copy": null,
     "sass": "<%= nodeDependencies['sass'] %>",
-    "sass-loader": "<%= nodeDependencies['sass-loader'] %>",
     "sinon": "<%= nodeDependencies['sinon'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
-    "terser-webpack-plugin": "<%= nodeDependencies['terser-webpack-plugin'] %>",
-    "ts-loader": "<%= nodeDependencies['ts-loader'] %>",
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
+    "vite": null,
     "vitest": "<%= nodeDependencies.vitest %>",
-    "vitest-sonar-reporter": "<%= nodeDependencies['vitest-sonar-reporter'] %>",
-    "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
-    "vue-style-loader": "<%= nodeDependencies['vue-style-loader'] %>",
-    "webpack": "<%= nodeDependencies['webpack'] %>",
-    "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
-    "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
-    "webpack-dev-server": "<%= nodeDependencies['webpack-dev-server'] %>",
-    "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
-    "workbox-webpack-plugin": "<%= nodeDependencies['workbox-webpack-plugin'] %>"
+    "vitest-sonar-reporter": "<%= nodeDependencies['vitest-sonar-reporter'] %>"
   },
   "engines": {
     "node": ">=<%= nodeVersion %>",
@@ -125,8 +134,13 @@
     "default_environment": "prod"
   },
   "scripts": {
+<%_ if (microfrontend) { %>
     "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+<%_ } else { %>
+    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+<%_ } %>
     "lint": "eslint . --ext .ts,.vue ",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
     "cleanup": "rimraf <%= clientDistDir %>",
@@ -143,13 +157,24 @@
     "test:watch": "<%= clientPackageManager %> run vitest",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
+<%_ if (microfrontend) { %>
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",
     "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --mode production --env stats=minimal",
     "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --mode development --env stats=normal",
+<%_ } else { %>
+    "webapp:build:dev": "<%= clientPackageManager %> run vite-build",
+    "webapp:build:prod": "<%= clientPackageManager %> run vite-build",
+    "webapp:serve": "<%= clientPackageManager %> run vite-serve",
+<%_ } %>
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
     "webapp:test": "<%= clientPackageManager %> run test --",
+<%_ if (microfrontend) { %>
     "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
     "webpack": "webpack --config webpack/webpack.common.js"
+<%_ } else { %>
+    "vite-serve": "vite",
+    "vite-build": "vite build"
+<%_ } %>
   },
   "browserslist": [
     "> 1%",

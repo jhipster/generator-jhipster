@@ -1,4 +1,4 @@
-import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { defineComponent, inject, onMounted, ref, type Ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
 
-import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>

@@ -125,6 +125,7 @@ module.exports = async (env, options) => {
                   appendTsSuffixTo: ['\\.vue$'],
                   happyPackMode: true,
                   transpileOnly: true,
+                  configFile: 'tsconfig.app.json',
                 },
               },
             ],
@@ -141,7 +142,7 @@ module.exports = async (env, options) => {
 <%_ if (enableTranslation) { _%>
           I18N_HASH: JSON.stringify(languagesHash.hash),
 <%_ } _%>
-          VERSION: JSON.stringify(config.version),
+          APP_VERSION: JSON.stringify(config.version),
           SERVER_API_URL: JSON.stringify(config.serverApiUrl),
         }),
         new HtmlWebpackPlugin({

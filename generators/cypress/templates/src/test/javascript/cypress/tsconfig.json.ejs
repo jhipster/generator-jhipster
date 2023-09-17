@@ -17,7 +17,11 @@
  limitations under the License.
 -%>
 {
+<%_ if (clientFrameworkVue) { _%>
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+<%_ } else { _%>
   "extends": "../../../../tsconfig.json",
+<%_ } _%>
   "compilerOptions": {
     "baseUrl": "./",
     "sourceMap": false,
