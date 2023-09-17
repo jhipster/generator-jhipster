@@ -4,6 +4,7 @@
 @ChangelogDate(20200804035100)
 entity EntityIntegerId {
   id Integer
+  name String
 }
 
 /*
@@ -13,6 +14,7 @@ entity EntityIntegerId {
 entity EntityCustomSequence {
   @SequenceGeneratorName(entityIntegerIdSeq)
   id Long
+  name String
 }
 
 /*
