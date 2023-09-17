@@ -7,6 +7,15 @@ entity EntityIntegerId {
 }
 
 /*
+ * Integer custom id and sequence
+ */
+@ChangelogDate(20200804035200)
+entity EntityCustomSequence {
+  @SequenceGeneratorName(entityIntegerIdSeq)
+  id Long
+}
+
+/*
  * UUID custom id
  */
 @ChangelogDate(20200804035300)

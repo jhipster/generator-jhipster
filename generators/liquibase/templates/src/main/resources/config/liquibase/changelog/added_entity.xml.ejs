@@ -24,6 +24,12 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+<%_ fields.filter(field => field.liquibaseCustomSequenceGenerator).forEach((field, idx) => { _%>
+    <changeSet id="<%= changelogDate %>-seq-<%- idx %>" author="jhipster">
+        <createSequence sequenceName="<%- field.liquibaseSequenceGeneratorName %>" startValue="1050" incrementBy="50"/>
+    </changeSet>
+
+<%_ }); _%>
     <!--
         Added the entity <%= entity.entityClass %>.
     -->

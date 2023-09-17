@@ -76,13 +76,19 @@ export default function prepareField(entityWithConfig, field, generator) {
       field.readonly = true;
     } else {
       const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
-      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
+      field.jpaGeneratedValue = field.jpaGeneratedValue || [INTEGER, LONG].includes(field.fieldType) ? defaultGenerationType : true;
+      field.jpaGeneratedValueSequence = field.jpaGeneratedValue === 'sequence';
+      field.jpaGeneratedValueIdentity = field.jpaGeneratedValue === 'identity';
       field.autoGenerateByService = false;
       field.autoGenerateByRepository = true;
       field.requiresPersistableImplementation = false;
       field.readonly = true;
-      if (field.jpaGeneratedValue === 'identity') {
+      if (field.jpaGeneratedValueIdentity) {
         field.liquibaseAutoIncrement = true;
+      } else if (field.jpaGeneratedValueSequence) {
+        field.jpaSequenceGeneratorName = field.sequenceGeneratorName ?? 'sequenceGenerator';
+        field.liquibaseSequenceGeneratorName = snakeCase(field.jpaSequenceGeneratorName);
+        field.liquibaseCustomSequenceGenerator = field.liquibaseSequenceGeneratorName !== 'sequence_generator';
       }
     }
   }

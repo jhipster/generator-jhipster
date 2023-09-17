@@ -309,6 +309,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -787,6 +789,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -1101,6 +1105,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
