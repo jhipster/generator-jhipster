@@ -130,7 +130,7 @@ import java.util.stream.StreamSupport;
  * REST controller for managing {@link <%= entityAbsoluteClass %>}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/<%= entityApiUrl %>")
 <%_ if (databaseTypeSql && !viaService && !saveUserSnapshot) { _%>
 @Transactional
 <%_ } _%>
@@ -163,7 +163,7 @@ public class <%= entityClass %>Resource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new <%= instanceName %>, or with status {@code 400 (Bad Request)} if the <%= entityInstance %> has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/<%= entityApiUrl %>")
+    @PostMapping("")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> create<%= entityClass %>(<% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() != null) {
@@ -217,7 +217,7 @@ public class <%= entityClass %>Resource {
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/<%= entityApiUrl %>/{<%= primaryKey.name %>}")
+    @PutMapping("/{<%= primaryKey.name %>}")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(
         @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
         <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>
@@ -283,7 +283,7 @@ public class <%= entityClass %>Resource {
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/<%= entityApiUrl %>/{<%= primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
+    @PatchMapping(value = "/{<%= primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> partialUpdate<%= entityClass %>(
     @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
     <% if (anyPropertyHasValidation) { %>@NotNull <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
@@ -360,7 +360,7 @@ public class <%= entityClass %>Resource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityInstancePlural %> in body.
      */
 <%_ if (reactive) { _%>
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 <%_ } else { _%>
     @GetMapping("/<%= entityApiUrl %>")
 <%_ } _%>
@@ -374,7 +374,7 @@ public class <%= entityClass %>Resource {
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.
      */
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_NDJSON_VALUE)
   <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
@@ -394,7 +394,7 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= instanceName %>, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/<%= entityApiUrl %>/{id}")
+    @GetMapping("/{id}")
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
@@ -410,7 +410,7 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/<%= entityApiUrl %>/{id}")
+    @DeleteMapping("/{id}")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%= entityClass %>(@PathVariable <%= primaryKey.type %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService, fromResource: true}); -%>
