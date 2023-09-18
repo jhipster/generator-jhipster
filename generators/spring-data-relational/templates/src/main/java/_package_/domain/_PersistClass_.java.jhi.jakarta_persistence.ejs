@@ -41,7 +41,7 @@ import org.hibernate.type.SqlTypes;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ } else if (field.jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator"<% if (field.liquibaseCustomSequenceGenerator) { %>, sequenceName = "<%- field.jpaSequenceGeneratorName %>"<% } %>)
     <%_ } else if (field.jpaGeneratedValue) { _%>
     @GeneratedValue
     <%_ } _%>

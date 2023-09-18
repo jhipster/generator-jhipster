@@ -1,7 +1,7 @@
 import type { BvToast } from 'bootstrap-vue';
 import { getCurrentInstance } from 'vue';
 <%_ if (enableTranslation) { _%>
-import { Composer, useI18n } from 'vue-i18n';
+import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
 
 export const useAlertService = () => {

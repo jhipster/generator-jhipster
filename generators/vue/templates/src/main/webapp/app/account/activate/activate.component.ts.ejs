@@ -1,6 +1,6 @@
-import { defineComponent, inject, onMounted, ref, Ref } from 'vue';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import LoginService from '@/account/login.service';
+import type LoginService from '@/account/login.service';
 import ActivateService from './activate.service';
 import { useRoute } from 'vue-router';
 

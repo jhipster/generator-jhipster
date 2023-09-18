@@ -21,7 +21,7 @@ import { LiquibaseEntity } from '../types.mjs';
 import { GeneratorDefinition } from '../../base-application/generator.mjs';
 
 const { CommonDBTypes } = fieldTypes;
-const { LONG: TYPE_LONG } = CommonDBTypes;
+const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;
 
 export default function postPrepareEntity({
   application,
@@ -34,8 +34,8 @@ export default function postPrepareEntity({
     const idFieldName = idField.fieldName ?? 'id';
     const liquibaseFakeData = application.generateUserManagement
       ? [
-          { [idFieldName]: userIdType === TYPE_LONG ? 1 : idField.generateFakeData() },
-          { [idFieldName]: userIdType === TYPE_LONG ? 2 : idField.generateFakeData() },
+          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 1 : idField.generateFakeData() },
+          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 2 : idField.generateFakeData() },
         ]
       : [];
     (entity as LiquibaseEntity).liquibaseFakeData = liquibaseFakeData;

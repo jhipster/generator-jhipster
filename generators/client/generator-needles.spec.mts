@@ -3,7 +3,7 @@ import ClientGenerator from './index.mjs';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
+const { ANGULAR, REACT } = clientFrameworkTypes;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
@@ -55,16 +55,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
   describe('React clientFramework', () => {
     before(() => {
       return generateAppWithClientFramework(REACT);
-    });
-
-    it('should add webpack config to webpack.common.js', async () => {
-      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
-    });
-  });
-
-  describe('Vue clientFramework', () => {
-    before(() => {
-      return generateAppWithClientFramework(VUE);
     });
 
     it('should add webpack config to webpack.common.js', async () => {

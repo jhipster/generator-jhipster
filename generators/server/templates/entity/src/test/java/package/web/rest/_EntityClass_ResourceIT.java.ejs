@@ -47,7 +47,7 @@ if (databaseTypeSql && reactive) {
   createEntityPostfix = ').block()';
 }
 let idValue = `${persistInstance}.get${primaryKey.nameCapitalized}()`;
-if (primaryKey.typeLong) {
+if (primaryKey.typeLong || primaryKey.typeInteger) {
   idValue = idValue + '.intValue()';
 } else if (primaryKey.typeUUID) {
   idValue = idValue + '.toString()';
@@ -200,9 +200,13 @@ import java.util.List;
 <%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (!embedded && primaryKey.hasLong) { _%>
+<%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 import java.util.Random;
+  <%_ if (primaryKey.hasLong) { _%>
 import java.util.concurrent.atomic.AtomicLong;
+  <%_ } else if (primaryKey.hasInteger) { _%>
+import java.util.concurrent.atomic.AtomicInteger;
+  <%_ } _%>
 <%_ } _%>
 
 <%_ if (anyFieldIsBigDecimal) { _%>
@@ -431,10 +435,14 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 <%_ if (searchEngineAny) { _%>
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/<%= entityApiUrl %>";
 <%_ } _%>
-<%_ if (!embedded && primaryKey.hasLong) { _%>
+<%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 
     private static Random random = new Random();
+  <%_ if (primaryKey.hasLong) { _%>
     private static AtomicLong count = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
+  <%_ } else if (primaryKey.hasInteger) { _%>
+    private static AtomicInteger count = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
+  <%_ } _%>
 <%_ } _%>
 
     @Autowired
@@ -692,7 +700,7 @@ _%>
   <%_ if (primaryKey.typeUUID && databaseTypeSql) { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else { %>"existing_id"<% } %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
@@ -1037,7 +1045,7 @@ _%>
         default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.equals=" + id);
         default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.notEquals=" + id);
 
-  <%_ if (primaryKey.typeLong) { _%>
+  <%_ if (primaryKey.typeLong || primaryKey.typeInteger) { _%>
         default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.greaterThanOrEqual=" + id);
         default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.greaterThan=" + id);
 
@@ -1363,12 +1371,12 @@ _%>
     void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>
 <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL_ID, <% if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>)
+        webTestClient.get().uri(ENTITY_API_URL_ID, <% if (primaryKey.typeInteger) { %>Integer.MAX_VALUE<% } else if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>)
             .accept(MediaType.APPLICATION_PROBLEM_JSON)
             .exchange()
             .expectStatus().isNotFound();
 <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <% if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>))
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <% if (primaryKey.typeInteger) { %>Integer.MAX_VALUE<% } else if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
 <%_ } _%>
     }

@@ -25,6 +25,12 @@ describe('generator - server - support - doc', () => {
         expect(formatDocAsJavaDoc('Comment="KO"', 1)).toBe(' /**\n  * Comment=\\"KO\\"\n  */');
       });
     });
+    describe('when passing a comment with newlines', () => {
+      it('formats the comment correctly with line breaks', () => {
+        const comment = 'This is the first line.\\nAnd this is the second.';
+        expect(formatDocAsJavaDoc(comment, 1)).toBe(' /**\n  * This is the first line.\n  * And this is the second.\n  */');
+      });
+    });
   });
 
   describe('formatDocAsApiDescription', () => {

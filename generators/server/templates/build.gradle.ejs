@@ -512,7 +512,7 @@ task webapp_test(type: NpmTask) {
     inputs.dir("<%= clientSrcDir %>")
         .withPropertyName("webapp-source-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ if (!clientFrameworkAngular) { _%>
+  <%_ if (clientFrameworkReact) { _%>
     inputs.files("tsconfig.json")
         .withPropertyName("tsconfig")
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -524,6 +524,24 @@ task webapp_test(type: NpmTask) {
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
   <%_ if (clientFrameworkVue) { _%>
+
+    inputs.files("tsconfig.json", "tsconfig.app.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ if (microfrontend) { _%>
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } else { _%>
+
+    inputs.files("vite.config.ts")
+        .withPropertyName("vite")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } _%>
+
     inputs.files(".postcssrc")
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)

@@ -10,7 +10,7 @@ LABEL ALIAS=jhipster-control-center
 FROM jhipster/consul-config-loader:v0.4.1
 LABEL ALIAS=consul-config-loader
 
-FROM postgres:15.4
+FROM postgres:16.0
 LABEL ALIAS=postgresql
 
 FROM quay.io/keycloak/keycloak:22.0.3
@@ -31,7 +31,7 @@ FROM cassandra:3.11.14
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.11.0
+FROM neo4j:5.12.0
 
 FROM hazelcast/management-center:5.3.2
 LABEL ALIAS=hazelcast

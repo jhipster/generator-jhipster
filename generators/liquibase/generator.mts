@@ -48,7 +48,7 @@ import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import command from './command.mjs';
 
 const {
-  CommonDBTypes: { LONG: TYPE_LONG },
+  CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
 } = fieldTypes;
 
 export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
@@ -595,7 +595,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           return;
         }
         let data;
-        if (field.id && field.fieldType === TYPE_LONG) {
+        if (field.id && [TYPE_INTEGER, TYPE_LONG].includes(field.fieldType)) {
           data = rowNumber + 1;
         } else {
           data = field.generateFakeData();

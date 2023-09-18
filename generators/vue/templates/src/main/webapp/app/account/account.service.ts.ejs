@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AccountStore } from '@/store';
+import { type AccountStore } from '@/store';
 
 export default class AccountService {
   constructor(private store: AccountStore) {}
@@ -34,7 +34,9 @@ export default class AccountService {
         this.store.setAuthentication(account);
         return true;
       }
-    } catch (error) {}
+    } catch (error) {
+      // Ignore error
+    }
 
     this.store.logout();
     return false;

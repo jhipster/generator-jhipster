@@ -184,8 +184,16 @@ public class SecurityConfiguration {
 <%_ if (!skipClient) { _%>
                     .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+  <%_ if (clientFrameworkVue) { _%>
+                    .requestMatchers(mvc.pattern("/assets/**")).permitAll()
+    <%_ if (microfrontend) { _%>
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
+    <%_ } _%>
+  <%_ } else { _%>
+                    .requestMatchers(mvc.pattern("/app/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
+  <%_ } _%>
                     .requestMatchers(mvc.pattern("/content/**")).permitAll()
                     .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
 <%_ } _%>

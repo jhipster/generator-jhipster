@@ -19,7 +19,7 @@
 import { fieldTypes, databaseTypes } from '../../../../jdl/jhipster/index.mjs';
 
 const dbTypes = fieldTypes;
-const { STRING, UUID, LONG } = dbTypes.CommonDBTypes;
+const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;
 const { SQL } = databaseTypes;
 
 /**
@@ -33,7 +33,7 @@ export const getJavaValueGeneratorForType = (type) => {
   if (type === UUID) {
     return 'UUID.randomUUID()';
   }
-  if (type === LONG) {
+  if (type === LONG || type === INTEGER) {
     return 'count.incrementAndGet()';
   }
   throw new Error(`Java type ${type} does not have a random generator implemented`);

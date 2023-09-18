@@ -87,7 +87,9 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
 export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInConfigTask.call(this, taskParam);
-  updateLanguagesInWebpackTask.call(this, taskParam);
+  if (taskParam.application.microfrontend) {
+    updateLanguagesInWebpackTask.call(this, taskParam);
+  }
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {
     configurationFile: `${taskParam.application.clientSrcDir}app/shared/config/dayjs.ts`,
     commonjs: true,

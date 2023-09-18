@@ -149,7 +149,7 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator"<% if (user.primaryKey.fields[0].liquibaseCustomSequenceGenerator) { %>, sequenceName = "<%- user.primaryKey.fields[0].jpaSequenceGeneratorName %>"<% } %>)
     <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue) { _%>
     @GeneratedValue
     <%_ } _%>

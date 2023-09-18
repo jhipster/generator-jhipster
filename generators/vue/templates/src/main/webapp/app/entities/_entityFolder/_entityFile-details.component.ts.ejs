@@ -1,4 +1,4 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, type Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -10,7 +10,7 @@ import useDataUtils from '@/shared/data/data-utils.service';
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
 import { useDateFormat } from '@/shared/composables'
 <%_ } _%>
-import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
