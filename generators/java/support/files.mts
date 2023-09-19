@@ -57,46 +57,50 @@ export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
 export const moveToSrcTestResourcesDir = (data: any, filePath: string) =>
   `${data.srcTestResources}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
-export const javaMainPackageTemplatesBlock = (relativePath: string | any = '') => {
-  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+export const javaMainPackageTemplatesBlock = (blockOrRelativePath: string | any = '') => {
+  const block = typeof blockOrRelativePath === 'object' ? blockOrRelativePath : undefined;
+  const relativePath = block ? block.relativePath ?? '' : blockOrRelativePath;
   return {
     path: `${SERVER_MAIN_SRC_DIR}_package_/${relativePath}`,
     renameTo: (data: any, filePath: string) =>
       `${data.javaPackageSrcDir}${relativePath}${data.entityJavaPackageFolder ?? ''}${
         replaceEntityFilePathVariables(data, filePath) ?? ''
       }`,
-    ...(typeof relativePath === 'object' ? relativePath : undefined),
+    ...block,
   };
 };
 
-export const javaMainResourceTemplatesBlock = (relativePath: string | any = '') => {
-  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+export const javaMainResourceTemplatesBlock = (blockOrRelativePath: string | any = '') => {
+  const block = typeof blockOrRelativePath === 'object' ? blockOrRelativePath : undefined;
+  const relativePath = block ? block.relativePath ?? '' : blockOrRelativePath;
   return {
     path: `${SERVER_MAIN_RES_DIR}${relativePath}`,
     renameTo: (data: any, filePath: string) =>
       `${data.srcMainResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
-    ...(typeof relativePath === 'object' ? relativePath : undefined),
+    ...block,
   };
 };
 
-export const javaTestResourceTemplatesBlock = (relativePath: string | any = '') => {
-  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+export const javaTestResourceTemplatesBlock = (blockOrRelativePath: string | any = '') => {
+  const block = typeof blockOrRelativePath === 'object' ? blockOrRelativePath : undefined;
+  const relativePath = block ? block.relativePath ?? '' : blockOrRelativePath;
   return {
     path: `${SERVER_TEST_RES_DIR}${relativePath}`,
     renameTo: (data: any, filePath: string) =>
       `${data.srcTestResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
-    ...(typeof relativePath === 'object' ? relativePath : undefined),
+    ...block,
   };
 };
 
-export const javaTestPackageTemplatesBlock = (relativePath: string | any = '') => {
-  relativePath = typeof relativePath === 'object' ? relativePath.relativePath : relativePath;
+export const javaTestPackageTemplatesBlock = (blockOrRelativePath: string | any = '') => {
+  const block = typeof blockOrRelativePath === 'object' ? blockOrRelativePath : undefined;
+  const relativePath = block ? block.relativePath ?? '' : blockOrRelativePath;
   return {
     path: `${SERVER_TEST_SRC_DIR}_package_/${relativePath}`,
     renameTo: (data: any, filePath: string) =>
       `${data.javaPackageTestDir}${relativePath}${data.entityJavaPackageFolder ?? ''}${
         replaceEntityFilePathVariables(data, filePath) ?? ''
       }`,
-    ...(typeof relativePath === 'object' ? relativePath : undefined),
+    ...block,
   };
 };
