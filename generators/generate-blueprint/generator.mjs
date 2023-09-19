@@ -249,7 +249,7 @@ export default class extends BaseGenerator {
         );
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
-          keywords: ['yeoman-generator', 'jhipster-blueprint', 'jhipster-7'],
+          keywords: ['yeoman-generator', 'jhipster-blueprint', 'jhipster-8'],
           type: 'module',
           files: ['generators'],
           scripts: {
