@@ -147,7 +147,13 @@ const ensureProfile = (project, profileId: string) => {
 const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
 
 const sortArtifacts = (artifacts: MavenArtifact[]) =>
-  artifacts.sort((a, b) => {
+  artifacts.sort((a: MavenArtifact, b: MavenArtifact) => {
+    if (a.groupId === undefined) {
+      return -1;
+    }
+    if (b.groupId === undefined) {
+      return 1;
+    }
     const groupIdCompared = sortWithTemplate(groupIdOrder, a.groupId, b.groupId);
     if (groupIdCompared) return groupIdCompared;
     return a.artifactId.localeCompare(b.artifactId);

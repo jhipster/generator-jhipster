@@ -18,7 +18,7 @@
  */
 
 export type MavenArtifact = {
-  groupId: string;
+  groupId?: string;
   artifactId: string;
   version?: string;
   inProfile?: string;
