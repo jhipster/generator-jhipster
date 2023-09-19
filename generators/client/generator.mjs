@@ -33,7 +33,7 @@ import { createNeedleCallback } from '../base/support/index.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
 import command from './command.mjs';
 
-const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
+const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
 /**
@@ -113,6 +113,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         const { clientFramework, testFrameworks } = this.jhipsterConfigWithDefaults;
+        if (clientFramework === CLIENT_FRAMEWORK_NO) {
+          this.cancelCancellableTasks();
+          return;
+        }
         if ([ANGULAR, VUE, REACT].includes(clientFramework)) {
           await this.composeWithJHipster(clientFramework);
         }
