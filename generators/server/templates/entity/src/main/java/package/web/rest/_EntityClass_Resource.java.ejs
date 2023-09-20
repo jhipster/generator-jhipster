@@ -130,7 +130,7 @@ import java.util.stream.StreamSupport;
  * REST controller for managing {@link <%= entityAbsoluteClass %>}.
  */
 @RestController
-@RequestMapping("/api/<%= entityApiUrl %>")
+@RequestMapping("/api/<%= entityApiUrl %>/")
 <%_ if (databaseTypeSql && !viaService && !saveUserSnapshot) { _%>
 @Transactional
 <%_ } _%>
