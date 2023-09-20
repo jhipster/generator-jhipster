@@ -39,14 +39,14 @@ const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 export const modelFiles = {
   model: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi'],
     },
   ],
   modelTestFiles: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageTestDir,
       templates: ['domain/_PersistClass_Test.java'],
     },
@@ -60,7 +60,7 @@ export const modelFiles = {
 export const entityFiles = {
   server: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.jakarta_validation'],
     },
@@ -71,7 +71,7 @@ export const restFiles = {
   restFiles: [
     {
       condition: generator => !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['web/rest/_EntityClass_Resource.java'],
     },
@@ -82,7 +82,7 @@ export const restFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/web/rest/_EntityClass_ResourceIT.java',
+          file: '_package_/web/rest/_EntityClass_ResourceIT.java',
           options: {
             context: {
               _,
@@ -102,7 +102,7 @@ export const filteringFiles = {
   filteringFiles: [
     {
       condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['service/criteria/_EntityClass_Criteria.java', 'service/_EntityClass_QueryService.java'],
     },
@@ -116,7 +116,7 @@ const filteringReactiveFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/service/criteria/_EntityClass_Criteria.java',
+          file: '_package_/service/criteria/_EntityClass_Criteria.java',
           renameTo: generator => `${generator.entityAbsoluteFolder}/domain/criteria/${generator.entityClass}Criteria.java`,
         },
       ],
@@ -128,13 +128,13 @@ export const respositoryFiles = {
   respositoryFiles: [
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/_EntityClass_Repository.java'],
     },
     {
       condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/_EntityClass_Repository_reactive.java'],
     },
@@ -145,7 +145,7 @@ export const serviceFiles = {
   serviceFiles: [
     {
       condition: generator => generator.service === SERVICE_IMPL && !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['service/_EntityClass_Service.java', 'service/impl/_EntityClass_ServiceImpl.java'],
     },
@@ -154,7 +154,7 @@ export const serviceFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/service/impl/_EntityClass_ServiceImpl.java',
+          file: '_package_/service/impl/_EntityClass_ServiceImpl.java',
           renameTo: generator =>
             replaceEntityFilePathVariables(generator, `${generator.entityAbsoluteFolder}/service/_EntityClass_Service.java`),
         },
@@ -167,7 +167,7 @@ export const dtoFiles = {
   dtoFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['service/dto/_DtoClass_.java', 'service/mapper/EntityMapper.java', 'service/mapper/_EntityClass_Mapper.java'],
     },
@@ -175,13 +175,13 @@ export const dtoFiles = {
   dtoTestFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageTestDir,
       templates: ['service/dto/_DtoClass_Test.java'],
     },
     {
       condition: generator => generator.dto === MAPSTRUCT && [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageTestDir,
       templates: ['service/mapper/_EntityClass_MapperTest.java'],
     },
@@ -191,23 +191,23 @@ export const dtoFiles = {
 const userFiles = {
   userFiles: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
       templates: ['domain/User.java'],
     },
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
       templates: ['service/dto/UserDTO.java'],
     },
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user.adminUserDto}.java`),
       templates: ['service/dto/AdminUserDTO.java'],
     },
     {
       condition: data => data.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [
         'service/UserService.java',
@@ -218,7 +218,7 @@ const userFiles = {
     },
     {
       condition: data => data.generateBuiltInUserEntity,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'service/UserServiceIT.java',
@@ -259,7 +259,7 @@ export function writeFiles() {
         } else if (!entity.builtIn) {
           await this.writeFiles({
             sections: serverFiles,
-            rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
+            rootTemplatesPath: application.reactive ? ['reactive', ''] : '',
             context: { ...application, ...entity },
           });
         }
@@ -279,11 +279,11 @@ export function writeFiles() {
           await this.writeFiles({
             templates: [
               {
-                sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+                sourceFile: `${SERVER_MAIN_SRC_DIR}_package_/domain/enumeration/Enum.java.ejs`,
                 destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
               },
             ],
-            rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
+            rootTemplatesPath: application.reactive ? ['reactive', ''] : '',
             context: enumInfo,
           });
         }
