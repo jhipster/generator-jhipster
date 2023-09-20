@@ -16,14 +16,69 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFrameworkTypes } from '../../jdl/index.js';
+
+const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 const command: JHipsterCommandDefinition = {
-  options: {
+  options: {},
+  configs: {
     clientFramework: {
       description: 'Provide client framework for the application',
-      type: String,
-      scope: 'storage',
+      cli: {
+        type: String,
+      },
+      prompt: generator => ({
+        type: 'list',
+        message: () =>
+          generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE
+            ? `Which ${chalk.yellow('*Framework*')} would you like to use as microfrontend?`
+            : `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
+      }),
+      choices: [
+        {
+          value: ANGULAR,
+          name: 'Angular',
+        },
+        {
+          value: REACT,
+          name: 'React',
+        },
+        {
+          value: VUE,
+          name: 'Vue',
+        },
+        {
+          value: CLIENT_FRAMEWORK_NO,
+          name: 'No client',
+        },
+      ],
+    },
+    microfrontend: {
+      description: 'Enable microfrontend support',
+      cli: {
+        type: Boolean,
+      },
+      prompt: generator => ({
+        type: 'confirm',
+        when: answers =>
+          (answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework) !== CLIENT_FRAMEWORK_NO &&
+          generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_GATEWAY,
+        message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
+      }),
+    },
+    withAdminUi: {
+      description: 'Generate administrative user interface',
+      cli: {
+        type: Boolean,
+      },
+      prompt: generator => ({
+        type: 'confirm',
+        when: answers => (answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework) !== CLIENT_FRAMEWORK_NO,
+        message: 'Do you want to generate the admin UI?',
+      }),
     },
   },
 };

@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import { Command, Option } from 'commander';
 import lodash from 'lodash';
+import { convertConfigToOption } from '../lib/internal/index.mjs';
 
 const { kebabCase } = lodash;
 
@@ -173,6 +174,16 @@ export default class JHipsterCommand extends Command {
   addJHipsterOptions(options, blueprintOptionDescription) {
     Object.entries(options).forEach(([key, value]) => {
       this._addGeneratorOption(kebabCase(value.name ?? key), value, blueprintOptionDescription);
+    });
+    return this;
+  }
+
+  addJHipsterConfigs(configs = {}, blueprintOptionDescription) {
+    Object.entries(configs).forEach(([name, config]) => {
+      if (config.cli) {
+        const option = convertConfigToOption(name, config);
+        this._addGeneratorOption(kebabCase(option.name), option, blueprintOptionDescription);
+      }
     });
     return this;
   }

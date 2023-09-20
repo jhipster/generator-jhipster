@@ -16,55 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 import _ from 'lodash';
-import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { httpsGet } from '../base/support/index.mjs';
 
-const { ANGULAR, REACT, VUE, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 const { intersection } = _;
-
-export async function askForClient({ control }) {
-  if (control.existingProject && !this.options.askAnswered) return;
-
-  const config = this.jhipsterConfigWithDefaults;
-  const choices = [
-    {
-      value: ANGULAR,
-      name: 'Angular',
-    },
-    {
-      value: REACT,
-      name: 'React',
-    },
-    {
-      value: VUE,
-      name: 'Vue',
-    },
-    {
-      value: 'no',
-      name: 'No client',
-    },
-  ];
-
-  const answers = await this.prompt(
-    {
-      type: 'list',
-      name: 'clientFramework',
-      when: () => this.jhipsterConfig.applicationType !== 'microservice',
-      message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
-      choices,
-      default: config.clientFramework,
-    },
-    this.config,
-  );
-
-  if (answers.clientFramework === NO_CLIENT_FRAMEWORK) {
-    this.jhipsterConfig.skipClient = true;
-    this.cancelCancellableTasks();
-  }
-}
 
 export async function askForClientTheme({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
@@ -114,22 +71,6 @@ export async function askForClientThemeVariant({ control }) {
         { value: 'light', name: 'Light' },
       ],
       default: config.clientThemeVariant,
-    },
-    this.config,
-  );
-}
-
-export async function askForAdminUi({ control }) {
-  if (control.existingProject && !this.options.askAnswered) return;
-
-  const config = this.jhipsterConfigWithDefaults;
-  await this.prompt(
-    {
-      type: 'confirm',
-      name: 'withAdminUi',
-      when: () => !this.jhipsterConfig.skipClient,
-      message: 'Do you want to generate the admin UI?',
-      default: config.withAdminUi,
     },
     this.config,
   );

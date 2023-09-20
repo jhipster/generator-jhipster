@@ -8,7 +8,6 @@ exports[`generator - app help should print expected information 1`] = `
 Options:
   --auto-crlf                              Detect line endings
   --defaults                               Execute jhipster with default config
-  --application-type <value>               Application type to generate
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
   --skip-commit-hook                       Skip adding husky commit hooks
@@ -29,8 +28,8 @@ Options:
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   --pk-type <value>                        Default primary key type (beta)
   --client-package-manager <value>         Force an unsupported client package manager
-  --microfrontend                          Force generation of experimental microfrontend support
   --test-frameworks <value...>             Test frameworks to be generated
+  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --skip-cache                             Do not remember prompt answers (default: false)
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
@@ -48,9 +47,10 @@ Options:
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --dev-database-type <value>              Development database
-  --client-framework <value>               Provide client framework for the application
-  --prettier-tab-width <value>             Default tab width for prettier
+  --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
+  --microfrontend                          Enable microfrontend support
   --with-admin-ui                          Generate administrative user interface
+  --prettier-tab-width <value>             Default tab width for prettier
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
   --cypress-coverage                       Enable Cypress code coverage report generation
@@ -571,7 +571,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "serviceDiscoveryEureka": false,
   "serviceDiscoveryType": "no",
   "skipCheckLengthOfIdentifier": false,
-  "skipClient": false,
+  "skipClient": undefined,
   "skipCommitHook": undefined,
   "skipFakeData": false,
   "skipJhipsterDependencies": false,
@@ -1112,7 +1112,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "serviceDiscoveryEureka": false,
   "serviceDiscoveryType": "consul",
   "skipCheckLengthOfIdentifier": false,
-  "skipClient": false,
+  "skipClient": undefined,
   "skipCommitHook": undefined,
   "skipFakeData": false,
   "skipJhipsterDependencies": false,
@@ -1240,7 +1240,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "devJdbcUrl": "jdbc:postgresql://localhost:5432/jhipster",
   "devLiquibaseUrl": "jdbc:postgresql://localhost:5432/jhipster",
   "devR2dbcUrl": undefined,
-  "devServerPort": undefined,
+  "devServerPort": 9060,
   "dockerContainers": {
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
     "cassandra": "cassandra-placeholder",
@@ -1381,7 +1381,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "entitySuffix": "",
   "fakerSeed": undefined,
   "frontendAppName": "jhipsterApp",
-  "gatewayServerPort": undefined,
+  "gatewayServerPort": 8080,
   "gatlingTests": false,
   "generateAuthenticationApi": false,
   "generateBuiltInAuthorityEntity": false,
@@ -1499,7 +1499,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "messageBrokerAny": false,
   "messageBrokerKafka": false,
   "messageBrokerPulsar": false,
-  "microfrontend": false,
+  "microfrontend": true,
   "microfrontends": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -1596,7 +1596,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "serviceDiscoveryEureka": false,
   "serviceDiscoveryType": "consul",
   "skipCheckLengthOfIdentifier": false,
-  "skipClient": true,
+  "skipClient": undefined,
   "skipCommitHook": undefined,
   "skipFakeData": false,
   "skipJhipsterDependencies": false,

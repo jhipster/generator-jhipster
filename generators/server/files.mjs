@@ -323,7 +323,7 @@ export const baseServerFiles = {
   ],
   packageJson: [
     {
-      condition: generator => generator.skipClient,
+      condition: generator => generator.clientFrameworkNo,
       templates: ['package.json'],
     },
   ],
@@ -350,7 +350,7 @@ export const baseServerFiles = {
       templates: ['pom.xml'],
     },
     {
-      condition: generator => !generator.skipClient,
+      condition: generator => generator.clientFrameworkAny,
       transform: false,
       templates: ['npmw', 'npmw.cmd'],
     },
@@ -517,32 +517,32 @@ export const baseServerFiles = {
   ],
   serverJavaWeb: [
     {
-      condition: generator => !generator.skipClient && !generator.reactive,
+      condition: generator => generator.clientFrameworkAny && !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/StaticResourcesWebConfiguration.java'],
     },
     {
       // TODO : add these tests to reactive
-      condition: generator => !generator.skipClient && !generator.reactive,
+      condition: generator => generator.clientFrameworkAny && !generator.reactive,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/StaticResourcesWebConfigurerTest.java'],
     },
     {
-      condition: generator => !generator.skipClient,
+      condition: generator => generator.clientFrameworkAny,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [data => `web/filter/SpaWebFilter_${data.imperativeOrReactive}.java`],
     },
     {
-      condition: generator => !generator.skipClient,
+      condition: generator => generator.clientFrameworkAny,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [data => `web/filter/SpaWebFilterIT_${data.imperativeOrReactive}.java`],
     },
     {
-      condition: generator => !generator.skipClient && generator.reactive,
+      condition: generator => generator.clientFrameworkAny && generator.reactive,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/filter/SpaWebFilterTestController_reactive.java'],

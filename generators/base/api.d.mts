@@ -1,5 +1,5 @@
 import type { BaseOptions, BaseFeatures, ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import { SetOptional } from 'type-fest';
+import type { SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.mjs';
 
 export type ApplicationWithConfig = {
@@ -172,15 +172,35 @@ export type ValidationResult = {
   error?: string | string[];
 };
 
+export type PromptSpec = {
+  type: 'list' | 'confirm';
+  message: string | ((any) => string);
+  when?: boolean | ((any) => boolean);
+  default?: any | ((any) => any);
+};
+
+export type ConfigSpec = {
+  description?: string;
+  choices?: string[] | { value: string; name: string }[];
+
+  cli?: SetOptional<CliOptionSpec, 'name'>;
+  argument?: SetOptional<ArgumentSpec, 'name'>;
+  prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
+  scope?: 'storage' | 'blueprint' | 'generator';
+};
+
 export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'>;
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
+export type JHipsterConfigs = Record<string, ConfigSpec>;
+
 export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
-  options: JHipsterOptions;
+  options?: JHipsterOptions;
+  configs?: JHipsterConfigs;
   /**
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']

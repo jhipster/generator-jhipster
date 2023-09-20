@@ -19,7 +19,7 @@
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant, askForClientTestOpts } from './prompts.mjs';
+import { askForClientTheme, askForClientThemeVariant, askForClientTestOpts } from './prompts.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
 import { writeEnumerationFiles } from './entity-files.mjs';
@@ -67,9 +67,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForClient,
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(command.configs));
+      },
       askForClientTestOpts,
-      askForAdminUi,
       askForClientTheme,
       askForClientThemeVariant,
     });
