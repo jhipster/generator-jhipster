@@ -70,7 +70,11 @@ export default class JHipsterBaseBlueprintGenerator<
 
       if (this.getFeatures().checkBlueprint) {
         if (!this.jhipsterContext) {
-          throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints ionic')}`);
+          throw new Error(
+            `This is a JHipster blueprint and should be used only like ${chalk.yellow(
+              `jhipster --blueprints ${this.options.namespace.split(':')[0]}`,
+            )}`,
+          );
         }
       }
 
