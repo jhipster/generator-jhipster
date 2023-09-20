@@ -86,6 +86,7 @@ const command: JHipsterCommandDefinition = {
       hide: true,
     },
   },
+  configs: {},
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };
 
