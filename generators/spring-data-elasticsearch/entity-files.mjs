@@ -23,12 +23,12 @@ export const entityFiles = {
   elasticSearchFiles: [
     {
       condition: generator => !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/search/_EntityClass_SearchRepository.java'],
     },
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.elastic_search'],
     },

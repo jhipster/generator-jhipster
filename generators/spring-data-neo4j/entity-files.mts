@@ -24,7 +24,7 @@ export const entityFiles = {
   server: [
     {
       condition: generator => generator.databaseTypeNeo4j,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.spring_data_neo4j'],
     },

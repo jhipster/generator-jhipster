@@ -45,13 +45,13 @@ export const entityFiles = {
   ],
   server: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.spring_data_couchbase'],
     },
     {
       condition: generator => !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/_EntityClass_Repository.java'],
     },

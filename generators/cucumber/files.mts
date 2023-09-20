@@ -25,7 +25,7 @@ import { CommonClientServerApplication } from '../base-application/types.mjs';
 const cucumberFiles: WriteFileSection<Generator, CommonClientServerApplication> = {
   cucumberFiles: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         // Create Cucumber test files
@@ -35,19 +35,19 @@ const cucumberFiles: WriteFileSection<Generator, CommonClientServerApplication> 
       ],
     },
     {
-      path: `${SERVER_TEST_RES_DIR}package/`,
+      path: `${SERVER_TEST_RES_DIR}_package_/`,
       renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
       templates: ['cucumber/gitkeep'],
     },
     {
       condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['cucumber/stepdefs/UserStepDefs.java'],
     },
     {
       condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
-      path: `${SERVER_TEST_RES_DIR}package/`,
+      path: `${SERVER_TEST_RES_DIR}_package_/`,
       renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
       templates: ['cucumber/user.feature'],
     },
