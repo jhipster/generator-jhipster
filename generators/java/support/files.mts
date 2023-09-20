@@ -62,9 +62,11 @@ type RelativeWriteFileBlock = WriteFileBlock & { relativePath?: string };
 
 export function javaMainPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
 export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
-export function javaMainPackageTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+export function javaMainPackageTemplatesBlock(
+  blockOrRelativePath: string | RelativeWriteFileBlock = '',
+): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${SERVER_MAIN_SRC_DIR}_package_/${relativePath}`,
     renameTo: (data: any, filePath: string) =>
@@ -73,39 +75,45 @@ export function javaMainPackageTemplatesBlock(blockOrRelativePath: string | Rela
       }`,
     ...block,
   };
-};
+}
 
 export function javaMainResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
 export function javaMainResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
-export function javaMainResourceTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+export function javaMainResourceTemplatesBlock(
+  blockOrRelativePath: string | RelativeWriteFileBlock = '',
+): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${SERVER_MAIN_RES_DIR}${relativePath}`,
     renameTo: (data: any, filePath: string) =>
       `${data.srcMainResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
     ...block,
   };
-};
+}
 
 export function javaTestResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
 export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
-export function javaTestResourceTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+export function javaTestResourceTemplatesBlock(
+  blockOrRelativePath: string | RelativeWriteFileBlock = '',
+): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${SERVER_TEST_RES_DIR}${relativePath}`,
     renameTo: (data: any, filePath: string) =>
       `${data.srcTestResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
     ...block,
   };
-};
+}
 
 export function javaTestPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
 export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
-export function javaTestPackageTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+export function javaTestPackageTemplatesBlock(
+  blockOrRelativePath: string | RelativeWriteFileBlock = '',
+): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${SERVER_TEST_SRC_DIR}_package_/${relativePath}`,
     renameTo: (data: any, filePath: string) =>
@@ -114,4 +122,4 @@ export function javaTestPackageTemplatesBlock(blockOrRelativePath: string | Rela
       }`,
     ...block,
   };
-};
+}

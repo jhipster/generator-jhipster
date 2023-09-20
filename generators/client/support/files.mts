@@ -28,34 +28,34 @@ export function clientSrcTemplatesBlock(blockOrRelativePath?: string): Pick<Writ
 export function clientSrcTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
 export function clientSrcTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<WriteFileBlock> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${CLIENT_TEMPLATES_SRC_DIR}${relativePath}`,
     renameTo: srcRenameTo(relativePath),
     ...block,
   };
-};
+}
 
 export function clientApplicationTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
 export function clientApplicationTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
 export function clientApplicationTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<WriteFileBlock> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${CLIENT_TEMPLATES_APP_DIR}${relativePath}`,
     renameTo: appRenameTo(relativePath),
     ...block,
   };
-};
+}
 
 export function clientTestTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
 export function clientTestTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
 export function clientTestTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<WriteFileBlock> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
+  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
     path: `${CLIENT_TEST_SRC_DIR}${relativePath}`,
     renameTo: testRenameTo(relativePath),
     ...block,
   };
-};
+}
