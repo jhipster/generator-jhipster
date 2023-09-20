@@ -257,13 +257,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    * @param options - Object containing options.
    * @param common - skip generator scoped options.
    */
-  parseJHipsterOptions(options: JHipsterOptions, configs: JHipsterConfigs | boolean = {}, common = false) {
+  parseJHipsterOptions(options: JHipsterOptions | undefined, configs: JHipsterConfigs | boolean = {}, common = false) {
     if (typeof configs === 'boolean') {
       common = configs;
       configs = {};
     }
 
-    Object.entries(options)
+    Object.entries(options ?? {})
       .concat(...Object.entries(configs).map((name, def) => [name, convertConfigToOption(name, def)]))
       .forEach(([optionName, optionDesc]) => {
         if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
