@@ -118,7 +118,8 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
     application.packageFolder = `${application.packageName.replace(/\./g, '/')}/`;
   }
 
-  application.prodDatabaseTypePostgres = undefined;
+  application.prodDatabaseTypePostgres = undefined; // Deprecated
+  application.prodDatabaseTypePostgresql = undefined;
   application.prodDatabaseTypeMssql = undefined;
   application.devDatabaseTypeH2Any = undefined;
   application.prodDatabaseTypeMariadb = undefined;

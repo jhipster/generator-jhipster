@@ -18,7 +18,7 @@ dependencies {
   <%_ if (prodDatabaseTypeMysql) { _%>
   liquibaseRuntime "com.mysql:mysql-connector-j"
   <%_ } _%>
-  <%_ if (prodDatabaseTypePostgres) { _%>
+  <%_ if (prodDatabaseTypePostgresql) { _%>
   liquibaseRuntime "org.postgresql:postgresql"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMariadb) { _%>

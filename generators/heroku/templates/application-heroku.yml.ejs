@@ -65,7 +65,7 @@ jhipster:
   <%_ } _%>
 <%_ } _%>
 spring:
-<%_ if (prodDatabaseTypePostgres || prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+<%_ if (prodDatabaseTypePostgresql || prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: ${JDBC_DATABASE_URL}

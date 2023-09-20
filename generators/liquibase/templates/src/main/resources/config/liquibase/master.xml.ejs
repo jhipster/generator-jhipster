@@ -12,7 +12,7 @@
     <property name="uuidType" value="uuid" dbms="h2"/>
   <%_ } _%>
     <property name="datetimeType" value="datetime(6)" dbms="h2"/>
-  <%_ if (prodDatabaseTypePostgres) { _%>
+  <%_ if (prodDatabaseTypePostgresql) { _%>
     <property name="clobType" value="longvarchar" dbms="h2"/>
   <%_ } else { _%>
     <property name="clobType" value="clob" dbms="h2"/>
@@ -35,7 +35,7 @@
     <property name="uuidType" value="varchar(36)" dbms="mariadb"/>
     <property name="datetimeType" value="datetime(6)" dbms="mariadb"/>
 <%_ } _%>
-<%_ if (prodDatabaseTypePostgres) { _%>
+<%_ if (prodDatabaseTypePostgresql) { _%>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
     <property name="floatType" value="float4" dbms="postgresql"/>
     <property name="clobType" value="clob" dbms="postgresql"/>

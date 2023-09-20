@@ -130,6 +130,30 @@ const deprecatedProperties = {
     replacement: 'databaseMigrationLiquibase',
     get: ({ data }) => data.databaseMigrationLiquibase,
   },
+  databaseTypePostgres: {
+    replacement: 'prodDatabaseTypePostgresql',
+    get: ({ data }) => data.prodDatabaseTypePostgresql,
+  },
+  prodDatabaseTypePostgres: {
+    replacement: 'prodDatabaseTypePostgresql',
+    get: ({ data }) => data.prodDatabaseTypePostgresql,
+  },
+  databaseTypeMariadb: {
+    replacement: 'prodDatabaseTypeMariadb',
+    get: ({ data }) => data.prodDatabaseTypeMariadb,
+  },
+  databaseTypeMysql: {
+    replacement: 'prodDatabaseTypeMysql',
+    get: ({ data }) => data.prodDatabaseTypeMysql,
+  },
+  databaseTypeOracle: {
+    replacement: 'prodDatabaseTypeOracle',
+    get: ({ data }) => data.prodDatabaseTypeOracle,
+  },
+  databaseTypeMssql: {
+    replacement: 'prodDatabaseTypeMssql',
+    get: ({ data }) => data.prodDatabaseTypeMssql,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

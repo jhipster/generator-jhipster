@@ -22,7 +22,7 @@
 -%>
 <&_ if (fragment.importSection) { -&>
 import jakarta.persistence.*;
-<%_ if ((prodDatabaseTypePostgres && anyFieldHasTextContentType) || (anyFieldIsUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb))) { _%>
+<%_ if ((prodDatabaseTypePostgresql && anyFieldHasTextContentType) || (anyFieldIsUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb))) { _%>
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 <%_ } _%>
