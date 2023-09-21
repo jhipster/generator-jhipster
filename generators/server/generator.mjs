@@ -331,11 +331,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
         application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
+        application.javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
         }
