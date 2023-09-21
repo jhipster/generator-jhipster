@@ -14,6 +14,10 @@ const deprecatedProperties = {
     replacement: 'nodeDependencies.npm',
     get: ({ data }) => data.nodeDependencies.npm,
   },
+  JHIPSTER_DEPENDENCIES_VERSION: {
+    replacement: 'jhipsterDependenciesVersion',
+    get: ({ data }) => data.jhipsterDependenciesVersion,
+  },
   DOCKER_DIR: {
     replacement: 'dockerServicesDir',
     get: ({ data }) => data.dockerServicesDir,
@@ -67,8 +71,8 @@ const deprecatedProperties = {
     get: ({ data }) => data.anyFieldHasDocumentation,
   },
   fieldsContainBigDecimal: {
-    replacement: 'anyFieldIsDuration',
-    get: ({ data }) => data.anyFieldIsDuration,
+    replacement: 'anyFieldIsBigDecimal',
+    get: ({ data }) => data.anyFieldIsBigDecimal,
   },
   fieldsContainBlob: {
     replacement: 'anyFieldIsBlobDerived',
@@ -79,8 +83,8 @@ const deprecatedProperties = {
     get: ({ data }) => data.anyFieldIsDateDerived,
   },
   fieldsContainDuration: {
-    replacement: 'anyFieldIsBigDecimal',
-    get: ({ data }) => data.anyFieldIsBigDecimal,
+    replacement: 'anyFieldIsDuration',
+    get: ({ data }) => data.anyFieldIsDuration,
   },
   fieldsContainInstant: {
     replacement: 'anyFieldIsInstant',
