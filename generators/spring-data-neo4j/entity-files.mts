@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import Generator from './generator.mjs';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { javaMainPackageTemplatesBlock } from '../server/support/index.mjs';
 
 export const entityFiles = {
