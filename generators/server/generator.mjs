@@ -370,7 +370,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         const SPRING_BOOT_VERSION = application.javaDependencies['spring-boot'];
         application.addSpringMilestoneRepository =
-          ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC');
+          (application.backendType ?? 'Java') === 'Java' &&
+          (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
