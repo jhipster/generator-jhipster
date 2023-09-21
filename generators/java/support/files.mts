@@ -20,12 +20,10 @@
 import { WriteFileBlock } from '../../base/api.mjs';
 import { SERVER_TEST_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../../generator-constants.mjs';
 
-export const replaceFilePathVariables = (data: any, filePath: string) =>
-  filePath?.replace(/_package_/, data.packageName)?.replace(/_\w*/, '');
-
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
   filePath = filePath
-    ?.replace(/_package_/, data.entityJavaPackageFolder)
+    ?.replace(/_package_/, data.packageFolder)
+    ?.replace(/_entityPackage_/, data.entityJavaPackageFolder)
     ?.replace(/_mainClass_/, data.mainClass)
     ?.replace(/_[pP]ersistClass_/, data.persistClass)
     ?.replace(/_[eE]ntityClass_/, data.entityClass)
@@ -38,14 +36,14 @@ export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
  * Removes trailing specifiers.
  */
 export const moveToJavaPackageSrcDir = (data: any, filePath: string) =>
-  `${data.javaPackageSrcDir}${replaceFilePathVariables(data, filePath) ?? ''}`;
+  `${data.javaPackageSrcDir}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
 /**
  * Move the template to `javaPackageTestDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
  * Removes trailing specifiers.
  */
 export const moveToJavaPackageTestDir = (data: any, filePath: string) =>
-  `${data.javaPackageTestDir}${replaceFilePathVariables(data, filePath) ?? ''}`;
+  `${data.javaPackageTestDir}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
 export const moveToJavaEntityPackageSrcDir = (data: any, filePath: string) =>
   `${data.srcMainJava}${data.entityAbsoluteFolder}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
@@ -71,7 +69,7 @@ export function javaMainPackageTemplatesBlock(
   return {
     path: `${SERVER_MAIN_SRC_DIR}_package_/${relativePath}`,
     renameTo: (data: any, filePath: string) =>
-      `${data.javaPackageSrcDir}${relativePath}${data.entityJavaPackageFolder ?? ''}${
+      `${data.javaPackageSrcDir}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
         replaceEntityFilePathVariables(data, filePath) ?? ''
       }`,
     ...block,
@@ -88,7 +86,9 @@ export function javaMainResourceTemplatesBlock(
   return {
     path: `${SERVER_MAIN_RES_DIR}${relativePath}`,
     renameTo: (data: any, filePath: string) =>
-      `${data.srcMainResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
+      `${data.srcMainResources}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
+        replaceEntityFilePathVariables(data, filePath) ?? ''
+      }`,
     ...block,
   };
 }
@@ -103,7 +103,9 @@ export function javaTestResourceTemplatesBlock(
   return {
     path: `${SERVER_TEST_RES_DIR}${relativePath}`,
     renameTo: (data: any, filePath: string) =>
-      `${data.srcTestResources}${relativePath}${replaceEntityFilePathVariables(data, filePath) ?? ''}`,
+      `${data.srcTestResources}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
+        replaceEntityFilePathVariables(data, filePath) ?? ''
+      }`,
     ...block,
   };
 }
@@ -118,7 +120,7 @@ export function javaTestPackageTemplatesBlock(
   return {
     path: `${SERVER_TEST_SRC_DIR}_package_/${relativePath}`,
     renameTo: (data: any, filePath: string) =>
-      `${data.javaPackageTestDir}${relativePath}${data.entityJavaPackageFolder ?? ''}${
+      `${data.javaPackageTestDir}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
         replaceEntityFilePathVariables(data, filePath) ?? ''
       }`,
     ...block,

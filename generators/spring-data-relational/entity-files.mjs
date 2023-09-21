@@ -22,22 +22,22 @@ const sqlFiles = {
   sqlFiles: [
     {
       condition: generator => !generator.reactive,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
     },
     {
       condition: generator => !generator.reactive && generator.requiresPersistableImplementation,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
     },
     {
       condition: generator => !generator.reactive && generator.enableHibernateCache,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
     },
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.containsBagRelationships,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
         'repository/_EntityClass_RepositoryWithBagRelationships.java',
         'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
@@ -45,22 +45,22 @@ const sqlFiles = {
     },
     {
       condition: generator => generator.reactive,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_.java.jhi.spring_data_reactive'],
     },
     {
       condition: generator => generator.requiresPersistableImplementation,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_.java.jhi.spring_data_persistable'],
     },
     {
       condition: generator => generator.reactive && generator.requiresPersistableImplementation,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_Callback.java'],
     },
     {
       condition: generator => generator.reactive && !generator.embedded,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
         'repository/_EntityClass_RepositoryInternalImpl_reactive.java',
         'repository/_EntityClass_SqlHelper_reactive.java',
@@ -79,7 +79,7 @@ export default async function writeEntitiesTask({ application, entities }) {
         blocks: [
           {
             condition: generator => generator.reactive && generator.requiresPersistableImplementation,
-            ...javaMainPackageTemplatesBlock(),
+            ...javaMainPackageTemplatesBlock('_entityPackage_'),
             templates: ['domain/_PersistClass_Callback.java'],
           },
         ],

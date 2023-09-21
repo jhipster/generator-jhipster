@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
+import { javaMainPackageTemplatesBlock } from '../server/support/index.mjs';
 
 export const entityFiles = {
   dbChangelog: [
@@ -34,8 +34,7 @@ export const entityFiles = {
   ],
   server: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_PersistClass_.java.jhi.spring_data_cassandra'],
     },
   ],
