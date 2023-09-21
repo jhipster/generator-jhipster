@@ -75,8 +75,10 @@ export default class XmlStorage {
     delete this._cachedStore;
   }
 
-  public save() {
-    this.sort();
+  public save(sort = true) {
+    if (sort) {
+      this.sort();
+    }
     this.persist(false);
   }
 

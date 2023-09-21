@@ -43,6 +43,7 @@ const rootOrder = [
   'packaging',
   'name',
   'description',
+  'parent',
   'repositories',
   'pluginRepositories',
   'distributionManagement',

@@ -30,6 +30,7 @@ import { createPomStorage, type PomStorage } from './support/index.mjs';
 
 export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   pomStorage!: PomStorage;
+  sortPomFile?: boolean;
 
   async beforeQueue() {
     this.pomStorage = createPomStorage(this);
@@ -120,7 +121,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
   get postWriting() {
     return this.asPostWritingTaskGroup({
       sortPom() {
-        this.pomStorage.save();
+        this.pomStorage.save(this.sortPomFile ?? true);
       },
     });
   }
