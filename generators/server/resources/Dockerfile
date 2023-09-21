@@ -49,7 +49,7 @@ LABEL ALIAS=zookeeper
 FROM apachepulsar/pulsar:3.0.1
 LABEL ALIAS=pulsar
 
-FROM sonarqube:10.2.0-community
+FROM sonarqube:10.2.1-community
 LABEL ALIAS=sonar
 
 FROM docker.io/bitnami/consul:1.16.2
