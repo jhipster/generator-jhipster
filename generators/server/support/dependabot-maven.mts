@@ -23,7 +23,7 @@ import { XMLParser } from 'fast-xml-parser';
  * @param pomContent
  */
 export function getPomProperties(pomContent: string): Record<string, string> {
-  return new XMLParser().parse(pomContent).project.properties;
+  return new XMLParser().parse<any>(pomContent).project.properties;
 }
 
 /**
