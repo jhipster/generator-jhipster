@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { WriteFileBlock } from '../../base/api.mjs';
+import type { WriteFileBlock } from '../../base/api.mjs';
+import type CoreGenerator from '../../base-core/generator.mjs';
 import { SERVER_TEST_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../../generator-constants.mjs';
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
@@ -64,16 +65,11 @@ export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWrite
 export function javaMainPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
-  const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
-  return {
-    path: `${SERVER_MAIN_SRC_DIR}_package_/${relativePath}`,
-    renameTo: (data: any, filePath: string) =>
-      `${data.javaPackageSrcDir}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
-        replaceEntityFilePathVariables(data, filePath) ?? ''
-      }`,
-    ...block,
-  };
+  return javaBlock({
+    srcPath: `${SERVER_MAIN_SRC_DIR}_package_/`,
+    destProperty: 'javaPackageSrcDir',
+    blockOrRelativePath,
+  });
 }
 
 export function javaMainResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
@@ -81,16 +77,11 @@ export function javaMainResourceTemplatesBlock(blockOrRelativePath: RelativeWrit
 export function javaMainResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
-  const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
-  return {
-    path: `${SERVER_MAIN_RES_DIR}${relativePath}`,
-    renameTo: (data: any, filePath: string) =>
-      `${data.srcMainResources}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
-        replaceEntityFilePathVariables(data, filePath) ?? ''
-      }`,
-    ...block,
-  };
+  return javaBlock({
+    srcPath: SERVER_MAIN_RES_DIR,
+    destProperty: 'srcMainResources',
+    blockOrRelativePath,
+  });
 }
 
 export function javaTestResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
@@ -98,16 +89,11 @@ export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWrit
 export function javaTestResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
-  const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
-  const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
-  return {
-    path: `${SERVER_TEST_RES_DIR}${relativePath}`,
-    renameTo: (data: any, filePath: string) =>
-      `${data.srcTestResources}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
-        replaceEntityFilePathVariables(data, filePath) ?? ''
-      }`,
-    ...block,
-  };
+  return javaBlock({
+    srcPath: SERVER_TEST_RES_DIR,
+    destProperty: 'srcTestResources',
+    blockOrRelativePath,
+  });
 }
 
 export function javaTestPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
@@ -115,14 +101,32 @@ export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWrite
 export function javaTestPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+  return javaBlock({
+    srcPath: `${SERVER_TEST_SRC_DIR}_package_/`,
+    destProperty: 'javaPackageTestDir',
+    blockOrRelativePath,
+  });
+}
+
+function javaBlock({
+  srcPath,
+  destProperty,
+  blockOrRelativePath = '',
+}: {
+  srcPath: string;
+  destProperty: string;
+  blockOrRelativePath: string | RelativeWriteFileBlock;
+}): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
+  const blockRenameTo = typeof block?.renameTo === 'function' ? block.renameTo : undefined;
   const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : blockOrRelativePath.relativePath ?? '';
   return {
-    path: `${SERVER_TEST_SRC_DIR}_package_/${relativePath}`,
-    renameTo: (data: any, filePath: string) =>
-      `${data.javaPackageTestDir}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
-        replaceEntityFilePathVariables(data, filePath) ?? ''
-      }`,
+    path: `${srcPath}${relativePath}`,
     ...block,
+    renameTo(this: CoreGenerator, data: any, filePath: string) {
+      return `${data[destProperty]}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
+        replaceEntityFilePathVariables(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
+      }`;
+    },
   };
 }
