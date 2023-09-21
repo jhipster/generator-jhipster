@@ -63,7 +63,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
-        application.backendType = 'Java';
+        application.backendType = this.jhipsterConfig.backendType ?? 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
@@ -117,6 +117,9 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
+
+        application.backendTypeSpringBoot = application.backendType === 'Java';
+        application.backendTypeJavaAny = application.backendTypeJavaAny ?? application.backendTypeSpringBoot;
       },
     });
   }

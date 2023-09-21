@@ -69,7 +69,7 @@ liquibase {
       password "<%- devDatabasePassword %>"
 <%_ } _%>
       changelogFile project.ext.diffChangelogFile
-<%_ if (!reactive) { _%>
+<%_ if (!reactive && backendTypeSpringBoot) { _%>
       referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
 <%_ } _%>
 <%_ if (liquibaseDefaultSchemaName) { _%>
@@ -98,9 +98,11 @@ configurations {
     }
   }
 }
+<%_ if (backendTypeSpringBoot) { _%>
 
 ext {
   if (project.hasProperty("no-liquibase")) {
     springProfiles += ",no-liquibase"
   }
 }
+<%_ } _%>

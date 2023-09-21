@@ -1,4 +1,5 @@
 export default function mavenPluginContent({
+  backendTypeSpringBoot,
   reactive,
   packageName,
   srcMainResources,
@@ -20,7 +21,7 @@ export default function mavenPluginContent({
       <url>${url}</url>
       <defaultSchemaName>${defaultSchemaName}</defaultSchemaName>
       <username>${username}</username>
-      <password>${password}</password>${reactive ? '' : `
+      <password>${password}</password>${reactive || !backendTypeSpringBoot ? '' : `
       <referenceUrl>hibernate:spring:${packageName}.domain?dialect=${hibernateDialect}&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>`}
       <verbose>true</verbose>
       <logging>debug</logging>
@@ -37,7 +38,7 @@ export default function mavenPluginContent({
         <groupId>org.liquibase.ext</groupId>
         <artifactId>liquibase-hibernate6</artifactId>
         <version>\${liquibase.version}</version>
-      </dependency>
+      </dependency>${backendTypeSpringBoot ? `
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -47,7 +48,7 @@ export default function mavenPluginContent({
         <groupId>jakarta.validation</groupId>
         <artifactId>jakarta.validation-api</artifactId>
         <version>\${validation-api.version}</version>
-      </dependency>${devDatabaseTypeH2Any? `
+      </dependency>` : ''}${devDatabaseTypeH2Any? `
       <dependency>
         <groupId>com.h2database</groupId>
         <artifactId>h2</artifactId>
