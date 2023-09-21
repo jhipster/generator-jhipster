@@ -79,12 +79,12 @@ export default class XmlStorage {
     if (sort) {
       this.sort();
     }
-    this.persist(false);
+    this.persist();
   }
 
   protected sort() {}
 
-  protected persist(sort = true) {
+  protected persist(sort = false) {
     if (this._cachedStore) {
       if (sort) {
         this.sort();
