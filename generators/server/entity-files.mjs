@@ -133,9 +133,9 @@ export const serviceFiles = {
     },
     javaMainPackageTemplatesBlock({
       condition: generator => generator.service === SERVICE_CLASS && !generator.embedded,
-      relativePath: '_entityPackage_/service/',
+      relativePath: '_entityPackage_/',
       renameTo: (_data, file) => file.replace('service/impl', 'service').replace('Impl.java', '.java'),
-      templates: ['impl/_EntityClass_ServiceImpl.java'],
+      templates: ['service/impl/_EntityClass_ServiceImpl.java'],
     }),
   ],
 };
@@ -144,7 +144,7 @@ export const dtoFiles = {
   baseDtoFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
-      ...javaMainPackageTemplatesBlock(),
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['service/mapper/EntityMapper.java'],
     },
   ],

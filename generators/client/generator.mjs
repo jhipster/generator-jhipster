@@ -83,6 +83,14 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      applyNoFramework() {
+        const { clientFramework } = this.jhipsterConfigWithDefaults;
+        if (clientFramework === CLIENT_FRAMEWORK_NO) {
+          this.jhipsterConfig.skipClient = true;
+          this.cancelCancellableTasks();
+          return;
+        }
+      },
       upgradeAngular() {
         if (this.jhipsterConfig.clientFramework === 'angularX') {
           this.jhipsterConfig.clientFramework = ANGULAR;
@@ -115,10 +123,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         const { clientFramework, testFrameworks } = this.jhipsterConfigWithDefaults;
-        if (clientFramework === CLIENT_FRAMEWORK_NO) {
-          this.cancelCancellableTasks();
-          return;
-        }
         if ([ANGULAR, VUE, REACT].includes(clientFramework)) {
           await this.composeWithJHipster(clientFramework);
         }
