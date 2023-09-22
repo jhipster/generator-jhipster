@@ -16,8 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -86,7 +88,32 @@ const command: JHipsterCommandDefinition = {
       hide: true,
     },
   },
-  configs: {},
+  configs: {
+    applicationType: {
+      description: 'Application type to generate',
+      cli: {
+        type: String,
+      },
+      prompt: {
+        type: 'list',
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+      },
+      choices: [
+        {
+          value: APPLICATION_TYPE_MONOLITH,
+          name: 'Monolithic application (recommended for simple projects)',
+        },
+        {
+          value: APPLICATION_TYPE_GATEWAY,
+          name: 'Gateway application',
+        },
+        {
+          value: APPLICATION_TYPE_MICROSERVICE,
+          name: 'Microservice application',
+        },
+      ],
+    },
+  },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };
 

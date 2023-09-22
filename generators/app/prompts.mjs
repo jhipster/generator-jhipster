@@ -19,10 +19,6 @@
 import chalk from 'chalk';
 import statistics from '../statistics.mjs';
 
-import { applicationTypes } from '../../jdl/jhipster/index.mjs';
-
-const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
-
 export async function askForInsightOptIn() {
   if (!statistics.shouldWeAskForOptIn()) return;
   const answers = await this.prompt({
@@ -34,41 +30,4 @@ export async function askForInsightOptIn() {
   if (answers.insight !== undefined) {
     statistics.setOptOutStatus(!answers.insight);
   }
-}
-
-export async function askForApplicationType({ control }) {
-  if (control.existingProject && this.options.askAnswered !== true) return;
-  const config = this.jhipsterConfigWithDefaults;
-
-  const applicationTypeChoices = [
-    {
-      value: MONOLITH,
-      name: 'Monolithic application (recommended for simple projects)',
-    },
-    {
-      value: GATEWAY,
-      name: 'Gateway application',
-    },
-    {
-      value: MICROSERVICE,
-      name: 'Microservice application',
-    },
-  ];
-
-  await this.prompt(
-    [
-      {
-        type: 'list',
-        name: 'applicationType',
-        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-        choices: applicationTypeChoices,
-        default: config.applicationType,
-      },
-    ],
-    this.config,
-  );
-
-  const { applicationType } = this.jhipsterConfig;
-  // TODO drop for v8, setting the generator with config is deprecated
-  this.applicationType = applicationType;
 }

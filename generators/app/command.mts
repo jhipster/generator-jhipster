@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import {
   GENERATOR_BOOTSTRAP,
@@ -27,7 +26,6 @@ import {
   GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
 } from '../generator-list.mjs';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -138,19 +136,7 @@ const command: JHipsterCommandDefinition = {
       type: Array,
     },
   },
-  configs: {
-    applicationType: {
-      description: 'Application type to generate',
-      cli: {
-        type: String,
-      },
-      prompt: {
-        type: 'list',
-        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-      },
-      choices: [APPLICATION_TYPE_MONOLITH, APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE],
-    },
-  },
+  configs: {},
   loadGeneratorOptions: true,
   import: [
     GENERATOR_BOOTSTRAP,

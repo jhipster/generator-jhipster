@@ -29,7 +29,6 @@ Options:
   --pk-type <value>                        Default primary key type (beta)
   --client-package-manager <value>         Force an unsupported client package manager
   --test-frameworks <value...>             Test frameworks to be generated
-  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --skip-cache                             Do not remember prompt answers (default: false)
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
@@ -45,6 +44,7 @@ Options:
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
+  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
