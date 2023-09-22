@@ -88,7 +88,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (clientFramework === CLIENT_FRAMEWORK_NO) {
           this.jhipsterConfig.skipClient = true;
           this.cancelCancellableTasks();
-          return;
         }
       },
       upgradeAngular() {
