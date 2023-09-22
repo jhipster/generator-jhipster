@@ -321,6 +321,11 @@ export const baseServerFiles = {
       templates: ['entrypoint.sh'],
     },
   ],
+  readme: [
+    {
+      templates: ['README.md.jhi.spring-boot'],
+    },
+  ],
   packageJson: [
     {
       condition: generator => generator.clientFrameworkNo,

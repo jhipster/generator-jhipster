@@ -293,6 +293,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -395,7 +396,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": undefined,
+  "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
@@ -846,6 +847,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -948,7 +950,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": undefined,
+  "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1399,6 +1401,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -1501,7 +1504,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": undefined,
+  "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",

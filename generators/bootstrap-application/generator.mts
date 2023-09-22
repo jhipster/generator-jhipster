@@ -32,6 +32,7 @@ import { preparePostEntityServerDerivedProperties } from '../server/support/inde
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
+import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.mjs';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -91,6 +92,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           prettierExtensions = `${prettierExtensions},java`;
         }
         application.prettierExtensions = prettierExtensions;
+        application.documentationArchiveUrl = `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${application.jhipsterVersion}`;
       },
     });
   }

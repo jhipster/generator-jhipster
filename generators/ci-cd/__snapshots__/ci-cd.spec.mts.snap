@@ -1562,7 +1562,7 @@ gradle-package:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM inside Docker should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "image: jhipster/jhipster:v
+    "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
 
 cache:
   key: "$CI_COMMIT_REF_NAME"
@@ -1963,7 +1963,7 @@ deploy-to-production:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular Yarn inside Docker Autoconfigure should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "image: jhipster/jhipster:v
+    "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
 
 cache:
   key: "$CI_COMMIT_REF_NAME"
@@ -2074,7 +2074,7 @@ maven-package:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: npm skip server should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "image: jhipster/jhipster:v
+    "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
 
 before_script:
   - export NG_CLI_ANALYTICS="false"
@@ -2410,7 +2410,7 @@ node {
         checkout scm
     }
 
-    docker.image('jhipster/jhipster:v').inside('-u jhipster -e MAVEN_OPTS="-Duser.home=./"') {
+    docker.image('jhipster/jhipster:vJHIPSTER_VERSION').inside('-u jhipster -e MAVEN_OPTS="-Duser.home=./"') {
         stage('check java') {
             sh "java -version"
         }

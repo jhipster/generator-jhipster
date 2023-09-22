@@ -6,6 +6,7 @@ import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
 import { loadConfig, loadDerivedConfig } from '../../../lib/internal/index.mjs';
 import serverCommand from '../../server/command.mjs';
+import { packageJson } from '../../../lib/index.mjs';
 
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;
@@ -87,7 +88,7 @@ export const loadAppConfig = ({
     application.nodeVersion = NODE_VERSION;
   }
 
-  application.jhipsterVersion = config.jhipsterVersion;
+  application.jhipsterVersion = useVersionPlaceholders ? 'JHIPSTER_VERSION' : config.jhipsterVersion ?? packageJson.version;
   application.baseName = config.baseName;
   application.reactive = config.reactive;
   application.jhiPrefix = config.jhiPrefix;
