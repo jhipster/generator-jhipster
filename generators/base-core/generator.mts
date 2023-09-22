@@ -332,7 +332,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     this.options.positionalArguments = [];
   }
 
-  prepareQuestions(configs: JHipsterConfigs) {
+  prepareQuestions(configs: JHipsterConfigs = {}) {
     return Object.entries(configs)
       .filter(([_name, def]) => def.prompt)
       .map(([name, def]) => {
