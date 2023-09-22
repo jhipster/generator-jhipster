@@ -39,8 +39,8 @@ const sqlFiles = {
       condition: generator => !generator.reactive && !generator.embedded && generator.containsBagRelationships,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
-        'repository/_EntityClass_RepositoryWithBagRelationships.java',
-        'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
+        'repository/_entityClass_RepositoryWithBagRelationships.java',
+        'repository/_entityClass_RepositoryWithBagRelationshipsImpl.java',
       ],
     },
     {
@@ -62,9 +62,9 @@ const sqlFiles = {
       condition: generator => generator.reactive && !generator.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
-        'repository/_EntityClass_RepositoryInternalImpl_reactive.java',
-        'repository/_EntityClass_SqlHelper_reactive.java',
-        'repository/rowmapper/_EntityClass_RowMapper_reactive.java',
+        'repository/_entityClass_RepositoryInternalImpl_reactive.java',
+        'repository/_entityClass_SqlHelper_reactive.java',
+        'repository/rowmapper/_entityClass_RowMapper_reactive.java',
       ],
     },
   ],

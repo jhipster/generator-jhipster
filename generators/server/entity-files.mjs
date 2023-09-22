@@ -63,7 +63,7 @@ export const restFiles = {
     {
       condition: generator => !generator.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['web/rest/_EntityClass_Resource.java'],
+      templates: ['web/rest/_entityClass_Resource.java'],
     },
   ],
   restTestFiles: [
@@ -72,7 +72,7 @@ export const restFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: '_package_/_entityPackage_/web/rest/_EntityClass_ResourceIT.java',
+          file: '_package_/_entityPackage_/web/rest/_entityClass_ResourceIT.java',
           options: {
             context: {
               _,
@@ -93,7 +93,7 @@ export const filteringFiles = {
     {
       condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/criteria/_EntityClass_Criteria.java', 'service/_EntityClass_QueryService.java'],
+      templates: ['service/criteria/_entityClass_Criteria.java', 'service/_entityClass_QueryService.java'],
     },
   ],
 };
@@ -104,7 +104,7 @@ const filteringReactiveFiles = {
       condition: generator => generator.jpaMetamodelFiltering && generator.reactive,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('service/', 'domain/'),
-      templates: ['service/criteria/_EntityClass_Criteria.java'],
+      templates: ['service/criteria/_entityClass_Criteria.java'],
     },
   ],
 };
@@ -114,12 +114,12 @@ export const respositoryFiles = {
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['repository/_EntityClass_Repository.java'],
+      templates: ['repository/_entityClass_Repository.java'],
     },
     {
       condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['repository/_EntityClass_Repository_reactive.java'],
+      templates: ['repository/_entityClass_Repository_reactive.java'],
     },
   ],
 };
@@ -129,13 +129,13 @@ export const serviceFiles = {
     {
       condition: generator => generator.service === SERVICE_IMPL && !generator.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/_EntityClass_Service.java', 'service/impl/_EntityClass_ServiceImpl.java'],
+      templates: ['service/_entityClass_Service.java', 'service/impl/_entityClass_ServiceImpl.java'],
     },
     javaMainPackageTemplatesBlock({
       condition: generator => generator.service === SERVICE_CLASS && !generator.embedded,
       relativePath: '_entityPackage_/',
       renameTo: (_data, file) => file.replace('service/impl', 'service').replace('Impl.java', '.java'),
-      templates: ['service/impl/_EntityClass_ServiceImpl.java'],
+      templates: ['service/impl/_entityClass_ServiceImpl.java'],
     }),
   ],
 };
@@ -152,7 +152,7 @@ export const dtoFiles = {
     {
       condition: generator => generator.dto === MAPSTRUCT,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/dto/_DtoClass_.java', 'service/mapper/_EntityClass_Mapper.java'],
+      templates: ['service/dto/_DtoClass_.java', 'service/mapper/_entityClass_Mapper.java'],
     },
   ],
   dtoTestFiles: [
@@ -164,7 +164,7 @@ export const dtoFiles = {
     {
       condition: generator => generator.dto === MAPSTRUCT && [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),
       ...javaTestPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/mapper/_EntityClass_MapperTest.java'],
+      templates: ['service/mapper/_entityClass_MapperTest.java'],
     },
   ],
 };

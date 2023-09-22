@@ -51,7 +51,7 @@ export const entityFiles = {
     {
       condition: generator => !generator.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['repository/_EntityClass_Repository.java'],
+      templates: ['repository/_entityClass_Repository.java'],
     },
   ],
 };

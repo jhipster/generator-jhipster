@@ -23,7 +23,7 @@ export const entityFiles = {
     {
       condition: generator => !generator.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['repository/search/_EntityClass_SearchRepository.java'],
+      templates: ['repository/search/_entityClass_SearchRepository.java'],
     },
     {
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
