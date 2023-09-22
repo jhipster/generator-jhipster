@@ -173,10 +173,12 @@ export type ValidationResult = {
 };
 
 export type PromptSpec = {
-  type: 'list' | 'confirm';
+  type: 'input' | 'list' | 'confirm';
   message: string | ((any) => string);
   when?: boolean | ((any) => boolean);
   default?: any | ((any) => any);
+  filter?: any | ((any) => any);
+  transformer?: any | ((any) => any);
 };
 
 export type ConfigSpec = {

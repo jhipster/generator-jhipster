@@ -209,6 +209,7 @@ Options:
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
+  --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-git                               Skip git repository initialization

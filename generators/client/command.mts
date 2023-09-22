@@ -22,6 +22,16 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFramewor
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
+const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
+const promptValueToMicrofrontends = answer =>
+  answer
+    ? answer
+        .split(',')
+        .map(baseName => baseName.trim())
+        .filter(Boolean)
+        .map(baseName => ({ baseName }))
+    : [];
+
 const command: JHipsterCommandDefinition = {
   options: {},
   configs: {
@@ -61,12 +71,36 @@ const command: JHipsterCommandDefinition = {
       cli: {
         type: Boolean,
       },
-      prompt: generator => ({
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'confirm',
         when: answers =>
-          (answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework) !== CLIENT_FRAMEWORK_NO &&
-          generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_GATEWAY,
+          (answers.clientFramework ?? config.clientFramework) !== CLIENT_FRAMEWORK_NO &&
+          config.applicationType === APPLICATION_TYPE_GATEWAY,
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
+      }),
+    },
+    microfrontends: {
+      description: 'Microfrontends to load',
+      cli: {
+        type: String,
+      },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => {
+          const askForMicrofrontends = Boolean(
+            (answers.microfrontend ?? config.microfrontend) &&
+              (answers.applicationType ?? config.applicationType) === APPLICATION_TYPE_GATEWAY,
+          );
+          if (askForMicrofrontends && answers.microfrontends) {
+            answers.microfrontends = microfrontendsToPromptValue(answers.microfrontends);
+          } else {
+            answers.microfrontends = [];
+          }
+          return askForMicrofrontends;
+        },
+        type: 'input',
+        message: `Comma separated ${chalk.yellow('*microfrontend*')} app names.`,
+        filter: promptValueToMicrofrontends,
+        transformer: microfrontendsToPromptValue,
       }),
     },
     withAdminUi: {

@@ -36,16 +36,6 @@ export async function askForInsightOptIn() {
   }
 }
 
-const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
-const promptValueToMicrofrontends = answer =>
-  answer
-    ? answer
-        .split(',')
-        .map(baseName => baseName.trim())
-        .filter(Boolean)
-        .map(baseName => ({ baseName }))
-    : [];
-
 export async function askForApplicationType({ control }) {
   if (control.existingProject && this.options.askAnswered !== true) return;
   const config = this.jhipsterConfigWithDefaults;
@@ -73,37 +63,6 @@ export async function askForApplicationType({ control }) {
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
         choices: applicationTypeChoices,
         default: config.applicationType,
-      },
-      {
-        when: answers => {
-          const { applicationType } = answers;
-          const askForMicrofrontend = [GATEWAY, MICROSERVICE].includes(applicationType);
-          if (!askForMicrofrontend) {
-            answers.microfrontend = false;
-          }
-          return askForMicrofrontend;
-        },
-        type: 'confirm',
-        name: 'microfrontend',
-        message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
-        default: config.microfrontend ?? false,
-      },
-      {
-        when: answers => {
-          const { applicationType, microfrontend, microfrontends } = answers;
-          const askForMicrofrontends = applicationType === GATEWAY && microfrontend;
-          if (askForMicrofrontends) {
-            answers.microfrontends = microfrontendsToPromptValue(microfrontends);
-          } else {
-            answers.microfrontends = [];
-          }
-          return askForMicrofrontends;
-        },
-        type: 'input',
-        name: 'microfrontends',
-        message: `Comma separated ${chalk.yellow('*microfrontend*')} app names.`,
-        filter: promptValueToMicrofrontends,
-        transformer: microfrontendsToPromptValue,
       },
     ],
     this.config,
