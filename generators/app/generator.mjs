@@ -28,7 +28,6 @@ import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
   GENERATOR_CLIENT,
   GENERATOR_PAGE,
   GENERATOR_SERVER,
@@ -128,13 +127,8 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
       async compose() {
-        const { enableTranslation, skipServer, skipClient } = this.jhipsterConfigWithDefaults;
+        const { skipServer, skipClient } = this.jhipsterConfigWithDefaults;
         await this.composeWithJHipster(GENERATOR_COMMON);
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES, {
-            generatorOptions: { regenerate: true },
-          });
-        }
         if (!skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER);
         }
