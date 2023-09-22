@@ -189,7 +189,7 @@ public class <%= entityClass %>Resource {
         <%= instanceName %>.set<%= field.fieldNameCapitalized %>(UUID.randomUUID());
     <%_ } _%>
   <%_ } _%>
-<%- include('/partials_entity/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+<%- include('/_global_partials_entity_/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
   <%_ if (reactive) { _%>
             .map(result -> {
                 try {
@@ -256,7 +256,7 @@ public class <%= entityClass %>Resource {
       <%_ } _%>
     <% } %>
   <%_ } _%>
-<%- include('/partials_entity/update_template', {updatableEntity, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc, isController: true, isPersisted: requiresPersistableImplementation}); -%>
+<%- include('/_global_partials_entity_/update_template', {updatableEntity, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc, isController: true, isPersisted: requiresPersistableImplementation}); -%>
   <%_ if (reactive) { _%>
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(result -> ResponseEntity.ok()
