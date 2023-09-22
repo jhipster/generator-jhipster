@@ -7,6 +7,26 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <repositories>
+        <repository>
+            <id>repositoryId</id>
+            <url>repositoryUrl</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repositoryId</id>
+            <url>repositoryUrl</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <profiles>
         <profile>
             <id>prod</id>
@@ -102,26 +122,6 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
             <other>other</other>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>repositoryId</id>
-            <url>repositoryUrl</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repositoryId</id>
-            <url>repositoryUrl</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
 ",
     "stateCleared": "modified",

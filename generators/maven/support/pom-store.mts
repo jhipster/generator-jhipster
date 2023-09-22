@@ -149,14 +149,16 @@ const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springfr
 
 const sortArtifacts = (artifacts: MavenArtifact[]) =>
   artifacts.sort((a: MavenArtifact, b: MavenArtifact) => {
-    if (a.groupId === undefined) {
-      return -1;
+    if (a.groupId !== b.groupId) {
+      if (a.groupId === undefined) {
+        return -1;
+      }
+      if (b.groupId === undefined) {
+        return 1;
+      }
+      const groupIdCompared = sortWithTemplate(groupIdOrder, a.groupId, b.groupId);
+      if (groupIdCompared) return groupIdCompared;
     }
-    if (b.groupId === undefined) {
-      return 1;
-    }
-    const groupIdCompared = sortWithTemplate(groupIdOrder, a.groupId, b.groupId);
-    if (groupIdCompared) return groupIdCompared;
     return a.artifactId.localeCompare(b.artifactId);
   });
 
