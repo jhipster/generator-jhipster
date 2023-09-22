@@ -17,15 +17,13 @@
  * limitations under the License.
  */
 import { clientApplicationTemplatesBlock } from '../client/support/files.mjs';
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 export const entityFiles = {
   client: [
-    {
-      ...clientApplicationTemplatesBlock('shared/model/'),
-      path: `${CLIENT_MAIN_SRC_DIR}app/entities/_entityFolder_/`,
+    clientApplicationTemplatesBlock({
+      relativePath: 'shared/model/',
       templates: ['_entityModel_.model.ts'],
-    },
+    }),
     {
       condition: generator => !generator.embedded,
       ...clientApplicationTemplatesBlock(),
