@@ -146,7 +146,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         const config = this.jhipsterConfigWithDefaults;
         if (config.entitySuffix === config.dtoSuffix) {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-        }    
+        }
       },
 
       async composePages() {
