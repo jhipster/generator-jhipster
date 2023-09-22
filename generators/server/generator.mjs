@@ -191,7 +191,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
     });
   }
@@ -252,7 +252,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
 
-        // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
@@ -331,11 +330,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
         application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
+        application.javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
         }
@@ -368,7 +369,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         const SPRING_BOOT_VERSION = application.javaDependencies['spring-boot'];
         application.addSpringMilestoneRepository =
-          ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC');
+          (application.backendType ?? 'Java') === 'Java' &&
+          (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {

@@ -22,25 +22,25 @@ import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/sup
 export const couchbaseFiles = {
   serverJavaConfig: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/JHipsterCouchbaseRepository.java', 'config/DatabaseConfiguration.java'],
     },
     {
       condition: data => data.authenticationTypeSession && !data.reactive && data.generateUserManagement,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/PersistentTokenRepository_couchbase.java'],
     },
     {
       condition: data => data.searchEngineCouchbase,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/CouchbaseSearchRepository.java'],
     },
     {
       condition: data => data.searchEngineCouchbase,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['repository/CouchbaseSearchRepositoryTest.java'],
     },
@@ -64,7 +64,7 @@ export const couchbaseFiles = {
   ],
   serverTestFw: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/CouchbaseTestContainer.java', 'config/EmbeddedCouchbase.java'],
     },

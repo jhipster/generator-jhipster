@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // Version of Java

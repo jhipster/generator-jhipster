@@ -19,7 +19,7 @@
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant, askForClientTestOpts } from './prompts.mjs';
+import { askForClientTheme, askForClientThemeVariant, askForClientTestOpts } from './prompts.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
 import { writeEnumerationFiles } from './entity-files.mjs';
@@ -33,7 +33,7 @@ import { createNeedleCallback } from '../base/support/index.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
 import command from './command.mjs';
 
-const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
+const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
 /**
@@ -56,7 +56,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
     });
   }
@@ -67,9 +67,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForClient,
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(command.configs));
+      },
       askForClientTestOpts,
-      askForAdminUi,
       askForClientTheme,
       askForClientThemeVariant,
     });
@@ -81,6 +83,13 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      applyNoFramework() {
+        const { clientFramework } = this.jhipsterConfigWithDefaults;
+        if (clientFramework === CLIENT_FRAMEWORK_NO) {
+          this.jhipsterConfig.skipClient = true;
+          this.cancelCancellableTasks();
+        }
+      },
       upgradeAngular() {
         if (this.jhipsterConfig.clientFramework === 'angularX') {
           this.jhipsterConfig.clientFramework = ANGULAR;

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import {
   GENERATOR_BOOTSTRAP,
@@ -26,17 +27,13 @@ import {
   GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
 } from '../generator-list.mjs';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
     defaults: {
       description: 'Execute jhipster with default config',
       type: Boolean,
-    },
-    applicationType: {
-      description: 'Application type to generate',
-      type: String,
-      scope: 'storage',
     },
     skipClient: {
       description: 'Skip the client-side application generation',
@@ -136,14 +133,22 @@ const command: JHipsterCommandDefinition = {
       type: String,
       scope: 'storage',
     },
-    microfrontend: {
-      description: 'Force generation of experimental microfrontend support',
-      type: Boolean,
-      scope: 'storage',
-    },
     testFrameworks: {
       description: 'Test frameworks to be generated',
       type: Array,
+    },
+  },
+  configs: {
+    applicationType: {
+      description: 'Application type to generate',
+      cli: {
+        type: String,
+      },
+      prompt: {
+        type: 'list',
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+      },
+      choices: [APPLICATION_TYPE_MONOLITH, APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE],
     },
   },
   loadGeneratorOptions: true,

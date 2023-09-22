@@ -100,6 +100,8 @@ export type CommonClientServerApplication = BaseApplication &
 
     serverPort: number;
     backendType?: string;
+    backendTypeJavaAny?: boolean;
+    backendTypeSpringBoot?: boolean;
     temporaryDir?: string;
 
     dockerServicesDir?: string;

@@ -231,7 +231,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.serviceDiscoveryType).to.equal('consul');
       });
       it('should set the client skipping option to true', () => {
-        expect(options.skipClient).to.be.true;
+        expect(options.clientFramework).to.equal('no');
       });
       it('should unset the client theme option', () => {
         expect(options.clientTheme).to.be.undefined;

@@ -23,7 +23,7 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode, loadStoredAppOptions } from './support/index.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
-import { askForApplicationType, askForInsightOptIn } from './prompts.mjs';
+import { askForInsightOptIn } from './prompts.mjs';
 import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
@@ -35,11 +35,10 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
 } from '../generator-list.mjs';
 
-import { applicationTypes, applicationOptions, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { applicationTypes, applicationOptions } from '../../jdl/jhipster/index.mjs';
 import command from './command.mjs';
 
 const { MICROSERVICE } = applicationTypes;
-const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
@@ -53,7 +52,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       validateNode() {
         if (this.skipChecks) {
           return;
@@ -67,7 +66,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         }
       },
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
 
       validate() {
@@ -75,7 +74,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           throw new Error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -83,10 +82,13 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       askForInsightOptIn,
-      askForApplicationType,
-    };
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(command.configs));
+      },
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
@@ -97,18 +99,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return {
       setup() {
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          this.jhipsterConfig.skipClient =
-            this.jhipsterConfig.skipClient ||
-            !this.jhipsterConfig.clientFramework ||
-            this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
-          this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
-        } else {
-          this.jhipsterConfig.skipClient = this.jhipsterConfig.skipClient || this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
-        }
-
-        if (this.jhipsterConfig.skipClient) {
-          this.jhipsterConfig.clientFramework = CLIENT_FRAMEWORK_NO;
         }
       },
       fixConfig() {
@@ -137,7 +128,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
       async compose() {
-        const { enableTranslation, skipServer, clientFramework } = this.jhipsterConfigWithDefaults;
+        const { enableTranslation, skipServer, skipClient } = this.jhipsterConfigWithDefaults;
         await this.composeWithJHipster(GENERATOR_COMMON);
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES, {
@@ -147,7 +138,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         if (!skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER);
         }
-        if (clientFramework !== CLIENT_FRAMEWORK_NO) {
+        if (!skipClient) {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },

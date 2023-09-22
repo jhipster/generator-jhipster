@@ -20,6 +20,8 @@ import { loadClientConfig, loadDerivedClientConfig, preparePostEntityClientDeriv
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
+import clientCommand from '../client/command.mjs';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.mjs';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -37,6 +39,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
   get loading() {
     return this.asLoadingTaskGroup({
       loadApplication({ application }) {
+        loadConfig(clientCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadClientConfig({ config: this.jhipsterConfigWithDefaults, application });
       },
     });
@@ -49,6 +52,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
+        loadDerivedConfig(clientCommand.configs, { application });
         loadDerivedClientConfig({ application });
       },
     });

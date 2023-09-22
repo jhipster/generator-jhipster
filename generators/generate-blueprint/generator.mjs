@@ -46,7 +46,7 @@ import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 import command from './command.mjs';
-import { NODE_VERSION } from '../generator-constants.mjs';
+import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
@@ -249,7 +249,7 @@ export default class extends BaseGenerator {
         );
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
-          keywords: ['yeoman-generator', 'jhipster-blueprint', 'jhipster-7'],
+          keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
           type: 'module',
           files: ['generators'],
           scripts: {

@@ -45,6 +45,8 @@ import type {
   ValidationResult,
   WriteFileOptions,
   JHipsterArguments,
+  JHipsterConfigs,
+  JHipsterCommandDefinition,
 } from '../base/api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { CommonClientServerApplication, type BaseApplication } from '../base-application/types.mjs';
@@ -52,6 +54,7 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import NeedleApi from '../needle-api.mjs';
 import command from '../base/command.mjs';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.mjs';
+import { convertConfigToOption } from '../../lib/internal/index.mjs';
 
 const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -249,38 +252,48 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     return priorities;
   }
 
-  /**
-   * Load options from an object.
-   * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param options - Object containing options.
-   * @param common - skip generator scoped options.
-   */
-  parseJHipsterOptions(options: JHipsterOptions, common = false) {
-    Object.entries(options).forEach(([optionName, optionDesc]) => {
-      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
-      let optionValue;
-      // Hidden options are test options, which doesn't rely on commoander for options parsing.
-      // We must parse environment variables manually
-      if (this.options[optionDesc.name ?? optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
-        optionValue = process.env[optionDesc.env];
-      } else {
-        optionValue = this.options[optionDesc.name ?? optionName];
-      }
-      if (optionValue !== undefined) {
-        optionValue = optionDesc.type !== Array && optionDesc.type !== Function ? optionDesc.type(optionValue) : optionValue;
-        if (optionDesc.scope === 'storage') {
-          this.config.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'blueprint') {
-          this.blueprintStorage!.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'control') {
-          this.sharedData.getControl()[optionName] = optionValue;
-        } else if (optionDesc.scope === 'generator') {
-          this[optionName] = optionValue;
+  parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
+    if (commandDef.arguments) {
+      this.parseJHipsterArguments(commandDef.arguments);
+    }
+    if (commandDef.options || commandDef.configs) {
+      this.parseJHipsterOptions(commandDef.options, commandDef.configs);
+    }
+  }
+
+  parseJHipsterOptions(options: JHipsterOptions | undefined, configs: JHipsterConfigs | boolean = {}, common = false) {
+    if (typeof configs === 'boolean') {
+      common = configs;
+      configs = {};
+    }
+
+    Object.entries(options ?? {})
+      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]))
+      .forEach(([optionName, optionDesc]) => {
+        if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
+        let optionValue;
+        // Hidden options are test options, which doesn't rely on commoander for options parsing.
+        // We must parse environment variables manually
+        if (this.options[optionDesc.name ?? optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
+          optionValue = process.env[optionDesc.env];
         } else {
-          throw new Error(`Scope ${optionDesc.scope} not supported`);
+          optionValue = this.options[optionDesc.name ?? optionName];
         }
-      }
-    });
+        if (optionValue !== undefined) {
+          optionValue = optionDesc.type !== Array && optionDesc.type !== Function ? optionDesc.type(optionValue) : optionValue;
+          if (optionDesc.scope === 'storage') {
+            this.config.set(optionName, optionValue);
+          } else if (optionDesc.scope === 'blueprint') {
+            this.blueprintStorage!.set(optionName, optionValue);
+          } else if (optionDesc.scope === 'control') {
+            this.sharedData.getControl()[optionName] = optionValue;
+          } else if (optionDesc.scope === 'generator') {
+            this[optionName] = optionValue;
+          } else {
+            throw new Error(`Scope ${optionDesc.scope} not supported`);
+          }
+        }
+      });
   }
 
   parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
@@ -317,6 +330,29 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
     // Arguments should only be parsed by the root generator, cleanup to don't be forwarded.
     this.options.positionalArguments = [];
+  }
+
+  prepareQuestions(configs: JHipsterConfigs) {
+    return Object.entries(configs)
+      .filter(([_name, def]) => def.prompt)
+      .map(([name, def]) => {
+        const promptSpec = typeof def.prompt === 'function' ? def.prompt(this) : { ...def.prompt };
+        let storage: any;
+        if ((def.scope ?? 'storage') === 'storage') {
+          storage = this.config;
+          if (promptSpec.default === undefined) {
+            promptSpec.default = () => (this as any).jhipsterConfigWithDefaults?.[name];
+          }
+        } else if (def.scope === 'blueprint') {
+          storage = this.blueprintStorage;
+        }
+        return {
+          name,
+          choices: def.choices,
+          ...promptSpec,
+          storage,
+        };
+      });
   }
 
   /**

@@ -28,7 +28,7 @@ const command: JHipsterCommandDefinition = {
     },
   },
   options: {
-    skipDbChangelog: serverCommand.options.skipDbChangelog,
+    skipDbChangelog: serverCommand.options!.skipDbChangelog,
   },
 };
 

@@ -22,7 +22,7 @@ import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/sup
 export const files = {
   serverResource: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [
         'config/ElasticsearchConfiguration.java',
@@ -32,12 +32,12 @@ export const files = {
     },
     {
       condition: generator => generator.generateBuiltInUserEntity || generator.authenticationTypeOauth2,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/search/UserSearchRepository.java'],
     },
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'config/ElasticsearchTestConfiguration.java',

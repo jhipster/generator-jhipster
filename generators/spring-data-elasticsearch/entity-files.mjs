@@ -16,21 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
+import { javaMainPackageTemplatesBlock } from '../server/support/index.mjs';
 
 export const entityFiles = {
   elasticSearchFiles: [
     {
       condition: generator => !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['repository/search/_EntityClass_SearchRepository.java'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['repository/search/_entityClass_SearchRepository.java'],
     },
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.elastic_search'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.elastic_search'],
     },
   ],
 };

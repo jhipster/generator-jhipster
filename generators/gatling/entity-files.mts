@@ -25,7 +25,7 @@ export const gatlingFiles = {
       path: TEST_DIR,
       templates: [
         {
-          file: 'java/gatling/simulations/_EntityClass_GatlingTest.java',
+          file: 'java/gatling/simulations/_entityClass_GatlingTest.java',
           renameTo: generator => `java/gatling/simulations/${generator.entityClass}GatlingTest.java`,
         },
       ],
