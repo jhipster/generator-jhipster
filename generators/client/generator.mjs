@@ -56,7 +56,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
     });
   }

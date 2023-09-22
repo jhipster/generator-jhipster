@@ -191,7 +191,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
     });
   }
@@ -252,7 +252,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
 
-        // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }

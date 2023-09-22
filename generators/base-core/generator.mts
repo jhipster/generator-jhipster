@@ -46,6 +46,7 @@ import type {
   WriteFileOptions,
   JHipsterArguments,
   JHipsterConfigs,
+  JHipsterCommandDefinition,
 } from '../base/api.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { CommonClientServerApplication, type BaseApplication } from '../base-application/types.mjs';
@@ -251,12 +252,15 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     return priorities;
   }
 
-  /**
-   * Load options from an object.
-   * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param options - Object containing options.
-   * @param common - skip generator scoped options.
-   */
+  parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
+    if (commandDef.arguments) {
+      this.parseJHipsterArguments(commandDef.arguments);
+    }
+    if (commandDef.options || commandDef.configs) {
+      this.parseJHipsterOptions(commandDef.options, commandDef.configs);
+    }
+  }
+
   parseJHipsterOptions(options: JHipsterOptions | undefined, configs: JHipsterConfigs | boolean = {}, common = false) {
     if (typeof configs === 'boolean') {
       common = configs;
@@ -264,7 +268,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     }
 
     Object.entries(options ?? {})
-      .concat(...Object.entries(configs).map((name, def) => [name, convertConfigToOption(name, def)]))
+      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]))
       .forEach(([optionName, optionDesc]) => {
         if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
         let optionValue;
@@ -336,9 +340,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         let storage: any;
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;
-          const defaultValue = (this as any).jhipsterConfigWithDefaults?.[name];
-          if (defaultValue !== undefined) {
-            promptSpec.default = defaultValue;
+          if (promptSpec.default === undefined) {
+            promptSpec.default = () => (this as any).jhipsterConfigWithDefaults?.[name];
           }
         } else if (def.scope === 'blueprint') {
           storage = this.blueprintStorage;

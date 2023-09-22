@@ -66,7 +66,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         }
       },
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
 
       validate() {
