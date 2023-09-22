@@ -175,25 +175,19 @@ Options:
   --defaults                               Execute jhipster with default config
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
-  --skip-commit-hook                       Skip adding husky commit hooks
-  --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
-  --skip-fake-data                         Skip generation of fake data for development
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
-  --auth <value>                           Provide authentication type for the application when skipping server side generation
-  --db <value>                             Provide DB name for the application when skipping server side generation
   --blueprint <value...>                   DEPRECATED: Specify a generator blueprint to use for the sub generators
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
-  --incremental-changelog                  Creates incremental database changelogs
-  --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --ignore-errors                          Don't fail on prettier errors.
-  --enable-translation                     Enable translation
-  -l, --language <value...>                Language to be added to application (existing languages are not removed)
   --pk-type <value>                        Default primary key type (beta)
   --client-package-manager <value>         Force an unsupported client package manager
   --test-frameworks <value...>             Test frameworks to be generated
-  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
+  --auth <value>                           Provide authentication type for the application when skipping server side generation
+  --db <value>                             Provide DB name for the application when skipping server side generation
+  --incremental-changelog                  Creates incremental database changelogs
+  --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --build <value>                          Provide build tool for the application when skipping server side generation
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
@@ -201,20 +195,28 @@ Options:
   --message-broker <value>                 message broker
   --reactive                               Generate a reactive backend
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
+  --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-db-changelog                      Skip the generation of database migrations
+  --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
+  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
+  --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
   --prettier-tab-width <value>             Default tab width for prettier
+  --skip-commit-hook                       Skip adding husky commit hooks
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
   --cypress-coverage                       Enable Cypress code coverage report generation
   --cypress-audit                          Enable cypress-audit/lighthouse report generation
+  --enable-translation                     Enable translation
+  -l, --language <value...>                Language to be added to application (existing languages are not removed)
+  -n, --native-language [value]            Set application native language
   --workspaces-folders <value...>          Folders to use as monorepository workspace (default: [])
   --workspaces                             Generate workspaces for multiples applications
   -h, --help                               display help for command

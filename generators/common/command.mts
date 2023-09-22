@@ -25,6 +25,11 @@ const command: JHipsterCommandDefinition = {
       type: Number,
       scope: 'storage',
     },
+    skipCommitHook: {
+      description: 'Skip adding husky commit hooks',
+      type: Boolean,
+      scope: 'storage',
+    },
   },
 };
 

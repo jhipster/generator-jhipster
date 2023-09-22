@@ -154,6 +154,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   projectVersion;
   fakeKeytool;
+  command = command;
 
   async beforeQueue() {
     loadStoredAppOptions.call(this);
@@ -191,7 +192,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        this.parseJHipsterCommand(command);
+        this.parseJHipsterCommand(this.command);
       },
     });
   }
@@ -202,6 +203,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
       askForServerTestOpts,
       askForServerSideOpts,
       askForOptionalItems,

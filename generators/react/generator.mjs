@@ -47,24 +47,10 @@ const { REACT } = clientFrameworkTypes;
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
+    await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_REACT);
     }
-  }
-
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        const { enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (!enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
   }
 
   get loading() {

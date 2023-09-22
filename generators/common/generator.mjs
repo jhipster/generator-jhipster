@@ -37,6 +37,8 @@ import { loadStoredAppOptions } from '../app/support/index.mjs';
 const { REACT, ANGULAR } = clientFrameworkTypes;
 
 export default class CommonGenerator extends BaseApplicationGenerator {
+  command = command;
+
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
@@ -51,13 +53,26 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(this.command);
       },
     });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
   }
 
   // Public API method used by the getter and also by Blueprints

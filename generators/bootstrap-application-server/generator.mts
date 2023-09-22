@@ -47,6 +47,8 @@ import { GRADLE_VERSION } from '../gradle/constants.mjs';
 import { normalizePathEnd } from '../base/support/path.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
 import { getMainClassName } from '../java/support/index.mjs';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.mjs';
+import serverCommand from '../server/command.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -60,6 +62,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get loading() {
     return this.asLoadingTaskGroup({
       async loadApplication({ application }) {
+        loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
@@ -99,6 +102,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
+        loadDerivedConfig(serverCommand.configs, { application });
         loadDerivedServerConfig({ application });
       },
       prepareForTemplates({ application: app }) {

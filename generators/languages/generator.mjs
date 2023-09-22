@@ -55,6 +55,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
    */
   languagesToApply;
   composedBlueprints;
+  languageCommand;
+
+  constructor(args, options, features) {
+    super(args, options, features);
+
+    this.languageCommand = this.options.commandName === 'languages';
+  }
 
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
@@ -123,7 +130,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       checkPrompts({ control }) {
         const { enableTranslation, languages } = this.jhipsterConfig;
-        const showPrompts = this.options.askAnswered || this.env.rootGenerator() === this;
+        const showPrompts = this.options.askAnswered || this.languageCommand;
         this.askForNativeLanguage = showPrompts || (!control.existingProject && !this.jhipsterConfig.nativeLanguage);
         this.askForMoreLanguages =
           enableTranslation !== false && (showPrompts || (!control.existingProject && (languages?.length ?? 0) < 1));
@@ -182,7 +189,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
         if (application.enableTranslation) {
-          if (this.options.regenerate) {
+          if (!this.languageCommand) {
             this.languagesToApply = application.languages;
           } else {
             this.languagesToApply = [...new Set(this.languagesToApply || [])];

@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import {
   GENERATOR_BOOTSTRAP,
@@ -27,7 +26,6 @@ import {
   GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
 } from '../generator-list.mjs';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -42,26 +40,6 @@ const command: JHipsterCommandDefinition = {
     },
     skipServer: {
       description: 'Skip the server-side application generation',
-      type: Boolean,
-      scope: 'storage',
-    },
-    skipCommitHook: {
-      description: 'Skip adding husky commit hooks',
-      type: Boolean,
-      scope: 'storage',
-    },
-    skipUserManagement: {
-      description: 'Skip the user management module during app generation',
-      type: Boolean,
-      scope: 'storage',
-    },
-    skipCheckLengthOfIdentifier: {
-      description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
-      type: Boolean,
-      scope: 'storage',
-    },
-    skipFakeData: {
-      description: 'Skip generation of fake data for development',
       type: Boolean,
       scope: 'storage',
     },
@@ -80,16 +58,6 @@ const command: JHipsterCommandDefinition = {
       type: String,
       scope: 'storage',
     },
-    authenticationType: {
-      name: 'auth',
-      description: 'Provide authentication type for the application when skipping server side generation',
-      type: String,
-      scope: 'storage',
-    },
-    db: {
-      description: 'Provide DB name for the application when skipping server side generation',
-      type: String,
-    },
     blueprint: {
       description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
       type: Array,
@@ -99,29 +67,9 @@ const command: JHipsterCommandDefinition = {
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
       type: String,
     },
-    incrementalChangelog: {
-      description: 'Creates incremental database changelogs',
-      type: Boolean,
-      scope: 'storage',
-    },
-    recreateInitialChangelog: {
-      description: 'Recreate the initial database changelog based on the current config',
-      type: Boolean,
-    },
     ignoreErrors: {
       description: "Don't fail on prettier errors.",
       type: Boolean,
-    },
-    enableTranslation: {
-      description: 'Enable translation',
-      type: Boolean,
-      required: false,
-      scope: 'storage',
-    },
-    language: {
-      alias: 'l',
-      description: 'Language to be added to application (existing languages are not removed)',
-      type: Array,
     },
     pkType: {
       description: 'Default primary key type (beta)',
@@ -138,20 +86,7 @@ const command: JHipsterCommandDefinition = {
       type: Array,
     },
   },
-  configs: {
-    applicationType: {
-      description: 'Application type to generate',
-      cli: {
-        type: String,
-      },
-      prompt: {
-        type: 'list',
-        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-      },
-      choices: [APPLICATION_TYPE_MONOLITH, APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE],
-    },
-  },
-  loadGeneratorOptions: true,
+  configs: {},
   import: [
     GENERATOR_BOOTSTRAP,
     GENERATOR_SERVER,

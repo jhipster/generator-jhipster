@@ -28,7 +28,6 @@ import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
   GENERATOR_CLIENT,
   GENERATOR_PAGE,
   GENERATOR_SERVER,
@@ -42,6 +41,8 @@ const { MICROSERVICE } = applicationTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
+  command = command;
+
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
@@ -66,7 +67,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         }
       },
       loadOptions() {
-        this.parseJHipsterCommand(command);
+        this.parseJHipsterCommand(this.command);
       },
 
       validate() {
@@ -86,7 +87,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       askForInsightOptIn,
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(command.configs));
+        await this.prompt(this.prepareQuestions(this.command.configs));
       },
     });
   }
@@ -120,34 +121,32 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
        * Composing with others generators, must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
        *
-       * Generators `server`, `client`, `common`, `languages` depends on each other.
-       * We are composing in the same task so every priority are executed in parallel.
-       * - compose (app) -> initializing (common) -> initializing (server) -> ...
-       *
-       * When composing in different tasks the result would be:
+       * Composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
+       *
+       * This behaviour allows a more consistent blueprint support.
        */
-      async compose() {
-        const { enableTranslation, skipServer, skipClient } = this.jhipsterConfigWithDefaults;
+      async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON);
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES, {
-            generatorOptions: { regenerate: true },
-          });
-        }
-        if (!skipServer) {
+      },
+      async composeServer() {
+        if (!this.jhipsterConfigWithDefaults.skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER);
         }
-        if (!skipClient) {
+      },
+      async composeClient() {
+        if (!this.jhipsterConfigWithDefaults.skipClient) {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
-
       /**
        * At this point every other generator should already be configured, so, enforce defaults fallback.
        */
       saveConfigWithDefaults() {
-        this._validateAppConfiguration();
+        const config = this.jhipsterConfigWithDefaults;
+        if (config.entitySuffix === config.dtoSuffix) {
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+        }
       },
 
       async composePages() {
@@ -195,11 +194,5 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  _validateAppConfiguration(config = this.jhipsterConfigWithDefaults) {
-    if (config.entitySuffix === config.dtoSuffix) {
-      throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-    }
   }
 }

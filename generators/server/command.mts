@@ -16,11 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
+    authenticationType: {
+      name: 'auth',
+      description: 'Provide authentication type for the application when skipping server side generation',
+      type: String,
+      scope: 'storage',
+    },
+    db: {
+      description: 'Provide DB name for the application when skipping server side generation',
+      type: String,
+    },
+    incrementalChangelog: {
+      description: 'Creates incremental database changelogs',
+      type: Boolean,
+      scope: 'storage',
+    },
+    skipUserManagement: {
+      description: 'Skip the user management module during app generation',
+      type: Boolean,
+      scope: 'storage',
+    },
+    recreateInitialChangelog: {
+      description: 'Recreate the initial database changelog based on the current config',
+      type: Boolean,
+    },
     buildTool: {
       name: 'build',
       description: 'Provide build tool for the application when skipping server side generation',
@@ -57,9 +83,19 @@ const command: JHipsterCommandDefinition = {
       type: String,
       scope: 'storage',
     },
+    skipCheckLengthOfIdentifier: {
+      description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
+      type: Boolean,
+      scope: 'storage',
+    },
     skipDbChangelog: {
       description: 'Skip the generation of database migrations',
       type: Boolean,
+    },
+    skipFakeData: {
+      description: 'Skip generation of fake data for development',
+      type: Boolean,
+      scope: 'storage',
     },
     websocket: {
       description: 'Provide websocket option for the application when skipping server side generation',
@@ -86,7 +122,32 @@ const command: JHipsterCommandDefinition = {
       hide: true,
     },
   },
-  configs: {},
+  configs: {
+    applicationType: {
+      description: 'Application type to generate',
+      cli: {
+        type: String,
+      },
+      prompt: {
+        type: 'list',
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+      },
+      choices: [
+        {
+          value: APPLICATION_TYPE_MONOLITH,
+          name: 'Monolithic application (recommended for simple projects)',
+        },
+        {
+          value: APPLICATION_TYPE_GATEWAY,
+          name: 'Gateway application',
+        },
+        {
+          value: APPLICATION_TYPE_MICROSERVICE,
+          name: 'Microservice application',
+        },
+      ],
+    },
+  },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };
 
