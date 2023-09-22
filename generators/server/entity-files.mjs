@@ -131,12 +131,12 @@ export const serviceFiles = {
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['service/_EntityClass_Service.java', 'service/impl/_EntityClass_ServiceImpl.java'],
     },
-    {
+    javaMainPackageTemplatesBlock({
       condition: generator => generator.service === SERVICE_CLASS && !generator.embedded,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file.replace('service/impl', 'service')),
-      templates: ['service/impl/_EntityClass_ServiceImpl.java'],
-    },
+      relativePath: '_entityPackage_/service/',
+      renameTo: (_data, file) => file.replace('service/impl', 'service').replace('Impl.java', '.java'),
+      templates: ['impl/_EntityClass_ServiceImpl.java'],
+    }),
   ],
 };
 
