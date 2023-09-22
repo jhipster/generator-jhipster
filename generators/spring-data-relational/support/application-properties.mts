@@ -29,7 +29,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.prodDatabaseTypeMysql = application.prodDatabaseType === MYSQL;
   application.prodDatabaseTypeOracle = application.prodDatabaseType === ORACLE;
   application.prodDatabaseTypePostgresql = application.prodDatabaseType === POSTGRESQL;
-  application.prodDatabaseTypePostgres = application.prodDatabaseTypePostgresql; // Deprecated
 
   application.devDatabaseTypeH2Disk = application.devDatabaseType === H2_DISK;
   application.devDatabaseTypeH2Memory = application.devDatabaseType === H2_MEMORY;
