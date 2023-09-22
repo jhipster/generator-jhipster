@@ -24,28 +24,28 @@ export const reactFiles = {
       condition: generator => !generator.embedded,
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'entities/_entityFolder/_entityFile-detail.tsx',
-        'entities/_entityFolder/_entityFile.tsx',
-        'entities/_entityFolder/_entityFile.reducer.ts',
-        'entities/_entityFolder/index.tsx',
+        'entities/_entityFolder_/_entityFile_-detail.tsx',
+        'entities/_entityFolder_/_entityFile_.tsx',
+        'entities/_entityFolder_/_entityFile_.reducer.ts',
+        'entities/_entityFolder_/index.tsx',
       ],
     },
     {
       ...clientApplicationTemplatesBlock(),
       renameTo: data => `${data.clientSrcDir}app/shared/model/${data.entityModelFileName}.model.ts`,
-      templates: ['entities/_entityFolder/_entityModel.model.ts'],
+      templates: ['entities/_entityFolder_/_entityModel_.model.ts'],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
       ...clientApplicationTemplatesBlock(),
-      templates: ['entities/_entityFolder/_entityFile-delete-dialog.tsx', 'entities/_entityFolder/_entityFile-update.tsx'],
+      templates: ['entities/_entityFolder_/_entityFile_-delete-dialog.tsx', 'entities/_entityFolder_/_entityFile_-update.tsx'],
     },
   ],
   test: [
     {
       condition: generator => !generator.embedded,
       ...clientApplicationTemplatesBlock(),
-      templates: ['entities/_entityFolder/_entityFile-reducer.spec.ts'],
+      templates: ['entities/_entityFolder_/_entityFile_-reducer.spec.ts'],
     },
   ],
 };

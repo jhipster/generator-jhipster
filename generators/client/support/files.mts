@@ -5,10 +5,7 @@ export const replaceEntityFilePath = (data: any, filepath: string) =>
   filepath
     .replace(/_entityFolder_/, data.entityFolderName)
     .replace(/_entityFile_/, data.entityFileName)
-    .replace(/_entityModel_/, data.entityFileName)
-    .replace(/_entityFolder/, data.entityFolderName)
-    .replace(/_entityFile/, data.entityFileName)
-    .replace(/_entityModel/, data.entityModelFileName);
+    .replace(/_entityModel_/, data.entityFileName);
 
 const srcRenameTo = (relativePath: string) => (data: any, filepath: string) =>
   `${data.clientSrcDir}${relativePath}${replaceEntityFilePath(data, filepath)}`;
