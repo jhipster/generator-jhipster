@@ -41,6 +41,8 @@ const { CYPRESS } = testFrameworkTypes;
  * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
+  command = command;
+
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
@@ -56,7 +58,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
-        this.parseJHipsterCommand(command);
+        this.parseJHipsterCommand(this.command);
       },
     });
   }
@@ -69,7 +71,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(command.configs));
+        await this.prompt(this.prepareQuestions(this.command.configs));
       },
       askForClientTestOpts,
       askForClientTheme,

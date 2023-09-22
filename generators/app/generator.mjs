@@ -41,6 +41,8 @@ const { MICROSERVICE } = applicationTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
+  command = command;
+
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
@@ -65,7 +67,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         }
       },
       loadOptions() {
-        this.parseJHipsterCommand(command);
+        this.parseJHipsterCommand(this.command);
       },
 
       validate() {
@@ -85,7 +87,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       askForInsightOptIn,
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(command.configs));
+        await this.prompt(this.prepareQuestions(this.command.configs));
       },
     });
   }
