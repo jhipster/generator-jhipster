@@ -56,7 +56,7 @@
     "ts-loader": "9.4.4",
     "typescript": "5.2.2",
     "vite": "4.4.9",
-    "vitest": "0.34.4",
+    "vitest": "0.34.5",
     "vitest-sonar-reporter": "0.4.1",
     "vue-loader": "17.2.2",
     "vue-style-loader": "4.1.3",
