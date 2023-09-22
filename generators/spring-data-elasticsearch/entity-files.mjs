@@ -27,7 +27,7 @@ export const entityFiles = {
     },
     {
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['domain/_PersistClass_.java.jhi.elastic_search'],
+      templates: ['domain/_persistClass_.java.jhi.elastic_search'],
     },
   ],
 };

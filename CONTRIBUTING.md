@@ -418,7 +418,7 @@ Sub templates should be named with the `ejs` extension because it's the default 
 
     <%- include('../common/field_validators', {field, reactive}); -%>
 
-This statement means that [_PersistClass_.java.jhi.jakarta_validation.ejs](generators/server/templates/entity/src/main/java/package/domain/_PersistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/server/templates/entity/src/main/java/package/common/field_validators.ejs) sub template.
+This statement means that [_persistClass_.java.jhi.jakarta_validation.ejs](generators/server/templates/entity/src/main/java/package/domain/_persistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/server/templates/entity/src/main/java/package/common/field_validators.ejs) sub template.
 
 Sub templates can be unit tested.
 

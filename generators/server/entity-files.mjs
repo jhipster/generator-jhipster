@@ -34,13 +34,13 @@ export const modelFiles = {
   model: [
     {
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_PersistClass_.java.jhi'],
+      templates: ['domain/_persistClass_.java.jhi'],
     },
   ],
   modelTestFiles: [
     {
       ...javaTestPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_PersistClass_Test.java'],
+      templates: ['domain/_persistClass_Test.java'],
     },
   ],
 };
@@ -53,7 +53,7 @@ export const entityFiles = {
   server: [
     {
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_validation'],
+      templates: ['domain/_persistClass_.java.jhi.jakarta_validation'],
     },
   ],
 };
@@ -152,14 +152,14 @@ export const dtoFiles = {
     {
       condition: generator => generator.dto === MAPSTRUCT,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/dto/_DtoClass_.java', 'service/mapper/_entityClass_Mapper.java'],
+      templates: ['service/dto/_dtoClass_.java', 'service/mapper/_entityClass_Mapper.java'],
     },
   ],
   dtoTestFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
       ...javaTestPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/dto/_DtoClass_Test.java'],
+      templates: ['service/dto/_dtoClass_Test.java'],
     },
     {
       condition: generator => generator.dto === MAPSTRUCT && [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),

@@ -46,7 +46,7 @@ export const entityFiles = {
   server: [
     {
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_couchbase'],
+      templates: ['domain/_persistClass_.java.jhi.spring_data_couchbase'],
     },
     {
       condition: generator => !generator.embedded,

@@ -24,7 +24,7 @@ export const entityFiles = {
     {
       condition: generator => generator.databaseTypeNeo4j,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_neo4j'],
+      templates: ['domain/_persistClass_.java.jhi.spring_data_neo4j'],
     },
   ],
 };
