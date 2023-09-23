@@ -13,6 +13,7 @@ export type BaseApplication = {
   hipster: string;
   lowercaseBaseName: string;
   upperFirstCamelCaseBaseName: string;
+  documentationArchiveUrl: string;
 
   projectVersion: string;
   projectDescription: string;

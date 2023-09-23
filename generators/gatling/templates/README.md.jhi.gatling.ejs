@@ -1,0 +1,19 @@
+<&_ if (fragment.testingSection) { -&>
+### Gatling
+
+Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/java/gatling/simulations](src/test/java/gatling/simulations).
+
+You can execute all Gatling tests with
+```
+<%_ if (buildToolMaven) { _%>
+./mvnw gatling:test
+<%_ } else { _%>
+./gradlew gatlingRun.
+<%_ } _%>
+```
+
+<&_ } -&>
+
+<&_ if (fragment.referenceSection) { -&>
+[Gatling]: https://gatling.io/
+<&_ } -&>
