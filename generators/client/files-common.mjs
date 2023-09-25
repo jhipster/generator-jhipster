@@ -16,17 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientSrcTemplatesBlock } from './support/files.mjs';
+import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.mjs';
 
 export const files = {
   common: [
     {
-      templates: ['.eslintignore', 'README.md.jhi.client'],
+      templates: ['README.md.jhi.client'],
     },
-    {
+    clientRootTemplatesBlock({
+      templates: ['.eslintignore'],
+    }),
+    clientRootTemplatesBlock({
       condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
       templates: ['webpack/webpack.microfrontend.js.jhi'],
-    },
+    }),
     {
       ...clientSrcTemplatesBlock(),
       templates: [

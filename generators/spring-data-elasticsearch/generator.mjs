@@ -25,9 +25,12 @@ import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask 
 
 export default class ElasticsearchGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_DATA_ELASTICSEARCH);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 

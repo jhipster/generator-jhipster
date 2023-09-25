@@ -99,12 +99,6 @@
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "jest": "<%= nodeDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
     "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",

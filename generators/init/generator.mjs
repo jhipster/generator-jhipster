@@ -30,9 +30,12 @@ import { packageJson } from '../../lib/index.mjs';
  */
 export default class InitGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_INIT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 

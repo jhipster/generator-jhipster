@@ -88,12 +88,6 @@
     "eslint-plugin-react": "<%= nodeDependencies['eslint-plugin-react'] %>",
     "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
     "fork-ts-checker-webpack-plugin": "<%= nodeDependencies['fork-ts-checker-webpack-plugin'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
     "identity-obj-proxy": "<%= nodeDependencies['identity-obj-proxy'] %>",
     "jest": "<%= nodeDependencies['jest'] %>",

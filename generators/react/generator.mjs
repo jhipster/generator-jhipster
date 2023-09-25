@@ -46,10 +46,13 @@ const { REACT } = clientFrameworkTypes;
  */
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
-    await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_REACT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
   }
 
@@ -74,7 +77,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.common.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,

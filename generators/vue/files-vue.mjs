@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import { clientApplicationTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
 
 export const vueFiles = {
   common: [
-    {
+    clientRootTemplatesBlock({
       templates: [
         'package.json',
         'tsconfig.json',
@@ -33,10 +33,10 @@ export const vueFiles = {
         'vite.config.ts',
         'vitest.config.ts',
       ],
-    },
+    }),
   ],
   microfrontend: [
-    {
+    clientRootTemplatesBlock({
       condition: generator => generator.microfrontend,
       templates: [
         'webpack/config.js',
@@ -46,7 +46,7 @@ export const vueFiles = {
         'webpack/vue.utils.js',
         'webpack/webpack.microfrontend.js.jhi.vue',
       ],
-    },
+    }),
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationTemplatesBlock(),

@@ -23,14 +23,18 @@ import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.mjs';
 import { type Entity } from '../base-application/index.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
+import { clientRootTemplatesBlock } from '../client/support/index.mjs';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
 export const cypressFiles: WriteFileSection<CypressGenerator, CommonClientServerApplication> = {
   common: [
     {
-      templates: ['cypress.config.ts', 'README.md.jhi.cypress'],
+      templates: ['README.md.jhi.cypress'],
     },
+    clientRootTemplatesBlock({
+      templates: ['cypress.config.ts'],
+    }),
   ],
   clientTestFw: [
     {
@@ -81,10 +85,10 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CommonClientServer
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: ['e2e/lighthouse.audits.ts'],
     },
-    {
+    clientRootTemplatesBlock({
       condition: generator => generator.cypressAudit,
       templates: ['cypress-audits.config.ts'],
-    },
+    }),
   ],
   coverage: [
     {

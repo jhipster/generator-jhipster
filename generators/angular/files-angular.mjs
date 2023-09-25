@@ -17,11 +17,16 @@
  * limitations under the License.
  */
 
-import { clientApplicationTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
 
 export const files = {
-  common: [
+  jhipsterProject: [
     {
+      templates: ['README.md.jhi.client.angular'],
+    },
+  ],
+  common: [
+    clientRootTemplatesBlock({
       templates: [
         'package.json',
         'tsconfig.json',
@@ -37,7 +42,7 @@ export const files = {
         'webpack/webpack.custom.js',
         'webpack/logo-jhipster.png',
       ],
-    },
+    }),
   ],
   sass: [
     {
@@ -56,10 +61,10 @@ export const files = {
     },
   ],
   microfrontend: [
-    {
+    clientRootTemplatesBlock({
       condition: generator => generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
-    },
+    }),
     {
       condition: generator => generator.microfrontend && generator.applicationTypeGateway,
       ...clientApplicationTemplatesBlock(),

@@ -32,12 +32,25 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
   pomStorage!: PomStorage;
 
   async beforeQueue() {
-    this.pomStorage = createPomStorage(this);
-
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
       await this.composeWithBlueprints(GENERATOR_MAVEN);
     }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      pomStorage() {
+        this.pomStorage = createPomStorage(this);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get configuring() {

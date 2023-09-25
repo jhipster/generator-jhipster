@@ -94,12 +94,6 @@
     "@vue/tsconfig": null,
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "flush-promises": null,
     "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
     "numeral": "<%= nodeDependencies['numeral'] %>",

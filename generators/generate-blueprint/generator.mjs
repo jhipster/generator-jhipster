@@ -53,9 +53,12 @@ const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } =
 
 export default class extends BaseGenerator {
   async _beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 

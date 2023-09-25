@@ -5,11 +5,7 @@ const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   withAdminUi: [false, true],
   skipJhipsterDependencies: [false, true],
   enableTranslation: [false, true],
-  clientSrcDir: [
-    undefined,
-    { value: 'src/', additional: { clientTestDir: 'test/' } },
-    { value: 'src/main/webapp2/', additional: { clientTestDir: 'src/test/javascript2/' } },
-  ],
+  clientRootDir: [undefined, { value: 'clientRoot/' }, { value: '' }],
   websocket: [false, true],
 };
 
