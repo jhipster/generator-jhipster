@@ -599,21 +599,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/maven/templates/template-file-maven.ejs": {
     "stateCleared": "modified",
   },
-  "generators/openapi-client/command.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openapi-client/generator.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openapi-client/generator.spec.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openapi-client/index.mjs": {
-    "stateCleared": "modified",
-  },
-  "generators/openapi-client/templates/template-file-openapi-client.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/project-name/command.mjs": {
     "stateCleared": "modified",
   },
