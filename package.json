@@ -187,7 +187,7 @@
     "fs-extra": "11.1.1",
     "jest-extended": "4.0.1",
     "jsdoc": "4.0.2",
-    "octokit": "3.1.0",
+    "octokit": "3.1.1",
     "open-cli": "7.2.0",
     "prettier2": "npm:prettier@2.8.8",
     "rimraf": "5.0.4",
