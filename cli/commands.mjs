@@ -69,6 +69,7 @@ const defaultCommands = {
   },
   gae: {
     desc: 'Deploy the current application to Google App Engine',
+    removed: removedV8,
   },
   'generate-blueprint': {
     desc: 'Generate a blueprint',
@@ -143,18 +144,18 @@ const defaultCommands = {
     desc: 'Run a module or custom generator',
     argument: ['[generator]'],
   },
-  'spring-boot': {
-    desc: 'Create a Spring Boot application (alpha)',
-  },
   'spring-service': {
     alias: 'service',
     desc: 'Create a new Spring service bean',
+    removed: removedV8,
   },
   'spring-controller': {
     desc: 'Create a new Spring controller',
+    removed: removedV8,
   },
   'openapi-client': {
     desc: 'Generates java client code from an OpenAPI/Swagger definition',
+    removed: removedV8,
   },
   upgrade: {
     desc: 'Upgrade the JHipster version, and upgrade the generated application',
