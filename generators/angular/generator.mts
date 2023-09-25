@@ -119,7 +119,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         };
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.custom.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,

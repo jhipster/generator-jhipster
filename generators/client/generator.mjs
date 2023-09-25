@@ -36,10 +36,6 @@ import command from './command.mjs';
 const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
- */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   command = command;
 
@@ -235,7 +231,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
-        const packageJsonStorage = this.createStorage('package.json');
+        const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
         const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();

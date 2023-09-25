@@ -182,7 +182,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       },
 
       configure({ application }) {
-        this.packageJson.merge({
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        clientPackageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
@@ -199,7 +200,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
-        this.packageJson.merge({
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        clientPackageJson.merge({
           devDependencies: {
             lighthouse: application.nodeDependencies.lighthouse,
             'cypress-audit': application.nodeDependencies['cypress-audit'],
@@ -216,7 +218,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       configureCoverage({ application, source }) {
         const { cypressCoverage, clientFrameworkAngular, dasherizedBaseName } = application;
         if (!cypressCoverage) return;
-        this.packageJson.merge({
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        clientPackageJson.merge({
           devDependencies: {
             '@cypress/code-coverage': application.nodeDependencies['@cypress/code-coverage'],
             'babel-loader': application.nodeDependencies['babel-loader'],

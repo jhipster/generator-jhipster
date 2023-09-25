@@ -77,7 +77,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
         application.clientSrcDirRelativeToClientTestDir = `${relative(application.clientSpecDir, application.clientWebappDir)}/`;
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.common.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,
