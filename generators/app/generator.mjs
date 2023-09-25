@@ -29,7 +29,6 @@ import {
   GENERATOR_APP,
   GENERATOR_COMMON,
   GENERATOR_CLIENT,
-  GENERATOR_PAGE,
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
 } from '../generator-list.mjs';
@@ -147,21 +146,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         if (config.entitySuffix === config.dtoSuffix) {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
         }
-      },
-
-      async composePages() {
-        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
-        await Promise.all(
-          this.jhipsterConfig.pages.map(page => {
-            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, {
-              generatorArgs: [page.name],
-              generatorOptions: {
-                skipInstall: true,
-                page,
-              },
-            });
-          }),
-        );
       },
     });
   }
