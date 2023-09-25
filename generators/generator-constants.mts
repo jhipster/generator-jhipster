@@ -38,7 +38,7 @@ export const javaDependencies: Record<string, string> = {
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
    */
-  hibernate: '6.2.7.Final',
+  hibernate: '6.2.9.Final',
   /*
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.
