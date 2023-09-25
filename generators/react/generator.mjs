@@ -46,10 +46,13 @@ const { REACT } = clientFrameworkTypes;
  */
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
-    await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_REACT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
   }
 

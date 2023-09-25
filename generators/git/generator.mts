@@ -35,9 +35,12 @@ export default class InitGenerator extends BaseGenerator {
   skipGit;
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GIT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 

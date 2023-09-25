@@ -29,10 +29,13 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   hasServicesFile = false;
 
   async beforeQueue() {
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER);
+    }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     }
   }
 

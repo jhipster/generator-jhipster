@@ -64,13 +64,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-
     if (!this.fromBlueprint) {
       this.supportedLanguages = supportedLanguages;
       this.composedBlueprints = await this.composeWithBlueprints('languages', {
         generatorArgs: this.options.languages,
       });
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 

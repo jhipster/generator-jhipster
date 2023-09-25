@@ -42,12 +42,14 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_COMMON);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }
 

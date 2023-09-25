@@ -46,9 +46,12 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     }
   }
 

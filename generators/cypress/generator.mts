@@ -30,10 +30,13 @@ const { ANGULAR } = clientFrameworkTypes;
 
 export default class CypressGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CYPRESS);
+    }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 

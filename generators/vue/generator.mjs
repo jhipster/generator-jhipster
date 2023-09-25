@@ -43,10 +43,13 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 export default class VueGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
-    await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_VUE);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
   }
 
