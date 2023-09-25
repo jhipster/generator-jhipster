@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 import process from 'node:process';
-import fs from 'fs';
-import path from 'path';
+import fs, { rmSync, readdirSync } from 'node:fs';
+import path from 'node:path';
 import chalk from 'chalk';
-import shelljs from 'shelljs';
 import semver from 'semver';
 import gitignore from 'parse-gitignore';
 import latestVersion from 'latest-version';
@@ -38,37 +37,6 @@ const UPGRADE_BRANCH = 'jhipster_upgrade';
 const GLOBAL_VERSION = 'global';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
-
-/**
- * Executes a Git command using shellJS
- * gitExec(args [, options, callback])
- *
- * @param {string|array} args - can be an array of arguments or a string command
- * @param {object} options[optional] - takes any of child process options
- * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
- * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
- */
-function gitExec(logger, args, options = {}, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-
-  if (options.async === undefined) options.async = callback !== undefined;
-  if (options.silent === undefined) options.silent = true;
-  if (options.trace === undefined) options.trace = true;
-
-  if (!Array.isArray(args)) {
-    args = [args];
-  }
-  const command = `git ${args.join(' ')}`;
-
-  logger.debug(command);
-  if (callback) {
-    return shelljs.exec(command, options, callback);
-  }
-  return shelljs.exec(command, options);
-}
 
 export default class UpgradeGenerator extends BaseGenerator {
   fromV7;
@@ -121,7 +89,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   _rmRf(file) {
     const absolutePath = path.resolve(file);
     this.log.verboseInfo(`Removing ${absolutePath}`);
-    shelljs.rm('-rf', absolutePath);
+    rmSync(absolutePath, { recursive: true, force: true });
   }
 
   _gitCheckout(branch, options = {}) {
@@ -129,15 +97,16 @@ export default class UpgradeGenerator extends BaseGenerator {
     if (options.force) {
       args.push('-f');
     }
-    const gitCheckout = this.gitExec(args, { silent: this.silent });
-    if (gitCheckout.code !== 0) throw new Error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
+    const gitCheckout = this.spawnSync('git', args, { stdio: 'pipe', reject: false });
+    if (gitCheckout.exitCode !== 0) throw new Error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
     this.log.ok(`Checked out branch "${branch}"`);
   }
 
   _cleanUp() {
     const ignoredFiles = gitignore(fs.readFileSync('.gitignore')).patterns || [];
     const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
-    shelljs.ls('-A').forEach(file => {
+    const files = readdirSync(this.destinationPath());
+    files.forEach(file => {
       if (!filesToKeep.includes(file)) {
         this._rmRf(file);
       }
@@ -154,8 +123,8 @@ export default class UpgradeGenerator extends BaseGenerator {
       this._rmRf('node_modules');
       generatorCommand = 'jhipster';
     } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
-      const result = shelljs.exec('npm bin', { silent: this.silent });
-      if (result.code === 0) {
+      const result = this.spawnCommandSync('npm bin', { stdio: 'pipe', reject: false });
+      if (result.exitCode === 0) {
         generatorCommand = `"${result.stdout.replace('\n', '')}/jhipster"`;
       } else {
         generatorCommand = 'npm exec --no jhipster --';
@@ -175,13 +144,13 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   _gitCommitAll(commitMsg) {
-    const gitAdd = this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000, silent: this.silent });
-    if (gitAdd.code !== 0) throw new Error(`Unable to add resources in git:\n${gitAdd.stderr}`);
+    const gitAdd = this.spawnSync('git', ['add', '-A'], { stdio: 'pipe', reject: false });
+    if (gitAdd.exitCode !== 0) throw new Error(`Unable to add resources in git:\n${gitAdd.stderr}`);
 
-    const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
-      silent: this.silent,
+    const gitCommit = this.spawnSync('git', ['commit', '-q', '-m', commitMsg, '-a', '--allow-empty', '--no-verify'], {
+      stdio: 'pipe',
     });
-    if (gitCommit.code !== 0) throw new Error(`Unable to commit in git:\n${gitCommit.stderr}`);
+    if (gitCommit.exitCode !== 0) throw new Error(`Unable to commit in git:\n${gitCommit.stderr}`);
     this.log.ok(`Committed with message "${commitMsg}"`);
   }
 
@@ -201,8 +170,8 @@ export default class UpgradeGenerator extends BaseGenerator {
     const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --force`;
     this.log.verboseInfo(generatorCommand);
 
-    const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
-    if (npmIntall.code === 0) this.log.ok(`Installed ${npmPackage}@${version}`);
+    const npmIntall = this.spawnCommandSync(generatorCommand, { stdio: 'pipe', reject: false });
+    if (npmIntall.exitCode === 0) this.log.ok(`Installed ${npmPackage}@${version}`);
     else throw new Error(`Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
   }
 
@@ -290,19 +259,19 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       assertGitRepository() {
         const gitInit = () => {
-          const gitInit = this.gitExec('init', { silent: this.silent });
-          if (gitInit.code !== 0) throw new Error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
+          const gitInit = this.spawnSync('git', ['init'], { stdio: 'pipe', reject: false });
+          if (gitInit.exitCode !== 0) throw new Error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
           this.log.ok('Initialized a new Git repository');
           this._gitCommitAll('Initial');
         };
-        const gitRevParse = this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], { silent: this.silent });
-        if (gitRevParse.code !== 0) gitInit();
+        const gitRevParse = this.spawnSync('git', ['rev-parse', '-q', '--is-inside-work-tree'], { stdio: 'pipe', reject: false });
+        if (gitRevParse.exitCode !== 0) gitInit();
         else this.log.ok('Git repository detected');
       },
 
       assertNoLocalChanges() {
-        const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
-        if (gitStatus.code !== 0) throw new Error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
+        const gitStatus = this.spawnSync('git', ['status', '--porcelain'], { stdio: 'pipe', reject: false });
+        if (gitStatus.exitCode !== 0) throw new Error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
         if (gitStatus.stdout) {
           this.log.warn(gitStatus.stdout);
           throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
@@ -310,14 +279,15 @@ export default class UpgradeGenerator extends BaseGenerator {
       },
 
       detectCurrentBranch() {
-        const gitRevParse = this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { silent: this.silent });
-        if (gitRevParse.code !== 0) throw new Error(`Unable to detect current Git branch:\n${gitRevParse.stdout} ${gitRevParse.stderr}`);
+        const gitRevParse = this.spawnSync('git', ['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { stdio: 'pipe', reject: false });
+        if (gitRevParse.exitCode !== 0)
+          throw new Error(`Unable to detect current Git branch:\n${gitRevParse.stdout} ${gitRevParse.stderr}`);
         this.sourceBranch = gitRevParse.stdout.replace('\n', '');
       },
 
       async prepareUpgradeBranch() {
         const getGitVersion = () => {
-          const gitVersion = this.gitExec(['--version'], { silent: this.silent });
+          const gitVersion = this.spawnSync('git', ['--version'], { stdio: 'pipe', reject: false });
           return String(gitVersion.stdout.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));
         };
 
@@ -329,8 +299,8 @@ export default class UpgradeGenerator extends BaseGenerator {
           } else {
             args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
           }
-          const gitMerge = this.gitExec(args, { silent: this.silent });
-          if (gitMerge.code !== 0) {
+          const gitMerge = this.spawnSync('git', args, { stdio: 'pipe', reject: false });
+          if (gitMerge.exitCode !== 0) {
             throw new Error(
               `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`,
             );
@@ -364,14 +334,14 @@ export default class UpgradeGenerator extends BaseGenerator {
         };
 
         const createUpgradeBranch = () => {
-          const gitCheckout = this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], { silent: this.silent });
-          if (gitCheckout.code !== 0)
+          const gitCheckout = this.spawnSync('git', ['checkout', '--orphan', UPGRADE_BRANCH], { stdio: 'pipe', reject: false });
+          if (gitCheckout.exitCode !== 0)
             throw new Error(`Unable to create ${UPGRADE_BRANCH} branch:\n${gitCheckout.stdout} ${gitCheckout.stderr}`);
           this.log.ok(`Created branch ${UPGRADE_BRANCH}`);
         };
 
-        const gitRevParse = this.gitExec(['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { silent: this.silent });
-        if (gitRevParse.code !== 0) {
+        const gitRevParse = this.spawnSync('git', ['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { stdio: 'pipe', reject: false });
+        if (gitRevParse.exitCode !== 0) {
           // Create and checkout upgrade branch
           createUpgradeBranch();
           // Remove/rename old files
@@ -451,13 +421,13 @@ export default class UpgradeGenerator extends BaseGenerator {
 
       mergeChangesBack() {
         this.log.verboseInfo(`Merging changes back to ${this.sourceBranch}...`);
-        this.gitExec(['merge', '-q', UPGRADE_BRANCH], { silent: this.silent });
+        this.spawnSync('git', ['merge', '-q', UPGRADE_BRANCH], { stdio: 'pipe', reject: false });
         this.log.ok('Merge done!');
       },
 
       checkConflictsInPackageJson() {
-        const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent });
-        if (gitDiff.code !== 0) throw new Error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
+        const gitDiff = this.spawnSync('git', ['diff', '--name-only', '--diff-filter=U', 'package.json'], { stdio: 'pipe', reject: false });
+        if (gitDiff.exitCode !== 0) throw new Error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         if (gitDiff.stdout) {
           const installCommand = 'npm install';
           this.log.warn(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
@@ -468,7 +438,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INSTALL]() {
-    return {
+    return this.asInstallTaskGroup({
       install() {
         if (!this.skipInstall) {
           this.log.verboseInfo('Installing dependencies, please wait...');
@@ -477,8 +447,8 @@ export default class UpgradeGenerator extends BaseGenerator {
           const installCommand = 'npm install';
           this.log.verboseInfo(installCommand);
 
-          const pkgInstall = shelljs.exec(installCommand, { silent: this.silent });
-          if (pkgInstall.code !== 0) {
+          const pkgInstall = this.spawnSync(installCommand, { stdio: 'pipe', reject: false });
+          if (pkgInstall.exitCode !== 0) {
             throw new Error(`${installCommand} failed.`);
           }
         } else {
@@ -486,33 +456,19 @@ export default class UpgradeGenerator extends BaseGenerator {
           this.log.ok(logMsg);
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.END]() {
     return {
       end() {
-        const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U'], { silent: this.silent });
-        if (gitDiff.code !== 0) throw new Error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
+        const gitDiff = this.spawnSync('git', ['diff', '--name-only', '--diff-filter=U'], { stdio: 'pipe', reject: false });
+        if (gitDiff.exitCode !== 0) throw new Error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
         this.log.ok(chalk.bold('Upgraded successfully.'));
         if (gitDiff.stdout) {
           this.log.warn(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
         }
       },
     };
-  }
-
-  /**
-   * @deprecated
-   * executes a Git command using shellJS
-   * gitExec(args [, options] [, callback])
-   *
-   * @param {string|array} args - can be an array of arguments or a string command
-   * @param {object} options[optional] - takes any of child process options
-   * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
-   * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
-   */
-  gitExec(args, options, callback) {
-    return gitExec(this.logger, args, options, callback);
   }
 }
