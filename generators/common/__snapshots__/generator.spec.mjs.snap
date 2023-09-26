@@ -47,13 +47,9 @@ trim_trailing_whitespace = false
   },
   ".prettierignore": {
     "contents": "node_modules
-target
-build
 package-lock.json
 .git
-.mvn
-gradle
-.gradle
+target/
 ",
     "stateCleared": "modified",
   },

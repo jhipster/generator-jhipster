@@ -20,13 +20,11 @@
 export default {
   maven: [
     {
-      templates: [
-        { file: 'mvnw', noEjs: true },
-        { file: 'mvnw.cmd', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.jar', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.properties', noEjs: true },
-        { file: '.mvn/jvm.config', noEjs: true },
-      ],
+      templates: ['.prettierignore.jhi.maven'],
+    },
+    {
+      transform: false,
+      templates: ['mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', '.mvn/jvm.config'],
     },
   ],
 };

@@ -108,7 +108,7 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
       /** @deprecated, use destinationFile instead */
       renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
       /** transforms (files processing) to be applied */
-      transform?: false | (() => string)[];
+      transform?: boolean | (() => string)[];
       /** binary files skips ejs render, ejs extension and file transform */
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
@@ -127,7 +127,7 @@ export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
   /** condition to enable to write the block */
   condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
-  transform?: false | (() => string)[];
+  transform?: boolean | (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
@@ -173,7 +173,7 @@ export type ValidationResult = {
 };
 
 export type PromptSpec = {
-  type: 'input' | 'list' | 'confirm';
+  type: 'input' | 'list' | 'confirm' | 'checkbox';
   message: string | ((any) => string);
   when?: boolean | ((any) => boolean);
   default?: any | ((any) => any);

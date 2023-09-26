@@ -24,7 +24,7 @@
 export const prettierConfigFiles = {
   global: [
     {
-      templates: ['.prettierrc', '.prettierignore'],
+      templates: ['.prettierrc', '.prettierignore.jhi'],
     },
   ],
 };

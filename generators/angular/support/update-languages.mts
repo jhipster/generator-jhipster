@@ -58,7 +58,7 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
     '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
     '                ]';
 
-  this.editFile('webpack/webpack.custom.js', { ignoreNonExisting }, content =>
+  this.editFile(`${application.clientRootDir}webpack/webpack.custom.js`, { ignoreNonExisting }, content =>
     content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent),
   );
 }

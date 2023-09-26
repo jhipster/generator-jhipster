@@ -20,12 +20,11 @@
 export default {
   gradle: [
     {
-      templates: [
-        { file: 'gradlew', noEjs: true },
-        { file: 'gradlew.bat', noEjs: true },
-        { file: 'gradle/wrapper/gradle-wrapper.jar', noEjs: true },
-        'gradle/wrapper/gradle-wrapper.properties',
-      ],
+      templates: ['.prettierignore.jhi.gradle', 'gradle/wrapper/gradle-wrapper.properties'],
+    },
+    {
+      transform: false,
+      templates: ['gradlew', 'gradlew.bat', 'gradle/wrapper/gradle-wrapper.jar'],
     },
   ],
 };
