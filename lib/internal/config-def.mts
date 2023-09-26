@@ -2,7 +2,8 @@ import type { JHipsterConfigs } from '../../generators/base/api.mjs';
 import { upperFirstCamelCase } from '../../generators/base/support/string.mjs';
 
 export const convertConfigToOption = (name, config) => {
-  const choices = config?.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
+  if (!config?.cli?.type) return undefined;
+  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
   return {
     name,
     description: config.description,

@@ -74,7 +74,7 @@ const command: JHipsterCommandDefinition = {
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'confirm',
         when: answers =>
-          (answers.clientFramework ?? config.clientFramework) !== CLIENT_FRAMEWORK_NO &&
+          [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework) &&
           config.applicationType === APPLICATION_TYPE_GATEWAY,
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
       }),

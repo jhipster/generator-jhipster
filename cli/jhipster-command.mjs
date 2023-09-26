@@ -180,8 +180,8 @@ export default class JHipsterCommand extends Command {
 
   addJHipsterConfigs(configs = {}, blueprintOptionDescription) {
     Object.entries(configs).forEach(([name, config]) => {
-      if (config.cli) {
-        const option = convertConfigToOption(name, config);
+      const option = convertConfigToOption(name, config);
+      if (option) {
         this._addGeneratorOption(kebabCase(option.name), option, blueprintOptionDescription);
       }
     });
