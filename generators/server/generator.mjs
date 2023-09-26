@@ -156,36 +156,20 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   fakeKeytool;
   command = command;
 
-  async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_COMMON);
-    await this.dependsOnJHipster(GENERATOR_JAVA);
-
+  async beforeQueue(useNpmWrapper = true) {
     if (!this.fromBlueprint) {
+      loadStoredAppOptions.call(this);
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
 
-    // Not using normal blueprints or this is a normal blueprint.
-    if ((!this.fromBlueprint && !this.delegateToBlueprint) || (this.fromBlueprint && this.sbsBlueprint)) {
-      this.setFeatures({
-        customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
-          const buildTool = this.jhipsterConfig.buildTool;
-          if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
-            return defaultInstallTask();
-          }
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnJHipster(GENERATOR_JAVA);
 
-          const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
-          try {
-            await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
-          } catch (error) {
-            this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
-          }
-          return true;
-        }.bind(this),
-      });
+      if (useNpmWrapper) {
+        this.useNpmWrapperInstallTask();
+      }
     }
   }
 
@@ -975,6 +959,25 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         );
       }
     }
+  }
+
+  useNpmWrapperInstallTask() {
+    this.setFeatures({
+      customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
+        const buildTool = this.jhipsterConfig.buildTool;
+        if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
+          return defaultInstallTask();
+        }
+
+        const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
+        try {
+          await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
+        } catch (error) {
+          this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
+        }
+        return true;
+      }.bind(this),
+    });
   }
 
   _validateRelationship(entityName, relationship) {

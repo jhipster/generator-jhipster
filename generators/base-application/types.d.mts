@@ -93,6 +93,7 @@ export type CommonClientServerApplication = BaseApplication &
   SpringBootApplication &
   ClientApplication &
   ApplicationType & {
+    clientRootDir: string;
     clientSrcDir: string;
     clientTestDir?: string;
     clientDistDir?: string;

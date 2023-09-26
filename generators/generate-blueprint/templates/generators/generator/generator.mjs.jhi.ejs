@@ -57,6 +57,10 @@ export default class extends <%= generatorClass %>Generator {
     });
   }
 
+  async beforeQueue() {
+    await super.beforeQueue();
+  }
+
 <%_ } _%>
 <% for (const priority of priorities) { %>
 <&- fragments.<%- priority.name %>Section() -&>

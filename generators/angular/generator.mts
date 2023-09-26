@@ -54,10 +54,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   localEntities?: any[];
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
-    await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ANGULAR);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
   }
 
@@ -119,7 +122,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         };
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.custom.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,

@@ -7,8 +7,7 @@ import BaseApplicationGenerator from '../../generators/base-application/index.mj
 
 const mockAngularBlueprintSubGen = class extends AngularGenerator {
   constructor(args, opts, features) {
-    super(args, opts, features);
-    this.sbsBlueprint = true;
+    super(args, opts, { ...features, sbsBlueprint: true });
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
@@ -47,7 +46,6 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
         skipServer: true,
       })
       .withOptions({
-        defaults: true,
         blueprint: 'myblueprint2',
       })
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]]);
@@ -97,8 +95,11 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
   });
   it('should bail on any file change adding same needles again', async () => {
     await runResult
-      .create('jhipster-myblueprint2:angular')
+      .create('jhipster:angular')
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
-      .withOptions({ force: false });
+      .withOptions({
+        blueprint: 'myblueprint2',
+        force: false,
+      });
   });
 });

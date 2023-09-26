@@ -36,22 +36,20 @@ import command from './command.mjs';
 const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
- */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   command = command;
 
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_COMMON);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }
 
@@ -235,7 +233,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
-        const packageJsonStorage = this.createStorage('package.json');
+        const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
         const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();

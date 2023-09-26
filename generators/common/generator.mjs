@@ -42,11 +42,13 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_GIT);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_GIT);
     }
   }
 
@@ -172,6 +174,16 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addJHipsterDependencies({ application }) {
+        if (application.skipJhipsterDependencies) return;
+
+        this.packageJson.merge({
+          devDependencies: {
+            'generator-jhipster': '<%= jhipsterVersion %>',
+            ...Object.fromEntries(application.blueprints.map(blueprint => [blueprint.name, blueprint.version])),
+          },
+        });
+      },
       async formatSonarProperties() {
         this.queueTransformStream(await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
           name: 'prettifying sonar-project.properties',

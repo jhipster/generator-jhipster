@@ -38,10 +38,12 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   generateWorkspaces;
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } });
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_WORKSPACES);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } });
     }
   }
 
