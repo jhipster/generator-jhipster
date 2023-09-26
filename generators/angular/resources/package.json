@@ -40,7 +40,7 @@
     "jest-sonar": "0.2.16",
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "4.0.8",
-    "rimraf": "5.0.1",
+    "rimraf": "5.0.4",
     "ts-jest": "29.1.1",
     "typescript": "5.1.6",
     "webpack": "5.88.2",
