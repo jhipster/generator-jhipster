@@ -23,7 +23,7 @@ import lodash from 'lodash';
 
 import Generator from './index.mjs';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.mjs';
-import { defaultHelpers as helpers } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, runResult } from '../../test/support/index.mjs';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
@@ -84,13 +84,9 @@ describe(`generator - ${generator}`, () => {
     const { searchEngine, serviceDiscoveryType } = sampleConfig;
 
     describe(name, () => {
-      let runResult;
-
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig(sampleConfig);
+        await helpers.run(generatorFile).withJHipsterConfig(sampleConfig);
       });
-
-      after(() => runResult.cleanup());
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -105,6 +101,21 @@ describe(`generator - ${generator}`, () => {
       describe('serviceDiscoveryType', () => {
         matchEureka(() => runResult, serviceDiscoveryType === EUREKA);
         matchConsul(() => runResult, serviceDiscoveryType === CONSUL);
+      });
+    });
+
+    describe(`custom path for ${name}`, () => {
+      before(async () => {
+        await helpers
+          .run(generatorFile)
+          .withSharedApplication({
+            dockerServicesDir: 'foo/',
+          })
+          .withJHipsterConfig(sampleConfig);
+      });
+
+      it('should not generate any file inside src/', () => {
+        expect(Object.keys(runResult.getStateSnapshot('**/src/**')).length).toBe(0);
       });
     });
   });

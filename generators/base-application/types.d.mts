@@ -107,6 +107,7 @@ export type CommonClientServerApplication = BaseApplication &
     temporaryDir?: string;
 
     dockerServicesDir?: string;
+    dockerServices?: string[];
     prettierExtensions?: string;
 
     generateUserManagement?: boolean;
