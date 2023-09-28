@@ -36,7 +36,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    './<%= clientSrcDir %>app/<%= microfrontend ? 'main' : 'index' %>'
+    './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/<%= microfrontend ? 'main' : 'index' %>'
   ],
   output: {
     path: utils.root('<%= clientDistDir %>'),

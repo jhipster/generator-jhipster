@@ -34,12 +34,12 @@
     "checkJs": false,
     "baseUrl": "./",
     "paths": {
-        "app/*": ["<%= clientSrcDir %>app/*"]
+        "app/*": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
     },
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["<%= clientSrcDir %>app"],
+  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
 }

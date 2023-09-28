@@ -147,7 +147,7 @@
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= this.relativeDir(clientRootDir, temporaryDir) %>}",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",

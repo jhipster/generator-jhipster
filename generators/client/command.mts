@@ -117,6 +117,12 @@ const command: JHipsterCommandDefinition = {
         message: 'Do you want to generate the admin UI?',
       }),
     },
+    clientRootDir: {
+      'description': 'Client root',
+      cli: {
+        type: String,
+      },
+    },
   },
 };
 
