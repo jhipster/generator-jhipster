@@ -280,7 +280,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get default() {
     return this.asDefaultTaskGroup({
       task({ application }) {
-        const isPackageJson = file => file.path === this.destinationPath('package.json');
+        const packageJsonFiles = [this.destinationPath('package.json')];
+        if (application.clientRootDir) {
+          packageJsonFiles.push(this.destinationPath(`${application.clientRootDir}package.json`));
+        }
+        const isPackageJson = file => packageJsonFiles.includes(file.path);
         const populateNullValues = dependencies => {
           if (!dependencies) return;
           for (const key of Object.keys(dependencies)) {
