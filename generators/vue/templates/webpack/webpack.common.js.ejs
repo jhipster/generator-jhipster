@@ -20,7 +20,7 @@ function resolve(dir = '') {
 module.exports = async (env, options) => {
   const development = options.mode === 'development';
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(resolve('<%= clientSrcDir %>i18n'), {
+  const languagesHash = await hashElement(resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -37,7 +37,7 @@ module.exports = async (env, options) => {
       },
 <%_ } _%>
       entry: {
-        app: './<%= clientSrcDir %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
+        app: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
       },
       output: {
         path: resolve('<%= clientDistDir %>'),
@@ -46,7 +46,7 @@ module.exports = async (env, options) => {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
           vue$: '@vue/compat/dist/vue.esm-bundler.js',
-          '@': resolve('<%= clientSrcDir %>app'),
+          '@': resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>app'),
         },
       },
       devServer: {
@@ -89,7 +89,7 @@ module.exports = async (env, options) => {
       cache: {
         // 1. Set cache type to filesystem
         type: 'filesystem',
-        cacheDirectory: resolve('<%= temporaryDir %>webpack'),
+        cacheDirectory: resolve('<%= this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
         buildDependencies: {
           // 2. Add your config as buildDependency to get cache invalidation on config change
           config: [
@@ -147,7 +147,7 @@ module.exports = async (env, options) => {
         }),
         new HtmlWebpackPlugin({
           base: '/',
-          template: './<%= clientSrcDir %>index.html',
+          template: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
         }),
         new VueLoaderPlugin(),
         new CopyWebpackPlugin({
@@ -163,15 +163,15 @@ module.exports = async (env, options) => {
               from: path.join(path.dirname(require.resolve('axios/package.json')), 'dist/axios.min.js'),
               to: 'swagger-ui/',
             },
-            { from: './<%= clientSrcDir %>swagger-ui/', to: 'swagger-ui/' },
-            { from: './<%= clientSrcDir %>content/', to: 'content/' },
-            { from: './<%= clientSrcDir %>favicon.ico', to: 'favicon.ico' },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
             {
-              from: './<%= clientSrcDir %>manifest.webapp',
+              from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp',
               to: 'manifest.webapp',
             },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-            { from: './<%= clientSrcDir %>robots.txt', to: 'robots.txt' },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' },
           ],
         })<% if (enableTranslation) { %>,
         new MergeJsonWebpackPlugin({

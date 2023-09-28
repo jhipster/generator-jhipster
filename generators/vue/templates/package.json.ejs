@@ -138,7 +138,7 @@
     "lint": "eslint . --ext .ts,.vue ",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
     "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= this.relativeDir(clientRootDir, temporaryDir) %>}",
     "start": "<%= clientPackageManager %> run webapp:dev --",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start --",
