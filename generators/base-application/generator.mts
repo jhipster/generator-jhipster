@@ -32,7 +32,7 @@ import { LanguageSourceType } from '../languages/types.js';
 import command from './command.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
 
-const { upperFirst } = _;
+const { upperFirst, defaults } = _;
 
 const {
   LOADING,
@@ -367,6 +367,12 @@ export default class BaseApplicationGenerator<
     }
     const application = this.sharedData.getApplication();
 
+    if ([PREPARING, LOADING].includes(priorityName)) {
+      return {
+        application,
+        applicationDefaults: data => defaults(application, data),
+      };
+    }
     if (LOADING_ENTITIES === priorityName) {
       return {
         application,

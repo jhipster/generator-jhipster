@@ -114,16 +114,18 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
+      prepareApplication({ application, applicationDefaults }) {
         loadDerivedAppConfig({ application });
 
-        application.nodePackageManager = 'npm';
-        application.dockerServicesDir = DOCKER_DIR;
+        applicationDefaults({
+          nodePackageManager: 'npm',
+          dockerServicesDir: DOCKER_DIR,
+        });
 
-        // TODO v8 drop the following variables
-        const anyApplication = application as any;
-
-        anyApplication.clientPackageManager = application.nodePackageManager;
+        applicationDefaults({
+          // TODO drop clientPackageManager
+          clientPackageManager: application.nodePackageManager,
+        });
       },
     });
   }
