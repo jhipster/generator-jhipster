@@ -106,23 +106,30 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addPrettierDependencies({ application }) {
+        this.packageJson.merge({
+          scripts: {
+            'prettier-check': 'prettier --check "{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+            'prettier-format': 'prettier --write "{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+          },
+          devDependencies: {
+            prettier: application.nodeDependencies.prettier,
+            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
+          },
+          engines: {
+            node: application.applicationNodeEngine,
+          },
+        });
+      },
       addCommitHookDependencies({ application }) {
         if (application.skipCommitHook) return;
         this.packageJson.merge({
           scripts: {
             prepare: 'husky install',
-            'prettier-check': 'prettier --check "{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
-            'prettier-format': 'prettier --write "{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
           },
           devDependencies: {
             husky: application.nodeDependencies.husky,
-            prettier: "<%= nodeDependencies['prettier'] %>",
-            'prettier-plugin-java': "<%= nodeDependencies['prettier-plugin-java'] %>",
-            'prettier-plugin-packagejson': "<%= nodeDependencies['prettier-plugin-packagejson'] %>",
             'lint-staged': application.nodeDependencies['lint-staged'],
-          },
-          engines: {
-            node: '<%= applicationNodeEngine %>',
           },
         });
       },
