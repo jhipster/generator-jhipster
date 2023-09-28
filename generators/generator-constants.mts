@@ -101,7 +101,8 @@ export const GENERATOR_JHIPSTER = 'generator-jhipster';
 export const YO_RC_FILE = '.yo-rc.json';
 
 export const JHIPSTER_CONFIG_DIR = '.jhipster';
-export const DOCKER_DIR = `${MAIN_DIR}docker/`;
+export const TEMPLATES_DOCKER_DIR = 'docker/';
+export const JAVA_DOCKER_DIR = `${MAIN_DIR}docker/`;
 export const LINE_LENGTH = 180;
 export const CLIENT_MAIN_SRC_DIR = `${MAIN_DIR}webapp/`;
 export const CLIENT_TEST_SRC_DIR = `${TEST_DIR}javascript/`;

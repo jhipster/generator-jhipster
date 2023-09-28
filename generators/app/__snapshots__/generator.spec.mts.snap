@@ -293,6 +293,9 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
+  "dockerServices": [
+    "postgresql",
+  ],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
@@ -848,6 +851,11 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
+  "dockerServices": [
+    "consul",
+    "zipkin",
+    "postgresql",
+  ],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
@@ -1403,6 +1411,12 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
+  "dockerServices": [
+    "consul",
+    "zipkin",
+    "hazelcast",
+    "postgresql",
+  ],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
