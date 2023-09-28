@@ -65,10 +65,10 @@ const <%= remote.capitalizedBaseName %>Routes = React.lazy(() => import('@<%= re
 
 const AppRoutes = () => {
 <%_ if (communicationSpringWebsocket) { _%>
-  const location = useLocation();
+  const pageLocation = useLocation();
   React.useEffect(() => {
-    sendActivity(location.pathname);
-  }, [location]);
+    sendActivity(pageLocation.pathname);
+  }, [pageLocation]);
 <%_ } _%>
   return (
     <div className="view-routes">

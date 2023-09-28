@@ -69,7 +69,7 @@ import {
 export const <%= entityReactName %> = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
 <%_ if (!paginationInfiniteScroll) { _%>
   const navigate = useNavigate();
 <%_ } _%>
@@ -78,9 +78,9 @@ export const <%= entityReactName %> = () => {
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (paginationNo) { _%>
-  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(location, '<%= primaryKey.name %>'), location.search));
+  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, '<%= primaryKey.name %>'), pageLocation.search));
 <%_ } else { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), pageLocation.search));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
@@ -231,8 +231,8 @@ export const <%= entityReactName %> = () => {
   <%_ } else { _%>
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
   <%_ } _%>
-    if (location.search !== endURL) {
-      navigate(`${location.pathname}${endURL}`);
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
 <%_ } _%>
@@ -250,7 +250,7 @@ export const <%= entityReactName %> = () => {
 
 <%_ if (paginationPagination) { _%>
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
     const sort = params.get(SORT);
     if (page && sort) {
@@ -262,7 +262,7 @@ export const <%= entityReactName %> = () => {
         order: sortSplit[1]
       });
     }
-  }, [location.search]);
+  }, [pageLocation.search]);
 <%_ } _%>
 
   const sort = p => () => {
