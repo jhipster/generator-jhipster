@@ -118,7 +118,7 @@ const command: JHipsterCommandDefinition = {
       }),
     },
     clientRootDir: {
-      'description': 'Client root',
+      description: 'Client root',
       cli: {
         type: String,
       },
