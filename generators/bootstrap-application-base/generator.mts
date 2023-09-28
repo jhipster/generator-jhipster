@@ -33,7 +33,7 @@ import {
   prepareRelationship,
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
-import { DOCKER_DIR } from '../generator-constants.mjs';
+import { JAVA_DOCKER_DIR } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
@@ -119,7 +119,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
         applicationDefaults({
           nodePackageManager: 'npm',
-          dockerServicesDir: DOCKER_DIR,
+          dockerServicesDir: JAVA_DOCKER_DIR,
         });
 
         applicationDefaults({

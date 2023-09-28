@@ -1,4 +1,4 @@
-import { DOCKER_DIR } from '../generator-constants.mjs';
+import { TEMPLATES_DOCKER_DIR } from '../generator-constants.mjs';
 
 const renameTo = (ctx, filepath) => `${ctx.dockerServicesDir}${filepath}`.replace('/_eureka_', '').replace('/_consul_', '');
 
@@ -9,21 +9,21 @@ export const dockerFiles = {
       condition: ctx => ctx.dockerServices.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
       templates: [
         {
-          sourceFile: ctx => `${DOCKER_DIR}${ctx.prodDatabaseType}.yml`,
+          sourceFile: ctx => `${TEMPLATES_DOCKER_DIR}${ctx.prodDatabaseType}.yml`,
           destinationFile: ctx => `${ctx.dockerServicesDir}${ctx.prodDatabaseType}.yml`,
         },
       ],
     },
     {
       condition: ctx => ctx.dockerServices.includes('mysql'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
       templates: ['config/mysql/my.cnf'],
     },
     {
       condition: ctx => ctx.dockerServices.includes('mariadb'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
       templates: ['config/mariadb/my.cnf'],
@@ -32,7 +32,7 @@ export const dockerFiles = {
   couchbaseFiles: [
     {
       condition: ctx => ctx.dockerServices.includes('couchbase'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['couchbase.yml', 'couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
     },
@@ -40,7 +40,7 @@ export const dockerFiles = {
   mongodbFiles: [
     {
       condition: ctx => ctx.dockerServices.includes('mongodb'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
     },
@@ -48,7 +48,7 @@ export const dockerFiles = {
   cassandraFiles: [
     {
       condition: ctx => ctx.dockerServices.includes('cassandra'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: [
         // docker-compose files
@@ -66,7 +66,7 @@ export const dockerFiles = {
   neo4jFiles: [
     {
       condition: ctx => ctx.dockerServices.includes('neo4j'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['neo4j.yml'],
     },
@@ -74,19 +74,19 @@ export const dockerFiles = {
   cacheProvideFiles: [
     {
       condition: generator => generator.dockerServices.includes('hazelcast'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['hazelcast-management-center.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('memcached'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['memcached.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('redis'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
     },
@@ -94,19 +94,19 @@ export const dockerFiles = {
   searchDiscoveryFiles: [
     {
       condition: generator => generator.serviceDiscoveryAny,
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['central-server-config/README.md'],
     },
     {
       condition: generator => generator.dockerServices.includes('consul'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['consul.yml', 'config/git2consul.json', 'central-server-config/_consul_/application.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('eureka'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: [
         'jhipster-registry.yml',
@@ -117,7 +117,7 @@ export const dockerFiles = {
   ],
   applicationFiles: [
     {
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       condition: ctx => ctx.backendTypeJavaAny,
       renameTo,
       templates: [
@@ -130,50 +130,50 @@ export const dockerFiles = {
       ],
     },
     {
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['sonar.yml', 'prometheus/prometheus.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('elasticsearch'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['elasticsearch.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('kafka'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['kafka.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('pulsar'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['pulsar.yml'],
     },
     {
       condition: generator => !!generator.dockerServices.includes('swagger-editor'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['swagger-editor.yml'],
     },
     {
       condition: generator => generator.dockerServices.includes('keycloak'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['keycloak.yml', 'realm-config/jhipster-realm.json'],
     },
     {
       condition: generator => generator.dockerServices.includes('keycloak'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
       templates: ['realm-config/keycloak-health-check.sh'],
     },
     {
       condition: generator => generator.dockerServices.includes('zipkin'),
-      path: DOCKER_DIR,
+      path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['zipkin.yml'],
     },
