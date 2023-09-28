@@ -270,7 +270,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     Object.entries(options ?? {})
       .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]))
       .forEach(([optionName, optionDesc]) => {
-        if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
+        if (!optionDesc?.type || !optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
         let optionValue;
         // Hidden options are test options, which doesn't rely on commoander for options parsing.
         // We must parse environment variables manually
