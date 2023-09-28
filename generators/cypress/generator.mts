@@ -231,7 +231,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
-            'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
+            'pree2e:cypress:coverage': 'npm run clean-coverage && npm run ci:server:await',
             'e2e:cypress:coverage': 'npm run e2e:cypress:headed',
             'poste2e:cypress:coverage': 'nyc report',
             'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',

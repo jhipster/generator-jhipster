@@ -55,18 +55,18 @@ let config = defineConfig({
             getFileFromRepo('axios/dist/axios.min.js'),
             fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url)),
           ],
-          dest: '<%= clientDistDir %>swagger-ui',
+          dest: '<%= this.relativeDir(clientRootDir, clientDistDir) %>swagger-ui',
         },
       ],
       hook: 'writeBundle',
     }),
   ],
   root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
-  publicDir: fileURLToPath(new URL('./<%- clientDistDir %>public', import.meta.url)),
+  publicDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
   cacheDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
   build: {
     emptyOutDir: true,
-    outDir: fileURLToPath(new URL('./<%- clientDistDir %>', import.meta.url)),
+    outDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
     rollupOptions: {
       input: {
         app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),

@@ -17,7 +17,7 @@ module.exports = {
   testMatch: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/**/@(*.)@(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   coveragePathIgnorePatterns: [
-    '<rootDir>/<%= clientTestDir %>'
+    '<rootDir>/<%= this.relativeDir(clientRootDir, clientTestDir) %>',
   ],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy',

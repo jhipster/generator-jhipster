@@ -37,7 +37,7 @@
     "project": [
       "./tsconfig.json",
 <%_ if (cypressTests) { _%>
-      "./<%= clientTestDir %>cypress/tsconfig.json",
+      "./<%= this.relativeDir(clientRootDir, clientTestDir) %>cypress/tsconfig.json",
 <%_ } _%>
       "./tsconfig.test.json"
     ]
