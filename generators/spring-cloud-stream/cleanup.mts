@@ -30,7 +30,7 @@ export default function cleanupKafkaFilesTask(this: KafkaGenerator, { applicatio
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseConsumer.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseProducer.java`);
 
-    // make sure those files are removed and reacreated
+    // make sure those files are removed and recreated
     this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }

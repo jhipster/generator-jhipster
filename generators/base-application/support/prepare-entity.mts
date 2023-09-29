@@ -623,7 +623,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerReationships apis
+  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerRelationships apis
     ![CASSANDRA, COUCHBASE, NEO4J].includes(entity.databaseType) &&
     // Only sql and mongodb provides *WithEagerReationships apis for imperative implementation
     (entity.reactive || [SQL, MONGODB].includes(entity.databaseType)) &&

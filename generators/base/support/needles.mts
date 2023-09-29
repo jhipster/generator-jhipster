@@ -96,7 +96,7 @@ export const checkContentIn = (contentToCheck: string | RegExp, content, ignoreW
 };
 
 /**
- * Write content before needle applying identation
+ * Write content before needle applying indentation
  *
  * @param args
  * @returns null if needle was not found, new content otherwise
