@@ -92,7 +92,7 @@ the resulting (simplified) json object used by the generator
 
 [drawbacks]: #drawbacks
 
-Blueprint with additional options will have to override objects definiton: an overridable api should be provided at the generator-core level to let the blueprint developer to add its own attributes at each level
+Blueprint with additional options will have to override objects definition: an overridable api should be provided at the generator-core level to let the blueprint developer to add its own attributes at each level
 
 ## Rationale and alternatives
 
