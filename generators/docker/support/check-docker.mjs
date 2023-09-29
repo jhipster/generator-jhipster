@@ -20,10 +20,11 @@ import chalk from 'chalk';
 
 /**
  * Check that Docker exists.
+ * @this {import('../../base-core/index.mjs').default}
  */
 export const checkDocker = async function () {
   if (this.abort || this.skipChecks) return;
-  const ret = await this.spawnCommand('docker -v', { reject: false });
+  const ret = await this.spawnCommand('docker -v', { reject: false, stdio: 'pipe' });
   if (ret.exitCode !== 0) {
     this.log.error(
       chalk.red(
