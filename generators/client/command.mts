@@ -17,9 +17,13 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import _ from 'lodash';
+import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFrameworkTypes } from '../../jdl/index.js';
 
+const { CYPRESS } = testFrameworkTypes;
+const { intersection } = _;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
@@ -48,22 +52,10 @@ const command: JHipsterCommandDefinition = {
             : `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
       }),
       choices: [
-        {
-          value: ANGULAR,
-          name: 'Angular',
-        },
-        {
-          value: REACT,
-          name: 'React',
-        },
-        {
-          value: VUE,
-          name: 'Vue',
-        },
-        {
-          value: CLIENT_FRAMEWORK_NO,
-          name: 'No client',
-        },
+        { value: ANGULAR, name: 'Angular' },
+        { value: REACT, name: 'React' },
+        { value: VUE, name: 'Vue' },
+        { value: CLIENT_FRAMEWORK_NO, name: 'No client' },
       ],
     },
     microfrontend: {
@@ -77,6 +69,7 @@ const command: JHipsterCommandDefinition = {
           [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework) &&
           config.applicationType === APPLICATION_TYPE_GATEWAY,
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
+        default: false,
       }),
     },
     microfrontends: {
@@ -103,16 +96,32 @@ const command: JHipsterCommandDefinition = {
         transformer: microfrontendsToPromptValue,
       }),
     },
+    clientTestFrameworks: {
+      description: 'Client test frameworks',
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
+        type: 'checkbox',
+        message: 'Besides Jest/Vitest, which testing frameworks would you like to use?',
+        default: () => intersection([CYPRESS], config.testFrameworks),
+      }),
+      choices: [{ name: 'Cypress', value: CYPRESS }],
+    },
     withAdminUi: {
       description: 'Generate administrative user interface',
       cli: {
         type: Boolean,
       },
-      prompt: generator => ({
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'confirm',
-        when: answers => (answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework) !== CLIENT_FRAMEWORK_NO,
+        when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         message: 'Do you want to generate the admin UI?',
       }),
+    },
+    clientRootDir: {
+      description: 'Client root',
+      cli: {
+        type: String,
+      },
     },
   },
 };

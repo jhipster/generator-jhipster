@@ -16,12 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "extends": "./tsconfig.json",
-  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts"],
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "<%= this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/spec",
-    "types": ["jest", "node"]
-  }
-}
+node_modules
+package-lock.json
+.git
+<%- temporaryDir %>
+
+<&- fragments.render({ join: '\n\n' }) &>

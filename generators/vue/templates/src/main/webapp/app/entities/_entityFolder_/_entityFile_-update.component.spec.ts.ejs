@@ -38,9 +38,9 @@ import AlertService from '@/shared/alert/alert.service';
     .filter(relationships => relationships.length > 0);
 _%>
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
-  <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
+  <% if (relationship.otherEntityUser && generateBuiltInUserEntity) { %>
 import UserService from '@/entities/user/user.service';
-  <%_ } else { _%>
+  <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
@@ -68,6 +68,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       route = {};
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+      <%= entityInstance %>ServiceStub.retrieve.onFirstCall().resolves(Promise.resolve([]));
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
@@ -95,7 +96,7 @@ describe('Component Tests', () => {
               sinon.createStubInstance<UserService>(UserService, {
                 retrieve: sinon.stub().resolves({}),
               } as any),
-  <%_ } else { _%>
+  <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
             <%= relationship.otherEntity.entityInstance %>Service: () =>
               sinon.createStubInstance<<%= relationship.otherEntity.entityAngularName %>Service>(<%= relationship.otherEntity.entityAngularName %>Service, {
                 retrieve: sinon.stub().resolves({}),

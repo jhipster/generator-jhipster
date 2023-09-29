@@ -22,7 +22,7 @@ _%>
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
 import UserService from '@/entities/user/user.service';
-  <%_ } else { _%>
+  <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
 import { type I<%= relationship.otherEntity.entityAngularName %> } from '@/shared/model/<%= relationship.otherEntityModelName %>.model';
   <%_ } _%>
@@ -47,7 +47,9 @@ export default defineComponent({
     const userService = inject('userService', () => new UserService());
     const <%= relationship.otherEntity.entityInstancePlural %>: Ref<Array<any>> = ref([]);
   <%_ } else { _%>
+    <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { %>
     const <%= relationship.otherEntity.entityInstance %>Service = inject('<%= relationship.otherEntity.entityInstance %>Service', () => new <%= relationship.otherEntity.entityAngularName %>Service());
+    <%_ } %>
     const <%= relationship.otherEntity.entityInstancePlural %>: Ref<I<%= relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>

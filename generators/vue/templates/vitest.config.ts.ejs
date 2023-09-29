@@ -31,7 +31,7 @@ export default mergeConfig(
     test: {
       globals: true,
       environment: 'happy-dom', // happy-dom provides a better performance but doesn't have a default url.
-      setupFiles: [fileURLToPath(new URL('./<%= clientSrcDir %>app/test-setup.ts', import.meta.url))],
+      setupFiles: [fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/test-setup.ts', import.meta.url))],
 <%_ if (applicationTypeGateway && microfrontend) { _%>
       alias: {
   <%_ for (const remote of microfrontends) { _%>
@@ -41,7 +41,7 @@ export default mergeConfig(
 <%_ } _%>
       reporters: ['default', 'vitest-sonar-reporter'],
       outputFile: {
-        'vitest-sonar-reporter': fileURLToPath(new URL('./<%= temporaryDir %>test-results/TESTS-results-vitest.xml', import.meta.url)),
+        'vitest-sonar-reporter': fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-vitest.xml', import.meta.url)),
       },
       coverage: {
         provider: 'v8',

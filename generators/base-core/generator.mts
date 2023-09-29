@@ -65,6 +65,11 @@ const __dirname = dirname(__filename);
 
 const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`;
 
+const relativeDir = (from: string, to: string) => {
+  const rel = relative(from, to);
+  return rel ? `${rel}/` : '';
+};
+
 /**
  * This is the base class for a generator for every generator.
  */
@@ -100,6 +105,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   experimental?: boolean;
   debugEnabled?: boolean;
   jhipster7Migration?: boolean;
+  relativeDir = relativeDir;
+  relative = relative;
 
   readonly sharedData!: SharedData<CommonClientServerApplication>;
   readonly logger: Logger;
@@ -334,7 +341,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   prepareQuestions(configs: JHipsterConfigs = {}) {
     return Object.entries(configs)
-      .filter(([_name, def]) => def.prompt)
+      .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {
         const promptSpec = typeof def.prompt === 'function' ? def.prompt(this) : { ...def.prompt };
         let storage: any;

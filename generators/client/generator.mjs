@@ -19,10 +19,10 @@
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import { askForClientTheme, askForClientThemeVariant, askForClientTestOpts } from './prompts.mjs';
+import { askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
-import { writeEnumerationFiles } from './entity-files.mjs';
+import { addEnumerationFiles } from './entity-files.mjs';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
@@ -71,7 +71,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (control.existingProject && this.options.askAnswered !== true) return;
         await this.prompt(this.prepareQuestions(this.command.configs));
       },
-      askForClientTestOpts,
       askForClientTheme,
       askForClientThemeVariant,
     });
@@ -88,6 +87,14 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (clientFramework === CLIENT_FRAMEWORK_NO) {
           this.jhipsterConfig.skipClient = true;
           this.cancelCancellableTasks();
+        }
+      },
+      mergeTestConfig() {
+        if (this.jhipsterConfig.clientTestFrameworks) {
+          this.jhipsterConfig.testFrameworks = [
+            ...new Set([...(this.jhipsterConfig.testFrameworks ?? []), ...this.jhipsterConfig.clientTestFrameworks]),
+          ];
+          delete this.jhipsterConfig.clientTestFrameworks;
         }
       },
       upgradeAngular() {
@@ -171,6 +178,9 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       addExternalResource({ application, source }) {
+        if (![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
         source.addExternalResourceToRoot = ({ resource, comment }) =>
           this.editFile(
             `${application.clientSrcDir}index.html`,
@@ -222,7 +232,14 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      writeEnumerationFiles,
+      async writeEnumerationFiles({ application, entities }) {
+        if (!application.webappEnumerationsDir || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
+        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+          await addEnumerationFiles.call(this, { application, entity });
+        }
+      },
     });
   }
 
@@ -233,6 +250,9 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
+        if (![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
         const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
@@ -254,7 +274,9 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       microfrontend({ application, source }) {
-        if (!application.microfrontend) return;
+        if (!application.microfrontend || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
         if (application.clientFrameworkAngular) {
           const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
           source.addWebpackConfig({

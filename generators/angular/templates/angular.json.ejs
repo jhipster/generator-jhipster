@@ -32,7 +32,7 @@
         }
       },
       "root": "",
-      "sourceRoot": "<%= clientSrcDir.replace(/\/$/, "") %>",
+      "sourceRoot": "<%= this.relativeDir(clientRootDir, clientSrcDir).replace(/\/$/, "") %>",
       "prefix": "<%= jhiPrefixDashed %>",
       "architect": {
         "build": {
@@ -41,12 +41,12 @@
             "customWebpackConfig": {
               "path": "./webpack/webpack.custom.js"
             },
-            "outputPath": "<%= clientDistDir %>",
-            "index": "<%= clientSrcDir %>index.html",
-            "main": "<%= clientSrcDir %>main.ts",
+            "outputPath": "<%= this.relativeDir(clientRootDir, clientDistDir) %>",
+            "index": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html",
+            "main": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>main.ts",
             "polyfills": [
 <%_ if (communicationSpringWebsocket) { _%>
-              "./<%= clientSrcDir %>sockjs-client.polyfill",
+              "./<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
 <%_ } _%>
 <%_ if (microfrontend) { _%>
               "zone.js/dist/zone"
@@ -57,12 +57,15 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "<%= clientSrcDir %>content",
-              "<%= clientSrcDir %>favicon.ico",
-              "<%= clientSrcDir %>manifest.webapp",
-              "<%= clientSrcDir %>robots.txt"
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt"
             ],
-            "styles": ["<%= clientSrcDir %>content/scss/vendor.scss", "<%= clientSrcDir %>content/scss/global.scss"],
+            "styles": [
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -119,7 +122,8 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
-            "configPath": "jest.conf.js"
+            "configPath": "jest.conf.js",
+            "tsConfig": "tsconfig.spec.json"
           }
         }
       }
@@ -128,7 +132,7 @@
   "cli": {
     "cache": {
       "enabled": true,
-      "path": "./<%= temporaryDir %>angular/",
+      "path": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>angular/",
       "environment": "all"
     },
     "packageManager": "<%= clientPackageManager %>"

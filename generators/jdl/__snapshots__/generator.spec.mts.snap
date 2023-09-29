@@ -208,6 +208,7 @@ Options:
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
+  --client-root-dir <value>                Client root
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
   --skip-git                               Skip git repository initialization

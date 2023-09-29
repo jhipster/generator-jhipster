@@ -147,9 +147,9 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
   application.buildToolMaven = application.buildTool === MAVEN;
   application.buildToolUnknown = !application.buildToolGradle && !application.buildToolMaven;
 
-  application.temporaryDir = application.buildToolGradle ? 'build/' : 'target/';
+  application.temporaryDir = application.temporaryDir ?? (application.buildToolGradle ? 'build/' : 'target/');
   const buildDestinationDir = `${application.temporaryDir}${application.buildToolGradle ? 'resources/main/' : 'classes/'}`;
-  application.clientDistDir = `${buildDestinationDir}${CLIENT_DIST_DIR}`;
+  application.clientDistDir = application.clientDistDir ?? `${buildDestinationDir}${CLIENT_DIST_DIR}`;
 
   application.cacheProviderNo = !application.cacheProvider || application.cacheProvider === NO_CACHE;
   application.cacheProviderCaffeine = application.cacheProvider === CAFFEINE;

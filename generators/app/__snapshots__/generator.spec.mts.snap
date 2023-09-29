@@ -48,6 +48,7 @@ Options:
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
+  --client-root-dir <value>                Client root
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
   --skip-git                               Skip git repository initialization
@@ -127,6 +128,9 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
+  "clientTestFrameworks": undefined,
+  "clientTestFrameworksAny": true,
+  "clientTestFrameworksCypress": false,
   "clientTheme": "none",
   "clientThemeDark": false,
   "clientThemeLight": false,
@@ -685,6 +689,9 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
+  "clientTestFrameworks": undefined,
+  "clientTestFrameworksAny": true,
+  "clientTestFrameworksCypress": false,
   "clientTheme": "none",
   "clientThemeDark": false,
   "clientThemeLight": false,
@@ -1245,6 +1252,9 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
+  "clientTestFrameworks": undefined,
+  "clientTestFrameworksAny": true,
+  "clientTestFrameworksCypress": false,
   "clientTheme": undefined,
   "clientThemeDark": false,
   "clientThemeLight": false,
