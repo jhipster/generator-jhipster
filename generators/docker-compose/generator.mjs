@@ -74,7 +74,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       async checkDockerCompose() {
         if (this.skipChecks) return;
 
-        const { stdout, exitCode } = await this.spawnCommand('docker compose version');
+        const { stdout, exitCode } = await this.spawnCommand('docker compose version', { reject: false });
         if (exitCode !== 0) {
           this.log.error(
             chalk.red(

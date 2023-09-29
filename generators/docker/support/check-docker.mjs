@@ -23,7 +23,7 @@ import chalk from 'chalk';
  */
 export const checkDocker = async function () {
   if (this.abort || this.skipChecks) return;
-  const ret = await this.spawnCommand('docker -v');
+  const ret = await this.spawnCommand('docker -v', { reject: false });
   if (ret.exitCode !== 0) {
     this.log.error(
       chalk.red(
