@@ -224,7 +224,7 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 Since v8 `generator-jhipster` is written in typescript.
 To run it you need to compile to javascript or use a just-in-time compilation.
 
-#### Runnning jit executable
+#### Running jit executable
 
 The executable is located at `bin/jhipster.cjs`.
 You can alias it to `jhipster` command:
