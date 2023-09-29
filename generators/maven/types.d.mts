@@ -77,8 +77,8 @@ export type MavenDefinition = {
 
 export type MavenSourceType = {
   addMavenAnnotationProcessor?(artifact: MavenAnnotationProcessor | MavenAnnotationProcessor[]): void;
-  addMavenDependency?(dependecy: MavenDependency | MavenDependency[]): void;
-  addMavenDependencyManagement?(dependecy: MavenDependency | MavenDependency[]): void;
+  addMavenDependency?(dependency: MavenDependency | MavenDependency[]): void;
+  addMavenDependencyManagement?(dependency: MavenDependency | MavenDependency[]): void;
   addMavenDistributionManagement?(distributionManagement: MavenDistributionManagement | MavenDistributionManagement[]): void;
   addMavenPlugin?(plugin: MavenPlugin | MavenPlugin[]): void;
   addMavenPluginManagement?(plugin: MavenPlugin | MavenPlugin[]): void;

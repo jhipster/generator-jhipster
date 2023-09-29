@@ -873,7 +873,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
         }
-        throw new Error(`Unknow Error ${error}`);
+        throw new Error(`Unknown Error ${error}`);
       }
       return writeCallback;
     };

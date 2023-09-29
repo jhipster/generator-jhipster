@@ -66,10 +66,10 @@ type SearchEngine = {
   searchEngine: string;
 };
 
-type ApplicatonNature = (ImperativeApplication & CacheProviderApplication) | ReactiveApplication;
+type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | ReactiveApplication;
 
 export type SpringBootApplication = JavaApplication &
-  ApplicatonNature &
+  ApplicationNature &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication &
