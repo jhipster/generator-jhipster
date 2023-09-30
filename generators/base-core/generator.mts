@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { basename, join as joinPath, dirname, relative, isAbsolute, join, extname } from 'path';
+import { relative as posixRelative } from 'path/posix';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import { statSync, rmSync, existsSync, readFileSync } from 'fs';
@@ -66,7 +67,7 @@ const __dirname = dirname(__filename);
 const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`;
 
 const relativeDir = (from: string, to: string) => {
-  const rel = relative(from, to);
+  const rel = posixRelative(from, to);
   return rel ? `${rel}/` : '';
 };
 
@@ -106,7 +107,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   debugEnabled?: boolean;
   jhipster7Migration?: boolean;
   relativeDir = relativeDir;
-  relative = relative;
+  relative = posixRelative;
 
   readonly sharedData!: SharedData<CommonClientServerApplication>;
   readonly logger: Logger;
