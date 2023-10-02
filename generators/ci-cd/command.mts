@@ -1,0 +1,176 @@
+/**
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import chalk from 'chalk';
+import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const command: JHipsterCommandDefinition = {
+  options: {},
+  configs: {
+    ciCd: {
+      argument: {
+        type: Array,
+      },
+      prompt: {
+        type: 'checkbox',
+        message: 'What CI/CD pipeline do you want to generate?',
+      },
+      choices: [
+        { name: 'GitHub Actions', value: 'github' },
+        { name: 'Jenkins pipeline', value: 'jenkins' },
+        { name: 'GitLab CI', value: 'gitlab' },
+        { name: 'Azure Pipelines', value: 'azure' },
+        { name: 'Travis CI', value: 'travis' },
+        { name: 'CircleCI', value: 'circle' },
+      ],
+      scope: 'generator',
+    },
+    ciCdIntegrations: {
+      prompt: {
+        type: 'checkbox',
+        message: 'What tasks/integrations do you want to include ?',
+      },
+      choices: [
+        // ['jenkins', 'gitlab']
+        { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
+        // ['jenkins', 'gitlab', 'travis', 'github']
+        { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
+        // ['jenkins', 'github'].includes(this.pipeline)
+        { name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' },
+        // ['jenkins', 'gitlab', 'travis', 'github', 'circle', 'azure']
+        {
+          name: `${chalk.yellow('*Snyk*')}: dependency scanning for security vulnerabilities (requires SNYK_TOKEN)`,
+          value: 'snyk',
+        },
+        // ['jenkins', 'gitlab', 'travis', 'github', 'circle']
+        {
+          name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`,
+          value: 'heroku',
+        },
+        // ['github']
+        {
+          name: `Would you like to enable the ${chalk.yellow(
+            '*Cypress Dashboard*',
+          )} (requires both CYPRESS_PROJECT_ID and CYPRESS_RECORD_KEY set on CI service)`,
+          value: 'cypressDashboard',
+        },
+      ],
+      scope: 'generator',
+    },
+    insideDocker: {
+      prompt: {
+        // when: this.pipeline === 'jenkins',
+        // when: this.pipeline === 'gitlab',
+        type: 'confirm',
+        message: 'Would you like to perform the build in a Docker container ?',
+        // message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container) ?',
+      },
+      scope: 'generator',
+    },
+    sendBuildToGitlab: {
+      prompt: {
+        // when: this.pipeline === 'jenkins',
+        type: 'confirm',
+        message: 'Would you like to send build status to GitLab ?',
+      },
+      scope: 'generator',
+    },
+    artifactorySnapshotsId: {
+      prompt: {
+        // when: response => response.ciCdIntegrations.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
+      },
+      default: 'snapshots',
+      scope: 'generator',
+    },
+    artifactorySnapshotsUrl: {
+      prompt: {
+        // when: response => response.ciCdIntegrations.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
+      },
+      default: 'http://artifactory:8081/artifactory/libs-snapshot',
+      scope: 'generator',
+    },
+    artifactoryReleasesId: {
+      prompt: {
+        // when: response => response.ciCdIntegrations.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
+      },
+      default: 'releases',
+      scope: 'generator',
+    },
+    artifactoryReleasesUrl: {
+      prompt: {
+        // when: response => response.ciCdIntegrations.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
+      },
+      default: 'http://artifactory:8081/artifactory/libs-release',
+      scope: 'generator',
+    },
+    sonarName: {
+      prompt: {
+        // when: response => this.pipeline === 'jenkins' && response.ciCdIntegrations.includes('sonar'),
+        type: 'input',
+        message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
+      },
+      default: 'sonar',
+      scope: 'generator',
+    },
+    sonarUrl: {
+      prompt: {
+        // when: response => this.pipeline !== 'jenkins' && response.ciCdIntegrations.includes('sonar'),
+        type: 'input',
+        message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
+      },
+      default: 'https://sonarcloud.io',
+      scope: 'generator',
+    },
+    sonarOrga: {
+      prompt: {
+        // when: response => this.pipeline !== 'jenkins' && response.ciCdIntegrations.includes('sonar'),
+        type: 'input',
+        message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
+      },
+      scope: 'generator',
+    },
+    dockerImage: {
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        // when: response => this.pipeline === 'github' && response.ciCdIntegrations.includes('publishDocker'),
+        type: 'input',
+        message: `${chalk.yellow('*Docker*')}: what is the name of the image ?`,
+        default: () => `jhipster/${config.dasherizedBaseName}`,
+      }),
+      scope: 'generator',
+    },
+    herokuAppName: {
+      prompt: {
+        // when: response => response.ciCdIntegrations.includes('heroku'),
+        type: 'input',
+        message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
+        // default: `${this.herokuAppName}`,
+      },
+      scope: 'generator',
+    },
+  },
+};
+
+export default command;

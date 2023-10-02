@@ -38,9 +38,9 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'jenkins',
+            ciCd: 'jenkins',
             insideDocker: false,
-            cicdIntegrations: [],
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -64,9 +64,9 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'jenkins',
+            ciCd: 'jenkins',
             insideDocker: false,
-            cicdIntegrations: [],
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -91,9 +91,9 @@ describe('generator - CI-CD', () => {
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
-            pipeline: 'jenkins',
+            ciCd: 'jenkins',
             insideDocker: false,
-            cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
+            ciCdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
             artifactoryReleasesId: 'releases',
@@ -126,9 +126,9 @@ describe('generator - CI-CD', () => {
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
-            pipeline: 'jenkins',
+            ciCd: 'jenkins',
             insideDocker: true,
-            cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
+            ciCdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
             artifactoryReleasesId: 'releases',
@@ -164,9 +164,9 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'gitlab',
+            ciCd: 'gitlab',
             insideDocker: false,
-            cicdIntegrations: [],
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -190,8 +190,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'gitlab',
-            cicdIntegrations: [],
+            ciCd: 'gitlab',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -215,9 +215,9 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(skipServerSample)
           .withAnswers({
-            pipeline: 'gitlab',
+            ciCd: 'gitlab',
             insideDocker: true,
-            cicdIntegrations: [],
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -239,9 +239,9 @@ describe('generator - CI-CD', () => {
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
-            pipeline: 'gitlab',
+            ciCd: 'gitlab',
             insideDocker: false,
-            cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
+            ciCdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
             artifactoryReleasesId: 'releases',
@@ -274,9 +274,9 @@ describe('generator - CI-CD', () => {
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
-            pipeline: 'gitlab',
+            ciCd: 'gitlab',
             insideDocker: true,
-            cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
+            ciCdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
             artifactoryReleasesId: 'releases',
@@ -304,11 +304,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .createJHipster(GENERATOR_CI_CD)
-          .withJHipsterConfig(mavenSample)
-          .withOptions({ autoconfigureGitlab: true })
-          .run();
+        runResult = await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['gitlab']).run();
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -336,8 +332,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'travis',
-            cicdIntegrations: [],
+            ciCd: 'travis',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -359,8 +355,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'travis',
-            cicdIntegrations: [],
+            ciCd: 'travis',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -387,8 +383,8 @@ describe('generator - CI-CD', () => {
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
-            pipeline: 'travis',
-            cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk', 'cypressDashboard'],
+            ciCd: 'travis',
+            ciCdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk', 'cypressDashboard'],
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
             artifactoryReleasesId: 'releases',
@@ -429,8 +425,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'azure',
-            cicdIntegrations: ['cypressDashboard'],
+            ciCd: 'azure',
+            ciCdIntegrations: ['cypressDashboard'],
           })
           .run();
       });
@@ -454,8 +450,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'azure',
-            cicdIntegrations: [],
+            ciCd: 'azure',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -477,8 +473,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'azure',
-            cicdIntegrations: ['snyk'],
+            ciCd: 'azure',
+            ciCdIntegrations: ['snyk'],
           })
           .run();
       });
@@ -499,8 +495,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'azure',
-            cicdIntegrations: ['snyk'],
+            ciCd: 'azure',
+            ciCdIntegrations: ['snyk'],
           })
           .run();
       });
@@ -517,11 +513,7 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: autoconfigure', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .createJHipster(GENERATOR_CI_CD)
-          .withJHipsterConfig(mavenSample)
-          .withOptions({ autoconfigureAzure: true })
-          .run();
+        runResult = await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['azure']).run();
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -543,8 +535,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'github',
-            cicdIntegrations: [],
+            ciCd: 'github',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -562,8 +554,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'github',
-            cicdIntegrations: [],
+            ciCd: 'github',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -582,8 +574,8 @@ describe('generator - CI-CD', () => {
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
-            pipeline: 'github',
-            cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk', 'cypressDashboard'],
+            ciCd: 'github',
+            ciCdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk', 'cypressDashboard'],
             dockerImage: 'jhipster-publish-docker',
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
@@ -622,8 +614,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'github',
-            cicdIntegrations: ['sonar', 'publishDocker', 'heroku', 'snyk'],
+            ciCd: 'github',
+            ciCdIntegrations: ['sonar', 'publishDocker', 'heroku', 'snyk'],
             dockerImage: 'jhipster-publish-docker',
             sonarUrl: 'http://sonar.com:9000',
           })
@@ -651,11 +643,7 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: autoconfigure', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .createJHipster(GENERATOR_CI_CD)
-          .withJHipsterConfig(mavenSample)
-          .withOptions({ autoconfigureGithub: true })
-          .run();
+        runResult = await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['github']).run();
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -677,8 +665,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'circle',
-            cicdIntegrations: ['cypressDashboard'],
+            ciCd: 'circle',
+            ciCdIntegrations: ['cypressDashboard'],
           })
           .run();
       });
@@ -703,8 +691,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'circle',
-            cicdIntegrations: [],
+            ciCd: 'circle',
+            ciCdIntegrations: [],
           })
           .run();
       });
@@ -729,8 +717,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
-            pipeline: 'circle',
-            cicdIntegrations: ['snyk'],
+            ciCd: 'circle',
+            ciCdIntegrations: ['snyk'],
           })
           .run();
       });
@@ -751,8 +739,8 @@ describe('generator - CI-CD', () => {
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
-            pipeline: 'circle',
-            cicdIntegrations: ['snyk'],
+            ciCd: ['circle'],
+            ciCdIntegrations: ['snyk'],
           })
           .run();
       });
