@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import _ from 'lodash';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+
+const { kebabCase } = _;
 
 const command: JHipsterCommandDefinition = {
   options: {},
@@ -79,6 +82,7 @@ const command: JHipsterCommandDefinition = {
         type: 'confirm',
         message: 'Would you like to perform the build in a Docker container ?',
         // message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container) ?',
+        default: false,
       },
       scope: 'generator',
     },
@@ -87,6 +91,7 @@ const command: JHipsterCommandDefinition = {
         // when: this.pipeline === 'jenkins',
         type: 'confirm',
         message: 'Would you like to send build status to GitLab ?',
+        default: false,
       },
       scope: 'generator',
     },
@@ -169,6 +174,7 @@ const command: JHipsterCommandDefinition = {
         // default: `${this.herokuAppName}`,
       },
       scope: 'generator',
+      default: config => kebabCase(config.jhipsterConfigWithDefaults.baseName),
     },
   },
 };

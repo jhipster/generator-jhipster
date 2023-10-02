@@ -304,7 +304,14 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['gitlab']).run();
+        runResult = await helpers
+          .createJHipster(GENERATOR_CI_CD)
+          .withJHipsterConfig(mavenSample)
+          .withArguments(['gitlab'])
+          .withAnswers({
+            insideDocker: true,
+          })
+          .run();
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
