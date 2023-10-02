@@ -191,7 +191,12 @@ export type ConfigSpec = {
   argument?: JHipsterArgumentConfig;
   prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
   scope?: 'storage' | 'blueprint' | 'generator';
-  default?: string | boolean | string[];
+  /**
+   * The callback receives the generator as input for 'generator' scope.
+   * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
+   * The callback receives blueprintStorage contents as input for 'blueprint' scope.
+   */
+  default?: string | boolean | string[] | ((any) => string | boolean | string[]);
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
