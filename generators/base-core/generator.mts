@@ -56,7 +56,7 @@ import command from '../base/command.mjs';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.mjs';
 import { convertConfigToOption } from '../../lib/internal/index.mjs';
 
-const { merge } = _;
+const { merge, get, set } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
@@ -262,6 +262,20 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
     if (commandDef.arguments) {
       this.parseJHipsterArguments(commandDef.arguments);
+    } else if (commandDef.configs) {
+      this.parseJHipsterArguments(
+        Object.fromEntries(
+          Object.entries(commandDef.configs as Record<string, any>)
+            .filter(([_name, def]) => def.argument)
+            .map(([name, def]) => [
+              name,
+              {
+                description: def.description,
+                ...def.argument,
+              },
+            ]),
+        ) as any,
+      );
     }
     if (commandDef.options || commandDef.configs) {
       this.parseJHipsterOptions(commandDef.options, commandDef.configs);
@@ -324,7 +338,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         }
         if (argument !== undefined) {
           const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
-          this[argumentName] = convertedValue;
+          if ((argumentDef.scope ?? 'generator') === 'generator') {
+            this[argumentName] = convertedValue;
+          } else if (argumentDef.scope === 'storage') {
+            this.config.set(argumentName, convertedValue);
+          } else if (argumentDef.scope === 'blueprint') {
+            this.blueprintStorage!.set(argumentName, convertedValue);
+          }
         }
       } else {
         if (argumentDef.required) {
@@ -352,6 +372,11 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
           }
         } else if (def.scope === 'blueprint') {
           storage = this.blueprintStorage;
+        } else if (def.scope === 'generator') {
+          storage = {
+            getPath: path => get(this, path),
+            setPath: (path, value) => set(this, path, value),
+          };
         }
         return {
           name,

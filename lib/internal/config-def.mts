@@ -16,7 +16,10 @@ export const convertConfigToOption = (name, config) => {
 export const loadConfig = (configsDef, { application, config }) => {
   if (configsDef) {
     for (const [name] of Object.entries(configsDef)) {
-      application[name] = config[name];
+      const value = application[name];
+      if (value === undefined || value === null) {
+        application[name] = config[name] ?? undefined;
+      }
     }
   }
 };
@@ -25,12 +28,13 @@ export const loadDerivedConfig = (configsDef: JHipsterConfigs | undefined, { app
   if (configsDef) {
     for (const [name, def] of Object.entries(configsDef)) {
       if (def.choices) {
+        const configVal = application[name];
         for (const choice of def.choices) {
           const choiceVal = typeof choice === 'string' ? choice : choice.value;
-          const value = application[name];
-          application[`${name}${upperFirstCamelCase(choiceVal)}`] = (value ?? 'no') === choiceVal;
+          const prop = `${name}${upperFirstCamelCase(choiceVal)}`;
+          application[prop] = application[prop] ?? ([].concat(configVal) as any).includes(choiceVal);
         }
-        application[`${name}Any`] = !application[`${name}No`];
+        application[`${name}Any`] = application[`${name}Any`] ?? !application[`${name}No`];
       }
     }
   }
